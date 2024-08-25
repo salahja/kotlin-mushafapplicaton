@@ -27,7 +27,6 @@ import com.example.mushafconsolidated.DAO.wbwDao
 import com.example.mushafconsolidated.Entities.BadalErabNotesEnt
 import com.example.mushafconsolidated.Entities.BookMarks
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
-import com.example.mushafconsolidated.Entities.GrammarRules
 import com.example.mushafconsolidated.Entities.HalEnt
 import com.example.mushafconsolidated.Entities.LiajlihiEnt
 import com.example.mushafconsolidated.Entities.MafoolBihi
@@ -43,79 +42,48 @@ import com.example.mushafconsolidated.Entities.TameezEnt
 import com.example.mushafconsolidated.Entities.VerbCorpus
 import com.example.mushafconsolidated.Entities.hanslexicon
 import com.example.mushafconsolidated.Entities.lanerootdictionary
-import com.example.mushafconsolidated.Entities.lughat
 import com.example.mushafconsolidated.Entities.surahsummary
-import com.example.mushafconsolidated.Entities.wbwentity
 import com.example.mushafconsolidated.model.QuranCorpusWbw
-
-
-//import com.example.mushafconsolidated.Entities.JoinVersesTranslationDataTranslation;
-class QuranRepository(
-    /* val buckwaterDao: BuckwaterDao,
-     val quranVerbsDao: QuranVerbsDao,
-
-     val verbcorpusDao: verbcorpusDao,
-     val kovDao: kovDao,
-    ,*/
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 
 
-    val qurandao: QuranDao,
-    val ssummary: surahsummaryDao,
-    val chaptersdao: AnaQuranChapterDao,
-    val mafoolb: MafoolBihiDao,
-    var jumlahaliya: HaliyaDao,
-    val tammezent: tameezDao,
-    val mutlaqent: MafoolMutlaqEntDao,
-    val liajlihient: liajlihiDao,
-    val badalErabNotesEnt: BadalErabNotesDao,
-    val bookm: BookMarkDao,
-    val hansdao: HansDao,
-    val lanesdao: LaneRootDao,
-    val ajlihiworddao: liajlihiDao,
-    val mutlaqworddao: MafoolMutlaqEntDao,
-    val tameezword: tameezDao,
+ class QuranRepository @Inject constructor(
+     var qurandao: QuranDao,
+     val ssummary: surahsummaryDao,
+     val chaptersdao: AnaQuranChapterDao,
+     val mafoolb: MafoolBihiDao,
+     var jumlahaliya: HaliyaDao,
+     val tammezent: tameezDao,
+     val mutlaqent: MafoolMutlaqEntDao,
+     val liajlihient: liajlihiDao,
+     val badalErabNotesEnt: BadalErabNotesDao,
+     val bookm: BookMarkDao,
+     val hansdao: HansDao,
+     val lanesdao: LaneRootDao,
+     val ajlihiworddao: liajlihiDao,
+     val mutlaqworddao: MafoolMutlaqEntDao,
+     val tameezword: tameezDao,
 
-    val nouncorpusdao: NounCorpusDao,
-    val mafoolbihi: MafoolBihiDao,
-    val verbcorpusdao: VerbCorpusDao,
-    val kanaDao: NewKanaDao,
-    val shartDAO: NewShartDAO,
-    val nasbDao: NewNasbDao,
-    val mousufSifa: SifaDao,
-    val mudhafDao: NewMudhafDao,
-    val wbwdao: wbwDao,
-    val lughatdao: LughatDao,
-    val grammarrulesDao: grammarRulesDao,
+     val nouncorpusdao: NounCorpusDao,
+     val mafoolbihi: MafoolBihiDao,
+     val verbcorpusdao: VerbCorpusDao,
+     val kanaDao: NewKanaDao,
+     val shartDAO: NewShartDAO,
+     val nasbDao: NewNasbDao,
+     val mousufSifa: SifaDao,
+     val mudhafDao: NewMudhafDao,
+     val wbwdao: wbwDao,
+     val lughatdao: LughatDao,
+     val grammarrulesDao: grammarRulesDao,
 
 
-    ) {
+     ) {
 
     fun getQuranCorpusWbwBysurah(cid: Int): List<QuranCorpusWbw> =
         qurandao.getQuranCorpusWbwbysurah(cid)
 
-
-    fun getGrammarRulesByHarf(harf: String): List<GrammarRules>? =
-        grammarrulesDao.getGrammarRulesByHarf(harf)
-
-    fun getGrammarRulesByHarf(): List<GrammarRules>? = grammarrulesDao.grammarRules
-
-    fun getwbwQuranTranslationRange(
-        surahid: Int,
-        ayahid: Int,
-        startindex: Int,
-        endindex: Int
-    ): List<wbwentity> =
-        wbwdao.getwbwQuranbTranslationbyrange(surahid, ayahid, startindex, endindex)
-
-    fun getRootWordDictionary(root: String?): List<lughat> = lughatdao.getRootWordDictionary(root)
-
-
-    fun getArabicWord(root: String?): List<lughat> = lughatdao.getArabicWord(root)
-
-
-    fun getwbwTranslationbywordno(surahid: Int, ayahid: Int, wordno: Int): List<wbwentity> =
-        wbwdao.getwbwTranslationbywordno(surahid, ayahid, wordno)
 
     fun getkana(surah: Int, ayah: Int): List<NewKanaEntity> =
         kanaDao.getkanabysurahAyah(surah, ayah)
@@ -147,12 +115,6 @@ class QuranRepository(
     fun getQuranCorpusWbw(surah: Int, ayah: Int, wordno: Int): List<QuranCorpusWbw> =
         qurandao.getQuranCorpusWbw(surah, ayah, wordno)
 
-    fun getNounsbysurahayahword(surah: Int, ayah: Int, wordno: Int): List<NounCorpus> =
-        nouncorpusdao.getQuranNounsBysurahayahword(surah, ayah, wordno)
-
-    fun getNounsbysurahayah(surah: Int, ayah: Int): List<NounCorpus> =
-        nouncorpusdao.getQuranNounAyah(surah, ayah)
-
     fun getMafoolbihi(surah: Int, ayah: Int, wordno: Int): List<MafoolBihi> =
         mafoolbihi.getMafoolbihi(surah, ayah, wordno)
 
@@ -169,7 +131,6 @@ class QuranRepository(
     fun getNouncorpus(surah: Int, ayah: Int, wordno: Int): List<NounCorpus> =
         nouncorpusdao.getQuranNounsBysurahayahword(surah, ayah, wordno)
 
-    fun allquran(): LiveData<List<QuranEntity>> = qurandao.allQuranl()
     val chapters: LiveData<List<ChaptersAnaEntity>> = chaptersdao.chaptersl()
 
     val bookmarlist: LiveData<List<BookMarks>> = bookm.getBookMarksLive()
@@ -223,30 +184,31 @@ class QuranRepository(
 
 
     }
+   suspend fun getChapterData(chapterNo: Int): ChapterData {
+        return ChapterData(
+            mafoolbihiwords = mafoolb.getBySurah(chapterNo),
+            jumlahaliya = jumlahaliya.getHaliyaSurah(chapterNo),
+            tammezent = tammezent.getTameezSurah(chapterNo),
+            liajlihient = liajlihient.getMafoolLiajlihisurah(chapterNo),
+            mutlaqent = mutlaqent.getMutlaqsurah(chapterNo),
+            badalErabNotesEnt = badalErabNotesEnt.getBadalNotesSurah(chapterNo),
+            allofQuran = qurandao.getQuranVersesBySurahl(chapterNo), // Fetch Quran verses
+            corpusSurahWord = qurandao.getQuranCorpusWbwbysurah(chapterNo) //Fetch corpus data
+        )
+    }
 
-
-    /*
-        fun getMujarradroot(root : String): LiveData<List<MujarradVerbs>>
-                =mujarradao.getverbTrilive(root)
-
-        fun getMujarradWeakness(kov : String): LiveData<List<MujarradVerbs>>
-                =mujarradao.getMujarradWeaknesslive(kov)
-        suspend fun insertlive(entity : MujarradVerbs) {
-            mujarradao.insertlive(entity)
-        }
-
-
-
-        fun getMazeedroot(root : String): LiveData<List<MazeedEntity>>
-        =mazeeddao.getMazeedRootlive(root)
-
-        fun getMazeedWeakness(kov : String): LiveData<List<MazeedEntity>>
-                =mazeeddao.getMazeedWeaknesslive(kov)
-        suspend fun insertlive(entity : MazeedEntity) {
-            mazeeddao.insertlive(entity)
-        }
-
-    */
+    
 
 
 }
+
+data class ChapterData(
+val mafoolbihiwords: List<MafoolBihi>,
+val jumlahaliya: List<HalEnt>,
+val tammezent: List<TameezEnt>,
+val liajlihient: List<LiajlihiEnt>,
+val mutlaqent: List<MafoolMutlaqEnt>,
+val badalErabNotesEnt: List<BadalErabNotesEnt>,
+val allofQuran: List<QuranEntity>, // Assuming you need this as well
+val corpusSurahWord: List<QuranCorpusWbw>// Assuming you need this as well
+)

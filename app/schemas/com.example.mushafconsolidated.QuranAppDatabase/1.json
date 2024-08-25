@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "01dd56fd2cae68892928247f1d52963f",
+    "identityHash": "fad851faba6a65109f4a625e43121e5e",
     "entities": [
       {
         "tableName": "surahjson",
@@ -2332,13 +2332,13 @@
       },
       {
         "tableName": "bookmark",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`header` TEXT, `verseno` TEXT NOT NULL, `chapterno` TEXT NOT NULL, `surahname` TEXT NOT NULL, `datetime` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`header` TEXT NOT NULL, `verseno` TEXT NOT NULL, `chapterno` TEXT NOT NULL, `surahname` TEXT NOT NULL, `datetime` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
           {
             "fieldPath": "header",
             "columnName": "header",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "verseno",
@@ -2362,7 +2362,7 @@
             "fieldPath": "datetime",
             "columnName": "datetime",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "id",
@@ -2493,7 +2493,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '01dd56fd2cae68892928247f1d52963f')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fad851faba6a65109f4a625e43121e5e')"
     ]
   }
 }

@@ -11,16 +11,16 @@ import database.entity.MujarradVerbs
 @Dao
 interface mazeedDao {
     @Query(value = "SELECT * FROM mazeed where root=:root")
-    fun getMazeedRoot(root: String?): List<MazeedEntity?>?
+    fun getMazeedRoot(root: String?): List<MazeedEntity>
 
     @get:Query(value = "SELECT * FROM mazeed order by root")
-    val mazeedAll: List<MazeedEntity?>?
+    val mazeedAll: List<MazeedEntity>
 
     @Query(value = "select DISTINCT root,form,babname ,verbtype,kov,kovname,id from mazeed where kov=:kov order by root limit 30")
-    fun getMazeedWeakness(kov: String?): List<MazeedEntity?>?
+    fun getMazeedWeakness(kov: String?): List<MazeedEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(entity: MujarradVerbs?): Long
+    fun insert(entity: MujarradVerbs): Long
 
 
 
@@ -38,7 +38,7 @@ interface mazeedDao {
     fun getMazeedWeaknesslive(kov: String?): LiveData<List<MazeedEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertlive(entity: MazeedEntity?): Long
+    fun insertlive(entity: MazeedEntity): Long
 
 
 

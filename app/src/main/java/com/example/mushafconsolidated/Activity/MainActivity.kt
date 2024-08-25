@@ -106,16 +106,17 @@ class MainActivity : BaseActivity() {
         // Use widthWindowSizeClass and heightWindowSizeClass
     }
 
+
+
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
-        permissions: Array<String?>,
+        permissions: Array<out String>, // Use 'out' for non-nullable strings
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        //check if permission had taken or not
         if (requestCode == REQUEST_WRITE_STORAGE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //valid to download or not
                 try {
                     validateFilesAndDownload()
                 } catch (e: IOException) {

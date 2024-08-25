@@ -99,6 +99,7 @@ import com.tonyodev.fetch2.FetchListener
 import com.tonyodev.fetch2.Request
 import com.tonyodev.fetch2.getErrorFromThrowable
 import com.tonyodev.fetch2rx.RxFetch
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
 import wheel.OnWheelChangedListener
@@ -111,6 +112,7 @@ import kotlin.math.max
 
 
 @Suppress("unused", "unused")
+@AndroidEntryPoint
 class ShowMushafActivity : BaseActivity(), OnItemClickListenerOnLong, View.OnClickListener,
     FullscreenButtonClickListener {
     private lateinit var filepath: String

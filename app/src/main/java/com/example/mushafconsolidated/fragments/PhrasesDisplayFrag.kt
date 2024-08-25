@@ -44,6 +44,7 @@ import com.example.mushafconsolidated.model.Juz
 import com.example.mushafconsolidated.quranrepo.QuranVIewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationBarView
+import dagger.hilt.android.AndroidEntryPoint
 import database.NamesGridImageAct
 import org.sj.conjugator.activity.ConjugatorAct
 import sj.hisnul.activity.HisnulBottomACT
@@ -55,6 +56,7 @@ import java.util.Objects
  * Use the [PhrasesDisplayFrag.newInstance] factory method to
  * create an instance of this fragment.
  */
+@AndroidEntryPoint
 class PhrasesDisplayFrag : Fragment(), SearchView.OnQueryTextListener {
     //   implements FragmentCommunicator {
     // TODO: Rename parameter arguments, choose names that match

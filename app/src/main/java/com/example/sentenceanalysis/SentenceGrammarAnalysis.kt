@@ -6,8 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
@@ -16,8 +17,9 @@ import androidx.preference.PreferenceManager
 import com.example.Constant
 import com.example.compose.CardsViewModel
 import com.skyyo.expandablelist.theme.AppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class SentenceGrammarAnalysis : AppCompatActivity() {
 
     override fun onBackPressed() {
@@ -59,7 +61,7 @@ class SentenceGrammarAnalysis : AppCompatActivity() {
 
 
             AppTheme(systemInDarkTheme) {
-                Surface(color = MaterialTheme.colors.background) {
+                Surface(color = MaterialTheme.colorScheme.background) {
 
 
                     NewVerseAnalysisCardsScreen(versemodel)
@@ -89,4 +91,3 @@ class VerseAnalysisFctory(
     override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T =
         ExpandableVerseViewModel(chapterid, verseid, thememode, wbwchoice) as T
 }
-

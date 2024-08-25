@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -58,6 +59,7 @@ import com.example.utility.CorpusUtilityorig
 import com.example.utility.CorpusUtilityorig.Companion.getSpannableVerses
 import com.example.utility.QuranGrammarApplication
 import com.google.android.material.chip.Chip
+import dagger.hilt.android.AndroidEntryPoint
 import org.sj.conjugator.activity.BaseActivity
 import org.sj.conjugator.activity.ConjugatorTabsActivity
 import org.sj.conjugator.interfaces.OnItemClickListener
@@ -65,9 +67,10 @@ import org.sj.conjugator.utilities.ArabicLiterals
 import java.util.concurrent.Executors
 import java.util.regex.Pattern
 
-
+@AndroidEntryPoint
 class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener {
-    private lateinit var allChapters: LiveData<List<ChaptersAnaEntity>>
+    private lateinit var allChapters: MutableLiveData<List<ChaptersAnaEntity>>
+
     private lateinit var binding: ActivityRootBreakupBinding
     lateinit var shared: SharedPreferences
     private var firstcolortat = 0
@@ -167,8 +170,8 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
         val sb = StringBuilder()
         sb.append(root).append(" ").append("Ocurrance").append(" ").append(corpusSurahWord!!.size)
         rootoccurance.text = sb.toString()
-
-        allChapters = mainViewModel.getAllChapters()
+        allChapters = mainViewModel.loadListschapter()
+      //  allChapters = mainViewModel.getAllChapters()
         if (root == "ACC" || root == "LOC" || root == "T") {
             occurances =
                 utils.getnounoccuranceHarfNasbZarf(root) as ArrayList<CorpusNounWbwOccurance>?

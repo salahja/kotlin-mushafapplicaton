@@ -2,6 +2,7 @@ package com.refactoring
 
 
 
+
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.ActivityNotFoundException
@@ -55,12 +56,10 @@ import com.example.mushafconsolidated.SurahSummary
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
 import com.example.mushafconsolidated.fragments.WordMorphologyDetails
-
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.model.CorpusAyahWord
 import com.example.mushafconsolidated.model.CorpusWbwWord
 import com.example.mushafconsolidatedimport.Config
-
 import com.example.mushafconsolidatedimport.ParticleColorScheme
 import com.example.utility.AnimationUtility
 import com.example.utility.CorpusUtilityorig
@@ -71,12 +70,15 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textview.MaterialTextView
-import com.tooltip.Tooltip
+
+import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip
+import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltipUtils
 import sj.hisnul.fragments.NamesDetail
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.Date
+
 
 //import com.example.mushafconsolidated.Entities.JoinVersesTranslationDataTranslation;
 //public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnItemClickListenerOnLong {
@@ -162,7 +164,7 @@ class FlowAyahWordAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewAdapter {
         val view: View
         view = if (viewType == 0) {
-            LayoutInflater.from(parent.context).inflate(R.layout.surah_header, parent, false)
+            LayoutInflater.from(parent.context).inflate(com.example.mushafconsolidated.R.layout.surah_header, parent, false)
         } else {
             LayoutInflater.from(parent.context).inflate(R.layout.row_ayah_word, parent, false)
             //   view = LayoutInflater.from(parent.context!!).inflate(R.layout.item_viewer_aya_cardview, parent, false);
@@ -810,17 +812,16 @@ class FlowAyahWordAdapter(
                                 R.color.background_color_light_brown
                             )
                     }
-                    val builder: Tooltip.Builder = Tooltip.Builder(
-                        v!!, R.style.ayah_translation
-                    )
-                        .setCancelable(true)
-                        .setDismissOnClick(false)
-                        .setCornerRadius(20f)
-                        .setGravity(Gravity.TOP)
-                        .setArrowEnabled(true)
-                        .setBackgroundColor(color)
-                    //    .setText(workBreakDown)
-                    builder.show()
+                    SimpleTooltip.Builder(QuranGrammarApplication.context!!)
+                        .anchorView(v)
+                        .text(workBreakDown)
+                        .gravity(Gravity.START)
+                        .animated(true)
+                        .transparentOverlay(false)
+                        .overlayWindowBackgroundColor(Color.BLACK)
+                        .build()
+                        .show()
+
                     true
                 })
                 arabicChipview.setOnClickListener(View.OnClickListener {
@@ -863,18 +864,16 @@ class FlowAyahWordAdapter(
                     }
 
 
-                    val builder: Tooltip.Builder = Tooltip.Builder(
-                        v!!, R.style.ayah_translation
-                    )
-                        .setCancelable(true)
-                        .setDismissOnClick(false)
-                        .setCornerRadius(20f)
-                        .setGravity(Gravity.TOP)
-                        .setArrowEnabled(true)
-                        .setBackgroundColor(color)
-
-                    builder.show()
-
+                    SimpleTooltip.Builder(QuranGrammarApplication.context!!)
+                        .anchorView(v)
+                        .text(workBreakDown)
+                        .gravity(Gravity.TOP)
+                        .modal(true)
+                        .arrowDrawable(android.R.drawable.ic_media_previous)
+                        .arrowHeight(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
+                        .arrowWidth(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
+                        .build()
+                        .show()
 
                     true
                 }

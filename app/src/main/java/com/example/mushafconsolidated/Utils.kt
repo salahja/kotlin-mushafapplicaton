@@ -64,7 +64,7 @@ class Utils {
 
 
         override fun doInBackground(vararg params: BookMarks?): Void? {
-            mAsyncTaskDao.deletebookmark(params[0])
+            params[0]?.let { mAsyncTaskDao.deletebookmark(it) }
             return null
         }
     }
@@ -129,7 +129,9 @@ class Utils {
             AsyncTask.execute(object : Runnable {
                 override fun run() {
                     // and deleting
-                    database.BookMarkDao().insertBookmark(entity)
+                    if (entity != null) {
+                        database.BookMarkDao().insertBookmark(entity)
+                    }
                     //  runOnUiThread(new Runnable() {
                     //  public void run() {
                     //   itemTextView.setText("item deleted");

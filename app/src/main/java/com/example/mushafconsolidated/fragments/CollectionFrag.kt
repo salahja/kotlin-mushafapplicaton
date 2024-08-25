@@ -24,8 +24,9 @@ import com.example.mushafconsolidated.intrfaceimport.OnItemClickListener
 import com.example.mushafconsolidated.quranrepo.QuranVIewModel
 import com.example.utility.SwipeToDeleteCallback
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class CollectionFrag constructor() : Fragment() {
     var coordinatorLayout: CoordinatorLayout? = null
     var layoutManager: RecyclerView.LayoutManager? = null

@@ -22,13 +22,14 @@ import com.example.utility.QuranGrammarApplication
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 import org.sj.conjugator.fragments.FragmentIsmIsmAla
 import org.sj.conjugator.fragments.FragmentIsmZarf
 import org.sj.conjugator.fragments.FragmentIsmfaelIsmMafools
 import org.sj.conjugator.fragments.FragmentVerb
 import ru.dimorinny.floatingtextbutton.FloatingTextButton
 
-
+@AndroidEntryPoint
 class LughatWordDetailsAct : BaseActivity() {
     // Arrey of strings FOR TABS TITLES
 

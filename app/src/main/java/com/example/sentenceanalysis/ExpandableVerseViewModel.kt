@@ -21,6 +21,7 @@ import com.example.mushafconsolidated.fragments.GrammerFragmentsBottomSheet
 import com.example.mushafconsolidated.model.QuranCorpusWbw
 import com.example.mushafconsolidated.model.SarfSagheerPOJO
 import com.example.utility.QuranGrammarApplication
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
