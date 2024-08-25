@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
 import com.example.mushafconsolidated.Entities.RootWordDetails
@@ -22,7 +23,9 @@ import com.example.utility.CorpusUtilityorig.Companion.NewSetWordSpan
 import com.example.utility.QuranGrammarApplication
 import com.example.utility.QuranGrammarApplication.Companion.context
 import com.google.android.material.chip.Chip
-import com.tooltip.Tooltip
+import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip
+import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltipUtils
+
 import org.sj.conjugator.interfaces.OnItemClickListener
 
 /**
@@ -31,7 +34,7 @@ import org.sj.conjugator.interfaces.OnItemClickListener
  */
 class MyRootBreakRecyclerViewAdapter(
     private val corpusSurahWord: List<QuranCorpusWbw>?,
-    private val chapters: LiveData<List<ChaptersAnaEntity>>
+    private val chapters: MutableLiveData<List<ChaptersAnaEntity>>
 ) :
     RecyclerView.Adapter<MyRootBreakRecyclerViewAdapter.ViewHolder>() {
     private lateinit var quranCorpusWbw: QuranCorpusWbw
@@ -188,17 +191,16 @@ class MyRootBreakRecyclerViewAdapter(
                         )
                 }
 
-                val builder: Tooltip.Builder = Tooltip.Builder(
-                    view!!, R.style.ayah_translation
-                )
-                    .setCancelable(true)
-                    .setDismissOnClick(false)
-                    .setCornerRadius(20f)
-                    .setGravity(Gravity.TOP)
-                    .setArrowEnabled(true)
-                    .setBackgroundColor(color)
-                    .setText(workBreakDown)
-                builder.show()
+                SimpleTooltip.Builder(QuranGrammarApplication.context!!)
+                    .anchorView(view)
+                    .text(workBreakDown)
+                    .gravity(Gravity.TOP)
+                    .modal(true)
+                    .arrowDrawable(android.R.drawable.ic_media_previous)
+                    .arrowHeight(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
+                    .arrowWidth(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
+                    .build()
+                    .show()
 
                 return@OnLongClickListener true
             })

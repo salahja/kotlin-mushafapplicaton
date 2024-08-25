@@ -16,8 +16,9 @@ import androidx.preference.PreferenceManager
 import com.example.Constant
 import com.example.compose.CardsViewModel
 import com.skyyo.expandablelist.theme.AppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class SentenceGrammarAnalysis : AppCompatActivity() {
 
     override fun onBackPressed() {

@@ -114,6 +114,7 @@ import com.tonyodev.fetch2.FetchListener
 import com.tonyodev.fetch2.Request
 import com.tonyodev.fetch2.getErrorFromThrowable
 import com.tonyodev.fetch2rx.RxFetch
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -130,7 +131,7 @@ import java.util.Date
 import java.util.Locale
 import java.util.concurrent.Executors
 import kotlin.math.max
-
+@AndroidEntryPoint
 class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnClickListener,
     FullscreenButtonClickListener {
 

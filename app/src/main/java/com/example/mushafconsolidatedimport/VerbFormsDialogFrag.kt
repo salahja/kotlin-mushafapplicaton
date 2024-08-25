@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.quranrepo.QuranVIewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 
 
 /**
@@ -21,6 +22,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
  * FontQuranListDialogFragment.newInstance(30).show(getSupportFragmentManager(), "dialog");
 </pre> *
  */
+@AndroidEntryPoint
 class VerbFormsDialogFrag : BottomSheetDialogFragment() {
     private var form: String? = null
     override fun onCreateView(

@@ -33,6 +33,7 @@ import com.example.mushafconsolidated.quranrepo.QuranVIewModel
 import com.example.sentenceanalysis.SentenceGrammarAnalysis
 import com.example.utility.CorpusUtilityorig
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -48,6 +49,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [TopicDetailsFrag.newInstance] factory method to
  * create an instance of this fragment.
  */
+@AndroidEntryPoint
 class TopicDetailsFrag : DialogFragment(), OnItemClickListenerOnLong {
     private lateinit var maps: HashMap<String, String>
     private lateinit var flowAyahWordAdapter: NewTopicFlowAyahWordAdapter

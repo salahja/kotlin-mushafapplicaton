@@ -43,11 +43,13 @@ import com.example.mushafconsolidated.model.QuranCorpusWbw
 import com.example.mushafconsolidated.quranrepo.QuranVIewModel
 import com.example.utility.CorpusUtilityorig
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 //import com.example.mushafconsolidated.Entities.JoinVersesTranslationDataTranslation;
+@AndroidEntryPoint
 class TopicDetailAct : BaseActivity(), OnItemClickListenerOnLong {
     private lateinit var flowAyahWordAdapter: NewTopicFlowAyahWordAdapter
 

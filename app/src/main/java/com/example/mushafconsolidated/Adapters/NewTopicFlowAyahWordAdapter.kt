@@ -63,7 +63,9 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textview.MaterialTextView
-import com.tooltip.Tooltip
+import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip
+import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltipUtils
+
 import sj.hisnul.fragments.NamesDetail
 import java.io.File
 import java.io.FileOutputStream
@@ -467,16 +469,16 @@ class NewTopicFlowAyahWordAdapter(
                         "white" -> color =
                             ContextCompat.getColor(context!!, R.color.background_color_light_brown)
                     }
-                    val builder =
-                        Tooltip.Builder(v!!, R.style.ayah_translation)
-                            .setCancelable(true)
-                            .setDismissOnClick(false)
-                            .setCornerRadius(20f)
-                            .setGravity(Gravity.TOP)
-                            .setArrowEnabled(true)
-                            .setBackgroundColor(color)
-                            .setText(workBreakDown)
-                    builder.show()
+                    SimpleTooltip.Builder(QuranGrammarApplication.context!!)
+                        .anchorView(v)
+                        .text(workBreakDown)
+                        .gravity(Gravity.TOP)
+                        .modal(true)
+                        .arrowDrawable(android.R.drawable.ic_media_previous)
+                        .arrowHeight(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
+                        .arrowWidth(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
+                        .build()
+                        .show()
                     true
                 }
                 view.setOnClickListener(object : View.OnClickListener {

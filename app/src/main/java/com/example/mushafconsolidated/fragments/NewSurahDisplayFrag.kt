@@ -43,6 +43,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationBarView
 import com.google.android.material.textview.MaterialTextView
+import dagger.hilt.android.AndroidEntryPoint
 import database.NamesGridImageAct
 import org.sj.conjugator.activity.ConjugatorAct
 import sj.hisnul.activity.HisnulBottomACT
@@ -54,6 +55,7 @@ import java.util.Objects
  * Use the [NewSurahDisplayFrag.newInstance] factory method to
  * create an instance of this fragment.
  */
+@AndroidEntryPoint
 class NewSurahDisplayFrag : Fragment(), SearchView.OnQueryTextListener {
     //   implements FragmentCommunicator {
     // TODO: Rename parameter arguments, choose names that match

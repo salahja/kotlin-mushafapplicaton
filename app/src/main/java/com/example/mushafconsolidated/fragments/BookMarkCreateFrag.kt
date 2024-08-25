@@ -26,6 +26,7 @@ import com.example.mushafconsolidated.quranrepo.QuranVIewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 
 
 /**
@@ -37,6 +38,7 @@ import com.google.android.material.snackbar.Snackbar
  * ThemeListPrefrence.newInstance(30).show(getSupportFragmentManager(), "dialog");
 </pre> *
  */
+@AndroidEntryPoint
 class BookMarkCreateFrag : BottomSheetDialogFragment(), OnItemClickListener,
     View.OnClickListener {
     private lateinit var recyclerView: RecyclerView

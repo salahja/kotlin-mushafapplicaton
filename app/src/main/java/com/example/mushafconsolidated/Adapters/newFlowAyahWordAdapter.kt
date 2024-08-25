@@ -1,6 +1,8 @@
 package com.example.mushafconsolidated.fragments
 
 
+
+
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.ActivityNotFoundException
@@ -64,12 +66,15 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textview.MaterialTextView
-import com.tooltip.Tooltip
+
+import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip
+import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltipUtils
 import sj.hisnul.fragments.NamesDetail
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.Date
+
 
 //import com.example.mushafconsolidated.Entities.JoinVersesTranslationDataTranslation;
 //public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnItemClickListenerOnLong {
@@ -871,17 +876,17 @@ class newFlowAyahWordAdapter(
                             R.color.background_color_light_brown
                         )
                 }
-                val builder: Tooltip.Builder = Tooltip.Builder(
-                    v!!, R.style.ayah_translation
-                )
-                    .setCancelable(true)
-                    .setDismissOnClick(false)
-                    .setCornerRadius(20f)
-                    .setGravity(Gravity.TOP)
-                    .setArrowEnabled(true)
-                    .setBackgroundColor(color)
-                    .setText(workBreakDown)
-                builder.show()
+
+                SimpleTooltip.Builder(QuranGrammarApplication.context!!)
+                    .anchorView(v)
+                    .text(workBreakDown)
+                    .gravity(Gravity.TOP)
+                    .modal(true)
+                    .arrowDrawable(android.R.drawable.ic_media_previous)
+                    .arrowHeight(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
+                    .arrowWidth(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
+                    .build()
+                    .show()
                 true
             }
             arabicChipview.setOnClickListener /* l = */ {
@@ -935,28 +940,57 @@ class newFlowAyahWordAdapter(
                     ContextCompat.getColor(context, R.color.background_color_light_brown)
                 when (isNightmode) {
                     "dark", "blue", "green" -> color =
-                        ContextCompat.getColor(context, R.color.background_color)
+                        ContextCompat.getColor(context, com.example.mushafconsolidated.R.color.background_color)
 
-                    "brown" -> color = ContextCompat.getColor(context, R.color.neutral0)
+                    "brown" -> color = ContextCompat.getColor(context, com.example.mushafconsolidated.R.color.neutral0)
                     "light" ->                             //  case "white":
                         color = ContextCompat.getColor(
                             context,
-                            R.color.background_color_light_brown
+                            com.example.mushafconsolidated.R.color.background_color_light_brown
                         )
                 }
+                 SimpleTooltip.Builder(QuranGrammarApplication.context!!)
+                    .anchorView(v)
+                    .text(workBreakDown)
+                    .gravity(Gravity.TOP)
+                    .modal(true)
+                    .arrowDrawable(android.R.drawable.ic_media_previous)
+                    .arrowHeight(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
+                    .arrowWidth(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
+                    .build()
+                    .show()
+              /*  val tooltip: SimpleTooltip = SimpleTooltip.Builder(QuranGrammarApplication.context!!)
+                    .anchorView(v)
+                    .text(workBreakDown)
+                    .gravity(Gravity.TOP)
+                    .dismissOnOutsideTouch(false)
+                    .dismissOnInsideTouch(false)
+                    .modal(true)
+                    .animated(true)
+                    .animationDuration(2000)
+                    .animationPadding(SimpleTooltipUtils.pxFromDp(50f))
+                     .contentView(R.layout.tooltip_custom, R.id.tv_text)
+                    .focusable(true)
+                    .build()*/
 
 
-                val builder: Tooltip.Builder = Tooltip.Builder(
-                    v!!, R.style.ayah_translation
-                )
-                    .setCancelable(true)
-                    .setDismissOnClick(false)
-                    .setCornerRadius(20f)
-                    .setGravity(Gravity.TOP)
-                    .setArrowEnabled(true)
-                    .setBackgroundColor(color)
-                    .setText(workBreakDown)
-                builder.show()
+
+
+
+
+
+                /*
+                                val builder: Tooltip.Builder = Tooltip.Builder(
+                                    v!!, R.style.ayah_translation
+                                )
+                                    .setCancelable(true)
+                                    .setDismissOnClick(false)
+                                    .setCornerRadius(20f)
+                                    .setGravity(Gravity.TOP)
+                                    .setArrowEnabled(true)
+                                    .setBackgroundColor(color)
+                                    .setText(workBreakDown)
+                                builder.show()*/
 
 
                 true

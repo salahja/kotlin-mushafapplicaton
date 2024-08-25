@@ -22,9 +22,10 @@ import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.quranrepo.QuranVIewModel
 import com.example.utility.QuranGrammarApplication
+import dagger.hilt.android.AndroidEntryPoint
 import ru.dimorinny.floatingtextbutton.FloatingTextButton
 
-
+@AndroidEntryPoint
 class Dictionary_frag(lughatWordDetailsAct: LughatWordDetailsAct, language: String) :
     Fragment() {
     private val worddifinition = ArrayList<String>()

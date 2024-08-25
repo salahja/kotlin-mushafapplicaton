@@ -19,14 +19,15 @@ import android.app.Application
 import android.content.Context
 import android.content.res.Configuration
 import androidx.preference.PreferenceManager
-import com.example.mushafconsolidated.quranrepo.QuranGraph
+
 import com.example.utility.ThemeHelper.applyTheme
+import dagger.hilt.android.HiltAndroidApp
 import database.verbrepo.VerbGraph
 import leakcanary.LeakCanary
 import leakcanary.LeakCanary.config
 import sj.hisnul.newepository.Graph
 import java.util.Locale
-
+@HiltAndroidApp
 class QuranGrammarApplication : Application() {
     /*
         private val applicationScope = CoroutineScope(SupervisorJob())
@@ -53,7 +54,7 @@ class QuranGrammarApplication : Application() {
         }
         Graph.provide(this)
         VerbGraph.provide(this)
-        QuranGraph.provide(this)
+
 
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         //  String theme = sharedPreferences.getString("theme", 1);

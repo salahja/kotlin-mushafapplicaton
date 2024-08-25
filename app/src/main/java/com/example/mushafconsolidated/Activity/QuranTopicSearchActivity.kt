@@ -25,7 +25,9 @@ import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.fragments.TopicDetailsFrag
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class QuranTopicSearchActivity : BaseActivity(), OnItemClickListenerOnLong {
     private lateinit var btnSelection: FloatingActionButton
     private var searchDownloadAdapter: QuranTopicSearchAdapter? = null

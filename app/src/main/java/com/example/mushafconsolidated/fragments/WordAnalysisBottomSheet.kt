@@ -69,6 +69,7 @@ import com.example.utility.CorpusUtilityorig
 import com.example.utility.CorpusUtilityorig.Companion.getSpancolor
 import com.example.utility.QuranGrammarApplication
 import com.google.android.material.button.MaterialButton
+import dagger.hilt.android.AndroidEntryPoint
 import database.entity.MujarradVerbs
 import database.verbrepo.VerbModel
 import kotlinx.coroutines.CoroutineScope
@@ -88,6 +89,7 @@ import java.util.Objects
  *
  * @constructor Create empty Word analysis bottom sheet
  */
+@AndroidEntryPoint
 class WordAnalysisBottomSheet : DialogFragment() {
     private lateinit var recyclerView: RecyclerView
     private val sarfSagheerList = ArrayList<SarfSagheer>()

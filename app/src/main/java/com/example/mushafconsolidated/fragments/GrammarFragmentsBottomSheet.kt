@@ -62,6 +62,7 @@ import com.example.mushafconsolidated.model.SarfSagheerPOJO
 import com.example.mushafconsolidated.model.Word
 import com.example.mushafconsolidated.quranrepo.QuranVIewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.Executors
 
 /**
@@ -73,6 +74,7 @@ import java.util.concurrent.Executors
  * ItemListDialogFragment.newInstance(30).show(getSupportFragmentManager(), "dialog");
 </pre> *
  */
+@AndroidEntryPoint
 class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
 
 

@@ -25,11 +25,13 @@ import com.example.mushafconsolidated.quranrepo.QuranVIewModel
 import com.example.utility.QuranGrammarApplication
 import com.example.utility.SwipeToDeleteCallback
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 
 
 /**
  * Created by Dev. M. Hussein on 5/9/2017.
  */
+@AndroidEntryPoint
 class PinsFragment constructor() : Fragment() {
     var coordinatorLayout: CoordinatorLayout? = null
     var layoutManager: RecyclerView.LayoutManager? = null
