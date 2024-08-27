@@ -20,7 +20,7 @@ import database.entity.kov
     version = 2
 )
 abstract class VerbDatabase : RoomDatabase() {
-    abstract fun BuckwaterDao(): BuckwaterDao?
+    abstract fun BuckwaterDao(): BuckwaterDao
   //  abstract fun QuranVerbsDao(): QuranVerbsDao?
 
   //  abstract fun verbcorpusDao(): verbcorpusDao?

@@ -16,12 +16,13 @@ import com.example.Constant.VERBMOOD
 import com.example.mushafconsolidated.R
 import com.example.utility.QuranGrammarApplication
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 import database.VerbDatabaseUtils
 import database.entity.kov
 import database.verbrepo.VerbModel
 import org.sj.conjugator.adapter.rulesbottomsheetadapter
 import org.sj.conjugator.interfaces.OnItemClickListener
-
+@AndroidEntryPoint
 class RulesBottomSheet : BottomSheetDialogFragment() {
     var rulesadapter: rulesbottomsheetadapter? = null
     private var verbtype: Array<String>? = null
