@@ -4,17 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "mazeed")
-class MazeedEntity(/*
-   root!!     TEXT    NOT NULL,
-    form     TEXT    NOT NULL,
-    verbtype TEXT    NOT NULL,
-    babname  TEXT    NOT NULL,
-    kov      TEXT    NOT NULL,
-    kovname  TEXT    NOT NULL,
-    id       INTEGER PRIMARY KEY AUTOINCREMENT
-                     NOT NULL
-);
- */
+class MazeedEntity(
              var root: String,
                    var form: String,
                    var verbtype: String,

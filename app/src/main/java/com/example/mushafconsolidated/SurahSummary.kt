@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
+
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListener
 import com.example.mushafconsolidated.quranrepo.QuranVIewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
