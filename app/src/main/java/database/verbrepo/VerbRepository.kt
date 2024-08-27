@@ -11,10 +11,11 @@ import database.Dao.mazeedDao
 import database.Dao.mujarradDao
 import database.entity.MazeedEntity
 import database.entity.MujarradVerbs
+import javax.inject.Inject
 
 
 //import com.example.mushafconsolidated.Entities.JoinVersesTranslationDataTranslation;
-class VerbRepository(
+class VerbRepository @Inject constructor(
     /* val buckwaterDao: BuckwaterDao,
      val quranVerbsDao: QuranVerbsDao,
      val quranicVerbsDao: QuranicVerbsDao,

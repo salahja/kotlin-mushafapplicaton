@@ -24,7 +24,6 @@ import com.example.mushafconsolidated.Entities.SifaPOJO
 import com.example.mushafconsolidated.Entities.TameezPOJO
 import com.example.mushafconsolidated.Entities.TameezPojoList
 import com.example.mushafconsolidated.Entities.VerbCorpusBreakup
-import com.example.mushafconsolidated.Entities.jsonsurahentity
 import com.example.mushafconsolidated.Entities.qurandictionary
 import com.example.mushafconsolidated.model.Juz
 import sj.hisnul.entity.hduanamesEnt
@@ -59,8 +58,7 @@ interface RawDao {
     @RawQuery
     fun getShartListing(query: SupportSQLiteQuery): List<ShartListingPojo>
 
-    @RawQuery
-    fun getJsonstr(query: SupportSQLiteQuery): List<jsonsurahentity>
+
     @RawQuery
     fun getSifaListing(query: SupportSQLiteQuery): List<SifaListingPojo>
     @RawQuery

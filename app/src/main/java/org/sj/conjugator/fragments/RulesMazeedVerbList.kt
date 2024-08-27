@@ -22,6 +22,7 @@ import com.example.Constant.VERBMOOD
 import com.example.Constant.VERBTYPE
 import com.example.mushafconsolidated.R
 import com.example.utility.QuranGrammarApplication
+import dagger.hilt.android.AndroidEntryPoint
 import database.entity.MazeedEntity
 import database.verbrepo.VerbModel
 import org.sj.conjugator.activity.ConjugatorTabsActivity
@@ -33,7 +34,7 @@ import org.sj.verbConjugation.FaelMafool
 import org.sj.verbConjugation.MadhiMudharay
 import org.sj.verbConjugation.VerbDetails
 import java.util.concurrent.Executors
-
+@AndroidEntryPoint
 class RulesMazeedVerbList : Fragment {
 
     lateinit var verbmood: String

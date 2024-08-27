@@ -1,5 +1,6 @@
 package org.sj.conjugator.utilities
 
+import dagger.hilt.android.AndroidEntryPoint
 import org.sj.conjugator.activity.SystemConstants
 import org.sj.nounConjugation.trilateral.augmented.AugmentedTrilateralActiveParticipleConjugator
 import org.sj.nounConjugation.trilateral.augmented.AugmentedTrilateralPassiveParticipleConjugator

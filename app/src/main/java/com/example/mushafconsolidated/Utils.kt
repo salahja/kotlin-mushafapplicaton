@@ -30,7 +30,6 @@ import com.example.mushafconsolidated.Entities.SifaListingPojo
 import com.example.mushafconsolidated.Entities.VerbCorpus
 import com.example.mushafconsolidated.Entities.VerbCorpusBreakup
 import com.example.mushafconsolidated.Entities.hanslexicon
-import com.example.mushafconsolidated.Entities.jsonsurahentity
 import com.example.mushafconsolidated.Entities.lanelexicon
 import com.example.mushafconsolidated.Entities.lughat
 import com.example.mushafconsolidated.Entities.qurandictionary
@@ -109,14 +108,6 @@ class Utils {
         return database.VerbCorpusDao().getVerbRootsurahayahwordid(id, verseid, wordid)
     }
 
-    fun getSurahJson(sid:    Int): List<jsonsurahentity?>? {
-        Log.d(TAG, "getQuranRoot: started")
-        return database.JasonSurahDao().getSurahJson(sid)
-    }
-    fun getSurahJson(): List<jsonsurahentity> {
-        Log.d(TAG, "getQuranRoot: started")
-        return database.JasonSurahDao().getSurahJsonall()
-    }
 
     fun getQuranNouns(id: Int, verseid: Int, wordid: Int): List<NounCorpus?>? {
         Log.d(TAG, "getQuranNouns: started")
@@ -195,16 +186,7 @@ class Utils {
         //  List<Book> result = booksDao.getBooks(query);
         return database.RawDao().getCorpusWbw(query)
     }
-    fun getJsonstr(tid:Int):List<jsonsurahentity>{
-        val sqlshart:String=("select * from surahjson where surah ==  \""
-                + tid + "\"")
 
-        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(sqlshart)
-        //  List<Book> result = booksDao.getBooks(query);
-        return database.RawDao().getJsonstr(query)
-
-
-    }
     fun getShart(tid:Int):List<ShartListingPojo>{
         val sqlshart:String=("select newshart.surah,newshart.ayah,newshart.indexstart,newshart.indexend,newshart.shartindexstart,newshart.shartindexend,\n" +
                 "newshart.jawabshartindexstart,newshart.jawabshartindexend,newshart.harfwordno,newshart.shartstatwordno,newshart.shartendwordno,\n" +

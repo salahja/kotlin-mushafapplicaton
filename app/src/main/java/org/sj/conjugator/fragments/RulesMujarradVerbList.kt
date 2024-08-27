@@ -20,6 +20,7 @@ import com.example.Constant.VERBMOOD
 import com.example.Constant.VERBTYPE
 import com.example.mushafconsolidated.R
 import com.example.utility.QuranGrammarApplication
+import dagger.hilt.android.AndroidEntryPoint
 import database.entity.MujarradVerbs
 import database.verbrepo.VerbModel
 import org.sj.conjugator.activity.ConjugatorTabsActivity
@@ -27,7 +28,7 @@ import org.sj.conjugator.adapter.SarfMujarradSarfSagheerListingAdapter
 import org.sj.conjugator.interfaces.OnItemClickListener
 import org.sj.conjugator.utilities.GatherAll
 import java.util.concurrent.Executors
-
+@AndroidEntryPoint
 class RulesMujarradVerbList : Fragment {
 
     lateinit var verbmood: String

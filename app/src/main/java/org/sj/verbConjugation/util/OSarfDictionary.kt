@@ -2,7 +2,10 @@ package org.sj.verbConjugation.util
 
 import android.app.Application
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
+import com.example.mushafconsolidated.quranrepo.QuranVIewModel
 import com.example.utility.QuranGrammarApplication
+import dagger.hilt.android.AndroidEntryPoint
 import database.VerbDatabaseUtils
 import database.verbrepo.VerbModel
 import org.sj.verbConjugation.trilateral.augmented.AugmentedTrilateralRoot
@@ -10,6 +13,8 @@ import org.sj.verbConjugation.trilateral.unaugmented.UnaugmentedTrilateralRoot
 import java.util.LinkedList
 
 class OSarfDictionary private constructor() {
+
+
     fun getAugmentedTrilateralRoot(rootText: String): AugmentedTrilateralRoot? {
         val c1 = rootText[0]
         val c2 = rootText[1]
@@ -18,9 +23,10 @@ class OSarfDictionary private constructor() {
         val augroot = AugmentedTrilateralRoot()
         //  AugmentedTrilateralRootTree augmentedRootsTree = DatabaseManager.getInstance().getAugmentedTrilateralRootTree(c1);
         val utils = VerbDatabaseUtils(QuranGrammarApplication.context)
+
         //  final ArrayList<VerbsTriMazeedDictEntity> triVerbMazeed = utils.getTriVerbMazeed(rootText);
-        for (root in utils.getMazeedRoot(rootText)!!) {
-            roots.add(root!!.root)
+        for (root in utils.getMazeedRoot(rootText)) {
+            roots.add(root.root)
             augroot.c1 = root.root[0]
             augroot.c2 = root.root[1]
             augroot.c3 = root.root[2]
@@ -41,7 +47,7 @@ class OSarfDictionary private constructor() {
         //  AugmentedTrilateralRootTree augmentedRootsTree = DatabaseManager.getInstance().getAugmentedTrilateralRootTree(c1);
         val utils = VerbDatabaseUtils(QuranGrammarApplication.context)
         val triVerbMazeed = utils.getMazeedRoot(rootText)
-     val   viewmodel = ViewModelProvider.AndroidViewModelFactory(QuranGrammarApplication.context!! as Application).create(VerbModel::class.java)
+            // val   viewmodel = ViewModelProvider.AndroidViewModelFactory(QuranGrammarApplication.context!! as Application).create(VerbModel::class.java)
        // val myViewModel3 = ViewModelProvider(viewLifecycleOwner).get(VerbModel::class.java)
       //  val viewmodel: VerbModel by viewModels()
         //val myViewModel5 by viewModels<VerbModel>()
@@ -49,8 +55,9 @@ class OSarfDictionary private constructor() {
 
 
         }*/
-        for (root in triVerbMazeed!!) {
-            if (root!!.form == formula) {
+        //val mazeedRoot = verbmodel.getMazeedRoot(rootText)
+        for (root in triVerbMazeed) {
+            if (root.form == formula) {
                 roots.add(root.root)
                 augroot.c1 = root.root[0]
                 augroot.c2 = root.root[1]
@@ -62,7 +69,7 @@ class OSarfDictionary private constructor() {
             }
         }
         if (augroot.babname == null && !triVerbMazeed.isEmpty()) {
-            roots.add(triVerbMazeed[0]!!.root)
+            roots.add(triVerbMazeed[0].root)
             augroot.c1 = triVerbMazeed[0]!!.root[0]
             augroot.c2 = triVerbMazeed[0]!!.root[1]
             augroot.c3 = triVerbMazeed[0]!!.root[2]
