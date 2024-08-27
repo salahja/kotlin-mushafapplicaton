@@ -27,7 +27,7 @@ class Constants constructor() {
             "http://192.168.29.28.sslip.io/drupal/sites/default/files/2021-05/QuranDatabase.zip"
         const val HOSTQURANTRANSLATION: String =
             "http://192.168.29.28.sslip.io/drupal/sites/default/files/2021-05/"
-        const val DATABASEZIP: String = "qurangrammar.db.zip"
+        const val DATABASEZIP: String = "qurangrammar.7z"
 
         // public static final String DATABASENAME="QuranDatabase.db";
         const val DATABASENAME: String = "qurangrammar.db"

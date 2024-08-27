@@ -34,6 +34,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import dagger.hilt.android.AndroidEntryPoint
 import database.VerbDatabaseUtils
 import database.entity.MazeedEntity
 import database.entity.MujarradVerbs
@@ -41,7 +42,7 @@ import database.verbrepo.VerbModel
 import org.sj.conjugator.fragments.SettingsFragmentVerb
 import org.sj.conjugator.utilities.SharedPref
 import ru.dimorinny.floatingtextbutton.FloatingTextButton
-
+@AndroidEntryPoint
 class ConjugatorAct : BaseActivity(), View.OnClickListener {
     private val keyValues: SparseArray<String> = SparseArray<String>()
     private lateinit var quranbtn: Button

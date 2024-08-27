@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mushafconsolidated.Utils
 import com.example.utility.QuranGrammarApplication
+import dagger.hilt.android.lifecycle.HiltViewModel
 import database.entity.MazeedEntity
 import database.entity.MujarradVerbs
 import database.entity.kov
@@ -13,9 +14,11 @@ import kotlinx.coroutines.launch
 import sj.hisnul.entity.hcategoryEnt
 import sj.hisnul.entity.hduadetailsEnt
 import sj.hisnul.entity.hduanamesEnt
+import javax.inject.Inject
 
-class VerbModel(
-    private val newrepository: VerbRepository = VerbGraph.repository
+@HiltViewModel
+class VerbModel @Inject constructor(
+    private val newrepository: VerbRepository
 ) :ViewModel(){
     private var mazeelist: MutableLiveData<List<MazeedEntity>> = MutableLiveData()
     private var mujarradlist: MutableLiveData<List<MujarradVerbs>> = MutableLiveData()

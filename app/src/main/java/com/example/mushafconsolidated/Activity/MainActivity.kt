@@ -20,12 +20,15 @@ import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.settingsimport.Constants.Companion.DATABASENAME
 import com.example.mushafconsolidated.settingsimport.Constants.Companion.DATABASEZIP
 import com.example.mushafconsolidated.settingsimport.Constants.Companion.FILEPATH
+import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry
+import org.apache.commons.compress.archivers.sevenz.SevenZFile
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
+import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
@@ -205,76 +208,7 @@ class MainActivity : BaseActivity() {
                         e1.printStackTrace()
                     }
                 }
-                runOnUiThread {
-                    val zipfile =
-                        File(getExternalFilesDir(null)!!.absolutePath + getString(R.string.app_folder_path) + File.separator + DATABASEZIP)
-                    val targetDirectory = File(FILEPATH)
-                    val mainDatabasesZIP = File(zipfile.toString())
-                    var zis: ZipInputStream? = null
-                    var progress = 1
-                    try {
-                        zis = ZipInputStream(
-                            BufferedInputStream(
-                                FileInputStream(mainDatabasesZIP)
-                            )
-                        )
-                    } catch (e: FileNotFoundException) {
-                        e.printStackTrace()
-                        val dialog1 =
-                            AlertDialog.Builder(this@MainActivity)
-                        dialog1.setMessage(e.cause.toString())
-                        val alertDialog = dialog1.create()
-                        alertDialog.show()
-                    }
-                    try {
-                        var ze: ZipEntry
-                        var count: Int
-                        val buffer = ByteArray(8192)
-                        try {
-                            while (zis!!.nextEntry.also { ze = it } != null) {
-                                val file = File(targetDirectory, ze.name)
-                                val dir =
-                                    if (ze.isDirectory) file else file.parentFile
-                                if (!dir.isDirectory && !dir.mkdirs()) throw FileNotFoundException(
-                                    "Failed to ensure directory: " + dir.absolutePath
-                                )
-                                if (ze.isDirectory) continue
-                                FileOutputStream(file).use { fout ->
-                                    progress += 1
-                                    while (zis.read(buffer).also { count = it } != -1) {
-                                        fout.write(buffer, 0, count)
-                                        progress += 1
-                                        //   progressBarDD.setProgress(progress);
-                                    }
-                                }
-                            }
-                        } catch (ex: NullPointerException) {
-                            try {
-                                zis!!.close()
-                                mainDatabasesZIP.delete()
-                                //     progressBarDD.dismiss();
-                            } catch (e: IOException) {
-                                e.printStackTrace()
-                            }
-                        }
-
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    } finally {
-                        try {
-                            zis!!.close()
-                            mainDatabasesZIP.delete()
-                            //     progressBarDD.dismiss();
-                        } catch (e: IOException) {
-                            e.printStackTrace()
-                        }
-                    }
-                    ex.shutdown()
-                    dialog.dismiss()
-                    val zipintent = Intent(this@MainActivity, QuranGrammarAct::class.java)
-                    startActivity(zipintent)
-                    finish()
-                }
+                sevenExtraction(ex, dialog)
             }
 
             private fun canWriteInSDCard(): Boolean {
@@ -282,6 +216,133 @@ class MainActivity : BaseActivity() {
                 return Environment.MEDIA_MOUNTED == state
             }
         })
+    }
+
+    private fun sevenExtraction(
+        ex: ExecutorService,
+        dialog: AlertDialog
+    ) {
+        runOnUiThread {
+            val zipfile =
+                File(getExternalFilesDir(null)!!.absolutePath + getString(R.string.app_folder_path) + File.separator + DATABASEZIP)
+            val targetDirectory = File(FILEPATH)
+            val mainDatabasesZIP = File(zipfile.toString())
+            var zis: ZipInputStream? = null
+            var progress = 1
+
+            val sevenZFile = SevenZFile(mainDatabasesZIP)
+            try {
+                var entry: SevenZArchiveEntry?
+                val buffer= ByteArray(8192)
+                while (sevenZFile.nextEntry.also { entry = it } != null) {
+                    if (entry!!.isDirectory) continue // Skip directories
+
+                    val file = File(targetDirectory, entry!!.name)
+                    val dir = file.parentFile
+                    if (!dir.isDirectory && !dir.mkdirs()) {
+                        throw FileNotFoundException("Failed to ensure directory: " + dir.absolutePath)
+                    }
+
+                    FileOutputStream(file).use { fout ->
+                        var count: Int
+                        while (sevenZFile.read(buffer).also { count = it } != -1) {
+                            fout.write(buffer, 0, count)
+                            progress += 1
+                            // Update progress bar if needed
+                        }
+                    }
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+                // Handle errors appropriately
+            } finally {
+                sevenZFile.close()
+                mainDatabasesZIP.delete()
+                // Dismiss progress dialog if used
+            }
+            ex.shutdown()
+            dialog.dismiss()
+            val zipintent = Intent(this@MainActivity, QuranGrammarAct::class.java)
+            startActivity(zipintent)
+            finish()
+        }
+    }
+
+
+    private fun zipExtraction(
+        ex: ExecutorService,
+        dialog: AlertDialog
+    ) {
+        runOnUiThread {
+            val zipfile =
+                File(getExternalFilesDir(null)!!.absolutePath + getString(R.string.app_folder_path) + File.separator + DATABASEZIP)
+            val targetDirectory = File(FILEPATH)
+            val mainDatabasesZIP = File(zipfile.toString())
+            var zis: ZipInputStream? = null
+            var progress = 1
+            try {
+                zis = ZipInputStream(
+                    BufferedInputStream(
+                        FileInputStream(mainDatabasesZIP)
+                    )
+                )
+            } catch (e: FileNotFoundException) {
+                e.printStackTrace()
+                val dialog1 =
+                    AlertDialog.Builder(this@MainActivity)
+                dialog1.setMessage(e.cause.toString())
+                val alertDialog = dialog1.create()
+                alertDialog.show()
+            }
+            try {
+                var ze: ZipEntry
+                var count: Int
+                val buffer = ByteArray(8192)
+                try {
+                    while (zis!!.nextEntry.also { ze = it } != null) {
+                        val file = File(targetDirectory, ze.name)
+                        val dir =
+                            if (ze.isDirectory) file else file.parentFile
+                        if (!dir.isDirectory && !dir.mkdirs()) throw FileNotFoundException(
+                            "Failed to ensure directory: " + dir.absolutePath
+                        )
+                        if (ze.isDirectory) continue
+                        FileOutputStream(file).use { fout ->
+                            progress += 1
+                            while (zis.read(buffer).also { count = it } != -1) {
+                                fout.write(buffer, 0, count)
+                                progress += 1
+                                //   progressBarDD.setProgress(progress);
+                            }
+                        }
+                    }
+                } catch (ex: NullPointerException) {
+                    try {
+                        zis!!.close()
+                        mainDatabasesZIP.delete()
+                        //     progressBarDD.dismiss();
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }
+
+            } catch (e: IOException) {
+                e.printStackTrace()
+            } finally {
+                try {
+                    zis!!.close()
+                    mainDatabasesZIP.delete()
+                    //     progressBarDD.dismiss();
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            }
+            ex.shutdown()
+            dialog.dismiss()
+            val zipintent = Intent(this@MainActivity, QuranGrammarAct::class.java)
+            startActivity(zipintent)
+            finish()
+        }
     }
 
     val defaultSaveRootPath: Boolean
