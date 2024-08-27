@@ -49,11 +49,7 @@
             android:resizeableActivity="true"
             tools:targetApi="24" />
 
-        <activity
-            android:name="com.example.compose.ComposeAct"
-            android:exported="false"
-            android:label="@string/title_activity_compose"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+
         <activity
             android:name="com.example.quranroots.RootBreakupAct"
             android:exported="false"

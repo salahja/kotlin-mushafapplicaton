@@ -13,43 +13,44 @@ interface BookMarkDao {
 
 
     @Query("SELECT * FROM bookmark ORDER BY datetime")
-    fun getBookMarks(): List<BookMarks?>?
+    fun getBookMarks(): List<BookMarks>
 
     @Query("SELECT * FROM bookmark ORDER BY datetime")
     fun getBookMarksLive(): LiveData<List<BookMarks>>
 
-    @Query("select  count(*) as count,id, chapterno,verseno,surahname from bookmark where header != \"pins\" group by header")
+    @Query("SELECT count(*), id, chapterno, verseno, surahname, header, datetime FROM bookmark WHERE header != \"pins\" GROUP BY header")
     fun getCollectionbygroupsLive(): LiveData<List<BookMarks>>
 
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertBookmark(entity: BookMarks?)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertBookmarkl(entity: BookMarks?)
+    fun insertBookmark(entity: BookMarks)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertBookmarkl(entity: BookMarks)
 
-    @Query("select  count(*) as count,id, chapterno,verseno,surahname from bookmark where header != \"pins\" group by header")
-    fun getCollectionbygroups(): List<BookMarks?>?
+//
+//    @Query("select  count(*) as count,id, chapterno,verseno,surahname from bookmark where header != \"pins\" group by header")
+//    fun getCollectionbygroups(): List<BookMarks>
 
 
     @Delete
-    fun deletebookmark(bookMarks: BookMarks?)
+    fun deletebookmark(bookMarks: BookMarks)
 
     @Delete
-    suspend fun deletebookmarkl(bookMarks: BookMarks?)
+    suspend fun deletebookmarkl(bookMarks: BookMarks)
 
     @Query("Delete from bookmark")
     fun deleteAllBookMakrs()
 
     @get:Query(" select  count(*) as count, * from bookmark group by header")
-    val collectionCount: List<BookMarks?>?
+    val collectionCount: List<BookMarks>
 
     @Query(" select    * from bookmark where header=:str group by header")
-    fun getCollectionbygroup(str: String?): List<BookMarks?>?
+    fun getCollectionbygroup(str: String?): List<BookMarks>
 
     @Query(" select    * from bookmark where header=:str order by datetime")
-    fun getAllBookmarks(str: String?): List<BookMarks?>?
+    fun getAllBookmarks(str: String?): List<BookMarks>
 
     @Query(" delete from bookmark where header=:str ")
     fun deleteCollection(str: String?): Int
