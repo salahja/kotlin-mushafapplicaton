@@ -10,16 +10,16 @@ import database.entity.MujarradVerbs
 @Dao
 interface mujarradDao {
     @Query(value = "SELECT * FROM mujarrad where root=:root")
-    fun getverbTri(root: String?): List<MujarradVerbs?>?
+    fun getverbTri(root: String?): List<MujarradVerbs>
 
     @Query(value = "SELECT * FROM mujarrad order by root")
-    fun getverbTriAll(): List<MujarradVerbs?>?
+    fun getverbTriAll(): List<MujarradVerbs>
 
     @Query(value = "select DISTINCT root,bab,babname ,verbtype,kov,kovname,id,verb from mujarrad where kov=:kov order by root limit 30")
-    fun getMujarradWeakness(kov: String?): List<MujarradVerbs?>?
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(entity: MujarradVerbs?): Long
+    fun getMujarradWeakness(kov: String?): List<MujarradVerbs>
+//
+   @Insert(onConflict = OnConflictStrategy.REPLACE)
+     fun insert(entity: MujarradVerbs): Long
 
 
 
@@ -36,7 +36,7 @@ interface mujarradDao {
     @Query(value = "select DISTINCT root,bab,babname ,verbtype,kov,kovname,id,verb from mujarrad where kov=:kov order by root limit 30")
     fun getMujarradWeaknesslive(kov: String?): LiveData<List<MujarradVerbs>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertlive(entity: MujarradVerbs?): Long
+     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertlive(entity: MujarradVerbs): Long
 
 }

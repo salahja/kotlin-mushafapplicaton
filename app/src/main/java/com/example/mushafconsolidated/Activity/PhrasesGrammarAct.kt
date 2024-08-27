@@ -105,7 +105,7 @@ import kotlinx.coroutines.launch
 import org.ahocorasick.trie.Trie
 import org.sj.conjugator.activity.BaseActivity
 import org.sj.conjugator.activity.ConjugatorAct
-import sj.hisnul.compose.HisnulComposeAct
+
 import sj.hisnul.fragments.NamesDetail
 import wheel.OnWheelChangedListener
 import wheel.WheelView
@@ -378,12 +378,12 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
                 val conjugatorintent = Intent(this@PhrasesGrammarAct, ConjugatorAct::class.java)
                 startActivity(conjugatorintent)
             }
-            if (item.itemId == R.id.dua) {
+       /*     if (item.itemId == R.id.dua) {
                 materialToolbar.title = "Hisnul Muslim-Dua;s"
                 //  val searchintent = Intent(this@QuranGrammarAct, ComposeAct::class.java)
                 val searchintent = Intent(this@PhrasesGrammarAct, HisnulComposeAct::class.java)
                 startActivity(searchintent)
-            }
+            }*/
             if (item.itemId == R.id.names) {
                 materialToolbar.title = "Quran Audio"
                 val settingint = Intent(this@PhrasesGrammarAct, NamesGridImageAct::class.java)
