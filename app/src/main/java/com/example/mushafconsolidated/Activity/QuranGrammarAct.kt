@@ -252,8 +252,8 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
         mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
 
-        val view = binding.root
-        setContentView(view)
+
+        setContentView( binding.root)
 
         materialToolbar = binding.toolbarmain
 
@@ -497,7 +497,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         surahArabicName = surahname.toString()
     }
 
-    fun initDialogComponents(readposition: Int) {
+   fun initDialogComponentss(readposition: Int) {
         val quranEntity = allofQuran[readposition - 1]
         val suraNames: Spinner
         val verses: Spinner
@@ -635,7 +635,290 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         }
     }
 
+    private fun initDialogComponents(readPosition: Int) {
+        val quranEntity = allofQuran[readPosition - 1]
+        var suraNumber = 0
+        var verseNumber = 0
+
+        // Inflate the dialog view
+        val jumpDialog = Dialog(this)
+        val dialogView = layoutInflater.inflate(R.layout.backupjumb_to_popup, null)
+        jumpDialog.setContentView(dialogView)
+
+        // Get references to the Spinners and Button
+        val suraNames: Spinner = dialogView.findViewById(R.id.suras)
+        val verses: Spinner = dialogView.findViewById(R.id.verses)
+        val ok: Button = dialogView.findViewById(R.id.ok)
+        soraList = mainViewModel.loadListschapter().value as ArrayList<ChaptersAnaEntity>
+        // Set up Surah Spinner
+        val surahOptions = soraList.mapIndexed { index, entity ->
+            "${index + 1} - ${entity.nameenglish} - ${entity.abjadname}"
+        }
+        val surahAdapter = ArrayAdapter(this, R.layout.myspinner, surahOptions)
+        suraNames.adapter = surahAdapter
+        suraNames.setSelection(quranEntity.surah - 1)
+
+        // Set up Verse Spinner (initially for the selected Surah)
+        updateVerseSpinner(verses, quranEntity.surah, quranEntity.ayah,soraList)
+
+        // Surah selection listener
+
+        suraNames.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                suraNumber = position + 1
+                updateVerseSpinner(verses, suraNumber, 1, soraList) // Reset verse selection to 1 when Surah changes
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+
+
+        // Verse selection listener
+        // Verse selection listener
+        verses.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                verseNumber = position + 1
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+        // OK button click listener
+        ok.setOnClickListener {
+            jumpDialog.dismiss()
+            verseNo = verseNumber
+            surahArabicName = soraList[suraNumber - 1].abjadname
+            versescount = soraList[suraNumber - 1].versescount
+            isMakkiMadani = soraList[suraNumber - 1].ismakki
+            rukucount = soraList[suraNumber - 1].rukucount
+            currentSelectSurah = suraNumber
+
+            if (currentSelectSurah == chapterno) {
+                parentRecyclerView.post { parentRecyclerView.scrollToPosition(verseNo) }
+            } else {
+                jumptostatus = true
+                surahorpart = currentSelectSurah
+                surahId = currentSelectSurah
+                chapterno = currentSelectSurah
+                executeSurahWordByWord()
+            }
+        }
+
+        jumpDialog.show()
+    }
+
+    // Helper function to update the Verse Spinner based on selected Surah
+    private fun updateVerseSpinner(
+        verseSpinner: Spinner,
+        surahNumber: Int,
+        selectedVerse: Int,
+        soraList: ArrayList<ChaptersAnaEntity>
+    ) {
+        val verseOptions = (1..soraList[surahNumber - 1].versescount).map { it.toString() }
+         val verseAdapter = ArrayAdapter(this, R.layout.spinner_layout_larg, verseOptions)
+        verseSpinner.adapter = verseAdapter
+        verseSpinner.setSelection(selectedVerse)
+    }
     private fun surahAyahPicker() {
+        val surahOptions = resources.getStringArray(R.array.surahdetails)
+        val verseCounts = resources.getIntArray(R.array.versescount)
+
+        val dialogView = layoutInflater.inflate(R.layout.activity_wheel_t, null)
+        val surahWheel: WheelView = dialogView.findViewById(R.id.wv_year)
+        val verseWheel: WheelView = dialogView.findViewById(R.id.wv_month)
+        val textView: TextView = dialogView.findViewById(R.id.textView2)
+
+        surahWheel.setEntries(*surahOptions)
+        surahWheel.currentIndex = chapterno - 1
+
+        // Update verse options based on initial Surah selection
+        updateVerseOptions(verseWheel, chapterno - 1, verseCounts)
+        updateTextView(textView, surahWheel, verseWheel)
+
+        val dialogPicker = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setPositiveButton("Done") { dialog, _ ->
+                val selectedSurahIndex = surahWheel.currentIndex
+                val selectedVerseIndex = verseWheel.currentIndex + 1 // Verse index starts from 1
+                 soraList = mainViewModel.loadListschapter().value as ArrayList<ChaptersAnaEntity>
+                try {
+                    // Update Surah-related information
+                    surahArabicName = soraList[selectedSurahIndex].abjadname
+                    verseNo = selectedVerseIndex
+                    versescount = soraList[selectedSurahIndex].versescount
+                    isMakkiMadani = soraList[selectedSurahIndex].ismakki
+                    rukucount = soraList[selectedSurahIndex].rukucount
+                    currentSelectSurah = soraList[selectedSurahIndex].chapterid
+                } catch (e: ArrayIndexOutOfBoundsException) {
+                    // Handle potential index issues (e.g., if array sizes don't match)
+                    // ... (Similar to your original code)
+                }
+
+                // Handle navigation to the selected Surah and Verse
+                handleNavigation(selectedSurahIndex,soraList)
+
+                // Save last read position
+                saveLastReadPosition(selectedSurahIndex)
+
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
+            .create()
+
+        // Customize dialog appearance based on theme preference
+        customizeDialogAppearance(dialogPicker)
+
+        // Surah wheel listener
+        surahWheel.onWheelChangedListener = object : OnWheelChangedListener {
+            override fun onChanged(wheel: WheelView, oldIndex: Int, newIndex: Int) {
+                updateVerseOptions(verseWheel, newIndex, verseCounts)
+                updateTextView(textView, surahWheel, verseWheel)
+            }
+        }
+
+        // Verse wheel listener
+        verseWheel.onWheelChangedListener = OnWheelChangedListener { _, _, newIndex ->
+            updateTextView(textView, surahWheel, verseWheel)
+        }
+
+        dialogPicker.show()
+    }
+
+    // Helper functions for better organization
+    private fun updateVerseOptions(verseWheel: WheelView, surahIndex: Int, verseCounts: IntArray) {
+        val verseOptions = (1..verseCounts[surahIndex]).map { it.toString() }.toTypedArray()
+        verseWheel.setEntries(*verseOptions)
+        verseWheel.currentIndex = 0 // Reset verse selection to 1 when Surah changes
+    }
+
+    private fun updateTextView(textView: TextView, surahWheel: WheelView, verseWheel: WheelView) {
+        val selectedSurah = surahWheel.getItem(surahWheel.currentIndex) as String
+        val selectedVerse = verseWheel.getItem(verseWheel.currentIndex) as String
+        textView.text = "$selectedSurah/$selectedVerse"
+    }
+
+    private fun handleNavigation(selectedSurahIndex: Int, soraList: ArrayList<ChaptersAnaEntity>) {
+        val chapterno = IntArray(1)
+        parentRecyclerView = binding.overlayViewRecyclerView
+        val myFragment: NewSurahDisplayFrag? =
+            supportFragmentManager.findFragmentByTag(SURAHFRAGTAG) as NewSurahDisplayFrag?
+
+
+        val mngr = getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        val taskList = mngr.getRunningTasks(10)
+
+        if (myFragment != null && myFragment.isVisible) {
+            val settingint = Intent(this, QuranGrammarAct::class.java)
+            settingint.putExtra(Constant.SURAH_ID, this.chapterno)
+
+            settingint.putExtra(Constant.RUKUCOUNT, rukucount)
+            settingint.putExtra(Constant.ISMAKKI, isMakkiMadani)
+            settingint.putExtra(Constant.VERSESCOUNT, versescount)
+            settingint.putExtra(Constant.SURAHNAME, surahArabicName)
+            startActivity(settingint)
+        } else
+
+            if (currentSelectSurah == this.chapterno) {
+                parentRecyclerView.post { parentRecyclerView.scrollToPosition(verseNo) }
+            } else {
+                jumptostatus = true
+                surahorpart = currentSelectSurah
+                surahId = currentSelectSurah
+                this.chapterno = currentSelectSurah
+//                println(soraList[chapterno[0]].chapterid)
+                println("chapterno" + this.chapterno)
+                println(this.chapterno)
+                executeSurahWordByWord()
+                //     asyncTaskcorpus = new refactoringcurrentSurahSyncWordByWord().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            }
+        val sura: String = this.soraList[selectedSurahIndex - 1].chapterid.toString()
+        this.chapterno = this.soraList[selectedSurahIndex].chapterid
+        surahArabicName = this.soraList[selectedSurahIndex].nameenglish
+        surahArabicName = this.soraList[selectedSurahIndex].namearabic
+        val pref = getSharedPreferences("lastreadmushaf", MODE_PRIVATE)
+        val editor = pref.edit()
+        editor.putInt(Constant.CHAPTER, sura.toInt())
+        //  editor.putInt("page", page.getAyahItemsquran().get(0).getPage());
+        editor.putString(
+            Constant.SURAH_ARABIC_NAME,
+            this.soraList[selectedSurahIndex- 1].namearabic
+        )
+        editor.apply()
+    }
+
+    private fun saveLastReadPosition(selectedSurahIndex: Int) {
+        // ... (Your existing last read position saving logic)
+    }
+
+    private fun customizeDialogAppearance(alertDialog: AlertDialog) {
+        val preferences = shared.getString("themepref", "dark")
+        when (preferences) {
+            "light" -> alertDialog.window!!.setBackgroundDrawableResource(R.color.md_theme_dark_onSecondary)
+            "brown" -> alertDialog.window!!.setBackgroundDrawableResource(R.color.background_color_light_brown)
+            "blue" -> alertDialog.window!!.setBackgroundDrawableResource(R.color.prussianblue)
+            "green" -> alertDialog.window!!.setBackgroundDrawableResource(R.color.mdgreen_theme_dark_onPrimary)
+        }
+        val lp = WindowManager.LayoutParams()
+        lp.copyFrom(alertDialog.window!!.attributes)
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT
+        //   alertDialog.show();
+        alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        alertDialog.show()
+        val buttonPositive = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+        buttonPositive.setTextColor(ContextCompat.getColor(this@QuranGrammarAct, R.color.green))
+        val buttonNegative = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+        buttonNegative.setTextColor(ContextCompat.getColor(this@QuranGrammarAct, R.color.red))
+        when (preferences) {
+            "light", "brown" -> {
+                buttonPositive.setTextColor(
+                    ContextCompat.getColor(
+                        this@QuranGrammarAct,
+                        R.color.colorMuslimMate
+                    )
+                )
+                buttonNegative.setTextColor(
+                    ContextCompat.getColor(
+                        this@QuranGrammarAct,
+                        R.color.red
+                    )
+                )
+            }
+
+            "blue" -> {
+                buttonPositive.setTextColor(
+                    ContextCompat.getColor(
+                        this@QuranGrammarAct,
+                        R.color.yellow
+                    )
+                )
+                buttonNegative.setTextColor(
+                    ContextCompat.getColor(
+                        this@QuranGrammarAct,
+                        R.color.Goldenrod
+                    )
+                )
+            }
+
+            "green" -> {
+                buttonPositive.setTextColor(
+                    ContextCompat.getColor(
+                        this@QuranGrammarAct,
+                        R.color.yellow
+                    )
+                )
+                buttonNegative.setTextColor(
+                    ContextCompat.getColor(
+                        this@QuranGrammarAct,
+                        R.color.cyan_light
+                    )
+                )
+            }
+        }
+        //  wmlp.gravity = Gravity.TOP | Gravity.CENTER;
+        alertDialog.window!!.attributes = lp
+        alertDialog.window!!.setGravity(Gravity.TOP)
+    }
+   private fun surahAyahPickerX() {
         val mTextView: TextView
         val chapterWheel: WheelView
         val verseWheel: WheelView
@@ -711,121 +994,11 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                 println("chapterno" + this.chapterno)
                 println(this.chapterno)
             }
-            parentRecyclerView = binding.overlayViewRecyclerView
-            val myFragment: NewSurahDisplayFrag? =
-                supportFragmentManager.findFragmentByTag(SURAHFRAGTAG) as NewSurahDisplayFrag?
 
-
-            val mngr = getSystemService(ACTIVITY_SERVICE) as ActivityManager
-            val taskList = mngr.getRunningTasks(10)
-
-            if (myFragment != null && myFragment.isVisible) {
-                val settingint = Intent(this, QuranGrammarAct::class.java)
-                settingint.putExtra(Constant.SURAH_ID, this.chapterno)
-
-                settingint.putExtra(Constant.RUKUCOUNT, rukucount)
-                settingint.putExtra(Constant.ISMAKKI, isMakkiMadani)
-                settingint.putExtra(Constant.VERSESCOUNT, versescount)
-                settingint.putExtra(Constant.SURAHNAME, surahArabicName)
-                startActivity(settingint)
-            } else
-
-                if (currentSelectSurah == this.chapterno) {
-                    parentRecyclerView.post { parentRecyclerView.scrollToPosition(verseNo) }
-                } else {
-                    jumptostatus = true
-                    surahorpart = currentSelectSurah
-                    surahId = currentSelectSurah
-                    this.chapterno = currentSelectSurah
-//                println(soraList[chapterno[0]].chapterid)
-                    println("chapterno" + this.chapterno)
-                    println(this.chapterno)
-                    executeSurahWordByWord()
-                    //     asyncTaskcorpus = new refactoringcurrentSurahSyncWordByWord().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                }
-            val sura: String = soraList[chapterno[0] - 1].chapterid.toString()
-            this.chapterno = soraList[chapterno[0] - 1].chapterid
-            surahArabicName = soraList[chapterno[0] - 1].nameenglish
-            surahArabicName = soraList[chapterno[0] - 1].namearabic
-            val pref = getSharedPreferences("lastreadmushaf", MODE_PRIVATE)
-            val editor = pref.edit()
-            editor.putInt(Constant.CHAPTER, sura.toInt())
-            //  editor.putInt("page", page.getAyahItemsquran().get(0).getPage());
-            editor.putString(
-                Constant.SURAH_ARABIC_NAME,
-                soraList[chapterno[0] - 1].namearabic
-            )
-            editor.apply()
         }
         dialogPicker.setNegativeButton("Cancel") { dialogInterface: DialogInterface?, i: Int -> }
         val alertDialog = dialogPicker.create()
-        val preferences = shared.getString("themepref", "dark")
-        when (preferences) {
-            "light" -> alertDialog.window!!.setBackgroundDrawableResource(R.color.md_theme_dark_onSecondary)
-            "brown" -> alertDialog.window!!.setBackgroundDrawableResource(R.color.background_color_light_brown)
-            "blue" -> alertDialog.window!!.setBackgroundDrawableResource(R.color.prussianblue)
-            "green" -> alertDialog.window!!.setBackgroundDrawableResource(R.color.mdgreen_theme_dark_onPrimary)
-        }
-        val lp = WindowManager.LayoutParams()
-        lp.copyFrom(alertDialog.window!!.attributes)
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT
-        //   alertDialog.show();
-        alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        alertDialog.show()
-        val buttonPositive = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
-        buttonPositive.setTextColor(ContextCompat.getColor(this@QuranGrammarAct, R.color.green))
-        val buttonNegative = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)
-        buttonNegative.setTextColor(ContextCompat.getColor(this@QuranGrammarAct, R.color.red))
-        when (preferences) {
-            "light", "brown" -> {
-                buttonPositive.setTextColor(
-                    ContextCompat.getColor(
-                        this@QuranGrammarAct,
-                        R.color.colorMuslimMate
-                    )
-                )
-                buttonNegative.setTextColor(
-                    ContextCompat.getColor(
-                        this@QuranGrammarAct,
-                        R.color.red
-                    )
-                )
-            }
 
-            "blue" -> {
-                buttonPositive.setTextColor(
-                    ContextCompat.getColor(
-                        this@QuranGrammarAct,
-                        R.color.yellow
-                    )
-                )
-                buttonNegative.setTextColor(
-                    ContextCompat.getColor(
-                        this@QuranGrammarAct,
-                        R.color.Goldenrod
-                    )
-                )
-            }
-
-            "green" -> {
-                buttonPositive.setTextColor(
-                    ContextCompat.getColor(
-                        this@QuranGrammarAct,
-                        R.color.yellow
-                    )
-                )
-                buttonNegative.setTextColor(
-                    ContextCompat.getColor(
-                        this@QuranGrammarAct,
-                        R.color.cyan_light
-                    )
-                )
-            }
-        }
-        //  wmlp.gravity = Gravity.TOP | Gravity.CENTER;
-        alertDialog.window!!.attributes = lp
-        alertDialog.window!!.setGravity(Gravity.TOP)
         chapterWheel.onWheelChangedListener = object : OnWheelChangedListener {
             override fun onChanged(wheel: WheelView, oldIndex: Int, newIndex: Int) {
                 val text = chapterWheel.getItem(newIndex) as String
@@ -881,7 +1054,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         val dialog = builder.create()
         val listener: OnItemClickListenerOnLong = this
         val corpus = CorpusUtilityorig(this)
-        val scope: CoroutineScope = CoroutineScope(Dispatchers.Main)
+        val scope = CoroutineScope(Dispatchers.Main)
 
 
         bysurah(dialog, scope, corpus, listener)
@@ -920,10 +1093,10 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
              corpusSurahWord = chapterData.corpusSurahWord
              allofQuran = chapterData.allofQuran
             val mafoolbihiwords = chapterData.mafoolbihiwords
-            val Jumlahaliya = chapterData.jumlahaliya
-            val Tammezent = chapterData.tammezent
-            val Mutlaqent = chapterData.mutlaqent
-            val BadalErabNotesEnt = chapterData.badalErabNotesEnt
+            val jumlahaliya = chapterData.jumlahaliya
+            val tameezEntList = chapterData.tammezent
+            val mutlaqEntList = chapterData.mutlaqent
+            val badalErabNotesEnts = chapterData.badalErabNotesEnt
 
             for (quranEntity in allofQuran) {
                 quranEntity.en_arberry
@@ -995,11 +1168,11 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                     //    allofQuran=it
                     newflowAyahWordAdapter = newFlowAyahWordAdapter(
                         false,
-                        Mutlaqent,
-                        Tammezent,
-                        BadalErabNotesEnt,
+                        mutlaqEntList,
+                        tameezEntList,
+                        badalErabNotesEnts,
                         liajlihient,
-                        Jumlahaliya,
+                        jumlahaliya,
                         mafoolbihiwords,
                         header,
                         allofQuran,

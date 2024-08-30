@@ -5,25 +5,17 @@
 
     <dist:module dist:instant="true" />
 
-
     <uses-feature android:name="android.hardware.type.watch" />
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.INTERNET" />
-
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
-
-
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
- <!-- <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" /> -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" /> -->
     <!-- <uses-permission android:name="android.permission.WRITE_SETTINGS"/> -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
@@ -43,19 +35,20 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
         <activity
+            android:name=".Activity.DownloadAct"
+            android:exported="false"
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+        <activity
             android:name=".ajroomiya.NewAjroomiyaDetailHostActivity"
             android:exported="false"
             android:label="@string/title_activity_ajroomiya_detail_host"
             android:resizeableActivity="true"
             tools:targetApi="24" />
-
-
         <activity
             android:name="com.example.quranroots.RootBreakupAct"
             android:exported="false"
             android:label="@string/title_activity_root_breakup"
             android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar" />
-
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -76,6 +69,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+
         <activity
             android:name=".Activity.MainActivity"
             android:parentActivityName=".Activity.SplashActivity"
@@ -93,7 +89,7 @@
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
         </activity>
         <activity
-            android:name="com.example.sentenceanalysis.SentenceGrammarAnalysis"
+            android:name=".Activity.PrdownloaderAct"
             android:parentActivityName=".Activity.MainActivity"
             android:screenOrientation="portrait">
             <meta-data
@@ -103,6 +99,14 @@
 
 
 
+        <activity
+            android:name="com.example.sentenceanalysis.SentenceGrammarAnalysis"
+            android:parentActivityName=".Activity.MainActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.mushafconsolidated.Activity.MainActivity" />
+        </activity>
         <activity
             android:name=".Activity.WordbywordMushafAct"
             android:parentActivityName=".Activity.MainActivity"
@@ -135,9 +139,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
         </activity>
-
-
-
         <activity
             android:name=".Activity.WordOccuranceAct"
             android:exported="true"
@@ -156,7 +157,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
         </activity>
-
         <activity
             android:name="com.example.quranroots.TopicDetailAct"
             android:exported="true"
@@ -166,10 +166,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
         </activity>
-
-
-
-
         <activity
             android:name="com.example.voiceai.VoiceRecognitionActivity"
             android:exported="true"
@@ -232,7 +228,6 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-
         <activity
             android:name=".Activity.QuranGrammarAct"
             android:exported="true"
@@ -244,12 +239,11 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
         </activity>
-
-
         <activity
             android:name="sj.hisnul.activity.NewExpandAct"
             android:parentActivityName="sj.hisnul.activity.HisnulBottomACT">
@@ -273,7 +267,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
         </activity>
-
         <activity
             android:name="sj.hisnul.activity.HisnulBottomACT"
             android:parentActivityName=".Activity.MainActivity"

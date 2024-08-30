@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.InputType
 import android.text.TextUtils
-import android.util.Log
 import android.util.SparseArray
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -255,14 +254,14 @@ class SearchKeyBoardAct : BaseActivity(), View.OnClickListener {
                 val charSequence = inputConnection.getTextBeforeCursor(currentText.length, 0)
                 if (charSequence.toString().length == 3) {
                     //  setInputtext(charSequence.toString());
-                    InitSelecton(charSequence.toString())
+                    initSelecton(charSequence.toString())
                 }
             }
 
             R.id.key_enter -> {
                 val charSequence = inputConnection.getTextBeforeCursor(currentText.length, 0)
                 if (charSequence.toString().length == 3) {
-                    InitSelecton(charSequence.toString())
+                    initSelecton(charSequence.toString())
                 }
             }
 
@@ -304,7 +303,7 @@ class SearchKeyBoardAct : BaseActivity(), View.OnClickListener {
         inputConnection.commitText(value, 1)
     }
 
-    private fun InitSelecton(roots: String) {
+    private fun initSelecton(roots: String) {
         keyboard.visibility = LinearLayout.GONE
         actv.clearFocus()
         val split = roots.split(",".toRegex()).dropLastWhile { it.isEmpty() }

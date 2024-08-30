@@ -93,7 +93,7 @@ object QuranValidateSources {
         val filepath =
             dir.toString() + "/" + suraID + ayaID + AudioAppConstants.Extensions.Companion.MP3
         //Audio file path
-        ///storage/emulated/0/Mushafapplication/Audio/1/8.mp3
+        //stored audio files /storage/emulated/0/Documents/audio/20/072001.mp3
         val app_folder_path: String =
             (Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
                 .toString() + "/audio/" + 20 + "/"
@@ -107,8 +107,8 @@ object QuranValidateSources {
                 + AudioAppConstants.Extensions.Companion.MP3)
 
         //check file found or not
-        //   val file: File = File(app_folder_path)
-        val file: File = File(filepath)
+           val file: File = File(app_folder_path)
+       // val file: File = File(filepath)
         if (file.length() == 0.toLong())
         {
             file.delete()

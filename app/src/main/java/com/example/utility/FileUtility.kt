@@ -13,6 +13,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.FileWriter
 import java.io.IOException
+import java.util.Locale
 
 class FileUtility(var context: Context) {
     //to be delted
@@ -191,4 +192,8 @@ class FileUtility(var context: Context) {
             return appDirectory
         }
     }
+
+
+
+
 }

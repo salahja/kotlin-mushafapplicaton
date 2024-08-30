@@ -20,12 +20,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.downloader.PRDownloader
 import com.example.Constant
 import com.example.Constant.ISMAKKI
 import com.example.Constant.RUKUCOUNT
 import com.example.Constant.SURAHNAME
 import com.example.Constant.SURAH_ID
 import com.example.Constant.VERSESCOUNT
+import com.example.mushafconsolidated.Activity.PrdownloaderAct
 import com.example.mushafconsolidated.Activity.QuranGrammarAct
 import com.example.mushafconsolidated.Activity.ShowMushafActivity
 import com.example.mushafconsolidated.Adapters.JuzSurahDisplayAdapter
@@ -344,7 +346,7 @@ class NewSurahDisplayFrag : Fragment(), SearchView.OnQueryTextListener {
                 startActivity(settingint)
             }
             if (item.itemId == R.id.mushafview) {
-                val settingints = Intent(activity, ShowMushafActivity::class.java)
+                val settingints = Intent(activity, PrdownloaderAct::class.java)
 
                 startActivity(settingints)
             }
