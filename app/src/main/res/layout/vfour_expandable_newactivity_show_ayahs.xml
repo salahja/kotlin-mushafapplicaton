@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    tools:context=".Activity.ShowMushafActivity">
 
     <androidx.recyclerview.widget.RecyclerView
 
@@ -14,95 +14,94 @@
         android:layout_marginBottom="20dp"
         android:visibility="visible" />
 
-    <include layout="@layout/fbarnormalfooter"
+    <include
+        android:id="@+id/normalfootid"
+        layout="@layout/fbarnormalfooter"
 
 
-        android:visibility="gone"
-        />
-    <include layout="@layout/rxfetch_progress"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/rxfetchProgress"
+        layout="@layout/rxfetch_progress"
 
 
+        android:visibility="gone" />
 
-        android:visibility="gone"
-        />
     <androidx.coordinatorlayout.widget.CoordinatorLayout
 
-        android:layout_gravity="bottom"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom">
 
         <RelativeLayout
-            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
             android:id="@+id/audio_settings_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:background="@color/colorPrimary"
+            android:gravity="bottom"
             android:visibility="visible"
             app:behavior_peekHeight="30dp"
-            android:gravity="bottom"
-            android:layout_gravity="bottom">
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
 
+            <include
+                layout="@layout/dialog_audio_panel"
 
-
-
-    <include layout="@layout/dialog_audio_panel"
-
-        android:visibility="visible"
-        />
+                android:visibility="visible" />
         </RelativeLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
 
-        android:layout_gravity="bottom"
         android:layout_width="match_parent"
-        android:layout_height="450dp">
+        android:layout_height="450dp"
+        android:layout_gravity="bottom">
+
         <RelativeLayout
-            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
             android:id="@+id/footerplayer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:gravity="bottom"
             android:visibility="visible"
             app:behavior_peekHeight="35dp"
-            android:gravity="bottom"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
 
 
             >
 
-            <include layout="@layout/exoplayer"
-                android:layout_gravity="bottom"
+            <include
+                android:id="@+id/exoplayerid"
+                layout="@layout/exoplayer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
 
-                android:visibility="visible"
-                />
-
+                android:visibility="visible" />
 
 
             <!--  <include layout="@layout/exoplayer"-->
 
 
-
-
-
         </RelativeLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
     <com.example.utility.MovableFloatingActionButton
         android:id="@+id/playfb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|start"
-        android:gravity="center_vertical"
         android:layout_marginBottom="200dp"
+        android:gravity="center_vertical"
         android:src="@drawable/rotatewheel"
-        app:fabSize="normal"/>
-<!--    <include layout="@layout/expandable_fbuttons"
+        app:fabSize="normal" />
+    <!--    <include layout="@layout/expandable_fbuttons"
 
-         android:layout_gravity="bottom"
+             android:layout_gravity="bottom"
 
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />-->
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />-->
 
 </FrameLayout>
