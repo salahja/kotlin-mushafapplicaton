@@ -8,15 +8,16 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.ViewPropertyAnimatorCompat
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar.SnackbarLayout
-import ru.dimorinny.floatingtextbutton.FloatingTextButton
+ 
 
 class SnackbarBehavior(context: Context?, attrs: AttributeSet?) :
-    CoordinatorLayout.Behavior<FloatingTextButton>(context, attrs) {
+    CoordinatorLayout.Behavior<FloatingActionButton>(context, attrs) {
     private var animation: ViewPropertyAnimatorCompat? = null
     override fun layoutDependsOn(
         parent: CoordinatorLayout,
-        child: FloatingTextButton,
+        child: FloatingActionButton,
         dependency: View
     ): Boolean {
         return dependency is SnackbarLayout
@@ -24,7 +25,7 @@ class SnackbarBehavior(context: Context?, attrs: AttributeSet?) :
 
     override fun onDependentViewChanged(
         parent: CoordinatorLayout,
-        child: FloatingTextButton,
+        child: FloatingActionButton,
         dependency: View
     ): Boolean {
         if (child.translationY > 0) {
@@ -40,7 +41,7 @@ class SnackbarBehavior(context: Context?, attrs: AttributeSet?) :
 
     override fun onDependentViewRemoved(
         parent: CoordinatorLayout,
-        child: FloatingTextButton,
+        child: FloatingActionButton,
         dependency: View
     ) {
         if (dependency is SnackbarLayout) {

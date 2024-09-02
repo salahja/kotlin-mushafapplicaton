@@ -1,4 +1,4 @@
-package org.sj.conjugator.floatingtextbutton.util;
+package org.sj.conjugator.FloatingActionButton.util;
 
 import android.content.Context;
 import android.util.TypedValue;

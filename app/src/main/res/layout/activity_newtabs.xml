@@ -47,8 +47,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1" />
             <!--Typography-->
-            <!-- app:floating_background_color="@color/background_color"-->
-            <ru.dimorinny.floatingtextbutton.FloatingTextButton
+            <!-- app:="@color/background_color"-->
+             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/action_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -58,11 +58,7 @@
 
                 android:background="?selectableItemBackground"
 
-                app:floating_left_icon="@drawable/baseline_arrow_circle_down_black_24dp"
-
-
-                app:floating_title="Back    "
-                app:floating_title_color="@color/colorOnPrimary" />
+              />
 
 
         </LinearLayout>

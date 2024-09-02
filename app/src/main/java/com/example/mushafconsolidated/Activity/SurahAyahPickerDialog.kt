@@ -40,7 +40,7 @@ class SurahAyahPickerDialog(
     // Data sources (can be passed in or fetched here)
     private val surahArrays: Array<String> = context.resources.getStringArray(R.array.surahdetails)
     private val verseArrays: Array<String> = context.resources.getStringArray(R.array.versescounts)
-    private val intArrays: IntArray = context.resources.getIntArray(R.array.versescount)
+
     private var soraList: List<ChaptersAnaEntity?>? = null // Fetch this from your repository
 
     fun show(isRefresh: Boolean, startTrue: Boolean, onSelectionComplete: (surah: Int, ayah: Int) -> Unit) {

@@ -36,7 +36,8 @@ import com.example.mushafconsolidated.fragments.QuranMorphologyDetails
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
 import com.example.utility.CorpusUtilityorig.Companion.getSpannableVerses
 import com.example.utility.QuranGrammarApplication
-import ru.dimorinny.floatingtextbutton.FloatingTextButton
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+
 import java.util.Objects
 import java.util.concurrent.Executors
 import java.util.regex.Pattern
@@ -89,14 +90,14 @@ open class WordOccuranceAct : BaseActivity() {
             pronouncolortag = Constant.WMIDNIHTBLUE
             fourcolortag = Constant.GREENDARK
         }
-        val callBackbutton: FloatingTextButton = findViewById(R.id.action_button)
+        val callBackbutton: FloatingActionButton = findViewById(R.id.action_button)
 
-        if (preferences == "dark") {
+/*        if (preferences == "dark") {
             val color: Int = resources.getColor(R.color.color_background_overlay)
-            callBackbutton.backgroundColor = color
+            callBackbutton. = color
         } else {
             callBackbutton.backgroundColor = resources.getColor(R.color.color_background)
-        }
+        }*/
         callBackbutton.setOnClickListener { view: View? ->
             //  Intent quranintnt = new Intent(VerbOccuranceAsynKAct.this, ReadingSurahPartActivity.class);
             finish()

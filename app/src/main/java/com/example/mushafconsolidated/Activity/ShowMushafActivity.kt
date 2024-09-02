@@ -83,22 +83,24 @@ import com.example.mushafconsolidated.receiversimport.Settingsss
 import com.example.mushafconsolidated.settingsimport.Constants
 import com.example.utility.FlowLayout
 import com.example.utility.MovableFloatingActionButton
-import com.google.android.exoplayer2.C
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.PlaybackException
-import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.Player.DiscontinuityReason
-import com.google.android.exoplayer2.Player.MediaItemTransitionReason
-import com.google.android.exoplayer2.Player.PositionInfo
-import com.google.android.exoplayer2.Tracks
-import com.google.android.exoplayer2.audio.AudioAttributes
-import com.google.android.exoplayer2.trackselection.TrackSelectionParameters
-import com.google.android.exoplayer2.ui.PlayerControlView
-import com.google.android.exoplayer2.ui.StyledPlayerView.FullscreenButtonClickListener
-import com.google.android.exoplayer2.util.EventLogger
-import com.google.android.exoplayer2.util.RepeatModeUtil
-import com.google.android.exoplayer2.util.Util
+import androidx.media3.common.C
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.common.MediaItem
+import androidx.media3.common.PlaybackException
+import androidx.media3.common.Player
+import androidx.media3.common.Player.DiscontinuityReason
+import androidx.media3.common.Player.MediaItemTransitionReason
+import androidx.media3.common.Player.PositionInfo
+import androidx.media3.common.Tracks
+import androidx.media3.common.AudioAttributes
+import androidx.media3.common.TrackSelectionParameters
+import androidx.media3.common.util.RepeatModeUtil
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.common.util.Util
+import androidx.media3.exoplayer.util.EventLogger
+import androidx.media3.ui.LegacyPlayerControlView
+ 
+
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textview.MaterialTextView
@@ -115,10 +117,11 @@ import java.util.Objects
 import kotlin.math.max
 
 
+@UnstableApi
 @Suppress("unused")
 @AndroidEntryPoint
 class ShowMushafActivity : BaseActivity(), OnItemClickListenerOnLong, View.OnClickListener,
-    FullscreenButtonClickListener, SurahAyahPickerListener {
+     SurahAyahPickerListener {
     private lateinit var filepath: String
     val isjuz = false
     private lateinit var exoSettings: ImageButton
@@ -164,13 +167,13 @@ class ShowMushafActivity : BaseActivity(), OnItemClickListenerOnLong, View.OnCli
     //  private val resetplayer: MaterialButton
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var selectedqari: String
-    private lateinit var qariname: TextView
+  private lateinit var qariname: TextView
     private lateinit var canceldownload: MaterialButton
 
     //  FrameLayout eqContainer;
 
 
-    private lateinit var playerView: PlayerControlView
+    private lateinit var playerView: LegacyPlayerControlView
     private var player: ExoPlayer? = null
     private lateinit var trackSelectionParameters: TrackSelectionParameters
     private lateinit var lastSeenTracks: Tracks
@@ -886,7 +889,7 @@ class ShowMushafActivity : BaseActivity(), OnItemClickListenerOnLong, View.OnCli
         ab.append("Aya").append(":").append(currenttrack).append(" ").append("of").append(
             versescount
         )
-        ayaprogress.text = ab.toString()
+       // ayaprogress.text = ab.toString()
         if (null != holder) {
             try {
                 if (holder.itemView.findViewById<View?>(R.id.quran_textView) != null) {
@@ -981,7 +984,7 @@ class ShowMushafActivity : BaseActivity(), OnItemClickListenerOnLong, View.OnCli
             ab.append("Aya").append(":").append(currenttrack).append(" ").append("of").append(
                 versescount
             )
-            ayaprogress.text = ab.toString()
+          //  ayaprogress.text = ab.toString()
             if (hlights[currenttrack] != null) {
                 holder = recyclerView.findViewHolderForAdapterPosition(
                     Objects.requireNonNull<ArrayList<AyahCoordinate>>(
@@ -1121,7 +1124,7 @@ class ShowMushafActivity : BaseActivity(), OnItemClickListenerOnLong, View.OnCli
             ab.append("Aya").append(":").append(currenttrack).append(" ").append("of").append(
                 versescount
             )
-            ayaprogress.text = ab.toString()
+         //   ayaprogress.text = ab.toString()
             if (hlights[currenttrack] != null) {
                 holder = recyclerView.findViewHolderForAdapterPosition(
                     Objects.requireNonNull<ArrayList<AyahCoordinate>>(
@@ -1266,7 +1269,7 @@ class ShowMushafActivity : BaseActivity(), OnItemClickListenerOnLong, View.OnCli
             val ab = java.lang.StringBuilder()
             ab.append("Aya").append(":").append(currenttrack).append(" ").append("of")
                 .append(versescount)
-            ayaprogress.text = ab.toString()
+         //   ayaprogress.text = ab.toString()
             if (hlights[currenttrack] != null) {
                 holder = recyclerView.findViewHolderForAdapterPosition(
                     Objects.requireNonNull<java.util.ArrayList<AyahCoordinate>?>(
@@ -1496,7 +1499,7 @@ class ShowMushafActivity : BaseActivity(), OnItemClickListenerOnLong, View.OnCli
             }
             val str = "($surahArabicName)($surahNameEnglish):$readerName"
             qariname.text = str
-            //   qariname.setText(readerName);
+              qariname.setText(readerName);
             player!!.prepare()
             if (rangeRecitation) {
                 recyclerView.post { recyclerView.scrollToPosition(versestartrange) }
@@ -1698,7 +1701,7 @@ class ShowMushafActivity : BaseActivity(), OnItemClickListenerOnLong, View.OnCli
         }
     }
 
-    override fun onFullscreenButtonClick(isFullScreen: Boolean) {}
+
     private inner class PlayerEventListener : Player.Listener {
         override fun onPlaybackStateChanged(playbackState: @Player.State Int) {
             if (playbackState == Player.STATE_ENDED) {
@@ -1818,7 +1821,7 @@ class ShowMushafActivity : BaseActivity(), OnItemClickListenerOnLong, View.OnCli
 
     @SuppressLint("WrongViewCast", "NotifyDataSetChanged")
     private fun initRV() {
-        ayaprogress = findViewById(R.id.ayaprogress)
+       // ayaprogress = findViewById(R.id.ayaprogress)
 //        canceldownload = findViewById<MaterialButton>(R.id.canceldownload)
         //     canceldownload.setOnClickListener(this)
         qariname = findViewById(R.id.lqari)
@@ -1828,7 +1831,7 @@ class ShowMushafActivity : BaseActivity(), OnItemClickListenerOnLong, View.OnCli
         playfb = findViewById(R.id.playfb)
         playfb.setOnClickListener(this)
         exoSettings = findViewById(R.id.exo_settings)
-        exoSettings.setOnClickListener(this)
+       exoSettings.setOnClickListener(this)
         exoClose = findViewById(R.id.exo_close)
         exoBottomBar = findViewById(R.id.exo_bottom_bar)
         //  private ImageView playbutton;
@@ -1837,7 +1840,7 @@ class ShowMushafActivity : BaseActivity(), OnItemClickListenerOnLong, View.OnCli
         playresume.setOnClickListener(this)
         val surahselection = findViewById<MaterialButton>(R.id.surahselection)
         surahselection.setOnClickListener(this)
-        exoClose.setOnClickListener(this)
+        //exoClose.setOnClickListener(this)
         playbutton.setOnClickListener(this)
         exoBottomBar.setOnClickListener(this)
         chooseDisplaytype.isChecked = singleline
@@ -2033,7 +2036,7 @@ class ShowMushafActivity : BaseActivity(), OnItemClickListenerOnLong, View.OnCli
             passageadapter.notifyDataSetChanged()
         }
         recyclerView.itemAnimator = DefaultItemAnimator()
-        exoBottomBar.setOnClickListener {
+      exoBottomBar.setOnClickListener {
            // SurahAyahPicker(true, starttrue = true)
             pickerDialog.show(isRefresh = false, startTrue = true) { surah, ayah ->
                 // Handle the selected surah and ayah here
@@ -2055,7 +2058,7 @@ class ShowMushafActivity : BaseActivity(), OnItemClickListenerOnLong, View.OnCli
             recyclerView.post { recyclerView.scrollToPosition(0) }
             releasePlayer()
             initializePlayer()
-            //    RefreshActivity("", " ", false);
+
         }
         exoSettings.setOnClickListener {
             if (audioSettingBottomBehaviour.state == BottomSheetBehavior.STATE_COLLAPSED) {

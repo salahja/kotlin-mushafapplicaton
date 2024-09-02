@@ -152,7 +152,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     private lateinit var materialToolbar: Toolbar
 
     //goes with extracttwothree
-    //   private lateinit var refflowAyahWordAdapter: refFlowAyahWordAdapter
+
     // private lateinit var flowAyahWordAdapterpassage: FlowAyahWordAdapterPassage
     // private UpdateMafoolFlowAyahWordAdapter flowAyahWordAdapter;
     private var mausoof = false
@@ -249,11 +249,11 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
         super.onCreate(savedInstanceState)
         binding = NewFragmentReadingBinding.inflate(layoutInflater)
-
+        setContentView( binding.root)
         mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
 
 
-        setContentView( binding.root)
+
 
         materialToolbar = binding.toolbarmain
 
@@ -909,7 +909,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     private fun executeSurahWordByWord() {
         val builder = AlertDialog.Builder(
             this,
-            com.google.android.material.R.style.ThemeOverlay_Material3_Dialog
+ R.style.Theme_MaterialComponents_DayNight_NoActionBar_NoActionBar
         )
         builder.setCancelable(false) // if you want user to wait for some process to finish,
         builder.setView(R.layout.layout_loading_dialog)
@@ -1315,13 +1315,23 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
            /* ParticleColorScheme.newInstance()
                 .show(this@QuranGrammarAct.supportFragmentManager, WordAnalysisBottomSheet.TAG)*/
 
-            val fragment = ScrollingFragment.newInstance(chapterno, verseNo,surahArabicName,isMakkiMadani)
+            val fragment = ScrollingFragment.newInstance(allofQuran[position].surah, allofQuran[position-1].ayah,surahArabicName,isMakkiMadani)
             supportFragmentManager.beginTransaction()
                 .replace(R.id.frame_container_qurangrammar, fragment) // Replaces the current fragment or view
                 .addToBackStack(null) // Optional: adds the transaction to the back stack, so the user can navigate back
                 .commit()
 
-        } else if (tag == "qurantext") {
+        } else if(tag=="tafsir") {
+
+            val readingintent =
+                Intent(this@QuranGrammarAct, TafsirFullscreenActivity::class.java)
+            val chapterno =allofQuran[position].surah
+            val verse = allofQuran!![position - 1].ayah
+            readingintent.putExtra(Constant.SURAH_ID, chapterno)
+            readingintent.putExtra(Constant.AYAH_ID, verse)
+            readingintent.putExtra(Constant.SURAH_ARABIC_NAME, surahArabicName)
+            startActivity(readingintent)
+        }  else if (tag == "qurantext") {
             val word: QuranEntity = if (position != 0) {
                 allofQuran[position - 1]
             } else {

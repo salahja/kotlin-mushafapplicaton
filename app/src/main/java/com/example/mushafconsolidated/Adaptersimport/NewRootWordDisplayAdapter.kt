@@ -888,48 +888,6 @@ class NewRootWordDisplayAdapter : RecyclerView.Adapter<NewRootWordDisplayAdapter
     }
 
 
-    fun setRootWordsAndMeanings(
-        haliaSentence: ArrayList<HalEnt>?,
-        tameez: ArrayList<TameezEnt>?,
-        mafoolbihi: ArrayList<MafoolBihi>?,
-        mutlaq: ArrayList<MafoolMutlaqEnt>?,
-        liajlihi: ArrayList<LiajlihiEnt>?,
-        verb: Boolean,
-        wazannumberslist: ArrayList<String>?,
-        spannableStringBuilder: SpannableStringBuilder?,
-        noun: Boolean,
-        ismfaelmafool: ArrayList<ArrayList<*>>?,
-        participles: Boolean,
-        isverbconjugation: Boolean,
-        corpusSurahWord: ArrayList<QuranCorpusWbw>?,
-        wordbdetail: HashMap<String, SpannableStringBuilder?>?,
-        vbdetail: HashMap<String, String?>?,
-        isSarfSagheer: Boolean,
-        isSarfSagheerThulahi: Boolean,
-        sarfsagheer: ArrayList<SarfSagheer>?,
-        context: Context,
-    ) {
-        this.haliaSentence = haliaSentence!!
-        this.tameez = tameez
-        this.mafoolbihi = mafoolbihi
-        isverb = verb
-        this.wazannumberslist = wazannumberslist!!
-        spannable = spannableStringBuilder!!
-        isnoun = noun
-        this.ismfaelmafool = ismfaelmafool!!
-        particples = participles
-        this.isverbconjugation = isverbconjugation
-        corpusexpand = corpusSurahWord
-        worddetails = wordbdetail!!
-        this.vbdetail = vbdetail!!
-        isSarfSagheerMazeed = isSarfSagheer
-        this.sarfsagheer = sarfsagheer
-        this.isSarfSagheerThulahi = isSarfSagheerThulahi
-        this.mutlaq = mutlaq
-        this.liajlihi = liajlihi
-        this.context = context
-    }
-
     inner class ItemViewAdapter(view: View, viewType: Int) :
         RecyclerView.ViewHolder(view), View.OnClickListener // current clickListerner
     {

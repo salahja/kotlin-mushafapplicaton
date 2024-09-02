@@ -19,6 +19,7 @@ import com.example.Constant
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.fragments.Dictionary_frag
 import com.example.utility.QuranGrammarApplication
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayoutMediator
@@ -27,7 +28,7 @@ import org.sj.conjugator.fragments.FragmentIsmIsmAla
 import org.sj.conjugator.fragments.FragmentIsmZarf
 import org.sj.conjugator.fragments.FragmentIsmfaelIsmMafools
 import org.sj.conjugator.fragments.FragmentVerb
-import ru.dimorinny.floatingtextbutton.FloatingTextButton
+ 
 
 @AndroidEntryPoint
 class LughatWordDetailsAct : BaseActivity() {
@@ -35,11 +36,30 @@ class LughatWordDetailsAct : BaseActivity() {
 
 
     private var shared: SharedPreferences? = null
-
+    data class TabInfo(val title: String, val languageKey: String? = null)
     private val dictionarytitle = arrayOf("Lane Lexicon", "Hans Weir")
+
+    private val dictionaryTabs = arrayOf(
+        TabInfo("Lane Lexicon", "lanes"),
+        TabInfo("Hans Weir", "hans")
+    )
+
     private val arabicwordharfnasb = arrayOf("English lughat", "Urdu Lughat", "Harf ")
+
+    private val arabicWordHarfNasbTabs = arrayOf(
+        TabInfo("English lughat", "english"),
+        TabInfo("Urdu Lughat", "urdu"),
+        TabInfo("Harf ") // Consider adding a language key for consistency
+    )
     private val vocabularytitles =
         arrayOf("Lane Lexicon", "Hans Weir", "English lughat", "Urdu Lughat")
+    private val vocabularyTabs = arrayOf(
+        TabInfo("Lane Lexicon", "lanes"),
+        TabInfo("Hans Weir", "hans"),
+        TabInfo("English lughat", "english"),
+        TabInfo("Urdu Lughat", "urdu")
+    )
+
     private val thulathientitles = arrayOf(
         "Lane Lexicon",
         "Hans Weir",
@@ -50,10 +70,37 @@ class LughatWordDetailsAct : BaseActivity() {
         "N. Instrument",
         "N.Place/Time"
     )
+    private val thulathiEntitlesTabs = arrayOf(
+        TabInfo("Lane Lexicon", "lanes"),
+        TabInfo("Hans Weir", "hans"),
+        TabInfo("English lughat", "english"),
+        TabInfo("Urdu Lughat", "urdu"),
+        TabInfo("Verb Conjugation"),
+        TabInfo("Active/Passive PCPL"),
+        TabInfo("N. Instrument"),
+        TabInfo("N.Place/Time")
+    )
+
     private val thulathientitlesmansub = arrayOf(
         "Lane Lexicon", "Hans Weir", "English lughat", "Urdu Lughat", "Subjunctive",
         "Verb Conjugaton", "Active/Passive PCPL", "N. Instrument", "N.Place/Time"
     )
+    private val thulathientitlesmansubs = arrayOf(
+        TabInfo("Lane Lexicon", "lanes"),
+        TabInfo("Hans Weir", "hans"),
+        TabInfo("English lughat", "english"),
+        TabInfo("Urdu Lughat", "urdu"),
+        TabInfo("Subjunctive"),
+        TabInfo("Verb Conjugation"),
+        TabInfo("Active/Passive PCPL"),
+        TabInfo("N. Instrument"),
+        TabInfo("N. Instrument"),
+        TabInfo("N.Place/Time")
+    )
+
+
+
+
     private val mujarradparticple = arrayOf(
         "Lane Lexicon", "Hans Weir", "English lughat", "Urdu Lughat", " ",
         "Verb Conjugaton", "Active/Passive PCPL", "N. Instrument", "N.Place/Time"
@@ -140,11 +187,11 @@ class LughatWordDetailsAct : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newtabs)
         //   setContentView(R.layout.activity_tabs);
-        val callButton = findViewById<FloatingTextButton>(R.id.action_button)
+    /*    val callButton = findViewById<FloatingActionButton>(R.id.action_button)
         callButton.setOnClickListener { view: View? ->
             // viewPager.adapters=null;
             finish()
-        }
+        }*/
         shared = androidx.preference.PreferenceManager.getDefaultSharedPreferences(
             QuranGrammarApplication.context!!
         )
@@ -157,9 +204,9 @@ class LughatWordDetailsAct : BaseActivity() {
         dataBundle = Bundle()
         val bundle = intent.extras
         //  bundle.getParcelableArray("dictionary");
-        var conjugationroot = bundle!!.getString(Constant.QURAN_VERB_ROOT)
-        val vocubaluryroot = bundle.getString(Constant.QURAN_VERB_ROOT)
-        val verbformthulathi = bundle.getString(Constant.QURAN_VERB_WAZAN)
+        var conjugationroot = bundle?.getString(Constant.QURAN_VERB_ROOT) ?: ""
+        val vocubaluryroot = bundle?.getString(Constant.QURAN_VERB_ROOT) ?: ""
+        val verbformthulathi = bundle?.getString(Constant.QURAN_VERB_WAZAN) ?: ""
         val ss = conjugationroot!!.replace("[\\[\\]]".toRegex(), "")
         val verbroot = ss.replace("[,;\\s]".toRegex(), "")
         val starts = conjugationroot.indexOf(ArabicLiterals.LALIF)
@@ -168,7 +215,7 @@ class LughatWordDetailsAct : BaseActivity() {
             conjugationroot =
                 conjugationroot.replace(ArabicLiterals.LALIF, hamza.trim { it <= ' ' })
         }
-        if (bundle.getString("nouncase") != null) {
+        if (bundle?.getString("nouncase") != null) {
             nouncase = bundle.getString(Constant.NOUNCASE)
             isnoun = true
             when (nouncase) {
@@ -177,18 +224,18 @@ class LughatWordDetailsAct : BaseActivity() {
                 "GEN" -> isIsmMajroor = true
             }
         }
-        val verbform: String? = bundle.getString(Constant.QURAN_VERB_WAZAN)
-        val verbmood: String? = bundle.getString(Constant.VERBMOOD)
-        val verbtype: String? = bundle.getString(Constant.VERBTYPE)
-        val arabicword: String? = bundle.getString("arabicword")
-        isdictionary = bundle.getBoolean("dictionary")
-        isimperative = bundle.getBoolean(Constant.IMPERATIVE, false)
-        isparticple = bundle.getBoolean(Constant.ISPARTICPLE, false)
-        val isharfnasab = bundle.getBoolean(Constant.ACCUSATIVE, false)
-        val isdem = bundle.getBoolean(Constant.DEMONSTRATIVE, false)
-        val isrelative = bundle.getBoolean(Constant.RELATIVE, false)
-        val isShart = bundle.getBoolean(Constant.CONDITIONAL, false)
-        val isprep = bundle.getBoolean(Constant.PREPOSITION, false)
+        val verbform: String? = bundle?.getString(Constant.QURAN_VERB_WAZAN) ?: ""
+        val verbmood: String? = bundle?.getString(Constant.VERBMOOD) ?: ""
+        val verbtype: String? = bundle?.getString(Constant.VERBTYPE) ?: ""
+        val arabicword: String? = bundle?.getString("arabicword") ?: ""
+        isdictionary = bundle?.getBoolean("dictionary",false) ?: false
+        isimperative = bundle?.getBoolean(Constant.IMPERATIVE, false) ?: false
+        isparticple = bundle?.getBoolean(Constant.ISPARTICPLE, false) ?: false
+        val isharfnasab = bundle?.getBoolean(Constant.ACCUSATIVE, false) ?: false
+        val isdem = bundle?.getBoolean(Constant.DEMONSTRATIVE, false) ?: false
+        val isrelative = bundle?.getBoolean(Constant.RELATIVE, false) ?: false
+        val isShart = bundle?.getBoolean(Constant.CONDITIONAL, false) ?: false
+        val isprep = bundle?.getBoolean(Constant.PREPOSITION, false) ?: false
         isHarf = isShart == isrelative == isharfnasab == isprep == isdem
         try {
             when (verbmood) {
@@ -209,8 +256,10 @@ class LughatWordDetailsAct : BaseActivity() {
                 dataBundle!!.putString(Constant.QURAN_VERB_WAZAN, verbform)
                 dataBundle!!.putString(Constant.VERBMOOD, verbmood)
                 dataBundle!!.putString(Constant.VERBTYPE, verbtype)
-                if (bundle.getString("nouncase") != null) {
-                    dataBundle!!.putString(Constant.NOUNCASE, nouncase)
+                if (bundle != null) {
+                    if (bundle.getString("nouncase") != null) {
+                        dataBundle!!.putString(Constant.NOUNCASE, nouncase)
+                    }
                 }
                 assert(verbtype != null)
 
@@ -943,3 +992,133 @@ class LughatWordDetailsAct : BaseActivity() {
         private const val NUM_PAGES_ISMMARFU = 5
     }
 }
+/*
+@AndroidEntryPoint
+class LughatWordDetailsAct : BaseActivity() {
+
+    private lateinit var sharedPreferences: SharedPreferences
+
+    // Use a data class to represent tab titles and associated data
+    data class TabInfo(val title: String, val languageKey: String? = null)
+
+    // Define tab configurations based on word type and properties
+    private val dictionaryTabs = arrayOf(
+        TabInfo("Lane Lexicon", "lanes"),
+        TabInfo("Hans Weir", "hans")
+    )
+
+    private val arabicWordHarfNasbTabs = arrayOf(
+        TabInfo("English lughat", "english"),
+        TabInfo("Urdu Lughat", "urdu"),
+        TabInfo("Harf ") // Consider adding a language key for consistency
+    )
+
+    private val vocabularyTabs = arrayOf(
+        TabInfo("Lane Lexicon", "lanes"),
+        TabInfo("Hans Weir", "hans"),
+        TabInfo("English lughat", "english"),
+        TabInfo("Urdu Lughat", "urdu")
+    )
+
+    private val thulathiEntitlesTabs = arrayOf(
+        TabInfo("Lane Lexicon", "lanes"),
+        TabInfo("Hans Weir", "hans"),
+        TabInfo("English lughat", "english"),
+        TabInfo("Urdu Lughat", "urdu"),
+        TabInfo("Verb Conjugation"),
+        TabInfo("Active/Passive PCPL"),
+        TabInfo("N. Instrument"),
+        TabInfo("N.Place/Time")
+    )
+
+    // ... (Similarly define other tab configurations)
+
+    private var dataBundle: Bundle? = null
+    private var isUnaugmentedWazan = false
+    private var isAugmentedWazan = false
+    // ... (Other flags)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_newtabs)
+
+        val callButton = findViewById<FloatingActionButton>(R.id.action_button)
+        callButton.setOnClickListener {
+            finish() // Close the activity
+        }
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        // ... (Other initialization)
+
+        val viewPager = findViewById<ViewPager2>(R.id.pager)
+        val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
+        dataBundle = Bundle()
+
+        val bundle = intent.extras
+        val conjugationRoot = bundle?.getString(Constant.QURAN_VERB_ROOT) ?: ""
+        val vocabularyRoot = bundle?.getString(Constant.QURAN_VERB_ROOT) ?: ""
+        val verbFormThulathi = bundle?.getString(Constant.QURAN_VERB_WAZAN) ?: ""
+
+        // Clean up the conjugation root
+        val verbRoot = conjugationRoot
+            .replace("[\\[\\]]".toRegex(), "")
+            .replace("[,;\\s]".toRegex(), "")
+            .replaceFirst(ArabicLiterals.LALIF, "ء") // Replace first occurrence only
+
+        // ... (Process noun case, verb properties, etc.)
+
+        // Determine tab configuration based on word type and properties
+        val tabs: Array<TabInfo> = when {
+            isdictionary -> dictionaryTabs
+            ismujarrad && isparticple && (isIsmMajroor || isIsmMansub || isIsmMarfu) -> {
+                // Update mujarradparticple array based on noun case
+                // ...
+                mujarradparticple
+            }
+            // ... (Other conditions)
+            else -> thulathiEntitlesTabs // Default to thulathiEntitlesTabs
+        }
+
+        // Set up ViewPager and TabLayout
+        val fm = supportFragmentManager
+        val viewStateAdapter = ViewStateAdapter(fm, lifecycle, tabs, dataBundle)
+        viewPager.adapter = viewStateAdapter
+
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = tabs[position].title
+        }.attach()
+
+        // ... (Tab and ViewPager event listeners)
+    }
+
+    private inner class ViewStateAdapter(
+        fragmentManager: FragmentManager,
+        lifecycle: Lifecycle,
+        private val tabs: Array<TabInfo>,
+        private val dataBundle: Bundle?
+    ) : FragmentStateAdapter(fragmentManager, lifecycle) {
+
+        override fun getItemCount(): Int = tabs.size
+
+        override fun createFragment(position: Int): Fragment {
+            val tab = tabs[position]
+            return when (tab.languageKey) {
+                "lanes" -> Dictionary_frag(this@LughatWordDetailsAct, "lanes").apply {
+                    arguments = dataBundle
+                }
+                "hans" -> Dictionary_frag(this@LughatWordDetailsAct, "hans").apply {
+                    arguments = dataBundle
+                }
+                // ... (Handle other language keys)
+                else -> {
+                    // Handle cases without language keys (e.g., Verb Conjugation)
+                    // ...
+                    Fragment() // Placeholder, replace with appropriate Fragment
+                }
+            }
+        }
+    }
+
+    // ... (Other methods)
+}
+ */

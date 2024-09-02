@@ -1,13 +1,10 @@
 package com.example.mushafconsolidated.Activity
 
 
-import com.example.mushafconsolidated.Activityimport.BaseActivity
 import Utility.AudioPlayed
 import Utility.AudioPrefrence
 import android.annotation.SuppressLint
-import android.app.Dialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
@@ -18,12 +15,9 @@ import android.os.Handler
 import android.os.Looper
 import android.text.format.DateFormat
 import android.util.ArrayMap
-import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.Window
 import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -42,6 +36,24 @@ import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.media3.common.AudioAttributes
+import androidx.media3.common.C
+import androidx.media3.common.MediaItem
+import androidx.media3.common.PlaybackException
+import androidx.media3.common.Player
+import androidx.media3.common.Player.DiscontinuityReason
+import androidx.media3.common.Player.MediaItemTransitionReason
+import androidx.media3.common.Player.PositionInfo
+import androidx.media3.common.TrackSelectionParameters
+import androidx.media3.common.Tracks
+import androidx.media3.common.util.RepeatModeUtil
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.common.util.Util
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
+import androidx.media3.exoplayer.util.EventLogger
+import androidx.media3.ui.LegacyPlayerControlView
+import androidx.media3.ui.PlayerControlView
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -49,11 +61,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.Constant
 import com.example.Constant.CHAPTER
 import com.example.Constant.SURAH_ARABIC_NAME
-
-import com.example.mushafconsolidated.Activity.Data.getSaveDirs
-import com.example.mushafconsolidated.Activity.ShowMushafActivity.Companion
 import com.example.mushafconsolidated.Activityimport.AyahCoordinate
- 
+import com.example.mushafconsolidated.Activityimport.BaseActivity
 import com.example.mushafconsolidated.BottomOptionDialog
 import com.example.mushafconsolidated.Entities.BadalErabNotesEnt
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
@@ -91,37 +100,15 @@ import com.example.sentenceanalysis.SentenceGrammarAnalysis
 import com.example.utility.CorpusUtilityorig
 import com.example.utility.CorpusUtilityorig.Companion.HightLightKeyWord
 import com.example.utility.MovableFloatingActionButton
-import com.google.android.exoplayer2.C
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.PlaybackException
-import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.Player.DiscontinuityReason
-import com.google.android.exoplayer2.Player.MediaItemTransitionReason
-import com.google.android.exoplayer2.Player.PositionInfo
-import com.google.android.exoplayer2.Tracks
-import com.google.android.exoplayer2.audio.AudioAttributes
-import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
-import com.google.android.exoplayer2.trackselection.TrackSelectionParameters
-import com.google.android.exoplayer2.ui.PlayerControlView
-import com.google.android.exoplayer2.ui.StyledPlayerView.FullscreenButtonClickListener
-import com.google.android.exoplayer2.util.EventLogger
-import com.google.android.exoplayer2.util.RepeatModeUtil
-import com.google.android.exoplayer2.util.Util
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textview.MaterialTextView
-
 import dagger.hilt.android.AndroidEntryPoint
-
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import sj.hisnul.fragments.NamesDetail
 import timber.log.Timber
-import wheel.OnWheelChangedListener
-import wheel.WheelView
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -130,9 +117,11 @@ import java.util.Date
 import java.util.Locale
 import java.util.concurrent.Executors
 import kotlin.math.max
+
+@UnstableApi
 @AndroidEntryPoint
-class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnClickListener,
-    FullscreenButtonClickListener ,SurahAyahPickerListener{
+class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnClickListener
+     ,SurahAyahPickerListener{
 
 
     // private UpdateMafoolFlowAyahWordAdapter flowAyahWordAdapter;
@@ -199,9 +188,8 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
     //  FrameLayout eqContainer;
 
 
-    // protected StyledPlayerView playerView;
-    //    protected StyledPlayerControlView playerView;
-    private var playerView: PlayerControlView? = null
+
+    private var playerView: LegacyPlayerControlView? = null
     private var player: ExoPlayer? = null
     private var trackSelectionParameters: TrackSelectionParameters? = null
     private var lastSeenTracks: Tracks? = null
@@ -964,7 +952,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
         }
     }
 
-    override fun onFullscreenButtonClick(isFullScreen: Boolean) {}
+
     private inner class PlayerEventListener : Player.Listener {
         override fun onPlaybackStateChanged(playbackState: @Player.State Int) {
             if (playbackState == Player.STATE_ENDED) {

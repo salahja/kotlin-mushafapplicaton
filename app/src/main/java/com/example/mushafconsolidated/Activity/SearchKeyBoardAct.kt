@@ -27,7 +27,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCa
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.sj.conjugator.activity.BaseActivity
 import org.sj.conjugator.activity.KeyboardUtil.hideKeyboard
-import ru.dimorinny.floatingtextbutton.FloatingTextButton
+ 
 import timber.log.Timber
 
 
@@ -59,12 +59,12 @@ class SearchKeyBoardAct : BaseActivity(), View.OnClickListener {
         setContentView(R.layout.search_key_activity_autocomplete)
         hideKeyboard(this@SearchKeyBoardAct)
         keyboard = findViewById(R.id.arabic_keyboard)
-        val callButton = findViewById<FloatingTextButton>(R.id.action_buttons)
-        callButton.setOnClickListener { view: View? ->
-            super@SearchKeyBoardAct.finish()
-            super@SearchKeyBoardAct.finish()
-            super.onBackPressed()
-        }
+        val callButton = findViewById<FloatingActionButton>(R.id.action_buttons)
+//        callButton.setOnClickListener { view: View? ->
+//            super@SearchKeyBoardAct.finish()
+//            super@SearchKeyBoardAct.finish()
+//            super.onBackPressed()
+//        }
         //    hideKeyboardSoft();
         setUpAutoComplete()
         val ic: InputConnection = actv.onCreateInputConnection(EditorInfo())
@@ -123,7 +123,7 @@ class SearchKeyBoardAct : BaseActivity(), View.OnClickListener {
 
     private fun init() {
         quranbtn = findViewById(R.id.qurangrammar)
-        layoutBottomSheet = findViewById(R.id.bottom_sheet)
+        layoutBottomSheet = findViewById(R.id.conjugatorbootomsheet)
         sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet)
         floatingActionButton = findViewById(R.id.fab)
         keyboard = findViewById(R.id.arabic_keyboard)

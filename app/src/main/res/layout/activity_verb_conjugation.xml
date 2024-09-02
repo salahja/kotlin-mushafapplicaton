@@ -41,7 +41,7 @@
 
     <include layout="@layout/conjugator_bottom_menu" />
 
-    <ru.dimorinny.floatingtextbutton.FloatingTextButton
+     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/action_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -51,12 +51,7 @@
         android:layout_marginBottom="60.0dip"
 
         android:background="?selectableItemBackground"
-
-        app:floating_left_icon="@drawable/ic_baseline_settings_backup_restore_24"
-
-
-        app:floating_title="Quran"
-        app:floating_title_color="@color/colorOnPrimary" />
+ />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -9,8 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.Constant.VERBTYPE
 import com.example.mushafconsolidated.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.sj.conjugator.fragments.RulesBottomSheet
-import ru.dimorinny.floatingtextbutton.FloatingTextButton
+ 
 
 class SarfSagheerActivity : BaseActivity() {
     var recyclerView: RecyclerView? = null
@@ -24,7 +25,7 @@ class SarfSagheerActivity : BaseActivity() {
         if (bundle != null) {
             verbtype = bundle.getString(VERBTYPE)
         }
-        val callButton: FloatingTextButton = findViewById(R.id.sagheeractivtyfloat)
+        val callButton: FloatingActionButton = findViewById(R.id.sagheeractivtyfloat)
         callButton.setOnClickListener {
             super@SarfSagheerActivity.finish()
             val conjugatorintent = Intent(this@SarfSagheerActivity, ConjugatorAct::class.java)

@@ -1378,7 +1378,7 @@ class newFlowAyahWordAdapter(
                             sharescreenfb.animate().rotationBy(360f)
                             sharescreenfb.animate().duration = 500
                         }
-                        tafsir.setOnClickListener { view12: View? ->
+                 /*       tafsir.setOnClickListener { view12: View? ->
                             closeFABMenu()
                             val readingintent =
                                 Intent(context, TafsirFullscreenActivity::class.java)
@@ -1389,7 +1389,7 @@ class newFlowAyahWordAdapter(
                             readingintent.putExtra(Constant.AYAH_ID, verse)
                             readingintent.putExtra(Constant.SURAH_ARABIC_NAME, SurahName)
                             context.startActivity(readingintent)
-                        }
+                        }*/
                         summbaryfb.setOnClickListener { v: View? ->
                             closeFABMenu()
                             //  HideFabMenu();

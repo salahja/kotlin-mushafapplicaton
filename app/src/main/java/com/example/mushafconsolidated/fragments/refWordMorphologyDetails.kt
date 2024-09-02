@@ -27,6 +27,11 @@ class refWordMorphologyDetails(
     //    public WordMorphologyDetails() {
     //    }
     // --Commented out by Inspection STOP (13/11/22, 3:02 PM)
+    /*
+
+     */
+
+
     val workBreakDown: SpannableString?
         get() {
             //   SpannableString  tagspannable = null;
@@ -247,69 +252,55 @@ class refWordMorphologyDetails(
             return tagspannable
         }
 
-    private fun getNounDetails(wordetails: String?): String {
-        var expandTagsone = ""
-        val split: Array<String> =
-            wordetails!!.split("\\|".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        val wordbdetail: HashMap<String, SpannableStringBuilder?> = HashMap()
-        val sb: StringBuilder = java.lang.StringBuilder()
-        getNdetails(corpusNounWord, wordbdetail, sb)
-        val genderNumberdetails1: String =
-            getGenderNumberdetails(
-                corpusNounWord!![0].gendernumber
-            ).toString()
-        if (wordbdetail["noun"] != null) {
-            expandTagsone += wordbdetail["noun"].toString()
-            expandTagsone = expandTagsone + "Root:-" + corpusNounWord!![0].root_a
+    private fun getNounDetails(wordDetails: String?): String {
+        var expandedTag = ""
+        val wordDetailMap: HashMap<String, SpannableStringBuilder?> = HashMap()
+        val stringBuilder = StringBuilder()
+
+        corpusNounWord?.let {
+            getNdetails(it, wordDetailMap, stringBuilder)
+            val genderNumberDetails = getGenderNumberdetails(it[0].gendernumber).toString()
+            if (wordDetailMap["noun"] != null) {
+                expandedTag += wordDetailMap["noun"].toString()
+                expandedTag += "Root:-${it[0].root_a}"
+            }
         }
-        //   expandTagsone = expandTagsone.concat(genderNumberdetails1.toString);
-        return expandTagsone
+        return expandedTag
     }
 
-    private fun getVerbDetails(expandTagsone: String, wordetails: String): String {
-        var expandTagsone: String = expandTagsone
-        val split: Array<String> =
-            wordetails.split("\\|".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        val s: String = split[split.size - 1]
-        if (!s.contains("MOOD")) {
-            val genderNumberdetails: StringBuilder =
-                getGenderNumberdetails(s)
-            expandTagsone += genderNumberdetails.toString()
-            val verbTense: String = expandVerbTense(word.detailsone!!)
-            expandTagsone = "$expandTagsone($verbTense)"
-            expandTagsone += verbfeaturesenglisharabic.IND
+    private fun getVerbDetails(expandedTag: String, wordDetails: String): String {
+        var result = expandedTag
+        val split = wordDetails.split("|").filter { it.isNotEmpty() }
+        val lastPart = split.last()
+
+        if (!lastPart.contains("MOOD")) {
+            result += getGenderNumberdetails(lastPart).toString()
+            result = "$result(${expandVerbTense(word.detailsone!!)})"
+            result += verbfeaturesenglisharabic.IND
         } else {
-            val ss: String = split[split.size - 2]
-            val genderNumberdetails: StringBuilder =
-                getGenderNumberdetails(ss)
-            expandTagsone += genderNumberdetails.toString()
-            val verbTense: String = expandVerbTense(word.detailsone!!)
-            expandTagsone = "$expandTagsone($verbTense)"
+            val secondLastPart = split[split.size - 2]
+            result += getGenderNumberdetails(secondLastPart).toString()
+            result = "$result(${expandVerbTense(word.detailsone!!)})"
         }
-        expandTagsone += if (!s.contains("PASS")) {
-            verbfeaturesenglisharabic.ACT
-        } else {
-            verbfeaturesenglisharabic.PASS
+
+        result += if (!lastPart.contains("PASS")) verbfeaturesenglisharabic.ACT else verbfeaturesenglisharabic.PASS
+        verbCorpusRootWord?.let {
+            result += "Root:-${it[0].root_a}"
         }
-        //   expandTagsone.concat(verbCorpusRootWord.get(0).getRoot_a);
-        expandTagsone = expandTagsone + "Root:-" + verbCorpusRootWord!![0].root_a
-        return expandTagsone
+        return result
     }
 
-    private fun expandVerbTense(verbdetails: String): String {
-        var tense: String = if (verbdetails.contains("IMPF")) {
-            verbfeaturesenglisharabic.IMPF
-        } else if (verbdetails.contains("IMPV")) {
-            verbfeaturesenglisharabic.IMPV
-        } else if (verbdetails.contains("PERF")) {
-            verbfeaturesenglisharabic.PERF
-        } else {
-            ""
+    private fun expandVerbTense(verbDetails: String): String {
+        var tense = when {
+            verbDetails.contains("IMPF") -> verbfeaturesenglisharabic.IMPF
+            verbDetails.contains("IMPV") -> verbfeaturesenglisharabic.IMPV
+            verbDetails.contains("PERF") -> verbfeaturesenglisharabic.PERF
+            else -> ""
         }
-        if (verbdetails.contains("SUBJ")) {
-            tense += verbfeaturesenglisharabic.SUBJ
-        } else if (verbdetails.contains("JUS")) {
-            tense += verbfeaturesenglisharabic.JUS
+        tense += when {
+            verbDetails.contains("SUBJ") -> verbfeaturesenglisharabic.SUBJ
+            verbDetails.contains("JUS") -> verbfeaturesenglisharabic.JUS
+            else -> ""
         }
         return tense
     }

@@ -14,6 +14,7 @@ import com.example.Constant.VERBMOOD
 import com.example.Constant.VERBTYPE
 import com.example.mushafconsolidated.R
 import com.example.utility.QuranGrammarApplication
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayoutMediator
@@ -24,7 +25,7 @@ import org.sj.conjugator.fragments.FragmentVerb
 import org.sj.conjugator.fragments.MazeedTabSagheerFragmentVerb
 import org.sj.conjugator.utilities.ArabicLiterals
 import org.sj.conjugator.utilities.SharedPref
-import ru.dimorinny.floatingtextbutton.FloatingTextButton
+ 
 
 class ConjugatorTabsActivity :  BaseActivity() {
     // Arrey of strings FOR TABS TITLES
@@ -50,11 +51,11 @@ class ConjugatorTabsActivity :  BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newtabs)
-        val callButton: FloatingTextButton = findViewById(R.id.action_button)
-        callButton.setOnClickListener { view: View? ->
-            // viewPager.adapters=null;
-            finish()
-        }
+//        val callButton: FloatingActionButton = findViewById(R.id.action_button)
+//        callButton.setOnClickListener { view: View? ->
+//            // viewPager.adapters=null;
+//            finish()
+//        }
         val fm: FragmentManager = getSupportFragmentManager()
         val sa: ViewStateAdapter = ViewStateAdapter(fm, lifecycle)
         val viewPager: ViewPager2 = findViewById(R.id.pager)
