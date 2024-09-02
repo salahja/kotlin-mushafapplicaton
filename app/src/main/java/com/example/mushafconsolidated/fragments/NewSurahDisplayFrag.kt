@@ -12,12 +12,14 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.OptIn
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.downloader.PRDownloader
@@ -314,6 +316,7 @@ class NewSurahDisplayFrag : Fragment(), SearchView.OnQueryTextListener {
         return view
     }
 
+    @OptIn(UnstableApi::class)
     private fun initnavagation(view: View) {
         bottomNavigationView = view.findViewById(R.id.bottomNavView)
         btnBottomSheet = view.findViewById(R.id.fab)
@@ -346,7 +349,7 @@ class NewSurahDisplayFrag : Fragment(), SearchView.OnQueryTextListener {
                 startActivity(settingint)
             }
             if (item.itemId == R.id.mushafview) {
-                val settingints = Intent(activity, PrdownloaderAct::class.java)
+                val settingints = Intent(activity, ShowMushafActivity::class.java)
 
                 startActivity(settingints)
             }
