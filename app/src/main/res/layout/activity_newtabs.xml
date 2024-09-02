@@ -52,7 +52,7 @@
                 android:id="@+id/action_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
+                android:visibility="gone"
                 android:layout_gravity="start|bottom|center"
                 android:layout_margin="16.0dip"
 

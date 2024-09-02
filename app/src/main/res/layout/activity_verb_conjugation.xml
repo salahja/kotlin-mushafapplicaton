@@ -45,7 +45,7 @@
         android:id="@+id/action_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
+         android:visibility="gone"
         android:layout_gravity="end|bottom|center"
         android:layout_margin="60.0dip"
         android:layout_marginBottom="60.0dip"

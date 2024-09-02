@@ -368,7 +368,7 @@
             android:layout_width="94dp"
             android:layout_height="60dp"
 
-
+             android:visibility="gone"
             android:layout_gravity="start|bottom|center"
 
             android:background="?selectableItemBackground"
@@ -409,7 +409,7 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
-
+            android:visibility="gone"
             android:layout_width="100dp"
             android:layout_height="60dp"
             android:layout_gravity="bottom"

@@ -10,9 +10,10 @@ import com.example.Constant.VERBTYPE
 import com.example.mushafconsolidated.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import dagger.hilt.android.AndroidEntryPoint
 import org.sj.conjugator.fragments.RulesBottomSheet
  
-
+@AndroidEntryPoint
 class SarfSagheerActivity : BaseActivity() {
     var recyclerView: RecyclerView? = null
     private var verbtype: String? = null
