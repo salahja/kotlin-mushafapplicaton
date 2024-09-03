@@ -444,13 +444,13 @@ class fragTopicFlowAyahWordAdapter(private var activity: AppCompatActivity,priva
                         //    vbdetail = ams.getVerbDetails();
                         print("check")
                     }
-                    val corpusNounWord: ArrayList<NounCorpus?> =
+                    val corpusNounWord:List<NounCorpus> =
                         utils.getQuranNouns(
                             word.corpus!!.surah,
                             word.corpus!!.ayah,
                             word.corpus!!.wordno
-                        ) as ArrayList<NounCorpus?>
-                    val verbCorpusRootWord: List<VerbCorpus?> =
+                        )
+                    val verbCorpusRootWord : List<VerbCorpus> =
                         utils.getQuranRoot(
                             word.corpus!!.surah,
                             word.corpus!!.ayah,

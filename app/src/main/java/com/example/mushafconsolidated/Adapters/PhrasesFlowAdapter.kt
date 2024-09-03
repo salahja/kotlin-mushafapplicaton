@@ -47,8 +47,10 @@ import com.example.mushafconsolidated.Entities.LiajlihiEnt
 import com.example.mushafconsolidated.Entities.MafoolBihi
 import com.example.mushafconsolidated.Entities.MafoolMutlaqEnt
 import com.example.mushafconsolidated.Entities.NasbListingPojo
+import com.example.mushafconsolidated.Entities.NounCorpus
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.TameezEnt
+import com.example.mushafconsolidated.Entities.VerbCorpus
 import com.example.mushafconsolidated.Entities.wbwentity
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SurahSummary
@@ -654,13 +656,13 @@ class PhrasesFlowAdapter(
                         //    vbdetail = ams.getVerbDetails();
                         print("check")
                     }
-                    val corpusNounWord =
+                    val corpusNounWord:List<NounCorpus> =
                         utils.getQuranNouns(
                             word.corpus!!.surah,
                             word.corpus!!.ayah,
                             word.corpus!!.wordno
                         )
-                    val verbCorpusRootWord =
+                    val verbCorpusRootWord : List<VerbCorpus> =
                         utils.getQuranRoot(
                             word.corpus!!.surah,
                             word.corpus!!.ayah,

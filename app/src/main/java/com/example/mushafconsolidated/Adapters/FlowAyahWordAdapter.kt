@@ -48,8 +48,10 @@ import com.example.mushafconsolidated.Entities.HalEnt
 import com.example.mushafconsolidated.Entities.LiajlihiEnt
 import com.example.mushafconsolidated.Entities.MafoolBihi
 import com.example.mushafconsolidated.Entities.MafoolMutlaqEnt
+import com.example.mushafconsolidated.Entities.NounCorpus
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.TameezEnt
+import com.example.mushafconsolidated.Entities.VerbCorpus
 import com.example.mushafconsolidated.Entities.wbwentity
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SurahSummary
@@ -77,7 +79,7 @@ import java.util.Date
 
 //import com.example.mushafconsolidated.Entities.JoinVersesTranslationDataTranslation;
 //public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnItemClickListenerOnLong {
-class newFlowAyahWordAdapter(
+class FlowAyahWordAdapter(
     isaudio: Boolean,
     private val mutlaqent: List<MafoolMutlaqEnt?>?,
     private val tameezEnts: List<TameezEnt?>?,
@@ -92,7 +94,7 @@ class newFlowAyahWordAdapter(
     private val SurahName: String,
     private val isMakkiMadani: Int,
     listener: OnItemClickListenerOnLong?,
-) : RecyclerView.Adapter<newFlowAyahWordAdapter.ItemViewAdapter>() //implements OnItemClickListenerOnLong {
+) : RecyclerView.Adapter<FlowAyahWordAdapter.ItemViewAdapter>() //implements OnItemClickListenerOnLong {
 {
     private var wordByWordDisplay: Boolean = false
     private var ayahWord: ArrayList<NewQuranCorpusWbw>? = null
@@ -844,13 +846,13 @@ class newFlowAyahWordAdapter(
                     //    vbdetail = ams.getVerbDetails();
                     print("check")
                 }
-                val corpusNounWord =
+                val corpusNounWord:List<NounCorpus> =
                     utils.getQuranNouns(
                         word.corpus!!.surah,
                         word.corpus!!.ayah,
                         word.corpus!!.wordno
                     )
-                val verbCorpusRootWord =
+                val verbCorpusRootWord : List<VerbCorpus> =
                     utils.getQuranRoot(
                         word.corpus!!.surah,
                         word.corpus!!.ayah,

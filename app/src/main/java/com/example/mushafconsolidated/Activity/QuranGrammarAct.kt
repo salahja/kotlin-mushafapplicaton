@@ -72,7 +72,7 @@ import com.example.mushafconsolidated.fragments.BookmarkFragment
 import com.example.mushafconsolidated.fragments.NewSurahDisplayFrag
 import com.example.mushafconsolidated.fragments.ScrollingFragment
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
-import com.example.mushafconsolidated.fragments.newFlowAyahWordAdapter
+import com.example.mushafconsolidated.fragments.FlowAyahWordAdapter
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.model.NewQuranCorpusWbw
 import com.example.mushafconsolidated.model.QuranCorpusWbw
@@ -122,7 +122,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     // private var newnewadapterlist = LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>>()
     private var newnewadapterlist: LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>> =
         LinkedHashMap()
-    private lateinit var newflowAyahWordAdapter: newFlowAyahWordAdapter
+    private lateinit var newflowAyahWordAdapter: FlowAyahWordAdapter
     lateinit var binding: NewFragmentReadingBinding
     private lateinit var surahWheelDisplayData: Array<String>
     private lateinit var ayahWheelDisplayData: Array<String>
@@ -1033,7 +1033,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                 if (!mushafview) {
                     // viewmodel.getVersesBySurahLive(chapterno).observe(this, {
                     //    allofQuran=it
-                    newflowAyahWordAdapter = newFlowAyahWordAdapter(
+                    newflowAyahWordAdapter = FlowAyahWordAdapter(
                         false,
                         mutlaqEntList,
                         tameezEntList,

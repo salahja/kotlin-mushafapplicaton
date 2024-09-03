@@ -2,6 +2,9 @@ package com.example.mushafconsolidated.fragments
 
 
 import android.text.SpannableStringBuilder
+import androidx.annotation.OptIn
+import androidx.media3.common.util.Log
+import androidx.media3.common.util.UnstableApi
 import com.example.mushafconsolidated.Entities.NewCorpusExpandWbwPOJO
 import com.example.mushafconsolidated.Entities.NounCorpus
 import com.example.mushafconsolidated.Entities.VerbCorpus
@@ -204,7 +207,84 @@ open class QuranMorphologyDetails() {
     //get the root,since vercopus is not checked
 //    wordbdetail.put("form", SpannableStringBuilder.valueOf("I"));
     //chedk if particple
-    open val wordDetails: HashMap<String, SpannableStringBuilder?>
+    open val wordDetails:HashMap<String, SpannableStringBuilder?>// Use immutable Map
+        get() {
+            //val wordDetailsMap = mutableMapOf<String, SpannableStringBuilder>()
+        val wordDetailsMap = HashMap<String, SpannableStringBuilder?>()
+            // Use mutableMapOf for building the map
+            val firstCorpusWord = corpusSurahWord?.getOrNull(0) // Safe access with null check
+
+            firstCorpusWord?.let {
+                wordDetailsMap["surahid"] = SpannableStringBuilder(it.surah.toString())
+                wordDetailsMap["ayahid"] = SpannableStringBuilder(it.ayah.toString())
+                wordDetailsMap["wordno"] = SpannableStringBuilder(it.wordno.toString())
+                wordDetailsMap["wordtranslation"] = SpannableStringBuilder(it.en)
+
+                // Build Arabic word efficiently
+                val arabicWord = StringBuilder().apply {
+                    append(it.araone)
+                    append(it.aratwo)
+                    append(it.arathree)
+                    append(it.arafour)
+                    append(it.arafive) // Assuming arafive exists
+                }.toString()
+                wordDetailsMap["arabicword"] = SpannableStringBuilder(arabicWord)
+
+                // Handle noun details
+                val firstCorpusNoun = corpusNoun?.getOrNull(0)
+                firstCorpusNoun?.let { noun ->
+                    if (noun.proptwo == CorpusConstants.NominalsProp.PCPL) {
+                        val form = noun.form?.replace("[()]".toRegex(), "")
+                        wordDetailsMap["form"] = SpannableStringBuilder(
+                            if (form != "I") {
+                                convertForms(form) // Call the improved convertForm function
+                                this.form.toString()
+                            } else {
+                                noun.form ?: "" // Handle null form
+                            }
+                        )
+                        getRoot(corpusSurahWord, wordDetailsMap) // Assuming this function exists
+                    }
+
+                    wordDetailsMap["PCPL"] = SpannableStringBuilder(
+                        if (noun.proptwo == "PCPL") {
+                            noun.propone + noun.proptwo
+                        } else {
+                            "NONE"
+                        }
+                    )
+                    wordDetailsMap["particple"] = SpannableStringBuilder(if (noun.proptwo == "PCPL") "PART" else "NONE")
+                }
+            }
+
+            // Call other helper functions
+            GetPronounDetails(corpusSurahWord, wordDetailsMap)
+            GetLemmArabicwordWordDetails(corpusSurahWord, wordDetailsMap)
+            getRoot(corpusSurahWord, wordDetailsMap)
+            getNdetails(corpusNoun, wordDetailsMap, StringBuilder()) // Pass an empty StringBuilder
+            getProperNounDetails(corpusNoun, wordDetailsMap, StringBuilder())
+
+            // Simplify word details analysis
+            wordDetailsMap["worddetails"]?.let { wordDetails ->
+                val isNoun = wordDetails.contains("Noun")
+                if (!isNoun) {
+                    when {
+                        wordDetails.contains("Relative Pronoun") -> wordDetailsMap["relative"] = SpannableStringBuilder("relative")
+                        wordDetails.contains("Conditional particle") || wordDetails.contains("Time Adverb") ->
+                            wordDetailsMap["cond"] = SpannableStringBuilder("cond")
+                        wordDetails.contains("Accusative(حرف نصب)") -> wordDetailsMap["harfnasb"] = SpannableStringBuilder("harfnasb")
+                        wordDetails.contains("Prepositions") -> wordDetailsMap["prep"] = SpannableStringBuilder("prep")
+                        wordDetails.contains("Demonstrative Pronoun") -> wordDetailsMap["dem"] = SpannableStringBuilder("dem")
+                    }
+                }
+            }
+
+            return wordDetailsMap // Return the immutable map
+        }
+
+    // 1. Rename parameters and variables for clarity
+
+    open val wordDetailsss: HashMap<String, SpannableStringBuilder?>
         get() {
             val wordbdetail = HashMap<String, SpannableStringBuilder?>()
             wordbdetail["surahid"] = SpannableStringBuilder.valueOf(

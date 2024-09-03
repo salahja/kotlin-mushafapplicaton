@@ -12,7 +12,9 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
+import com.example.mushafconsolidated.Entities.NounCorpus
 import com.example.mushafconsolidated.Entities.RootWordDetails
+import com.example.mushafconsolidated.Entities.VerbCorpus
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.fragments.WordMorphologyDetails
@@ -146,13 +148,13 @@ class MyRootBreakRecyclerViewAdapter(
                     //    vbdetail = ams.getVerbDetails();
                     print("check")
                 }
-                val corpusNounWord =
+                val corpusNounWord: List<NounCorpus> =
                     utils.getQuranNouns(
                         quranCorpusWbw.corpus.surah,
                         quranCorpusWbw.corpus.ayah,
                         quranCorpusWbw.corpus.wordno
                     )
-                val verbCorpusRootWord =
+                val verbCorpusRootWord: List<VerbCorpus> =
                     utils.getQuranRoot(
                         quranCorpusWbw.corpus.surah,
                         quranCorpusWbw.corpus.ayah,

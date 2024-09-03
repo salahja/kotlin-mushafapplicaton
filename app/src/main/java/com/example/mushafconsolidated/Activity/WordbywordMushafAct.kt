@@ -53,7 +53,6 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.exoplayer.util.EventLogger
 import androidx.media3.ui.LegacyPlayerControlView
-import androidx.media3.ui.PlayerControlView
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -83,7 +82,7 @@ import com.example.mushafconsolidated.databinding.FbarnormalfooterBinding
 import com.example.mushafconsolidated.databinding.RxfetchProgressBinding
 import com.example.mushafconsolidated.databinding.VfourExpandableNewactivityShowAyahsBinding
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
-import com.example.mushafconsolidated.fragments.newFlowAyahWordAdapter
+import com.example.mushafconsolidated.fragments.FlowAyahWordAdapter
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.model.CorpusAyahWord
 import com.example.mushafconsolidated.model.NewQuranCorpusWbw
@@ -128,7 +127,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
     private lateinit var mainViewModel: QuranVIewModel
     private var corpusSurahWord: List<QuranCorpusWbw>? = null
 
-    private lateinit var newflowAyahWordAdapter: newFlowAyahWordAdapter
+    private lateinit var newflowAyahWordAdapter: FlowAyahWordAdapter
     private var Jumlahaliya: List<HalEnt?>? = null
     private var Tammezent: List<TameezEnt?>? = null
 
@@ -1375,7 +1374,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
 
             // recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.layoutManager = manager
-            newflowAyahWordAdapter = newFlowAyahWordAdapter(
+            newflowAyahWordAdapter = FlowAyahWordAdapter(
                 true,
                 Mutlaqent,
                 tammezent,
