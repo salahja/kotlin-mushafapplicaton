@@ -40,7 +40,19 @@
                         android:layout_weight="1.0"
 
                         android:textSize="20sp" />
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@id/weaknesstype"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:layout_width="0.0dip"
+                        android:layout_height="wrap_content"
 
+                        android:gravity="center|end"
+                        android:paddingStart="5.0dip"
+                        android:paddingEnd="3.0dip"
+                        android:textAlignment="center"
+                        android:layout_weight="1.0"
+
+                        android:textSize="20sp" />
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@id/weknessname"
                         style="@style/Widget.Material3.Button.ElevatedButton"

@@ -41,7 +41,7 @@ import database.entity.MujarradVerbs
 import database.verbrepo.VerbModel
 import org.sj.conjugator.fragments.SettingsFragmentVerb
 import org.sj.conjugator.utilities.SharedPref
-import ru.dimorinny.floatingtextbutton.FloatingTextButton
+ 
 @AndroidEntryPoint
 class ConjugatorAct : BaseActivity(), View.OnClickListener {
     private val keyValues: SparseArray<String> = SparseArray<String>()
@@ -84,11 +84,11 @@ class ConjugatorAct : BaseActivity(), View.OnClickListener {
         setContentView(R.layout.conjugator_key_activity_autocomplete)
         KeyboardUtil.hideKeyboard(this@ConjugatorAct)
         keyboard = findViewById(R.id.arabic_keyboard)
-        val callButton: FloatingTextButton = findViewById(R.id.action_buttons)
-        callButton.setOnClickListener { view: View? ->
-            super@ConjugatorAct.finish()
-            super.onBackPressed()
-        }
+//        val callButton: FloatingActionButton = findViewById(R.id.action_buttons)
+//        callButton.setOnClickListener { view: View? ->
+//            super@ConjugatorAct.finish()
+//            super.onBackPressed()
+//        }
         //    hideKeyboardSoft();
      //   contextOfApplication = getApplicationContext()
         SetUpAutoComplete()
@@ -154,7 +154,7 @@ class ConjugatorAct : BaseActivity(), View.OnClickListener {
     private fun init() {
         quranbtn = findViewById(R.id.qurangrammar)
         settingbtn = findViewById(R.id.conjugatorsetting)
-        layoutBottomSheet = findViewById(R.id.bottom_sheet)
+        layoutBottomSheet = findViewById(R.id.conjugatorbootomsheet)
         sheetBehavior = BottomSheetBehavior.from<View>(layoutBottomSheet)
         floatingActionButton = findViewById(R.id.fab)
         mujarradbtn = findViewById(R.id.mujarradbtn)

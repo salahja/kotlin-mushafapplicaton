@@ -15,15 +15,16 @@ import com.example.Constant.SARFKABEERWEAKNESS
 import com.example.Constant.VERBMOOD
 import com.example.Constant.VERBTYPE
 import com.example.mushafconsolidated.R
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.sj.conjugator.adapter.IsmZarffKabeerAdapter
 import org.sj.conjugator.utilities.GatherAll
-import ru.dimorinny.floatingtextbutton.FloatingTextButton
+ 
 
 class FragmentIsmZarf : Fragment() {
     var recyclerView: RecyclerView? = null
     private var isAugmented = false
     private var isUnAugmented = false
-    private lateinit var callButton: FloatingTextButton
+    private lateinit var callButton: FloatingActionButton
     private lateinit  var layoutManager: LinearLayoutManager
     private   var skabeer = ArrayList<ArrayList<*>>()
     private lateinit var verbformthulathi: String

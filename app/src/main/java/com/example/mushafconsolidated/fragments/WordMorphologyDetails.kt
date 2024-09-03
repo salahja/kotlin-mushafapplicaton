@@ -3,88 +3,67 @@ package com.example.mushafconsolidated.fragments
 
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
+import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.NounCorpus
 import com.example.mushafconsolidated.Entities.VerbCorpus
-import com.example.mushafconsolidated.model.CorpusWbwWord
 import com.example.utility.CorpusConstants.verbfeaturesenglisharabic
 import com.example.utility.CorpusUtilityorig
 
 
-class WordMorphologyDetails : QuranMorphologyDetails {
-    private var verbCorpusRootWord: ArrayList<VerbCorpus>? = null
-    private var corpusNounWord: ArrayList<NounCorpus>? = null
-    private var word: CorpusWbwWord
+// Rename the class to follow Kotlin conventions (PascalCase) and be more descriptive.
+class WordMorphologyDetails(
+    private val word: CorpusEntity,
+    corpusNounWords: List<NounCorpus>, // Use specific types instead of '*'
+    verbCorpusRootWords: List<VerbCorpus>
+) : QuranMorphologyDetails() {
+    private val verbCorpusRootWords: List<VerbCorpus>? = verbCorpusRootWords
+    private val corpusNounWords: List<NounCorpus>? = corpusNounWords
 
-    constructor(word: CorpusWbwWord) {
-        this.word = word
-    }
+    // No need for an init block since properties are initialized directly.
 
-    constructor(
-        word: CorpusWbwWord,
-        corpusNounWord: List<*>,
-        verbCorpusRootWord: List<*>
-    ) {
-        this.word = word
-        this.corpusNounWord = corpusNounWord as ArrayList<NounCorpus>?
-        this.verbCorpusRootWord = verbCorpusRootWord as ArrayList<VerbCorpus>?
-    }
-
-    constructor(word: CorpusWbwWord, corpusNounWord: ArrayList<NounCorpus>?) {
-        this.word = word
-        this.corpusNounWord = corpusNounWord
-    }//   tagspannable.setSpan(new ForegroundColorSpan(CYAN), 0, expandTagsone.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);//   SpannableString  tagspannable = null;
-
-    // --Commented out by Inspection START (13/11/22, 3:02 PM):
-    //    public WordMorphologyDetails() {
-    //    }
-    // --Commented out by Inspection STOP (13/11/22, 3:02 PM)
-    val workBreakDown: SpannableString?
+    val workBreakDown: SpannableString? // Rename to be more descriptive
         get() {
-            //   SpannableString  tagspannable = null;
-            var tagspannable: SpannableString? = null
+            var spannableString: SpannableString? = null
             when (word.wordcount) {
                 1 -> {
-                    val tagone: String = word.tagone!!
-                    var expandTagsone: String = expandTags(tagone)
-                    if ((tagone == "N")) {
-                        expandTagsone = getNounDetails(word.detailsone)
+                    val tagOne = word.tagone!!
+                    var expandedTagOne = expandTags(tagOne)
+                    expandedTagOne = when (tagOne) {
+                        "N" -> getNounDetails(word.detailsone)
+                        "V" -> getVerbDetails(expandedTagOne, word.detailsone!!)
+                        else -> expandedTagOne
                     }
-                    if ((tagone == "V")) {
-                        expandTagsone = getVerbDetails(expandTagsone, word.detailsone!!)
-                    }
-                    tagspannable = SpannableString(expandTagsone)
-                    //   tagspannable.setSpan(new ForegroundColorSpan(CYAN), 0, expandTagsone.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    tagspannable = CorpusUtilityorig.NewSetWordSpanTag(
+                    spannableString = SpannableString(expandedTagOne)
+                    spannableString = CorpusUtilityorig.NewSetWordSpanTag(
                         word.tagone!!, word.tagtwo!!, word.tagthree!!,
-                        word.tagfour!!, word.tagfive!!, " ", " ", "", "", expandTagsone
+                        word.tagfour!!, word.tagfive!!, " ", " ", "", "", expandedTagOne
                     )
                 }
 
                 2 -> {
-                    val tagtwo: String = word.tagtwo!!
-                    val tagone: String = word.tagone!!
-                    var expandTagsone: String = expandTags(tagone)
-                    val tagnounone: Boolean =
-                        (tagone == "N") || (tagone == "ADJ") || (tagone == "PN")
-                    val tagnountwo: Boolean =
-                        (tagtwo == "N") || (tagtwo == "ADJ") || (tagtwo == "PN")
-                    var expandTagstwo: String = expandTags(tagtwo)
-                    if (tagnounone) {
-                        expandTagsone = getNounDetails(word.detailsone)
-                    } else if (tagnountwo) {
-                        expandTagstwo = getNounDetails(word.detailstwo)
+                    val tagTwo = word.tagtwo!!
+                    val tagOne = word.tagone!!
+                    var expandedTagOne = expandTags(tagOne)
+                    val isNounOne = tagOne in listOf("N", "ADJ", "PN")
+                    val isNounTwo = tagTwo in listOf("N", "ADJ", "PN")
+                    var expandedTagTwo = expandTags(tagTwo)
+                    if (isNounOne) {
+                        expandedTagOne = getNounDetails(word.detailsone)
+                    } else if (isNounTwo) {
+                        expandedTagTwo = getNounDetails(word.detailstwo)
                     }
-                    if ((tagone == "V")) {
-                        expandTagsone = getVerbDetails(expandTagsone, word.detailsone!!)
-                    } else if ((tagtwo == "V")) {
-                        expandTagstwo = getVerbDetails(expandTagstwo, word.detailstwo!!)
+                    if (tagOne == "V") {
+                        expandedTagOne = getVerbDetails(expandedTagOne, word.detailsone!!)
+                    } else if (tagTwo == "V") {
+                        expandedTagTwo = getVerbDetails(expandedTagTwo, word.detailstwo!!)
                     }
-                    tagspannable = CorpusUtilityorig.NewSetWordSpanTag(
+                    spannableString = CorpusUtilityorig.NewSetWordSpanTag(
                         word.tagone!!, word.tagtwo!!, word.tagthree!!,
-                        word.tagfour!!, word.tagfive!!, " ", " ", "", expandTagstwo, expandTagsone
+                        word.tagfour!!, word.tagfive!!, " ", " ", "", expandedTagTwo, expandedTagOne
                     )
                 }
 
+                // Refactor cases 3, 4, and 5 to avoid repetitive code
                 3 -> {
                     val sb: StringBuilder = StringBuilder()
                     var expandTagsone: String =
@@ -125,7 +104,7 @@ class WordMorphologyDetails : QuranMorphologyDetails {
                     sb.append(word.tagtwo)
                     sb.append("|")
                     sb.append(word.tagone)
-                    tagspannable = CorpusUtilityorig.NewSetWordSpanTag(
+                    spannableString = CorpusUtilityorig.NewSetWordSpanTag(
                         word.tagone!!,
                         word.tagtwo!!,
                         word.tagthree!!,
@@ -189,7 +168,7 @@ class WordMorphologyDetails : QuranMorphologyDetails {
                     sb.append(word.tagtwo)
                     sb.append("|")
                     sb.append(word.tagone)
-                    tagspannable = CorpusUtilityorig.NewSetWordSpanTag(
+                    spannableString = CorpusUtilityorig.NewSetWordSpanTag(
                         word.tagone!!,
                         word.tagtwo!!,
                         word.tagthree!!,
@@ -233,7 +212,7 @@ class WordMorphologyDetails : QuranMorphologyDetails {
                     sb.append(word.tagtwo!!)
                     sb.append("|")
                     sb.append(word.tagone!!)
-                    tagspannable = CorpusUtilityorig.NewSetWordSpanTag(
+                    spannableString = CorpusUtilityorig.NewSetWordSpanTag(
                         word.tagone!!,
                         word.tagtwo!!,
                         word.tagthree!!,
@@ -254,74 +233,61 @@ class WordMorphologyDetails : QuranMorphologyDetails {
                     sb.append("|")
                     sb.append(word.tagone)
                 }
+
             }
-            return tagspannable
+            return spannableString
         }
 
-    private fun getNounDetails(wordetails: String?): String {
-        var expandTagsone = ""
-        val split: Array<String> =
-            wordetails!!.split("\\|".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        val wordbdetail: HashMap<String, SpannableStringBuilder?> = HashMap()
-        val sb: StringBuilder = java.lang.StringBuilder()
-        getNdetails(corpusNounWord, wordbdetail, sb)
-        val genderNumberdetails1: String =
-            getGenderNumberdetails(
-                corpusNounWord!![0].gendernumber
-            ).toString()
-        if (wordbdetail["noun"] != null) {
-            expandTagsone += wordbdetail["noun"].toString()
-            expandTagsone = expandTagsone + "Root:-" + corpusNounWord!![0].root_a
+    private fun getNounDetails(wordDetails: String?): String {
+        var expandedTag = ""
+        val wordDetailMap = HashMap<String, SpannableStringBuilder?>()
+        val stringBuilder = StringBuilder()
+
+        corpusNounWords?.let {
+            val arrayList = ArrayList(it)
+            getNdetails(arrayList, wordDetailMap, stringBuilder) // Assuming this function exists
+            val genderNumberDetails = getGenderNumberdetails(it[0].gendernumber).toString()
+            wordDetailMap["noun"]?.let { nounDetails ->
+                expandedTag += nounDetails.toString()
+                expandedTag += "Root:-${it[0].root_a}"
+            }
         }
-        //   expandTagsone = expandTagsone.concat(genderNumberdetails1.toString);
-        return expandTagsone
+        return expandedTag
     }
 
-    private fun getVerbDetails(expandTagsone: String, wordetails: String): String {
-        var expandTagsone: String = expandTagsone
-        val split: Array<String> =
-            wordetails.split("\\|".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        val s: String = split[split.size - 1]
-        if (!s.contains("MOOD")) {
-            val genderNumberdetails: StringBuilder =
-                getGenderNumberdetails(s)
-            expandTagsone += genderNumberdetails.toString()
-            val verbTense: String = expandVerbTense(word.detailsone!!)
-            expandTagsone = "$expandTagsone($verbTense)"
-            expandTagsone += verbfeaturesenglisharabic.IND
+    private fun getVerbDetails(expandedTag: String, wordDetails: String): String {
+        var result = expandedTag
+        val split = wordDetails.split("|").filter { it.isNotEmpty() }
+        val lastPart = split.last()
+
+        if (!lastPart.contains("MOOD")) {
+            result += getGenderNumberdetails(lastPart).toString()
+            result = "$result(${expandVerbTense(word.detailsone!!)})"
+            result += verbfeaturesenglisharabic.IND // Assuming this constant exists
         } else {
-            val ss: String = split[split.size - 2]
-            val genderNumberdetails: StringBuilder =
-                getGenderNumberdetails(ss)
-            expandTagsone += genderNumberdetails.toString()
-            val verbTense: String = expandVerbTense(word.detailsone!!)
-            expandTagsone = "$expandTagsone($verbTense)"
+            val secondLastPart = split[split.size - 2]
+            result += getGenderNumberdetails(secondLastPart).toString()
+            result = "$result(${expandVerbTense(word.detailsone!!)})"
         }
-        expandTagsone += if (!s.contains("PASS")) {
-            verbfeaturesenglisharabic.ACT
-        } else {
-            verbfeaturesenglisharabic.PASS
+
+        result += if (!lastPart.contains("PASS")) verbfeaturesenglisharabic.ACT else verbfeaturesenglisharabic.PASS // Assuming these constants exist
+        verbCorpusRootWords?.let {
+            result += "Root:-${it[0].root_a}"
         }
-        //   expandTagsone.concat(verbCorpusRootWord.get(0).getRoot_a);
-        expandTagsone = expandTagsone + "Root:-" + verbCorpusRootWord!![0].root_a
-        return expandTagsone
+        return result
     }
 
-    private fun expandVerbTense(verbdetails: String): String {
-        var tense: String
-        tense = if (verbdetails.contains("IMPF")) {
-            verbfeaturesenglisharabic.IMPF
-        } else if (verbdetails.contains("IMPV")) {
-            verbfeaturesenglisharabic.IMPV
-        } else if (verbdetails.contains("PERF")) {
-            verbfeaturesenglisharabic.PERF
-        } else {
-            ""
+    private fun expandVerbTense(verbDetails: String): String {
+        var tense = when {
+            verbDetails.contains("IMPF") -> verbfeaturesenglisharabic.IMPF
+            verbDetails.contains("IMPV") -> verbfeaturesenglisharabic.IMPV
+            verbDetails.contains("PERF") -> verbfeaturesenglisharabic.PERF
+            else -> ""
         }
-        if (verbdetails.contains("SUBJ")) {
-            tense += verbfeaturesenglisharabic.SUBJ
-        } else if (verbdetails.contains("JUS")) {
-            tense += verbfeaturesenglisharabic.JUS
+        tense += when {
+            verbDetails.contains("SUBJ") -> verbfeaturesenglisharabic.SUBJ
+            verbDetails.contains("JUS") -> verbfeaturesenglisharabic.JUS
+            else -> ""
         }
         return tense
     }

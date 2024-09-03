@@ -114,7 +114,7 @@ class MainActivity : BaseActivity() {
         mujarradListingbtn = findViewById(R.id.conjugationnav)
         settingbtn = findViewById(R.id.conjugatorsetting)
         conjugatorbtn = findViewById(R.id.conjugator)
-        layoutBottomSheet = findViewById(R.id.bottom_sheet)
+        layoutBottomSheet = findViewById(R.id.conjugatorbootomsheet)
         sheetBehavior = BottomSheetBehavior.from<View>(layoutBottomSheet)
 
         sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet)

@@ -103,13 +103,13 @@ class Utils {
         return database.AnaQuranChapterDao().getSingleChapters(id)
     }
 
-    fun getQuranRoot(id: Int, verseid: Int, wordid: Int): List<VerbCorpus?>? {
+    fun getQuranRoot(id: Int, verseid: Int, wordid: Int): List<VerbCorpus> {
         Log.d(TAG, "getQuranRoot: started")
         return database.VerbCorpusDao().getVerbRootsurahayahwordid(id, verseid, wordid)
     }
 
 
-    fun getQuranNouns(id: Int, verseid: Int, wordid: Int): List<NounCorpus?>? {
+    fun getQuranNouns(id: Int, verseid: Int, wordid: Int): List<NounCorpus> {
         Log.d(TAG, "getQuranNouns: started")
         return database.NounCorpusDao().getQuranNounsBysurahayahword(id, verseid, wordid)
     }

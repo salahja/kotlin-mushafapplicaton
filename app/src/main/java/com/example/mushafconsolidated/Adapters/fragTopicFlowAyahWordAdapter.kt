@@ -32,6 +32,7 @@ import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.Group
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.fragment.app.FragmentManager
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.AutoTransition
@@ -49,12 +50,12 @@ import com.example.mushafconsolidated.Entities.VerbCorpus
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SurahSummary
 import com.example.mushafconsolidated.Utils
+import com.example.mushafconsolidated.fragments.ScrollingFragment
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
 import com.example.mushafconsolidated.fragments.WordMorphologyDetails
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.model.NewQuranCorpusWbw
 import com.example.mushafconsolidatedimport.Config
-import com.example.mushafconsolidatedimport.ParticleColorScheme
 import com.example.utility.AnimationUtility
 import com.example.utility.CorpusUtilityorig
 import com.example.utility.FlowLayout
@@ -74,19 +75,20 @@ import java.util.Date
 
 //import com.example.mushafconsolidated.Entities.JoinVersesTranslationDataTranslation;
 //public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnItemClickListenerOnLong {
-class NewTopicFlowAyahWordAdapter(
-    private val ayahWordArrayList: ArrayList<LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>>>,
-    listener: OnItemClickListenerOnLong?,
+class fragTopicFlowAyahWordAdapter(private var activity: AppCompatActivity,private var context: Context,
+                                   private val fragmentManager: FragmentManager,
+                                   private val ayahWordArrayList: ArrayList<LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>>>,
+                                   listener: OnItemClickListenerOnLong?,
 
-    arrayofquran: ArrayList<ArrayList<QuranEntity>>,
-    surahArrays: Array<String>
+                                   arrayofquran: ArrayList<ArrayList<QuranEntity>>,
+                                   surahArrays: Array<String>
 ) :
-    RecyclerView.Adapter<NewTopicFlowAyahWordAdapter.ItemViewAdapter>() {
+    RecyclerView.Adapter<fragTopicFlowAyahWordAdapter.ItemViewAdapter>() {
     private val arabicfontSize: Int
     private val translationfontsize: Int
     val mItemClickListener: OnItemClickListenerOnLong?
     private val issentence: Boolean
-    var context: Context? = null
+
     lateinit var arabic: TextView
     lateinit var rootword: TextView
     private lateinit var isNightmode: String
@@ -114,7 +116,9 @@ class NewTopicFlowAyahWordAdapter(
     }
 
     fun addContext(context: Context?) {
-        this.context = context
+        if (context != null) {
+            this.context = context
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -440,13 +444,13 @@ class NewTopicFlowAyahWordAdapter(
                         //    vbdetail = ams.getVerbDetails();
                         print("check")
                     }
-                    val corpusNounWord: List<NounCorpus> =
+                    val corpusNounWord:List<NounCorpus> =
                         utils.getQuranNouns(
                             word.corpus!!.surah,
                             word.corpus!!.ayah,
                             word.corpus!!.wordno
-                        ) as ArrayList<NounCorpus>
-                    val verbCorpusRootWord: List<VerbCorpus> =
+                        )
+                    val verbCorpusRootWord : List<VerbCorpus> =
                         utils.getQuranRoot(
                             word.corpus!!.surah,
                             word.corpus!!.ayah,
@@ -522,7 +526,7 @@ class NewTopicFlowAyahWordAdapter(
                                 "SurahName" //TODO
                             )
                             WordAnalysisBottomSheet.newInstance(data).show(
-                                (context as AppCompatActivity?)!!.supportFragmentManager,
+                                fragmentManager, // Use the passed FragmentManager
                                 WordAnalysisBottomSheet.TAG
                             )
                         }
@@ -782,9 +786,10 @@ class NewTopicFlowAyahWordAdapter(
                         closeFABMenu()
                         //HideFabMenu();
                         val readingintent = Intent(
-                            context as AppCompatActivity?,
+                            activity,
                             TafsirFullscreenActivity::class.java
                         )
+                        val ayahWord = ayahWordArrayList[position][0]!![0]
                         //  flowAyahWordAdapter.getItem(position);
                         val chapter_no = ayahWord.corpus!!.surah
                         //   int verse = ayahWord.getWord().get(0).getcorpus!!.ayah();
@@ -793,7 +798,7 @@ class NewTopicFlowAyahWordAdapter(
                         readingintent.putExtra(SURAH_ID, chapter_no)
                         readingintent.putExtra(AYAH_ID, verse)
                         readingintent.putExtra(SURAH_ARABIC_NAME, SurahName)
-                        (context as AppCompatActivity?)!!.startActivity(readingintent)
+                       activity.startActivity(readingintent)
                     }
                     summbaryfb.setOnClickListener {
                         closeFABMenu()
@@ -814,10 +819,20 @@ class NewTopicFlowAyahWordAdapter(
                     }
                     helpfb.setOnClickListener { v: View? ->
                         closeFABMenu()
-                        ParticleColorScheme.newInstance().show(
-                            (context as AppCompatActivity).supportFragmentManager,
-                            WordAnalysisBottomSheet.TAG
-                        )
+                        val ayahWord = ayahWordArrayList[position][0]!![0]
+                        //  flowAyahWordAdapter.getItem(position);
+                        val surah = ayahWord.corpus!!.surah
+                        //   int verse = ayahWord.getWord().get(0).getcorpus!!.ayah();
+                        val ayah = ayahWord.corpus!!.ayah
+                        //   String name = getSurahArabicName();
+
+
+                        val fragment = ScrollingFragment.newInstance(surah, ayah,SurahName,isMakkiMadani)
+                       activity. supportFragmentManager.beginTransaction()
+                            .replace(R.id.frame_container_topic, fragment) // Replaces the current fragment or view
+                            .addToBackStack(null) // Optional: adds the transaction to the back stack, so the user can navigate back
+                            .commit()
+
                     }
                     sharescreenfb.setOnClickListener(object : View.OnClickListener {
                         override fun onClick(v: View) {

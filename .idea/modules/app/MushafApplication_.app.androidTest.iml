@@ -33,9 +33,9 @@
             <arrayArg name="friendPaths">
               <args>
                 <arg>$MODULE_DIR$/../../../app/build/tmp/kotlin-classes/debug</arg>
-                <arg>$MODULE_DIR$/../../../app/build/intermediates/javac/debug/classes</arg>
+                <arg>$MODULE_DIR$/../../../app/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes</arg>
                 <arg>$MODULE_DIR$/../../../app/build/tmp/kapt3/classes/debug</arg>
-                <arg>$MODULE_DIR$/../../../app/build/intermediates/compile_app_classes_jar/debug/classes.jar</arg>
+                <arg>$MODULE_DIR$/../../../app/build/intermediates/compile_app_classes_jar/debug/bundleDebugClassesToCompileJar/classes.jar</arg>
               </args>
             </arrayArg>
             <arrayArg name="pluginClasspaths">
@@ -53,11 +53,7 @@
               </args>
             </arrayArg>
             <arrayArg name="pluginOptions">
-              <args>
-                <arg>plugin:androidx.compose.plugins.idea:enabled=true</arg>
-                <arg>plugin:androidx.compose.compiler.plugins.kotlin:sourceInformation=true</arg>
-                <arg>plugin:androidx.compose.compiler.plugins.kotlin:liveLiterals=true</arg>
-              </args>
+              <args>plugin:androidx.compose.compiler.plugins.kotlin:sourceInformation=true</args>
             </arrayArg>
           </arrayArguments>
         </compilerArguments>

@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.Constant
 import com.example.mushafconsolidated.Activity.TafsirFullscreenActivity
 import com.example.mushafconsolidated.Adapters.NewTopicFlowAyahWordAdapter
+import com.example.mushafconsolidated.Adapters.fragTopicFlowAyahWordAdapter
 import com.example.mushafconsolidated.Entities.BookMarks
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.R
@@ -52,7 +53,7 @@ private const val ARG_PARAM2 = "param2"
 @AndroidEntryPoint
 class TopicDetailsFrag : DialogFragment(), OnItemClickListenerOnLong {
     private lateinit var maps: HashMap<String, String>
-    private lateinit var flowAyahWordAdapter: NewTopicFlowAyahWordAdapter
+    private lateinit var flowAyahWordAdapter: fragTopicFlowAyahWordAdapter
 
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -118,17 +119,19 @@ class TopicDetailsFrag : DialogFragment(), OnItemClickListenerOnLong {
                     }
                 }
                 requireActivity().runOnUiThread {
-
+                    val activity = requireActivity() as AppCompatActivity
                     val linearLayoutManager = LinearLayoutManager(requireContext())
                     /*       val flowAyahWordAdapter =
                            TopicFlowAyahWordAdapter(corpusayahWordArrayList, listener, surahname)*/
-                    flowAyahWordAdapter = NewTopicFlowAyahWordAdapter(
+                    flowAyahWordAdapter = fragTopicFlowAyahWordAdapter(activity,  requireContext(),childFragmentManager,
                         arrayofadapterlist,
                         listener,
 
                         arrayofquran,
                         surahArrays
                     )
+
+
                     val parentRecyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
                     parentRecyclerView.layoutManager = linearLayoutManager
                     flowAyahWordAdapter.addContext(requireContext())
@@ -166,10 +169,15 @@ class TopicDetailsFrag : DialogFragment(), OnItemClickListenerOnLong {
             arrayofadapterlist.add(newnewadapterlist)
             //    final Object o6 = wbwa.get(verseglobal).get(0);
             val sb = StringBuilder()
-
+            val activity = requireActivity() as AppCompatActivity
             val listener: OnItemClickListenerOnLong = this
-            flowAyahWordAdapter =
-                NewTopicFlowAyahWordAdapter(arrayofadapterlist, listener, arrayofquran, surahArrays)
+            flowAyahWordAdapter = fragTopicFlowAyahWordAdapter(activity,requireContext(),childFragmentManager,
+                arrayofadapterlist,
+                listener,
+
+                arrayofquran,
+                surahArrays
+            )
             val linearLayoutManager = LinearLayoutManager(requireContext())
             val parentRecyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
             parentRecyclerView.layoutManager = linearLayoutManager

@@ -362,13 +362,13 @@
 
         </LinearLayout>
 
-        <ru.dimorinny.floatingtextbutton.FloatingTextButton
+         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/action_buttons"
 
             android:layout_width="94dp"
             android:layout_height="60dp"
 
-
+             android:visibility="gone"
             android:layout_gravity="start|bottom|center"
 
             android:background="?selectableItemBackground"
@@ -376,12 +376,6 @@
             android:foregroundGravity="bottom"
 
 
-            app:floating_background_color="@color/color_surface"
-            app:floating_left_icon="@drawable/baseline_history_black_48dp"
-            app:floating_title="Back    "
-
-
-            app:floating_title_color="@color/colorOnPrimary"
 
 
             app:layout_constraintEnd_toEndOf="parent"
@@ -415,7 +409,7 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
-
+            android:visibility="gone"
             android:layout_width="100dp"
             android:layout_height="60dp"
             android:layout_gravity="bottom"
