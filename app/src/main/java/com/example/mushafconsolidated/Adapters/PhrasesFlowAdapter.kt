@@ -593,7 +593,7 @@ class PhrasesFlowAdapter(
                             word.corpus!!.ayah,
                             word.corpus!!.wordno
                         )
-                    val qm = refWordMorphologyDetails(
+                    val qm = WordMorphologyDetails(
                         word.corpus!!,
                         corpusNounWord!!, verbCorpusRootWord!!
                     )
@@ -666,7 +666,7 @@ class PhrasesFlowAdapter(
                             word.corpus!!.ayah,
                             word.corpus!!.wordno
                         )
-                    val qm = refWordMorphologyDetails(
+                    val qm = WordMorphologyDetails(
                         word.corpus!!,
                         corpusNounWord!!, verbCorpusRootWord!!
                     )

@@ -43,7 +43,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import com.example.Constant
-import com.example.mushafconsolidated.Activity.TafsirFullscreenActivity
 import com.example.mushafconsolidated.Entities.BadalErabNotesEnt
 import com.example.mushafconsolidated.Entities.HalEnt
 import com.example.mushafconsolidated.Entities.LiajlihiEnt
@@ -857,7 +856,7 @@ class newFlowAyahWordAdapter(
                         word.corpus!!.ayah,
                         word.corpus!!.wordno
                     )
-                val qm = refWordMorphologyDetails(
+                val qm = WordMorphologyDetails(
                     word.corpus!!,
                     corpusNounWord!!, verbCorpusRootWord!!
                 )
@@ -931,7 +930,7 @@ class newFlowAyahWordAdapter(
                         word.corpus!!.ayah,
                         word.corpus!!.wordno
                     )
-                val qm = refWordMorphologyDetails(
+                val qm = WordMorphologyDetails(
                     word.corpus!!,
                     corpusNounWord!!, verbCorpusRootWord!!
                 )

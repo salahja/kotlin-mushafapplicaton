@@ -590,7 +590,7 @@ class SifaPhrasesFlowAdapter(
                             word.corpus!!.ayah,
                             word.corpus!!.wordno
                         )
-                    val qm = refWordMorphologyDetails(
+                    val qm = WordMorphologyDetails(
                         word.corpus!!,
                         corpusNounWord!!, verbCorpusRootWord!!
                     )
@@ -663,7 +663,7 @@ class SifaPhrasesFlowAdapter(
                             word.corpus!!.ayah,
                             word.corpus!!.wordno
                         )
-                    val qm = refWordMorphologyDetails(
+                    val qm = WordMorphologyDetails(
                         word.corpus!!,
                         corpusNounWord!!, verbCorpusRootWord!!
                     )

@@ -50,7 +50,7 @@ import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SurahSummary
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
-import com.example.mushafconsolidated.fragments.refWordMorphologyDetails
+import com.example.mushafconsolidated.fragments.WordMorphologyDetails
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.model.NewQuranCorpusWbw
 import com.example.mushafconsolidatedimport.Config
@@ -455,7 +455,7 @@ class NewTopicFlowAyahWordAdapter(
 
 
                     val qm =
-                        refWordMorphologyDetails(word.corpus!!, corpusNounWord, verbCorpusRootWord)
+                        WordMorphologyDetails(word.corpus!!, corpusNounWord, verbCorpusRootWord)
                     val workBreakDown = qm.workBreakDown
                     var color =
                         context!!.resources.getColor(R.color.background_color_light_brown)

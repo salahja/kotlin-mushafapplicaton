@@ -9,14 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
 import com.example.mushafconsolidated.Entities.RootWordDetails
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.Utils
-import com.example.mushafconsolidated.fragments.refWordMorphologyDetails
+import com.example.mushafconsolidated.fragments.WordMorphologyDetails
 import com.example.mushafconsolidated.model.QuranCorpusWbw
 import com.example.mushafconsolidatedimport.Config
 import com.example.utility.CorpusUtilityorig.Companion.NewSetWordSpan
@@ -159,7 +158,7 @@ class MyRootBreakRecyclerViewAdapter(
                         quranCorpusWbw.corpus.ayah,
                         quranCorpusWbw.corpus.wordno
                     )
-                val qm = refWordMorphologyDetails(
+                val qm = WordMorphologyDetails(
                     quranCorpusWbw.corpus,
                     corpusNounWord!!, verbCorpusRootWord!!
                 )
