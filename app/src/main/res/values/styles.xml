@@ -68,6 +68,8 @@
         <item name="tabTextColor">@color/mtrl_tabs_icon_color_selector</item>
         <item name="tabUnboundedRipple">true</item>
     </style>
+
+
     <style name="Theme.Black" parent="Theme.Material3.Dark.NoActionBar">
 
         <item name="android:windowBackground">@color/bg_black</item>

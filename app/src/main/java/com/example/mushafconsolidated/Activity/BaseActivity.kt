@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import com.example.mushafconsolidated.R
-import com.google.android.material.color.DynamicColors
+
 
 open class BaseActivity : AppCompatActivity() {
     private var currenttheme: String? = null
@@ -12,7 +12,7 @@ open class BaseActivity : AppCompatActivity() {
         currenttheme =
             PreferenceManager.getDefaultSharedPreferences(this).getString("themepref", "dark")
         super.onCreate(savedInstanceState)
-        DynamicColors.applyToActivitiesIfAvailable(this@BaseActivity.application)
+      //  DynamicColors.applyToActivitiesIfAvailable(this@BaseActivity.application)
         switchTheme(currenttheme)
     }
 

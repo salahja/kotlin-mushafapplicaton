@@ -34,10 +34,7 @@
         android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
-        <activity
-            android:name=".Activity.DownloadAct"
-            android:exported="false"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+
         <activity
             android:name=".ajroomiya.NewAjroomiyaDetailHostActivity"
             android:exported="false"
