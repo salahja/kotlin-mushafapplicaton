@@ -10,9 +10,11 @@ import android.os.Bundle
 import android.os.Environment
 import android.preference.PreferenceManager
 import android.widget.Toast
+import androidx.activity.result.launch
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.recyclerview.widget.RecyclerView
 import androidx.window.layout.WindowMetricsCalculator
 
@@ -20,6 +22,10 @@ import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.settingsimport.Constants.Companion.DATABASENAME
 import com.example.mushafconsolidated.settingsimport.Constants.Companion.DATABASEZIP
 import com.example.mushafconsolidated.settingsimport.Constants.Companion.FILEPATH
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry
 import org.apache.commons.compress.archivers.sevenz.SevenZFile
 import java.io.BufferedInputStream
@@ -43,6 +49,15 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         switchTheme("brown")
         super.onCreate(savedInstanceState)
+        val splashScreen = installSplashScreen()
+
+        // Use a coroutine to delay the splash screen
+        var keepSplashOnScreen = true
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(3000) // Delay for 3 seconds (adjust as needed)
+            keepSplashOnScreen = false
+            splashScreen.setKeepOnScreenCondition { keepSplashOnScreen }
+        }
         val hasPermission = ContextCompat.checkSelfPermission(
             this,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,

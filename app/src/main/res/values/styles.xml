@@ -68,6 +68,8 @@
         <item name="tabTextColor">@color/mtrl_tabs_icon_color_selector</item>
         <item name="tabUnboundedRipple">true</item>
     </style>
+
+
     <style name="Theme.Black" parent="Theme.Material3.Dark.NoActionBar">
 
         <item name="android:windowBackground">@color/bg_black</item>
@@ -342,7 +344,7 @@
 
 
     <style name="ayah_tafseer">
-        <item name="android:textSize">22.0dip</item>
+        <item name="android:textSize">22.0sp</item>
 
         <item name="android:gravity">right</item>
         <item name="android:padding">8.0dip</item>
@@ -352,7 +354,7 @@
     </style>
 
     <style name="ayah_tafseer_slide">
-        <item name="android:textSize">22.0dip</item>
+        <item name="android:textSize">22.0sp</item>
 
         <item name="android:gravity">right</item>
         <item name="android:layout_width">fill_parent</item>
@@ -360,12 +362,18 @@
     </style>
 
     <style name="ayah_text">
-        <item name="android:textSize">30.0dip</item>
+        <item name="android:textSize">30.0sp</item>
 
         <item name="android:gravity">center</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
+
+        <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+            <item name="windowSplashScreenBackground">@color/Lime</item>
+            <item name="windowSplashScreenAnimatedIcon">@drawable/ic_bismillah</item>
+            <item name="postSplashScreenTheme">@style/Theme.Browns</item>
+        </style>
 
 
 

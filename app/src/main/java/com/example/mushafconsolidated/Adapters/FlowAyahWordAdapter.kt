@@ -180,6 +180,7 @@ class FlowAyahWordAdapter(
         val sharedPreferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(
             context
         )
+
         isNightmode = sharedPreferences.getString("themepref", "dark").toString()
         //  String arabic_font_selection = sharedPreferences.getString("Arabic_Font_Selection", String.valueOf(MODE_PRIVATE));
         val arabic_font_selection =

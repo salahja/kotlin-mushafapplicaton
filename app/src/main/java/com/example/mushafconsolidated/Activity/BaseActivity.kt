@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import com.example.mushafconsolidated.R
-import com.google.android.material.color.DynamicColors
+
 
 open class BaseActivity : AppCompatActivity() {
     private var currenttheme: String? = null
@@ -12,7 +12,7 @@ open class BaseActivity : AppCompatActivity() {
         currenttheme =
             PreferenceManager.getDefaultSharedPreferences(this).getString("themepref", "dark")
         super.onCreate(savedInstanceState)
-        DynamicColors.applyToActivitiesIfAvailable(this@BaseActivity.application)
+      //  DynamicColors.applyToActivitiesIfAvailable(this@BaseActivity.application)
         switchTheme(currenttheme)
     }
 
@@ -21,11 +21,11 @@ open class BaseActivity : AppCompatActivity() {
     // }
     protected fun switchTheme(currenttheme: String?) {
         when (currenttheme) {
-            BaseActivity.Companion.LIGHT_THEME -> setTheme(R.style.AppThemebrow)
-            BaseActivity.Companion.DARK_THEME -> setTheme(R.style.Theme_Black)
-            BaseActivity.Companion.DARK_BLUE -> setTheme(R.style.AppTheme_materialdarkblue)
-            BaseActivity.Companion.DARK_GREEN -> setTheme(R.style.AppTheme_DarkGreen)
-            BaseActivity.Companion.BROWN_MODE -> setTheme(R.style.Theme_Browns)
+            LIGHT_THEME -> setTheme(R.style.AppThemebrow)
+            DARK_THEME -> setTheme(R.style.Theme_Black)
+            DARK_BLUE -> setTheme(R.style.AppTheme_materialdarkblue)
+            DARK_GREEN -> setTheme(R.style.AppTheme_DarkGreen)
+            BROWN_MODE -> setTheme(R.style.Theme_Browns)
             else -> setTheme(R.style.Theme_Black)
         }
         PreferenceManager.getDefaultSharedPreferences(this).edit().putString("theme", currenttheme)

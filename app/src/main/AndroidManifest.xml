@@ -34,16 +34,13 @@
         android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
-        <activity
-            android:name=".Activity.DownloadAct"
-            android:exported="false"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+
         <activity
             android:name=".ajroomiya.NewAjroomiyaDetailHostActivity"
             android:exported="false"
             android:label="@string/title_activity_ajroomiya_detail_host"
             android:resizeableActivity="true"
-            tools:targetApi="24" />
+         />
         <activity
             android:name="com.example.quranroots.RootBreakupAct"
             android:exported="false"
@@ -60,21 +57,13 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity
-            android:name=".Activity.SplashActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
 
 
 
         <activity
             android:name=".Activity.MainActivity"
-            android:parentActivityName=".Activity.SplashActivity"
+            android:theme="@style/Theme.App.Starting"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
