@@ -7,6 +7,7 @@ import com.example.mushafconsolidated.DAO.BookMarkDao
 import com.example.mushafconsolidated.DAO.CorpusExpandedDao
 import com.example.mushafconsolidated.DAO.HaliyaDao
 import com.example.mushafconsolidated.DAO.HansDao
+import com.example.mushafconsolidated.DAO.JasonSurahDao
 import com.example.mushafconsolidated.DAO.LaneDao
 import com.example.mushafconsolidated.DAO.LaneRootDao
 import com.example.mushafconsolidated.DAO.LughatDao
@@ -72,6 +73,12 @@ object AppModule {
     fun getBookMarkDao(appDB: QuranAppDatabase): BookMarkDao {
 
         return appDB.BookMarkDao()
+    }
+    @Singleton
+    @Provides
+    fun getJasonSurahDao(appDB: QuranAppDatabase): JasonSurahDao {
+
+        return appDB.JasonSurahDao()
     }
 
     @Singleton

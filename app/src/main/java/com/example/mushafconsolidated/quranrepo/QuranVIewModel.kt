@@ -1,5 +1,6 @@
 package com.example.mushafconsolidated.quranrepo
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,6 +23,7 @@ import com.example.mushafconsolidated.Entities.SifaEntity
 import com.example.mushafconsolidated.Entities.TameezEnt
 import com.example.mushafconsolidated.Entities.VerbCorpus
 import com.example.mushafconsolidated.Entities.hanslexicon
+import com.example.mushafconsolidated.Entities.jsonsurahentity
 import com.example.mushafconsolidated.Entities.lanerootdictionary
 import com.example.mushafconsolidated.Entities.lughat
 import com.example.mushafconsolidated.Entities.surahsummary
@@ -389,7 +391,6 @@ class QuranVIewModel @Inject constructor(
         return quranlist
     }
 
-
     fun getSurahSummary(cid: Int): LiveData<List<surahsummary>> {
 
 
@@ -406,6 +407,16 @@ class QuranVIewModel @Inject constructor(
         quranRepository.insertlive(bookmar)
     }
 
+    fun insertJsonsurah(jsonstr: jsonsurahentity) = viewModelScope.launch {
+        val result = quranRepository.insertJsonsurah(jsonstr)
+        if (result > 0) {
+            // Insertion successful, handle success (e.g., show a message)
+            Log.d("Insert", "Surah JSON inserted successfully")
+        } else {
+            // Insertion failed, handle failure (e.g., show an error message)
+            Log.e("Insert", "Failed to insert Surah JSON")
+        }
+    }
     fun deletebookmark(bookmar: BookMarks) = viewModelScope.launch {
 
         quranRepository.delete(bookmar)
@@ -415,6 +426,8 @@ class QuranVIewModel @Inject constructor(
 
         quranRepository.deletecollection(bookmar)
     }
+
+
 
 
 }

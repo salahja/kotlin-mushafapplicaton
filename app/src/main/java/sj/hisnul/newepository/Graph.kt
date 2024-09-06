@@ -15,8 +15,8 @@ object Graph {
            hduaItemDao=db.hDuaItemDao(),
         hduaCategoryDao=db.gethDuaCategoryDao(),
             hduaNamesDao=db.gethDuaNamesDao(),
-            namesDetailsDao= db.NamesDetailsDao()!!,
-            TheNames= db.NamesDao()!!,
+            namesDetailsDao= db.NamesDetailsDao(),
+            TheNames= db.NamesDao(),
 
 
         )

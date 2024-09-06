@@ -12,6 +12,7 @@ import com.example.mushafconsolidated.DAO.BookMarkDao
 import com.example.mushafconsolidated.DAO.CorpusExpandedDao
 import com.example.mushafconsolidated.DAO.HaliyaDao
 import com.example.mushafconsolidated.DAO.HansDao
+import com.example.mushafconsolidated.DAO.JasonSurahDao
 import com.example.mushafconsolidated.DAO.LaneDao
 import com.example.mushafconsolidated.DAO.LaneRootDao
 import com.example.mushafconsolidated.DAO.LughatDao
@@ -55,6 +56,7 @@ import com.example.mushafconsolidated.Entities.SifaEntity
 import com.example.mushafconsolidated.Entities.TameezEnt
 import com.example.mushafconsolidated.Entities.VerbCorpus
 import com.example.mushafconsolidated.Entities.hanslexicon
+import com.example.mushafconsolidated.Entities.jsonsurahentity
 import com.example.mushafconsolidated.Entities.lanelexicon
 import com.example.mushafconsolidated.Entities.lanerootdictionary
 import com.example.mushafconsolidated.Entities.lughat
@@ -82,7 +84,7 @@ import java.io.File
 /*@Module
 @InstallIn(SingletonComponent::class)*/
 @Database(
-    entities = [hduadetailsEnt::class, MufradatEntity::class,  hduanamesEnt::class, hcategoryEnt::class, AllahNamesDetails::class, lanerootdictionary::class, Qari::class, surahsummary::class, quranexplorer::class, AllahNames::class, MafoolMutlaqEnt::class, BadalErabNotesEnt::class, HalEnt::class, MafoolBihi::class, LiajlihiEnt::class, TameezEnt::class, GrammarRules::class, hanslexicon::class, qurandictionary::class, lanelexicon::class, lughat::class, NewNasbEntity::class, NewShartEntity::class, NewKanaEntity::class, NewMudhafEntity::class, SifaEntity::class, wbwentity::class, NounCorpus::class, VerbCorpus::class, QuranEntity::class, CorpusEntity::class, BookMarks::class, ChaptersAnaEntity::class],
+    entities = [jsonsurahentity::class,hduadetailsEnt::class, MufradatEntity::class,  hduanamesEnt::class, hcategoryEnt::class, AllahNamesDetails::class, lanerootdictionary::class, Qari::class, surahsummary::class, quranexplorer::class, AllahNames::class, MafoolMutlaqEnt::class, BadalErabNotesEnt::class, HalEnt::class, MafoolBihi::class, LiajlihiEnt::class, TameezEnt::class, GrammarRules::class, hanslexicon::class, qurandictionary::class, lanelexicon::class, lughat::class, NewNasbEntity::class, NewShartEntity::class, NewKanaEntity::class, NewMudhafEntity::class, SifaEntity::class, wbwentity::class, NounCorpus::class, VerbCorpus::class, QuranEntity::class, CorpusEntity::class, BookMarks::class, ChaptersAnaEntity::class],
     version = 1
 )
 abstract class QuranAppDatabase : RoomDatabase() {
@@ -321,6 +323,9 @@ abstract class QuranAppDatabase : RoomDatabase() {
      */
     abstract fun gethDuaCategoryDao(): hDuaCategoryDao
     abstract fun MufradatDao(): MufradatDao
+    //abstract fun QuranDao(): QuranDao
+
+    abstract fun JasonSurahDao() : JasonSurahDao
 
 
     /*

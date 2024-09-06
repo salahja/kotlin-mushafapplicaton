@@ -133,6 +133,11 @@
         android:key="@string/prefs_show_kana"
         android:title=" Verb kāna/كان واخواتها "
         app:summaryOn="@string/harfnasbsummary" />
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="@string/prefs_show_mafoolat"
+        android:title=" Mafoolat/مفولات  "
+        app:summaryOn="@string/harfnasbsummary" />
 
 
     <SwitchPreference

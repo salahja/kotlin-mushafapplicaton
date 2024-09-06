@@ -2,8 +2,40 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "b6d5acd5a118bfd5065a431a525edfc1",
+    "identityHash": "fad851faba6a65109f4a625e43121e5e",
     "entities": [
+      {
+        "tableName": "surahjson",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surah` INTEGER NOT NULL, `jasonstr` TEXT NOT NULL, `docid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "surah",
+            "columnName": "surah",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "jasonstr",
+            "columnName": "jasonstr",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "docid",
+            "columnName": "docid",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "docid"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
       {
         "tableName": "hduadetails",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`book_id` INTEGER NOT NULL, `dua_global_id` INTEGER NOT NULL, `ID` TEXT NOT NULL, `dua_segment_id` INTEGER NOT NULL, `top` TEXT, `arabic_diacless` TEXT, `arabic` TEXT, `transliteration` TEXT, `translations` TEXT, `bottom` TEXT, `reference` TEXT, `app_reference` TEXT, `pid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
@@ -2461,7 +2493,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b6d5acd5a118bfd5065a431a525edfc1')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fad851faba6a65109f4a625e43121e5e')"
     ]
   }
 }
