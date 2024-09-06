@@ -41,7 +41,6 @@ import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
-import androidx.compose.ui.input.key.type
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.drawerlayout.widget.DrawerLayout
@@ -72,7 +71,6 @@ import com.example.mushafconsolidated.Entities.TameezEnt
 import com.example.mushafconsolidated.Entities.jsonsurahentity
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SurahSummary
-import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.ajroomiya.NewAjroomiyaDetailHostActivity
 import com.example.mushafconsolidated.databinding.NewFragmentReadingBinding
 import com.example.mushafconsolidated.fragments.BookMarkCreateFrag
@@ -134,17 +132,15 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
     // private var newnewadapterlist = LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>>()
     private var newnewadapterlist: LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>> = LinkedHashMap()
-    lateinit var newnewadapterlists: LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>>
     private lateinit var newflowAyahWordAdapter: FlowAyahWordAdapter
     private lateinit var nomafoolatflowAyahWordAdapter: NoMafoolatFlowAyahWordAdapter
     lateinit var binding: NewFragmentReadingBinding
     private lateinit var surahWheelDisplayData: Array<String>
-    private lateinit var ayahWheelDisplayData: Array<String>
     private lateinit var btnBottomSheet: FloatingActionButton
     lateinit var surahArabicName: String
     private var jumptostatus = false
     var surahId = 0
-    var verseNumber = 0
+    private var verseNumber = 0
     var suraNumber = 0
     private var rukucount = 0
     var surahname: String? = null
@@ -653,7 +649,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                 }
 
                 // Handle navigation to the selected Surah and Verse
-                handleNavigation(selectedSurahIndex, soraList)
+                handleNavigation(selectedSurahIndex)
 
                 // Save last read position
 
@@ -695,7 +691,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         textView.text = "$selectedSurah/$selectedVerse"
     }
 
-    private fun handleNavigation(selectedSurahIndex: Int, soraList: ArrayList<ChaptersAnaEntity>) {
+    private fun handleNavigation(selectedSurahIndex: Int) {
         val chapterno = IntArray(1)
         parentRecyclerView = binding.overlayViewRecyclerView
         val myFragment: NewSurahDisplayFrag? =
@@ -840,7 +836,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     }
 
 
-    fun loadJsonFromFile(context: Context, fileName: String): String? {
+    private fun loadJsonFromFile(context: Context, fileName: String): String? {
         val file = File(context.filesDir, fileName)
         return try {
             file.readText()
@@ -1068,7 +1064,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     }
 
 
-    fun saveJsonFile(context: Context, fileName: String, data: Any, ) {
+    private fun saveJsonFile(context: Context, fileName: String, data: Any) {
         val gson = Gson()
         val jsonString = gson.toJson(data)
 
@@ -1077,7 +1073,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         try {
             FileOutputStream(file).use { fos ->
                 // Construct the content with chapterno
-                val content = "$jsonString"
+                val content = jsonString
                 fos.write(content.toByteArray())
             }
 
@@ -1194,7 +1190,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                 }
 
 
-                val viewmodel: QuranVIewModel by viewModels()
+
                 if (!mushafview && mafoolat) {
                     // viewmodel.getVersesBySurahLive(chapterno).observe(this, {
                     //    allofQuran=it
@@ -1520,7 +1516,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             val readingintent =
                 Intent(this@QuranGrammarAct, TafsirFullscreenActivity::class.java)
             val chapterno = allofQuran[position].surah
-            val verse = allofQuran!![position - 1].ayah
+            val verse = allofQuran[position - 1].ayah
             readingintent.putExtra(Constant.SURAH_ID, chapterno)
             readingintent.putExtra(Constant.AYAH_ID, verse)
             readingintent.putExtra(Constant.SURAH_ARABIC_NAME, surahArabicName)

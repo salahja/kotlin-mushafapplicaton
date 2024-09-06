@@ -563,9 +563,8 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
                                     )
                                 )
                         } else if (isNightmode == "brown") {
-                            val textViews =
-                                holder.itemView.findViewById<View>(R.id.flow_word_by_word)
-                                    .findViewById<TextView>(R.id.word_arabic_textView)
+                            holder.itemView.findViewById<View>(R.id.flow_word_by_word)
+                                .findViewById<TextView>(R.id.word_arabic_textView)
                             holder.itemView.findViewById<View>(R.id.flow_word_by_word)
                                 .setBackgroundColor(
                                     ContextCompat.getColor(
@@ -574,9 +573,8 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
                                     )
                                 )
                         } else {
-                            val textViews =
-                                holder.itemView.findViewById<View>(R.id.flow_word_by_word)
-                                    .findViewById<TextView>(R.id.word_arabic_textView)
+                            holder.itemView.findViewById<View>(R.id.flow_word_by_word)
+                                .findViewById<TextView>(R.id.word_arabic_textView)
                             holder.itemView.findViewById<View>(R.id.flow_word_by_word)
                                 .setBackgroundColor(
                                     ContextCompat.getColor(
@@ -597,7 +595,6 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
                     ).show()
                 }
             }
-            val temp = 2
             if (currenttrack > 1) {
                 val holderp = recyclerView.findViewHolderForAdapterPosition(currenttrack - 1)
                 if (null != holderp) {
@@ -972,7 +969,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
 
         override fun onTracksChanged(tracks: Tracks) {
             //   updateButtonVisibility();
-            val currentTracks = player!!.currentTracks
+            player!!.currentTracks
             currenttrack = player!!.currentMediaItemIndex
             //     currenttrack=resumelastplayed;
             val resume = true
@@ -1008,10 +1005,9 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
     private fun preparehighlightsNew(passageno: Int, str: StringBuilder, ayahmat: ArrayList<Int>) {
         val holder = recyclerView.findViewHolderForAdapterPosition(1)
         var ayahindex = ayahmat[0]
-        val ayahmaz = ayahmat.size
+        ayahmat.size
         val split1 = str.toString().split("﴿".toRegex()).dropLastWhile { it.isEmpty() }
             .toTypedArray()
-        val start = 0
         //  = str.indexOf("1");
         val end = str.indexOf(ayahindex.toString())
         val acf = AyahCoordinate(0, end, passageno)
@@ -1078,7 +1074,6 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
         readers = findViewById(R.id.selectReaders)
         val pickerDialog = SurahAyahPickerDialog(this, this, surahselected, ayah)
         llEndRange.setOnClickListener {
-            val starttrue = false
             pickerDialog.show(isRefresh = false, startTrue = false) { surah, ayah ->
                 // Handle the selected surah and ayah here
                 println("Selected Surah: $surah, Ayah: $ayah")
@@ -1135,7 +1130,6 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
             }
         })
         endrange.setOnClickListener {
-            val starttrue = false
             pickerDialog.show(isRefresh = false, startTrue = false) { surah, ayah ->
                 // Handle the selected surah and ayah here
                 println("Selected Surah: $surah, Ayah: $ayah")
@@ -1240,7 +1234,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
     }
 
     private fun ExecuteSurahWordByWord() {
-        val utils = Utils(this)
+        Utils(this)
         val builder = AlertDialog.Builder(
             this,
             com.google.android.material.R.style.ThemeOverlay_Material3_Dialog
