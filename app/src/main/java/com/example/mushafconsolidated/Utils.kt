@@ -30,7 +30,6 @@ import com.example.mushafconsolidated.Entities.SifaListingPojo
 import com.example.mushafconsolidated.Entities.VerbCorpus
 import com.example.mushafconsolidated.Entities.VerbCorpusBreakup
 import com.example.mushafconsolidated.Entities.hanslexicon
-import com.example.mushafconsolidated.Entities.jsonsurahentity
 import com.example.mushafconsolidated.Entities.lanelexicon
 import com.example.mushafconsolidated.Entities.lughat
 import com.example.mushafconsolidated.Entities.qurandictionary
@@ -68,10 +67,7 @@ class Utils {
             return null
         }
     }
-    fun getSurahJson(sid:    Int): List<jsonsurahentity?>? {
-        Log.d(TAG, "getQuranRoot: started")
-        return database.JasonSurahDao().getSurahJson(sid)
-    }
+
     fun getMudhafSurahNew(id: Int): List<NewMudhafEntity?>? {
         return database.NewMudhafDao().getMudhafSurah(id)
     }
