@@ -864,7 +864,7 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
     private fun ExecuteSurahWordByWord() {
         val builder = AlertDialog.Builder(
             this,
-            com.google.android.material.R.style.ThemeOverlay_Material3_Dialog
+           R.style.Theme_MaterialComponents_DayNight_NoActionBar_PopupOverlay
         )
         builder.setCancelable(false) // if you want user to wait for some process to finish,
         builder.setView(R.layout.layout_loading_dialog)
