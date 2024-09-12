@@ -1345,7 +1345,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
             // recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.layoutManager = manager
             nomafoolatflowAyahWordAdapter = NoMafoolatFlowAyahWordAdapter(
-                false,
+                true,
 
                 header,
                 allofQuran,
