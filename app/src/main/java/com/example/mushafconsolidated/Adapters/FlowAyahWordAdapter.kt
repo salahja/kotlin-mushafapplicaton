@@ -334,10 +334,14 @@ class FlowAyahWordAdapter(
         }
         ayahWord = ayahWordArrayList[position]
         entity?.let { storepreferences(it) }
-        val quranverses = ayahWord!![0].spannableverse
+
+        setAyahGrammaticalPhrases(holder, ayahWord!!?.get(0)?.spannableverse,
+            ayahWord!![0].corpus!!.surah,  ayahWord!![0].corpus!!.ayah
+        )
+
         //  val quranverses = allofQuran!![position]!!.qurantext
         //   if (!isaudio){
-        holder.quran_textView.text = quranverses
+
         //   holder.quran_textView.setTextSize(arabicfontSize);
         holder.quran_textView.typeface = custom_font
         holder.base_cardview.visibility = View.GONE
@@ -686,6 +690,13 @@ class FlowAyahWordAdapter(
         }
 
         setTextSizes(holder)
+    }
+
+    private fun setAyahGrammaticalPhrases(holder: FlowAyahWordAdapter.ItemViewAdapter, spannableverse: SpannableString?, surah: Int, ayah: Int) {
+        if (spannableverse != null) {
+            CorpusUtilityorig.setAyahGrammaticalPhrases(spannableverse,surah,ayah)
+            holder.quran_textView.text = spannableverse
+        }
     }
 
     private fun setTextSizes(holder: ItemViewAdapter) {
