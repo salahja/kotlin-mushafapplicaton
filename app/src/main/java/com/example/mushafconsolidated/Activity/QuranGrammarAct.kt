@@ -92,6 +92,7 @@ import com.example.sentenceanalysis.SentenceGrammarAnalysis
 import com.example.utility.CorpusUtilityorig
 import com.example.utility.CorpusUtilityorig.Companion.HightLightKeyWord
 import com.example.utility.QuranGrammarApplication
+import com.example.utility.ScreenshotUtils
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.color.DynamicColors
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -1271,7 +1272,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         } else if (tag == "jumptofb") {
             initDialogComponents(position)
         } else if (tag == "sharefb") {
-            takeScreenShot(window.decorView)
+            ScreenshotUtils.takeScreenshot(window.decorView, this)
         } else if (tag == "helpfb") {
             val chapterno = corpusSurahWord!![position - 1].corpus.surah
             val dataBundle = Bundle()
@@ -1313,7 +1314,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                         return true
                     }
                     if (item.itemId == R.id.action_share) {
-                        takeScreenShot(window.decorView)
+                        ScreenshotUtils.takeScreenshot(window.decorView, QuranGrammarApplication.context!!)
                         optionsMenu.dismiss()
                         return true
                     }

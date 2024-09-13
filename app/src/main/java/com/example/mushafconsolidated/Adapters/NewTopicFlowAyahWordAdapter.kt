@@ -59,6 +59,7 @@ import com.example.utility.AnimationUtility
 import com.example.utility.CorpusUtilityorig
 import com.example.utility.FlowLayout
 import com.example.utility.QuranGrammarApplication
+import com.example.utility.ScreenshotUtils
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -839,6 +840,7 @@ class NewTopicFlowAyahWordAdapter(
                         override fun onClick(v: View) {
                             closeFABMenu()
                             //HideFabMenu();
+
                             takeScreenShot((context as AppCompatActivity).window.decorView)
                         }
 

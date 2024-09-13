@@ -94,6 +94,8 @@ import com.example.sentenceanalysis.SentenceGrammarAnalysis
 import com.example.utility.CorpusUtilityorig
 import com.example.utility.CorpusUtilityorig.Companion.HightLightKeyWord
 import com.example.utility.MovableFloatingActionButton
+import com.example.utility.QuranGrammarApplication
+import com.example.utility.ScreenshotUtils
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textview.MaterialTextView
@@ -1732,7 +1734,8 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
             BottomOptionDialog.newInstance(data)
                 .show(this@WordbywordMushafAct.supportFragmentManager, WordAnalysisBottomSheet.TAG)
         } else if (tag == "sharefb") {
-            takeScreenShot(window.decorView)
+        //    takeScreenShot(window.decorView)
+            ScreenshotUtils.takeScreenshot(window.decorView, this)
         } else if (tag == "helpfb") {
             val chapterno = corpusSurahWord!![position - 1].corpus.surah
             val dataBundle = Bundle()
@@ -1764,7 +1767,9 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
                     }
 
                     if (item.itemId == R.id.action_share) {
-                        takeScreenShot(window.decorView)
+                        ScreenshotUtils.takeScreenshot(window.decorView,
+                            QuranGrammarApplication.context!!
+                        )
                         optionsMenu.dismiss()
                         return true
                     }

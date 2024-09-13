@@ -1106,6 +1106,7 @@ class SifaPhrasesFlowAdapter(
                             override fun onClick(v: View) {
                                 closeFABMenu()
                                 //HideFabMenu();
+
                                 takeScreenShot((context as AppCompatActivity).window.decorView)
                             }
 

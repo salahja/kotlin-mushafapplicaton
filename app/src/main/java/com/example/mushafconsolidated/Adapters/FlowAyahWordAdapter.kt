@@ -63,6 +63,7 @@ import com.example.utility.AnimationUtility
 import com.example.utility.CorpusUtilityorig
 import com.example.utility.FlowLayout
 import com.example.utility.QuranGrammarApplication
+import com.example.utility.ScreenshotUtils
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -1423,7 +1424,7 @@ class FlowAyahWordAdapter(
                             override fun onClick(v: View) {
                                 closeFABMenu()
                                 //HideFabMenu();
-                                takeScreenShot((context as AppCompatActivity).window.decorView)
+                                ScreenshotUtils.takeScreenshot((context as AppCompatActivity).window.decorView,QuranGrammarApplication.context!!)
                             }
 
                             private fun takeScreenShot(view: View) {
