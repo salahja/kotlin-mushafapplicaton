@@ -108,7 +108,7 @@ import kotlinx.coroutines.withContext
 import mufradat.MufradatPagerActivity
 import org.sj.conjugator.activity.BaseActivity
 import org.sj.conjugator.activity.ConjugatorAct
-import sj.hisnul.activity.HisnulBottomACT
+
 
 import sj.hisnul.fragments.NamesDetail
 import wheel.OnWheelChangedListener
@@ -376,12 +376,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                 startActivity(conjugatorintent)
             }/*      */
 
-            if (item.itemId == R.id.dua) {
-                materialToolbar.title = "Hisnul Muslim-Dua;s"
-                //  val searchintent = Intent(this@QuranGrammarAct, ComposeAct::class.java)
-                val searchintent = Intent(this@QuranGrammarAct, HisnulBottomACT::class.java)
-                startActivity(searchintent)
-            }
+
 
             if (item.itemId == R.id.names) {
                 materialToolbar.title = "Quran Audio"

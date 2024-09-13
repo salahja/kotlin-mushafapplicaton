@@ -11,9 +11,6 @@ import database.entity.MazeedEntity
 import database.entity.MujarradVerbs
 import database.entity.kov
 import kotlinx.coroutines.launch
-import sj.hisnul.entity.hcategoryEnt
-import sj.hisnul.entity.hduadetailsEnt
-import sj.hisnul.entity.hduanamesEnt
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,10 +21,8 @@ class VerbModel @Inject constructor(
     private var mujarradlist: MutableLiveData<List<MujarradVerbs>> = MutableLiveData()
     private var mazeedall: LiveData<List<MazeedEntity>> = MutableLiveData()
     private var mujaradall: LiveData<List<MujarradVerbs>> = MutableLiveData()
-    var duachapter: LiveData<List<hduanamesEnt>> = MutableLiveData()
+
     val util = Utils(QuranGrammarApplication.context)
-    var allduaitem: LiveData<List<hduadetailsEnt>> = MutableLiveData()
-    var duacategory: LiveData<List<hcategoryEnt>> = MutableLiveData()
 
     private var kovs: LiveData<List<kov>> = MutableLiveData()
 

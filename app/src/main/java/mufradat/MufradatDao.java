@@ -3,10 +3,8 @@ package mufradat;
 import androidx.room.Dao;
 import androidx.room.Query;
 
-import  mufradat.MufradatEntity;
-
 import java.util.List;
-
+import mufradat.MufradatEntity;
 @Dao
 public interface MufradatDao {
 

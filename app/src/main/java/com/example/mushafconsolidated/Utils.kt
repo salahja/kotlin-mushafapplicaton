@@ -39,7 +39,6 @@ import com.example.mushafconsolidated.model.Juz
 import com.example.mushafconsolidated.model.QuranCorpusWbw
 import database.entity.AllahNames
 import mufradat.MufradatEntity
-import sj.hisnul.entity.hduanamesEnt
 
 
 //import com.example.mushafconsolidated.Entities.JoinVersesTranslationDataTranslation;
@@ -710,17 +709,6 @@ class Utils {
         get() {
             return database.NamesDao()?.ALLAH_NAMES_LIST() as ArrayList<AllahNames>
         }
-
-
-    fun getDuaCATNAMES(tid: String?): List<hduanamesEnt> {
-        val verb: String = String.format(
-            "select * from hduanames where (category = '%s'   or category like '%%,%s'   or category like '%s, %% 'or category like '%%,%s,%%'" +
-                    "", tid, tid, tid, tid
-        )
-        val fs: String = "$verb)"
-        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(fs)
-        return database.RawDao().getDuaCATNAMES(query)
-    }
 
 
     /*

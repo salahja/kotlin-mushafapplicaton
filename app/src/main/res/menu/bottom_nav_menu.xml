@@ -36,11 +36,6 @@
         android:title="Allah(SWT)Names" />
 
 
-    <item
-        android:id="@+id/dua"
-        android:icon="@drawable/dua"
-        android:orderInCategory="100"
-        android:title="Dua" />
 
 
 </menu>

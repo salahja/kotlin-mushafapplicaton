@@ -72,19 +72,14 @@ import database.Dao.NamesDao
 import database.entity.AllahNames
 import mufradat.MufradatDao
 import mufradat.MufradatEntity
-import sj.hisnul.Dao.hDuaCategoryDao
-import sj.hisnul.Dao.hDuaItemDao
-import sj.hisnul.Dao.hDuaNamesDao
+
 import sj.hisnul.entity.AllahNamesDetails
-import sj.hisnul.entity.hcategoryEnt
-import sj.hisnul.entity.hduadetailsEnt
-import sj.hisnul.entity.hduanamesEnt
 import java.io.File
 
 /*@Module
 @InstallIn(SingletonComponent::class)*/
 @Database(
-    entities = [hduadetailsEnt::class, MufradatEntity::class,  hduanamesEnt::class, hcategoryEnt::class, AllahNamesDetails::class, lanerootdictionary::class, Qari::class, surahsummary::class, quranexplorer::class, AllahNames::class, MafoolMutlaqEnt::class, BadalErabNotesEnt::class, HalEnt::class, MafoolBihi::class, LiajlihiEnt::class, TameezEnt::class, GrammarRules::class, hanslexicon::class, qurandictionary::class, lanelexicon::class, lughat::class, NewNasbEntity::class, NewShartEntity::class, NewKanaEntity::class, NewMudhafEntity::class, SifaEntity::class, wbwentity::class, NounCorpus::class, VerbCorpus::class, QuranEntity::class, CorpusEntity::class, BookMarks::class, ChaptersAnaEntity::class],
+    entities = [MufradatEntity::class,AllahNamesDetails::class, lanerootdictionary::class, Qari::class, surahsummary::class, quranexplorer::class, AllahNames::class, MafoolMutlaqEnt::class, BadalErabNotesEnt::class, HalEnt::class, MafoolBihi::class, LiajlihiEnt::class, TameezEnt::class, GrammarRules::class, hanslexicon::class, qurandictionary::class, lanelexicon::class, lughat::class, NewNasbEntity::class, NewShartEntity::class, NewKanaEntity::class, NewMudhafEntity::class, SifaEntity::class, wbwentity::class, NounCorpus::class, VerbCorpus::class, QuranEntity::class, CorpusEntity::class, BookMarks::class, ChaptersAnaEntity::class],
     version = 1
 )
 abstract class QuranAppDatabase : RoomDatabase() {
@@ -302,26 +297,8 @@ abstract class QuranAppDatabase : RoomDatabase() {
      */
     abstract fun NamesDao(): NamesDao
 
-    /**
-     * H dua item dao
-     *
-     * @return
-     */
-    abstract fun hDuaItemDao(): hDuaItemDao
 
-    /**
-     * Geth dua names dao
-     *
-     * @return
-     */
-    abstract fun gethDuaNamesDao(): hDuaNamesDao
 
-    /**
-     * Geth dua category dao
-     *
-     * @return
-     */
-    abstract fun gethDuaCategoryDao(): hDuaCategoryDao
     abstract fun MufradatDao(): MufradatDao
     //abstract fun QuranDao(): QuranDao
 

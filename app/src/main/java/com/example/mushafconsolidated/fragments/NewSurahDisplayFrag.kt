@@ -50,7 +50,7 @@ import com.google.android.material.textview.MaterialTextView
 import dagger.hilt.android.AndroidEntryPoint
 import database.NamesGridImageAct
 import org.sj.conjugator.activity.ConjugatorAct
-import sj.hisnul.activity.HisnulBottomACT
+
 import java.util.Objects
 
 
@@ -339,10 +339,7 @@ class NewSurahDisplayFrag : Fragment(), SearchView.OnQueryTextListener {
                 val conjugatorintent = Intent(activity, ConjugatorAct::class.java)
                 startActivity(conjugatorintent)
             }
-            if (item.itemId == R.id.dua) {
-                val hisnulBottomACT = Intent(activity, HisnulBottomACT::class.java)
-                startActivity(hisnulBottomACT)
-            }
+
             if (item.itemId == R.id.names) {
                 val settingint = Intent(activity, NamesGridImageAct::class.java)
 
