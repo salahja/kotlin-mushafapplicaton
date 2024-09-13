@@ -229,6 +229,11 @@ class fragTopicFlowAyahWordAdapter(private var activity: AppCompatActivity,priva
             quranverses = ayahWordArrayList[position][0]!![0].spannableverse!!
         } catch (e: IndexOutOfBoundsException) {
         }
+        setAyahGrammaticalPhrases(holder, quranverses,
+            ayahWordArrayList!![position][0]?.get(0)?.corpus?.surah ?: 1, ayahWordArrayList!![position][0]?.get(0)?.corpus?.ayah ?: 1)
+
+
+
         assert(ayahWord != null)
         //  holder.header.text = ayahWord.topictitle
         holder.quran_textView.text = quranverses
@@ -328,6 +333,13 @@ class fragTopicFlowAyahWordAdapter(private var activity: AppCompatActivity,priva
             holder.erabexpand.visibility = View.GONE
         }
         setTextSizes(holder)
+    }
+
+    private fun setAyahGrammaticalPhrases(holder: fragTopicFlowAyahWordAdapter.ItemViewAdapter, spannableverse: SpannableString, surah: Int, ayah: Int) {
+        if (spannableverse != null) {
+            CorpusUtilityorig.setAyahGrammaticalPhrases(spannableverse,surah,ayah)
+            holder.quran_textView.text = spannableverse
+        }
     }
 
     private fun setTextSizes(holder: ItemViewAdapter) {

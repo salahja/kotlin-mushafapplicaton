@@ -59,6 +59,7 @@ import com.example.utility.AnimationUtility
 import com.example.utility.CorpusUtilityorig
 import com.example.utility.FlowLayout
 import com.example.utility.QuranGrammarApplication
+import com.example.utility.ScreenshotUtils
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -225,6 +226,13 @@ class NewTopicFlowAyahWordAdapter(
             quranverses = ayahWordArrayList[position][0]!![0].spannableverse!!
         } catch (e: IndexOutOfBoundsException) {
         }
+        setAyahGrammaticalPhrases(holder, quranverses,
+            ayahWordArrayList!![position][0]?.get(0)?.corpus?.surah ?: 1, ayahWordArrayList!![position][0]?.get(0)?.corpus?.ayah ?: 1)
+
+
+
+
+
         assert(ayahWord != null)
         //  holder.header.text = ayahWord.topictitle
         holder.quran_textView.text = quranverses
@@ -325,6 +333,15 @@ class NewTopicFlowAyahWordAdapter(
         }
         setTextSizes(holder)
     }
+    private fun setAyahGrammaticalPhrases(holder: NewTopicFlowAyahWordAdapter.ItemViewAdapter, spannableverse: SpannableString?, ayah: Int, surah: Int) {
+
+        if (spannableverse != null) {
+            CorpusUtilityorig.setAyahGrammaticalPhrases(spannableverse,surah,ayah)
+            holder.quran_textView.text = spannableverse
+        }
+
+    }
+
 
     private fun setTextSizes(holder: ItemViewAdapter) {
         if (!defaultfont) {
@@ -823,6 +840,7 @@ class NewTopicFlowAyahWordAdapter(
                         override fun onClick(v: View) {
                             closeFABMenu()
                             //HideFabMenu();
+
                             takeScreenShot((context as AppCompatActivity).window.decorView)
                         }
 

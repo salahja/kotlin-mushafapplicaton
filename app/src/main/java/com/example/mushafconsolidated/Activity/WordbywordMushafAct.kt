@@ -63,16 +63,10 @@ import com.example.Constant.SURAH_ARABIC_NAME
 import com.example.mushafconsolidated.Activityimport.AyahCoordinate
 import com.example.mushafconsolidated.Activityimport.BaseActivity
 import com.example.mushafconsolidated.BottomOptionDialog
-import com.example.mushafconsolidated.Entities.BadalErabNotesEnt
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
-import com.example.mushafconsolidated.Entities.HalEnt
-import com.example.mushafconsolidated.Entities.LiajlihiEnt
-import com.example.mushafconsolidated.Entities.MafoolBihi
-import com.example.mushafconsolidated.Entities.MafoolMutlaqEnt
 import com.example.mushafconsolidated.Entities.Page
 import com.example.mushafconsolidated.Entities.Qari
 import com.example.mushafconsolidated.Entities.QuranEntity
-import com.example.mushafconsolidated.Entities.TameezEnt
 import com.example.mushafconsolidated.PRDownloaderManager
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SurahSummary
@@ -81,12 +75,13 @@ import com.example.mushafconsolidated.databinding.ExoplayerBinding
 import com.example.mushafconsolidated.databinding.FbarnormalfooterBinding
 import com.example.mushafconsolidated.databinding.RxfetchProgressBinding
 import com.example.mushafconsolidated.databinding.VfourExpandableNewactivityShowAyahsBinding
+import com.example.mushafconsolidated.fragments.NoMafoolatFlowAyahWordAdapter
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
-import com.example.mushafconsolidated.fragments.FlowAyahWordAdapter
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.model.CorpusAyahWord
 import com.example.mushafconsolidated.model.NewQuranCorpusWbw
 import com.example.mushafconsolidated.model.QuranCorpusWbw
+import com.example.mushafconsolidated.quranrepo.QuranRepository
 import com.example.mushafconsolidated.quranrepo.QuranVIewModel
 import com.example.mushafconsolidated.receiversimport.AudioAppConstants
 import com.example.mushafconsolidated.receiversimport.DownloadService
@@ -99,6 +94,8 @@ import com.example.sentenceanalysis.SentenceGrammarAnalysis
 import com.example.utility.CorpusUtilityorig
 import com.example.utility.CorpusUtilityorig.Companion.HightLightKeyWord
 import com.example.utility.MovableFloatingActionButton
+import com.example.utility.QuranGrammarApplication
+import com.example.utility.ScreenshotUtils
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textview.MaterialTextView
@@ -115,6 +112,7 @@ import java.text.MessageFormat
 import java.util.Date
 import java.util.Locale
 import java.util.concurrent.Executors
+import javax.inject.Inject
 import kotlin.math.max
 
 @UnstableApi
@@ -122,14 +120,15 @@ import kotlin.math.max
 class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnClickListener
      ,SurahAyahPickerListener{
 
+    @Inject
+    lateinit var quranRepository: QuranRepository
 
     // private UpdateMafoolFlowAyahWordAdapter flowAyahWordAdapter;
     private lateinit var mainViewModel: QuranVIewModel
     private var corpusSurahWord: List<QuranCorpusWbw>? = null
 
-    private lateinit var newflowAyahWordAdapter: FlowAyahWordAdapter
-    private var Jumlahaliya: List<HalEnt?>? = null
-    private var Tammezent: List<TameezEnt?>? = null
+    private lateinit var nomafoolatflowAyahWordAdapter: NoMafoolatFlowAyahWordAdapter
+
 
     private var newnewadapterlist = LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>>()
     private var mausoof = false
@@ -142,20 +141,11 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
     private var corpusayahWordArrayList: ArrayList<CorpusAyahWord>? = null
 
 
-    private var mafoolbihiwords: List<MafoolBihi?>? = null
-    private var jumlahaliya: List<HalEnt?>? = null
-    private var tammezent: List<TameezEnt?>? = null
-    private var Mutlaqent: List<MafoolMutlaqEnt?>? = null
-    private var Liajlihient: List<LiajlihiEnt?>? = null
-    private var BadalErabNotesEnt: List<BadalErabNotesEnt?>? = null
-
-
     private val isMakkiMadani = 0
     private lateinit var exo_settings: ImageButton
     private lateinit var exo_close: ImageButton
     private lateinit var exo_bottom_bar: ImageButton
-    private lateinit var surahWheelDisplayData: Array<String>
-    private lateinit var ayahWheelDisplayData: Array<String>
+
     var versestartrange = 0
     private var verseendrange = 0
     private var currenttrack = 0
@@ -575,9 +565,8 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
                                     )
                                 )
                         } else if (isNightmode == "brown") {
-                            val textViews =
-                                holder.itemView.findViewById<View>(R.id.flow_word_by_word)
-                                    .findViewById<TextView>(R.id.word_arabic_textView)
+                            holder.itemView.findViewById<View>(R.id.flow_word_by_word)
+                                .findViewById<TextView>(R.id.word_arabic_textView)
                             holder.itemView.findViewById<View>(R.id.flow_word_by_word)
                                 .setBackgroundColor(
                                     ContextCompat.getColor(
@@ -586,9 +575,8 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
                                     )
                                 )
                         } else {
-                            val textViews =
-                                holder.itemView.findViewById<View>(R.id.flow_word_by_word)
-                                    .findViewById<TextView>(R.id.word_arabic_textView)
+                            holder.itemView.findViewById<View>(R.id.flow_word_by_word)
+                                .findViewById<TextView>(R.id.word_arabic_textView)
                             holder.itemView.findViewById<View>(R.id.flow_word_by_word)
                                 .setBackgroundColor(
                                     ContextCompat.getColor(
@@ -609,7 +597,6 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
                     ).show()
                 }
             }
-            val temp = 2
             if (currenttrack > 1) {
                 val holderp = recyclerView.findViewHolderForAdapterPosition(currenttrack - 1)
                 if (null != holderp) {
@@ -791,7 +778,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
                     }
                     marray = marray.subList(versestartrange, verseendrange)
                     player!!.setMediaItems(
-                        marray as MutableList<MediaItem>,  /* resetPosition= */
+                        marray,  /* resetPosition= */
                         !haveStartPosition
                     )
                 } else {
@@ -913,7 +900,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
                         readerID,
                         ayaItem.ayah,
                         ayaItem.surah,
-                        dir.toString(),
+                        dir,
                         audioType
                     )
                     if (location.isNotEmpty()) {
@@ -926,7 +913,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
                     readerID,
                     0,
                     surahselected,
-                    dir.toString(),
+                    dir,
                     audioType
                 )
                 marray.add(MediaItem.fromUri(location))
@@ -984,7 +971,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
 
         override fun onTracksChanged(tracks: Tracks) {
             //   updateButtonVisibility();
-            val currentTracks = player!!.currentTracks
+            player!!.currentTracks
             currenttrack = player!!.currentMediaItemIndex
             //     currenttrack=resumelastplayed;
             val resume = true
@@ -1020,10 +1007,9 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
     private fun preparehighlightsNew(passageno: Int, str: StringBuilder, ayahmat: ArrayList<Int>) {
         val holder = recyclerView.findViewHolderForAdapterPosition(1)
         var ayahindex = ayahmat[0]
-        val ayahmaz = ayahmat.size
+        ayahmat.size
         val split1 = str.toString().split("﴿".toRegex()).dropLastWhile { it.isEmpty() }
             .toTypedArray()
-        val start = 0
         //  = str.indexOf("1");
         val end = str.indexOf(ayahindex.toString())
         val acf = AyahCoordinate(0, end, passageno)
@@ -1090,14 +1076,13 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
         readers = findViewById(R.id.selectReaders)
         val pickerDialog = SurahAyahPickerDialog(this, this, surahselected, ayah)
         llEndRange.setOnClickListener {
-            val starttrue = false
             pickerDialog.show(isRefresh = false, startTrue = false) { surah, ayah ->
                 // Handle the selected surah and ayah here
                 println("Selected Surah: $surah, Ayah: $ayah")
             }
         }
         llStartRange.setOnClickListener(object : View.OnClickListener {
-            val starttrue = true
+
             override fun onClick(v: View) {
                 marrayrange = null
                 pickerDialog.show(isRefresh = false, startTrue = true) { surah, ayah ->
@@ -1138,7 +1123,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
             }
         }
         startrange.setOnClickListener(object : View.OnClickListener {
-            val starttrue = true
+
             override fun onClick(v: View) {
                 pickerDialog.show(isRefresh = false, startTrue = true) { surah, ayah ->
                     // Handle the selected surah and ayah here
@@ -1147,7 +1132,6 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
             }
         })
         endrange.setOnClickListener {
-            val starttrue = false
             pickerDialog.show(isRefresh = false, startTrue = false) { surah, ayah ->
                 // Handle the selected surah and ayah here
                 println("Selected Surah: $surah, Ayah: $ayah")
@@ -1252,7 +1236,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
     }
 
     private fun ExecuteSurahWordByWord() {
-        val utils = Utils(this)
+        Utils(this)
         val builder = AlertDialog.Builder(
             this,
             com.google.android.material.R.style.ThemeOverlay_Material3_Dialog
@@ -1262,24 +1246,10 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
         val mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
         val dialog = builder.create()
         corpusayahWordArrayList = ArrayList()
-        jumlahaliya = ArrayList()
-        tammezent = ArrayList()
-        Liajlihient = ArrayList()
 
 
-        corpusayahWordArrayList = ArrayList()
-        mafoolbihiwords = mainViewModel.getMafoolSurah(surah).value
-        jumlahaliya = mainViewModel.getHalsurah(surah).value
-        tammezent = mainViewModel.getTameezsurah(surah).value
-        Liajlihient = mainViewModel.getLiajlihiSurah(surah).value
-        Mutlaqent = mainViewModel.getMutlaqSurah(surah).value
-        BadalErabNotesEnt = mainViewModel.getbadalSurah(surah).value
-
-
-        allofQuran = mainViewModel.getquranbySUrah(surah).value
-        corpusSurahWord = mainViewModel.getQuranCorpusWbwbysurah(surah).value
         val corpus = CorpusUtilityorig(this)
-        var scope: CoroutineScope = CoroutineScope(Dispatchers.Main)
+        var scope = CoroutineScope(Dispatchers.Main)
         val listener: OnItemClickListenerOnLong = this
         val ex = Executors.newSingleThreadExecutor()
         ex.execute {
@@ -1297,20 +1267,22 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
         listener: OnItemClickListenerOnLong,
     ) {
         ex.launch {
-            mafoolbihiwords = mainViewModel.getMafoolSurah(surah).value
-            Jumlahaliya = mainViewModel.getHalsurah(surah).value
-            Tammezent = mainViewModel.getTameezsurah(surah).value
-            Liajlihient = mainViewModel.getLiajlihiSurah(surah).value
-            Mutlaqent = mainViewModel.getMutlaqSurah(surah).value
-            BadalErabNotesEnt = mainViewModel.getbadalSurah(surah).value
+            val qurandata=quranRepository.getQuranData(surah)
+            allofQuran=qurandata.allofQuran
+            val corpusSurahWord=qurandata.corpusSurahWord
+
+
 
 
             allofQuran = mainViewModel.getquranbySUrah(surah).value
+          //  corpusSurahWord = mainViewModel.getQuranCorpusWbwbysurah(surah).value
+
+          //  allofQuran = mainViewModel.getquranbySUrah(surah).value
 
 
 
 
-            corpusSurahWord = mainViewModel.getQuranCorpusWbwbysurah(surah).value
+        //    corpusSurahWord = mainViewModel.getQuranCorpusWbwbysurah(surah).value
 
             newnewadapterlist = CorpusUtilityorig.composeWBWCollection(allofQuran, corpusSurahWord)
 
@@ -1374,14 +1346,9 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
 
             // recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.layoutManager = manager
-            newflowAyahWordAdapter = FlowAyahWordAdapter(
+            nomafoolatflowAyahWordAdapter = NoMafoolatFlowAyahWordAdapter(
                 true,
-                Mutlaqent,
-                tammezent,
-                BadalErabNotesEnt,
-                Liajlihient,
-                jumlahaliya,
-                mafoolbihiwords,
+
                 header,
                 allofQuran,
                 newnewadapterlist,
@@ -1390,10 +1357,11 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
                 isMakkiMadani,
                 listener
             )
-            newflowAyahWordAdapter.addContext(this@WordbywordMushafAct)
+
+            nomafoolatflowAyahWordAdapter.addContext(this@WordbywordMushafAct)
             recyclerView.setHasFixedSize(true)
-            recyclerView.adapter = newflowAyahWordAdapter
-            newflowAyahWordAdapter.notifyDataSetChanged()
+            recyclerView.adapter = nomafoolatflowAyahWordAdapter
+            nomafoolatflowAyahWordAdapter.notifyDataSetChanged()
             recyclerView.itemAnimator = DefaultItemAnimator()
 
 
@@ -1472,28 +1440,6 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
         // LocalBroadcastManager.getInstance(this).unregisterReceiver(downloadPageAya)
         //stop flag of auto start
         startBeforeDownload = false
-    }
-
-    override fun onResume() {
-        super.onResume()
-    //    rxFetch!!.addListener(fetchListener)
-
-    /*    resumeDisposable =
-            rxFetch!!.getDownloadsInGroup(RxFilesActivity.groupId).flowable.subscribe(
-                { downloads: List<Download> ->
-                    for (download in downloads) {
-                        if (fileProgressMap.containsKey(download.id)) {
-                            fileProgressMap[download.id] = download.progress
-                            updateUIWithProgress()
-                        }
-                    }
-                }
-            ) { throwable: Throwable? ->
-                val error = getErrorFromThrowable(
-                    throwable!!
-                )
-                Timber.d("GamesFilesActivity Error: %1\$s", error)
-            }*/
     }
 
 
@@ -1788,7 +1734,8 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
             BottomOptionDialog.newInstance(data)
                 .show(this@WordbywordMushafAct.supportFragmentManager, WordAnalysisBottomSheet.TAG)
         } else if (tag == "sharefb") {
-            takeScreenShot(window.decorView)
+        //    takeScreenShot(window.decorView)
+            ScreenshotUtils.takeScreenshot(window.decorView, this)
         } else if (tag == "helpfb") {
             val chapterno = corpusSurahWord!![position - 1].corpus.surah
             val dataBundle = Bundle()
@@ -1820,7 +1767,9 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
                     }
 
                     if (item.itemId == R.id.action_share) {
-                        takeScreenShot(window.decorView)
+                        ScreenshotUtils.takeScreenshot(window.decorView,
+                            QuranGrammarApplication.context!!
+                        )
                         optionsMenu.dismiss()
                         return true
                     }
@@ -1955,12 +1904,6 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
             isStartFrom = false
         }
     }
-
-    override fun onStart() {
-        super.onStart()
-
-    }
-
 
 
     companion object {

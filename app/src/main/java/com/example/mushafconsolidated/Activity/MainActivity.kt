@@ -49,7 +49,7 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         switchTheme("brown")
         super.onCreate(savedInstanceState)
-        val splashScreen = installSplashScreen()
+         val splashScreen = installSplashScreen()
 
         // Use a coroutine to delay the splash screen
         var keepSplashOnScreen = true

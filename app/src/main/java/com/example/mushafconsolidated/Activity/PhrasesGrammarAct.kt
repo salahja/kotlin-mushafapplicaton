@@ -92,6 +92,7 @@ import com.example.sentenceanalysis.SentenceGrammarAnalysis
 import com.example.utility.CorpusUtilityorig
 import com.example.utility.QuranGrammarApplication
 import com.example.utility.QuranGrammarApplication.Companion.context
+import com.example.utility.ScreenshotUtils
 import com.example.voiceai.VoiceRecognitionActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -864,7 +865,7 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
     private fun ExecuteSurahWordByWord() {
         val builder = AlertDialog.Builder(
             this,
-            com.google.android.material.R.style.ThemeOverlay_Material3_Dialog
+           R.style.Theme_MaterialComponents_DayNight_NoActionBar_PopupOverlay
         )
         builder.setCancelable(false) // if you want user to wait for some process to finish,
         builder.setView(R.layout.layout_loading_dialog)
@@ -1584,7 +1585,8 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
         } else if (tag == "jumptofb") {
             initDialogComponents(position)
         } else if (tag == "sharefb") {
-            takeScreenShot(window.decorView)
+         //   takeScreenShot(window.decorView)
+            ScreenshotUtils.takeScreenshot(window.decorView, this)
         } else if (tag == "helpfb") {
             val chapterno = corpusSurahWord!![position - 1].corpus.surah
             val dataBundle = Bundle()
@@ -1626,7 +1628,7 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
                         return true
                     }
                     if (item.itemId == R.id.action_share) {
-                        takeScreenShot(window.decorView)
+                        ScreenshotUtils.takeScreenshot(window.decorView, QuranGrammarApplication.context!!)
                         optionsMenu.dismiss()
                         return true
                     }

@@ -7,6 +7,7 @@ import com.example.mushafconsolidated.DAO.BadalErabNotesDao
 import com.example.mushafconsolidated.DAO.BookMarkDao
 import com.example.mushafconsolidated.DAO.HaliyaDao
 import com.example.mushafconsolidated.DAO.HansDao
+
 import com.example.mushafconsolidated.DAO.LaneRootDao
 import com.example.mushafconsolidated.DAO.LughatDao
 import com.example.mushafconsolidated.DAO.MafoolBihiDao
@@ -41,6 +42,7 @@ import com.example.mushafconsolidated.Entities.SifaEntity
 import com.example.mushafconsolidated.Entities.TameezEnt
 import com.example.mushafconsolidated.Entities.VerbCorpus
 import com.example.mushafconsolidated.Entities.hanslexicon
+
 import com.example.mushafconsolidated.Entities.lanerootdictionary
 import com.example.mushafconsolidated.Entities.surahsummary
 import com.example.mushafconsolidated.model.QuranCorpusWbw
@@ -60,6 +62,7 @@ import javax.inject.Inject
      val liajlihient: liajlihiDao,
      val badalErabNotesEnt: BadalErabNotesDao,
      val bookm: BookMarkDao,
+
      val hansdao: HansDao,
      val lanesdao: LaneRootDao,
      val ajlihiworddao: liajlihiDao,
@@ -173,7 +176,8 @@ import javax.inject.Inject
 
     }
 
-    suspend fun delete(entity: BookMarks) {
+
+     suspend fun delete(entity: BookMarks) {
         bookm.deletebookmarkl(entity)
 
 
@@ -197,10 +201,25 @@ import javax.inject.Inject
         )
     }
 
-    
 
+     suspend fun getQuranData(chapterNo: Int): QuranData {
+         return QuranData(
+
+             allofQuran = qurandao.getQuranVersesBySurahl(chapterNo), // Fetch Quran verses
+             corpusSurahWord = qurandao.getQuranCorpusWbwbysurah(chapterNo) //Fetch corpus data
+         )
+     }
 
 }
+
+
+
+
+data class QuranData(
+
+    val allofQuran: List<QuranEntity>, // Assuming you need this as well
+    val corpusSurahWord: List<QuranCorpusWbw>// Assuming you need this as well
+)
 
 data class ChapterData(
 val mafoolbihiwords: List<MafoolBihi>,
