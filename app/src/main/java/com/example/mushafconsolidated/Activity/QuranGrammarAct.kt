@@ -121,6 +121,7 @@ import javax.inject.Inject
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.quiz.ArabicVerbQuizFragment
 import java.io.FileWriter
 
 //import com.example.mushafconsolidated.Entities.JoinVersesTranslationDataTranslation;
@@ -331,7 +332,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
 
             supportFragmentManager.commit {
-                replace<NewSurahDisplayFrag>(R.id.frame_container_qurangrammar, SURAHFRAGTAG)
+                replace<ArabicVerbQuizFragment>(R.id.frame_container_qurangrammar, SURAHFRAGTAG)
                 setReorderingAllowed(true)
                 addToBackStack(null)
                 setCustomAnimations(R.anim.slide_down, R.anim.slide_up)

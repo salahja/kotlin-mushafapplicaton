@@ -1,0 +1,133 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/question_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:padding="15dp"
+        android:gravity="center_horizontal"
+        android:text="@string/question_text"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/verbdetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/question_text_view"
+        android:layout_margin="10dp"
+        android:padding="15dp"
+        android:gravity="center_horizontal"
+        android:text="@string/question_text"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/answer_button1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/verbdetails"
+        android:layout_margin="10dp"
+        android:padding="15dp"
+        android:background="@drawable/default_option_border_bg"
+
+        android:gravity="center_horizontal"
+        android:text="@string/answer1_text"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/answer_button2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/answer_button1"
+        android:layout_margin="10dp"
+        android:padding="15dp"
+        android:background="@drawable/default_option_border_bg"
+        android:gravity="center_horizontal"
+        android:text="@string/answer2_text"
+
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/answer_button3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/answer_button2"
+        android:layout_margin="10dp"
+        android:padding="15dp"
+        android:background="@drawable/default_option_border_bg"
+        android:gravity="center_horizontal"
+        android:text="@string/answer3_text"
+
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/answer_button4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/answer_button3"
+        android:layout_margin="10dp"
+        android:padding="15dp"
+
+        android:background="@drawable/default_option_border_bg"
+        android:gravity="center_horizontal"
+
+
+        android:text="@string/answer3_text"
+        android:textSize="16sp" />
+
+    <TextView
+
+        android:id="@+id/submit_button"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/answer_button4"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:text="@string/submit_text"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:layout_below="@id/submit_button"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:layout_weight="1"
+            android:indeterminate="false"
+            android:max="5"
+            android:minHeight="50dp"
+            android:progress="0"
+            android:textAlignment="center" />
+
+        <TextView
+
+            android:id="@+id/tv_progress"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_centerHorizontal="true"
+
+            android:layout_gravity="center"
+            tools:text="9/5"
+            android:text="@string/progress"
+            android:textSize="16sp" />
+    </LinearLayout>
+</RelativeLayout>

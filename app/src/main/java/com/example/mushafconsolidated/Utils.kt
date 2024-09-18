@@ -106,7 +106,10 @@ class Utils {
         Log.d(TAG, "getQuranRoot: started")
         return database.VerbCorpusDao().getVerbRootsurahayahwordid(id, verseid, wordid)
     }
-
+    fun getAllverbs(): List<VerbCorpus> {
+        Log.d(TAG, "getQuranRoot: started")
+        return database.VerbCorpusDao().getAllverbs()
+    }
 
     fun getQuranNouns(id: Int, verseid: Int, wordid: Int): List<NounCorpus> {
         Log.d(TAG, "getQuranNouns: started")
@@ -644,6 +647,11 @@ class Utils {
     fun getwbwQuranBySurahAyah(id: Int, aid: Int): List<wbwentity>? {
         return database.wbwDao().getwbwQuranBySurahAyah(id, aid)
     }
+   fun getwbwQuranBySurahAyahWord(cid: Int, aid: Int, wid: Int):List<wbwentity>?  {
+
+     return  database.wbwDao().getwbwQuranBySurahAyahWord(cid, aid, wid)
+   }
+
 
     fun getwbwQuranbTranslation(
         sid: Int,
