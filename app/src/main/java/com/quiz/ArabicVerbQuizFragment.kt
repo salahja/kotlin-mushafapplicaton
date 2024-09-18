@@ -17,7 +17,7 @@ import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.databinding.FragmentArabicVerbQuizBinding
 import com.google.android.material.textview.MaterialTextView
 
-class ArabicVerbQuizFragment : Fragment() ,OnClickListener {
+class ArabicVerbQuizFragment : Fragment(), OnClickListener {
 
 
     //private lateinit var verbcorpus: wbwentity
@@ -40,8 +40,8 @@ class ArabicVerbQuizFragment : Fragment() ,OnClickListener {
     class Question(
         val id: Int,
         val question: String,
-        val answers: List<String>,
-        val correctAnswerIndex: Int
+        val answers: List<String>
+
     )
 
     val questions = listOf(
@@ -49,19 +49,19 @@ class ArabicVerbQuizFragment : Fragment() ,OnClickListener {
             1,
             "What is Tense of the verb?",
             listOf("Perfect", "Imperfect", "Imperative"),
-            1
+
         ),
         Question(
             2,
             "What is the Voice of the Verb?",
             listOf("Active", "Passive"),
-            0
+
         ),
         Question(
             3,
             "What is the Mood of the VERB",
             listOf("Indictive", "Subjunctive", "Jussive"),
-            1
+
         ),
         Question(
             4,
@@ -87,7 +87,7 @@ class ArabicVerbQuizFragment : Fragment() ,OnClickListener {
                 "FirstPersonPlural",
                 "First Person Singular Masculine"
             ),
-            1
+
         ),
         Question(
             5,
@@ -96,7 +96,7 @@ class ArabicVerbQuizFragment : Fragment() ,OnClickListener {
                 "Pattern 1", "Pattern 2", "Pattern 3", "Pattern 4", "Pattern 5",
                 "Pattern 6", "Pattern 7", "Pattern 8", "Pattern 9"
             ),
-            1
+
         ),
     )
 
@@ -119,13 +119,6 @@ class ArabicVerbQuizFragment : Fragment() ,OnClickListener {
             cverb.verseno,
             cverb.wordno
         )
-
-
-
-
-
-
-
         verbdetails = binding.verbdetails
         questionTextView = binding.questionTextView
         answerButton1 = binding.answerButton1
@@ -133,45 +126,49 @@ class ArabicVerbQuizFragment : Fragment() ,OnClickListener {
         answerButton3 = binding.answerButton3
         answerButton4 = binding.answerButton4
         submitButton = binding.submitButton
-        progressbar=binding.progressBar
-        tvProgress=binding.tvProgress
+        progressbar = binding.progressBar
+        tvProgress = binding.tvProgress
+        answerButton1.setOnClickListener(this)
+        answerButton2.setOnClickListener(this)
+        answerButton3.setOnClickListener(this)
+        answerButton4.setOnClickListener(this)
         val buildstr = StringBuilder()
         buildstr.append(verbcorpus?.get(0)?.araone).append(verbcorpus?.get(0)?.aratwo)
             .append(verbcorpus?.get(0)?.arathree).append(verbcorpus?.get(0)?.arafour)
             .append(verbcorpus?.get(0)?.arafive).append(":").append(verbcorpus?.get(0)?.en)
         verbdetails.text = buildstr
         progressbar.progress = currentPosition
-        tvProgress.text = "$currentPosition"+ "/" +progressbar.max
+        tvProgress.text = "$currentPosition" + "/" + progressbar.max
         showNextQuestion(currentPosition)
-        answerButton1.setOnClickListener(this)
-        answerButton2.setOnClickListener(this)
-        answerButton3.setOnClickListener(this)
-        answerButton4.setOnClickListener(this)
 
 
 
     }
+
     private fun defaultOptionsView() {
         val options = ArrayList<TextView>()
         options.add(0, answerButton1)
         options.add(1, answerButton2)
         options.add(2, answerButton3)
         options.add(3, answerButton4)
-        for (option in options){
+        for (option in options) {
             option.setTextColor(Color.parseColor("#7A8089"))
-            option.typeface=android.graphics.Typeface.DEFAULT
-            option.background=  ContextCompat.getDrawable(requireContext(),R.drawable.default_option_border_bg)
+            option.typeface = android.graphics.Typeface.DEFAULT
+            option.background =
+                ContextCompat.getDrawable(requireContext(), R.drawable.default_option_border_bg)
         }
     }
 
-    private fun selectedOptionsView(tv: TextView,selectedOptionNum:Int){
-defaultOptionsView()
-        mSelectedOptionPositon=selectedOptionNum
+    private fun selectedOptionsView(tv: TextView, selectedOptionNum: Int) {
+        defaultOptionsView()
+        mSelectedOptionPositon = selectedOptionNum
         tv.setTextColor(Color.parseColor("#363A43"))
         tv.setTypeface(tv.typeface, Typeface.BOLD)
-        tv.background=  ContextCompat.getDrawable(requireContext(),R.drawable.selected_option_border_bg)
+        tv.background =
+            ContextCompat.getDrawable(requireContext(), R.drawable.selected_option_border_bg)
 
     }
+
     private fun showNextQuestion(mSelectedOptionPositon: Int) {
         //val currentQuestion = questions[0] // Access the first question in the list
         defaultOptionsView()
@@ -198,11 +195,12 @@ defaultOptionsView()
         if (currentQuestion.answers.size > 3) {
             answerButton4.text = currentQuestion.answers[3]
         }
-        if(this.currentPosition==0) {
+        if (this.currentPosition == 0) {
             questionfirst()
-        }else if(this.currentPosition==1) {
+        } else if (this.currentPosition == 1) {
+
             questiontwo()
-        }else if(this.currentPosition==2) {
+        } else if (this.currentPosition == 2) {
             questionthree()
         }
         submitButton.setOnClickListener(View.OnClickListener {
@@ -213,143 +211,43 @@ defaultOptionsView()
 
     }
 
-    private fun questionthree() {
-        if (this.currentPosition == 1) {
 
-            answerButton4.visibility = View.GONE
-            answerButton3.visibility = View.VISIBLE
-            answerButton1.setOnClickListener {
-                answerButton1.text
-                if (answerButton1.text.contains(cverb.mood_kananumbers.toString(), ignoreCase = true)) {
-                    println(answerButton1.text)
-                    println(cverb.tense)
-                    answerButton1.setCompoundDrawablesWithIntrinsicBounds(
-                        R.drawable.baseline_check_24,
-                        0,
-                        0,
-                        0
-                    )
-                } else {
 
-                    answerButton1.setCompoundDrawablesWithIntrinsicBounds(
-                        R.drawable.ic_cross,
-                        0,
-                        0,
-                        0
-                    )
-                }
-            }
-
-            answerButton2.setOnClickListener {
-
-                if (answerButton2.text.contains(cverb.mood_kananumbers.toString(), ignoreCase = true)) {
-                    println(answerButton1.text)
-                    println(cverb.tense)
-                    answerButton2.setCompoundDrawablesWithIntrinsicBounds(
-                        R.drawable.baseline_check_24,
-                        0,
-                        0,
-                        0
-                    )
-                } else {
-
-                    answerButton2.setCompoundDrawablesWithIntrinsicBounds(
-                        R.drawable.ic_cross,
-                        0,
-                        0,
-                        0
-                    )
-                }
-            }
-            answerButton3.setOnClickListener {
-
-                if (answerButton3.text.contains(cverb.mood_kananumbers.toString(), ignoreCase = true)) {
-                    println(answerButton1.text)
-                    println(cverb.tense)
-                    answerButton3.setCompoundDrawablesWithIntrinsicBounds(
-                        R.drawable.baseline_check_24,
-                        0,
-                        0,
-                        0
-                    )
-                } else {
-
-                    answerButton3.setCompoundDrawablesWithIntrinsicBounds(
-                        R.drawable.ic_cross,
-                        0,
-                        0,
-                        0
-                    )
-                }
-            }
-        }
-    }
     private fun questiontwo() {
-        if (this.currentPosition == 1) {
+
             answerButton3.visibility = View.GONE
             answerButton4.visibility = View.GONE
-            answerButton1.setOnClickListener {
+
                 answerButton1.text
                 if (answerButton1.text.contains(cverb.voice.toString(), ignoreCase = true)) {
                     println(answerButton1.text)
                     println(cverb.tense)
-                    answerButton1.setCompoundDrawablesWithIntrinsicBounds(
-                        R.drawable.baseline_check_24,
-                        0,
-                        0,
-                        0
-                    )
-                } else {
 
-                    answerButton1.setCompoundDrawablesWithIntrinsicBounds(
-                        R.drawable.ic_cross,
-                        0,
-                        0,
-                        0
-                    )
                 }
-            }
 
-            answerButton2.setOnClickListener {
+
+
 
                 if (answerButton2.text.contains(cverb.voice.toString(), ignoreCase = true)) {
-                    println(answerButton1.text)
+                    println(answerButton2.text)
                     println(cverb.tense)
-                    answerButton2.setCompoundDrawablesWithIntrinsicBounds(
-                        R.drawable.baseline_check_24,
-                        0,
-                        0,
-                        0
-                    )
-                } else {
 
-                    answerButton2.setCompoundDrawablesWithIntrinsicBounds(
-                        R.drawable.ic_cross,
-                        0,
-                        0,
-                        0
-                    )
                 }
-            }
-        }
+
+
     }
 
     private fun questionfirst() {
-        if (this.currentPosition == 0) {
-            answerButton1.setOnClickListener {
+
+
                 answerButton1.text
                 if (answerButton1.text.contains(cverb.tense.toString(), ignoreCase = true)) {
                     println(answerButton1.text)
                     println(cverb.tense)
-                    answerButton1.setCompoundDrawablesWithIntrinsicBounds(
-                        R.drawable.baseline_check_24,
-                        0,
-                        0,
-                        0
-                    )
+
                 }
-            }
-            answerButton2.setOnClickListener {
+
+
                 var compare = "Imperfect"
                 if (answerButton2.text.equals("Imperfect")) {
                     compare = "IMPF"
@@ -357,31 +255,63 @@ defaultOptionsView()
                 if (compare.contains(cverb.tense.toString(), ignoreCase = true)) {
                     println(answerButton1.text)
                     println(cverb.tense)
-                    answerButton2.setCompoundDrawablesWithIntrinsicBounds(
-                        R.drawable.baseline_check_24,
-                        0,
-                        0,
-                        0
-                    )
+
                 }
-            }
-            answerButton3.setOnClickListener {
+
+
 
                 if (answerButton3.text.contains(cverb.tense.toString(), ignoreCase = true)) {
                     println(answerButton1.text)
                     println(cverb.tense)
-                    answerButton3.setCompoundDrawablesWithIntrinsicBounds(
-                        R.drawable.baseline_check_24,
-                        0,
-                        0,
-                        0
-                    )
+
                 }
-            }
-        }
+
+
     }
+    private fun questionthree() {
 
 
+        answerButton4.visibility = View.GONE
+        answerButton3.visibility = View.VISIBLE
+
+            answerButton1.text
+            if (answerButton1.text.contains(
+                    cverb.mood_kananumbers.toString(),
+                    ignoreCase = true
+                )
+            ) {
+                println(answerButton1.text)
+                println(cverb.tense)
+
+            }
+
+
+
+
+            if (answerButton2.text.contains(
+                    cverb.mood_kananumbers.toString(),
+                    ignoreCase = true
+                )
+            ) {
+                println(answerButton1.text)
+                println(cverb.tense)
+
+            }
+
+
+
+            if (answerButton3.text.contains(
+                    cverb.mood_kananumbers.toString(),
+                    ignoreCase = true
+                )
+            ) {
+                println(answerButton1.text)
+                println(cverb.tense)
+
+            }
+
+
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -389,18 +319,21 @@ defaultOptionsView()
     }
 
     override fun onClick(v: View?) {
-        when(v?.id){
-            R.id.answer_button1->{
-                selectedOptionsView(answerButton1,1)
+        when (v?.id) {
+            R.id.answer_button1 -> {
+                selectedOptionsView(answerButton1, 0)
             }
-            R.id.answer_button2->{
-                selectedOptionsView(answerButton2,2)
+
+            R.id.answer_button2 -> {
+                selectedOptionsView(answerButton2, 1)
             }
-            R.id.answer_button3->{
-                selectedOptionsView(answerButton3,3)
+
+            R.id.answer_button3 -> {
+                selectedOptionsView(answerButton3, 2)
             }
-            R.id.answer_button1->{
-                selectedOptionsView(answerButton4,4)
+
+            R.id.answer_button1 -> {
+                selectedOptionsView(answerButton4, 3)
             }
         }
     }
