@@ -421,4 +421,21 @@
     <item name="ayah_translation" type="id" />
 
 
+    <item name="answer_button2" type="id" />
+    <item name="answer_button3" type="id" />
+
+
+    <item name="answer_button4" type="id" />
+    <item name="answer_button5" type="id" />
+    <item name="answer_button6" type="id" />
+    <item name="answer_button7" type="id" />
+    <item name="answer_button8" type="id" />
+    <item name="answer_button9" type="id" />
+    <item name="answer_button10" type="id" />
+    <item name="answer_button11" type="id" />
+    <item name="answer_button12" type="id" />
+    <item name="answer_button13" type="id" />
+    <item name="answer_button14" type="id" />
+
+
 </resources>

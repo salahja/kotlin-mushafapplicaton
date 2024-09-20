@@ -10,8 +10,12 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.compose.foundation.background
+import androidx.compose.ui.semantics.text
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+
+
 import com.example.mushafconsolidated.Entities.VerbCorpus
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.Utils
@@ -21,6 +25,8 @@ import com.google.android.material.textview.MaterialTextView
 class ArabicVerbQuizFragment : Fragment(), OnClickListener {
 
 
+
+    private lateinit var answerButtons: Array<TextView>
     //private lateinit var verbcorpus: wbwentity
     private lateinit var cverb: VerbCorpus
     private var _binding: FragmentArabicVerbQuizBinding? = null
@@ -31,18 +37,40 @@ class ArabicVerbQuizFragment : Fragment(), OnClickListener {
     private lateinit var answerButton2: TextView
     private lateinit var answerButton3: TextView
     private lateinit var answerButton4: TextView
+
+    private lateinit var answerButton5 : TextView //answerButton1
+    private lateinit var answerButton6 : TextView //answerButton2
+    private lateinit var answerButton7 : TextView //answerButton3
+    private lateinit var answerButton8 : TextView //answerButton4
+
+    private lateinit var answerButton9 : TextView //answerButton1
+    private lateinit var answerButton10 : TextView //answerButton2
+    private lateinit var answerButton11 : TextView //answerButton3
+    private lateinit var answerButton12: TextView //answerButton4
+    private lateinit var answerButton13: TextView //answerButton4
+
+
+
+
+
+
     private lateinit var submitButton: TextView
+
+
+
+
+
     private lateinit var tvProgress: TextView
     private lateinit var progressbar: ProgressBar
     private var mcurrentPosition: Int = 1
     private var mSelectedOptionPositon: Int = 0
     private var mQuestionList: ArrayList<Question>? = null
-
+    enum class QuestionType { TENSE, VOICE, MOOD, GENDER_NUMBER, PATTERN }
     class Question(
         val id: Int,
         val question: String,
         val answers: List<String>,
-        var correct:Int
+        var correctAnswerIndex:Int
 
     )
 
@@ -81,13 +109,14 @@ class ArabicVerbQuizFragment : Fragment(), OnClickListener {
                 "SecondPersonSingularMasculine",
                 "SecondPersonDualMasculine",
                 "SecondPersonPlularMasculine",
+
                 "SecondPersonSingularFeminine",
                 "SecondPersonDualFeminine",
                 "SecondPersonPluralFeminine",
 
                 "FirstPersonSingula",
                 "FirstPersonPlural",
-                "First Person Singular Masculine"
+
             ),
 0
             ),
@@ -116,25 +145,42 @@ class ArabicVerbQuizFragment : Fragment(), OnClickListener {
         val utils = Utils(requireContext())
         val allverbs = utils.getAllverbs()
         cverb = allverbs.random()
+
         val verbcorpus = utils.getwbwQuranBySurahAyahWord(
             cverb.chapterno,
             cverb.verseno,
             cverb.wordno
         )
-        verbdetails = binding.verbdetails
-        questionTextView = binding.questionTextView
-        answerButton1 = binding.answerButton1
-        answerButton2 = binding.answerButton2
-        answerButton3 = binding.answerButton3
-        answerButton4 = binding.answerButton4
-        submitButton = binding.submitButton
-        progressbar = binding.progressBar
-        tvProgress = binding.tvProgress
-        answerButton1.setOnClickListener(this)
+        if (_binding != null) {
+            val binding = _binding!!
+            verbdetails = binding.verbdetails
+            questionTextView = binding.questionTextView
+            answerButtons = arrayOf(
+                binding.answerButton1, binding.answerButton2, binding.answerButton3,
+                binding.answerButton4, binding.answerButton5, binding.answerButton6,
+                binding.answerButton7, binding.answerButton8, binding.answerButton9,
+                binding.answerButton10, binding.answerButton11, binding.answerButton12,
+                binding.answerButton13,binding.answerButton14
+            )
+
+            for (button in answerButtons) {
+                button.setOnClickListener(this)
+            }
+
+            submitButton = binding.submitButton
+            progressbar = binding.progressBar
+            tvProgress = binding.tvProgress
+            submitButton.setOnClickListener(this)
+        }
+
+
+
+
+  /*      answerButton1.setOnClickListener(this)
         answerButton2.setOnClickListener(this)
         answerButton3.setOnClickListener(this)
         answerButton4.setOnClickListener(this)
-        submitButton.setOnClickListener(this)
+        submitButton.setOnClickListener(this)*/
         val buildstr = StringBuilder()
         buildstr.append(verbcorpus?.get(0)?.araone).append(verbcorpus?.get(0)?.aratwo)
             .append(verbcorpus?.get(0)?.arathree).append(verbcorpus?.get(0)?.arafour)
@@ -147,6 +193,16 @@ class ArabicVerbQuizFragment : Fragment(), OnClickListener {
     }
 
     private fun defaultOptionsView() {
+        for (option in answerButtons) { // Iterate over the answerButtons array
+            option.setTextColor(Color.parseColor("#7A8089"))
+            option.typeface = android.graphics.Typeface.DEFAULT
+            option.background = ContextCompat.getDrawable(
+                requireContext(),
+                R.drawable.default_option_border_bg
+            )
+        }
+    }
+    private fun defaultOptionsViews() {
         val options = ArrayList<TextView>()
         options.add(0, answerButton1)
         options.add(1, answerButton2)
@@ -179,12 +235,22 @@ class ArabicVerbQuizFragment : Fragment(), OnClickListener {
             submitButton.text="Submit"
         }
         val currentQuestion = questions[this.mcurrentPosition-1]
+        for (i in 0 until currentQuestion.answers.size) {
+            if (i < answerButtons.size) {
+                answerButtons[i].text = currentQuestion.answers[i]
+                answerButtons[i].visibility = View.VISIBLE
+            }
+        }
+        for (i in currentQuestion.answers.size until answerButtons.size) {
+            answerButtons[i].visibility = View.GONE
+        }
+
         questionTextView.text = currentQuestion.question
         progressbar.progress = mcurrentPosition
         tvProgress.text = "$mcurrentPosition" + "/" + progressbar.max
 
 // Ensure you are only setting as many answer buttons as there are options
-        if (currentQuestion.answers.size > 0) {
+   /*     if (currentQuestion.answers.size > 0) {
             answerButton1.text = currentQuestion.answers[0]
         }
 
@@ -200,6 +266,52 @@ class ArabicVerbQuizFragment : Fragment(), OnClickListener {
         if (currentQuestion.answers.size > 3) {
             answerButton4.text = currentQuestion.answers[3]
         }
+        if (currentQuestion.answers.size > 4) {
+            answerButton4.text = currentQuestion.answers[4]
+        }
+
+        if (currentQuestion.answers.size > 5) {
+            answerButton5.text = currentQuestion.answers[4]
+        }
+
+        if (currentQuestion.answers.size > 6) {
+            answerButton3.text = currentQuestion.answers[6]
+        }
+
+// Assuming there is a fourth button and enough answers
+        if (currentQuestion.answers.size > 7) {
+            answerButton4.text = currentQuestion.answers[7]
+        }
+        if (currentQuestion.answers.size > 8) {
+            answerButton1.text = currentQuestion.answers[8]
+        }
+
+        if (currentQuestion.answers.size > 9) {
+            answerButton2.text = currentQuestion.answers[9]
+        }
+
+        if (currentQuestion.answers.size > 10) {
+            answerButton3.text = currentQuestion.answers[10]
+        }
+
+// Assuming there is a fourth button and enough answers
+        if (currentQuestion.answers.size > 11) {
+            answerButton4.text = currentQuestion.answers[11]
+        }
+        if (currentQuestion.answers.size > 12) {
+            answerButton1.text = currentQuestion.answers[12]
+        }
+
+        if (currentQuestion.answers.size > 13) {
+            answerButton2.text = currentQuestion.answers[13]
+        }
+
+*/
+
+
+
+
+
         if (this.mcurrentPosition -1== 0) {
             questionfirst()
         } else if (this.mcurrentPosition-1 == 1) {
@@ -207,6 +319,10 @@ class ArabicVerbQuizFragment : Fragment(), OnClickListener {
             questiontwo()
         } else if (this.mcurrentPosition-1 == 2) {
             questionthree()
+        }else if(this.mcurrentPosition-1==3){
+            querstionfour()
+        }else if(this.mcurrentPosition-1==4){
+            questionfive()
         }
 /*        submitButton.setOnClickListener(View.OnClickListener {
             this.currentPosition++
@@ -221,17 +337,144 @@ class ArabicVerbQuizFragment : Fragment(), OnClickListener {
 
     }
 
+    private fun questionfive() {
+
+    }
+
+    private fun querstionfour() {
+
+
+        for (button in answerButtons) {
+            button.visibility = View.VISIBLE
+        }
+        val ThirdPersonSingularMasculine="3MS"
+        val ThirdPersonDualMasculine="3MD"
+        val ThirdPersonPluralMasculine="3MP"
+
+        val ThirdPersonSingularFeminine="3FS"
+        val ThirdPesonDualFeminine="3FD"
+        val ThirdPersonPluralFeminine="3FP"
+
+
+        val SecondPersonSingularMasculine="2MS"
+        val SecondPersonDualMasculine="2MD"
+        val SecondPersonPlularMasculine="2MP"
+
+        val SecondPersonSingularFeminine="2FS"
+        val SecondPersonDualFeminine="2FD"
+        val SecondPersonPluralFeminine="2FP"
+
+        val FirstPersonSingula="1S"
+        val FirstPersonPlural="2P "
+        if (ThirdPersonSingularMasculine.contains(cverb.gendernumber.toString(), ignoreCase = true)) {
+            println(answerButtons[0].text)
+            println(cverb.tense)
+            //  answerButton2.background=ContextCompat.getDrawable(requireContext(),R.drawable.correct_option_border_bg)
+            questions[0].correctAnswerIndex=0
+        }
+        if (ThirdPersonDualMasculine.contains(cverb.gendernumber.toString(), ignoreCase = true)) {
+            println(answerButtons[0].text)
+            println(cverb.gendernumber)
+            //  answerButton2.background=ContextCompat.getDrawable(requireContext(),R.drawable.correct_option_border_bg)
+            questions[3].correctAnswerIndex=1
+        }
+        if (ThirdPersonPluralMasculine.contains(cverb.gendernumber.toString(), ignoreCase = true)) {
+            println(answerButtons[0].text)
+            println(cverb.gendernumber)
+            //  answerButton2.background=ContextCompat.getDrawable(requireContext(),R.drawable.correct_option_border_bg)
+            questions[3].correctAnswerIndex=2
+        }
+        if (ThirdPersonSingularFeminine.contains(cverb.gendernumber.toString(), ignoreCase = true)) {
+            println(answerButtons[0].text)
+            println(cverb.gendernumber)
+            //  answerButton2.background=ContextCompat.getDrawable(requireContext(),R.drawable.correct_option_border_bg)
+            questions[3].correctAnswerIndex=3
+        }
+        if (ThirdPesonDualFeminine.contains(cverb.gendernumber.toString(), ignoreCase = true)) {
+            println(answerButtons[0].text)
+            println(cverb.gendernumber)
+            //  answerButton2.background=ContextCompat.getDrawable(requireContext(),R.drawable.correct_option_border_bg)
+            questions[3].correctAnswerIndex=4
+        }
+        if (ThirdPersonPluralFeminine.contains(cverb.gendernumber.toString(), ignoreCase = true)) {
+            println(answerButtons[0].text)
+            println(cverb.gendernumber)
+            //  answerButton2.background=ContextCompat.getDrawable(requireContext(),R.drawable.correct_option_border_bg)
+            questions[3].correctAnswerIndex=5
+        }
+
+        if(SecondPersonSingularMasculine.contains(cverb.gendernumber.toString(), ignoreCase = true)){
+            println(answerButtons[0].text)
+            println(cverb.gendernumber)
+            //  answerButton2.background=ContextCompat.getDrawable(requireContext(),R.drawable.correct_option_border_bg)
+            questions[3].correctAnswerIndex=6
+        }
+
+        if(SecondPersonDualMasculine.contains(cverb.gendernumber.toString(), ignoreCase = true)){
+            println(answerButtons[0].text)
+            println(cverb.gendernumber)
+            //  answerButton2.background=ContextCompat.getDrawable(requireContext(),R.drawable.correct_option_border_bg)
+            questions[3].correctAnswerIndex=7
+        }
+
+        if(SecondPersonPlularMasculine.contains(cverb.gendernumber.toString(), ignoreCase = true)){
+            println(answerButtons[0].text)
+            println(cverb.gendernumber)
+            //  answerButton2.background=ContextCompat.getDrawable(requireContext(),R.drawable.correct_option_border_bg)
+            questions[3].correctAnswerIndex=8
+        }
+        if(SecondPersonSingularFeminine.contains(cverb.gendernumber.toString(), ignoreCase = true)){
+            println(answerButtons[0].text)
+            println(cverb.gendernumber)
+            //  answerButton2.background=ContextCompat.getDrawable(requireContext(),R.drawable.correct_option_border_bg)
+            questions[3].correctAnswerIndex=9
+        }
+        if(SecondPersonDualFeminine.contains(cverb.gendernumber.toString(), ignoreCase = true)){
+            println(answerButtons[0].text)
+            println(cverb.gendernumber)
+            //  answerButton2.background=ContextCompat.getDrawable(requireContext(),R.drawable.correct_option_border_bg)
+            questions[3].correctAnswerIndex=10
+        }
+        if(SecondPersonPluralFeminine.contains(cverb.gendernumber.toString(), ignoreCase = true)){
+            println(answerButtons[0].text)
+            println(cverb.gendernumber)
+            //  answerButton2.background=ContextCompat.getDrawable(requireContext(),R.drawable.correct_option_border_bg)
+            questions[3].correctAnswerIndex=11
+        }
+        if(FirstPersonSingula.contains(cverb.gendernumber.toString(), ignoreCase = true)){
+            println(answerButtons[0].text)
+            println(cverb.gendernumber)
+            //  answerButton2.background=ContextCompat.getDrawable(requireContext(),R.drawable.correct_option_border_bg)
+            questions[3].correctAnswerIndex=12
+        }
+        if(FirstPersonPlural.contains(cverb.gendernumber.toString(), ignoreCase = true)){
+            println(answerButtons[0].text)
+            println(cverb.gendernumber)
+            //  answerButton2.background=ContextCompat.getDrawable(requireContext(),R.drawable.correct_option_border_bg)
+            questions[3].correctAnswerIndex=13
+        }
+
+
+
+
+
+
+
+
+        answerButtons[0].text
+    }
+
 
     private fun questiontwo() {
 
-        answerButton3.visibility = View.GONE
-        answerButton4.visibility = View.GONE
+        answerButtons[2].visibility = View.GONE
+        answerButtons[3].visibility = View.GONE
 
-        answerButton1.text
-        if (answerButton1.text.contains(cverb.voice.toString(), ignoreCase = true)) {
-            println(answerButton1.text)
+        answerButtons[0].text
+        if (answerButtons[0].text.contains(cverb.voice.toString(), ignoreCase = true)) {
+            println(answerButtons[0].text)
             println(cverb.tense)
-            questions[1].correct=0
+            questions[1].correctAnswerIndex=0
 
         }
 
@@ -239,10 +482,10 @@ class ArabicVerbQuizFragment : Fragment(), OnClickListener {
 
 
 
-        if (answerButton2.text.contains(cverb.voice.toString(), ignoreCase = true)) {
-            println(answerButton2.text)
+        if (answerButtons[1].text.contains(cverb.voice.toString(), ignoreCase = true)) {
+            println(answerButtons[1].text)
             println(cverb.tense)
-            questions[1].correct=1
+            questions[1].correctAnswerIndex=1
           //  answerButton2.background=ContextCompat.getDrawable(requireContext(),R.drawable.correct_option_border_bg)
         }
 
@@ -253,30 +496,30 @@ class ArabicVerbQuizFragment : Fragment(), OnClickListener {
     private fun questionfirst() {
 
         var compare = "Imperfect"
-        answerButton1.text
-        if (answerButton1.text.contains(cverb.tense.toString(), ignoreCase = true)) {
-            println(answerButton1.text)
+        answerButtons[0].text
+        if (answerButtons[0].text.contains(cverb.tense.toString(), ignoreCase = true)) {
+            println(answerButtons[0].text)
             println(cverb.tense)
-       //     answerButton1.background=ContextCompat.getDrawable(requireContext(),R.drawable.correct_option_border_bg)
-            questions[0].correct=0
+       //     answerButtons[0].background=ContextCompat.getDrawable(requireContext(),R.drawable.correct_option_border_bg)
+            questions[0].correctAnswerIndex=0
 
         }
 
 
          if (compare.contains(cverb.tense.toString(), ignoreCase = true)) {
-            println(answerButton1.text)
+            println(answerButtons[1].text)
             println(cverb.tense)
           //  answerButton2.background=ContextCompat.getDrawable(requireContext(),R.drawable.correct_option_border_bg)
-             questions[0].correct=1
+             questions[0].correctAnswerIndex=1
         }
 
 
 
-      if (answerButton3.text.contains(cverb.tense.toString(), ignoreCase = true)) {
-            println(answerButton1.text)
+      if (answerButtons[2].text.contains(cverb.tense.toString(), ignoreCase = true)) {
+            println(answerButtons[2].text)
             println(cverb.tense)
-             questions[0].correct=2
-         //   answerButton3.background=ContextCompat.getDrawable(requireContext(),R.drawable.correct_option_border_bg)
+             questions[0].correctAnswerIndex=2
+         //   answerButtons[2].background=ContextCompat.getDrawable(requireContext(),R.drawable.correct_option_border_bg)
         }
 
     }
@@ -284,48 +527,47 @@ class ArabicVerbQuizFragment : Fragment(), OnClickListener {
      fun questionthree() {
 
 
-        answerButton4.visibility = View.GONE
-        answerButton3.visibility = View.VISIBLE
+         answerButtons[3].visibility = View.GONE
+         answerButtons[2].visibility = View.VISIBLE
 
-        answerButton1.text
-        if (answerButton1.text.contains(
+        if (answerButtons[0].text.contains(
                 cverb.mood_kananumbers.toString(),
                 ignoreCase = true
             )
         ) {
-            println(answerButton1.text)
+            println(answerButtons[0].text)
             println(cverb.tense)
-            questions.get(2).correct=0
-           // answerButton1.background=ContextCompat.getDrawable(requireContext(),R.drawable.correct_option_border_bg)
+            questions.get(2).correctAnswerIndex=0
+           // answerButtons[0].background=ContextCompat.getDrawable(requireContext(),R.drawable.correct_option_border_bg)
         }
 
 
 
 
 
-        if (answerButton2.text.contains(
+        if (answerButtons[1].text.contains(
                 cverb.mood_kananumbers.toString(),
                 ignoreCase = true
             )
         ) {
-            println(answerButton1.text)
+            println(answerButtons[0].text)
             println(cverb.tense)
-            questions[2].correct=1
-         //   answerButton2.background=ContextCompat.getDrawable(requireContext(),R.drawable.correct_option_border_bg)
+            questions[2].correctAnswerIndex=1
+         //   answerButtons[1].background=ContextCompat.getDrawable(requireContext(),R.drawable.correct_option_border_bg)
         }
 
 
 
 
-        if (answerButton3.text.contains(
+        if (answerButtons[2].text.contains(
                 cverb.mood_kananumbers.toString(),
                 ignoreCase = true
             )
         ) {
-            println(answerButton1.text)
+            println(answerButtons[0].text)
             println(cverb.tense)
-            questions[2].correct=2
-          //  answerButton3.background=ContextCompat.getDrawable(requireContext(),R.drawable.correct_option_border_bg)
+            questions[2].correctAnswerIndex=2
+          //  answerButtons[2].background=ContextCompat.getDrawable(requireContext(),R.drawable.correct_option_border_bg)
         }
 
 
@@ -341,19 +583,19 @@ class ArabicVerbQuizFragment : Fragment(), OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.answer_button1 -> {
-                selectedOptionsView(answerButton1, 1)
+                selectedOptionsView(answerButtons[0], 1)
             }
 
             R.id.answer_button2 -> {
-                selectedOptionsView(answerButton2, 2)
+                selectedOptionsView(answerButtons[1], 2)
             }
 
             R.id.answer_button3 -> {
-                selectedOptionsView(answerButton3, 3)
+                selectedOptionsView(answerButtons[2], 3)
             }
 
             R.id.answer_button1 -> {
-                selectedOptionsView(answerButton4, 4)
+                selectedOptionsView(answerButtons[3], 4)
             }
             R.id.submit_button -> {
                 if(mSelectedOptionPositon==0) {
@@ -372,10 +614,10 @@ class ArabicVerbQuizFragment : Fragment(), OnClickListener {
                 }else{
 
                     val question=questions[mcurrentPosition-1]
-                    if(question.correct+1!=mSelectedOptionPositon){
+                    if(question.correctAnswerIndex+1!=mSelectedOptionPositon){
                         answerView(mSelectedOptionPositon,R.drawable.wrong_option_border_bg)
                     }
-                    answerView(question.correct+1,R.drawable.correct_option_border_bg)
+                    answerView(question.correctAnswerIndex+1,R.drawable.correct_option_border_bg)
                     if(mcurrentPosition==questions.size){
                         submitButton.text="Finish"
                     }else{
@@ -396,13 +638,13 @@ class ArabicVerbQuizFragment : Fragment(), OnClickListener {
     fun answerView(answer:Int,drawableView:Int){
         when(answer){
             1->{
-                answerButton1.background=ContextCompat.getDrawable(requireContext(),drawableView)
+                answerButtons[0].background=ContextCompat.getDrawable(requireContext(),drawableView)
             }
             2->{
-                answerButton2.background=ContextCompat.getDrawable(requireContext(),drawableView)
+                answerButtons[1].background=ContextCompat.getDrawable(requireContext(),drawableView)
             }
             3->{
-                answerButton3.background=ContextCompat.getDrawable(requireContext(),drawableView)
+                answerButtons[2].background=ContextCompat.getDrawable(requireContext(),drawableView)
             }
         }
     }

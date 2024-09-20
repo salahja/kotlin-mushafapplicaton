@@ -1,133 +1,262 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:layout_height="wrap_content"
+    android:fillViewport="true">
 
-    <TextView
-        android:id="@+id/question_text_view"
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/flex"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:padding="15dp"
-        android:gravity="center_horizontal"
-        android:text="@string/question_text"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/verbdetails"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/question_text_view"
-        android:layout_margin="10dp"
-        android:padding="15dp"
-        android:gravity="center_horizontal"
-        android:text="@string/question_text"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-
-
-    <TextView
-        android:id="@+id/answer_button1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/verbdetails"
-        android:layout_margin="10dp"
-        android:padding="15dp"
-        android:background="@drawable/default_option_border_bg"
-
-        android:gravity="center_horizontal"
-        android:text="@string/answer1_text"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/answer_button2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/answer_button1"
-        android:layout_margin="10dp"
-        android:padding="15dp"
-        android:background="@drawable/default_option_border_bg"
-        android:gravity="center_horizontal"
-        android:text="@string/answer2_text"
-
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/answer_button3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/answer_button2"
-        android:layout_margin="10dp"
-        android:padding="15dp"
-        android:background="@drawable/default_option_border_bg"
-        android:gravity="center_horizontal"
-        android:text="@string/answer3_text"
-
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/answer_button4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/answer_button3"
-        android:layout_margin="10dp"
-        android:padding="15dp"
-
-        android:background="@drawable/default_option_border_bg"
-        android:gravity="center_horizontal"
-
-
-        android:text="@string/answer3_text"
-        android:textSize="16sp" />
-
-    <TextView
-
-        android:id="@+id/submit_button"
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/answer_button4"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="32dp"
-        android:text="@string/submit_text"
-        android:textSize="16sp" />
-
-    <LinearLayout
-        android:layout_below="@id/submit_button"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:gravity="center_vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-
-            android:layout_weight="1"
-            android:indeterminate="false"
-            android:max="5"
-            android:minHeight="50dp"
-            android:progress="0"
-            android:textAlignment="center" />
+        app:flexDirection="row"
+        app:flexWrap="wrap"
+        app:justifyContent="center"
+        app:maxLine="6">
 
         <TextView
+            android:id="@+id/question_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_horizontal"
+            android:padding="15dp"
+            android:text="@string/question_text"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
 
-            android:id="@+id/tv_progress"
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/verbdetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_horizontal"
+            android:padding="15dp"
+            android:text="@string/question_text"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+ 
 
+        <TextView
+            android:id="@+id/answer_button1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/verbdetails"
+            android:layout_margin="10dp"
+            android:background="@drawable/default_option_border_bg"
+            android:gravity="center_horizontal"
+            android:padding="15dp"
+            android:text="@string/answer1_text"
+            android:textSize="16sp"
+            android:visibility="visible"/>
 
-            android:layout_centerHorizontal="true"
+        <TextView
+           android:id="@+id/answer_button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/answer_button1"
+            android:layout_margin="10dp"
+            android:background="@drawable/default_option_border_bg"
+            android:gravity="center_horizontal"
+            android:padding="15dp"
+            android:text="@string/answer2_text"
+            android:textSize="16sp"
+            android:visibility="visible"/>
 
-            android:layout_gravity="center"
-            tools:text="9/5"
-            android:text="@string/progress"
-            android:textSize="16sp" />
-    </LinearLayout>
-</RelativeLayout>
+        <TextView
+            android:id="@+id/answer_button3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/answer_button2"
+            android:layout_margin="10dp"
+            android:background="@drawable/default_option_border_bg"
+            android:gravity="center_horizontal"
+            android:padding="15dp"
+            android:text="@string/answer3_text"
+            android:textSize="16sp"
+            android:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/answer_button4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/answer_button3"
+            android:layout_margin="10dp"
+            android:background="@drawable/default_option_border_bg"
+            android:gravity="center_horizontal"
+            android:padding="15dp"
+            android:text="@string/answer3_text"
+            android:textSize="16sp"
+            android:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/answer_button5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/answer_button4"
+            android:layout_margin="10dp"
+            android:background="@drawable/default_option_border_bg"
+            android:gravity="center_horizontal"
+            android:padding="15dp"
+            android:text="@string/answer3_text"
+            android:textSize="16sp"
+            android:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/answer_button6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/answer_button5"
+            android:layout_margin="10dp"
+            android:background="@drawable/default_option_border_bg"
+            android:gravity="center_horizontal"
+            android:padding="15dp"
+            android:text="@string/answer3_text"
+            android:textSize="16sp"
+            android:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/answer_button7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/answer_button6"
+            android:layout_margin="10dp"
+            android:background="@drawable/default_option_border_bg"
+            android:gravity="center_horizontal"
+            android:padding="15dp"
+            android:text="@string/answer3_text"
+            android:textSize="16sp"
+            android:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/answer_button8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/answer_button7"
+            android:layout_margin="10dp"
+            android:background="@drawable/default_option_border_bg"
+            android:gravity="center_horizontal"
+            android:padding="15dp"
+            android:text="@string/answer3_text"
+            android:textSize="16sp"
+            android:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/answer_button9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/answer_button8"
+            android:layout_margin="10dp"
+            android:background="@drawable/default_option_border_bg"
+            android:gravity="center_horizontal"
+            android:padding="15dp"
+            android:text="@string/answer3_text"
+            android:textSize="16sp"
+            android:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/answer_button10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/answer_button9"
+            android:layout_margin="10dp"
+            android:background="@drawable/default_option_border_bg"
+            android:gravity="center_horizontal"
+            android:padding="15dp"
+            android:text="@string/answer3_text"
+            android:textSize="16sp"
+            android:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/answer_button11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/answer_button10"
+            android:layout_margin="10dp"
+            android:background="@drawable/default_option_border_bg"
+            android:gravity="center_horizontal"
+            android:padding="15dp"
+            android:text="@string/answer3_text"
+            android:textSize="16sp"
+            android:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/answer_button12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/answer_button11"
+            android:layout_margin="10dp"
+            android:background="@drawable/default_option_border_bg"
+            android:gravity="center_horizontal"
+            android:padding="15dp"
+            android:text="@string/answer3_text"
+            android:textSize="16sp"
+            android:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/answer_button13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/answer_button12"
+            android:layout_margin="10dp"
+            android:background="@drawable/default_option_border_bg"
+            android:gravity="center_horizontal"
+            android:padding="15dp"
+            android:text="@string/answer3_text"
+            android:textSize="16sp"
+            android:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/answer_button14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/answer_button12"
+            android:layout_margin="10dp"
+            android:background="@drawable/default_option_border_bg"
+            android:gravity="center_horizontal"
+            android:padding="15dp"
+            android:text="@string/answer3_text"
+            android:textSize="16sp"
+            android:visibility="visible"/>
+        <!-- Other answer buttons (answer_button2 to answer_button14) -->
+
+        <TextView
+            android:id="@+id/submit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@string/submit_text"
+            android:textSize="16sp"
+            app:layout_alignSelf="center"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:indeterminate="false"
+                android:max="5"
+                android:minHeight="50dp"
+                android:progress="0"
+                android:textAlignment="center"/>
+
+            <TextView
+                android:id="@+id/tv_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/progress"
+                android:textSize="16sp"
+                tools:text="9/5"/>
+        </LinearLayout>
+
+    </com.google.android.flexbox.FlexboxLayout>
+</ScrollView>
