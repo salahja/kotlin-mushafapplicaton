@@ -1,4 +1,4 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -85,7 +85,7 @@
             android:background="@drawable/default_option_border_bg"
             android:gravity="center_horizontal"
             android:padding="15dp"
-            android:text="@string/answer3_text"
+            android:text="@string/answer4_text"
             android:textSize="16sp"
             android:visibility="visible"/>
 
@@ -98,7 +98,7 @@
             android:background="@drawable/default_option_border_bg"
             android:gravity="center_horizontal"
             android:padding="15dp"
-            android:text="@string/answer3_text"
+            android:text="@string/answer5_text"
             android:textSize="16sp"
             android:visibility="visible"/>
 
@@ -111,7 +111,7 @@
             android:background="@drawable/default_option_border_bg"
             android:gravity="center_horizontal"
             android:padding="15dp"
-            android:text="@string/answer3_text"
+            android:text="@string/answer6_text"
             android:textSize="16sp"
             android:visibility="visible"/>
 
@@ -124,7 +124,7 @@
             android:background="@drawable/default_option_border_bg"
             android:gravity="center_horizontal"
             android:padding="15dp"
-            android:text="@string/answer3_text"
+            android:text="@string/answer7_text"
             android:textSize="16sp"
             android:visibility="visible"/>
 
@@ -137,7 +137,7 @@
             android:background="@drawable/default_option_border_bg"
             android:gravity="center_horizontal"
             android:padding="15dp"
-            android:text="@string/answer3_text"
+            android:text="@string/answer8_text"
             android:textSize="16sp"
             android:visibility="visible"/>
 
@@ -150,7 +150,7 @@
             android:background="@drawable/default_option_border_bg"
             android:gravity="center_horizontal"
             android:padding="15dp"
-            android:text="@string/answer3_text"
+            android:text="@string/answer9_text"
             android:textSize="16sp"
             android:visibility="visible"/>
 
@@ -163,7 +163,7 @@
             android:background="@drawable/default_option_border_bg"
             android:gravity="center_horizontal"
             android:padding="15dp"
-            android:text="@string/answer3_text"
+            android:text="@string/answer10_text"
             android:textSize="16sp"
             android:visibility="visible"/>
 
@@ -176,7 +176,7 @@
             android:background="@drawable/default_option_border_bg"
             android:gravity="center_horizontal"
             android:padding="15dp"
-            android:text="@string/answer3_text"
+            android:text="@string/answer11_text"
             android:textSize="16sp"
             android:visibility="visible"/>
 
@@ -189,7 +189,7 @@
             android:background="@drawable/default_option_border_bg"
             android:gravity="center_horizontal"
             android:padding="15dp"
-            android:text="@string/answer3_text"
+            android:text="@string/answer12_text"
             android:textSize="16sp"
             android:visibility="visible"/>
 
@@ -202,7 +202,7 @@
             android:background="@drawable/default_option_border_bg"
             android:gravity="center_horizontal"
             android:padding="15dp"
-            android:text="@string/answer3_text"
+            android:text="@string/answer13_text"
             android:textSize="16sp"
             android:visibility="visible"/>
 
@@ -215,48 +215,56 @@
             android:background="@drawable/default_option_border_bg"
             android:gravity="center_horizontal"
             android:padding="15dp"
-            android:text="@string/answer3_text"
+            android:text="@string/answer14_text"
             android:textSize="16sp"
             android:visibility="visible"/>
         <!-- Other answer buttons (answer_button2 to answer_button14) -->
-
-        <TextView
+    </com.google.android.flexbox.FlexboxLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_below="@+id/flex"
+        android:padding="16dp">
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/submit_button"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:layout_marginTop="32dp"
+            android:layout_gravity="center"
             android:text="@string/submit_text"
             android:textSize="16sp"
-            app:layout_alignSelf="center"/>
+             />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="16dp">
+
 
             <ProgressBar
                 android:id="@+id/progressBar"
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+
                 android:indeterminate="false"
+                android:layout_below="@id/submit_button"
                 android:max="5"
+                android:layout_marginTop="20dp"
                 android:minHeight="50dp"
                 android:progress="0"
                 android:textAlignment="center"/>
 
             <TextView
                 android:id="@+id/tv_progress"
+                android:layout_alignLeft="@+id/progressBar"
+                android:layout_below="@id/submit_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/progress"
                 android:textSize="16sp"
                 tools:text="9/5"/>
-        </LinearLayout>
+        </RelativeLayout>
 
-    </com.google.android.flexbox.FlexboxLayout>
-</ScrollView>
+
+</RelativeLayout>
