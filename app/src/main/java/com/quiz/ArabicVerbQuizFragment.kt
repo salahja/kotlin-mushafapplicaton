@@ -3,6 +3,8 @@ package com.quiz
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
@@ -14,12 +16,15 @@ import androidx.compose.foundation.background
 import androidx.compose.ui.semantics.text
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.example.mushafconsolidated.Entities.RootVerbDetails
 
 
-import com.example.mushafconsolidated.Entities.VerbCorpus
+
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.databinding.FragmentArabicVerbQuizBinding
+import com.example.mushafconsolidated.fragments.QuranMorphologyDetails
+import com.example.utility.CorpusUtilityorig.Companion.NewSetWordSpan
 import com.google.android.material.textview.MaterialTextView
 
 class ArabicVerbQuizFragment : Fragment(), OnClickListener {
@@ -27,17 +32,20 @@ class ArabicVerbQuizFragment : Fragment(), OnClickListener {
 
 
     private lateinit var answerButtons: Array<TextView>
-    //private lateinit var verbcorpus: wbwentity
-    private lateinit var cverb: VerbCorpus
+    //private lateinit var cverb: wbwentity
+    private lateinit var cverb: RootVerbDetails
     private var _binding: FragmentArabicVerbQuizBinding? = null
     private val binding get() = _binding!!
+
     private lateinit var questionTextView: TextView
     private lateinit var answerButton1: TextView
     private lateinit var verbdetails: MaterialTextView
     private lateinit var answerButton2: TextView
     private lateinit var answerButton3: TextView
     private lateinit var answerButton4: TextView
-
+    private lateinit var arabicsurahname:MaterialTextView
+    private lateinit var correctanswer:MaterialTextView
+    private lateinit var score:MaterialTextView
     private lateinit var answerButton5 : TextView //answerButton1
     private lateinit var answerButton6 : TextView //answerButton2
     private lateinit var answerButton7 : TextView //answerButton3
@@ -64,6 +72,7 @@ class ArabicVerbQuizFragment : Fragment(), OnClickListener {
     private lateinit var progressbar: ProgressBar
     private var mcurrentPosition: Int = 1
     private var mSelectedOptionPositon: Int = 0
+    private var mcurrectanswer:Int =0
     private var mQuestionList: ArrayList<Question>? = null
     enum class QuestionType { TENSE, VOICE, MOOD, GENDER_NUMBER, PATTERN }
     class Question(
@@ -124,8 +133,8 @@ class ArabicVerbQuizFragment : Fragment(), OnClickListener {
             5,
             "What is the Patter(form) of the VERB",
             listOf(
-                "Pattern 1", "Pattern 2", "Pattern 3", "Pattern 4", "Pattern 5",
-                "Pattern 6", "Pattern 7", "Pattern 8", "Pattern 9"
+                "Form 1(Unaugmented)", "Form II(فَعَّلَ)", "Form III(فَاعَلَ)", "Form IV(أَفْعَلَ)", "Form V(تَفَعَّلَ)",
+                "Form VI(تَفَاعَلَ)", "Form VII(إِنْفَعَلَ-)", "Form VIII(إِفْتَعَلَ)", "Form IX(إِفْعَلَّ)","Form X(إِسْتَفْعَلَ)"
             ),
 0
             ),
@@ -144,13 +153,14 @@ class ArabicVerbQuizFragment : Fragment(), OnClickListener {
 
         val utils = Utils(requireContext())
         val allverbs = utils.getAllverbs()
-        cverb = allverbs.random()
-
-        val verbcorpus = utils.getwbwQuranBySurahAyahWord(
+       // cverb = allverbs.random()
+        val allRootVerbDetails = utils.getAllRootVerbDetails()
+         cverb = allRootVerbDetails?.random()!!
+       /* val cverb = utils.getwbwQuranBySurahAyahWord(
             cverb.chapterno,
             cverb.verseno,
             cverb.wordno
-        )
+        )*/
         if (_binding != null) {
             val binding = _binding!!
             verbdetails = binding.verbdetails
@@ -166,10 +176,12 @@ class ArabicVerbQuizFragment : Fragment(), OnClickListener {
             for (button in answerButtons) {
                 button.setOnClickListener(this)
             }
-
+            arabicsurahname=binding.arabicsurahname
             submitButton = binding.submitButton
             progressbar = binding.progressBar
             tvProgress = binding.tvProgress
+            correctanswer=binding.correctanswer
+            score=binding.score
             submitButton.setOnClickListener(this)
         }
 
@@ -181,12 +193,50 @@ class ArabicVerbQuizFragment : Fragment(), OnClickListener {
         answerButton3.setOnClickListener(this)
         answerButton4.setOnClickListener(this)
         submitButton.setOnClickListener(this)*/
-        val buildstr = StringBuilder()
-        buildstr.append(verbcorpus?.get(0)?.araone).append(verbcorpus?.get(0)?.aratwo)
-            .append(verbcorpus?.get(0)?.arathree).append(verbcorpus?.get(0)?.arafour)
-            .append(verbcorpus?.get(0)?.arafive).append(":").append(verbcorpus?.get(0)?.en)
-        verbdetails.text = buildstr
+        val sb = StringBuilder()
+        val spannableString = NewSetWordSpan(
+            cverb?.tagone, cverb?.tagtwo, cverb?.tagthree, cverb?.tagfour, cverb?.tagfive,
+            cverb?.araone!!, cverb?.aratwo!!, cverb?.arathree!!, cverb?.arafour!!, cverb?.arafive!!
+        )
+        sb.append(cverb?.ayah).append("  ").append(cverb?.namearabic).append("   ")
+            .append(cverb?.surah).append(" ").append(cverb?.en)
+        val sbs = SpannableString(sb)
+        val charSequence = TextUtils.concat(spannableString, sb)
 
+
+        val genderNumberdetails =
+            QuranMorphologyDetails.getGenderNumberdetails(cverb?.gendernumber)
+        var tensevoicemood = StringBuilder()
+        tensevoicemood.append(cverb?.tense).append(":").append(cverb?.voice).append(":")
+            .append(cverb?.mood_kananumbers)
+         var thulathiName=""
+        var thulathibab=""
+        var formName=""
+        if (cverb?.form == "I") {
+            if (cverb?.thulathibab!!.length > 1) {
+                val s = cverb?.thulathibab!!.substring(0, 1)
+                 thulathiName = QuranMorphologyDetails.getThulathiName(s).toString()
+            } else {
+                 thulathibab = QuranMorphologyDetails.getThulathiName(cverb?.thulathibab).toString()
+            }
+
+
+            //   QuranMorphologyDetails.getThulathiName(cverb?.getThulathibab());
+        } else {
+             formName = QuranMorphologyDetails.getFormName(cverb?.form)
+        }
+        val correct=StringBuilder()
+        correct.append(genderNumberdetails).append(" ").append(tensevoicemood).append(":").append(thulathiName).append(":").append(thulathibab).append(formName)
+
+
+        arabicsurahname.text = charSequence
+        arabicsurahname.text = cverb.namearabic
+        val buildstr = StringBuilder()
+   /*     buildstr.append(cverb?.get(0)?.).append(cverb?.get(0)?.aratwo)
+            .append(cverb?.get(0)?.arathree).append(cverb?.get(0)?.arafour)
+            .append(cverb?.get(0)?.arafive).append(":").append(cverb?.get(0)?.en)*/
+        verbdetails.text = spannableString
+        correctanswer.text=correct
         showNextQuestion()
 
 
@@ -249,64 +299,6 @@ class ArabicVerbQuizFragment : Fragment(), OnClickListener {
         progressbar.progress = mcurrentPosition
         tvProgress.text = "$mcurrentPosition" + "/" + progressbar.max
 
-// Ensure you are only setting as many answer buttons as there are options
-   /*     if (currentQuestion.answers.size > 0) {
-            answerButton1.text = currentQuestion.answers[0]
-        }
-
-        if (currentQuestion.answers.size > 1) {
-            answerButton2.text = currentQuestion.answers[1]
-        }
-
-        if (currentQuestion.answers.size > 2) {
-            answerButton3.text = currentQuestion.answers[2]
-        }
-
-// Assuming there is a fourth button and enough answers
-        if (currentQuestion.answers.size > 3) {
-            answerButton4.text = currentQuestion.answers[3]
-        }
-        if (currentQuestion.answers.size > 4) {
-            answerButton4.text = currentQuestion.answers[4]
-        }
-
-        if (currentQuestion.answers.size > 5) {
-            answerButton5.text = currentQuestion.answers[4]
-        }
-
-        if (currentQuestion.answers.size > 6) {
-            answerButton3.text = currentQuestion.answers[6]
-        }
-
-// Assuming there is a fourth button and enough answers
-        if (currentQuestion.answers.size > 7) {
-            answerButton4.text = currentQuestion.answers[7]
-        }
-        if (currentQuestion.answers.size > 8) {
-            answerButton1.text = currentQuestion.answers[8]
-        }
-
-        if (currentQuestion.answers.size > 9) {
-            answerButton2.text = currentQuestion.answers[9]
-        }
-
-        if (currentQuestion.answers.size > 10) {
-            answerButton3.text = currentQuestion.answers[10]
-        }
-
-// Assuming there is a fourth button and enough answers
-        if (currentQuestion.answers.size > 11) {
-            answerButton4.text = currentQuestion.answers[11]
-        }
-        if (currentQuestion.answers.size > 12) {
-            answerButton1.text = currentQuestion.answers[12]
-        }
-
-        if (currentQuestion.answers.size > 13) {
-            answerButton2.text = currentQuestion.answers[13]
-        }
-
-*/
 
 
 
@@ -336,8 +328,58 @@ class ArabicVerbQuizFragment : Fragment(), OnClickListener {
 
 
     }
-
+/*
+       "Form 1(Unaugmented)", "Form II(فَعَّلَ)", "Form III(فَاعَلَ)", "Form IV(أَفْعَلَ)", "Form V(تَفَعَّلَ)",
+                "Form VI(تَفَاعَلَ)", "Form VII(إِنْفَعَلَ-)", "Form VIII(إِفْتَعَلَ)", "Form IX(إِفْعَلَّ)","Form X(إِسْتَفْعَلَ)"
+ */
     private fun questionfive() {
+        if(cverb.thulathibab!!.isEmpty()) {
+            if (answerButtons[1].text.contains(cverb.form.toString(), ignoreCase = true)) {
+
+                questions[2].correctAnswerIndex = 1
+
+            } else     if (answerButtons[2].text.contains(cverb.form.toString(), ignoreCase = true)) {
+
+                questions[3].correctAnswerIndex = 2
+
+            } else     if (answerButtons[3].text.contains(cverb.form.toString(), ignoreCase = true)) {
+
+                questions[4].correctAnswerIndex = 3
+
+            } else     if (answerButtons[4].text.contains(cverb.form.toString(), ignoreCase = true)) {
+
+                questions[5].correctAnswerIndex = 4
+
+            } else     if (answerButtons[5].text.contains(cverb.form.toString(), ignoreCase = true)) {
+                println(answerButtons[0].text)
+                println(cverb.tense)
+                questions[6].correctAnswerIndex = 5
+
+            } else     if (answerButtons[6].text.contains(cverb.form.toString(), ignoreCase = true)) {
+                println(answerButtons[0].text)
+                println(cverb.tense)
+                questions[7].correctAnswerIndex = 6
+
+            } else     if (answerButtons[7].text.contains(cverb.form.toString(), ignoreCase = true)) {
+                println(answerButtons[0].text)
+                println(cverb.tense)
+                questions[8].correctAnswerIndex = 7
+
+            }else     if (answerButtons[8].text.contains(cverb.form.toString(), ignoreCase = true)) {
+
+                questions[9].correctAnswerIndex = 8
+
+            }else     if (answerButtons[9].text.contains(cverb.form.toString(), ignoreCase = true)) {
+                println(answerButtons[0].text)
+                println(cverb.tense)
+                questions[10].correctAnswerIndex = 9
+
+            }
+
+        }else{
+
+            questions[0].correctAnswerIndex=0
+        }
 
     }
 
@@ -365,7 +407,7 @@ class ArabicVerbQuizFragment : Fragment(), OnClickListener {
         val SecondPersonPluralFeminine="2FP"
 
         val FirstPersonSingula="1S"
-        val FirstPersonPlural="2P "
+        val FirstPersonPlural="1P"
         if (ThirdPersonSingularMasculine.contains(cverb.gendernumber.toString(), ignoreCase = true)) {
             println(answerButtons[0].text)
             println(cverb.tense)
@@ -495,7 +537,7 @@ class ArabicVerbQuizFragment : Fragment(), OnClickListener {
 
     private fun questionfirst() {
 
-        var compare = "Imperfect"
+        var compare = "IMPF"
         answerButtons[0].text
         if (answerButtons[0].text.contains(cverb.tense.toString(), ignoreCase = true)) {
             println(answerButtons[0].text)
@@ -594,9 +636,54 @@ class ArabicVerbQuizFragment : Fragment(), OnClickListener {
                 selectedOptionsView(answerButtons[2], 3)
             }
 
-            R.id.answer_button1 -> {
+            R.id.answer_button4 -> {
                 selectedOptionsView(answerButtons[3], 4)
             }
+            R.id.answer_button5 -> {
+                selectedOptionsView(answerButtons[4], 5)
+            }
+
+            R.id.answer_button6-> {
+                selectedOptionsView(answerButtons[5], 6)
+            }
+            R.id.answer_button7 -> {
+                selectedOptionsView(answerButtons[6], 7)
+            }
+
+            R.id.answer_button8 -> {
+                selectedOptionsView(answerButtons[7], 8)
+            }
+
+            R.id.answer_button9  -> {
+                selectedOptionsView(answerButtons[8], 9)
+            }
+
+            R.id.answer_button10 -> {
+                selectedOptionsView(answerButtons[9], 10)
+            }
+
+            R.id.answer_button11 -> {
+                selectedOptionsView(answerButtons[10], 11)
+            }
+
+            R.id.answer_button12 -> {
+                selectedOptionsView(answerButtons[11], 12)
+            }
+            R.id.answer_button13-> {
+                selectedOptionsView(answerButtons[12], 13)
+            }
+
+            R.id.answer_button14 -> {
+                selectedOptionsView(answerButtons[13], 14)
+            }
+
+
+
+
+
+
+
+
             R.id.submit_button -> {
                 if(mSelectedOptionPositon==0) {
 
@@ -607,8 +694,7 @@ class ArabicVerbQuizFragment : Fragment(), OnClickListener {
                         }
 
                         else -> {
-                            Toast.makeText(requireContext(), "quiz completed", Toast.LENGTH_SHORT)
-                                .show()
+                           score.text="your Score is $mcurrectanswer out of 5"
                         }
                     }
                 }else{
@@ -616,6 +702,8 @@ class ArabicVerbQuizFragment : Fragment(), OnClickListener {
                     val question=questions[mcurrentPosition-1]
                     if(question.correctAnswerIndex+1!=mSelectedOptionPositon){
                         answerView(mSelectedOptionPositon,R.drawable.wrong_option_border_bg)
+                    }else{
+                        mcurrectanswer++
                     }
                     answerView(question.correctAnswerIndex+1,R.drawable.correct_option_border_bg)
                     if(mcurrentPosition==questions.size){
@@ -623,13 +711,7 @@ class ArabicVerbQuizFragment : Fragment(), OnClickListener {
                     }else{
                         submitButton.text="Go to Next Question"
                     }
-                  /*  if(mcurrentPosition-1==0){
-                       answerView()
-                    }else if(mcurrentPosition-1==1){
-                        questiontwo()
-                    }else if(mcurrentPosition-1==2){
-                        questionthree()
-                    }*/
+
                 }
                 mSelectedOptionPositon=0
             }
@@ -645,6 +727,39 @@ class ArabicVerbQuizFragment : Fragment(), OnClickListener {
             }
             3->{
                 answerButtons[2].background=ContextCompat.getDrawable(requireContext(),drawableView)
+            }
+            4->{
+                answerButtons[3].background=ContextCompat.getDrawable(requireContext(),drawableView)
+            }
+            5->{
+                answerButtons[4].background=ContextCompat.getDrawable(requireContext(),drawableView)
+            }
+            6->{
+                answerButtons[5].background=ContextCompat.getDrawable(requireContext(),drawableView)
+            }
+            7->{
+                answerButtons[6].background=ContextCompat.getDrawable(requireContext(),drawableView)
+            }
+            8->{
+                answerButtons[7].background=ContextCompat.getDrawable(requireContext(),drawableView)
+            }
+            9->{
+                answerButtons[8].background=ContextCompat.getDrawable(requireContext(),drawableView)
+            }
+            10->{
+                answerButtons[9].background=ContextCompat.getDrawable(requireContext(),drawableView)
+            }
+            11->{
+                answerButtons[10].background=ContextCompat.getDrawable(requireContext(),drawableView)
+            }
+            12->{
+                answerButtons[11].background=ContextCompat.getDrawable(requireContext(),drawableView)
+            }
+            13->{
+                answerButtons[12].background=ContextCompat.getDrawable(requireContext(),drawableView)
+            }
+            14->{
+                answerButtons[13].background=ContextCompat.getDrawable(requireContext(),drawableView)
             }
         }
     }

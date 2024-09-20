@@ -12,7 +12,7 @@
         app:flexDirection="row"
         app:flexWrap="wrap"
         app:justifyContent="center"
-        app:maxLine="6">
+        app:maxLine="8">
 
         <TextView
             android:id="@+id/question_text_view"
@@ -25,8 +25,29 @@
             android:textSize="20sp"
             android:textStyle="bold"/>
 
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/arabicsurahname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_horizontal"
+            android:padding="15dp"
+            android:text="@string/question_text"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/verbdetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_horizontal"
+            android:padding="15dp"
+            android:text="@string/question_text"
+            android:textSize="30sp"
+            android:textStyle="bold"/>
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/correctanswer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -264,6 +285,17 @@
                 android:text="@string/progress"
                 android:textSize="16sp"
                 tools:text="9/5"/>
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/score"
+            android:layout_marginTop="40dp"
+            android:layout_below="@id/tv_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/score"
+            android:textSize="16sp"
+           />
+
         </RelativeLayout>
 
 
