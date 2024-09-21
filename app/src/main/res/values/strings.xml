@@ -546,5 +546,24 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
     <string name="prefs_show_mafoolat">mafoolat</string>
+    <string name="question_text">question\n</string>
+    <string name="answer1_text">answerone\n</string>
+    <string name="answer2_text">answertwo\n</string>
+    <string name="answer3_text">answerthree\n</string>
+    <string name="submit_text">Submit\n</string>
+    <string name="progress">progress\n</string>
+    <string name="answer4_text">answerfour\n</string>
+    <string name="answer5_text">answerfive\n</string>
+    <string name="answer6_text">answersix</string>
+    <string name="answer7_text">answersix</string>
+    <string name="answer8_text">answersix</string>
+    <string name="answer9_text">answersix</string>
+    <string name="answer10_text">answersix</string>
+    <string name="answer11_text">answersix</string>
+    <string name="answer12_text">answersix</string>
+    <string name="answer13_text">answersix</string>
+    <string name="answer14_text">answerfourteen\n</string>
+    <string name="score">score</string>
+    <string name="restart">Restart</string>
 
 </resources>

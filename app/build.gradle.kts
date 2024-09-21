@@ -77,6 +77,9 @@ android {
 }
 
 dependencies {
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.7.2")
+    implementation(platform("androidx.compose:compose-bom:2024.09.02"))
+    debugImplementation("androidx.compose.ui:ui-test-manifest:<version>")
     // new
     implementation ("com.google.code.gson:gson:2.11.0")
 

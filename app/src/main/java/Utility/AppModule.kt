@@ -39,9 +39,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import database.Dao.NamesDao
 import mufradat.MufradatDao
-import sj.hisnul.Dao.hDuaCategoryDao
-import sj.hisnul.Dao.hDuaItemDao
-import sj.hisnul.Dao.hDuaNamesDao
+
 import javax.inject.Singleton
 
 @Module
@@ -295,28 +293,7 @@ object AppModule {
     }
 
 
-    @Singleton
-    @Provides
-    fun hDuaItemDao(appDB: QuranAppDatabase): hDuaItemDao {
 
-        return appDB.hDuaItemDao()
-    }
-
-
-    @Singleton
-    @Provides
-    fun gethDuaNamesDao(appDB: QuranAppDatabase): hDuaNamesDao {
-
-        return appDB.gethDuaNamesDao()
-    }
-
-
-    @Singleton
-    @Provides
-    fun gethDuaCategoryDao(appDB: QuranAppDatabase): hDuaCategoryDao {
-
-        return appDB.gethDuaCategoryDao()
-    }
 
     @Singleton
     @Provides

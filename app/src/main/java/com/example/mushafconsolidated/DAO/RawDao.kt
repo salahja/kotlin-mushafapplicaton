@@ -26,7 +26,6 @@ import com.example.mushafconsolidated.Entities.TameezPojoList
 import com.example.mushafconsolidated.Entities.VerbCorpusBreakup
 import com.example.mushafconsolidated.Entities.qurandictionary
 import com.example.mushafconsolidated.model.Juz
-import sj.hisnul.entity.hduanamesEnt
 
 
 //import com.example.mushafconsolidated.Entities.JoinVersesTranslationDataTranslation;
@@ -103,11 +102,9 @@ interface RawDao {
     @RawQuery
     fun getCorpusWbwfortameez(query: SupportSQLiteQuery): List<CorpusExpandWbwPOJO?>?
 
-    @RawQuery
-    fun getDuaCATNAMES(query: SupportSQLiteQuery): List<hduanamesEnt>
 
-    /*    @RawQuery
-        fun getLocinfo(query: SupportSQLiteQuery): LocationInfo?*/
+
+
 
     @RawQuery
     fun getCollectionCount(query: SupportSQLiteQuery): List<BookMarksPojo?>?

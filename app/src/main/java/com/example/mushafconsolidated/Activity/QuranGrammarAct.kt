@@ -50,7 +50,6 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.media3.common.util.UnstableApi
 import androidx.preference.PreferenceManager
@@ -108,7 +107,7 @@ import kotlinx.coroutines.withContext
 import mufradat.MufradatPagerActivity
 import org.sj.conjugator.activity.BaseActivity
 import org.sj.conjugator.activity.ConjugatorAct
-import sj.hisnul.activity.HisnulBottomACT
+
 
 import sj.hisnul.fragments.NamesDetail
 import wheel.OnWheelChangedListener
@@ -121,7 +120,7 @@ import javax.inject.Inject
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.io.FileWriter
+import com.quiz.ArabicVerbQuizAct
 
 //import com.example.mushafconsolidated.Entities.JoinVersesTranslationDataTranslation;
 @AndroidEntryPoint
@@ -376,12 +375,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                 startActivity(conjugatorintent)
             }/*      */
 
-            if (item.itemId == R.id.dua) {
-                materialToolbar.title = "Hisnul Muslim-Dua;s"
-                //  val searchintent = Intent(this@QuranGrammarAct, ComposeAct::class.java)
-                val searchintent = Intent(this@QuranGrammarAct, HisnulBottomACT::class.java)
-                startActivity(searchintent)
-            }
+
 
             if (item.itemId == R.id.names) {
                 materialToolbar.title = "Quran Audio"
@@ -390,12 +384,12 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                 startActivity(settingint)
             }
 
-            /* if (item.itemId == R.id.mushafview) {
-                 materialToolbar.title = "Mushaf"
-                 val settingints = Intent(this@QuranGrammarAct, QuranGrammarAct::class.java)
-                 //      settingints.putExtra(Constants.SURAH_INDEX, getChapterno());
-                 startActivity(settingints)
-             }*/
+             if (item.itemId == R.id.quiz) {
+                 materialToolbar.title = "Verb Quiz"
+                 val settingint = Intent(this@QuranGrammarAct, ArabicVerbQuizAct::class.java)
+                 settingint.putExtra(Constants.SURAH_INDEX, chapterno)
+                 startActivity(settingint)
+             }
         }
         navigationView.setNavigationItemSelectedListener { item: MenuItem ->
             if (item.itemId == R.id.bookmark) {

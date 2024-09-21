@@ -15,7 +15,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -241,7 +240,7 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
         } else {
             recyclerView.layoutManager = GridLayoutManager(this, 1)
             //  recyclerView.adapter = myRootBreakRecyclerViewAdapter
-            verbdetails = utils.getRootVerbDetails(root) as ArrayList<RootVerbDetails>?
+            verbdetails = utils.getRootVerbDetailsbyRootword(root) as ArrayList<RootVerbDetails>?
             verbDetailsRecAdapter = VerbDetailsRecAdapter(verbdetails!!)
             recyclerView.adapter = verbDetailsRecAdapter
             verbDetailsRecAdapter.SetOnItemClickListener(object : OnItemClickListener {

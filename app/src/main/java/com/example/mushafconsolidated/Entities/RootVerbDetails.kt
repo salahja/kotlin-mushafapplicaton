@@ -25,6 +25,7 @@ class RootVerbDetails {
     var tense: String? = null
     var voice: String? = null
     var mood_kananumbers: String? = null
+    var kana_mood: String? = null
     var lemma_a: String? = null
     var wordcount: Int = 0
     var surah: Int = 0
@@ -56,6 +57,7 @@ class RootVerbDetails {
         tense: String?,
         voice: String?,
         mood_kananumbers: String?,
+        kana_mood:String?,
         lemma_a: String?,
         wordcount: Int,
         surah: Int,
@@ -85,6 +87,7 @@ class RootVerbDetails {
         this.tense = tense
         this.voice = voice
         this.mood_kananumbers = mood_kananumbers
+        this.kana_mood = kana_mood
         this.lemma_a = lemma_a
         this.wordcount = wordcount
         this.surah = surah

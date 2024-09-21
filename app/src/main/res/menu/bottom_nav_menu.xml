@@ -34,13 +34,13 @@
         android:icon="@drawable/allah4"
         android:orderInCategory="100"
         android:title="Allah(SWT)Names" />
-
-
     <item
-        android:id="@+id/dua"
-        android:icon="@drawable/dua"
+        android:id="@+id/quiz"
+        android:icon="@drawable/ic_baseline_translate_24"
         android:orderInCategory="100"
-        android:title="Dua" />
+        android:title="Allah(SWT)Names" />
+
+
 
 
 </menu>

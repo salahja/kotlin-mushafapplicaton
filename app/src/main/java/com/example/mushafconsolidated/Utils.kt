@@ -39,7 +39,6 @@ import com.example.mushafconsolidated.model.Juz
 import com.example.mushafconsolidated.model.QuranCorpusWbw
 import database.entity.AllahNames
 import mufradat.MufradatEntity
-import sj.hisnul.entity.hduanamesEnt
 
 
 //import com.example.mushafconsolidated.Entities.JoinVersesTranslationDataTranslation;
@@ -107,7 +106,10 @@ class Utils {
         Log.d(TAG, "getQuranRoot: started")
         return database.VerbCorpusDao().getVerbRootsurahayahwordid(id, verseid, wordid)
     }
-
+    fun getAllverbs(): List<VerbCorpus> {
+        Log.d(TAG, "getQuranRoot: started")
+        return database.VerbCorpusDao().getAllverbs()
+    }
 
     fun getQuranNouns(id: Int, verseid: Int, wordid: Int): List<NounCorpus> {
         Log.d(TAG, "getQuranNouns: started")
@@ -529,7 +531,7 @@ class Utils {
         return database.RawDao().getrootdetails(query)
     }
 
-    fun getRootVerbDetails(tid: String): List<RootVerbDetails?>? {
+    fun getRootVerbDetailsbyRootword(tid: String): List<RootVerbDetails?>? {
         val sqlverb: String =
             ("SELECT CorpusExpand.araone ||CorpusExpand. aratwo ||CorpusExpand. arathree || CorpusExpand.arafour ||CorpusExpand.arafive as arabic,\n" +
                     "CorpusExpand.lemaraone ||CorpusExpand. lemaratwo ||CorpusExpand. lemarathree || CorpusExpand.lemarafour ||CorpusExpand. lemarafive as lemma,\n" +
@@ -540,7 +542,7 @@ class Utils {
                     "       qurandictionary.rootarabic,qurandictionary.wordno,\n" +
                     "\t   wbw.en,\n" +
                     "\t   chaptersana.abjadname,chaptersana.namearabic,chaptersana.nameenglish,\n" +
-                    "\t   verbcorpus.form,verbcorpus.thulathibab,verbcorpus.gendernumber,verbcorpus.tense,verbcorpus.voice,verbcorpus.mood_kananumbers,verbcorpus.lemma_a\n" +
+                    "\t   verbcorpus.form,verbcorpus.thulathibab,verbcorpus.gendernumber,verbcorpus.tense,verbcorpus.voice,verbcorpus.mood_kananumbers,verbcorpus.kana_mood,verbcorpus.lemma_a\n" +
                     "\t  \n" +
                     " \n" +
                     "      FROM corpusexpand,qurandictionary,wbw,chaptersana,verbcorpus\n" +
@@ -554,7 +556,31 @@ class Utils {
         //  List<Book> result = booksDao.getBooks(query);
         return database.RawDao().getverbdetails(query)
     }
-
+    fun getAllRootVerbDetails(): List<RootVerbDetails?>? {
+        val sqlverb: String =
+            ("SELECT CorpusExpand.araone ||CorpusExpand. aratwo ||CorpusExpand. arathree || CorpusExpand.arafour ||CorpusExpand.arafive as arabic,\n" +
+                    "CorpusExpand.lemaraone ||CorpusExpand. lemaratwo ||CorpusExpand. lemarathree || CorpusExpand.lemarafour ||CorpusExpand. lemarafive as lemma,\n" +
+                    "CorpusExpand.araone,CorpusExpand.aratwo,CorpusExpand.arathree,CorpusExpand.arafour,CorpusExpand.arafive,\n" +
+                    "CorpusExpand.tagone,CorpusExpand.tagtwo,CorpusExpand.tagthree,CorpusExpand.tagfour,CorpusExpand.tagfive,\n" +
+                    "       qurandictionary.surah,\n" +
+                    "       qurandictionary.ayah,\n" +
+                    "       qurandictionary.rootarabic,qurandictionary.wordno,\n" +
+                    "\t   wbw.en,\n" +
+                    "\t   chaptersana.abjadname,chaptersana.namearabic,chaptersana.nameenglish,\n" +
+                    "\t   verbcorpus.form,verbcorpus.thulathibab,verbcorpus.gendernumber,verbcorpus.tense,verbcorpus.voice,verbcorpus.mood_kananumbers,verbcorpus.kana_mood,verbcorpus.lemma_a\n" +
+                    "\t  \n" +
+                    " \n" +
+                    "      FROM corpusexpand,qurandictionary,wbw,chaptersana,verbcorpus\n" +
+                    "\t  where (CorpusExpand.tagone=\"V\" OR CorpusExpand.tagtwo=\"V\" OR CorpusExpand.tagthree=\"V\" OR CorpusExpand.tagfour=\"V\" \n" +
+                    "\t or CorpusExpand.tagfive==\"V\" )and qurandictionary.surah = CorpusExpand.surah AND  qurandictionary.ayah = CorpusExpand.ayah  \n" +
+                    "\t \tand qurandictionary.wordno = verbcorpus.wordno  AND qurandictionary.surah=verbcorpus.chapterno and qurandictionary.ayah=verbcorpus.verseno\n" +
+                    "\tand qurandictionary.wordno = CorpusExpand.wordno  AND qurandictionary.surah=wbw.surah and qurandictionary.ayah=wbw.ayah\n" +
+                    "and qurandictionary.wordno=wbw.wordno and qurandictionary.surah=chaptersana.chapterid"
+                    )
+        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(sqlverb)
+        //  List<Book> result = booksDao.getBooks(query);
+        return database.RawDao().getverbdetails(query)
+    }
 
     fun getHarfNasbIndexesnew(id: Int): List<NewNasbEntity?>? {
         return database.NewNasbDao().getHarfNasbIndices(id)
@@ -645,6 +671,11 @@ class Utils {
     fun getwbwQuranBySurahAyah(id: Int, aid: Int): List<wbwentity>? {
         return database.wbwDao().getwbwQuranBySurahAyah(id, aid)
     }
+   fun getwbwQuranBySurahAyahWord(cid: Int, aid: Int, wid: Int):List<wbwentity>?  {
+
+     return  database.wbwDao().getwbwQuranBySurahAyahWord(cid, aid, wid)
+   }
+
 
     fun getwbwQuranbTranslation(
         sid: Int,
@@ -710,17 +741,6 @@ class Utils {
         get() {
             return database.NamesDao()?.ALLAH_NAMES_LIST() as ArrayList<AllahNames>
         }
-
-
-    fun getDuaCATNAMES(tid: String?): List<hduanamesEnt> {
-        val verb: String = String.format(
-            "select * from hduanames where (category = '%s'   or category like '%%,%s'   or category like '%s, %% 'or category like '%%,%s,%%'" +
-                    "", tid, tid, tid, tid
-        )
-        val fs: String = "$verb)"
-        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(fs)
-        return database.RawDao().getDuaCATNAMES(query)
-    }
 
 
     /*

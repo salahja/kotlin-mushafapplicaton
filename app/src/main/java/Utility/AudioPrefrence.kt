@@ -12,25 +12,7 @@ object AudioPrefrence {
     private var jsonObject: JsonObject?=null
     private var result: AudioPositionSaved? = null
     private const val MAIN_CONFIG = "application_settings"
-    const val LOCATION_INFO = "location_information"
-    const val QUIBLA_DEGREE = "quibla_degree"
-    const val ALARM = "alarm"
-    const val NEXT_PRAY = "next_pray"
-    const val WEATHER_INFO = "Weather"
-    const val TODAY_WETHER = "today_weather"
-    const val WEEK_WETHER = "week_weather"
-    const val APP_LANGUAGE = "app_language"
-    const val PRAY_NOTIFY = "pray_notify"
-    const val ZEKER_NOTIFY = "zeker_notifiy"
-    const val ZEKER_NOTIFICATION = "zeker_notification"
-    const val SILENT_MOOD = "silent_mood"
-    const val LED_MOOD = "led_mood"
-    const val WIDGET_MONTH = "widget_month"
-    const val VIBRATION = "vibration_mood"
-    const val TWENTYFOUR = "twenty_four"
-    const val AZKAR_MOOD = "azkar_mood"
-    const val COUNTRY_POPUP = "country_popup"
-    const val APP_FIRST_OPEN = "application_first_open"
+ 
     fun setLastPlayedAudio(
         context: Context,
         audioPlayed: java.util.ArrayList<AudioPlayed>,

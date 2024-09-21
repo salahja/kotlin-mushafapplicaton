@@ -17,19 +17,19 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.downloader.PRDownloader
 import com.example.Constant
 import com.example.Constant.ISMAKKI
 import com.example.Constant.RUKUCOUNT
+import com.example.Constant.SURAHFRAGTAG
 import com.example.Constant.SURAHNAME
 import com.example.Constant.SURAH_ID
 import com.example.Constant.VERSESCOUNT
-import com.example.mushafconsolidated.Activity.PrdownloaderAct
 import com.example.mushafconsolidated.Activity.QuranGrammarAct
 import com.example.mushafconsolidated.Activity.ShowMushafActivity
 import com.example.mushafconsolidated.Adapters.JuzSurahDisplayAdapter
@@ -42,15 +42,17 @@ import com.example.mushafconsolidated.intrfaceimport.OnItemClickListener
 import com.example.mushafconsolidated.intrfaceimport.PassdataInterface
 import com.example.mushafconsolidated.model.Juz
 import com.example.mushafconsolidated.quranrepo.QuranVIewModel
+import com.example.mushafconsolidated.settingsimport.Constants
 import com.example.utility.QuranGrammarApplication
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationBarView
 import com.google.android.material.textview.MaterialTextView
+import com.quiz.ArabicVerbQuizAct
 import dagger.hilt.android.AndroidEntryPoint
 import database.NamesGridImageAct
 import org.sj.conjugator.activity.ConjugatorAct
-import sj.hisnul.activity.HisnulBottomACT
+
 import java.util.Objects
 
 
@@ -339,10 +341,7 @@ class NewSurahDisplayFrag : Fragment(), SearchView.OnQueryTextListener {
                 val conjugatorintent = Intent(activity, ConjugatorAct::class.java)
                 startActivity(conjugatorintent)
             }
-            if (item.itemId == R.id.dua) {
-                val hisnulBottomACT = Intent(activity, HisnulBottomACT::class.java)
-                startActivity(hisnulBottomACT)
-            }
+
             if (item.itemId == R.id.names) {
                 val settingint = Intent(activity, NamesGridImageAct::class.java)
 
@@ -352,6 +351,13 @@ class NewSurahDisplayFrag : Fragment(), SearchView.OnQueryTextListener {
                 val settingints = Intent(activity, ShowMushafActivity::class.java)
 
                 startActivity(settingints)
+            }
+
+            if (item.itemId == R.id.quiz) {
+
+                val settingint = Intent(requireActivity(), ArabicVerbQuizAct::class.java)
+
+                startActivity(settingint)
             }
         }
     }
