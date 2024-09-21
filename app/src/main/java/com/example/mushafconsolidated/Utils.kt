@@ -542,7 +542,7 @@ class Utils {
                     "       qurandictionary.rootarabic,qurandictionary.wordno,\n" +
                     "\t   wbw.en,\n" +
                     "\t   chaptersana.abjadname,chaptersana.namearabic,chaptersana.nameenglish,\n" +
-                    "\t   verbcorpus.form,verbcorpus.thulathibab,verbcorpus.gendernumber,verbcorpus.tense,verbcorpus.voice,verbcorpus.mood_kananumbers,verbcorpus.lemma_a\n" +
+                    "\t   verbcorpus.form,verbcorpus.thulathibab,verbcorpus.gendernumber,verbcorpus.tense,verbcorpus.voice,verbcorpus.mood_kananumbers,verbcorpus.kana_mood,verbcorpus.lemma_a\n" +
                     "\t  \n" +
                     " \n" +
                     "      FROM corpusexpand,qurandictionary,wbw,chaptersana,verbcorpus\n" +
@@ -567,7 +567,7 @@ class Utils {
                     "       qurandictionary.rootarabic,qurandictionary.wordno,\n" +
                     "\t   wbw.en,\n" +
                     "\t   chaptersana.abjadname,chaptersana.namearabic,chaptersana.nameenglish,\n" +
-                    "\t   verbcorpus.form,verbcorpus.thulathibab,verbcorpus.gendernumber,verbcorpus.tense,verbcorpus.voice,verbcorpus.mood_kananumbers,verbcorpus.lemma_a\n" +
+                    "\t   verbcorpus.form,verbcorpus.thulathibab,verbcorpus.gendernumber,verbcorpus.tense,verbcorpus.voice,verbcorpus.mood_kananumbers,verbcorpus.kana_mood,verbcorpus.lemma_a\n" +
                     "\t  \n" +
                     " \n" +
                     "      FROM corpusexpand,qurandictionary,wbw,chaptersana,verbcorpus\n" +

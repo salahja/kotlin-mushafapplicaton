@@ -74,15 +74,31 @@
         <activity
             android:name=".Activity.ShowMushafActivity"
             android:parentActivityName=".Activity.MainActivity"
-            android:screenOrientation="portrait">
+            android:taskAffinity="com.example.mushafconsolidated.newtask"
+
+android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
         </activity>
+
+        <activity
+            android:name="com.quiz.ArabicVerbQuizAct"
+            android:parentActivityName=".Activity.MainActivity"
+             android:taskAffinity="com.example.mushafconsolidated.newtask"
+android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.mushafconsolidated.Activity.MainActivity" />
+        </activity>
+
+
+
         <activity
             android:name=".Activity.PrdownloaderAct"
             android:parentActivityName=".Activity.MainActivity"
-            android:screenOrientation="portrait">
+             android:taskAffinity="com.example.mushafconsolidated.newtask"
+android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
@@ -93,7 +109,8 @@
         <activity
             android:name="com.example.sentenceanalysis.SentenceGrammarAnalysis"
             android:parentActivityName=".Activity.MainActivity"
-            android:screenOrientation="portrait">
+             android:taskAffinity="com.example.mushafconsolidated.newtask"
+android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
@@ -101,7 +118,8 @@
         <activity
             android:name=".Activity.WordbywordMushafAct"
             android:parentActivityName=".Activity.MainActivity"
-            android:screenOrientation="portrait">
+             android:taskAffinity="com.example.mushafconsolidated.newtask"
+android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
@@ -109,7 +127,8 @@
         <activity
             android:name="mufradat.MufradatPagerActivity"
             android:parentActivityName=".Activity.MainActivity"
-            android:screenOrientation="portrait">
+             android:taskAffinity="com.example.mushafconsolidated.newtask"
+android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
@@ -117,7 +136,8 @@
         <activity
             android:name=".Activity.TafsirFullscreenActivity"
             android:parentActivityName=".Activity.MainActivity"
-            android:screenOrientation="portrait">
+             android:taskAffinity="com.example.mushafconsolidated.newtask"
+android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
@@ -125,7 +145,8 @@
         <activity
             android:name=".Activity.PhrasesGrammarAct"
             android:parentActivityName=".Activity.MainActivity"
-            android:screenOrientation="portrait">
+             android:taskAffinity="com.example.mushafconsolidated.newtask"
+android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
@@ -134,7 +155,8 @@
             android:name=".Activity.WordOccuranceAct"
             android:exported="true"
             android:parentActivityName=".Activity.MainActivity"
-            android:screenOrientation="portrait">
+             android:taskAffinity="com.example.mushafconsolidated.newtask"
+android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
@@ -143,7 +165,8 @@
             android:name=".Activity.KeyboardSearchResult"
             android:exported="true"
             android:parentActivityName=".Activity.MainActivity"
-            android:screenOrientation="portrait">
+             android:taskAffinity="com.example.mushafconsolidated.newtask"
+android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
@@ -152,7 +175,8 @@
             android:name="com.example.quranroots.TopicDetailAct"
             android:exported="true"
             android:parentActivityName=".Activity.MainActivity"
-            android:screenOrientation="portrait">
+             android:taskAffinity="com.example.mushafconsolidated.newtask"
+android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
@@ -161,7 +185,8 @@
             android:name="com.example.voiceai.VoiceRecognitionActivity"
             android:exported="true"
             android:parentActivityName=".Activity.MainActivity"
-            android:screenOrientation="portrait">
+             android:taskAffinity="com.example.mushafconsolidated.newtask"
+android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
@@ -170,7 +195,8 @@
             android:name=".Activity.LughatWordDetailsAct"
             android:exported="true"
             android:label="@string/title_activity_verb_conjugation"
-            android:screenOrientation="portrait">
+             android:taskAffinity="com.example.mushafconsolidated.newtask"
+android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
@@ -235,17 +261,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
         </activity>
-        <activity
-            android:name="sj.hisnul.activity.NewExpandAct"
-            android:parentActivityName="sj.hisnul.activity.HisnulBottomACT">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.mushafconsolidated.Activity.MainActivity" />
-        </activity>
+
         <activity
             android:name="database.NamesGridImageAct"
             android:parentActivityName=".Activity.MainActivity"
-            android:screenOrientation="portrait">
+             android:taskAffinity="com.example.mushafconsolidated.newtask"
+android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
@@ -258,14 +279,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
         </activity>
-        <activity
-            android:name="sj.hisnul.activity.HisnulBottomACT"
-            android:parentActivityName=".Activity.MainActivity"
-            android:screenOrientation="portrait">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.mushafconsolidated.Activity.MainActivity" />
-        </activity>
+
         <!--
      <meta-data
             android:name="com.google.android.gms.version"

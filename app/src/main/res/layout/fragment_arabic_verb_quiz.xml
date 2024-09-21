@@ -12,7 +12,7 @@
         app:flexDirection="row"
         app:flexWrap="wrap"
         app:justifyContent="center"
-        app:maxLine="8">
+        app:maxLine="10">
 
         <TextView
             android:id="@+id/question_text_view"
@@ -44,7 +44,7 @@
             android:gravity="center_horizontal"
             android:padding="15dp"
             android:text="@string/question_text"
-            android:textSize="30sp"
+            android:textSize="40sp"
             android:textStyle="bold"/>
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/correctanswer"
@@ -243,7 +243,7 @@
     </com.google.android.flexbox.FlexboxLayout>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="horizontal"
         android:layout_below="@+id/flex"
@@ -271,7 +271,7 @@
                 android:layout_below="@id/submit_button"
                 android:max="5"
                 android:layout_marginTop="20dp"
-                android:minHeight="50dp"
+                android:minHeight="20dp"
                 android:progress="0"
                 android:textAlignment="center"/>
 
@@ -285,18 +285,32 @@
                 android:text="@string/progress"
                 android:textSize="16sp"
                 tools:text="9/5"/>
+
+
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/score"
-            android:layout_marginTop="40dp"
-            android:layout_below="@id/tv_progress"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/tv_progress"
             android:layout_gravity="center"
+            android:layout_marginTop="53dp"
+            android:gravity="center"
             android:text="@string/score"
+            android:textSize="16sp" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/restart"
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+           android:layout_below="@+id/score"
+            android:layout_marginTop="32dp"
+            android:layout_gravity="center"
+            android:text="@string/restart"
             android:textSize="16sp"
-           />
+            />
 
-        </RelativeLayout>
+
+    </RelativeLayout>
 
 
 </RelativeLayout>

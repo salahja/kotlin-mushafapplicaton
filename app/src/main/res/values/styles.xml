@@ -71,7 +71,7 @@
 
 
     <style name="Theme.Black" parent="Theme.Material3.Dark.NoActionBar">
-
+        <item name="android:windowDisablePreview">true</item>
         <item name="android:windowBackground">@color/bg_black</item>
         <item name="android:textViewStyle">@style/Base.Widget.TextView</item>
         <item name="android:textColor">@color/neutral1</item>
@@ -221,6 +221,9 @@
 
 
     <style name="AppTheme.materialdarkblue" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
         <item name="tabStyle">@style/RoundedTabLayoutStyleDark</item>
         <item name="colorPrimary">@color/md_db__theme_dark_primary</item>
         <item name="colorOnPrimary">@color/md_db__theme_dark_onPrimary</item>
@@ -255,6 +258,7 @@
         <item name="colorPrimaryInverse">@color/md_db__theme_dark_inversePrimary</item>
     </style>
     <style name="Theme.Browns" parent="Theme.Material3.Light.NoActionBar">
+        <item name="android:windowDisablePreview">true</item>
         <item name="android:colorBackground">@color/bg_brown</item>
         <item name="android:windowBackground">@color/bg_brown</item>
         <item name="android:textViewStyle">@style/Base.Widget.TextView</item>

@@ -50,7 +50,6 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.media3.common.util.UnstableApi
 import androidx.preference.PreferenceManager
@@ -121,8 +120,7 @@ import javax.inject.Inject
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.quiz.ArabicVerbQuizFragment
-import java.io.FileWriter
+import com.quiz.ArabicVerbQuizAct
 
 //import com.example.mushafconsolidated.Entities.JoinVersesTranslationDataTranslation;
 @AndroidEntryPoint
@@ -332,7 +330,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
 
             supportFragmentManager.commit {
-                replace<ArabicVerbQuizFragment>(R.id.frame_container_qurangrammar, SURAHFRAGTAG)
+                replace<NewSurahDisplayFrag>(R.id.frame_container_qurangrammar, SURAHFRAGTAG)
                 setReorderingAllowed(true)
                 addToBackStack(null)
                 setCustomAnimations(R.anim.slide_down, R.anim.slide_up)
@@ -386,12 +384,12 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                 startActivity(settingint)
             }
 
-            /* if (item.itemId == R.id.mushafview) {
-                 materialToolbar.title = "Mushaf"
-                 val settingints = Intent(this@QuranGrammarAct, QuranGrammarAct::class.java)
-                 //      settingints.putExtra(Constants.SURAH_INDEX, getChapterno());
-                 startActivity(settingints)
-             }*/
+             if (item.itemId == R.id.quiz) {
+                 materialToolbar.title = "Verb Quiz"
+                 val settingint = Intent(this@QuranGrammarAct, ArabicVerbQuizAct::class.java)
+                 settingint.putExtra(Constants.SURAH_INDEX, chapterno)
+                 startActivity(settingint)
+             }
         }
         navigationView.setNavigationItemSelectedListener { item: MenuItem ->
             if (item.itemId == R.id.bookmark) {
