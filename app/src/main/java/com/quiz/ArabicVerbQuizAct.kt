@@ -11,10 +11,8 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.activity.result.launch
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.example.mushafconsolidated.Entities.RootVerbDetails
@@ -69,7 +67,24 @@ class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
         var correctAnswerIndex: Int
 
     )
+    val buttonIds = arrayOf(
+        R.id.answer_button1,
+        R.id.answer_button2,
+        R.id.answer_button3,
+        R.id.answer_button4,
+        R.id.answer_button5,
+        R.id.answer_button6,
+        R.id.answer_button7,
+        R.id.answer_button8,
+        R.id.answer_button9,
+        R.id.answer_button10,
+        R.id.answer_button11,
+        R.id.answer_button12,
+        R.id.answer_button13,
+        R.id.answer_button14,
 
+        // ... other buttons ...
+    )
     private val questions = listOf(
         Question(
             1,
@@ -320,9 +335,9 @@ class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
         //val currentQuestion = questions[0] // Access the first question in the list
         defaultOptionsView()
         if (questions.size == this.mcurrentPosition) {
-            submitButton.text = "finish"
+            submitButton.text = getString(R.string.finish)
         } else {
-            submitButton.text = "Submit"
+            submitButton.text = getString(R.string.submit)
         }
         val currentQuestion = questions[this.mcurrentPosition - 1]
         for (i in 0 until currentQuestion.answers.size) {
@@ -337,7 +352,7 @@ class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
 
         questionTextView.text = currentQuestion.question
         progressbar.progress = mcurrentPosition
-        tvProgress.text = "$mcurrentPosition" + "/" + progressbar.max
+        tvProgress.text = "$mcurrentPosition" + getString(R.string.back_slash) + progressbar.max
 
 
 
@@ -846,8 +861,8 @@ class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
     }
 
 
-    fun reloadActivity() {
-        getWindow().setWindowAnimations(0)
+    private fun reloadActivity() {
+        window.setWindowAnimations(0)
         val originalIntent = intent
         overridePendingTransition(0, 0)
         startActivity(originalIntent)
@@ -897,12 +912,20 @@ class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
                 }
 
             else -> {
-                for (i in 1..14) {
+           /*     for (i in 1..14) {
                     if (v?.id == resources.getIdentifier("answer_button$i", "id", packageName)) {
                         selectedOptionsView(answerButtons[i - 1], i)
                         return // Exit the loop and method once found
                     }
+                }*/
+                for (i in buttonIds.indices) {
+                    if (v?.id == buttonIds[i]) {
+                        selectedOptionsView(answerButtons[i], i + 1)
+                        break
+                    }
                 }
+
+
             }
         }
     }
@@ -1000,9 +1023,9 @@ class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
                     }
                     answerView(question.correctAnswerIndex + 1, R.drawable.correct_option_border_bg)
                     if (mcurrentPosition == questions.size) {
-                        submitButton.text = "Finish"
+                        submitButton.text = getString(R.string.finish)
                     } else {
-                        submitButton.text = "Go to Next Question"
+                        submitButton.text = getString(R.string.next_question)
                     }
 
                 }
