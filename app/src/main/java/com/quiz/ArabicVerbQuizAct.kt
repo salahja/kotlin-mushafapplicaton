@@ -45,7 +45,9 @@ class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
 
     private lateinit var submitButton: TextView
     private lateinit var restartButton: MaterialButton
-
+    private lateinit var word_trans_textView: TextView
+    private lateinit var quran_verse: TextView
+    private lateinit var ayah_translation: TextView
 
     private lateinit var tvProgress: TextView
     private lateinit var progressbar: ProgressBar
@@ -167,20 +169,23 @@ class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
             correctanswer = binding.correctanswer
             score = binding.score
             restartButton = binding.restart
+            word_trans_textView = binding.wordTransTextView
+            quran_verse = binding.quranVerse
+            ayah_translation = binding.ayahTranslation
             restartButton.setOnClickListener(this)
             submitButton.setOnClickListener(this)
         }
 
 
-        val sb = StringBuilder()
+        val surahayahdetails = StringBuilder()
         val spannableString = NewSetWordSpan(
             cverb.tagone, cverb.tagtwo, cverb.tagthree, cverb.tagfour, cverb.tagfive,
             cverb.araone!!, cverb.aratwo!!, cverb.arathree!!, cverb.arafour!!, cverb.arafive!!
         )
-        sb.append(cverb.ayah).append("  ").append(cverb.namearabic).append("   ")
-            .append(cverb.surah).append(" ").append(cverb.en)
-        val sbs = SpannableString(sb)
-        val charSequence = TextUtils.concat(spannableString, sb)
+        surahayahdetails.append(cverb.ayah).append("  ").append(cverb.namearabic).append("   ")
+            .append(cverb.surah).append(" ")
+        val sbs = SpannableString(surahayahdetails)
+        val charSequence = TextUtils.concat(spannableString, surahayahdetails)
         val correct = StringBuilder()
         if (!cverb.gendernumber.equals("SP:kaAn")) {
             val genderNumberdetails =
@@ -238,14 +243,18 @@ class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
 
 
         }
-        arabicsurahname.text = charSequence
-        arabicsurahname.text = cverb.namearabic
+
+        arabicsurahname.text = surahayahdetails
         val buildstr = StringBuilder()
         /*     buildstr.append(cverb?.get(0)?.).append(cverb?.get(0)?.aratwo)
                  .append(cverb?.get(0)?.arathree).append(cverb?.get(0)?.arafour)
                  .append(cverb?.get(0)?.arafive).append(":").append(cverb?.get(0)?.en)*/
         verbdetails.text = spannableString
+        word_trans_textView.text = cverb.en
         correctanswer.text = correct
+
+        quran_verse.text = cverb.qurantext
+         ayah_translation.text=cverb.en_arberry
         showNextQuestion()
 
 

@@ -567,15 +567,14 @@ class Utils {
                     "       qurandictionary.rootarabic,qurandictionary.wordno,\n" +
                     "\t   wbw.en,\n" +
                     "\t   chaptersana.abjadname,chaptersana.namearabic,chaptersana.nameenglish,\n" +
-                    "\t   verbcorpus.form,verbcorpus.thulathibab,verbcorpus.gendernumber,verbcorpus.tense,verbcorpus.voice,verbcorpus.mood_kananumbers,verbcorpus.kana_mood,verbcorpus.lemma_a\n" +
-                    "\t  \n" +
-                    " \n" +
-                    "      FROM corpusexpand,qurandictionary,wbw,chaptersana,verbcorpus\n" +
+                    "\t   verbcorpus.form,verbcorpus.thulathibab,verbcorpus.gendernumber,verbcorpus.tense,verbcorpus.voice,verbcorpus.mood_kananumbers,verbcorpus.kana_mood,verbcorpus.lemma_a,qurans.qurantext,qurans.en_arberry\n" +
+                    "\t   FROM corpusexpand,qurandictionary,wbw,chaptersana,verbcorpus,qurans\n" +
                     "\t  where (CorpusExpand.tagone=\"V\" OR CorpusExpand.tagtwo=\"V\" OR CorpusExpand.tagthree=\"V\" OR CorpusExpand.tagfour=\"V\" \n" +
                     "\t or CorpusExpand.tagfive==\"V\" )and qurandictionary.surah = CorpusExpand.surah AND  qurandictionary.ayah = CorpusExpand.ayah  \n" +
                     "\t \tand qurandictionary.wordno = verbcorpus.wordno  AND qurandictionary.surah=verbcorpus.chapterno and qurandictionary.ayah=verbcorpus.verseno\n" +
                     "\tand qurandictionary.wordno = CorpusExpand.wordno  AND qurandictionary.surah=wbw.surah and qurandictionary.ayah=wbw.ayah\n" +
-                    "and qurandictionary.wordno=wbw.wordno and qurandictionary.surah=chaptersana.chapterid"
+                    "and qurandictionary.wordno=wbw.wordno and qurandictionary.surah=chaptersana.chapterid\n" +
+                    "and qurans.surah=qurandictionary.surah and qurans.ayah=qurandictionary.ayah"
                     )
         val query: SimpleSQLiteQuery = SimpleSQLiteQuery(sqlverb)
         //  List<Book> result = booksDao.getBooks(query);

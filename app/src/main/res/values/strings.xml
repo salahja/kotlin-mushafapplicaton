@@ -565,5 +565,7 @@
     <string name="answer14_text">answerfourteen\n</string>
     <string name="score">score</string>
     <string name="restart">Restart</string>
+    <string name="word_translation">Translation</string>
+    <string name="quranverse">quranverse\n</string>
 
 </resources>
