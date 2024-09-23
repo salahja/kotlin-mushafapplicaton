@@ -12,9 +12,11 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.example.Constant.QURAN_VERB_ROOT
@@ -22,7 +24,9 @@ import com.example.Constant.QURAN_VERB_WAZAN
 import com.example.Constant.VERBMOOD
 import com.example.Constant.VERBTYPE
 import com.example.mushafconsolidated.BottomOptionDialog
+import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.RootVerbDetails
+import com.example.mushafconsolidated.Entities.VerbCorpus
 import com.example.mushafconsolidated.Entities.VerbWazan
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.Utils
@@ -32,26 +36,31 @@ import com.example.mushafconsolidated.fragments.QuranMorphologyDetails
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
 import com.example.mushafconsolidated.model.NewQuranCorpusWbw
 import com.example.mushafconsolidated.model.NewVerbCorpusWbw
+import com.example.mushafconsolidated.model.QuranCorpusWbw
+import com.example.mushafconsolidated.quranrepo.QuranVIewModel
 import com.example.utility.CorpusUtilityorig.Companion.NewSetWordSpan
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
 import com.google.android.material.color.DynamicColors
 import com.google.android.material.textview.MaterialTextView
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.sj.conjugator.activity.BaseActivity
 import org.sj.conjugator.activity.ConjugatorTabsActivity
-
-class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
+@AndroidEntryPoint
+class ArabicVerbQuizActNew : BaseActivity(), View.OnClickListener {
 
     open var form = 0
     private var totalquestion: Int = 5
     private lateinit var answerButtons: Array<TextView>
-
+    private var corpusSurahWord: List<QuranCorpusWbw>? = null
+    private var qurans: List<QuranEntity>? = null
     //private lateinit var cverb: wbwentity
-    private lateinit var cverb: RootVerbDetails
-
+    private lateinit var cverb: VerbCorpus
+    private lateinit var mainViewModel: QuranVIewModel
     // private var _binding: FragmentArabicVerbQuizBinding? = null
     lateinit var binding: FragmentArabicVerbQuizBinding
 
@@ -165,7 +174,7 @@ class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        var qurancorpusarray = ArrayList<NewVerbCorpusWbw>()
+
 
         currenttheme =
             PreferenceManager.getDefaultSharedPreferences(this).getString("themepref", "dark")
@@ -201,7 +210,7 @@ class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
                 )
 
                 for (button in answerButtons) {
-                    button.setOnClickListener(this@ArabicVerbQuizAct)
+                    button.setOnClickListener(this@ArabicVerbQuizActNew)
                 }
                 arabicsurahname = binding.arabicsurahname
                 submitButton = binding.submitButton
@@ -213,27 +222,30 @@ class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
                 word_trans_textView = binding.wordTransTextView
                 quran_verse = binding.quranVerse
                 ayah_translation = binding.ayahTranslation
-                restartButton.setOnClickListener(this@ArabicVerbQuizAct)
-                submitButton.setOnClickListener(this@ArabicVerbQuizAct)
-                verbdetails.setOnClickListener(this@ArabicVerbQuizAct)
+                restartButton.setOnClickListener(this@ArabicVerbQuizActNew)
+                submitButton.setOnClickListener(this@ArabicVerbQuizActNew)
+                verbdetails.setOnClickListener(this@ArabicVerbQuizActNew)
 
             }
-          //  val allverbs = withContext(Dispatchers.IO) { utils.getAllverbs() }
-            val allRootVerbDetails = withContext(Dispatchers.IO) { utils.getAllRootVerbDetails() }
-
+            val mainViewModel: QuranVIewModel by viewModels()
+         //   mainViewModel = ViewModelProvider(this@ArabicVerbQuizActNew)[QuranVIewModel::class.java]
+           val allverbs = withContext(Dispatchers.IO) { utils.getAllverbs() }
+          //  val allRootVerbDetails = withContext(Dispatchers.IO) { utils.getAllRootVerbDetails() }
+            cverb = allverbs?.random()!!
             // Update UI with the results on the main thread`
             withContext(Dispatchers.Main) {
-                cverb = allRootVerbDetails?.random()!!
 
+                corpusSurahWord = mainViewModel.getQuranCorpusWbw(cverb.chapterno,cverb.verseno,cverb.wordno).value
+                qurans=                 mainViewModel.getsurahayahVerses(corpusSurahWord!!.get(0).corpus.surah, corpusSurahWord!!.get(0).corpus.ayah).value
 
 
                 val surahayahdetails = StringBuilder()
                 val spannableString = NewSetWordSpan(
-                    cverb.tagone, cverb.tagtwo, cverb.tagthree, cverb.tagfour, cverb.tagfive,
-                    cverb.araone!!, cverb.aratwo!!, cverb.arathree!!, cverb.arafour!!, cverb.arafive!!
+                    corpusSurahWord!!.get(0).corpus.tagone, corpusSurahWord!!.get(0).corpus.tagtwo, corpusSurahWord!!.get(0).corpus.tagthree, corpusSurahWord!!.get(0).corpus.tagfour, corpusSurahWord!!.get(0).corpus.tagfive,
+                    corpusSurahWord!!.get(0).corpus.araone!!, corpusSurahWord!!.get(0).corpus.aratwo!!, corpusSurahWord!!.get(0).corpus.arathree!!, corpusSurahWord!!.get(0).corpus.arafour!!, corpusSurahWord!!.get(0).corpus.arafive!!
                 )
-                surahayahdetails.append(cverb.ayah).append("  ").append(cverb.namearabic).append("   ")
-                    .append(cverb.surah).append(" ")
+                surahayahdetails.append(corpusSurahWord!!.get(0).corpus.ayah).append("  ").append("").append("   ")
+                    .append(corpusSurahWord!!.get(0).corpus.surah).append(" ")
                 val sbs = SpannableString(surahayahdetails)
                 val charSequence = TextUtils.concat(spannableString, surahayahdetails)
                 val correct = StringBuilder()
@@ -300,11 +312,11 @@ class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
                          .append(cverb?.get(0)?.arathree).append(cverb?.get(0)?.arafour)
                          .append(cverb?.get(0)?.arafive).append(":").append(cverb?.get(0)?.en)*/
                 verbdetails.text = spannableString
-                word_trans_textView.text = cverb.en
+                word_trans_textView.text = corpusSurahWord!!.get(0).wbw.en
                 correctanswer.text = correct
 
-                quran_verse.text = cverb.qurantext
-                ayah_translation.text=cverb.en_arberry
+                quran_verse.text = qurans?.get(0)!!.qurantext
+                ayah_translation.text= qurans?.get(0)!!.en_arberry
 
                 dialog.dismiss()
                 showNextQuestion()
@@ -896,10 +908,10 @@ class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
                 var verbmood=""
                 if(cverb.thulathibab!!.isEmpty()){
                     wazan= cverb.form.toString()
-                 root= cverb.rootarabic.toString()
+                 root= cverb.root_a.toString()
                      isaugmented="yes"
-                     chapterno=cverb.surah
-                     verse=cverb.ayah
+                     chapterno=cverb.chapterno
+                     verse=cverb.verseno
                      wordno=cverb.wordno
                     verbmood= cverb.mood_kananumbers!!
                     convertForms(wazan).toString()
@@ -932,8 +944,8 @@ class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
                     val vb= VerbWazan()
 
                     isaugmented="no"
-                    chapterno=cverb.surah
-                    verse=cverb.ayah
+                    chapterno=cverb.chapterno
+                    verse=cverb.verseno
                     wordno=cverb.wordno
                     verbmood= cverb.mood_kananumbers!!
                     if(cverb.mood_kananumbers.equals("IND")){
@@ -943,7 +955,7 @@ class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
                     }else if(cverb.mood_kananumbers.equals("JUSS")){
                         verbmood="Jussive"
                     }
-                    root= cverb.rootarabic.toString()
+                    root= cverb.root_a.toString()
                     vb.root = root
                     vb.wazan = mujarradwazan
                     val dataBundle = Bundle()

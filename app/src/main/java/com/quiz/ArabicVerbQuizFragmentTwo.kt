@@ -15,6 +15,7 @@ import com.example.mushafconsolidated.Entities.VerbCorpus
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.databinding.FragmentArabicVerbQuizBinding
+import com.google.android.material.chip.Chip
 import com.google.android.material.textview.MaterialTextView
 
 class ArabicVerbQuizFragmentTwo : Fragment(), OnClickListener {
@@ -26,7 +27,7 @@ class ArabicVerbQuizFragmentTwo : Fragment(), OnClickListener {
     private val binding get() = _binding!!
     private lateinit var questionTextView: TextView
     private lateinit var answerButton1: TextView
-    private lateinit var verbdetails: MaterialTextView
+    private lateinit var verbdetails: Chip
     private lateinit var answerButton2: TextView
     private lateinit var answerButton3: TextView
     private lateinit var answerButton4: TextView

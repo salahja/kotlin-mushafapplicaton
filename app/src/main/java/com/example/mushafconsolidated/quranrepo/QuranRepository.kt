@@ -115,6 +115,9 @@ import javax.inject.Inject
     fun getVerbRootBySurahAyahWord(surah: Int, ayah: Int, wordno: Int): List<VerbCorpus> =
         verbcorpusdao.getVerbRootsurahayahwordid(surah, ayah, wordno)
 
+     fun getAllVerbCorpus(): List<VerbCorpus> =
+         verbcorpusdao.getAllVerbs()
+
     fun getQuranCorpusWbw(surah: Int, ayah: Int, wordno: Int): List<QuranCorpusWbw> =
         qurandao.getQuranCorpusWbw(surah, ayah, wordno)
 
@@ -220,6 +223,11 @@ data class QuranData(
     val allofQuran: List<QuranEntity>, // Assuming you need this as well
     val corpusSurahWord: List<QuranCorpusWbw>// Assuming you need this as well
 )
+
+
+
+
+
 
 data class ChapterData(
 val mafoolbihiwords: List<MafoolBihi>,

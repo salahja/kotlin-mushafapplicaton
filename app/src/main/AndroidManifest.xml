@@ -83,7 +83,7 @@ android:screenOrientation="portrait">
         </activity>
 
         <activity
-            android:name="com.quiz.ArabicVerbQuizAct"
+            android:name="com.quiz.ArabicVerbQuizActNew"
             android:parentActivityName=".Activity.MainActivity"
              android:taskAffinity="com.example.mushafconsolidated.newtask"
 android:screenOrientation="portrait">

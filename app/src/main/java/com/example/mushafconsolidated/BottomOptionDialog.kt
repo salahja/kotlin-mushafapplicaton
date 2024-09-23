@@ -196,7 +196,7 @@ class BottomOptionDialog : BottomSheetDialogFragment() {
         const val TAG: String = "opton"
 
         // TODO: Customize parameter argument names
-        private const val ARG_OPTIONS_DATA: String = "item_count"
+        internal const val ARG_OPTIONS_DATA: String = "item_count"
 
         // TODO: Customize parameters
         fun newInstance(data: Array<String>): BottomOptionDialog {

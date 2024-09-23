@@ -17,6 +17,9 @@ interface VerbCorpusDao {
     @Query("SELECT * FROM verbcorpus where chapterno=:surahid and verseno=:ayaid ")
     fun getQuranRootaAyah(surahid: Int, ayaid: Int): List<VerbCorpus?>?
 
+    @Query("SELECT * FROM verbcorpus order by chapterno,verseno ")
+    fun getAllVerbs(): List<VerbCorpus>
+
     @Query("SELECT * FROM verbcorpus where root_a=:root")
     fun getQuranRootbyString(root: String?): List<VerbCorpus?>?
 

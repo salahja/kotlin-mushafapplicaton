@@ -173,6 +173,13 @@ class QuranVIewModel @Inject constructor(
         return verbcorpuslist
     }
 
+
+    fun getAllVerbCorpus(): MutableLiveData<List<VerbCorpus>> {
+        verbcorpuslist.value = this.quranRepository.getAllVerbCorpus()
+        return verbcorpuslist
+    }
+
+
     fun getQuranCorpusWbw(cid: Int, aid: Int, wid: Int): MutableLiveData<List<QuranCorpusWbw>> {
         corpuswbwlist.value = this.quranRepository.getQuranCorpusWbw(cid, aid, wid)
         return corpuswbwlist

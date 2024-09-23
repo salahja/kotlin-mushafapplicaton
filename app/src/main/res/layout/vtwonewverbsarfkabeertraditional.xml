@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.example.justJava.ZoomLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fadeScrollbars="true"
+    android:isScrollContainer="true"
+    android:orientation="vertical"
+    android:scrollbarAlwaysDrawVerticalTrack="true"
+    android:scrollbars="vertical"
+    android:singleLine="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardPastActive"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="10dp"
+            app:rippleColor="@color/colorAccent"
+            app:strokeColor="@color/color_primary_variant"
+            app:strokeWidth="1dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:id="@+id/pastactive"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingStart="5.0dip"
+                android:paddingEnd="3.0dip"
+                android:text="@string/faelmazi"
+                android:textAlignment="center" />
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Start of first horizontal row -->
+        <TextView
+            android:id="@+id/hum"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:autoSizeMaxTextSize="26sp"
+            android:autoSizeMinTextSize="10sp"
+            android:autoSizeStepGranularity="6sp"
+            android:gravity="center|right"
+            android:text="hum"
+            app:layout_constraintTop_toBottomOf="@id/cardPastActive"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.33" />
+
+        <TextView
+            android:id="@+id/huma"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center|right"
+            android:text="huma"
+            app:layout_constraintTop_toBottomOf="@id/cardPastActive"
+            app:layout_constraintStart_toEndOf="@id/hum"
+            app:layout_constraintWidth_percent="0.33" />
+
+        <TextView
+            android:id="@id/hua"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:autoSizeMaxTextSize="26sp"
+            android:autoSizeMinTextSize="10sp"
+            android:autoSizeStepGranularity="6sp"
+            android:gravity="center|right"
+            android:text="huua"
+            app:layout_constraintTop_toBottomOf="@id/cardPastActive"
+            app:layout_constraintStart_toEndOf="@id/huma"
+            app:layout_constraintWidth_percent="0.33" />
+
+        <!-- Continue similarly for other rows -->
+        <!-- Example second row -->
+        <TextView
+            android:id="@+id/hunna"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:autoSizeMaxTextSize="26sp"
+            android:autoSizeMinTextSize="10sp"
+            android:autoSizeStepGranularity="6sp"
+            android:text="madhihunna"
+            android:gravity="center|right"
+            app:layout_constraintTop_toBottomOf="@id/hum"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.33" />
+
+        <TextView
+            android:id="@+id/humaf"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center|right"
+            android:layout_marginTop="10dp"
+            android:text="humaf"
+            app:layout_constraintTop_toBottomOf="@id/huma"
+            app:layout_constraintStart_toEndOf="@id/hunna"
+            app:layout_constraintWidth_percent="0.33" />
+
+        <TextView
+            android:id="@id/hia"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"
+            android:autoSizeMaxTextSize="26sp"
+            android:autoSizeMinTextSize="10sp"
+            android:autoSizeStepGranularity="6sp"
+            android:text="hia"
+            android:gravity="center|right"
+            app:layout_constraintTop_toBottomOf="@id/hua"
+            app:layout_constraintStart_toEndOf="@id/humaf"
+            app:layout_constraintWidth_percent="0.33" />
+
+
+        <TextView
+            android:id="@+id/antum"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:autoSizeMaxTextSize="26sp"
+            android:autoSizeMinTextSize="10sp"
+            android:autoSizeStepGranularity="6sp"
+            android:text="antum"
+
+            android:gravity="center|right"
+            app:layout_constraintTop_toBottomOf="@id/hunna"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.33" />
+
+        <TextView
+            android:id="@+id/antuma"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:text="antuma"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center|right"
+            android:layout_marginTop="10dp"
+
+            app:layout_constraintTop_toBottomOf="@id/humaf"
+            app:layout_constraintStart_toEndOf="@id/hunna"
+            app:layout_constraintWidth_percent="0.33" />
+
+        <TextView
+            android:id="@id/anta"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"
+            android:text="anta"
+            android:autoSizeMaxTextSize="26sp"
+            android:autoSizeMinTextSize="10sp"
+            android:autoSizeStepGranularity="6sp"
+
+            android:gravity="center|right"
+            app:layout_constraintTop_toBottomOf="@id/hia"
+            app:layout_constraintStart_toEndOf="@id/humaf"
+            app:layout_constraintWidth_percent="0.33" />
+
+
+        <TextView
+            android:id="@+id/antatunna"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:autoSizeMaxTextSize="26sp"
+            android:autoSizeMinTextSize="10sp"
+            android:autoSizeStepGranularity="6sp"
+            android:text="antum"
+
+            android:gravity="center|right"
+            app:layout_constraintTop_toBottomOf="@id/antum"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.33" />
+
+        <TextView
+            android:id="@+id/madhiantumaf"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:text="madhiantumaf"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center|right"
+            android:layout_marginTop="10dp"
+
+            app:layout_constraintTop_toBottomOf="@id/antuma"
+            app:layout_constraintStart_toEndOf="@id/hunna"
+            app:layout_constraintWidth_percent="0.33" />
+
+        <TextView
+            android:id="@id/madhianti"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"
+            android:text="madhianti"
+            android:autoSizeMaxTextSize="26sp"
+            android:autoSizeMinTextSize="10sp"
+            android:autoSizeStepGranularity="6sp"
+
+            android:gravity="center|right"
+            app:layout_constraintTop_toBottomOf="@id/anta"
+            app:layout_constraintStart_toEndOf="@id/humaf"
+            app:layout_constraintWidth_percent="0.33" />
+
+        <!-- Add more TextViews for other rows similarly... -->
+
+        <!-- Add a CardView for the presentactive text at the bottom -->
+        <androidx.cardview.widget.CardView
+            android:visibility="gone"
+            android:id="@+id/cardPresentActive"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/madhianti"
+            app:rippleColor="@color/colorAccent"
+            app:strokeColor="@color/color_primary_variant"
+            app:strokeWidth="1dp">
+
+            <TextView
+                android:id="@id/presentactive"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoSizeMaxTextSize="26sp"
+                android:autoSizeMinTextSize="10sp"
+                android:autoSizeStepGranularity="6sp"
+                android:gravity="center"
+                android:paddingStart="5.0dip"
+                android:paddingEnd="3.0dip"
+                android:text="@string/faelmudhary" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/muzhum"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:autoSizeMaxTextSize="26sp"
+            android:autoSizeMinTextSize="10sp"
+            android:visibility="gone"
+            android:autoSizeStepGranularity="6sp"
+            android:gravity="center|right"
+            android:text="muzhum"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardPresentActive"
+            app:layout_constraintWidth_percent="0.33" />
+
+
+            <TextView
+                android:id="@+id/muzhuma"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:text="muzhuma"
+                android:autoSizeMaxTextSize="26sp"
+                android:autoSizeMinTextSize="10sp"
+                android:autoSizeStepGranularity="6sp"
+                android:gravity="center|right"
+                android:paddingStart="5.0dip"
+                android:paddingEnd="3.0dip"
+                app:layout_constraintTop_toBottomOf="@id/cardPresentActive"
+                app:layout_constraintStart_toEndOf="@id/hum"
+                app:layout_constraintWidth_percent="0.33" />
+
+
+            <TextView
+                android:id="@id/muzhua"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
+                android:text="muzhua"
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:autoSizeMaxTextSize="26sp"
+                android:autoSizeMinTextSize="10sp"
+                android:autoSizeStepGranularity="6sp"
+                android:gravity="center|right"
+                android:paddingStart="5.0dip"
+                android:paddingEnd="3.0dip"
+                app:layout_constraintTop_toBottomOf="@id/cardPresentActive"
+                app:layout_constraintStart_toEndOf="@id/muzhuma"
+                app:layout_constraintWidth_percent="0.33" />
+
+
+
+        <TextView
+            android:id="@+id/muzhunna"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:autoSizeMaxTextSize="26sp"
+            android:autoSizeMinTextSize="10sp"
+            android:visibility="gone"
+            android:autoSizeStepGranularity="6sp"
+            android:gravity="center|right"
+            android:text="muzhunna"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/muzhum"
+            app:layout_constraintWidth_percent="0.33" />
+
+
+        <TextView
+            android:id="@+id/muzhumaf"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:text="muzhumaf"
+            android:autoSizeMaxTextSize="26sp"
+            android:autoSizeMinTextSize="10sp"
+            android:autoSizeStepGranularity="6sp"
+            android:gravity="center|right"
+            android:paddingStart="5.0dip"
+            android:paddingEnd="3.0dip"
+            app:layout_constraintTop_toBottomOf="@id/muzhuma"
+            app:layout_constraintStart_toEndOf="@id/muzhunna"
+            app:layout_constraintWidth_percent="0.33" />
+
+
+        <TextView
+            android:id="@id/muzhia"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:text="muzhia"
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:autoSizeMaxTextSize="26sp"
+            android:autoSizeMinTextSize="10sp"
+            android:autoSizeStepGranularity="6sp"
+            android:gravity="center|right"
+            android:paddingStart="5.0dip"
+            android:paddingEnd="3.0dip"
+            app:layout_constraintTop_toBottomOf="@id/muzhua"
+            app:layout_constraintStart_toEndOf="@id/muzhumaf"
+            app:layout_constraintWidth_percent="0.33" />
+
+
+
+        <TextView
+            android:id="@+id/muzantum"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:autoSizeMaxTextSize="26sp"
+            android:autoSizeMinTextSize="10sp"
+            android:visibility="gone"
+            android:autoSizeStepGranularity="6sp"
+            android:gravity="center|right"
+            android:text="muzantum"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/muzhunna"
+            app:layout_constraintWidth_percent="0.33" />
+
+
+        <TextView
+            android:id="@+id/muzantuma"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:text="muzantuma"
+            android:autoSizeMaxTextSize="26sp"
+            android:autoSizeMinTextSize="10sp"
+            android:autoSizeStepGranularity="6sp"
+            android:gravity="center|right"
+            android:paddingStart="5.0dip"
+            android:paddingEnd="3.0dip"
+            app:layout_constraintTop_toBottomOf="@id/muzhumaf"
+            app:layout_constraintStart_toEndOf="@id/muzhunna"
+            app:layout_constraintWidth_percent="0.33" />
+
+
+        <TextView
+            android:id="@id/muzanta"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:text="muzanta"
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:autoSizeMaxTextSize="26sp"
+            android:autoSizeMinTextSize="10sp"
+            android:autoSizeStepGranularity="6sp"
+            android:gravity="center|right"
+            android:paddingStart="5.0dip"
+            android:paddingEnd="3.0dip"
+            app:layout_constraintTop_toBottomOf="@id/muzhia"
+            app:layout_constraintStart_toEndOf="@id/muzhumaf"
+            app:layout_constraintWidth_percent="0.33" />
+
+
+
+
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.example.justJava.ZoomLayout>

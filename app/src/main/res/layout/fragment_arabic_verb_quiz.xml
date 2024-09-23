@@ -38,15 +38,22 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.google.android.material.chip.Chip
             android:id="@+id/verbdetails"
-            android:layout_width="match_parent"
+
+            android:layout_width="wrap_content"
+
             android:layout_height="wrap_content"
-            android:layout_margin="3dp"
-            android:gravity="center_horizontal"
-            android:text="@string/question_text"
-            android:textSize="40sp"
-            android:textStyle="bold" />
+            android:layout_marginTop="15.0dip"
+            android:elevation="8dp"
+            android:lines="1"
+            android:onClick="onClick"
+            android:textSize="24.0sp"
+            android:tooltipText="Click for Vocabulary"
+            app:chipCornerRadius="8dp"
+            app:chipIcon="@drawable/ic_baseline_translate_24"
+
+            app:chipStrokeColor="@color/red500" />
 
         <TextView
             android:id="@+id/word_trans_textView"

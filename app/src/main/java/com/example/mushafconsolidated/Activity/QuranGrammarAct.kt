@@ -121,6 +121,7 @@ import javax.inject.Inject
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.quiz.ArabicVerbQuizAct
+import com.quiz.ArabicVerbQuizActNew
 
 //import com.example.mushafconsolidated.Entities.JoinVersesTranslationDataTranslation;
 @AndroidEntryPoint
@@ -386,7 +387,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
              if (item.itemId == R.id.quiz) {
                  materialToolbar.title = "Verb Quiz"
-                 val settingint = Intent(this@QuranGrammarAct, ArabicVerbQuizAct::class.java)
+                 val settingint = Intent(this@QuranGrammarAct, ArabicVerbQuizActNew::class.java)
                  settingint.putExtra(Constants.SURAH_INDEX, chapterno)
                  startActivity(settingint)
              }
