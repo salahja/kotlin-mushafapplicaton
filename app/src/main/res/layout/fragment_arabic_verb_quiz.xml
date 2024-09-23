@@ -48,13 +48,22 @@
             android:elevation="8dp"
             android:lines="1"
             android:onClick="onClick"
-            android:textSize="24.0sp"
+            android:textSize="40.0sp"
+            android:textStyle="bold"
             android:tooltipText="Click for Vocabulary"
             app:chipCornerRadius="8dp"
             app:chipIcon="@drawable/ic_baseline_translate_24"
 
             app:chipStrokeColor="@color/red500" />
-
+        <TextView
+            android:id="@+id/rootword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="3dp"
+            android:gravity="center_horizontal"
+            android:text="@string/root_word"
+            android:textSize="20sp"
+            android:textStyle="bold" />
         <TextView
             android:id="@+id/word_trans_textView"
             android:layout_width="match_parent"
@@ -70,7 +79,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="3dp"
             android:gravity="center_horizontal"
-            android:text="@string/word_translation"
+            android:text="@string/quranverse"
             android:textSize="20sp"
             android:textStyle="bold" />
         <TextView
@@ -79,7 +88,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="3dp"
             android:gravity="center_horizontal"
-            android:text="@string/word_translation"
+            android:text="@string/ayah_translation"
             android:textSize="20sp"
             android:textStyle="bold" />
         <com.google.android.material.textview.MaterialTextView
@@ -103,9 +112,10 @@
             android:background="@drawable/default_option_border_bg"
             android:gravity="center_horizontal"
             android:padding="5dp"
+
             android:text="@string/answer1_text"
             android:textSize="16sp"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <TextView
            android:id="@+id/answer_button2"
@@ -118,7 +128,7 @@
             android:padding="5dp"
             android:text="@string/answer2_text"
             android:textSize="16sp"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/answer_button3"
@@ -131,7 +141,7 @@
             android:padding="5dp"
             android:text="@string/answer3_text"
             android:textSize="16sp"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/answer_button4"
@@ -144,7 +154,7 @@
             android:padding="5dp"
             android:text="@string/answer4_text"
             android:textSize="16sp"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/answer_button5"
@@ -157,7 +167,7 @@
             android:padding="5dp"
             android:text="@string/answer5_text"
             android:textSize="16sp"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/answer_button6"
@@ -170,7 +180,7 @@
             android:padding="5dp"
             android:text="@string/answer6_text"
             android:textSize="16sp"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/answer_button7"
@@ -183,7 +193,7 @@
             android:padding="5dp"
             android:text="@string/answer7_text"
             android:textSize="16sp"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/answer_button8"
@@ -196,7 +206,7 @@
             android:padding="5dp"
             android:text="@string/answer8_text"
             android:textSize="16sp"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/answer_button9"
@@ -209,7 +219,7 @@
             android:padding="5dp"
             android:text="@string/answer9_text"
             android:textSize="16sp"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/answer_button10"
@@ -222,7 +232,7 @@
             android:padding="5dp"
             android:text="@string/answer10_text"
             android:textSize="16sp"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/answer_button11"
@@ -235,7 +245,7 @@
             android:padding="5dp"
             android:text="@string/answer11_text"
             android:textSize="16sp"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/answer_button12"
@@ -248,7 +258,7 @@
             android:padding="5dp"
             android:text="@string/answer12_text"
             android:textSize="16sp"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/answer_button13"
@@ -261,7 +271,7 @@
             android:padding="5dp"
             android:text="@string/answer13_text"
             android:textSize="16sp"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/answer_button14"
@@ -274,7 +284,7 @@
             android:padding="5dp"
             android:text="@string/answer14_text"
             android:textSize="16sp"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
         <!-- Other answer buttons (answer_button2 to answer_button14) -->
     </com.google.android.flexbox.FlexboxLayout>
     <com.google.android.material.button.MaterialButton

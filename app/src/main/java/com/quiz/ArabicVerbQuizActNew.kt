@@ -16,6 +16,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
+
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
@@ -68,6 +69,7 @@ class ArabicVerbQuizActNew : BaseActivity(), View.OnClickListener {
     private lateinit var arabicsurahname: MaterialTextView
     private lateinit var correctanswer: MaterialTextView
     private lateinit var score: MaterialTextView
+    private lateinit var rootword:TextView
 
 
     private lateinit var submitButton: TextView
@@ -123,7 +125,7 @@ class ArabicVerbQuizActNew : BaseActivity(), View.OnClickListener {
         Question(
             3,
             "What is the Mood of the VERB",
-            listOf("Indictive", "Subjunctive", "Jussive"),
+            listOf("Indictive", "Subjunctive", "Jussive","Emphasized"),
             0
         ),
         Question(
@@ -211,6 +213,7 @@ class ArabicVerbQuizActNew : BaseActivity(), View.OnClickListener {
                 for (button in answerButtons) {
                     button.setOnClickListener(this@ArabicVerbQuizActNew)
                 }
+                rootword=binding.rootword
                 arabicsurahname = binding.arabicsurahname
                 submitButton = binding.submitButton
                 progressbar = binding.progressBar
@@ -267,13 +270,25 @@ class ArabicVerbQuizActNew : BaseActivity(), View.OnClickListener {
                         }
 
 
+
                         //   QuranMorphologyDetails.getThulathiName(cverb?.getThulathibab());
                     } else {
                         formName = QuranMorphologyDetails.getFormName(cverb.form)
                     }
+                    if(corpusSurahWord!![0].corpus.detailsone!!.contains("SUFFIX|+n:EMPH")
+                        || corpusSurahWord!![0].corpus.detailstwo!!.contains("SUFFIX|+n:EMPH")
+                        || corpusSurahWord!![0].corpus.detailsthree!!.contains("SUFFIX|+n:EMPH")
+                        || corpusSurahWord!![0].corpus.detailsfour!!.contains("SUFFIX|+n:EMPH")
+                        || corpusSurahWord!![0].corpus.detailsfive!!.contains("SUFFIX|+n:EMPH")
+                    ) {
 
-                    correct.append(genderNumberdetails).append(" ").append(tensevoicemood).append(":")
-                        .append(thulathiName).append(":").append(thulathibab).append(formName)
+                        correct.append(genderNumberdetails).append(" ").append(tensevoicemood).append(":").append("EMPH")
+                            .append(thulathiName).append(":").append(thulathibab).append(formName)
+                    }else{
+                        correct.append(genderNumberdetails).append(" ").append(tensevoicemood).append(":")
+                            .append(thulathiName).append(":").append(thulathibab).append(formName)
+                    }
+ 
 
                 } else {
                     val genderNumberdetails =
@@ -316,6 +331,7 @@ class ArabicVerbQuizActNew : BaseActivity(), View.OnClickListener {
 
                 quran_verse.text = qurans?.get(0)!!.qurantext
                 ayah_translation.text= qurans?.get(0)!!.en_arberry
+                rootword.text=cverb.root_a
 
                 dialog.dismiss()
                 showNextQuestion()
@@ -455,11 +471,10 @@ class ArabicVerbQuizActNew : BaseActivity(), View.OnClickListener {
 
     @Suppress("LocalVariableName")
     private fun querstionfour() {
-
-
         for (button in answerButtons) {
-            button.visibility = View.VISIBLE
+            button.visibility = View.GONE
         }
+
         val ThirdPersonSingularMasculine = "3MS"
         val ThirdPersonDualMasculine = "3MD"
         val ThirdPersonPluralMasculine = "3MP"
@@ -479,6 +494,21 @@ class ArabicVerbQuizActNew : BaseActivity(), View.OnClickListener {
 
         val FirstPersonSingula = "1S"
         val FirstPersonPlural = "1P"
+        if(!cverb.tense.equals("IMPV")){
+
+
+            for (button in answerButtons) {
+                button.visibility = View.VISIBLE
+            }
+
+
+        }else{
+            for (i in 6..11) {
+                answerButtons[i].visibility = View.VISIBLE
+            }
+
+
+        }
         if (ThirdPersonSingularMasculine.contains(
                 cverb.gendernumber.toString(),
                 ignoreCase = true
@@ -923,6 +953,13 @@ class ArabicVerbQuizActNew : BaseActivity(), View.OnClickListener {
                         verbmood="Subjunctive"
                     }else if(cverb.mood_kananumbers.equals("JUSS")){
                         verbmood="Jussive"
+                    } else if(corpusSurahWord!![0].corpus.detailsone!!.contains("SUFFIX|+n:EMPH")
+                        || corpusSurahWord!![0].corpus.detailstwo!!.contains("SUFFIX|+n:EMPH")
+                        || corpusSurahWord!![0].corpus.detailsthree!!.contains("SUFFIX|+n:EMPH")
+                        || corpusSurahWord!![0].corpus.detailsfour!!.contains("SUFFIX|+n:EMPH")
+                        || corpusSurahWord!![0].corpus.detailsfive!!.contains("SUFFIX|+n:EMPH")
+                    ){
+                        verbmood="Emphatic"
                     }
 
                         dataBundle.putString(VERBTYPE, "mazeed")
