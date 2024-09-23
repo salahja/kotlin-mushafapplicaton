@@ -30,7 +30,6 @@ import com.example.mushafconsolidated.Entities.VerbCorpus
 import com.example.mushafconsolidated.Entities.VerbWazan
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.Utils
-import com.example.mushafconsolidated.VerbQuizBottomOptionDialog
 import com.example.mushafconsolidated.databinding.FragmentArabicVerbQuizBinding
 import com.example.mushafconsolidated.fragments.QuranMorphologyDetails
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
