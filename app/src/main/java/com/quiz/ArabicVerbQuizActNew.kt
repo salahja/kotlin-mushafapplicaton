@@ -951,7 +951,7 @@ class ArabicVerbQuizActNew : BaseActivity(), View.OnClickListener {
                         verbmood="Indicative"
                     }else if(cverb.mood_kananumbers.equals("SUBJ")){
                         verbmood="Subjunctive"
-                    }else if(cverb.mood_kananumbers.equals("JUSS")){
+                    }else if(cverb.mood_kananumbers.equals("JUS")){
                         verbmood="Jussive"
                     } else if(corpusSurahWord!![0].corpus.detailsone!!.contains("SUFFIX|+n:EMPH")
                         || corpusSurahWord!![0].corpus.detailstwo!!.contains("SUFFIX|+n:EMPH")
@@ -988,7 +988,7 @@ class ArabicVerbQuizActNew : BaseActivity(), View.OnClickListener {
                         verbmood="Indicative"
                     }else if(cverb.mood_kananumbers.equals("SUBJ")){
                         verbmood="Subjunctive"
-                    }else if(cverb.mood_kananumbers.equals("JUSS")){
+                    }else if(cverb.mood_kananumbers.equals("JUS")){
                         verbmood="Jussive"
                     }
                     root= cverb.root_a.toString()
