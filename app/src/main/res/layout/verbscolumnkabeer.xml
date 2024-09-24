@@ -49,8 +49,8 @@
                     android:orientation="horizontal">
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/negcommand"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -65,8 +65,8 @@
                         />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/command"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
 
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
@@ -83,8 +83,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/presentpassive"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -98,8 +98,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/pastpassive"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -113,8 +113,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/presentactive"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -128,8 +128,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/pastactive"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -145,8 +145,8 @@
                         />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/pronouns"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -198,7 +198,7 @@
                     android:orientation="horizontal">
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -216,7 +216,7 @@
                     </TextView>
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -230,8 +230,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/muzmajhua"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -245,8 +245,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/madimajhua"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -260,8 +260,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/muzhua"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -276,8 +276,8 @@
                         />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/madhihua"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -290,8 +290,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/huaid"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -338,7 +338,7 @@
                     android:orientation="horizontal">
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -355,7 +355,7 @@
                     </TextView>
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -369,8 +369,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/muzmajhuma"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -384,8 +384,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/madimajhuma"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -399,8 +399,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/muzhuma"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -413,8 +413,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/madhihuma"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -427,8 +427,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/humamid"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -475,7 +475,7 @@
                     android:orientation="horizontal">
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -493,7 +493,7 @@
                     </TextView>
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -504,8 +504,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/muzmajhum"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -520,8 +520,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/madimajhum"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -535,8 +535,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/muzhum"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -549,8 +549,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/madihum"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -563,8 +563,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/humid"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -608,7 +608,7 @@
                     android:orientation="horizontal">
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -626,7 +626,7 @@
                     </TextView>
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -639,8 +639,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/muzmajhia"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -658,8 +658,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/madimajhia"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -674,8 +674,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/muzhia"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -689,8 +689,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/madhihia"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -703,8 +703,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/hiaid"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -751,7 +751,7 @@
                     android:orientation="horizontal">
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -769,7 +769,7 @@
                     </TextView>
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -783,8 +783,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/muzmajhumaf"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -799,8 +799,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/madimajhumaf"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -815,8 +815,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/muzhumaf"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -830,8 +830,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/madhihumaf"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -844,8 +844,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/humafid"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -893,7 +893,7 @@
                     android:orientation="horizontal">
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -908,7 +908,7 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -923,8 +923,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/muzmajhunna"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -938,8 +938,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/madimajhunna"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -954,8 +954,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/muzhunna"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -969,8 +969,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/madihunna"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -983,8 +983,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/hunnaid"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1031,8 +1031,8 @@
                     android:orientation="horizontal">
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/nahiamranta"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1046,8 +1046,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/amranta"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1061,8 +1061,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/muzmajanta"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1076,8 +1076,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/madimajanta"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1092,8 +1092,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/muzanta"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1107,8 +1107,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/madhianta"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="match_parent"
                         android:layout_weight="0.2"
@@ -1121,8 +1121,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/antaid"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="match_parent"
                         android:layout_weight="0.2"
@@ -1171,8 +1171,8 @@
                     android:orientation="horizontal">
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/nahiamrantuma"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1187,8 +1187,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/amrantuma"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1202,8 +1202,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/muzmajantuma"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1217,8 +1217,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/madimajantuma"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1233,8 +1233,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/muzantuma"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1248,8 +1248,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/madhiantuma"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1262,8 +1262,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/antumamid"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1310,8 +1310,8 @@
                     android:orientation="horizontal">
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/nahiamrantum"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1325,8 +1325,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/amrantum"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1341,8 +1341,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/muzmajantum"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1357,8 +1357,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/madimajantum"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1373,8 +1373,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/muzantum"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1388,8 +1388,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/madhiantum"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1402,8 +1402,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/antumid"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1450,8 +1450,8 @@
                     android:orientation="horizontal">
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/nahiamranti"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1465,8 +1465,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/amranti"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1480,8 +1480,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/muzmajanti"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1495,8 +1495,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/madimajanti"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1511,8 +1511,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/muzanti"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1526,8 +1526,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/madhianti"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1540,8 +1540,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/antiid"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1588,8 +1588,8 @@
                     android:orientation="horizontal">
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/nahiamrantumaf"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1603,8 +1603,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/amrantumaf"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1619,8 +1619,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/muzmajantumaf"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1635,8 +1635,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/madimajantumaf"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1651,8 +1651,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/muzantumaf"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1666,8 +1666,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/madhiantumaf"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1680,8 +1680,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/antumafid"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1728,8 +1728,8 @@
                     android:orientation="horizontal">
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/nahiamrantunna"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1745,8 +1745,8 @@
                         />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/amrantunna"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1760,8 +1760,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/muzmajantunna"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1776,8 +1776,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/madimajantunna"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1792,8 +1792,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/muzantunna"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1807,8 +1807,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/madhiantunna"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1821,8 +1821,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/antunnaid"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1870,7 +1870,7 @@
                     android:orientation="horizontal">
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1886,8 +1886,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/muzmajana"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="match_parent"
                         android:layout_weight="0.2"
@@ -1902,8 +1902,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/madimajana"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1918,8 +1918,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/muzana"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1933,8 +1933,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/madhiana"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1947,8 +1947,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/anaid"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -1995,7 +1995,7 @@
                     android:orientation="horizontal">
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -2010,8 +2010,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/muzmajnahnu"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -2026,8 +2026,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/madimajnahnu"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -2042,8 +2042,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@+id/muznahnu"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -2057,8 +2057,8 @@
 
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/madhinahnu"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
@@ -2071,8 +2071,8 @@
                         app:autoSizeTextType="none" />
 
                     <TextView
- style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:id="@id/nahnuid"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
