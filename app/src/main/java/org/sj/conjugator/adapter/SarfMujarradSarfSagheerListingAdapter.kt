@@ -32,7 +32,7 @@ class SarfMujarradSarfSagheerListingAdapter(
         //      View view = LayoutInflater.from(parent.context!!).inflate(R.layout.sarfkabeercolumn, parent, false);
 
         //      View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.sarfkabeercolumn, parent, false);
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.sarfsagheer, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.sarfsagheerconstraint, parent, false)
         return ViewHolder(view)
     }
 
