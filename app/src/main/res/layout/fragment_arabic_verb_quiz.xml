@@ -96,6 +96,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="3dp"
+            android:visibility="gone"
             android:gravity="center_horizontal"
             android:text="@string/word_translation"
             android:textSize="20sp"
@@ -345,6 +346,18 @@
         android:text="@string/restart"
         android:textSize="16sp"
         app:layout_constraintTop_toBottomOf="@id/score"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/showanswer"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/showanswer"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/restart"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

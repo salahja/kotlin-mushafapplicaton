@@ -50,6 +50,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.sj.conjugator.activity.BaseActivity
 import org.sj.conjugator.activity.ConjugatorTabsActivity
+import shark.AndroidObjectInspectors
+
 @AndroidEntryPoint
 class ArabicVerbQuizActNew : BaseActivity(), View.OnClickListener {
 
@@ -74,6 +76,7 @@ class ArabicVerbQuizActNew : BaseActivity(), View.OnClickListener {
 
     private lateinit var submitButton: TextView
     private lateinit var restartButton: MaterialButton
+    private lateinit var showanswer: MaterialButton
     private lateinit var word_trans_textView: TextView
     private lateinit var quran_verse: TextView
     private lateinit var ayah_translation: TextView
@@ -224,9 +227,11 @@ class ArabicVerbQuizActNew : BaseActivity(), View.OnClickListener {
                 word_trans_textView = binding.wordTransTextView
                 quran_verse = binding.quranVerse
                 ayah_translation = binding.ayahTranslation
+                showanswer=binding.showanswer
                 restartButton.setOnClickListener(this@ArabicVerbQuizActNew)
                 submitButton.setOnClickListener(this@ArabicVerbQuizActNew)
                 verbdetails.setOnClickListener(this@ArabicVerbQuizActNew)
+                showanswer.setOnClickListener(this@ArabicVerbQuizActNew)
 
             }
             val mainViewModel: QuranVIewModel by viewModels()
@@ -1012,6 +1017,10 @@ class ArabicVerbQuizActNew : BaseActivity(), View.OnClickListener {
                 }
             }
             R.id.restart -> reloadActivity()
+            R.id.showanswer ->{
+
+                correctanswer.visibility=  View.VISIBLE
+            }
             R.id.submit_button -> {
 
                     if (mSelectedOptionPositon == 0) {

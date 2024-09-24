@@ -574,5 +574,6 @@
     <string name="ayah_translation">Ayah Translation</string>
     <string name="command">Command</string>
     <string name="negcommand">Prohibitive\n</string>
+    <string name="showanswer">Show Answers</string>
 
 </resources>
