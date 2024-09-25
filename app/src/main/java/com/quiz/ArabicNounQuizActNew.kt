@@ -8,10 +8,7 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.SpannableString
-import android.text.Spanned
 import android.text.TextUtils
-import android.text.style.BulletSpan
-import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -56,7 +53,7 @@ import org.sj.conjugator.activity.ConjugatorTabsActivity
 import shark.AndroidObjectInspectors
 
 @AndroidEntryPoint
-class ArabicVerbQuizActNew : BaseActivity(), View.OnClickListener {
+class ArabicNounQuizActNew : BaseActivity(), View.OnClickListener {
 
     open var form = 0
     private var totalquestion: Int = 5
@@ -83,9 +80,6 @@ class ArabicVerbQuizActNew : BaseActivity(), View.OnClickListener {
     private lateinit var word_trans_textView: TextView
     private lateinit var quran_verse: TextView
     private lateinit var ayah_translation: TextView
-    private lateinit var mansubnotes: MaterialTextView
-    private lateinit var majzoomnotes: MaterialTextView
-
 
     private lateinit var tvProgress: TextView
     private lateinit var progressbar: ProgressBar
@@ -195,54 +189,12 @@ class ArabicVerbQuizActNew : BaseActivity(), View.OnClickListener {
         binding = FragmentArabicVerbQuizBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val utils = Utils(this)
-        val item0="\u202Bللمضارع\u202C \u202Bالناصبة\u202C \u202Bالحروف\u202C"
-        val item001 = "The follwoing Harf makes ther Verb Mansub-Subjunctive"
-        val item01 = SpannableString(item0)
-        item01.setSpan(BulletSpan(15), 0, item01.length, 0)
-        val item1=SpannableString("To -  (أَنْ)")
-        item1.setSpan(BulletSpan(15), 0, item1.length, 0)
-        val item2 = SpannableString("(لَنْ) will not")
-        item2.setSpan(BulletSpan(15), 0, item2.length, 0)
-        val item3 = SpannableString("(لِكَىْ) so that,in order to")
-        item3.setSpan(BulletSpan(15), 0, item3.length, 0)
-
-        val item4 = SpannableString("(حَتِّى) Until, to the point that, so that")
-        item4.setSpan(BulletSpan(15), 0, item4.length, 0)
-        val item5 = SpannableString("1.harf لِكَىْ  is a compound حرف. The الم can be used on its own and so can كَي or they can be used\n" +
-                "together. The meaning remains the same")
-        val item6=SpannableString("2.harf حتى can come before a \u202Bماض\u202C \u202Bفعل\u202C as well. In this case, it means “until” or “to the point that”. Since\n" +
-                "\u202Bالماضي\u202C \u202Bالفعل\u202C does not change, the \u202Bحرف\u202C has no effect.")
-
-        item5.setSpan(BulletSpan(15), 0, item5.length, 0)
-        item6.setSpan(BulletSpan(15), 0, item6.length, 0)
-       // item3.setSpan(BulletSpan(15), 0, item6.length, 0)
-
-        val majzoomitem0001="\u202Bللمضارع\u202C \u202Bالجازمة\u202C \u202Bالحروف\u202C"
-        val majzoomitem001 = "The follwoing Harf makes ther Verb Majzoom-Jussive"
-        val majzoomitem01 = SpannableString(item0)
-        majzoomitem01.setSpan(BulletSpan(15), 0, majzoomitem01.length, 0)
-        val majzoomitem1=SpannableString("if -  (إِنْ)")
-        majzoomitem1.setSpan(BulletSpan(15), 0, majzoomitem1.length, 0)
-        val majzoomitem2 = SpannableString("( َلَمْ) did not")
-        majzoomitem2.setSpan(BulletSpan(15), 0, majzoomitem2.length, 0)
-        val majzoomitem3 = SpannableString("(لَمَّا) not yet")
-        majzoomitem3.setSpan(BulletSpan(15), 0, majzoomitem3.length, 0)
-
-        val majzoomitem4 = SpannableString("(وَلْ) and shoud")
-        val majzoomitem5 = SpannableString("(فَلْ) then should")
-        val majzoomitem6 = SpannableString("(لِ) Should")
-        val majzoomitem7=SpannableString("1-harf \u202Bإن\u202C can sometimes affect two \u202Bفعل\u202C and gives an “if, then” meaning")
-        val majzoomitem8=SpannableString("2.harf \u202Bلم\u202C gives a past-tense meaning (did not) despite the fact that it comes only before a \u202Bمضارع\u202C \u202Bفعل\u202C.")
-        val majzoomitem9=SpannableString("3-Also know that \u202Bلما\u202C can come before a \u202Bماض\u202C \u202Bفعل\u202C. In this case, it means “when” and has no effect on\n" +
-                "the \u202Bفعل\u202C.")
-        majzoomitem4.setSpan(BulletSpan(15), 0, majzoomitem4.length, 0)
-        majzoomitem5.setSpan(BulletSpan(15), 0, majzoomitem5.length, 0)
-        majzoomitem6.setSpan(BulletSpan(15), 0, majzoomitem6.length, 0)
-        majzoomitem7.setSpan(BulletSpan(15), 0, majzoomitem7.length, 0)
-        majzoomitem8.setSpan(BulletSpan(15), 0, majzoomitem8.length, 0)
-        majzoomitem9.setSpan(BulletSpan(15), 0, majzoomitem9.length, 0)
-
-
+     /*    val allverbs = utils.getAllverbs()
+        // cverb = allverbs.random()
+        val allRootVerbDetails = utils.getAllRootVerbDetails()
+      //  val allRootVerbDetails = utils.getRootVerbDetailsbyRootword("كون")
+        cverb = allRootVerbDetails?.random()!!
+*/
         val builder = AlertDialog.Builder(this)
         builder.setCancelable(false) // if you want user to wait for some process to finish,
         builder.setView(R.layout.layout_loading_dialog)
@@ -262,9 +214,8 @@ class ArabicVerbQuizActNew : BaseActivity(), View.OnClickListener {
                 )
 
                 for (button in answerButtons) {
-                    button.setOnClickListener(this@ArabicVerbQuizActNew)
+                    button.setOnClickListener(this@ArabicNounQuizActNew)
                 }
-                mansubnotes=binding.mansubnotes
                 rootword=binding.rootword
                 arabicsurahname = binding.arabicsurahname
                 submitButton = binding.submitButton
@@ -277,14 +228,11 @@ class ArabicVerbQuizActNew : BaseActivity(), View.OnClickListener {
                 quran_verse = binding.quranVerse
                 ayah_translation = binding.ayahTranslation
                 showanswer=binding.showanswer
-                majzoomnotes=binding.majzoomnotes
-                restartButton.setOnClickListener(this@ArabicVerbQuizActNew)
-                submitButton.setOnClickListener(this@ArabicVerbQuizActNew)
-                verbdetails.setOnClickListener(this@ArabicVerbQuizActNew)
-                showanswer.setOnClickListener(this@ArabicVerbQuizActNew)
-                mansubnotes.text=TextUtils.concat(item001,"\n",item0,"\n",item1, "\n", item2,"\n",item3,"\n",item4,"\n",item5,"\n",item6)
-                majzoomnotes.text=TextUtils.concat(majzoomitem0001,"\n",majzoomitem001, "\n", majzoomitem2,"\n",majzoomitem3,"\n",majzoomitem4,
-                    "\n",majzoomitem5,"\n",majzoomitem6,"\n",majzoomitem7,"\n",majzoomitem8,"\n",majzoomitem9)
+                restartButton.setOnClickListener(this@ArabicNounQuizActNew)
+                submitButton.setOnClickListener(this@ArabicNounQuizActNew)
+                verbdetails.setOnClickListener(this@ArabicNounQuizActNew)
+                showanswer.setOnClickListener(this@ArabicNounQuizActNew)
+
             }
             val mainViewModel: QuranVIewModel by viewModels()
          //   mainViewModel = ViewModelProvider(this@ArabicVerbQuizActNew)[QuranVIewModel::class.java]
@@ -303,7 +251,6 @@ class ArabicVerbQuizActNew : BaseActivity(), View.OnClickListener {
                     corpusSurahWord!!.get(0).corpus.tagone, corpusSurahWord!!.get(0).corpus.tagtwo, corpusSurahWord!!.get(0).corpus.tagthree, corpusSurahWord!!.get(0).corpus.tagfour, corpusSurahWord!!.get(0).corpus.tagfive,
                     corpusSurahWord!!.get(0).corpus.araone!!, corpusSurahWord!!.get(0).corpus.aratwo!!, corpusSurahWord!!.get(0).corpus.arathree!!, corpusSurahWord!!.get(0).corpus.arafour!!, corpusSurahWord!!.get(0).corpus.arafive!!
                 )
-
                 surahayahdetails.append(corpusSurahWord!!.get(0).corpus.ayah).append("  ").append("").append("   ")
                     .append(corpusSurahWord!!.get(0).corpus.surah).append(" ")
                 val sbs = SpannableString(surahayahdetails)
@@ -386,24 +333,8 @@ class ArabicVerbQuizActNew : BaseActivity(), View.OnClickListener {
                 verbdetails.text = spannableString
                 word_trans_textView.text = corpusSurahWord!!.get(0).wbw.en
                 correctanswer.text = correct
-                val span = SpannableString(qurans!!.get(0).qurantext)
-                val arabicword = corpusSurahWord!!.get(0).corpus.araone!!+corpusSurahWord!!.get(0).corpus.aratwo!!+ corpusSurahWord!!.get(0).corpus.arathree!!+
-                        corpusSurahWord!!.get(0).corpus.arafour!!+ corpusSurahWord!!.get(0).corpus.arafive!!
-                val indexOf = span.indexOf(arabicword)
-                try {
 
-
-                span.setSpan(
-                    ForegroundColorSpan(Color.RED),
-                    indexOf,
-                    indexOf+arabicword.length,
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-                } catch (e: IndexOutOfBoundsException) {
-                    System.out.println(e.localizedMessage);
-                }
-
-                quran_verse.text =span
+                quran_verse.text = qurans?.get(0)!!.qurantext
                 ayah_translation.text= qurans?.get(0)!!.en_arberry
                 rootword.text=cverb.root_a
 

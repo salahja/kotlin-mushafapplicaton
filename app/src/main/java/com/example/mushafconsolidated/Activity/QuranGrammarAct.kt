@@ -1368,7 +1368,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         } else if (tag == "tafsir") {
 
             val readingintent = Intent(this@QuranGrammarAct, TafsirFullscreenActivity::class.java)
-            val chapterno = allofQuran[position].surah
+            val chapterno = allofQuran[position-1].surah
             val verse = allofQuran[position - 1].ayah
             readingintent.putExtra(Constant.SURAH_ID, chapterno)
             readingintent.putExtra(Constant.AYAH_ID, verse)

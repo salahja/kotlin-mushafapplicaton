@@ -339,7 +339,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/restart"
-        android:visibility="visible"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -351,15 +351,55 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/showanswer"
-        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:text="@string/showanswer"
         android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/restart"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/restart" />
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/mansubnotes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/manzoomnote"
+        android:textDirection="ltr"
+        android:textSize="16sp"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/showanswer" />
+
+    <!-- Horizontal Divider -->
+    <View
+        android:id="@+id/horizontalDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintTop_toBottomOf="@id/mansubnotes"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/majzoomnotes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/majzoomnote"
+        android:textDirection="ltr"
+        android:textSize="16sp"
+        android:visibility="visible"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/horizontalDivider" />
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

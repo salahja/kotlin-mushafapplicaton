@@ -575,5 +575,7 @@
     <string name="command">Command</string>
     <string name="negcommand">Prohibitive\n</string>
     <string name="showanswer">Show Answers</string>
+    <string name="manzoomnote">Mansub</string>
+    <string name="majzoomnote">Majzoom</string>
 
 </resources>
