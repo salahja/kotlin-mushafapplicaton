@@ -385,12 +385,12 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                 startActivity(settingint)
             }
 
-             if (item.itemId == R.id.quiz) {
-                 materialToolbar.title = "Verb Quiz"
-                 val settingint = Intent(this@QuranGrammarAct, ArabicVerbQuizActNew::class.java)
-                 settingint.putExtra(Constants.SURAH_INDEX, chapterno)
-                 startActivity(settingint)
-             }
+            if (item.itemId == R.id.quiz) {
+                materialToolbar.title = "Verb Quiz"
+                val settingint = Intent(this@QuranGrammarAct, ArabicVerbQuizActNew::class.java)
+                settingint.putExtra(Constants.SURAH_INDEX, chapterno)
+                startActivity(settingint)
+            }
         }
         navigationView.setNavigationItemSelectedListener { item: MenuItem ->
             if (item.itemId == R.id.bookmark) {
@@ -608,32 +608,32 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
         val dialogPicker =
             AlertDialog.Builder(this).setView(dialogView).setPositiveButton("Done") { dialog, _ ->
-                    val selectedSurahIndex = surahWheel.currentIndex
-                    val selectedVerseIndex =
-                        verseWheel.currentIndex + 1 // Verse index starts from 1
-                    soraList =
-                        mainViewModel.loadListschapter().value as ArrayList<ChaptersAnaEntity>
-                    try {
-                        // Update Surah-related information
-                        surahArabicName = soraList[selectedSurahIndex].abjadname
-                        verseNo = selectedVerseIndex
-                        versescount = soraList[selectedSurahIndex].versescount
-                        isMakkiMadani = soraList[selectedSurahIndex].ismakki
-                        rukucount = soraList[selectedSurahIndex].rukucount
-                        currentSelectSurah = soraList[selectedSurahIndex].chapterid
-                    } catch (e: ArrayIndexOutOfBoundsException) {
-                        // Handle potential index issues (e.g., if array sizes don't match)
-                        // ... (Similar to your original code)
-                    }
+                val selectedSurahIndex = surahWheel.currentIndex
+                val selectedVerseIndex =
+                    verseWheel.currentIndex + 1 // Verse index starts from 1
+                soraList =
+                    mainViewModel.loadListschapter().value as ArrayList<ChaptersAnaEntity>
+                try {
+                    // Update Surah-related information
+                    surahArabicName = soraList[selectedSurahIndex].abjadname
+                    verseNo = selectedVerseIndex
+                    versescount = soraList[selectedSurahIndex].versescount
+                    isMakkiMadani = soraList[selectedSurahIndex].ismakki
+                    rukucount = soraList[selectedSurahIndex].rukucount
+                    currentSelectSurah = soraList[selectedSurahIndex].chapterid
+                } catch (e: ArrayIndexOutOfBoundsException) {
+                    // Handle potential index issues (e.g., if array sizes don't match)
+                    // ... (Similar to your original code)
+                }
 
-                    // Handle navigation to the selected Surah and Verse
-                    handleNavigation(selectedSurahIndex)
+                // Handle navigation to the selected Surah and Verse
+                handleNavigation(selectedSurahIndex)
 
-                    // Save last read position
+                // Save last read position
 
 
-                    dialog.dismiss()
-                }.setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }.create()
+                dialog.dismiss()
+            }.setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }.create()
 
         // Customize dialog appearance based on theme preference
         customizeDialogAppearance(dialogPicker)
@@ -798,8 +798,8 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         val scope = CoroutineScope(Dispatchers.Main)
 
 
-        //   bysurah(dialog, scope, corpus, listener)
-        bysurahjson(dialog, scope, corpus, listener)
+        bysurah(dialog, scope, corpus, listener)
+        //  bysurahjson(dialog, scope, corpus, listener)
 
     }
 
@@ -917,7 +917,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                     parentRecyclerView.adapter = newflowAyahWordAdapter
                     //   flowAyahWordAdapter.notifyDataSetChanged()
                     parentRecyclerView.post { parentRecyclerView.scrollToPosition(verseNo) }
-                }else{
+                } else {
                     nomafoolatflowAyahWordAdapter = NoMafoolatFlowAyahWordAdapter(
                         false,
 
@@ -942,8 +942,6 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
 
     }
-
-
 
 
     private fun saveJsonFile(context: Context, fileName: String, data: Any) {
@@ -1309,7 +1307,10 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                         return true
                     }
                     if (item.itemId == R.id.action_share) {
-                        ScreenshotUtils.takeScreenshot(window.decorView, QuranGrammarApplication.context!!)
+                        ScreenshotUtils.takeScreenshot(
+                            window.decorView,
+                            QuranGrammarApplication.context!!
+                        )
                         optionsMenu.dismiss()
                         return true
                     }
@@ -1360,15 +1361,15 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                 isMakkiMadani
             )
             supportFragmentManager.beginTransaction().replace(
-                    R.id.frame_container_qurangrammar, fragment
-                ) // Replaces the current fragment or view
+                R.id.frame_container_qurangrammar, fragment
+            ) // Replaces the current fragment or view
                 .addToBackStack(null) // Optional: adds the transaction to the back stack, so the user can navigate back
                 .commit()
 
         } else if (tag == "tafsir") {
 
             val readingintent = Intent(this@QuranGrammarAct, TafsirFullscreenActivity::class.java)
-            val chapterno = allofQuran[position-1].surah
+            val chapterno = allofQuran[position - 1].surah
             val verse = allofQuran[position - 1].ayah
             readingintent.putExtra(Constant.SURAH_ID, chapterno)
             readingintent.putExtra(Constant.AYAH_ID, verse)

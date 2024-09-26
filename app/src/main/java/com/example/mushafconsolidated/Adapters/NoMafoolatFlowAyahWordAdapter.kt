@@ -27,10 +27,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.compose.foundation.layout.height
 import androidx.constraintlayout.widget.Group
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -687,29 +689,47 @@ class NoMafoolatFlowAyahWordAdapter(
                             com.example.mushafconsolidated.R.color.background_color_light_brown
                         )
                 }
-                 SimpleTooltip.Builder(QuranGrammarApplication.context!!)
-                    .anchorView(v)
-                    .text(workBreakDown)
-                    .gravity(Gravity.TOP)
-                    .modal(true)
-                    .arrowDrawable(android.R.drawable.ic_media_previous)
-                    .arrowHeight(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
-                    .arrowWidth(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
-                    .build()
-                    .show()
-              /*  val tooltip: SimpleTooltip = SimpleTooltip.Builder(QuranGrammarApplication.context!!)
-                    .anchorView(v)
-                    .text(workBreakDown)
-                    .gravity(Gravity.TOP)
-                    .dismissOnOutsideTouch(false)
-                    .dismissOnInsideTouch(false)
-                    .modal(true)
-                    .animated(true)
-                    .animationDuration(2000)
-                    .animationPadding(SimpleTooltipUtils.pxFromDp(50f))
-                     .contentView(R.layout.tooltip_custom, R.id.tv_text)
-                    .focusable(true)
-                    .build()*/
+    /*            val popupView = LayoutInflater.from(context).inflate(R.layout.summary_negation, null)
+                val popupWindow = PopupWindow(
+                    popupView,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+
+// Set background drawable
+                popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.popup_background))
+                popupWindow.isFocusable = true
+                popupWindow.isOutsideTouchable = true
+
+// Measure the popup's dimensions to calculate the correct position
+                popupView.measure(
+                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+                )
+                val popupHeight = popupView.measuredHeight
+                val popupWidth = popupView.measuredWidth
+
+// Get the location of the clicked view (v) on the screen
+                val location = IntArray(2)
+                v?.getLocationOnScreen(location)
+                val x = location[0] + v!!.width / 2 - popupWidth / 2 // Center the popup horizontally
+                val y = location[1] - popupHeight // Show the popup above the item
+
+// Show the popup at the calculated position
+                popupWindow.showAtLocation(v, Gravity.NO_GRAVITY, x, y)*/
+
+
+
+                SimpleTooltip.Builder(QuranGrammarApplication.context!!)
+                        .anchorView(v)
+                        .text(workBreakDown)
+                        .gravity(Gravity.TOP)
+                        .modal(true)
+                        .arrowDrawable(android.R.drawable.ic_media_previous)
+                        .arrowHeight(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
+                        .arrowWidth(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
+                        .build()
+                        .show()
 
 
 
@@ -717,18 +737,8 @@ class NoMafoolatFlowAyahWordAdapter(
 
 
 
-                /*
-                                val builder: Tooltip.Builder = Tooltip.Builder(
-                                    v!!, R.style.ayah_translation
-                                )
-                                    .setCancelable(true)
-                                    .setDismissOnClick(false)
-                                    .setCornerRadius(20f)
-                                    .setGravity(Gravity.TOP)
-                                    .setArrowEnabled(true)
-                                    .setBackgroundColor(color)
-                                    .setText(workBreakDown)
-                                builder.show()*/
+
+
 
 
                 true

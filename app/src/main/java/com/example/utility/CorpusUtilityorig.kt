@@ -2186,8 +2186,35 @@ class CorpusUtilityorig(private var context: Context?) {
             }
             return str
         }
-
         fun composeWBWCollection(
+            allofQuran: List<QuranEntity>?,
+            corpusSurahWord: List<QuranCorpusWbw>?
+        ): LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>> {
+
+            val newnewadapterlist = LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>>()
+            if (allofQuran == null || corpusSurahWord == null) return newnewadapterlist
+
+            for (i in allofQuran.indices) {
+                val qurancorpusarray = ArrayList<NewQuranCorpusWbw>()
+                for (j in corpusSurahWord.indices) {
+                    if (corpusSurahWord[j].corpus.ayah == allofQuran[i].ayah) {
+                        val ayahWord = NewQuranCorpusWbw()
+                        ayahWord.spannableverse = SpannableString.valueOf(allofQuran[i].qurantext)
+                        ayahWord.wbw = corpusSurahWord[j].wbw
+                        ayahWord.corpus = corpusSurahWord[j].corpus
+                        qurancorpusarray.add(ayahWord)
+                    } else if (corpusSurahWord[j].corpus.ayah > allofQuran[i].ayah) {
+                        break
+                    }
+                }
+                if (qurancorpusarray.isNotEmpty()) {
+                    newnewadapterlist[i] = qurancorpusarray
+                }
+            }
+
+            return newnewadapterlist
+        }
+        fun composeWBWCollectionorig(
             allofQuran: List<QuranEntity>?,
             corpusSurahWord: List<QuranCorpusWbw>?
         ): LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>> {
