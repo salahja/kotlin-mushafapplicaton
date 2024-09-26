@@ -577,5 +577,12 @@
     <string name="showanswer">Show Answers</string>
     <string name="manzoomnote">Mansub</string>
     <string name="majzoomnote">Majzoom</string>
-
+    <string name="negationsumarry">Negaton of verbal sentence(‫ا‬ ‫فعليةلالجملة‬)</string>
+    <string name="past">Past</string>
+    <string name="present">Present</string>
+    <string name="future">Future</string>
+    <string name="pastdetail">Did not \npast + ‫ما‬ \npresent lightest + ‫لم‬</string>
+    <string name="presentdetails">Does not \npresent + ‫ما‬ \nnormal present + ‫ال‬</string>
+    <string name="futuredetail">Will not/not yet\npresent light + ‫لن‬\npresent lightest + ‫لَمّا</string>
+    "
 </resources>
