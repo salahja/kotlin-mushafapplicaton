@@ -798,8 +798,8 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         val scope = CoroutineScope(Dispatchers.Main)
 
 
-        bysurah(dialog, scope, corpus, listener)
-        //  bysurahjson(dialog, scope, corpus, listener)
+      //  bysurah(dialog, scope, corpus, listener)
+           bysurahjson(dialog, scope, corpus, listener)
 
     }
 
@@ -1003,33 +1003,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                     CorpusUtilityorig.composeWBWCollection(allofQuran, corpusSurahWord)
 
             }
-            if (kana) {
-                newnewadapterlist.let { corpus.setKana(it, chapterno) }
-            }
-            if (shart) {
-                newnewadapterlist.let { corpus.setShart(it, chapterno) }
-            }
-            if (mudhaf) {
-                newnewadapterlist.let {
-                    corpus.setMudhafFromDB(
-                        it, chapterno
-                    )
-                }
-            }
-            if (mausoof) {
-                newnewadapterlist.let {
-                    corpus.SetMousufSifaDB(
-                        it, chapterno
-                    )
-                }
-            }
-            if (harfnasb) {
-                newnewadapterlist.let {
-                    corpus.newnewHarfNasbDb(
-                        it, chapterno
-                    )
-                }
-            }
+          //  setFragments(corpus)
 
 
             withContext(Dispatchers.Main) {
@@ -1105,6 +1079,36 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         }
 
 
+    }
+
+    private fun setFragments(corpus: CorpusUtilityorig) {
+        if (kana) {
+            newnewadapterlist.let { corpus.setKana(it, chapterno) }
+        }
+        if (shart) {
+            newnewadapterlist.let { corpus.setShart(it, chapterno) }
+        }
+        if (mudhaf) {
+            newnewadapterlist.let {
+                corpus.setMudhafFromDB(
+                    it, chapterno
+                )
+            }
+        }
+        if (mausoof) {
+            newnewadapterlist.let {
+                corpus.SetMousufSifaDB(
+                    it, chapterno
+                )
+            }
+        }
+        if (harfnasb) {
+            newnewadapterlist.let {
+                corpus.newnewHarfNasbDb(
+                    it, chapterno
+                )
+            }
+        }
     }
 
     /*    class MyViewModelFactory @Inject constructor(
