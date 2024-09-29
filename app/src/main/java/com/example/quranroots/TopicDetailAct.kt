@@ -184,7 +184,7 @@ class TopicDetailAct : BaseActivity(), OnItemClickListenerOnLong {
                 corpusSurahWord = mainViewModel.getQuranCorpusWbwbysurahAyah(surah, ayah).value
                 val corpus = CorpusUtilityorig(this)
                 newnewadapterlist =
-                    CorpusUtilityorig.NotcomposeWBWCollection(allofQuran, corpusSurahWord)
+                    CorpusUtilityorig.composeWBWCollectionold(allofQuran, corpusSurahWord)
                 allofQuran?.let { arrayofquran.add(it) }
                 corpus.setKana(newnewadapterlist, surah, ayah, newnewadapterlist.size)
 

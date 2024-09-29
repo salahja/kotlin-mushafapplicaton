@@ -40,11 +40,7 @@ data class NewCorpusExpandWbwPOJO constructor(
     var lemrathree: String? = null
     var lemarafour: String? = null
     var lemarafive: String? = null
-    var form_one: String? = null
-    var form_two: String? = null
-    var form_three: String? = null
-    var form_four: String? = null
-    var form_five: String? = null
+
     var qurantext: String? = null
 
     @PrimaryKey(autoGenerate = true)

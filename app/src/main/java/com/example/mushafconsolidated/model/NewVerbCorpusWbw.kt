@@ -11,8 +11,7 @@ import com.example.mushafconsolidated.Entities.wbwentity
 class NewVerbCorpusWbw {
     @Ignore
     var spannableverse: SpannableString? = null
-    @Ignore
-    var spanInfoList: List<SpanInfo> = emptyList()
+
 
     @Embedded
     var corpus: CorpusEntity? = null

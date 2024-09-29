@@ -12,8 +12,7 @@ import com.example.mushafconsolidated.Entities.wbwentity
 class NewQuranCorpusWbw {
     @Ignore
     var spannableverse: SpannableString? = null
-    @Ignore
-    var spanInfoList: List<SpanInfo> = emptyList()
+
 
     @Embedded
     var corpus: CorpusEntity? = null
@@ -29,10 +28,4 @@ class NewQuranCorpusWbw {
     constructor()
 }
 
-data class SpanInfo(
-    val type: String,
-    val start: Int,
-    val end: Int,
-    val properties: Map<String, Any>? = null
-)
 

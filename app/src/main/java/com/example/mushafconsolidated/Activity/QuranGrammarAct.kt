@@ -837,7 +837,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         return try {
             file.readText()
         } catch (e: Exception) {
-            e.printStackTrace()
+           // e.printStackTrace()
             null // Return null if an error occurs
         }
     }

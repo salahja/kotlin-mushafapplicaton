@@ -30,21 +30,12 @@ class CorpusEntity constructor(
     var lemarathree: String?,
     var lemarafour: String?,
     var lemarafive: String?,
-    var lemma_b_one: String?,
-    var form_one: String?,
-    var form_two: String?,
-    var form_three: String?,
-    var form_four: String?,
-    var form_five: String?,
     var detailsone: String?,
     var detailstwo: String?,
     var detailsthree: String?,
     var detailsfour: String?,
     var detailsfive: String?,
-    var lemma_b_two: String?,
-    var lemma_b_three: String?,
-    var lemma_b_four: String?,
-    var lemma_b_five: String?,
+
     @field:PrimaryKey(
         autoGenerate = true
     ) var id: Int,

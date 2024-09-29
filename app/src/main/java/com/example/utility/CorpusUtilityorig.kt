@@ -2247,7 +2247,7 @@ class CorpusUtilityorig(private var context: Context?) {
             return newnewadapterlist
         }
 
-         suspend  fun composeWBWCollection(
+           fun composeWBWCollection(
             allofQuran: List<QuranEntity>?,
             corpusSurahWord: List<QuranCorpusWbw>?
         ): LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>> {
