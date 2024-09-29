@@ -184,7 +184,7 @@ class TopicDetailAct : BaseActivity(), OnItemClickListenerOnLong {
                 corpusSurahWord = mainViewModel.getQuranCorpusWbwbysurahAyah(surah, ayah).value
                 val corpus = CorpusUtilityorig(this)
                 newnewadapterlist =
-                    CorpusUtilityorig.composeWBWCollection(allofQuran, corpusSurahWord)
+                    CorpusUtilityorig.NotcomposeWBWCollection(allofQuran, corpusSurahWord)
                 allofQuran?.let { arrayofquran.add(it) }
                 corpus.setKana(newnewadapterlist, surah, ayah, newnewadapterlist.size)
 
@@ -242,7 +242,7 @@ class TopicDetailAct : BaseActivity(), OnItemClickListenerOnLong {
         allofQuran = mainViewModel.getsurahayahVerses(suraid, ayah).value as ArrayList<QuranEntity>?
         corpusSurahWord = mainViewModel.getQuranCorpusWbwbysurahAyah(suraid, ayah).value
         val corpus = CorpusUtilityorig(this)
-        newnewadapterlist = CorpusUtilityorig.composeWBWCollection(allofQuran, corpusSurahWord)
+        newnewadapterlist = CorpusUtilityorig.NotcomposeWBWCollection(allofQuran, corpusSurahWord)
         allofQuran?.let { arrayofquran.add(it) }
         corpus.setKana(newnewadapterlist, suraid, ayah, newnewadapterlist.size)
 

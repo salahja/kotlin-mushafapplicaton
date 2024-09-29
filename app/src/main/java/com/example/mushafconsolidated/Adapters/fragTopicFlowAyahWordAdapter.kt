@@ -135,7 +135,7 @@ class fragTopicFlowAyahWordAdapter(private var activity: AppCompatActivity,priva
     }
 
     override fun getItemId(position: Int): Long {
-        val ayahWord = ayahWordArrayList[position]
+        val ayahWord =ayahWordArrayList[position+1]
         var itemId: Long = 0
         return ayahWord[0]!![0].corpus!!.ayah.toLong()
 
@@ -223,10 +223,10 @@ class fragTopicFlowAyahWordAdapter(private var activity: AppCompatActivity,priva
 
 
 
-        ayahWord = ayahWordArrayList[position][0]!![0]
+        ayahWord =ayahWordArrayList[position+1][0]!![0]
 
         try {
-            quranverses = ayahWordArrayList[position][0]!![0].spannableverse!!
+            quranverses =ayahWordArrayList[position+1][0]!![0].spannableverse!!
         } catch (e: IndexOutOfBoundsException) {
         }
         setAyahGrammaticalPhrases(holder, quranverses,
@@ -368,7 +368,7 @@ class fragTopicFlowAyahWordAdapter(private var activity: AppCompatActivity,priva
         )
         val inflater = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         holder.flow_word_by_word.removeAllViews()
-        val wordarray = ayahWordArrayList[position][0]
+        val wordarray =ayahWordArrayList[position+1][0]
         if (wordarray != null) {
             for (word in wordarray) {
                 @SuppressLint("InflateParams") val view =
@@ -801,7 +801,7 @@ class fragTopicFlowAyahWordAdapter(private var activity: AppCompatActivity,priva
                             activity,
                             TafsirFullscreenActivity::class.java
                         )
-                        val ayahWord = ayahWordArrayList[position][0]!![0]
+                        val ayahWord =ayahWordArrayList[position+1][0]!![0]
                         //  flowAyahWordAdapter.getItem(position);
                         val chapter_no = ayahWord.corpus!!.surah
                         //   int verse = ayahWord.getWord().get(0).getcorpus!!.ayah();
@@ -831,7 +831,7 @@ class fragTopicFlowAyahWordAdapter(private var activity: AppCompatActivity,priva
                     }
                     helpfb.setOnClickListener { v: View? ->
                         closeFABMenu()
-                        val ayahWord = ayahWordArrayList[position][0]!![0]
+                        val ayahWord =ayahWordArrayList[position+1][0]!![0]
                         //  flowAyahWordAdapter.getItem(position);
                         val surah = ayahWord.corpus!!.surah
                         //   int verse = ayahWord.getWord().get(0).getcorpus!!.ayah();

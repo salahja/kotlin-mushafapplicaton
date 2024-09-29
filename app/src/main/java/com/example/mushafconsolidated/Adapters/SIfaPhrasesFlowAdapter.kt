@@ -150,7 +150,7 @@ class SifaPhrasesFlowAdapter(
     }
 
     override fun getItemId(position: Int): Long {
-        val ayahWord = ayahWordArrayList[position]
+        val ayahWord =ayahWordArrayList[position+1]
         var itemId: Long = 0
 
         itemId = ayahWord!![position].corpus!!.ayah.toLong()
@@ -475,7 +475,7 @@ class SifaPhrasesFlowAdapter(
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         holder.flow_word_by_word.removeAllViews()
         val ayahWord1 = ayahWord
-        val wordarray = ayahWordArrayList[position]
+        val wordarray =ayahWordArrayList[position+1]
         for (word in wordarray!!) {
             var aindex = 0
             @SuppressLint("InflateParams") val view = inflater.inflate(R.layout.word_by_word, null)

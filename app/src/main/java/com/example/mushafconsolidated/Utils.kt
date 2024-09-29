@@ -37,6 +37,8 @@ import com.example.mushafconsolidated.Entities.quranexplorer
 import com.example.mushafconsolidated.Entities.wbwentity
 import com.example.mushafconsolidated.model.Juz
 import com.example.mushafconsolidated.model.QuranCorpusWbw
+import com.example.mushafconsolidated.model.QuranEntityCorpusEntityWbwEntity
+import com.example.mushafconsolidated.model.QuranwithCorpusWbw
 import database.entity.AllahNames
 import mufradat.MufradatEntity
 
@@ -783,6 +785,12 @@ class Utils {
     fun getQuranCorpusWbwSurhAyah(cid: Int, aid: Int, wid: Int): List<QuranCorpusWbw> {
         return database.QuranDao().getQuranCorpusWbw(cid, aid, wid)
     }
+
+    fun getQuranandCorpusandWbwbySurah(cid: Int): List<QuranEntityCorpusEntityWbwEntity> {
+        return database.QuranDao().getQuranandCorpusandWbwbySurah(cid)
+    }
+
+
 
     companion object {
         private const val TAG: String = "Utils"

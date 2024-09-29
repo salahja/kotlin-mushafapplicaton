@@ -41,6 +41,8 @@ import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
+import androidx.compose.ui.input.key.type
+import androidx.compose.ui.semantics.dismiss
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.drawerlayout.widget.DrawerLayout
@@ -51,6 +53,7 @@ import androidx.fragment.app.replace
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
+import androidx.media3.common.util.Log
 import androidx.media3.common.util.UnstableApi
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -70,6 +73,7 @@ import com.example.mushafconsolidated.Entities.TameezEnt
 
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SurahSummary
+import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.ajroomiya.NewAjroomiyaDetailHostActivity
 import com.example.mushafconsolidated.databinding.NewFragmentReadingBinding
 import com.example.mushafconsolidated.fragments.BookMarkCreateFrag
@@ -79,9 +83,12 @@ import com.example.mushafconsolidated.fragments.ScrollingFragment
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
 import com.example.mushafconsolidated.fragments.FlowAyahWordAdapter
 import com.example.mushafconsolidated.fragments.NoMafoolatFlowAyahWordAdapter
+import com.example.mushafconsolidated.fragments.RefactorNoMafoolatFlowAyahWordAdapter
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
+import com.example.mushafconsolidated.model.NewNewQuranCorpusWbw
 import com.example.mushafconsolidated.model.NewQuranCorpusWbw
 import com.example.mushafconsolidated.model.QuranCorpusWbw
+import com.example.mushafconsolidated.model.QuranEntityCorpusEntityWbwEntity
 import com.example.mushafconsolidated.model.VerseModel
 import com.example.mushafconsolidated.quranrepo.QuranRepository
 import com.example.mushafconsolidated.quranrepo.QuranVIewModel
@@ -120,8 +127,9 @@ import javax.inject.Inject
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.quiz.ArabicVerbQuizAct
 import com.quiz.ArabicVerbQuizActNew
+import java.io.BufferedReader
+import java.io.InputStreamReader
 
 //import com.example.mushafconsolidated.Entities.JoinVersesTranslationDataTranslation;
 @AndroidEntryPoint
@@ -134,8 +142,11 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     // private var newnewadapterlist = LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>>()
     private var newnewadapterlist: LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>> =
         LinkedHashMap()
+    private var newnewnewadapterlist: LinkedHashMap<Int, ArrayList<NewNewQuranCorpusWbw>> =
+        LinkedHashMap()
     private lateinit var newflowAyahWordAdapter: FlowAyahWordAdapter
     private lateinit var nomafoolatflowAyahWordAdapter: NoMafoolatFlowAyahWordAdapter
+    private lateinit var refactornomafoolatflowAyahWordAdapter: RefactorNoMafoolatFlowAyahWordAdapter
     lateinit var binding: NewFragmentReadingBinding
     private lateinit var surahWheelDisplayData: Array<String>
     private lateinit var btnBottomSheet: FloatingActionButton
@@ -161,7 +172,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var navigationView: NavigationView
-
+ private lateinit var       quranandCorpusandWbwbySurah:List<QuranEntityCorpusEntityWbwEntity>
     // ChipNavigationBar chipNavigationBar;
     private lateinit var materialToolbar: Toolbar
 
@@ -798,12 +809,29 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         val scope = CoroutineScope(Dispatchers.Main)
 
 
-      //  bysurah(dialog, scope, corpus, listener)
-           bysurahjson(dialog, scope, corpus, listener)
+   //  bysurah(dialog, scope, corpus, listener)
+   bysurahjson(dialog, scope, corpus, listener)
 
     }
 
-
+    // Loading JSON
+    fun loadJsonFromFilesss(context: Context, fileName: String): String? {
+        return try {
+            val fileInputStream = context.openFileInput(fileName)
+            val inputStreamReader = InputStreamReader(fileInputStream)
+            val bufferedReader = BufferedReader(inputStreamReader)
+            val stringBuilder = StringBuilder()
+            var line: String?
+            while (bufferedReader.readLine().also { line = it } != null) {
+                stringBuilder.append(line)
+            }
+            fileInputStream.close()
+            stringBuilder.toString()
+        } catch (e: Exception) {
+            Log.e("JSON", "Error loading file: $fileName", e)
+            null
+        }
+    }
     private fun loadJsonFromFile(context: Context, fileName: String): String? {
         val file = File(context.filesDir, fileName)
         return try {
@@ -814,7 +842,8 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+
+    @OptIn(UnstableApi::class)
     private fun bysurahjson(
         dialog: AlertDialog,
         ex: CoroutineScope,
@@ -824,9 +853,109 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         runOnUiThread {
             dialog.show()
             dialog.window?.setBackgroundDrawableResource(R.color.bg_brown)
+        }
 
-        }/**/
+        ex.launch(Dispatchers.IO) {
+            try {
+                val fileName = "surah$chapterno.json"
+              //  var newnewadapterlist: LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>>? = null
+                val qurandata = quranRepository.getQuranData(chapterno)
+                val jsonString = loadJsonFromFile(QuranGrammarApplication.context!!, fileName)
+                if (jsonString != null) {
+                    val mapType = object : TypeToken<LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>>>() {}.type
+                    val gson = Gson()
+                    allofQuran = qurandata.allofQuran
+                    newnewadapterlist = gson.fromJson(jsonString, mapType)
+                    println("check")
+                } else {
 
+                    allofQuran = qurandata.allofQuran
+                    corpusSurahWord = qurandata.corpusSurahWord
+                    newnewadapterlist = CorpusUtilityorig.composeWBWCollection(allofQuran, corpusSurahWord)
+
+                    if (mafoolat) {
+                        val chapterData = quranRepository.getChapterData(chapterno)
+                        mafoolbihiwords = chapterData.mafoolbihiwords
+                        jumlahaliya = chapterData.jumlahaliya
+                        tameezEntList = chapterData.tammezent
+                        mutlaqEntList = chapterData.mutlaqent
+                        badalErabNotesEnts = chapterData.badalErabNotesEnt
+                    }
+
+                    val gson = Gson()
+                    val json = gson.toJson(newnewadapterlist)
+                    saveJsonFile(QuranGrammarApplication.context!!, fileName, json)
+                }
+
+                withContext(Dispatchers.Main) {
+                    dialog.dismiss()
+
+                    parentRecyclerView = binding.overlayViewRecyclerView
+
+                    if (jumptostatus) {
+                        surahorpart = chapterno
+                    }
+                    val header = arrayListOf(rukucount.toString(), versescount.toString(), chapterno.toString(), surahArabicName)
+                    HightLightKeyWord(allofQuran)
+
+                    val adapter = if (!mushafview && mafoolat) {
+                        FlowAyahWordAdapter(
+                            false,
+                            mutlaqEntList,
+                            tameezEntList,
+                            badalErabNotesEnts,
+                            liajlihient,
+                            jumlahaliya,
+                            mafoolbihiwords,
+                            header,
+                            allofQuran,
+                            newnewadapterlist!!, // Use the non-null value here
+                            this@QuranGrammarAct,
+                            surahArabicName,
+                            isMakkiMadani,
+                            listener
+                        )
+                    } else {
+                        NoMafoolatFlowAyahWordAdapter(
+                            false,
+                            header,
+                            allofQuran,
+                            newnewadapterlist!!, // Use the non-null value here
+                            this@QuranGrammarAct,
+                            surahArabicName,
+                            isMakkiMadani,
+                            listener
+                        )
+                    }
+              //      adapter.addContext(this@QuranGrammarAct)
+                  //  adapter.addContext(this@QuranGrammarAct)
+                    parentRecyclerView.setHasFixedSize(true)
+                    parentRecyclerView.adapter = adapter
+                    parentRecyclerView.post { parentRecyclerView.scrollToPosition(verseNo) }
+                }
+            } catch (e: Exception) {
+                // Handle JSON loading or parsing errors
+                Log.e("QuranGrammarAct", "Error loading data", e)
+                withContext(Dispatchers.Main) {
+                    dialog.dismiss()
+                    // Show error message to the user
+                }
+            }
+        }
+    }
+
+   /* @SuppressLint("NotifyDataSetChanged")
+    private fun bysurahjsonoring(
+        dialog: AlertDialog,
+        ex: CoroutineScope,
+        corpus: CorpusUtilityorig,
+        listener: OnItemClickListenerOnLong,
+    ) {
+        runOnUiThread {
+            dialog.show()
+            dialog.window?.setBackgroundDrawableResource(R.color.bg_brown)
+
+        }
         ex.launch(Dispatchers.IO) {
             if (mafoolat) {
                 val chapterData = quranRepository.getChapterData(chapterno)
@@ -840,6 +969,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                 newnewadapterlist =
                     CorpusUtilityorig.composeWBWCollection(allofQuran, corpusSurahWord)
             }
+
             val qurandata = quranRepository.getQuranData(chapterno)
             allofQuran = qurandata.allofQuran
             val fileName = "surah$chapterno.json"
@@ -851,30 +981,16 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                 newnewadapterlist = gson.fromJson(jsonString, mapType)
 
             } else {
-                val corpusSurahWord = qurandata.corpusSurahWord
-                newnewadapterlist =
-                    CorpusUtilityorig.composeWBWCollection(allofQuran, corpusSurahWord)
+                corpusSurahWord = qurandata.corpusSurahWord
+               newnewadapterlist = CorpusUtilityorig.composeWBWCollection(allofQuran, corpusSurahWord)
                 val gson = Gson()
                 val json = gson.toJson(newnewadapterlist)
                 saveJsonFile(QuranGrammarApplication.context!!, fileName, newnewadapterlist)
                 val jsonString = loadJsonFromFile(QuranGrammarApplication.context!!, fileName)
-                val mapType =
-                    object : TypeToken<LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>>>() {}.type
-
-
+                val mapType = object : TypeToken<LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>>>() {}.type
                 newnewadapterlist = gson.fromJson(jsonString, mapType)
-
-                // Use Gson to parse JSON
-            }
-
-
-            println("check")
+                 }
             withContext(Dispatchers.Main) {
-
-
-                //
-
-
                 parentRecyclerView = binding.overlayViewRecyclerView
 
                 if (jumptostatus) {
@@ -885,13 +1001,11 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                 header.add(versescount.toString())
                 header.add(chapterno.toString())
                 header.add(surahArabicName)
-                HightLightKeyWord(allofQuran)
+               HightLightKeyWord(allofQuran)
                 runOnUiThread {
                     dialog.dismiss()
                 }
-
-
-                val viewmodel: QuranVIewModel by viewModels()
+         //       val viewmodel: QuranVIewModel by viewModels()
                 if (!mushafview && mafoolat) {
                     // viewmodel.getVersesBySurahLive(chapterno).observe(this, {
                     //    allofQuran=it
@@ -922,7 +1036,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                         false,
 
                         header,
-                        allofQuran,
+                       allofQuran,
                         newnewadapterlist,
                         this@QuranGrammarAct,
                         surahArabicName,
@@ -941,10 +1055,19 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         }
 
 
+    }*/
+    fun saveJsonFile(context: Context, fileName: String, jsonData: String) {
+        try {
+            val fileOutputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE)
+            fileOutputStream.write(jsonData.toByteArray())
+            fileOutputStream.close()
+            Log.d("JSON", "File saved successfully: $fileName")
+        } catch (e: Exception) {
+            Log.e("JSON", "Error saving file: $fileName", e)
+        }
     }
 
-
-    private fun saveJsonFile(context: Context, fileName: String, data: Any) {
+    private fun saveJsonFileorig(context: Context, fileName: String, data: Any) {
         val gson = Gson()
         val jsonString = gson.toJson(data)
 
@@ -973,7 +1096,8 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     ) {
         runOnUiThread { dialog.show() }/**/
 
-
+        val utils= Utils(this@QuranGrammarAct)
+        quranandCorpusandWbwbySurah = utils.getQuranandCorpusandWbwbySurah(chapterno)
 
         ex.launch(Dispatchers.IO) {
 
@@ -982,6 +1106,9 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
 
 
+
+              val utils= Utils(this@QuranGrammarAct)
+                 quranandCorpusandWbwbySurah = utils.getQuranandCorpusandWbwbySurah(chapterno)
 
 
             if (mafoolat) {
@@ -997,13 +1124,14 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                     CorpusUtilityorig.composeWBWCollection(allofQuran, corpusSurahWord)
             } else {
                 val qurandata = quranRepository.getQuranData(chapterno)
-                allofQuran = qurandata.allofQuran
-                val corpusSurahWord = qurandata.corpusSurahWord
-                newnewadapterlist =
-                    CorpusUtilityorig.composeWBWCollection(allofQuran, corpusSurahWord)
+                 allofQuran = qurandata.allofQuran
+               val corpusSurahWord = qurandata.corpusSurahWord
+                newnewadapterlist =   CorpusUtilityorig.composeWBWCollection(allofQuran, corpusSurahWord)
+             //   newnewnewadapterlist =   CorpusUtilityorig.newcomposeWBWCollection(quranandCorpusandWbwbySurah)
+                println("checktime")
 
             }
-          //  setFragments(corpus)
+            //  setFragments(corpus)
 
 
             withContext(Dispatchers.Main) {

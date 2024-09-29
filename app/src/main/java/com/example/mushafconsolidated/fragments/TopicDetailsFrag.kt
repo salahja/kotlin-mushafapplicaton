@@ -156,7 +156,7 @@ class TopicDetailsFrag : DialogFragment(), OnItemClickListenerOnLong {
                 mainViewModel.getsurahayahVerses(surah, ayah).value as ArrayList<QuranEntity>?
             corpusSurahWord = mainViewModel.getQuranCorpusWbwbysurahAyah(surah, ayah).value
             val corpus = CorpusUtilityorig(requireContext())
-            newnewadapterlist = CorpusUtilityorig.composeWBWCollection(allofQuran, corpusSurahWord)
+            newnewadapterlist = CorpusUtilityorig.NotcomposeWBWCollection(allofQuran, corpusSurahWord)
             allofQuran?.let { arrayofquran.add(it) }
             corpus.setKana(newnewadapterlist, surah, ayah, newnewadapterlist.size)
 
@@ -213,7 +213,7 @@ class TopicDetailsFrag : DialogFragment(), OnItemClickListenerOnLong {
             mainViewModel.getsurahayahVerses(suraid, ayah).value as ArrayList<QuranEntity>?
         corpusSurahWord = mainViewModel.getQuranCorpusWbwbysurahAyah(suraid, ayah).value
         val corpus = CorpusUtilityorig(requireContext())
-        this.newnewadapterlist = CorpusUtilityorig.composeWBWCollection(allofQuran, corpusSurahWord)
+        this.newnewadapterlist = CorpusUtilityorig.NotcomposeWBWCollection(allofQuran, corpusSurahWord)
 
         this.allofQuran?.let { arrayofquran.add(it) }
         corpus.setKana(newnewadapterlist, suraid, ayah, newnewadapterlist.size)

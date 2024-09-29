@@ -111,7 +111,7 @@ class QuranVIewModel @Inject constructor(
     }
 
 
-    fun getwbwQuranTranslationRange(surahid: Int, ayahid: Int, startindex: Int, endindex: Int):
+     fun getwbwQuranTranslationRange(surahid: Int, ayahid: Int, startindex: Int, endindex: Int):
             LiveData<List<wbwentity>> {
         wbw.value =
             this.quranRepository.wbwdao.getwbwQuranbTranslationbyrange(
