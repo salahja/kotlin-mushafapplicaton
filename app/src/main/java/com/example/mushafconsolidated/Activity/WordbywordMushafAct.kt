@@ -75,7 +75,9 @@ import com.example.mushafconsolidated.databinding.ExoplayerBinding
 import com.example.mushafconsolidated.databinding.FbarnormalfooterBinding
 import com.example.mushafconsolidated.databinding.RxfetchProgressBinding
 import com.example.mushafconsolidated.databinding.VfourExpandableNewactivityShowAyahsBinding
+import com.example.mushafconsolidated.fragments.FlowAyahWordAdapter
 import com.example.mushafconsolidated.fragments.NoMafoolatFlowAyahWordAdapter
+import com.example.mushafconsolidated.fragments.RefactorNoMafoolatFlowAyahWordAdapter
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.model.CorpusAyahWord
@@ -103,6 +105,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import sj.hisnul.fragments.NamesDetail
 import timber.log.Timber
 import java.io.File
@@ -122,12 +125,13 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
 
     @Inject
     lateinit var quranRepository: QuranRepository
-
+    private  var corpusGroupedByAyah:LinkedHashMap<Int, ArrayList<QuranCorpusWbw>> =
+        LinkedHashMap()
     // private UpdateMafoolFlowAyahWordAdapter flowAyahWordAdapter;
     private lateinit var mainViewModel: QuranVIewModel
     private var corpusSurahWord: List<QuranCorpusWbw>? = null
 
-    private lateinit var nomafoolatflowAyahWordAdapter: NoMafoolatFlowAyahWordAdapter
+    private lateinit var nomafoolatflowAyahWordAdapter: RefactorNoMafoolatFlowAyahWordAdapter
 
 
     private var newnewadapterlist = LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>>()
@@ -1255,13 +1259,80 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
         ex.execute {
             //do inbackground
             // bysurah(dialog, ex)
-            bysurah(scope, corpus, listener)
+            bysurah(dialog, scope, listener)
+        }
+    }
+    private fun bysurah(
+        dialog: AlertDialog,
+        ex: CoroutineScope,
+        listener: OnItemClickListenerOnLong,
+    ) {
+
+
+        ex.launch(Dispatchers.IO) {
+            val utils = Utils(this@WordbywordMushafAct)
+
+
+
+                val qurandata = quranRepository.getQuranData(surah)
+                allofQuran=   qurandata.allofQuran
+                corpusSurahWord=qurandata.corpusSurahWord
+
+                corpusGroupedByAyah = corpusSurahWord!!.groupBy { it.corpus!!.ayah } as LinkedHashMap<Int, ArrayList<QuranCorpusWbw>>
+                //    newnewadapterlist = CorpusUtilityorig.composeWBWCollection(qurandata.allofQuran, qurandata.corpusSurahWord)
+
+
+            withContext(Dispatchers.Main) {
+                dialog.dismiss()
+                recyclerView = findViewById(R.id.rvAyahsPages)
+
+
+                val chapter: ArrayList<ChaptersAnaEntity?>? =
+                    repository.getSingleChapter(surah) as ArrayList<ChaptersAnaEntity?>?
+                //  initlistview(quranbySurah, chapter);
+
+                val header = ArrayList<String>()
+                header.add(chapter!![0]!!.rukucount.toString())
+                header.add(chapter[0]!!.versescount.toString())
+                header.add(chapter[0]!!.chapterid.toString())
+                header.add(chapter[0]!!.abjadname)
+                header.add(chapter[0]!!.nameenglish)
+                versescount = chapter[0]!!.versescount
+                surahNameEnglish = chapter[0]!!.nameenglish
+                surahNameArabic = chapter[0]!!.namearabic
+                val manager = LinearLayoutManager(this@WordbywordMushafAct)
+                manager.orientation = LinearLayoutManager.VERTICAL
+                recyclerView.setHasFixedSize(true)
+                manager.orientation = LinearLayoutManager.VERTICAL
+                HightLightKeyWord(allofQuran)
+
+
+                recyclerView.layoutManager = manager
+
+                nomafoolatflowAyahWordAdapter = RefactorNoMafoolatFlowAyahWordAdapter(
+                    true,
+
+                    header,
+                    allofQuran!!,
+                    corpusGroupedByAyah,
+                    this@WordbywordMushafAct,
+                    surahNameArabic,
+                    isMakkiMadani,
+                    listener
+                )
+
+                nomafoolatflowAyahWordAdapter.addContext(this@WordbywordMushafAct)
+                recyclerView.setHasFixedSize(true)
+                recyclerView.adapter = nomafoolatflowAyahWordAdapter
+                nomafoolatflowAyahWordAdapter.notifyDataSetChanged()
+                recyclerView.itemAnimator = DefaultItemAnimator()
+
+            }
         }
     }
 
-
-    @SuppressLint("NotifyDataSetChanged")
-    private fun bysurah(
+ /*   @SuppressLint("NotifyDataSetChanged")
+    private fun bysurahold(
         ex: CoroutineScope,
         corpus: CorpusUtilityorig,
         listener: OnItemClickListenerOnLong,
@@ -1368,7 +1439,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
         }
 
 
-    }
+    }*/
 
     fun getReaderAudioLink(readerName: String?) {
         for (reader in readersList) {
