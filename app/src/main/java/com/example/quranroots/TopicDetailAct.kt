@@ -53,10 +53,6 @@ import kotlinx.coroutines.launch
 class TopicDetailAct : BaseActivity(), OnItemClickListenerOnLong {
     private lateinit var flowAyahWordAdapter: NewTopicFlowAyahWordAdapter
 
-    // --Commented out by Inspection (24/10/22, 10:04 PM):int mudhafColoragainstBlack, // --Commented out by Inspection (24/10/22, 10:04 PM):mausofColoragainstBlack, sifatColoragainstBlack, // --Commented out by Inspection (24/10/22, 10:03 PM):brokenPlurarColoragainstBlack, shartagainstback;
-    // --Commented out by Inspection (24/10/22, 10:04 PM):private NavigationView navigationView;
-    // --Commented out by Inspection (24/10/22, 10:04 PM):private MaterialToolbar materialToolbar;
-    // --Commented out by Inspection (24/10/22, 10:03 PM):private FlowAyahWordAdapterPassage flowAyahWordAdapterpassage;
     private lateinit var corpusayahWordArrayList: ArrayList<CorpusAyahWord>
     private var corpusSurahWord: List<QuranCorpusWbw>? = null
     private var newnewadapterlist = LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>>()
@@ -67,17 +63,7 @@ class TopicDetailAct : BaseActivity(), OnItemClickListenerOnLong {
     private lateinit var arrayofquran: ArrayList<ArrayList<QuranEntity>>
     private lateinit var arrayofadapterlist: ArrayList<LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>>>
 
-    // --Commented out by Inspection (24/10/22, 10:04 PM):private int chapterno;
-    // --Commented out by Inspection START (24/10/22, 10:03 PM):
-    //    public int getVersescount() {
-    //        return versescount;
-    //    }
-    // --Commented out by Inspection STOP (24/10/22, 10:03 PM)
-    // --Commented out by Inspection START (24/10/22, 10:03 PM):
-    //    public int getChapterno() {
-    //        return chapterno;
-    //    }
-    // --Commented out by Inspection STOP (24/10/22, 10:03 PM)
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_dua_group, menu)
         return true

@@ -809,7 +809,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         val scope = CoroutineScope(Dispatchers.Main)
 
 
-   //  bysurah(dialog, scope, corpus, listener)
+   // bysurah(dialog, scope,  listener)
    bysurahjson(dialog, scope, corpus, listener)
 
     }
@@ -1086,9 +1086,63 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             println("Error saving file: ${e.localizedMessage}")
         }
     }
-
-    @SuppressLint("NotifyDataSetChanged")
     private fun bysurah(
+        dialog: AlertDialog,
+        ex: CoroutineScope,
+        listener: OnItemClickListenerOnLong,
+    ) {
+        dialog.show()
+
+        ex.launch(Dispatchers.IO) {
+            val utils = Utils(this@QuranGrammarAct)
+            quranandCorpusandWbwbySurah = utils.getQuranandCorpusandWbwbySurah(chapterno)
+
+            if (mafoolat) {
+                val chapterData = quranRepository.getChapterData(chapterno)
+                mafoolbihiwords = chapterData.mafoolbihiwords
+                jumlahaliya = chapterData.jumlahaliya
+                tameezEntList = chapterData.tammezent
+                mutlaqEntList = chapterData.mutlaqent
+                badalErabNotesEnts = chapterData.badalErabNotesEnt
+                newnewadapterlist = CorpusUtilityorig.composeWBWCollection(chapterData.allofQuran, chapterData.corpusSurahWord)
+            } else {
+                val qurandata = quranRepository.getQuranData(chapterno)
+             allofQuran=   qurandata.allofQuran
+                newnewadapterlist = CorpusUtilityorig.composeWBWCollection(qurandata.allofQuran, qurandata.corpusSurahWord)
+            }
+
+            withContext(Dispatchers.Main) {
+                dialog.dismiss()
+
+                parentRecyclerView = binding.overlayViewRecyclerView
+                if (jumptostatus) {
+                    surahorpart = chapterno
+                }
+                val header = arrayListOf(rukucount.toString(), versescount.toString(), chapterno.toString(), surahArabicName)
+                HightLightKeyWord(allofQuran) // Make sure allofQuran is initialized correctly
+
+                val adapter = if (!mushafview && mafoolat) {
+                    FlowAyahWordAdapter(
+                        false, mutlaqEntList, tameezEntList, badalErabNotesEnts, liajlihient, jumlahaliya,
+                        mafoolbihiwords, header, allofQuran, newnewadapterlist, this@QuranGrammarAct,
+                        surahArabicName, isMakkiMadani, listener
+                    )
+                } else {
+                    NoMafoolatFlowAyahWordAdapter(
+                        false, header, allofQuran, newnewadapterlist, this@QuranGrammarAct,
+                        surahArabicName, isMakkiMadani, listener
+                    )
+                }
+
+
+                parentRecyclerView.setHasFixedSize(true)
+                parentRecyclerView.adapter = adapter
+                parentRecyclerView.post { parentRecyclerView.scrollToPosition(verseNo) }
+            }
+        }
+    }
+    @SuppressLint("NotifyDataSetChanged")
+    private fun bysurahold(
         dialog: AlertDialog,
         ex: CoroutineScope,
         corpus: CorpusUtilityorig,
@@ -1104,11 +1158,6 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
             val startTime = System.nanoTime()
 
-
-
-
-              val utils= Utils(this@QuranGrammarAct)
-                 quranandCorpusandWbwbySurah = utils.getQuranandCorpusandWbwbySurah(chapterno)
 
 
             if (mafoolat) {
@@ -1127,21 +1176,10 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                  allofQuran = qurandata.allofQuran
                val corpusSurahWord = qurandata.corpusSurahWord
                 newnewadapterlist =   CorpusUtilityorig.composeWBWCollection(allofQuran, corpusSurahWord)
-             //   newnewnewadapterlist =   CorpusUtilityorig.newcomposeWBWCollection(quranandCorpusandWbwbySurah)
-                println("checktime")
 
             }
-            //  setFragments(corpus)
-
-
-            withContext(Dispatchers.Main) {
-
-
-                //
-
-
+                withContext(Dispatchers.Main) {
                 parentRecyclerView = binding.overlayViewRecyclerView
-
                 if (jumptostatus) {
                     surahorpart = chapterno
                 }
@@ -1154,9 +1192,6 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                 runOnUiThread {
                     dialog.dismiss()
                 }
-
-
-
                 if (!mushafview && mafoolat) {
                     // viewmodel.getVersesBySurahLive(chapterno).observe(this, {
                     //    allofQuran=it
