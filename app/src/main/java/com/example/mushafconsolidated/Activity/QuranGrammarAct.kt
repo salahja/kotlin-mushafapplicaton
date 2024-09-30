@@ -81,7 +81,7 @@ import com.example.mushafconsolidated.fragments.ScrollingFragment
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
 import com.example.mushafconsolidated.fragments.FlowAyahWordAdapter
 import com.example.mushafconsolidated.fragments.NoMafoolatFlowAyahWordAdapter
-import com.example.mushafconsolidated.fragments.RefactorNoMafoolatFlowAyahWordAdapter
+import com.example.mushafconsolidated.Adapters.RefactorNoMafoolatFlowAyahWordAdapter
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.model.NewNewQuranCorpusWbw
 import com.example.mushafconsolidated.model.NewQuranCorpusWbw

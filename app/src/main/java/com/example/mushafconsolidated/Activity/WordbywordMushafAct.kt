@@ -75,9 +75,7 @@ import com.example.mushafconsolidated.databinding.ExoplayerBinding
 import com.example.mushafconsolidated.databinding.FbarnormalfooterBinding
 import com.example.mushafconsolidated.databinding.RxfetchProgressBinding
 import com.example.mushafconsolidated.databinding.VfourExpandableNewactivityShowAyahsBinding
-import com.example.mushafconsolidated.fragments.FlowAyahWordAdapter
-import com.example.mushafconsolidated.fragments.NoMafoolatFlowAyahWordAdapter
-import com.example.mushafconsolidated.fragments.RefactorNoMafoolatFlowAyahWordAdapter
+import com.example.mushafconsolidated.Adapters.RefactorNoMafoolatFlowAyahWordAdapter
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.model.CorpusAyahWord

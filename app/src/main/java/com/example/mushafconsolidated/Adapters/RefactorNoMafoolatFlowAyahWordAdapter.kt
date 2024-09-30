@@ -1,4 +1,4 @@
-package com.example.mushafconsolidated.fragments
+package com.example.mushafconsolidated.Adapters
 
 
 
@@ -44,8 +44,9 @@ import com.example.mushafconsolidated.Entities.wbwentity
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SurahSummary
 import com.example.mushafconsolidated.Utils
+import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
+import com.example.mushafconsolidated.fragments.WordMorphologyDetails
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
-import com.example.mushafconsolidated.model.NewQuranCorpusWbw
 import com.example.mushafconsolidated.model.QuranCorpusWbw
 
 import com.example.mushafconsolidatedimport.Config
@@ -67,8 +68,6 @@ import java.io.IOException
 import java.util.Date
 
 
-//import com.example.mushafconsolidated.Entities.JoinVersesTranslationDataTranslation;
-//public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnItemClickListenerOnLong {
 class RefactorNoMafoolatFlowAyahWordAdapter(
     isaudio: Boolean,
 
@@ -141,7 +140,7 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
         val ayahWord = ayahWordArrayList[position]
         var itemId: Long = 0
 
-        itemId = ayahWord!![position].corpus!!.ayah.toLong()
+        itemId = ayahWord!![position].corpus.ayah.toLong()
 
         return itemId
     }
@@ -151,18 +150,15 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
             LayoutInflater.from(parent.context).inflate(R.layout.surah_header, parent, false)
         } else {
             LayoutInflater.from(parent.context).inflate(R.layout.row_ayah_word, parent, false)
-            //   view = LayoutInflater.from(parent.context!!).inflate(R.layout.item_viewer_aya_cardview, parent, false);
+
         }
         return ItemViewAdapter(view, viewType)
     }
 
-/*    fun getItem(position: Int): QuranCorpusWbw? {
-        //    return ayahWordArrayList!![0].word!![position]
-        return ayahWordArrayList.get(position)!![position]
-    }*/
+
     fun getItem(position: Int): QuranEntity? {
-        //    return ayahWordArrayList!![0].word!![position]
-        return allofQuran!![position]
+
+        return allofQuran[position]
     }
 
     @SuppressLint("ResourceType")
@@ -172,8 +168,7 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
         )
 
         isNightmode = sharedPreferences.getString("themepref", "dark").toString()
-        //  String arabic_font_selection = sharedPreferences.getString("Arabic_Font_Selection", String.valueOf(MODE_PRIVATE));
-        val arabic_font_selection =
+          val arabic_font_selection =
             sharedPreferences.getString("Arabic_Font_Selection", "quranicfontregular.ttf")
         val custom_font = Typeface.createFromAsset(
             context.assets,
@@ -312,7 +307,7 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
 
         //   String w bw = sharedPreferences.getString("wordByWord", String.valueOf(Context.MODE_PRIVATE));
         try {
-            entity = allofQuran!![position]
+            entity = allofQuran[position]
         } catch (e: IndexOutOfBoundsException) {
             println("check")
         }
@@ -322,7 +317,7 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
         val spannableverse=     valueOf(SpannableString(entity?.qurantext))
       //val spannableverse=  valueOf(entity?.qurantext)
        setAyahGrammaticalPhrases(holder, spannableverse,
-            ayahWord!![0].corpus!!.ayah, (ayahWord!![0]!!?.corpus?.surah ?:1) as Int
+            ayahWord!![0].corpus.ayah, (ayahWord!![0].corpus?.surah ?:1)
         )
 
         holder.base_cardview.visibility = View.GONE
@@ -444,7 +439,7 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
         setTextSizes(holder)
     }
 
-    private fun setAyahGrammaticalPhrases(holder: RefactorNoMafoolatFlowAyahWordAdapter.ItemViewAdapter, spannableverse: SpannableString?, ayah: Int, surah: Int) {
+    private fun setAyahGrammaticalPhrases(holder: ItemViewAdapter, spannableverse: SpannableString?, ayah: Int, surah: Int) {
 
         if (spannableverse != null) {
             CorpusUtilityorig.setAyahGrammaticalPhrases(spannableverse,surah,ayah)
@@ -491,16 +486,16 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
             var spannedroot: SpannableString? = null
             val sb = StringBuilder()
 
-            sb.append(word.corpus!!.wordno)
+            sb.append(word.corpus.wordno)
             val rootwords =
-                word.corpus!!.rootaraone + word.corpus!!.rootaratwo + word.corpus!!.rootarathree + word.corpus!!.rootarafour + word.corpus!!.rootarafive
+                word.corpus.rootaraone + word.corpus.rootaratwo + word.corpus.rootarathree + word.corpus.rootarafour + word.corpus.rootarafive
 
 
             if (showrootkey) {
                 spannedroot = if (rootwords.isNotEmpty()) {
                     getSpannedRoots(word, rootwords)
                 } else {
-                    SpannableString.valueOf(rootwords)
+                    valueOf(rootwords)
                 }
                 rootword.text = spannedroot
                 //
@@ -513,7 +508,7 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
             if (showWordColor) {
                 //        word.getRootword();
                 val araword =
-                    word.corpus!!.araone + word.corpus!!.aratwo + word.corpus!!.arathree + word.corpus!!.arafour + word.corpus!!.arafive
+                    word.corpus.araone + word.corpus.aratwo + word.corpus.arathree + word.corpus.arafour + word.corpus.arafive
 
                 val spannedword: SpannableString = getSpannedWords(word)
                 //   arabic.setText(fixArabic(String.valueOf(spannedword)));
@@ -532,11 +527,11 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
             } else {
                 if (showWbwTranslation) {
                     arabicChipview.text =
-                        word.corpus!!.araone + word.corpus!!.aratwo + word.corpus!!.arathree + word.corpus!!.arafour + word.corpus!!.arafive
+                        word.corpus.araone + word.corpus.aratwo + word.corpus.arathree + word.corpus.arafour + word.corpus.arafive
                     arabicChipview.visibility = View.VISIBLE
                 } else {
                     arabicTv.text =
-                        word.corpus!!.araone + word.corpus!!.aratwo + word.corpus!!.arathree + word.corpus!!.arafour + word.corpus!!.arafive
+                        word.corpus.araone + word.corpus.aratwo + word.corpus.arathree + word.corpus.arafour + word.corpus.arafive
                     arabicTv.visibility = View.VISIBLE
 
                 }
@@ -548,17 +543,17 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
             if (showWbwTranslation) {
                 when (wbw) {
                     "en" -> {
-                        translation.text = word.wbw!!.en
+                        translation.text = word.wbw.en
                         translation.paintFlags = translation.paintFlags or Paint.UNDERLINE_TEXT_FLAG
                     }
 
                     "bn" -> {
-                        translation.text = word.wbw!!.bn
+                        translation.text = word.wbw.bn
                         translation.paintFlags = translation.paintFlags or Paint.UNDERLINE_TEXT_FLAG
                     }
 
                     "in" -> {
-                        translation.text = word.wbw!!.`in`
+                        translation.text = word.wbw.`in`
                         translation.paintFlags = translation.paintFlags or Paint.UNDERLINE_TEXT_FLAG
                     }
 
@@ -581,29 +576,29 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
                 val utils = Utils(QuranGrammarApplication.context!!)
                 val verbCorpusRootWords =
                     utils.getQuranRoot(
-                        word.corpus!!.surah,
-                        word.corpus!!.ayah,
-                        word.corpus!!.wordno
+                        word.corpus.surah,
+                        word.corpus.ayah,
+                        word.corpus.wordno
                     )
-                if (verbCorpusRootWords!!.isNotEmpty() && verbCorpusRootWords[0]!!.tag == "V") {
+                if (verbCorpusRootWords.isNotEmpty() && verbCorpusRootWords[0].tag == "V") {
                     //    vbdetail = ams.getVerbDetails();
                     print("check")
                 }
                 val corpusNounWord:List<NounCorpus> =
                     utils.getQuranNouns(
-                        word.corpus!!.surah,
-                        word.corpus!!.ayah,
-                        word.corpus!!.wordno
+                        word.corpus.surah,
+                        word.corpus.ayah,
+                        word.corpus.wordno
                     )
                 val verbCorpusRootWord : List<VerbCorpus> =
                     utils.getQuranRoot(
-                        word.corpus!!.surah,
-                        word.corpus!!.ayah,
-                        word.corpus!!.wordno
+                        word.corpus.surah,
+                        word.corpus.ayah,
+                        word.corpus.wordno
                     )
              val qm = WordMorphologyDetails(
-                    word.corpus!!,
-                    corpusNounWord!!, verbCorpusRootWord!!
+                 word.corpus,
+                 corpusNounWord, verbCorpusRootWord
                 )
              val workBreakDown = qm.workBreakDown
 
@@ -636,49 +631,49 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
             }
             arabicChipview.setOnClickListener /* l = */ {
                 val dialog = Dialog(context)
-                dialog.setTitle(word.corpus!!.araone + word.corpus!!.aratwo + word.corpus!!.arathree + word.corpus!!.arafour + word.corpus!!.arafive)
+                dialog.setTitle(word.corpus.araone + word.corpus.aratwo + word.corpus.arathree + word.corpus.arafour + word.corpus.arafive)
 
                 val dataBundle = Bundle()
-                dataBundle.putInt(Constant.SURAH_ID, word.corpus!!.surah)
+                dataBundle.putInt(Constant.SURAH_ID, word.corpus.surah)
                 dataBundle.putInt(
                     Constant.AYAHNUMBER,
-                    Math.toIntExact(word.corpus!!.ayah.toLong())
+                    Math.toIntExact(word.corpus.ayah.toLong())
                 )
                 dataBundle.putInt(
                     Constant.WORDNUMBER,
-                    Math.toIntExact(word.corpus!!.wordno.toLong())
+                    Math.toIntExact(word.corpus.wordno.toLong())
                 )
                 dataBundle.putString(Constant.SURAH_ARABIC_NAME, SurahName)
-              LoadItemList(dataBundle, word.wbw!!)
+              LoadItemList(dataBundle, word.wbw)
             }
             //   } else {
             view.setOnLongClickListener { v: View? ->
                 val utils = Utils(QuranGrammarApplication.context!!)
                 val verbCorpusRootWords =
                     utils.getQuranRoot(
-                        word.corpus!!.surah,
-                        word.corpus!!.ayah,
-                        word.corpus!!.wordno
+                        word.corpus.surah,
+                        word.corpus.ayah,
+                        word.corpus.wordno
                     )
-                if (verbCorpusRootWords!!.isNotEmpty() && verbCorpusRootWords[0]!!.tag == "V") {
+                if (verbCorpusRootWords.isNotEmpty() && verbCorpusRootWords[0].tag == "V") {
                     //    vbdetail = ams.getVerbDetails();
                     print("check")
                 }
                 val corpusNounWord =
                     utils.getQuranNouns(
-                        word.corpus!!.surah,
-                        word.corpus!!.ayah,
-                        word.corpus!!.wordno
+                        word.corpus.surah,
+                        word.corpus.ayah,
+                        word.corpus.wordno
                     )
                 val verbCorpusRootWord =
                     utils.getQuranRoot(
-                        word.corpus!!.surah,
-                        word.corpus!!.ayah,
-                        word.corpus!!.wordno
+                        word.corpus.surah,
+                        word.corpus.ayah,
+                        word.corpus.wordno
                     )
                 val qm = WordMorphologyDetails(
-                    word.corpus!!,
-                    corpusNounWord!!, verbCorpusRootWord!!
+                    word.corpus,
+                    corpusNounWord, verbCorpusRootWord
                 )
                  val workBreakDown = qm.workBreakDown
 
@@ -686,13 +681,13 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
                     ContextCompat.getColor(context, R.color.background_color_light_brown)
                 when (isNightmode) {
                     "dark", "blue", "green" -> color =
-                        ContextCompat.getColor(context, com.example.mushafconsolidated.R.color.background_color)
+                        ContextCompat.getColor(context, R.color.background_color)
 
-                    "brown" -> color = ContextCompat.getColor(context, com.example.mushafconsolidated.R.color.neutral0)
+                    "brown" -> color = ContextCompat.getColor(context, R.color.neutral0)
                     "light" ->                             //  case "white":
                         color = ContextCompat.getColor(
                             context,
-                            com.example.mushafconsolidated.R.color.background_color_light_brown
+                            R.color.background_color_light_brown
                         )
                 }
     /*            val popupView = LayoutInflater.from(context).inflate(R.layout.summary_negation, null)
@@ -754,19 +749,19 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
                                 ((WordbywordMushafAct)context).pauseplay();
                             }*/
                 val dialog = Dialog(context)
-                dialog.setTitle(word.corpus!!.araone + word.corpus!!.aratwo + word.corpus!!.arathree + word.corpus!!.arafour + word.corpus!!.arafive)
+                dialog.setTitle(word.corpus.araone + word.corpus.aratwo + word.corpus.arathree + word.corpus.arafour + word.corpus.arafive)
                 val dataBundle = Bundle()
-                dataBundle.putInt(Constant.SURAH_ID, word.corpus!!.surah)
+                dataBundle.putInt(Constant.SURAH_ID, word.corpus.surah)
                 dataBundle.putInt(
                     Constant.AYAHNUMBER,
-                    Math.toIntExact(word.corpus!!.ayah.toLong())
+                    Math.toIntExact(word.corpus.ayah.toLong())
                 )
                 dataBundle.putInt(
                     Constant.WORDNUMBER,
-                    Math.toIntExact(word.corpus!!.wordno.toLong())
+                    Math.toIntExact(word.corpus.wordno.toLong())
                 )
                 dataBundle.putString(Constant.SURAH_ARABIC_NAME, SurahName)
-             LoadItemList(dataBundle, word.wbw!!)
+             LoadItemList(dataBundle, word.wbw)
             }
             // }
 
@@ -815,11 +810,11 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
                println("check")
            }*/
         return CorpusUtilityorig.ColorizeRootword(
-            tag.corpus!!.tagone!!,
-            tag.corpus!!.tagtwo!!,
-            tag.corpus!!.tagthree!!,
-            tag.corpus!!.tagfour!!,
-            tag.corpus!!.tagfive!!,
+            tag.corpus.tagone!!,
+            tag.corpus.tagtwo!!,
+            tag.corpus.tagthree!!,
+            tag.corpus.tagfour!!,
+            tag.corpus.tagfive!!,
             rootword
         )!!
     }
@@ -830,16 +825,16 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
                 println("check")
             }*/
         return CorpusUtilityorig.NewSetWordSpan(
-            tag.corpus!!.tagone,
-            tag.corpus!!.tagtwo,
-            tag.corpus!!.tagthree,
-            tag.corpus!!.tagfour,
-            tag.corpus!!.tagfive,
-            tag.corpus!!.araone!!,
-            tag.corpus!!.aratwo!!,
-            tag.corpus!!.arathree!!,
-            tag.corpus!!.arafour!!,
-            tag.corpus!!.arafive!!
+            tag.corpus.tagone,
+            tag.corpus.tagtwo,
+            tag.corpus.tagthree,
+            tag.corpus.tagfour,
+            tag.corpus.tagfive,
+            tag.corpus.araone!!,
+            tag.corpus.aratwo!!,
+            tag.corpus.arathree!!,
+            tag.corpus.arafour!!,
+            tag.corpus.arafive!!
         )
     }
 
@@ -850,14 +845,14 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
         editor.putInt(Constant.AYAH_ID, entity.ayah)
         editor.putString(Constant.SURAH_ARABIC_NAME, SurahName)
         editor.apply()
-        editor.commit();
+        editor.commit()
     }
 
     private fun setChapterInfo(holder: ItemViewAdapter, verse: ArrayList<QuranCorpusWbw>?) {
         val surahInfo = java.lang.StringBuilder()
         //        surahInfo.append(surahName+".");
-        surahInfo.append(verse!![0].corpus!!.surah).append(".")
-        surahInfo.append(verse[0].corpus!!.ayah).append("-")
+        surahInfo.append(verse!![0].corpus.surah).append(".")
+        surahInfo.append(verse[0].corpus.ayah).append("-")
         surahInfo.append(SurahName)
         val sharedPreferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(
             context
@@ -936,11 +931,10 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
         private lateinit var ivoverflow: ImageView
         private lateinit var ivoverflow2: ImageView
 
-        //  public   com.nex3z.flowlayout.FlowLayout  flow_word_by_word;
+
         lateinit var flow_word_by_word: FlowLayout
 
-        //   RelativeLayout colllayout;
-        lateinit var erabnotescardView: CardView
+        private lateinit var erabnotescardView: CardView
         private lateinit var mafoolatarow: ImageView
         private lateinit var hiddenGroup: Group
         lateinit var base_cardview: MaterialCardView
@@ -951,7 +945,7 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
         lateinit var helpfb: FloatingActionButton
         lateinit var summbaryfb: FloatingActionButton
         lateinit var sharescreenfb: FloatingActionButton
-        lateinit var collectionfb: FloatingActionButton
+        private lateinit var collectionfb: FloatingActionButton
 
         init {
             view.tag = this
@@ -979,35 +973,30 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
                 ivoverflow2 = view.findViewById(R.id.ivActionOverflowtwo)
                 ivoverflow2.setOnClickListener(this)
                 ivoverflow2.tag = "overflowbottom"
-                //   makkimadaniicon = view.findViewById(R.id.makkimadaniicon)
-                //    jumpto = view.findViewById(R.id.jumpto);
-                //   bismilla = view.findViewById(R.id.bismillah)
+
                 quran_transliterationnote = view.findViewById(R.id.quran_transliterationnote)
                 quran_jalalaynnote = view.findViewById(R.id.quran_jalalaynnote)
                 translate_textViewnote = view.findViewById(R.id.translate_textViewnote)
                 erab_textViewnote = view.findViewById(R.id.erab_textViewnote)
 
-                //   translate_textViewnoteen = view.findViewById(R.id.translate_textViewnoteen)
                 erab_textViewnoteen = view.findViewById(R.id.erab_textViewnoteen)
                 quran_transliteration = view.findViewById(R.id.quran_transliteration)
                 quran_jalalayn = view.findViewById(R.id.quran_jalalayn)
                 surah_info = view.findViewById(R.id.chaptername)
-                //    verse_idTextView = view.findViewById(R.id.verse_id_textView);
+
                 flow_word_by_word = view.findViewById(R.id.flow_word_by_word)
                 translate_textView = view.findViewById(R.id.translate_textView)
                 erab_textView = view.findViewById(R.id.erab_textView)
                 erab_textViewen = view.findViewById(R.id.erab_textViewen)
-                //     erab_textView.setTextIsSelectable(true);
+
                 quran_textView = view.findViewById(R.id.quran_textView)
                 erab_notes = view.findViewById(R.id.erab_notes)
-                //     bookmark = view.findViewById(R.id.bookmarkView);
+
                 erabexpand = view.findViewById(R.id.erabexpand)
                 erabexpanden = view.findViewById(R.id.erabexpanden)
-
                 erab_notes_expand = view.findViewById(R.id.erab_img)
                 erab_notes_expanden = view.findViewById(R.id.erab_img)
-//                expandImageButton = view.findViewById(R.id.expandImageButton)
-                quran_textView.setOnClickListener(this)
+                 quran_textView.setOnClickListener(this)
                 quran_textView.tag = "qurantext"
                 erab_notes_expand.setOnClickListener(this)
                 erab_notes_expand.tag = "erab_notes"
@@ -1132,24 +1121,13 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
                             sharescreenfb.animate().rotationBy(360f)
                             sharescreenfb.animate().duration = 500
                         }
-                 /*       tafsir.setOnClickListener { view12: View? ->
-                            closeFABMenu()
-                            val readingintent =
-                                Intent(context, TafsirFullscreenActivity::class.java)
-                            val chapter_no = ayahWord!![0].corpus!!.surah
-                            val verse = ayahWordArrayList[position - 1]!![0].corpus!!.ayah
 
-                            readingintent.putExtra(Constant.SURAH_ID, chapter_no)
-                            readingintent.putExtra(Constant.AYAH_ID, verse)
-                            readingintent.putExtra(Constant.SURAH_ARABIC_NAME, SurahName)
-                            context.startActivity(readingintent)
-                        }*/
                         summbaryfb.setOnClickListener { v: View? ->
                             closeFABMenu()
                             //  HideFabMenu();
-                            val chapter_no = ayahWord!![0].corpus!!.surah
+                            val chapter_no = ayahWord!![0].corpus.surah
                             //   int verse = ayahWord.getWord().get(0).getVerseId();
-                            val verse = ayahWordArrayList[position - 1]!![0].corpus!!.ayah
+                            val verse = ayahWordArrayList[position - 1]!![0].corpus.ayah
                             val dataBundle = Bundle()
                             dataBundle.putInt(Constant.SURAH_ID, chapter_no)
                             val item = SurahSummary()
