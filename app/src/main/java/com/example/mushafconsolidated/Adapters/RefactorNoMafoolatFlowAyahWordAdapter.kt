@@ -21,6 +21,7 @@ import android.os.Environment
 import android.preference.PreferenceManager
 import android.text.Html
 import android.text.SpannableString
+import android.text.SpannableString.valueOf
 import android.text.format.DateFormat
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -44,8 +45,9 @@ import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SurahSummary
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
-import com.example.mushafconsolidated.model.NewNewQuranCorpusWbw
 import com.example.mushafconsolidated.model.NewQuranCorpusWbw
+import com.example.mushafconsolidated.model.QuranCorpusWbw
+
 import com.example.mushafconsolidatedimport.Config
 import com.example.utility.AnimationUtility
 import com.example.utility.CorpusUtilityorig
@@ -72,7 +74,8 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
 
     private val header: ArrayList<String>,
 
-    private val ayahWordArrayList: LinkedHashMap<Int, ArrayList<NewNewQuranCorpusWbw>>,
+    private val allofQuran: List<QuranEntity>,
+    private val ayahWordArrayList: LinkedHashMap<Int, ArrayList<QuranCorpusWbw>>,
     var context: Context,
     private val SurahName: String,
     private val isMakkiMadani: Int,
@@ -80,7 +83,7 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
 ) : RecyclerView.Adapter<RefactorNoMafoolatFlowAyahWordAdapter.ItemViewAdapter>() //implements OnItemClickListenerOnLong {
 {
     private var wordByWordDisplay: Boolean = false
-    private var ayahWord: ArrayList<NewNewQuranCorpusWbw>? = null
+    private var ayahWord: ArrayList<QuranCorpusWbw>? = null
     private var defaultfont: Boolean = false
     private var isFABOpen = false
     private var issentence: Boolean = false
@@ -153,9 +156,13 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
         return ItemViewAdapter(view, viewType)
     }
 
-    fun getItem(position: Int): NewNewQuranCorpusWbw? {
+/*    fun getItem(position: Int): QuranCorpusWbw? {
         //    return ayahWordArrayList!![0].word!![position]
         return ayahWordArrayList.get(position)!![position]
+    }*/
+    fun getItem(position: Int): QuranEntity? {
+        //    return ayahWordArrayList!![0].word!![position]
+        return allofQuran!![position]
     }
 
     @SuppressLint("ResourceType")
@@ -303,12 +310,18 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
         var entity: QuranEntity? = null
         val wbw = sharedPreferences.getString("wbw", "en")
 
-        //   String wbw = sharedPreferences.getString("wordByWord", String.valueOf(Context.MODE_PRIVATE));
-
+        //   String w bw = sharedPreferences.getString("wordByWord", String.valueOf(Context.MODE_PRIVATE));
+        try {
+            entity = allofQuran!![position]
+        } catch (e: IndexOutOfBoundsException) {
+            println("check")
+        }
 
         ayahWord = this.ayahWordArrayList[position+1]
         entity?.let { storepreferences(it) }
-        setAyahGrammaticalPhrases(holder, ayahWord!!?.get(0)?.spannableverse,
+        val spannableverse=     valueOf(SpannableString(entity?.qurantext))
+      //val spannableverse=  valueOf(entity?.qurantext)
+       setAyahGrammaticalPhrases(holder, spannableverse,
             ayahWord!![0].corpus!!.ayah, (ayahWord!![0]!!?.corpus?.surah ?:1) as Int
         )
 
@@ -458,8 +471,8 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
         holder: ItemViewAdapter,
         showWordColor: Boolean,
         wbw: String?,
-        ayahWord: ArrayList<NewNewQuranCorpusWbw>?,
-        ayahWordArrayList: LinkedHashMap<Int, ArrayList<NewNewQuranCorpusWbw>>,
+        ayahWord: ArrayList<QuranCorpusWbw>?,
+        ayahWordArrayList: LinkedHashMap<Int, ArrayList<QuranCorpusWbw>>,
         showWbwTranslation: Boolean,
         position: Int,
     ) {
@@ -535,17 +548,17 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
             if (showWbwTranslation) {
                 when (wbw) {
                     "en" -> {
-                        translation.text = word.corpus!!.en
+                        translation.text = word.wbw!!.en
                         translation.paintFlags = translation.paintFlags or Paint.UNDERLINE_TEXT_FLAG
                     }
 
                     "bn" -> {
-                        translation.text = word.corpus!!.bn
+                        translation.text = word.wbw!!.bn
                         translation.paintFlags = translation.paintFlags or Paint.UNDERLINE_TEXT_FLAG
                     }
 
                     "in" -> {
-                        translation.text = word.corpus!!.`in`
+                        translation.text = word.wbw!!.`in`
                         translation.paintFlags = translation.paintFlags or Paint.UNDERLINE_TEXT_FLAG
                     }
 
@@ -796,7 +809,7 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
         }
     }
 
-    private fun getSpannedRoots(tag: NewNewQuranCorpusWbw, rootword: String): SpannableString {
+    private fun getSpannedRoots(tag: QuranCorpusWbw, rootword: String): SpannableString {
         /*   val b = corpus.corpus.ayah == 20 && (corpus.corpus.wordno == 2 || corpus.corpus.wordno == 9)
            if (b) {
                println("check")
@@ -811,7 +824,7 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
         )!!
     }
 
-    private fun getSpannedWords(tag: NewNewQuranCorpusWbw): SpannableString {
+    private fun getSpannedWords(tag: QuranCorpusWbw): SpannableString {
         /*    val b =tag.corpus!!.surah == 20 && (corpus.wordno == 2 ||tag.corpus!!.wordno == 9)
             if (b) {
                 println("check")
@@ -840,7 +853,7 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
         editor.commit();
     }
 
-    private fun setChapterInfo(holder: ItemViewAdapter, verse: ArrayList<NewNewQuranCorpusWbw>?) {
+    private fun setChapterInfo(holder: ItemViewAdapter, verse: ArrayList<QuranCorpusWbw>?) {
         val surahInfo = java.lang.StringBuilder()
         //        surahInfo.append(surahName+".");
         surahInfo.append(verse!![0].corpus!!.surah).append(".")

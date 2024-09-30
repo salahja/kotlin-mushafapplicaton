@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import com.example.mushafconsolidated.Entities.QuranEntity
+import com.example.mushafconsolidated.model.NewQuranCorpusWbw
 import com.example.mushafconsolidated.model.QuranCorpusWbw
 import com.example.mushafconsolidated.model.QuranEntityCorpusEntityWbwEntity
 import com.example.mushafconsolidated.model.QuranwithCorpusWbw
@@ -111,9 +112,10 @@ interface QuranDao {
 
     fun getQuranCorpusWbwbysurah(surahid: Int): List<QuranCorpusWbw>
 
+
+
     @Transaction
     @Query("SELECT * FROM CorpusExpand JOIN wbw ON wbw.id = CorpusExpand.id where  CorpusExpand.rootaraone||CorpusExpand.rootaratwo ||CorpusExpand.rootarathree||CorpusExpand.rootarafour||CorpusExpand.rootarafive=:root")
-
 
     fun getQuranCorpusWbwbyRoot(root: String): List<QuranCorpusWbw>
 
