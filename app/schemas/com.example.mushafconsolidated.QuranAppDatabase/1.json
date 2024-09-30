@@ -2,8 +2,40 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "251853add599375410b528a3b3755adc",
+    "identityHash": "33f7477f563aecfd59d405190b85e3ae",
     "entities": [
+      {
+        "tableName": "surahjson",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surah` INTEGER NOT NULL, `jasonstr` TEXT NOT NULL, `docid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "surah",
+            "columnName": "surah",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "jasonstr",
+            "columnName": "jasonstr",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "docid",
+            "columnName": "docid",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "docid"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
       {
         "tableName": "mufradat_verses",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `SurahNumber` INTEGER NOT NULL, `AyahNumber` INTEGER NOT NULL, `AyahTextQalam` TEXT NOT NULL, `AyahTextMuhammadi` INTEGER NOT NULL, `AyahTextPdms` TEXT NOT NULL, `AyahTextPlain` TEXT NOT NULL, `Translation` TEXT NOT NULL, `Tafseer` TEXT NOT NULL, `Words` TEXT NOT NULL, `SurahName` TEXT NOT NULL, `Ruku` INTEGER NOT NULL, `Sajda` INTEGER NOT NULL, `ParahNumber` INTEGER NOT NULL, `RukuParahNumber` INTEGER NOT NULL, `RukuSurahNumber` TEXT NOT NULL)",
@@ -2179,7 +2211,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '251853add599375410b528a3b3755adc')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '33f7477f563aecfd59d405190b85e3ae')"
     ]
   }
 }
