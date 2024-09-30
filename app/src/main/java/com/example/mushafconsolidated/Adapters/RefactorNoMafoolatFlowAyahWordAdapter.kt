@@ -601,12 +601,12 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
                         word.corpus!!.ayah,
                         word.corpus!!.wordno
                     )
-            /*    val qm = WordMorphologyDetails(
+             val qm = WordMorphologyDetails(
                     word.corpus!!,
                     corpusNounWord!!, verbCorpusRootWord!!
-                )*/
-              //  val workBreakDown = qm.workBreakDown
-                val workBreakDown = SpannableString("check")
+                )
+             val workBreakDown = qm.workBreakDown
+
                 var color =
                     ContextCompat.getColor(context, R.color.background_color_light_brown)
                 when (isNightmode) {
@@ -649,7 +649,7 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
                     Math.toIntExact(word.corpus!!.wordno.toLong())
                 )
                 dataBundle.putString(Constant.SURAH_ARABIC_NAME, SurahName)
-           //     LoadItemList(dataBundle, word.wbw!!)
+              LoadItemList(dataBundle, word.wbw!!)
             }
             //   } else {
             view.setOnLongClickListener { v: View? ->
@@ -676,12 +676,12 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
                         word.corpus!!.ayah,
                         word.corpus!!.wordno
                     )
-            /*    val qm = WordMorphologyDetails(
+                val qm = WordMorphologyDetails(
                     word.corpus!!,
                     corpusNounWord!!, verbCorpusRootWord!!
-                )*/
-              //  val workBreakDown = qm.workBreakDown
-                val workBreakDown = ""
+                )
+                 val workBreakDown = qm.workBreakDown
+
                 var color =
                     ContextCompat.getColor(context, R.color.background_color_light_brown)
                 when (isNightmode) {
@@ -766,7 +766,7 @@ class RefactorNoMafoolatFlowAyahWordAdapter(
                     Math.toIntExact(word.corpus!!.wordno.toLong())
                 )
                 dataBundle.putString(Constant.SURAH_ARABIC_NAME, SurahName)
-               // LoadItemList(dataBundle, word.wbw!!)
+             LoadItemList(dataBundle, word.wbw!!)
             }
             // }
 
