@@ -80,8 +80,8 @@ import com.example.mushafconsolidated.fragments.NewSurahDisplayFrag
 import com.example.mushafconsolidated.fragments.ScrollingFragment
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
 import com.example.mushafconsolidated.fragments.FlowAyahWordAdapter
-import com.example.mushafconsolidated.fragments.NoMafoolatFlowAyahWordAdapter
-import com.example.mushafconsolidated.Adapters.RefactorNoMafoolatFlowAyahWordAdapter
+import com.example.mushafconsolidated.Adapters.FlowAyahWordAdapterNoMafoolat
+import com.example.mushafconsolidated.Entities.SurahHeader
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.model.NewNewQuranCorpusWbw
 import com.example.mushafconsolidated.model.NewQuranCorpusWbw
@@ -145,13 +145,13 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         LinkedHashMap()
     private  var corpusGroupedByAyah:LinkedHashMap<Int, ArrayList<QuranCorpusWbw>> =
         LinkedHashMap()
-    private lateinit var newflowAyahWordAdapter: FlowAyahWordAdapter
-    private lateinit var nomafoolatflowAyahWordAdapter: NoMafoolatFlowAyahWordAdapter
-    private lateinit var refactornomafoolatflowAyahWordAdapter: RefactorNoMafoolatFlowAyahWordAdapter
+
+
     lateinit var binding: NewFragmentReadingBinding
-    private lateinit var surahWheelDisplayData: Array<String>
+
     private lateinit var btnBottomSheet: FloatingActionButton
     lateinit var surahArabicName: String
+    lateinit var surahEnglishName: String
     private var jumptostatus = false
     var surahId = 0
     private var verseNumber = 0
@@ -319,6 +319,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             chapterno = chapter
 
             surahArabicName = list!![chapter - 1].abjadname
+            surahEnglishName=list!![chapter-1].nameenglish
             //   setChapterno( bundle.etIntExtra(SURAH_ID,2));
             //  verseNo = bundle!!.getIntExtra(Constant.AYAH_ID, 1)
             versescount = list[chapter - 1].versescount
@@ -340,7 +341,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             isMakkiMadani = list[chapterno - 1].ismakki
             rukucount = list[chapterno - 1].rukucount
             surahArabicName = surahname.toString()
-
+            surahEnglishName=list[chapterno-1].nameenglish
 
             supportFragmentManager.commit {
                 replace<NewSurahDisplayFrag>(R.id.frame_container_qurangrammar, SURAHFRAGTAG)
@@ -905,7 +906,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                     if (jumptostatus) {
                         surahorpart = chapterno
                     }
-                    val header = arrayListOf(rukucount.toString(), versescount.toString(), chapterno.toString(), surahArabicName)
+                    val header=SurahHeader(rukucount,versescount,chapterno,surahArabicName,surahEnglishName)
                     HightLightKeyWord(allofQuran)
 
                     val adapter = if (!mushafview && mafoolat) {
@@ -926,7 +927,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                             listener
                         )
                     } else {
-                        RefactorNoMafoolatFlowAyahWordAdapter(
+                        FlowAyahWordAdapterNoMafoolat(
                             false,
                             header,
                             allofQuran,
@@ -1008,8 +1009,9 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                     if (jumptostatus) {
                         surahorpart = chapterno
                     }
-                    val header = arrayListOf(rukucount.toString(), versescount.toString(), chapterno.toString(), surahArabicName)
-                    HightLightKeyWord(allofQuran)
+                    val header=SurahHeader(rukucount,versescount,chapterno,surahArabicName," ")
+                 //   val header = arrayListOf(rukucount.toString(), versescount.toString(), chapterno.toString(), surahArabicName)
+                 //   HightLightKeyWord(allofQuran)
 
                     val adapter = if (!mushafview && mafoolat) {
                         FlowAyahWordAdapter(
@@ -1029,7 +1031,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                             listener
                         )
                     } else {
-                        RefactorNoMafoolatFlowAyahWordAdapter(
+                        FlowAyahWordAdapterNoMafoolat(
                             false,
                             header,
                             allofQuran,
@@ -1238,7 +1240,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                 if (jumptostatus) {
                     surahorpart = chapterno
                 }
-                val header = arrayListOf(rukucount.toString(), versescount.toString(), chapterno.toString(), surahArabicName)
+                val header=SurahHeader(rukucount,versescount,chapterno,surahArabicName,surahEnglishName)
                 HightLightKeyWord(allofQuran) // Make sure allofQuran is initialized correctly
 
                 val adapter = if (!mushafview && mafoolat) {
@@ -1248,7 +1250,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                         surahArabicName, isMakkiMadani, listener
                     )
                 } else {
-                    RefactorNoMafoolatFlowAyahWordAdapter(
+                    FlowAyahWordAdapterNoMafoolat(
                         false, header, allofQuran, corpusGroupedByAyah, this@QuranGrammarAct,
                         surahArabicName, isMakkiMadani, listener
                     )

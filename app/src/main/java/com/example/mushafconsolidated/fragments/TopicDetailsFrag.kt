@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Constant
 import com.example.mushafconsolidated.Activity.TafsirFullscreenActivity
-import com.example.mushafconsolidated.Adapters.NewTopicFlowAyahWordAdapter
 import com.example.mushafconsolidated.Adapters.fragTopicFlowAyahWordAdapter
 import com.example.mushafconsolidated.Entities.BookMarks
 import com.example.mushafconsolidated.Entities.QuranEntity
@@ -86,7 +85,7 @@ class TopicDetailsFrag : DialogFragment(), OnItemClickListenerOnLong {
         val bundle: Bundle? = arguments
         // layoutBottomSheet = view.findViewById(R.id.bottom_sheet)
         //  sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet)
-        val surahArrays = resources.getStringArray(R.array.surahdetails)
+
         if (maps.size != 0) {
 
             val surahname = ""
@@ -104,7 +103,8 @@ class TopicDetailsFrag : DialogFragment(), OnItemClickListenerOnLong {
             //   val value = GlobalScope.async {
             //  delay(1000)
             println("thread running on [${Thread.currentThread().name}]")
-
+            mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
+            val surahArrays = mainViewModel.loadListschapter().value
 
             scope.launch {
                 for (key: String in keys) {
@@ -152,6 +152,7 @@ class TopicDetailsFrag : DialogFragment(), OnItemClickListenerOnLong {
             corpusayahWordArrayList = ArrayList()
 
             mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
+            val surahArrays = mainViewModel.loadListschapter().value
             allofQuran =
                 mainViewModel.getsurahayahVerses(surah, ayah).value as ArrayList<QuranEntity>?
             corpusSurahWord = mainViewModel.getQuranCorpusWbwbysurahAyah(surah, ayah).value

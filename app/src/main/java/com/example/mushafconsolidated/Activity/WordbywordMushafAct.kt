@@ -75,7 +75,8 @@ import com.example.mushafconsolidated.databinding.ExoplayerBinding
 import com.example.mushafconsolidated.databinding.FbarnormalfooterBinding
 import com.example.mushafconsolidated.databinding.RxfetchProgressBinding
 import com.example.mushafconsolidated.databinding.VfourExpandableNewactivityShowAyahsBinding
-import com.example.mushafconsolidated.Adapters.RefactorNoMafoolatFlowAyahWordAdapter
+import com.example.mushafconsolidated.Adapters.FlowAyahWordAdapterNoMafoolat
+import com.example.mushafconsolidated.Entities.SurahHeader
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.model.CorpusAyahWord
@@ -129,7 +130,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
     private lateinit var mainViewModel: QuranVIewModel
     private var corpusSurahWord: List<QuranCorpusWbw>? = null
 
-    private lateinit var nomafoolatflowAyahWordAdapter: RefactorNoMafoolatFlowAyahWordAdapter
+    private lateinit var nomafoolatflowAyahWordAdapter: FlowAyahWordAdapterNoMafoolat
 
 
     private var newnewadapterlist = LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>>()
@@ -1289,15 +1290,11 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
                     repository.getSingleChapter(surah) as ArrayList<ChaptersAnaEntity?>?
                 //  initlistview(quranbySurah, chapter);
 
-                val header = ArrayList<String>()
-                header.add(chapter!![0]!!.rukucount.toString())
-                header.add(chapter[0]!!.versescount.toString())
-                header.add(chapter[0]!!.chapterid.toString())
-                header.add(chapter[0]!!.abjadname)
-                header.add(chapter[0]!!.nameenglish)
-                versescount = chapter[0]!!.versescount
-                surahNameEnglish = chapter[0]!!.nameenglish
-                surahNameArabic = chapter[0]!!.namearabic
+
+
+
+                val header= SurahHeader(chapter!!.get(0)!!.rukucount,chapter!!.get(0)!!.versescount, chapter[0]!!.chapterid,chapter[0]!!.namearabic,chapter[0]!!.nameenglish)
+
                 val manager = LinearLayoutManager(this@WordbywordMushafAct)
                 manager.orientation = LinearLayoutManager.VERTICAL
                 recyclerView.setHasFixedSize(true)
@@ -1307,7 +1304,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
 
                 recyclerView.layoutManager = manager
 
-                nomafoolatflowAyahWordAdapter = RefactorNoMafoolatFlowAyahWordAdapter(
+                nomafoolatflowAyahWordAdapter = FlowAyahWordAdapterNoMafoolat(
                     true,
 
                     header,

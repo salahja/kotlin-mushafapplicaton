@@ -13,10 +13,12 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mushafconsolidated.Entities.Page
+import com.example.mushafconsolidated.Entities.SurahHeader
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidatedimport.Config
 import com.example.utility.CorpusUtilityorig.Companion.getSpannable
+import com.example.utility.QuranViewUtils
 import java.text.MessageFormat
 
 
@@ -28,12 +30,12 @@ class PageMushaAudioAdapter(
     listener: OnItemClickListenerOnLong?,
     surah_id: Long,
     ismakki: Int,
-    header: ArrayList<String>,
+    header: SurahHeader,
 ) :
     RecyclerView.Adapter<PageMushaAudioAdapter.ItemViewAdapter>() //implements OnItemClickListenerOnLong {
 {
     val surah_id: Long
-    private val header: ArrayList<String>
+    private val header: SurahHeader
     private val isMakkiMadani: Int
 
     // --Commented out by Inspection (25/08/23, 7:28 pm):public TextView arabic, rootword;
@@ -153,25 +155,26 @@ class PageMushaAudioAdapter(
         if (getItemViewType(position) == 0) {
             val imgs = context.resources.obtainTypedArray(R.array.sura_imgs)
 
+
             // You have to set your header items values with the help of model class and you can modify as per your needs
-            holder.tvRukus!!.text = String.format("Ruku's :%s", header[0])
-            holder.tvVerses!!.text = String.format("Aya's :%s", header[1])
-            holder.tvSura!!.text = header[3]
-            val chapterno = header[2]
+            holder.tvRukus!!.text = String.format("Ruku's :%s", header.rukus)
+            holder.tvVerses!!.text = String.format("Aya's :%s", header.verses)
+            holder.tvSura!!.text = header.surahNameAr
+            val chapterno = header.chapterNumber
             val tauba = chapterno.toInt()
-            if (tauba == 9) {
+            if (header.chapterNumber == TAUBA_CHAPTER_NUMBER) {
                 holder.ivBismillah!!.visibility = View.GONE
             }
-            if (isMakkiMadani == 1) {
-                holder.ivLocationmakki!!.visibility = View.VISIBLE
-                holder.ivLocationmadani!!.visibility = View.GONE
-            } else {
-                holder.ivLocationmadani!!.visibility = View.VISIBLE
-                holder.ivLocationmakki!!.visibility = View.GONE
-            }
-            val drawable = imgs.getDrawable(chapterno.toInt() - 1)
+
+
+            val revelationCity = if (isMakkiMadani == 1) RevalationCity.MAKKI else RevalationCity.MADANI
+            QuranViewUtils.setLocationVisibility(holder.ivLocationmakki!!,
+                holder.ivLocationmadani!!,revelationCity)
+            //   setLocationVisibility(holder, if (isMakkiMadani == 1) RevalationCity.MAKKI else RevalationCity.MADANI)
+            val drawable = imgs.getDrawable(header.chapterNumber - 1)
             imgs.recycle()
             holder.ivSurahIcon!!.setImageDrawable(drawable)
+
             var headercolor: Int
             if (isNightmode == "dark" || isNightmode == "blue" || isNightmode == "green") {
                 holder.ivLocationmakki!!.setColorFilter(Color.CYAN)
@@ -204,111 +207,7 @@ class PageMushaAudioAdapter(
         }
     }
 
-    // --Commented out by Inspection START (25/08/23, 7:28 pm):
-    //    public void displayAyats(boolean showrootkey, PageMushaAudioAdapter.ItemViewAdapter holder, int position, SharedPreferences sharedPreferences, Typeface custom_font, boolean showErab, boolean showWordColor, boolean showTransliteration, boolean showJalalayn, boolean showTranslation, boolean showWordByword, String whichtranslation, boolean showKathir) {
-    //        //   holder.flowwbw.setBackgroundColor(R.style.Theme_DarkBlue);
-    //        QuranEntity entity = null;
-    //
-    //        //   String wbw = sharedPreferences.getString("wordByWord", String.valueOf(Context.MODE_PRIVATE));
-    //
-    //
-    //
-    //
-    //    /*    if(entity.getPassage_no()!=0){
-    //            StringBuilder builder = new StringBuilder();
-    //            builder.append(entity.getQurantext());
-    //            builder.append(MessageFormat.format("{0} ﴿ {1} ﴾ {2}", aya, entity.getAyah(),R.drawable.ruku_new));
-    //            //     builder.append("۩");
-    //            holder.quran_textView.setText(entity.getQurantext());
-    //            holder.quran_textView.setTextSize(arabicfontSize);
-    //            holder.quran_textView.setTypeface(custom_font);
-    //
-    //          //  holder.sajdaverse.setImageResource(R.drawable.ruku_new);
-    //
-    //        }*/
-    //
-    //     /*   if(entity.getHas_prostration()==1) {
-    //
-    //            StringBuilder builders = new StringBuilder();
-    //            builder.append(entity.getQurantext());
-    //            builder.append(MessageFormat.format("{0} ﴿ {1} ﴾ ۩", aya, entity.getAyah()));
-    //       //     builder.append("۩");
-    //            holder.quran_textView.setText(builder.toString());
-    //            holder.quran_textView.setTextSize(arabicfontSize);
-    //            holder.quran_textView.setTypeface(custom_font);
-    //        }else{
-    //            StringBuilder builders = new StringBuilder();
-    //            builder.append(entity.getQurantext());
-    //            builder.append(MessageFormat.format("{0} ﴿ {1} ﴾ ", aya, entity.getAyah()));
-    //
-    //            holder.quran_textView.setText(builder.toString());
-    //            holder.quran_textView.setTextSize(arabicfontSize);
-    //            holder.quran_textView.setTypeface(custom_font);
-    //        }
-    //*/
-    //
-    //        System.out.println("Position" + position);
-    //
-    //        if (showTranslation) {
-    //            if (whichtranslation.equals("en_arberry")) {
-    //                if (entity != null) {
-    //                    holder.translate_textView.setText(entity.getEn_arberry());
-    //                }
-    //                holder.translate_textViewnote.setText(R.string.arberry);
-    //                holder.translate_textView.setTextSize(translationfontsize);
-    //                holder.translate_textView.setTextSize(translationfontsize);
-    //                holder.translate_textView.setVisibility(View.VISIBLE);
-    //                holder.translate_textViewnote.setVisibility(View.VISIBLE);
-    //            }
-    //            if (whichtranslation.equals("en_sahih")) {
-    //                if (entity != null) {
-    //                    holder.translate_textView.setText(entity.getTranslation());
-    //                }
-    //                holder.translate_textViewnote.setText(R.string.ensahih);
-    //                holder.translate_textView.setTextSize(translationfontsize);
-    //                holder.translate_textView.setTextSize(translationfontsize);
-    //                holder.translate_textView.setVisibility(View.VISIBLE);
-    //                holder.translate_textViewnote.setVisibility(View.VISIBLE);
-    //            }
-    //            if (whichtranslation.equals("en_jalalayn")) {
-    //                if (entity != null) {
-    //                    holder.translate_textView.setText(entity.getEn_jalalayn());
-    //                }
-    //                holder.translate_textViewnote.setText(R.string.enjalalayn);
-    //                holder.translate_textView.setTextSize(translationfontsize);
-    //                holder.translate_textView.setTextSize(translationfontsize);
-    //                holder.translate_textView.setVisibility(View.VISIBLE);
-    //                holder.translate_textViewnote.setVisibility(View.VISIBLE);
-    //            }
-    //            if (whichtranslation.equals("ur_jalalayn")) {
-    //                if (entity != null) {
-    //                    holder.translate_textView.setText(entity.getUr_jalalayn());
-    //                }
-    //                holder.translate_textViewnote.setText(R.string.enjalalayn);
-    //                holder.translate_textView.setTextSize(translationfontsize);
-    //                holder.translate_textView.setTextSize(translationfontsize);
-    //                holder.translate_textView.setVisibility(View.VISIBLE);
-    //                holder.translate_textViewnote.setVisibility(View.VISIBLE);
-    //            }
-    //            if (whichtranslation.equals("ur_junagarhi")) {
-    //                if (entity != null) {
-    //                    holder.translate_textView.setText(entity.getUr_junagarhi());
-    //                }
-    //                holder.translate_textViewnote.setText(R.string.urjunagadi);
-    //                holder.translate_textView.setTextSize(translationfontsize);
-    //                holder.translate_textView.setTextSize(translationfontsize);
-    //                holder.translate_textView.setVisibility(View.VISIBLE);
-    //                holder.translate_textViewnote.setVisibility(View.VISIBLE);
-    //            }
-    //            holder.translate_textView.setTextSize(translationfontsize);
-    //            holder.translate_textView.setTextSize(translationfontsize);
-    //            holder.translate_textView.setVisibility(View.VISIBLE);
-    //            holder.translate_textViewnote.setVisibility(View.VISIBLE);
-    //
-    //        }
-    //
-    //    }
-    // --Commented out by Inspection STOP (25/08/23, 7:28 pm)
+
     inner class ItemViewAdapter internal constructor(view: View, viewType: Int) :
         RecyclerView.ViewHolder(view), View.OnClickListener, View.OnLongClickListener {
         var pagenum: TextView? = null
