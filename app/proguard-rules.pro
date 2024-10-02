@@ -19,3 +19,20 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+# Keep LeakCanary classes to avoid them from being obfuscated or removed
+-keep class leakcanary.** { *; }
+
+# LeakCanary relies on weak references, which ProGuard may strip out
+-keepclassmembers class * extends java.lang.ref.WeakReference {
+    <init>(...);
+}
+
+# Keep the class that LeakCanary uses for memory analysis
+-keep class com.squareup.leakcanary.** { *; }
+
+# LeakCanary uses the AndroidX Fragment and lifecycle observers, so make sure they are not obfuscated
+-keep class androidx.fragment.app.Fragment { *; }
+-keep class androidx.lifecycle.* { *; }
+
+# Prevent ProGuard from removing obfuscation for classes that may interact with LeakCanary
+-dontwarn leakcanary.**

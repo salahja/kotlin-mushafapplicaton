@@ -14,7 +14,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListener
-import com.example.mushafconsolidatedimport.MushafApplication.Companion.appContext
+import com.example.utility.QuranGrammarApplication
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 
@@ -99,7 +99,7 @@ class BottomOptionDialog : BottomSheetDialogFragment() {
             ivCopy.setOnClickListener {
                 val editor =
 
-                    android.preference.PreferenceManager.getDefaultSharedPreferences(appContext)
+                    android.preference.PreferenceManager.getDefaultSharedPreferences(QuranGrammarApplication.context)
                         .edit()
 
                 //     SharedPreferences.Editor editor = getActivity().getSharedPreferences("properties", 0).edit();
@@ -109,7 +109,7 @@ class BottomOptionDialog : BottomSheetDialogFragment() {
             }
             ivBookmark.setOnClickListener {
                 val editor =
-                    android.preference.PreferenceManager.getDefaultSharedPreferences(appContext)
+                    android.preference.PreferenceManager.getDefaultSharedPreferences(QuranGrammarApplication.context)
                         .edit()
                 //     SharedPreferences.Editor editor = getActivity().getSharedPreferences("properties", 0).edit();
                 editor.putString("quranFont", "me_quran.ttf")
@@ -118,7 +118,7 @@ class BottomOptionDialog : BottomSheetDialogFragment() {
             }
             ivShare.setOnClickListener {
                 val editor =
-                    android.preference.PreferenceManager.getDefaultSharedPreferences(appContext)
+                    android.preference.PreferenceManager.getDefaultSharedPreferences(QuranGrammarApplication.context)
                         .edit()
                 //     SharedPreferences.Editor editor = getActivity().getSharedPreferences("properties", 0).edit();
                 editor.putString("quranFont", "Pdms.ttf")

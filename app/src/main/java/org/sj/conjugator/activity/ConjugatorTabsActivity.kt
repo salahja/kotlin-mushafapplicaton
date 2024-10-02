@@ -51,11 +51,7 @@ class ConjugatorTabsActivity :  BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newtabs)
-//        val callButton: FloatingActionButton = findViewById(R.id.action_button)
-//        callButton.setOnClickListener { view: View? ->
-//            // viewPager.adapters=null;
-//            finish()
-//        }
+
         val fm: FragmentManager = getSupportFragmentManager()
         val sa: ViewStateAdapter = ViewStateAdapter(fm, lifecycle)
         val viewPager: ViewPager2 = findViewById(R.id.pager)
@@ -138,12 +134,40 @@ class ConjugatorTabsActivity :  BaseActivity() {
         // And now we have tabs that, when clicked, navigate to the correct page
     }
 
+
     private inner class ViewStateAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
+        FragmentStateAdapter(fragmentManager, lifecycle) {
+        override fun getItemCount(): Int {
+            return if (ismujarrad) {
+                NUM_PAGES_THULATHI
+            } else {
+                NUM_PAGES_MAZEED
+            }
+        }
+        // ... (other code)
+
+        override fun createFragment(position: Int): Fragment {
+            return when (position) {
+                0 -> MazeedTabSagheerFragmentVerb(QuranGrammarApplication.context!!).apply { arguments = dataBundle }
+                1 -> FragmentVerb().apply { arguments = dataBundle }
+                2 -> FragmentIsmfaelIsmMafools().apply { arguments = dataBundle }
+                3 -> FragmentIsmIsmAla().apply { arguments = dataBundle }
+                4 -> FragmentIsmZarf().apply { arguments = dataBundle }
+                else -> FragmentVerb().apply { arguments = dataBundle }
+            }
+        }
+
+        // ... (other code)
+    }
+
+
+
+    /*private inner class ViewStateAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
         FragmentStateAdapter(fragmentManager, lifecycle) {
         override fun createFragment(position: Int): Fragment {
             // Hardcoded in this order, you'll want to use lists and make sure the titles match
             if (position == 0) {
-                val fragv = MazeedTabSagheerFragmentVerb(this@ConjugatorTabsActivity)
+                val fragv = MazeedTabSagheerFragmentVerb(QuranGrammarApplication.context!!)
                 fragv.arguments = dataBundle
                 return fragv.newInstance()
             } else if (position == 1) {
@@ -175,7 +199,7 @@ class ConjugatorTabsActivity :  BaseActivity() {
                 NUM_PAGES_MAZEED
             }
         }
-    }
+    }*/
 
     companion object {
         private const val NUM_PAGES_THULATHI = 5

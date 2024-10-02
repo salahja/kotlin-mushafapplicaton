@@ -59,11 +59,7 @@ class FragmentVerb : Fragment() {
         }
         //   callButton.setVisibility(View.VISIBLE);
         callButton.setOnClickListener {
-            val fm = activity
-                ?.supportFragmentManager
-            if (fm != null) {
-                fm.popBackStack()
-            }
+            activity?.supportFragmentManager?.popBackStack()
         }
         assert(dataBundle != null)
         if (dataBundle!!.getString(VERBTYPE) == "mujarrad") {
@@ -116,6 +112,10 @@ class FragmentVerb : Fragment() {
         recyclerView.layoutManager = layoutManager
     }
 
-    companion object {
+    override fun onDestroyView() {
+        super.onDestroyView()
+        recyclerView?.adapter = null // Clear adapter reference
+        skabeer.clear() // Clear the ArrayList
+        // ... unregister other listeners if necessary
     }
 }

@@ -146,7 +146,7 @@ dependencies {
     implementation("org.tukaani:xz:1.9")
     implementation("androidx.compose.material3:material3:1.2.1")
     implementation("com.google.android.material:material:1.12.0")
-    
+
 }
 
 kapt {
