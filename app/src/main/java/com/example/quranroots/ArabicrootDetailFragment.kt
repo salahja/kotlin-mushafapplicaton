@@ -39,12 +39,15 @@ class ArabicrootDetailFragment : Fragment(), AdapterView.OnItemClickListener, Se
  * fragment (e.g. upon screen orientation changes).
  */
 
+
+
     /**
      * The placeholder content this fragment is presenting.
      */
     private var mItem: PlaceholderContent.PlaceholderItem? = null
     private val mToolbarLayout: CollapsingToolbarLayout? = null
     private val mTextView: TextView? = null
+    private lateinit var  recyclerView:RecyclerView
     private var rootsArrayList = ArrayList<String>()
     private var adapter: RootDetailAdapter? = null
     var binding: FragmentVerbrootDetailsListBinding? = null
@@ -73,7 +76,7 @@ class ArabicrootDetailFragment : Fragment(), AdapterView.OnItemClickListener, Se
         val view: View =
             inflater.inflate(R.layout.fragment_arabicroot_details_list, container, false)
 
-        val recyclerView: RecyclerView = binding!!.verbrootDetaillistRec
+         recyclerView= binding!!.verbrootDetaillistRec
 
 
         var layoutManager = LinearLayoutManager(activity)
@@ -98,11 +101,13 @@ class ArabicrootDetailFragment : Fragment(), AdapterView.OnItemClickListener, Se
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
+        recyclerView.adapter = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter?.SetOnItemClickListener(object : OnItemClickListener {
+
+        adapter?.setOnItemClickListener(object : OnItemClickListener {
             override fun onItemClick(v: View?, position: Int) {
                 val bmark = adapter!!.getItem(position) as String
                 //        ChaptersAnaEntity surah = (ChaptersAnaEntity) bookmarksShowAdapter.getItem(position);

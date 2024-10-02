@@ -18,10 +18,12 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.RelativeLayout
+
 import com.example.Constant.QURAN_VERB_ROOT
 import com.example.mushafconsolidated.Entities.qurandictionary
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.Utils
+import com.example.mushafconsolidated.databinding.RoundArabicKeyboardBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -43,11 +45,7 @@ class SearchKeyBoardAct : BaseActivity(), View.OnClickListener {
     private lateinit var keyboard: View
     private lateinit var inputConnection: InputConnection
     private lateinit var actv: AutoCompleteTextView
-
-    // --Commented out by Inspection START (22/08/23, 5:56 pm):
-    //    public void setInputtext(String inputtext) {
-    //    }
-    // --Commented out by Inspection STOP (22/08/23, 5:56 pm)
+    private lateinit var roundArabicKeyboardBinding: RoundArabicKeyboardBinding
     override fun onBackPressed() {
         Timber.tag("CDA").d("onBackPressed Called")
         super@SearchKeyBoardAct.finish()
@@ -58,14 +56,10 @@ class SearchKeyBoardAct : BaseActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.search_key_activity_autocomplete)
         hideKeyboard(this@SearchKeyBoardAct)
+
         keyboard = findViewById(R.id.arabic_keyboard)
-        val callButton = findViewById<FloatingActionButton>(R.id.action_buttons)
-//        callButton.setOnClickListener { view: View? ->
-//            super@SearchKeyBoardAct.finish()
-//            super@SearchKeyBoardAct.finish()
-//            super.onBackPressed()
-//        }
-        //    hideKeyboardSoft();
+
+
         setUpAutoComplete()
         val ic: InputConnection = actv.onCreateInputConnection(EditorInfo())
         // InputConnection ic = editTextAuto.onCreateInputConnection(new EditorInfo());
@@ -73,8 +67,47 @@ class SearchKeyBoardAct : BaseActivity(), View.OnClickListener {
         init()
         // kb. getCharSequence();
     }
-
     private fun setUpAutoComplete() {
+        hideKeyboard(this) // Assuming hideKeyboard is defined elsewhere
+
+        val util = Utils(this)
+        qurandictionaryArrayList = util.quranDictionary as ArrayList<qurandictionary>
+
+        val rootSet = qurandictionaryArrayList.map { it.rootarabic }.toHashSet()
+        val uniqueRoots = ArrayList(rootSet)
+
+        val autoCompleteAdapter = ArrayAdapter(this, R.layout.my_simple_list_item, uniqueRoots)
+        val listViewAdapter = ArrayAdapter(this, R.layout.my_simple_list_item, qurandictionaryArrayList.map { it.rootarabic })
+
+        actv = findViewById(R.id.autoCompleteTextView)
+        val listdisp = findViewById<ListView>(R.id.list_item)
+
+        listdisp.adapter = listViewAdapter
+        listdisp.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+            val qurandictionary = qurandictionaryArrayList[position]
+            launchActivity(qurandictionary.rootarabic)
+        }
+
+        val DROPDOWN_HEIGHT = 300
+        actv.dropDownHeight = DROPDOWN_HEIGHT
+        actv.threshold = 1
+        actv.setAdapter(autoCompleteAdapter)
+        actv.setTextColor(Color.RED)
+        actv.textSize = 50f
+        actv.setTextIsSelectable(true)
+        actv.showSoftInputOnFocus = false
+
+        actv.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                keyboard.visibility = LinearLayout.VISIBLE
+                keyboard.visibility = LinearLayout.VISIBLE
+                //     actv.showDropDown();
+                if (tlist != null) tlist!!.adapter = null
+                if (mlist != null) mlist!!.adapter = null
+            }
+        }
+    }
+    private fun setUpAutoCompletes() {
         hideKeyboard(this@SearchKeyBoardAct)
         val root: Array<String?>
         val util = Utils(this@SearchKeyBoardAct)
@@ -106,7 +139,7 @@ class SearchKeyBoardAct : BaseActivity(), View.OnClickListener {
         actv.setAdapter(adapters) //setting the adapter data into the AutoCompleteTextView
         actv.setTextColor(Color.RED)
         actv.textSize = 50.00.toFloat()
-        //   editTextAuto = findViewById(R.id.autoCompleteTextView);
+
         actv.setRawInputType(InputType.TYPE_CLASS_TEXT)
         actv.setTextIsSelectable(true)
         //   KeyboardUtil.hideKeyboard(this);
@@ -127,6 +160,7 @@ class SearchKeyBoardAct : BaseActivity(), View.OnClickListener {
         sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet)
         floatingActionButton = findViewById(R.id.fab)
         keyboard = findViewById(R.id.arabic_keyboard)
+        roundArabicKeyboardBinding
         val keydelete = findViewById<Button>(R.id.key_delete)
         val keyAC = findViewById<Button>(R.id.key_AC)
         val keyenter = findViewById<Button>(R.id.key_enter)

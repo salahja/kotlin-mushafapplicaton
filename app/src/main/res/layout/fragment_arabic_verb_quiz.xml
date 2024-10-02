@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,305 +12,402 @@
         app:flexDirection="row"
         app:flexWrap="wrap"
         app:justifyContent="center"
-        app:maxLine="10">
+        app:maxLine="10"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
             android:id="@+id/question_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="3dp"
             android:gravity="center_horizontal"
-            android:padding="15dp"
+            android:padding="5dp"
             android:text="@string/question_text"
             android:textSize="20sp"
-            android:textStyle="bold"/>
-
+            android:textStyle="bold" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/arabicsurahname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="3dp"
             android:gravity="center_horizontal"
-            android:padding="15dp"
             android:text="@string/question_text"
             android:textSize="20sp"
-            android:textStyle="bold"/>
-        <com.google.android.material.textview.MaterialTextView
+            android:textStyle="bold" />
+
+        <com.google.android.material.chip.Chip
             android:id="@+id/verbdetails"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15.0dip"
+            android:elevation="8dp"
+            android:lines="1"
+            android:onClick="onClick"
+            android:textSize="40.0sp"
+            android:textStyle="bold"
+            android:tooltipText="Click for Vocabulary"
+            app:chipCornerRadius="8dp"
+            app:chipIcon="@drawable/ic_baseline_translate_24"
+
+            app:chipStrokeColor="@color/red500" />
+        <TextView
+            android:id="@+id/rootword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="3dp"
             android:gravity="center_horizontal"
-            android:padding="15dp"
-            android:text="@string/question_text"
-            android:textSize="40sp"
-            android:textStyle="bold"/>
+            android:text="@string/root_word"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/word_trans_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="3dp"
+            android:gravity="center_horizontal"
+            android:text="@string/word_translation"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/quranVerse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="3dp"
+            android:gravity="center_horizontal"
+            android:text="@string/quranverse"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/ayahTranslation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="3dp"
+            android:gravity="center_horizontal"
+            android:text="@string/ayah_translation"
+            android:textSize="20sp"
+            android:textStyle="bold" />
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/correctanswer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="3dp"
+            android:visibility="gone"
             android:gravity="center_horizontal"
-            android:padding="15dp"
-            android:text="@string/question_text"
+            android:text="@string/word_translation"
             android:textSize="20sp"
-            android:textStyle="bold"/>
- 
+            android:textStyle="bold" />
 
+        <!-- Other TextViews for quran_verse, ayah_translation, etc. are similar -->
+
+        <!-- Answer buttons -->
         <TextView
             android:id="@+id/answer_button1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/verbdetails"
-            android:layout_margin="10dp"
+            android:layout_margin="3dp"
             android:background="@drawable/default_option_border_bg"
             android:gravity="center_horizontal"
-            android:padding="15dp"
+            android:padding="5dp"
+
             android:text="@string/answer1_text"
             android:textSize="16sp"
-            android:visibility="visible"/>
+            android:visibility="gone" />
 
         <TextView
            android:id="@+id/answer_button2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/answer_button1"
-            android:layout_margin="10dp"
+            android:layout_margin="3dp"
             android:background="@drawable/default_option_border_bg"
             android:gravity="center_horizontal"
-            android:padding="15dp"
+            android:padding="5dp"
             android:text="@string/answer2_text"
             android:textSize="16sp"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/answer_button3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/answer_button2"
-            android:layout_margin="10dp"
+            android:layout_margin="3dp"
             android:background="@drawable/default_option_border_bg"
             android:gravity="center_horizontal"
-            android:padding="15dp"
+            android:padding="5dp"
             android:text="@string/answer3_text"
             android:textSize="16sp"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/answer_button4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/answer_button3"
-            android:layout_margin="10dp"
+            android:layout_margin="3dp"
             android:background="@drawable/default_option_border_bg"
             android:gravity="center_horizontal"
-            android:padding="15dp"
+            android:padding="5dp"
             android:text="@string/answer4_text"
             android:textSize="16sp"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/answer_button5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/answer_button4"
-            android:layout_margin="10dp"
+            android:layout_margin="3dp"
             android:background="@drawable/default_option_border_bg"
             android:gravity="center_horizontal"
-            android:padding="15dp"
+            android:padding="5dp"
             android:text="@string/answer5_text"
             android:textSize="16sp"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/answer_button6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/answer_button5"
-            android:layout_margin="10dp"
+            android:layout_margin="3dp"
             android:background="@drawable/default_option_border_bg"
             android:gravity="center_horizontal"
-            android:padding="15dp"
+            android:padding="5dp"
             android:text="@string/answer6_text"
             android:textSize="16sp"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/answer_button7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/answer_button6"
-            android:layout_margin="10dp"
+            android:layout_margin="3dp"
             android:background="@drawable/default_option_border_bg"
             android:gravity="center_horizontal"
-            android:padding="15dp"
+            android:padding="5dp"
             android:text="@string/answer7_text"
             android:textSize="16sp"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/answer_button8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/answer_button7"
-            android:layout_margin="10dp"
+            android:layout_margin="3dp"
             android:background="@drawable/default_option_border_bg"
             android:gravity="center_horizontal"
-            android:padding="15dp"
+            android:padding="5dp"
             android:text="@string/answer8_text"
             android:textSize="16sp"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/answer_button9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/answer_button8"
-            android:layout_margin="10dp"
+            android:layout_margin="3dp"
             android:background="@drawable/default_option_border_bg"
             android:gravity="center_horizontal"
-            android:padding="15dp"
+            android:padding="5dp"
             android:text="@string/answer9_text"
             android:textSize="16sp"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/answer_button10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/answer_button9"
-            android:layout_margin="10dp"
+            android:layout_margin="3dp"
             android:background="@drawable/default_option_border_bg"
             android:gravity="center_horizontal"
-            android:padding="15dp"
+            android:padding="5dp"
             android:text="@string/answer10_text"
             android:textSize="16sp"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/answer_button11"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/answer_button10"
-            android:layout_margin="10dp"
+            android:layout_margin="3dp"
             android:background="@drawable/default_option_border_bg"
             android:gravity="center_horizontal"
-            android:padding="15dp"
+            android:padding="5dp"
             android:text="@string/answer11_text"
             android:textSize="16sp"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/answer_button12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/answer_button11"
-            android:layout_margin="10dp"
+            android:layout_margin="3dp"
             android:background="@drawable/default_option_border_bg"
             android:gravity="center_horizontal"
-            android:padding="15dp"
+            android:padding="5dp"
             android:text="@string/answer12_text"
             android:textSize="16sp"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/answer_button13"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/answer_button12"
-            android:layout_margin="10dp"
+            android:layout_margin="3dp"
             android:background="@drawable/default_option_border_bg"
             android:gravity="center_horizontal"
-            android:padding="15dp"
+            android:padding="5dp"
             android:text="@string/answer13_text"
             android:textSize="16sp"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/answer_button14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/answer_button12"
-            android:layout_margin="10dp"
+            android:layout_margin="3dp"
             android:background="@drawable/default_option_border_bg"
             android:gravity="center_horizontal"
-            android:padding="15dp"
+            android:padding="5dp"
             android:text="@string/answer14_text"
             android:textSize="16sp"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
         <!-- Other answer buttons (answer_button2 to answer_button14) -->
     </com.google.android.flexbox.FlexboxLayout>
-    <RelativeLayout
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/submit_button"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/submit_text"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/flex"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="false"
+        android:max="5"
+        android:minHeight="20dp"
+        android:progress="0"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@id/submit_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:id="@+id/tv_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/progress"
+        android:textSize="16sp"
+        tools:text="9/5"
+        app:layout_constraintTop_toBottomOf="@id/progressBar"
+        app:layout_constraintStart_toStartOf="@id/progressBar"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/score"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:layout_below="@+id/flex"
-        android:padding="16dp">
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/submit_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        android:text="@string/score"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/tv_progress"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-            android:layout_marginTop="32dp"
-            android:layout_gravity="center"
-            android:text="@string/submit_text"
-            android:textSize="16sp"
-             />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/restart"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/restart"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/score"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-
-
-            <ProgressBar
-                android:id="@+id/progressBar"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-
-                android:indeterminate="false"
-                android:layout_below="@id/submit_button"
-                android:max="5"
-                android:layout_marginTop="20dp"
-                android:minHeight="20dp"
-                android:progress="0"
-                android:textAlignment="center"/>
-
-            <TextView
-                android:id="@+id/tv_progress"
-                android:layout_alignLeft="@+id/progressBar"
-                android:layout_below="@id/submit_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/progress"
-                android:textSize="16sp"
-                tools:text="9/5"/>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/showanswer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/showanswer"
+        android:textSize="16sp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/restart" />
 
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/score"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_progress"
-            android:layout_gravity="center"
-            android:layout_marginTop="53dp"
-            android:gravity="center"
-            android:text="@string/score"
-            android:textSize="16sp" />
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/restart"
-            android:visibility="visible"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-           android:layout_below="@+id/score"
-            android:layout_marginTop="32dp"
-            android:layout_gravity="center"
-            android:text="@string/restart"
-            android:textSize="16sp"
-            />
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/mansubnotes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/manzoomnote"
+        android:textDirection="ltr"
+        android:textSize="16sp"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/showanswer" />
+
+    <!-- Horizontal Divider -->
+    <View
+        android:id="@+id/horizontalDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintTop_toBottomOf="@id/mansubnotes"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/majzoomnotes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/majzoomnote"
+        android:textDirection="ltr"
+        android:textSize="16sp"
+        android:visibility="visible"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/horizontalDivider" />
+
+    <include
+        android:id="@+id/summarylayout"
+        layout="@layout/summary_negation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/majzoomnotes"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    </RelativeLayout>
 
-
-</RelativeLayout>

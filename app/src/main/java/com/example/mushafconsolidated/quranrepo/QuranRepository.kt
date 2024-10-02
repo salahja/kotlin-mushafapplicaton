@@ -45,6 +45,7 @@ import com.example.mushafconsolidated.Entities.hanslexicon
 
 import com.example.mushafconsolidated.Entities.lanerootdictionary
 import com.example.mushafconsolidated.Entities.surahsummary
+import com.example.mushafconsolidated.model.NewQuranCorpusWbw
 import com.example.mushafconsolidated.model.QuranCorpusWbw
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -114,6 +115,9 @@ import javax.inject.Inject
 
     fun getVerbRootBySurahAyahWord(surah: Int, ayah: Int, wordno: Int): List<VerbCorpus> =
         verbcorpusdao.getVerbRootsurahayahwordid(surah, ayah, wordno)
+
+     fun getAllVerbCorpus(): List<VerbCorpus> =
+         verbcorpusdao.getAllVerbs()
 
     fun getQuranCorpusWbw(surah: Int, ayah: Int, wordno: Int): List<QuranCorpusWbw> =
         qurandao.getQuranCorpusWbw(surah, ayah, wordno)
@@ -206,7 +210,8 @@ import javax.inject.Inject
          return QuranData(
 
              allofQuran = qurandao.getQuranVersesBySurahl(chapterNo), // Fetch Quran verses
-             corpusSurahWord = qurandao.getQuranCorpusWbwbysurah(chapterNo) //Fetch corpus data
+             corpusSurahWord = qurandao.getQuranCorpusWbwbysurah(chapterNo), //Fetch corpus data
+
          )
      }
 
@@ -218,8 +223,14 @@ import javax.inject.Inject
 data class QuranData(
 
     val allofQuran: List<QuranEntity>, // Assuming you need this as well
-    val corpusSurahWord: List<QuranCorpusWbw>// Assuming you need this as well
+    val corpusSurahWord: List<QuranCorpusWbw>,// Assuming you need this as well
+
 )
+
+
+
+
+
 
 data class ChapterData(
 val mafoolbihiwords: List<MafoolBihi>,

@@ -83,12 +83,13 @@ class VerbrootDetailFragment
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
+        adapter=null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter?.SetOnItemClickListener(object : OnItemClickListener {
+        adapter?.setOnItemClickListener(object : OnItemClickListener {
             override fun onItemClick(v: View?, position: Int) {
                 val bmark = adapter!!.getItem(position) as String
                 //        ChaptersAnaEntity surah = (ChaptersAnaEntity) bookmarksShowAdapter.getItem(position);

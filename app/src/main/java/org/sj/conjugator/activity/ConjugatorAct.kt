@@ -41,7 +41,7 @@ import database.entity.MujarradVerbs
 import database.verbrepo.VerbModel
 import org.sj.conjugator.fragments.SettingsFragmentVerb
 import org.sj.conjugator.utilities.SharedPref
- 
+
 @AndroidEntryPoint
 class ConjugatorAct : BaseActivity(), View.OnClickListener {
     private val keyValues: SparseArray<String> = SparseArray<String>()
@@ -84,13 +84,6 @@ class ConjugatorAct : BaseActivity(), View.OnClickListener {
         setContentView(R.layout.conjugator_key_activity_autocomplete)
         KeyboardUtil.hideKeyboard(this@ConjugatorAct)
         keyboard = findViewById(R.id.arabic_keyboard)
-//        val callButton: FloatingActionButton = findViewById(R.id.action_buttons)
-//        callButton.setOnClickListener { view: View? ->
-//            super@ConjugatorAct.finish()
-//            super.onBackPressed()
-//        }
-        //    hideKeyboardSoft();
-     //   contextOfApplication = getApplicationContext()
         SetUpAutoComplete()
         val ic: InputConnection = editTextAuto.onCreateInputConnection(EditorInfo())
         // InputConnection ic = editTextAuto.onCreateInputConnection(new EditorInfo());
@@ -139,13 +132,13 @@ class ConjugatorAct : BaseActivity(), View.OnClickListener {
             actv.setTextIsSelectable(true)
             //   KeyboardUtil.hideKeyboard(this);
             actv.showSoftInputOnFocus = false
-            actv.setOnFocusChangeListener({ view: View?, hasFocus: Boolean ->
+            actv.setOnFocusChangeListener { view: View?, hasFocus: Boolean ->
                 if (hasFocus) {
                     keyboard.visibility = LinearLayout.VISIBLE
                     if (tlist != null) tlist!!.adapter = null
                     if (mlist != null) mlist!!.adapter = null
                 } //   keyboard.setVisibility(LinearLayout.GONE);
-            })
+            }
         }
 
 
@@ -490,14 +483,14 @@ class ConjugatorAct : BaseActivity(), View.OnClickListener {
     private fun toggleBottomSheet() {
         if (sheetBehavior.state != BottomSheetBehavior.STATE_EXPANDED) {
             sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED)
-            //    btnBottomSheet.setText("Close sheet");
+
         } else {
             sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED)
-            //    btnBottomSheet.setText("Expand sheet");
+
         }
     }
 
-    // inputConnectionCommitText(view);
+
     private val typedValues: Unit
         private get() {
             val charSequence: CharSequence
@@ -538,8 +531,8 @@ class ConjugatorAct : BaseActivity(), View.OnClickListener {
         tlist = ListView(this@ConjugatorAct)
         mlist = ListView(this@ConjugatorAct)
         val utils = VerbDatabaseUtils(this@ConjugatorAct)
-     //   mujarradVerbs = utils.getMujarradVerbs(root) as ArrayList<MujarradVerbs>
-        viewmodel.getMujarradRoot(root).observe(this){
+        //   mujarradVerbs = utils.getMujarradVerbs(root) as ArrayList<MujarradVerbs>
+        viewmodel.getMujarradRoot(root).observe(this) {
             mujarradVerbs = it as ArrayList<MujarradVerbs>
             for (entity in it) {
                 thulathia.add(entity.babname)
@@ -586,9 +579,9 @@ class ConjugatorAct : BaseActivity(), View.OnClickListener {
             }
         }
 
-     //   mazeedEntityVerbs = utils.getMazeedRoot(root)
-        viewmodel.getMazeedRoot(root).observe(this){
-            mazeedEntityVerbs= it as ArrayList<MazeedEntity>
+
+        viewmodel.getMazeedRoot(root).observe(this) {
+            mazeedEntityVerbs = it as ArrayList<MazeedEntity>
             for (dict in it) {
                 mazeed.add(dict.babname + "," + dict.form)
             }
@@ -656,7 +649,7 @@ class ConjugatorAct : BaseActivity(), View.OnClickListener {
     private fun InitDiaalog(root: String, wazan: String, verbtype: String) {
         val dataBundle = Bundle()
         val selectedRadioButton: RadioButton =
-            findViewById(verbmood.getCheckedRadioButtonId())
+            findViewById(verbmood.checkedRadioButtonId)
         //get RadioButton text
         val selected: String = selectedRadioButton.text.toString()
         // display it as Toast to the user

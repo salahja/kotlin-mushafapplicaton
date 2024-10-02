@@ -1293,6 +1293,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:clipChildren="false"
+            android:id="@+id/command"
 
             android:clipToPadding="false"
             android:dividerHeight="0.0px"
@@ -1316,6 +1317,7 @@
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
+                        android:text="Commands"
                         android:autoSizeMaxTextSize="26sp"
                         android:autoSizeMinTextSize="10sp"
                         android:autoSizeStepGranularity="6sp"

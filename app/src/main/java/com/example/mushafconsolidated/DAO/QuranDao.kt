@@ -5,7 +5,10 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import com.example.mushafconsolidated.Entities.QuranEntity
+import com.example.mushafconsolidated.model.NewQuranCorpusWbw
 import com.example.mushafconsolidated.model.QuranCorpusWbw
+import com.example.mushafconsolidated.model.QuranEntityCorpusEntityWbwEntity
+import com.example.mushafconsolidated.model.QuranwithCorpusWbw
 
 
 //.QuranEntity
@@ -14,6 +17,90 @@ import com.example.mushafconsolidated.model.QuranCorpusWbw
 @Dao
 interface QuranDao {
 
+    @Query("SELECT q.surah, " +
+            "q.ayah, " +
+            "q.qurantext, " +
+            "q.translation, " +
+            "q.en_arberry, " +
+            "q.ar_irab_two, " +
+            "ce.wordno, " +
+            "ce.juz, " +
+            "ce.wordcount, " +
+            "ce.araone, " +
+            "ce.aratwo, " +
+            "ce.arathree, " +
+            "ce.arafour, " +
+            "ce.arafive, " +
+            "ce.rootaraone, " +
+            "ce.rootaratwo, " +
+            "ce.rootarathree, " +
+            "ce.rootarafour, " +
+            "ce.rootarafive, " +
+            "ce.tagone, " +
+            "ce.tagtwo, " +
+            "ce.tagthree, " +
+            "ce.tagfour, " +
+            "ce.tagfive, " +
+            "ce.detailsone, " +
+            "ce.detailstwo, " +
+            "ce.detailsthree, " +
+            "ce.detailsfour, " +
+            "ce.detailsfive, " +
+            "w.en, " +
+            "w.ur, " +
+            "w.bn, " +
+            "w.[in], " +
+            "ce.id " + // Add ce.id to the query
+            "FROM qurans q " +
+            "INNER JOIN CorpusExpand ce ON q.docid = ce.id " +
+            "INNER JOIN WBW w ON q.docid = w.id " +
+            "WHERE   ce.id=w.id and ce.wordno=w.wordno and ce.surah=w.surah and ce.ayah=w.ayah and ce.surah=:surahid")
+    fun getQuranandCorpusandWbwbySurahss(surahid: Int): List<QuranEntityCorpusEntityWbwEntity>
+
+
+    @Query("SELECT q.surah, " +
+            "q.ayah, " +
+            "q.qurantext, " +
+            "q.translation, " +
+            "q.en_arberry, " +
+            "q.ar_irab_two, " +
+            "ce.wordno, " +
+            "ce.juz, " +
+            "ce.wordcount, " +
+            "ce.araone, " +
+            "ce.aratwo, " +
+            "ce.arathree, " +
+            "ce.arafour, " +
+            "ce.arafive, " +
+            "ce.rootaraone, " +
+            "ce.rootaratwo, " +
+            "ce.rootarathree, " +
+            "ce.rootarafour, " +
+            "ce.rootarafive, " +
+            "ce.tagone, " +
+            "ce.tagtwo, " +
+            "ce.tagthree, " +
+            "ce.tagfour, " +
+            "ce.tagfive, " +
+            "ce.detailsone, " +
+            "ce.detailstwo, " +
+            "ce.detailsthree, " +
+            "ce.detailsfour, " +
+            "ce.detailsfive, " +
+            "w.surah, " +
+            "w.ayah, " +
+            "w.wordno, " +
+            "w.en, " +
+            "w.ur, " +
+            "w.bn, " +
+            "w.[in], " +
+            "ce.id " +
+            // Add ce.id to the query
+            "FROM qurans q " +
+            "JOIN    CorpusExpand ce ON q.surah = ce.surah AND q.ayah = ce.ayah " +
+            "JOIN wbw w ON ce.surah = w.surah AND ce.ayah = w.ayah AND ce.wordno = w.wordno WHERE q.surah=:surahid")
+
+    fun getQuranandCorpusandWbwbySurah(surahid: Int): List<QuranEntityCorpusEntityWbwEntity>
 
     @Transaction
     @Query("SELECT * FROM CorpusExpand JOIN wbw ON wbw.id = CorpusExpand.id where corpusexpand.surah=:surahid and corpusexpand.ayah=:ayahid and corpusexpand.wordno=:wordno")
@@ -25,9 +112,10 @@ interface QuranDao {
 
     fun getQuranCorpusWbwbysurah(surahid: Int): List<QuranCorpusWbw>
 
+
+
     @Transaction
     @Query("SELECT * FROM CorpusExpand JOIN wbw ON wbw.id = CorpusExpand.id where  CorpusExpand.rootaraone||CorpusExpand.rootaratwo ||CorpusExpand.rootarathree||CorpusExpand.rootarafour||CorpusExpand.rootarafive=:root")
-
 
     fun getQuranCorpusWbwbyRoot(root: String): List<QuranCorpusWbw>
 

@@ -111,7 +111,7 @@ class QuranVIewModel @Inject constructor(
     }
 
 
-    fun getwbwQuranTranslationRange(surahid: Int, ayahid: Int, startindex: Int, endindex: Int):
+     fun getwbwQuranTranslationRange(surahid: Int, ayahid: Int, startindex: Int, endindex: Int):
             LiveData<List<wbwentity>> {
         wbw.value =
             this.quranRepository.wbwdao.getwbwQuranbTranslationbyrange(
@@ -172,6 +172,13 @@ class QuranVIewModel @Inject constructor(
         verbcorpuslist.value = this.quranRepository.getVerbRootBySurahAyahWord(cid, aid, wid)
         return verbcorpuslist
     }
+
+
+    fun getAllVerbCorpus(): MutableLiveData<List<VerbCorpus>> {
+        verbcorpuslist.value = this.quranRepository.getAllVerbCorpus()
+        return verbcorpuslist
+    }
+
 
     fun getQuranCorpusWbw(cid: Int, aid: Int, wid: Int): MutableLiveData<List<QuranCorpusWbw>> {
         corpuswbwlist.value = this.quranRepository.getQuranCorpusWbw(cid, aid, wid)

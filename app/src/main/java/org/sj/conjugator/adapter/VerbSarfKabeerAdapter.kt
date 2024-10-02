@@ -38,7 +38,8 @@ class VerbSarfKabeerAdapter(
         aBoolean = prefs.getBoolean("sarfkabeer_format_verb", true)
         val view: View = if (aBoolean) {
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.newverbsarfkabeertraditional, parent, false)
+             //   .inflate(R.layout.newverbsarfkabeertraditional, parent, false)
+                .inflate(R.layout.vtwonewverbsarfkabeertraditional, parent, false)
         } else {
             LayoutInflater.from(parent.context)
                 .inflate(R.layout.verbscolumnkabeer, parent, false)

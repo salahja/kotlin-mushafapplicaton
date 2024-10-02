@@ -370,13 +370,7 @@ class GatherAll {
             val ismmafoolresult = PassiveParticipleModifier.instance
                 .build(unaugmentedTrilateralRoot, rule.kov, conjugatedIsmMafool, "")
             val ismmafoolresultFinalResult = ismmafoolresult.finalResult
-            ///ismala
-            /*
-    0 = "مِفْعَل"
-1 = "مِفْعَلَة"
-2 = "مِفْعَال"
-3 = "فَعَّالَة"
-     */
+
             val conjugator = StandardInstrumentalConjugator.instance
             val modifier = InstrumentalModifier.instance
             val mifal = conjugator.createNounList(unaugmentedTrilateralRoot, "مِفْعَل")

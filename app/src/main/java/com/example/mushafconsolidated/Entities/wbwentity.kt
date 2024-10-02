@@ -9,11 +9,11 @@ class wbwentity constructor(
     var ayah: Int,
     var wordno: Int,
     var wordcount: Int,
-    var araone: String?,
+   /* var araone: String?,
     var aratwo: String?,
     var arathree: String?,
     var arafour: String?,
-    var arafive: String?,
+    var arafive: String?,*/
     var en: String,
     var bn: String,
     var `in`: String,

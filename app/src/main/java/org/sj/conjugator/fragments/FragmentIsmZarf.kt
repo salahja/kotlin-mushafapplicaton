@@ -63,13 +63,9 @@ class FragmentIsmZarf : Fragment() {
                 callButton.visibility = View.GONE
             }
         }
-        callButton.setOnClickListener({
-            val fm = activity
-                ?.supportFragmentManager
-            if (fm != null) {
-                fm.popBackStack()
-            }
-        })
+        callButton.setOnClickListener {
+            activity?.supportFragmentManager?.popBackStack()
+        }
         assert(dataBundle != null)
         if (dataBundle!!.getString(VERBTYPE) == "mujarrad") {
             isUnAugmented = true
@@ -117,6 +113,10 @@ class FragmentIsmZarf : Fragment() {
         //dismiss(ref);
     }
 
-    companion object {
+    override fun onDestroyView() {
+        super.onDestroyView()
+        recyclerView?.adapter = null // Clear adapter reference
+        skabeer.clear() // Clear the ArrayList
+        // ... unregister other listeners if necessary
     }
 }

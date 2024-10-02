@@ -6,9 +6,11 @@ import android.text.SpannableStringBuilder
 import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.NounCorpus
 import com.example.mushafconsolidated.Entities.VerbCorpus
+import com.example.mushafconsolidated.R
 import com.example.utility.CorpusConstants.verbfeaturesenglisharabic
 import com.example.utility.CorpusUtilityorig
-
+import android.content.ContentResolver
+import com.example.utility.QuranGrammarApplication.Companion.context
 
 // Rename the class to follow Kotlin conventions (PascalCase) and be more descriptive.
 class WordMorphologyDetails(
@@ -235,6 +237,11 @@ class WordMorphologyDetails(
                 }
 
             }
+         /*   if(spannableString.toString().contains("Negative particle")){
+                val sb=StringBuilder()
+                sb.append(spannableString.toString()).append(" \n").append(context!!.getString(R.string.negationsumarry)).append("\n")
+                spannableString=SpannableString(sb.toString())
+            }*/
             return spannableString
         }
 

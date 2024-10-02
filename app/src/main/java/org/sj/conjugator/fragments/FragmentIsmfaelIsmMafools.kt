@@ -41,8 +41,12 @@ class FragmentIsmfaelIsmMafools : Fragment() {
         return f
     }
 
-
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        recyclerView?.adapter = null // Clear adapter reference
+        skabeer.clear() // Clear the ArrayList
+        // ... unregister other listeners if necessary
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -62,13 +66,16 @@ class FragmentIsmfaelIsmMafools : Fragment() {
                 callButton.visibility = View.GONE
             }
         }
+
         callButton.setOnClickListener {
+            activity?.supportFragmentManager?.popBackStack()
+        }
+     /*   callButton.setOnClickListener {
             val fm = activity
                 ?.supportFragmentManager
-            if (fm != null) {
-                fm.popBackStack()
-            }
-        }
+            activity
+                ?.supportFragmentManager?.popBackStack()
+        }*/
         assert(dataBundle != null)
         if (dataBundle!!.getString(VERBTYPE) == "mujarrad") {
             isUnAugmented = true
@@ -125,6 +132,5 @@ class FragmentIsmfaelIsmMafools : Fragment() {
         var ref: ImageView
     }
 
-    companion object {
-    }
+    companion object
 }

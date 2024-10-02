@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Header TextView -->
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/negationsumarry"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Past Negation TextView -->
+    <TextView
+        android:id="@+id/pastnetation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="@string/past"
+        app:layout_constraintEnd_toStartOf="@+id/presentnegation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header" />
+
+    <!-- Present Negation TextView -->
+    <TextView
+        android:id="@+id/presentnegation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="present"
+        app:layout_constraintEnd_toStartOf="@+id/futurenegation"
+        app:layout_constraintStart_toEndOf="@+id/pastnetation"
+        app:layout_constraintTop_toBottomOf="@+id/header" />
+
+    <!-- Future Negation TextView -->
+    <TextView
+        android:id="@+id/futurenegation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="@string/future"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/presentnegation"
+        app:layout_constraintTop_toBottomOf="@+id/header" />
+
+    <TextView
+        android:id="@+id/pastdetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="@string/pastdetail"
+        app:layout_constraintEnd_toStartOf="@+id/presentdetail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pastnetation" />
+
+    <!-- Present Negation TextView -->
+    <TextView
+        android:id="@+id/presentdetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="@string/presentdetails"
+        app:layout_constraintEnd_toStartOf="@+id/futuredetail"
+        app:layout_constraintStart_toEndOf="@+id/pastdetail"
+        app:layout_constraintTop_toBottomOf="@+id/presentnegation" />
+
+    <!-- Future Negation TextView -->
+    <TextView
+        android:id="@+id/futuredetail"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_marginTop="36dp"
+        android:text="@string/futuredetail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/presentdetail"
+        app:layout_constraintTop_toBottomOf="@+id/futurenegation" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -48,7 +48,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationBarView
 import com.google.android.material.textview.MaterialTextView
-import com.quiz.ArabicVerbQuizAct
+import com.quiz.ArabicVerbQuizActNew
 import dagger.hilt.android.AndroidEntryPoint
 import database.NamesGridImageAct
 import org.sj.conjugator.activity.ConjugatorAct
@@ -355,7 +355,7 @@ class NewSurahDisplayFrag : Fragment(), SearchView.OnQueryTextListener {
 
             if (item.itemId == R.id.quiz) {
 
-                val settingint = Intent(requireActivity(), ArabicVerbQuizAct::class.java)
+                val settingint = Intent(requireActivity(), ArabicVerbQuizActNew::class.java)
 
                 startActivity(settingint)
             }

@@ -135,6 +135,7 @@ class NewAjroomiyaListFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
+
     }
 
     private class SimpleItemRecyclerViewAdapter(

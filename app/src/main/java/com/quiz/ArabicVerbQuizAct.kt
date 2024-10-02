@@ -3,6 +3,7 @@
 package com.quiz
 
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
@@ -11,22 +12,39 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
+import com.example.Constant.QURAN_VERB_ROOT
+import com.example.Constant.QURAN_VERB_WAZAN
+import com.example.Constant.VERBMOOD
+import com.example.Constant.VERBTYPE
+import com.example.mushafconsolidated.BottomOptionDialog
 import com.example.mushafconsolidated.Entities.RootVerbDetails
+import com.example.mushafconsolidated.Entities.VerbWazan
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.databinding.FragmentArabicVerbQuizBinding
 import com.example.mushafconsolidated.fragments.QuranMorphologyDetails
+import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
+import com.example.mushafconsolidated.model.NewQuranCorpusWbw
+import com.example.mushafconsolidated.model.NewVerbCorpusWbw
 import com.example.utility.CorpusUtilityorig.Companion.NewSetWordSpan
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.chip.Chip
 import com.google.android.material.color.DynamicColors
 import com.google.android.material.textview.MaterialTextView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.sj.conjugator.activity.BaseActivity
+import org.sj.conjugator.activity.ConjugatorTabsActivity
 
 class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
 
-
+    open var form = 0
     private var totalquestion: Int = 5
     private lateinit var answerButtons: Array<TextView>
 
@@ -37,7 +55,7 @@ class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
     lateinit var binding: FragmentArabicVerbQuizBinding
 
     private lateinit var questionTextView: TextView
-    private lateinit var verbdetails: MaterialTextView
+    private lateinit var verbdetails: Chip
     private lateinit var arabicsurahname: MaterialTextView
     private lateinit var correctanswer: MaterialTextView
     private lateinit var score: MaterialTextView
@@ -45,7 +63,9 @@ class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
 
     private lateinit var submitButton: TextView
     private lateinit var restartButton: MaterialButton
-
+    private lateinit var word_trans_textView: TextView
+    private lateinit var quran_verse: TextView
+    private lateinit var ayah_translation: TextView
 
     private lateinit var tvProgress: TextView
     private lateinit var progressbar: ProgressBar
@@ -60,7 +80,24 @@ class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
         var correctAnswerIndex: Int
 
     )
+    val buttonIds = arrayOf(
+        R.id.answer_button1,
+        R.id.answer_button2,
+        R.id.answer_button3,
+        R.id.answer_button4,
+        R.id.answer_button5,
+        R.id.answer_button6,
+        R.id.answer_button7,
+        R.id.answer_button8,
+        R.id.answer_button9,
+        R.id.answer_button10,
+        R.id.answer_button11,
+        R.id.answer_button12,
+        R.id.answer_button13,
+        R.id.answer_button14,
 
+        // ... other buttons ...
+    )
     private val questions = listOf(
         Question(
             1,
@@ -84,25 +121,25 @@ class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
             4,
             "What is the Gender and Number of Verb?",
             listOf(
-                "ThirdPersonSingularMasculine",
-                "ThirdPersonDualMasculine",
-                "ThirdPersonPluralMasculine",
+                "3rd Person Mas. Sing.",
+                "3rd Person Mas. Dual.",
+                "3rd Person Mas. Plur.",
 
-                "ThirdPersonSingularFeminine",
-                "ThirdPesonDualFeminine",
-                "ThirdPersonPluralFeminine",
+                "3rd Person Fem. Sing.",
+                "3rd Person Fem. Dual.",
+                "3rd Person Fem. Plur.",
 
 
-                "SecondPersonSingularMasculine",
-                "SecondPersonDualMasculine",
-                "SecondPersonPlularMasculine",
+                "2nd Person Mas. Sing.",
+                "2nd Person Mas, DUal.",
+                "2nd Person Mas. Plur.",
 
-                "SecondPersonSingularFeminine",
-                "SecondPersonDualFeminine",
-                "SecondPersonPluralFeminine",
+                "2nd Person Fem. Sing.",
+                "2nd Person Fem. Dual",
+                "2nd Person Fem. Plur.",
 
-                "FirstPersonSingula",
-                "FirstPersonPlural",
+                "1st Person Sing.",
+                "1st Person PLur",
 
                 ),
             0
@@ -127,7 +164,7 @@ class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
+        var qurancorpusarray = ArrayList<NewVerbCorpusWbw>()
 
         currenttheme =
             PreferenceManager.getDefaultSharedPreferences(this).getString("themepref", "dark")
@@ -138,115 +175,149 @@ class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
         binding = FragmentArabicVerbQuizBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val utils = Utils(this)
-        //    val allverbs = utils.getAllverbs()
+     /*    val allverbs = utils.getAllverbs()
         // cverb = allverbs.random()
         val allRootVerbDetails = utils.getAllRootVerbDetails()
       //  val allRootVerbDetails = utils.getRootVerbDetailsbyRootword("كون")
         cverb = allRootVerbDetails?.random()!!
-        cverb.arabic
+*/
+        val builder = AlertDialog.Builder(this)
+        builder.setCancelable(false) // if you want user to wait for some process to finish,
+        builder.setView(R.layout.layout_loading_dialog)
+        val dialog = builder.create()
+        lifecycleScope.launch {
+            runOnUiThread { dialog.show() }
+            if (binding != null) {
 
-        if (binding != null) {
+                verbdetails = binding.verbdetails
+                questionTextView = binding.questionTextView
+                answerButtons = arrayOf(
+                    binding.answerButton1, binding.answerButton2, binding.answerButton3,
+                    binding.answerButton4, binding.answerButton5, binding.answerButton6,
+                    binding.answerButton7, binding.answerButton8, binding.answerButton9,
+                    binding.answerButton10, binding.answerButton11, binding.answerButton12,
+                    binding.answerButton13, binding.answerButton14
+                )
 
-            verbdetails = binding.verbdetails
-            questionTextView = binding.questionTextView
-            answerButtons = arrayOf(
-                binding.answerButton1, binding.answerButton2, binding.answerButton3,
-                binding.answerButton4, binding.answerButton5, binding.answerButton6,
-                binding.answerButton7, binding.answerButton8, binding.answerButton9,
-                binding.answerButton10, binding.answerButton11, binding.answerButton12,
-                binding.answerButton13, binding.answerButton14
-            )
+                for (button in answerButtons) {
+                    button.setOnClickListener(this@ArabicVerbQuizAct)
+                }
+                arabicsurahname = binding.arabicsurahname
+                submitButton = binding.submitButton
+                progressbar = binding.progressBar
+                tvProgress = binding.tvProgress
+                correctanswer = binding.correctanswer
+                score = binding.score
+                restartButton = binding.restart
+                word_trans_textView = binding.wordTransTextView
+                quran_verse = binding.quranVerse
+                ayah_translation = binding.ayahTranslation
+                restartButton.setOnClickListener(this@ArabicVerbQuizAct)
+                submitButton.setOnClickListener(this@ArabicVerbQuizAct)
+                verbdetails.setOnClickListener(this@ArabicVerbQuizAct)
 
-            for (button in answerButtons) {
-                button.setOnClickListener(this)
             }
-            arabicsurahname = binding.arabicsurahname
-            submitButton = binding.submitButton
-            progressbar = binding.progressBar
-            tvProgress = binding.tvProgress
-            correctanswer = binding.correctanswer
-            score = binding.score
-            restartButton = binding.restart
-            restartButton.setOnClickListener(this)
-            submitButton.setOnClickListener(this)
+          //  val allverbs = withContext(Dispatchers.IO) { utils.getAllverbs() }
+            val allRootVerbDetails = withContext(Dispatchers.IO) { utils.getAllRootVerbDetails() }
+
+            // Update UI with the results on the main thread`
+            withContext(Dispatchers.Main) {
+                cverb = allRootVerbDetails?.random()!!
+
+
+
+                val surahayahdetails = StringBuilder()
+                val spannableString = NewSetWordSpan(
+                    cverb.tagone, cverb.tagtwo, cverb.tagthree, cverb.tagfour, cverb.tagfive,
+                    cverb.araone!!, cverb.aratwo!!, cverb.arathree!!, cverb.arafour!!, cverb.arafive!!
+                )
+                surahayahdetails.append(cverb.ayah).append("  ").append(cverb.namearabic).append("   ")
+                    .append(cverb.surah).append(" ")
+                val sbs = SpannableString(surahayahdetails)
+                val charSequence = TextUtils.concat(spannableString, surahayahdetails)
+                val correct = StringBuilder()
+                if (!cverb.gendernumber.equals("SP:kaAn")) {
+                    val genderNumberdetails =
+                        QuranMorphologyDetails.getGenderNumberdetails(cverb.gendernumber)
+                    val tensevoicemood = StringBuilder()
+                    tensevoicemood.append(cverb.tense).append(":").append(cverb.voice).append(":")
+                        .append(cverb.mood_kananumbers)
+                    var thulathiName = ""
+                    var thulathibab = ""
+                    var formName = ""
+                    if (cverb.form == "I") {
+                        if (cverb.thulathibab!!.length > 1) {
+                            val s = cverb.thulathibab!!.substring(0, 1)
+                            thulathiName = QuranMorphologyDetails.getThulathiName(s).toString()
+                        } else {
+                            thulathibab =
+                                QuranMorphologyDetails.getThulathiName(cverb.thulathibab).toString()
+                        }
+
+
+                        //   QuranMorphologyDetails.getThulathiName(cverb?.getThulathibab());
+                    } else {
+                        formName = QuranMorphologyDetails.getFormName(cverb.form)
+                    }
+
+                    correct.append(genderNumberdetails).append(" ").append(tensevoicemood).append(":")
+                        .append(thulathiName).append(":").append(thulathibab).append(formName)
+
+                } else {
+                    val genderNumberdetails =
+                        QuranMorphologyDetails.getGenderNumberdetails(cverb.mood_kananumbers)
+                    val tensevoicemood = StringBuilder()
+                    tensevoicemood.append(cverb.tense).append(":").append(cverb.voice).append(":")
+                        .append(cverb.kana_mood)
+                    var thulathiName = ""
+                    var thulathibab = ""
+                    var formName = ""
+                    if (cverb.form == "I") {
+                        if (cverb.thulathibab!!.length > 1) {
+                            val s = cverb.thulathibab!!.substring(0, 1)
+                            thulathiName = QuranMorphologyDetails.getThulathiName(s).toString()
+                        } else {
+                            thulathibab =
+                                QuranMorphologyDetails.getThulathiName(cverb.thulathibab).toString()
+                        }
+
+
+                        //   QuranMorphologyDetails.getThulathiName(cverb?.getThulathibab());
+                    } else {
+                        formName = QuranMorphologyDetails.getFormName(cverb.form)
+                    }
+
+                    correct.append(genderNumberdetails).append(" ").append(tensevoicemood).append(":")
+                        .append(thulathiName).append(":").append(thulathibab).append(formName)
+
+
+                }
+
+                arabicsurahname.text = surahayahdetails
+                val buildstr = StringBuilder()
+                /*     buildstr.append(cverb?.get(0)?.).append(cverb?.get(0)?.aratwo)
+                         .append(cverb?.get(0)?.arathree).append(cverb?.get(0)?.arafour)
+                         .append(cverb?.get(0)?.arafive).append(":").append(cverb?.get(0)?.en)*/
+                verbdetails.text = spannableString
+                word_trans_textView.text = cverb.en
+                correctanswer.text = correct
+
+                quran_verse.text = cverb.qurantext
+                ayah_translation.text=cverb.en_arberry
+
+                dialog.dismiss()
+                showNextQuestion()
+            }
         }
 
 
-        val sb = StringBuilder()
-        val spannableString = NewSetWordSpan(
-            cverb.tagone, cverb.tagtwo, cverb.tagthree, cverb.tagfour, cverb.tagfive,
-            cverb.araone!!, cverb.aratwo!!, cverb.arathree!!, cverb.arafour!!, cverb.arafive!!
-        )
-        sb.append(cverb.ayah).append("  ").append(cverb.namearabic).append("   ")
-            .append(cverb.surah).append(" ").append(cverb.en)
-        val sbs = SpannableString(sb)
-        val charSequence = TextUtils.concat(spannableString, sb)
-        val correct = StringBuilder()
-        if (!cverb.gendernumber.equals("SP:kaAn")) {
-            val genderNumberdetails =
-                QuranMorphologyDetails.getGenderNumberdetails(cverb.gendernumber)
-            val tensevoicemood = StringBuilder()
-            tensevoicemood.append(cverb.tense).append(":").append(cverb.voice).append(":")
-                .append(cverb.mood_kananumbers)
-            var thulathiName = ""
-            var thulathibab = ""
-            var formName = ""
-            if (cverb.form == "I") {
-                if (cverb.thulathibab!!.length > 1) {
-                    val s = cverb.thulathibab!!.substring(0, 1)
-                    thulathiName = QuranMorphologyDetails.getThulathiName(s).toString()
-                } else {
-                    thulathibab =
-                        QuranMorphologyDetails.getThulathiName(cverb.thulathibab).toString()
-                }
 
 
-                //   QuranMorphologyDetails.getThulathiName(cverb?.getThulathibab());
-            } else {
-                formName = QuranMorphologyDetails.getFormName(cverb.form)
-            }
-
-            correct.append(genderNumberdetails).append(" ").append(tensevoicemood).append(":")
-                .append(thulathiName).append(":").append(thulathibab).append(formName)
-
-        } else {
-            val genderNumberdetails =
-                QuranMorphologyDetails.getGenderNumberdetails(cverb.mood_kananumbers)
-            val tensevoicemood = StringBuilder()
-            tensevoicemood.append(cverb.tense).append(":").append(cverb.voice).append(":")
-                .append(cverb.kana_mood)
-            var thulathiName = ""
-            var thulathibab = ""
-            var formName = ""
-            if (cverb.form == "I") {
-                if (cverb.thulathibab!!.length > 1) {
-                    val s = cverb.thulathibab!!.substring(0, 1)
-                    thulathiName = QuranMorphologyDetails.getThulathiName(s).toString()
-                } else {
-                    thulathibab =
-                        QuranMorphologyDetails.getThulathiName(cverb.thulathibab).toString()
-                }
 
 
-                //   QuranMorphologyDetails.getThulathiName(cverb?.getThulathibab());
-            } else {
-                formName = QuranMorphologyDetails.getFormName(cverb.form)
-            }
-
-            correct.append(genderNumberdetails).append(" ").append(tensevoicemood).append(":")
-                .append(thulathiName).append(":").append(thulathibab).append(formName)
 
 
-        }
-        arabicsurahname.text = charSequence
-        arabicsurahname.text = cverb.namearabic
-        val buildstr = StringBuilder()
-        /*     buildstr.append(cverb?.get(0)?.).append(cverb?.get(0)?.aratwo)
-                 .append(cverb?.get(0)?.arathree).append(cverb?.get(0)?.arafour)
-                 .append(cverb?.get(0)?.arafive).append(":").append(cverb?.get(0)?.en)*/
-        verbdetails.text = spannableString
-        correctanswer.text = correct
-        showNextQuestion()
+
 
 
     }
@@ -278,9 +349,9 @@ class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
         //val currentQuestion = questions[0] // Access the first question in the list
         defaultOptionsView()
         if (questions.size == this.mcurrentPosition) {
-            submitButton.text = "finish"
+            submitButton.text = getString(R.string.finish)
         } else {
-            submitButton.text = "Submit"
+            submitButton.text = getString(R.string.submit)
         }
         val currentQuestion = questions[this.mcurrentPosition - 1]
         for (i in 0 until currentQuestion.answers.size) {
@@ -295,7 +366,7 @@ class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
 
         questionTextView.text = currentQuestion.question
         progressbar.progress = mcurrentPosition
-        tvProgress.text = "$mcurrentPosition" + "/" + progressbar.max
+        tvProgress.text = "$mcurrentPosition" + getString(R.string.back_slash) + progressbar.max
 
 
 
@@ -365,7 +436,7 @@ class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
 
         } else {
 
-            questions[5].correctAnswerIndex = 0
+            questions[4].correctAnswerIndex = 0
         }
 
     }
@@ -804,16 +875,166 @@ class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
     }
 
 
-    fun reloadActivity() {
-        getWindow().setWindowAnimations(0)
+    private fun reloadActivity() {
+        window.setWindowAnimations(0)
         val originalIntent = intent
         overridePendingTransition(0, 0)
         startActivity(originalIntent)
         finish()
         overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.slide_in_left)
     }
+   override  fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.verbdetails->{
+            var chapterno=0;
+                var verse=0;
+                var wordno=0
+                var root=""
+                var wazan=""
+                var isaugmented=""
+                var verbmood=""
+                if(cverb.thulathibab!!.isEmpty()){
+                    wazan= cverb.form.toString()
+                 root= cverb.rootarabic.toString()
+                     isaugmented="yes"
+                     chapterno=cverb.surah
+                     verse=cverb.ayah
+                     wordno=cverb.wordno
+                    verbmood= cverb.mood_kananumbers!!
+                    convertForms(wazan).toString()
+                    val dataBundle = Bundle()
+                    //      ArrayList arrayList = ThulathiMazeedConjugatonList.get(position);
+                    //   arrayList.get(0).ge
+                    if(cverb.mood_kananumbers.equals("IND")){
+                        verbmood="Indicative"
+                    }else if(cverb.mood_kananumbers.equals("SUBJ")){
+                        verbmood="Subjunctive"
+                    }else if(cverb.mood_kananumbers.equals("JUSS")){
+                        verbmood="Jussive"
+                    }
 
-    override fun onClick(v: View?) {
+                        dataBundle.putString(VERBTYPE, "mazeed")
+
+
+                        dataBundle.putString(VERBMOOD, verbmood)
+
+
+
+
+                    dataBundle.putString(QURAN_VERB_WAZAN, form.toString())
+                    dataBundle.putString(QURAN_VERB_ROOT, root)
+                    val intent = Intent(this, ConjugatorTabsActivity::class.java)
+                    intent.putExtras(dataBundle)
+                    startActivity(intent)
+                }else{
+                  val  mujarradwazan= cverb.thulathibab!!
+                    val vb= VerbWazan()
+
+                    isaugmented="no"
+                    chapterno=cverb.surah
+                    verse=cverb.ayah
+                    wordno=cverb.wordno
+                    verbmood= cverb.mood_kananumbers!!
+                    if(cverb.mood_kananumbers.equals("IND")){
+                        verbmood="Indicative"
+                    }else if(cverb.mood_kananumbers.equals("SUBJ")){
+                        verbmood="Subjunctive"
+                    }else if(cverb.mood_kananumbers.equals("JUSS")){
+                        verbmood="Jussive"
+                    }
+                    root= cverb.rootarabic.toString()
+                    vb.root = root
+                    vb.wazan = mujarradwazan
+                    val dataBundle = Bundle()
+                    //      ArrayList arrayList = ThulathiMazeedConjugatonList.get(position);
+                    //   arrayList.get(0).ge
+
+                    dataBundle.putString(VERBTYPE, "mujarrad")
+
+
+                    dataBundle.putString(VERBMOOD, verbmood)
+
+                    dataBundle.putString(QURAN_VERB_WAZAN, vb.wazan)
+                    dataBundle.putString(QURAN_VERB_ROOT, root)
+                    val intent = Intent(this, ConjugatorTabsActivity::class.java)
+                    intent.putExtras(dataBundle)
+                    startActivity(intent)
+
+                }
+            }
+            R.id.restart -> reloadActivity()
+            R.id.submit_button -> {
+
+                    if (mSelectedOptionPositon == 0) {
+
+                        mcurrentPosition++
+                        when {
+                            mcurrentPosition <= questions.size -> {
+                                if (mcurrentPosition == 3 && cverb.kana_mood!!.isEmpty()&& cverb.gendernumber.equals("SP:kaAn")) {
+                                    mcurrentPosition++
+                                    totalquestion = 4
+                                }
+                                showNextQuestion()
+                            }
+
+                            else -> {
+                                score.text = "your Score is $mcurrectanswer out of $totalquestion"
+                                restartButton.visibility = View.VISIBLE
+
+                            }
+                        }
+                    } else {
+
+                        val question = questions[mcurrentPosition - 1]
+                        if (question.correctAnswerIndex + 1 != mSelectedOptionPositon) {
+                            answerView(mSelectedOptionPositon, R.drawable.wrong_option_border_bg)
+                        } else {
+                            mcurrectanswer++
+                        }
+                        answerView(question.correctAnswerIndex + 1, R.drawable.correct_option_border_bg)
+                        if (mcurrentPosition == questions.size) {
+                            submitButton.text = "Finish"
+                        } else {
+                            submitButton.text = "Go to Next Question"
+                        }
+
+                    }
+                    mSelectedOptionPositon = 0
+                }
+
+            else -> {
+           /*     for (i in 1..14) {
+                    if (v?.id == resources.getIdentifier("answer_button$i", "id", packageName)) {
+                        selectedOptionsView(answerButtons[i - 1], i)
+                        return // Exit the loop and method once found
+                    }
+                }*/
+                for (i in buttonIds.indices) {
+                    if (v?.id == buttonIds[i]) {
+                        selectedOptionsView(answerButtons[i], i + 1)
+                        break
+                    }
+                }
+
+
+            }
+        }
+    }
+    private fun convertForms(mform: String?) {
+        when (mform) {
+            "IV" -> form = 1
+            "II" -> form = 2
+            "III" -> form = 3
+            "VII" -> form = 4
+            "VIII" -> form = 5
+            "VI" -> form = 7
+            "V" -> form = 8
+            "X" -> form = 9
+
+        }
+    }
+
+    fun onClicksss(v: View?) {
         when (v?.id) {
             R.id.answer_button1 -> {
                 selectedOptionsView(answerButtons[0], 1)
@@ -907,9 +1128,9 @@ class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
                     }
                     answerView(question.correctAnswerIndex + 1, R.drawable.correct_option_border_bg)
                     if (mcurrentPosition == questions.size) {
-                        submitButton.text = "Finish"
+                        submitButton.text = getString(R.string.finish)
                     } else {
-                        submitButton.text = "Go to Next Question"
+                        submitButton.text = getString(R.string.next_question)
                     }
 
                 }
@@ -918,7 +1139,7 @@ class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
         }
     }
 
-    private fun answerView(answer: Int, drawableView: Int) {
+    private fun answerViewdd(answer: Int, drawableView: Int) {
         when (answer) {
             1 -> {
                 answerButtons[0].background = ContextCompat.getDrawable(this, drawableView)
@@ -977,6 +1198,16 @@ class ArabicVerbQuizAct : BaseActivity(), View.OnClickListener {
             }
         }
     }
+
+    private fun answerView(answer: Int, drawableView: Int) {
+        if (answer in 1..answerButtons.size) {
+            answerButtons[answer - 1].background = ContextCompat.getDrawable(this, drawableView)
+        }
+    }
+
+
+
+
 }
 
 
