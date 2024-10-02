@@ -34,14 +34,14 @@ import java.util.Objects
 
 class NamesGridImageAct : BaseActivity() {
     private lateinit var gadapter: GridAdapter
-     var binding: ActivityDuaGroupBinding? =null
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityDuaGroupBinding.inflate(layoutInflater)
-       // setContentView(R.layout.activity_dua_group)
-        binding
-        val toolbar: Toolbar = binding!!.myActionBar
+    override fun onCreateView(parent: View?, name: String, context: Context, attrs: AttributeSet): View? {
+        return super.onCreateView(parent, name, context, attrs)
+    }
 
+    protected override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_dua_group)
+        val toolbar: Toolbar = findViewById(R.id.my_action_bar)
         setSupportActionBar(toolbar)
         /*     final int color = ContextCompat.getColor(this, R.color.color_background_overlay);
         final int colorsurface = ContextCompat.getColor(this, R.color.DarkGoldenrod);
@@ -55,7 +55,7 @@ class NamesGridImageAct : BaseActivity() {
             toolbar.setBackgroundColor(colorsurface);
         }
 */Objects.requireNonNull(getSupportActionBar())?.setDisplayHomeAsUpEnabled(true)
-        val recyclerView: RecyclerView = binding!!.duaListView
+        val recyclerView: RecyclerView = findViewById(R.id.duaListView)
         recyclerView.setLayoutManager(
             LinearLayoutManager(
                 this,
@@ -69,7 +69,7 @@ class NamesGridImageAct : BaseActivity() {
 
         val viewmodel: NewDuaModel by viewModels()
         viewmodel.getNames().observe(this, Observer {
-    //    viewmodel.getNames().observe(this) {
+            //    viewmodel.getNames().observe(this) {
 
             gadapter = GridAdapter(this, it, data)
             //  gridView.setAdapter(gridAdapter);
@@ -92,6 +92,25 @@ class NamesGridImageAct : BaseActivity() {
         })
 
 
+        /*
+        gridView.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+
+            }
+
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                ImageItem item = (ImageItem) parent.getItemAtPosition(position);
+                //Create intent
+                Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+                intent.putExtra("title", item.getTitle());
+                intent.putExtra("image", item.getImage());
+
+                //Start details activity
+                startActivity(intent);
+            }
+        }
+       */
     }
 
     //    TypedArray imgs = getResources().obtainTypedArray(R.array.image_ids);
@@ -109,10 +128,6 @@ class NamesGridImageAct : BaseActivity() {
             return imageItems
         }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        this.binding = null
-    }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         getMenuInflater().inflate(R.menu.mainsearch, menu)
         val searchManager: SearchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
