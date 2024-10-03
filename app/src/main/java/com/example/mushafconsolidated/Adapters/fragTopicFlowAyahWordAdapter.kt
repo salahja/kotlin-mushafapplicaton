@@ -673,7 +673,7 @@ class fragTopicFlowAyahWordAdapter(private var activity: AppCompatActivity, priv
         val bookmarfb: FloatingActionButton
         val fabmenu: FloatingActionButton
         val helpfb: FloatingActionButton
-        val summbaryfb: FloatingActionButton
+        val summaryfb: FloatingActionButton
         val sharescreenfb: FloatingActionButton
 
         init {
@@ -722,7 +722,8 @@ class fragTopicFlowAyahWordAdapter(private var activity: AppCompatActivity, priv
             tafsir = view.findViewById(R.id.tafsirfb)
             jumptofb = view.findViewById(R.id.jumptofb)
             bookmarfb = view.findViewById(R.id.bookmarfb)
-            summbaryfb = view.findViewById(R.id.summbaryfb)
+            summaryfb = view.findViewById(R.id.summbaryfb)
+            summaryfb.tag="summary"
             helpfb = view.findViewById(R.id.helpfb)
             sharescreenfb = view.findViewById(R.id.sharescreenfb)
             sharescreenfb.setOnClickListener(this)
@@ -730,7 +731,7 @@ class fragTopicFlowAyahWordAdapter(private var activity: AppCompatActivity, priv
             tafsir.setOnClickListener(this)
             jumptofb.setOnClickListener(this)
             bookmarfb.setOnClickListener(this)
-            summbaryfb.setOnClickListener(this)
+            summaryfb.setOnClickListener(this)
             helpfb.setOnClickListener(this)
             view.setOnClickListener(this)
             view.setOnLongClickListener(this)
@@ -778,11 +779,12 @@ class fragTopicFlowAyahWordAdapter(private var activity: AppCompatActivity, priv
 
                     bookmarfb.animate().rotationBy(360f)
                     bookmarfb.animate().duration = 600
-                    summbaryfb.visibility = View.VISIBLE
-                    summbaryfb.animate().translationX(
+
+               /*     summaryfb.visibility = View.VISIBLE
+                    summaryfb.animate().translationX(
                         -QuranGrammarApplication.instance!!.resources.getDimension(R.dimen.standard_155)
                     )
-                    summbaryfb.animate().rotationBy(360f)
+                    summaryfb.animate().rotationBy(360f)*/
                     helpfb.visibility = View.VISIBLE
                     helpfb.animate().translationX(
                         -QuranGrammarApplication.instance!!.resources.getDimension(R.dimen.standard_205)
@@ -814,7 +816,7 @@ class fragTopicFlowAyahWordAdapter(private var activity: AppCompatActivity, priv
                         readingintent.putExtra(SURAH_ARABIC_NAME, SurahName)
                        activity.startActivity(readingintent)
                     }
-                    summbaryfb.setOnClickListener {
+                   /* summaryfb.setOnClickListener {
                         closeFABMenu()
                         //  HideFabMenu();
                         val chapter_no = ayahWord.corpus!!.surah
@@ -830,7 +832,8 @@ class fragTopicFlowAyahWordAdapter(private var activity: AppCompatActivity, priv
                             (context as AppCompatActivity?)!!.supportFragmentManager,
                             NamesDetail.TAG
                         )
-                    }
+
+                    }*/
                     helpfb.setOnClickListener { v: View? ->
                         closeFABMenu()
                         val ayahWord =ayahWordArrayList[position][0]!![0]
@@ -943,7 +946,7 @@ class fragTopicFlowAyahWordAdapter(private var activity: AppCompatActivity, priv
                     //   jumptofb.animate().translationX(0);
                     bookmarfb.animate().translationX(0f)
                     bookmarfb.animate().rotationBy(360f)
-                    summbaryfb.animate().translationX(0f)
+                  //  summaryfb.animate().translationX(0f)
                     helpfb.animate().translationX(0f)
                     sharescreenfb.animate().translationX(0f)
                     sharescreenfb.animate().rotationBy(360f)

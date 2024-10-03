@@ -249,7 +249,13 @@ class MazeedTabSagheerFragmentVerb(private val context: Context) : Fragment() {
             }
         })
     }
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        recyclerView?.adapter = null // Clear adapter reference
+        skabeer.clear()
+        ssagheer?.clear()// Clear the ArrayList
+        // ... unregister other listeners if necessary
+    }
     companion object {
     }
 }

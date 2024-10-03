@@ -44,7 +44,8 @@ class FragmentIsmfaelIsmMafools : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         recyclerView?.adapter = null // Clear adapter reference
-        skabeer.clear() // Clear the ArrayList
+        skabeer.clear()
+    // Clear the ArrayList
         // ... unregister other listeners if necessary
     }
     override fun onCreateView(

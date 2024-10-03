@@ -18,11 +18,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Constant
+import com.example.Constant.SURAH_ID
 import com.example.mushafconsolidated.Activity.TafsirFullscreenActivity
 import com.example.mushafconsolidated.Adapters.fragTopicFlowAyahWordAdapter
 import com.example.mushafconsolidated.Entities.BookMarks
+import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.R
+import com.example.mushafconsolidated.SurahSummary
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.model.CorpusAyahWord
@@ -37,6 +40,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import sj.hisnul.fragments.NamesDetail
 import androidx.fragment.app.Fragment as Fragment1
 
 // TODO: Rename parameter arguments, choose names that match
@@ -85,25 +89,17 @@ class TopicDetailsFrag : DialogFragment(), OnItemClickListenerOnLong {
         val bundle: Bundle? = arguments
         // layoutBottomSheet = view.findViewById(R.id.bottom_sheet)
         //  sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet)
-
-        if (maps.size != 0) {
+        mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
+        if (maps.isNotEmpty()) {
 
             val surahname = ""
             val listener: OnItemClickListenerOnLong = this
-            val builder = AlertDialog.Builder(
-                requireContext(),
-                com.google.android.material.R.style.ThemeOverlay_Material3_Dialog
-            )
-            builder.setCancelable(false) // if you want user to wait for some process to finish,
-            builder.setView(R.layout.layout_loading_dialog)
-            val dialog = builder.create()
-            requireActivity().runOnUiThread { dialog.show() }
-            val scope: CoroutineScope
-            scope = CoroutineScope(Dispatchers.Main)
+            val dialog = showLoadingDialog()
+            val scope: CoroutineScope = CoroutineScope(Dispatchers.Main)
             //   val value = GlobalScope.async {
             //  delay(1000)
             println("thread running on [${Thread.currentThread().name}]")
-            mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
+
             val surahArrays = mainViewModel.loadListschapter().value
 
             scope.launch {
@@ -119,25 +115,8 @@ class TopicDetailsFrag : DialogFragment(), OnItemClickListenerOnLong {
                     }
                 }
                 requireActivity().runOnUiThread {
-                    val activity = requireActivity() as AppCompatActivity
-                    val linearLayoutManager = LinearLayoutManager(requireContext())
-                    /*       val flowAyahWordAdapter =
-                           TopicFlowAyahWordAdapter(corpusayahWordArrayList, listener, surahname)*/
-                    flowAyahWordAdapter = fragTopicFlowAyahWordAdapter(activity,  requireContext(),childFragmentManager,
-                        arrayofadapterlist,
-                        listener,
 
-                        arrayofquran,
-                        surahArrays
-                    )
-
-
-                    val parentRecyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
-                    parentRecyclerView.layoutManager = linearLayoutManager
-                    flowAyahWordAdapter.addContext(requireContext())
-                    parentRecyclerView.setHasFixedSize(true)
-                    parentRecyclerView.adapter = flowAyahWordAdapter
-                    flowAyahWordAdapter.notifyDataSetChanged()
+                    setupRecyclerView(listener, surahArrays, view)
                     dialog.dismiss()
                 }
             }
@@ -190,7 +169,49 @@ class TopicDetailsFrag : DialogFragment(), OnItemClickListenerOnLong {
         }
     }
 
+    private fun showLoadingDialog(): AlertDialog {
+        val builder = AlertDialog.Builder(
+            requireContext(),
+            com.google.android.material.R.style.ThemeOverlay_Material3_Dialog
+        )
+        builder.setCancelable(false) // if you want user to wait for some process to finish,
+        builder.setView(R.layout.layout_loading_dialog)
+        val dialog = builder.create()
+        requireActivity().runOnUiThread { dialog.show() }
+        return dialog
+    }
+
+    private fun setupRecyclerView(
+        listener: OnItemClickListenerOnLong,
+        surahArrays: List<ChaptersAnaEntity>?,
+        view: View
+    ) {
+        val activity = requireActivity() as AppCompatActivity
+        val linearLayoutManager = LinearLayoutManager(requireContext())
+        /*       val flowAyahWordAdapter =
+                           TopicFlowAyahWordAdapter(corpusayahWordArrayList, listener, surahname)*/
+        flowAyahWordAdapter = fragTopicFlowAyahWordAdapter(
+            activity, requireContext(), childFragmentManager,
+            arrayofadapterlist,
+            listener,
+
+            arrayofquran,
+            surahArrays
+        )
+
+
+        val parentRecyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
+        parentRecyclerView.layoutManager = linearLayoutManager
+        flowAyahWordAdapter.addContext(requireContext())
+        parentRecyclerView.setHasFixedSize(true)
+        parentRecyclerView.adapter = flowAyahWordAdapter
+        flowAyahWordAdapter.notifyDataSetChanged()
+    }
     private fun getwbwy(str: String, header: String) {
+        val (surahId, ayahId) = str.split(":").map { it.trim().toInt() }
+        newpreparewbwarray(header, surahId, ayahId)
+    }
+  /*  private fun getwbwy(str: String, header: String) {
         val ss = str.split(":".toRegex()).dropLastWhile { it.isEmpty() }
             .toTypedArray()
 
@@ -199,14 +220,9 @@ class TopicDetailsFrag : DialogFragment(), OnItemClickListenerOnLong {
             //    preparewbwarray(header, suraid, ayah)
             newpreparewbwarray(header, suraid, ayah)
 
-    }
+    }*/
 
     private fun newpreparewbwarray(header: String?, suraid: Int, ayah: Int) {
-        val utils = Utils(requireContext())
-        //  CorpusWbwWord word = new CorpusWbwWord();
-        val ayahWord = CorpusAyahWord()
-        val wordArrayList = ArrayList<CorpusWbwWord>()
-        //  val wbw: List<CorpusExpandWbwPOJO> = utils.getCorpusWbwBySurahAyahtopic(suraid, ayah)
 
 
         mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
@@ -274,6 +290,29 @@ class TopicDetailsFrag : DialogFragment(), OnItemClickListenerOnLong {
         val tag = view.tag
         var bookmarkview: View? = null
         val overflow = view.findViewById<View>(R.id.ivActionOverflow)
+        if(tag=="summary"){
+            view = view.findViewById(R.id.summbaryfb)
+
+            //  HideFabMenu();
+            val chapter_no = arrayofquran[position][0].surah
+            //   int verse = ayahWord.getWord().get(0).getVerseId();
+
+            val dataBundle = Bundle()
+            if (chapter_no != null) {
+                dataBundle.putInt(SURAH_ID, chapter_no)
+            }
+            val item = SurahSummary()
+            item.arguments = dataBundle
+            //  FragmentTransaction transactions = fragmentManager.beginTransaction().setCustomAnimations(R.anim.abc_slide_in_top, android.R.anim.fade_out);
+            //   transactions.show(item);
+            if (chapter_no != null) {
+                SurahSummary.newInstance(chapter_no).show(
+                   requireActivity().supportFragmentManager,
+                    NamesDetail.TAG
+                )
+            }
+
+        }
         if ((tag == "bookmark")) {
             bookMarkSelected(position, bookmarkview)
             //  SurahAyahPicker();
