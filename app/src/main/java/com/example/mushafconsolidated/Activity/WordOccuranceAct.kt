@@ -1,6 +1,5 @@
 package com.example.mushafconsolidated.Activity
 
-import com.example.mushafconsolidated.Activityimport.BaseActivity
 import Utility.ArabicLiterals.AlifMaksuraString
 import Utility.ArabicLiterals.Hamza
 import Utility.ArabicLiterals.LALIF
@@ -14,7 +13,6 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.ExpandableListView
 import androidx.appcompat.app.AlertDialog
-import androidx.compose.ui.semantics.dismiss
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
 import com.example.Constant
@@ -23,7 +21,7 @@ import com.example.Constant.SURAH_ARABIC_NAME
 import com.example.Constant.SURAH_ID
 import com.example.Constant.WORDNUMBER
 import com.example.Constant.particlespanDark
-
+import com.example.mushafconsolidated.Activityimport.BaseActivity
 import com.example.mushafconsolidated.Adapters.NounVerbOccuranceListAdapter
 import com.example.mushafconsolidated.Entities.CorpusNounWbwOccurance
 import com.example.mushafconsolidated.Entities.CorpusVerbWbwOccurance
@@ -39,10 +37,10 @@ import com.example.utility.CorpusUtilityorig.Companion.getSpannableVerses
 import com.example.utility.QuranGrammarApplication
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
-
 import java.util.Objects
 import java.util.concurrent.Executors
 import java.util.regex.Pattern
+
 @AndroidEntryPoint
 open class WordOccuranceAct : BaseActivity() {
     private var expandableListView: ExpandableListView? = null
@@ -331,7 +329,7 @@ open class WordOccuranceAct : BaseActivity() {
                     )
                 )
                 sb = SpannableString(l.toString())
-                sb!!.setSpan(
+                sb.setSpan(
                     particlespanDark,
                     indexof,
                     Objects.requireNonNull(
@@ -339,7 +337,7 @@ open class WordOccuranceAct : BaseActivity() {
                     ).length + indexof,
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                 )
-                lists.add(sb!!)
+                lists.add(sb)
                 //   System.out.println("Found value: " + m.group(2) );
             } else {
                 lists.add(SpannableString.valueOf(replaceAll))

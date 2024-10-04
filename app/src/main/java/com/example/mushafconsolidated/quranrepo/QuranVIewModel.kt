@@ -28,6 +28,7 @@ import com.example.mushafconsolidated.Entities.lanerootdictionary
 import com.example.mushafconsolidated.Entities.lughat
 import com.example.mushafconsolidated.Entities.surahsummary
 import com.example.mushafconsolidated.Entities.wbwentity
+
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.model.Juz
 import com.example.mushafconsolidated.model.QuranCorpusWbw
@@ -62,7 +63,7 @@ class QuranVIewModel @Inject constructor(
     var liajlihi: MutableLiveData<List<LiajlihiEnt>> = MutableLiveData()
     var badal: MutableLiveData<List<BadalErabNotesEnt>> = MutableLiveData()
     private var bokmarks: LiveData<List<BookMarks>> = MutableLiveData()
-
+    var wbw: MutableLiveData<List<wbwentity>> = MutableLiveData()
     private var hanslist: MutableLiveData<List<hanslexicon>> = MutableLiveData()
     private var laneslist: MutableLiveData<List<lanerootdictionary>> = MutableLiveData()
 
@@ -82,7 +83,7 @@ class QuranVIewModel @Inject constructor(
     private var nasab: MutableLiveData<List<NewNasbEntity>> = MutableLiveData()
     var mudhaf: MutableLiveData<List<NewMudhafEntity>> = MutableLiveData()
     private var sifa: MutableLiveData<List<SifaEntity>> = MutableLiveData()
-    var wbw: MutableLiveData<List<wbwentity>> = MutableLiveData()
+
 
     var lughat: MutableLiveData<List<lughat>> = MutableLiveData()
     private var grammarules: MutableLiveData<List<GrammarRules>> = MutableLiveData()
@@ -111,29 +112,8 @@ class QuranVIewModel @Inject constructor(
     }
 
 
-     fun getwbwQuranTranslationRange(surahid: Int, ayahid: Int, startindex: Int, endindex: Int):
-            LiveData<List<wbwentity>> {
-        wbw.value =
-            this.quranRepository.wbwdao.getwbwQuranbTranslationbyrange(
-                surahid,
-                ayahid,
-                startindex,
-                endindex
-            )
-        return wbw
-
-    }
 
 
-    fun getwbwTranslationbywordno(
-        surahid: Int,
-        ayahid: Int,
-        wordno: Int,
-    ): LiveData<List<wbwentity>> {
-        wbw.value = this.quranRepository.wbwdao.getwbwTranslationbywordno(surahid, ayahid, wordno)
-        return wbw
-
-    }
 
 
     fun getkana(surah: Int, ayah: Int): LiveData<List<NewKanaEntity>> {
@@ -425,8 +405,28 @@ class QuranVIewModel @Inject constructor(
         quranRepository.deletecollection(bookmar)
     }
 
+    fun getwbwQuranTranslationRange(surahid: Int, ayahid: Int, startindex: Int, endindex: Int):
+            LiveData<List<wbwentity>> {
+        wbw.value =
+            this.quranRepository.wbwdao.getwbwQuranbTranslationbyrange(
+                surahid,
+                ayahid,
+                startindex,
+                endindex
+            )
+        return wbw
+
+    }
 
 
+    fun getwbwTranslationbywordno(
+        surahid: Int,
+        ayahid: Int,
+        wordno: Int,
+    ): LiveData<List<wbwentity>> {
+        wbw.value = this.quranRepository.wbwdao.getwbwTranslationbywordno(surahid, ayahid, wordno)
+        return wbw
 
+    }
 }
 

@@ -42,6 +42,7 @@ import com.example.Constant.SURAH_ID
 import com.example.Constant.VERBMOOD
 import com.example.Constant.VERBTYPE
 import com.example.mushafconsolidated.Activity.LughatWordDetailsAct
+
 import com.example.mushafconsolidated.Activity.WordOccuranceAct
 import com.example.mushafconsolidated.Entities.HalEnt
 import com.example.mushafconsolidated.Entities.LiajlihiEnt

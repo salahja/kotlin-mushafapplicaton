@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "33f7477f563aecfd59d405190b85e3ae",
+    "identityHash": "66bea1a35614a1b8d50fb6b614530f93",
     "entities": [
       {
         "tableName": "surahjson",
@@ -1850,7 +1850,7 @@
       },
       {
         "tableName": "CorpusExpand",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surah` INTEGER NOT NULL, `ayah` INTEGER NOT NULL, `wordno` INTEGER NOT NULL, `wordcount` INTEGER NOT NULL, `araone` TEXT, `aratwo` TEXT, `arathree` TEXT, `arafour` TEXT, `arafive` TEXT, `tagone` TEXT, `tagtwo` TEXT, `tagthree` TEXT, `tagfour` TEXT, `tagfive` TEXT, `rootaraone` TEXT, `rootaratwo` TEXT, `rootarathree` TEXT, `rootarafour` TEXT, `rootarafive` TEXT, `lemaraone` TEXT, `lemaratwo` TEXT, `lemarathree` TEXT, `lemarafour` TEXT, `lemarafive` TEXT, `detailsone` TEXT, `detailstwo` TEXT, `detailsthree` TEXT, `detailsfour` TEXT, `detailsfive` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `juz` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surah` INTEGER NOT NULL, `ayah` INTEGER NOT NULL, `wordno` INTEGER NOT NULL, `wordcount` INTEGER NOT NULL, `araone` TEXT, `aratwo` TEXT, `arathree` TEXT, `arafour` TEXT, `arafive` TEXT, `tagone` TEXT, `tagtwo` TEXT, `tagthree` TEXT, `tagfour` TEXT, `tagfive` TEXT, `rootaraone` TEXT, `rootaratwo` TEXT, `rootarathree` TEXT, `rootarafour` TEXT, `rootarafive` TEXT, `lemaraone` TEXT, `lemaratwo` TEXT, `lemarathree` TEXT, `lemarafour` TEXT, `lemarafive` TEXT, `detailsone` TEXT, `detailstwo` TEXT, `detailsthree` TEXT, `detailsfour` TEXT, `detailsfive` TEXT, `en` TEXT NOT NULL, `bn` TEXT NOT NULL, `ind` TEXT NOT NULL, `ur` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `juz` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "surah",
@@ -2023,6 +2023,30 @@
           {
             "fieldPath": "detailsfive",
             "columnName": "detailsfive",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "en",
+            "columnName": "en",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bn",
+            "columnName": "bn",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ind",
+            "columnName": "ind",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ur",
+            "columnName": "ur",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -2211,7 +2235,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '33f7477f563aecfd59d405190b85e3ae')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '66bea1a35614a1b8d50fb6b614530f93')"
     ]
   }
 }

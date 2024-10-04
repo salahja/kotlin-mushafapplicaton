@@ -35,6 +35,11 @@ class CorpusEntity constructor(
     var detailsthree: String?,
     var detailsfour: String?,
     var detailsfive: String?,
+    var en: String,
+    var bn: String,
+    var ind: String,
+    var ur: String?,
+
 
     @field:PrimaryKey(
         autoGenerate = true

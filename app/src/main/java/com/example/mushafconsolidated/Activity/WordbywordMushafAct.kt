@@ -76,6 +76,7 @@ import com.example.mushafconsolidated.databinding.FbarnormalfooterBinding
 import com.example.mushafconsolidated.databinding.RxfetchProgressBinding
 import com.example.mushafconsolidated.databinding.VfourExpandableNewactivityShowAyahsBinding
 import com.example.mushafconsolidated.Adapters.FlowAyahWordAdapterNoMafoolat
+import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.SurahHeader
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
@@ -124,7 +125,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
 
     @Inject
     lateinit var quranRepository: QuranRepository
-    private  var corpusGroupedByAyah:LinkedHashMap<Int, ArrayList<QuranCorpusWbw>> =
+    private  var corpusGroupedByAyah:LinkedHashMap<Int, ArrayList<CorpusEntity>> =
         LinkedHashMap()
     // private UpdateMafoolFlowAyahWordAdapter flowAyahWordAdapter;
     private lateinit var mainViewModel: QuranVIewModel
@@ -1277,7 +1278,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
                 allofQuran=   qurandata.allofQuran
                 corpusSurahWord=qurandata.corpusSurahWord
 
-                corpusGroupedByAyah = corpusSurahWord!!.groupBy { it.corpus!!.ayah } as LinkedHashMap<Int, ArrayList<QuranCorpusWbw>>
+                corpusGroupedByAyah = corpusSurahWord!!.groupBy { it.corpus!!.ayah } as LinkedHashMap<Int, ArrayList<CorpusEntity>>
                 //    newnewadapterlist = CorpusUtilityorig.composeWBWCollection(qurandata.allofQuran, qurandata.corpusSurahWord)
 
 

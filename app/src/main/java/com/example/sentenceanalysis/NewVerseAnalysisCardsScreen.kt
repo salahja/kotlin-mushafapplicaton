@@ -9,6 +9,7 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.rememberTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.animation.expandVertically
@@ -27,6 +28,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -61,9 +63,8 @@ import com.example.mushafconsolidated.R
 import com.example.utility.QuranGrammarApplication
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-val EXPANSTION_TRANSITION_DURATION: Int = 0
+const val EXPANSTION_TRANSITION_DURATION: Int = 0
 
-@OptIn(ExperimentalMaterial3Api::class)
 @ExperimentalCoroutinesApi
 @Composable
 
@@ -79,19 +80,14 @@ fun NewVerseAnalysisCardsScreen(
         QuranGrammarApplication.context!!
     )
 
-    //  var loading = versemodel.loading.value
 
-    //grammatically colred word default font
-    val arabic_font_selection =
-        sharedPreferences.getString("Arabic_Font_Selection", "quranicfontregular.ttf")
-    // val words by wordoccuranceModel.words.collectAsStateWithLifecycle()
-    // val cards by viewModel.roots.collectAsStateWithLifecycle()
+    sharedPreferences.getString("Arabic_Font_Selection", "quranicfontregular.ttf")
+
     val cards by viewModel.items.collectAsStateWithLifecycle()
     val expandedCardIds by viewModel.expandedCardIdsList.collectAsStateWithLifecycle()
 
 
     val context = LocalContext.current
-    var shouldShowOnboarding by rememberSaveable { mutableStateOf(true) }
 
 
     val bgColour = remember {
@@ -102,9 +98,8 @@ fun NewVerseAnalysisCardsScreen(
         Modifier.background(bgColour)
 
     ) { paddingValues ->
-        val copyProgress: MutableState<Float> = remember { mutableFloatStateOf(0.0f) }
-        //   loading = viewModel.loading.value
-        //   WordOccuranceLoading(isDisplayed = loading)
+        remember { mutableFloatStateOf(0.0f) }
+
         LazyColumn(Modifier.padding(paddingValues)) {
             items(cards, ExpandableVerseViewModel.VerseAnalysisModel::id) { card ->
                 ExpandableVerseCard(
@@ -141,7 +136,7 @@ fun ExpandableVerseCard(
             targetState = !expanded
         }
     }
-    val transition = updateTransition(transitionState, label = "transition")
+    val transition = rememberTransition(transitionState, label = "transition")
     val cardBgColor by transition.animateColor({
 
         tween(durationMillis = EXPANSTION_TRANSITION_DURATION)
@@ -281,9 +276,9 @@ fun ExpandableVerseContent(
 
                 // on below line we are specifying
                 // divider for each list item
-                Divider(color = Color.Red, thickness = 0.5.dp)
+                HorizontalDivider(thickness = 0.5.dp, color = Color.Red)
             }
-            Divider()
+            HorizontalDivider()
         }
 
         /*

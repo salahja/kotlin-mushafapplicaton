@@ -35,6 +35,7 @@ import com.example.Constant.WORDMEANING
 import com.example.Constant.WORDNUMBER
 import com.example.Constant.particlespanDark
 import com.example.mushafconsolidated.Activity.LughatWordDetailsAct
+
 import com.example.mushafconsolidated.Adapters.NounVerbOccuranceListAdapter
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
 import com.example.mushafconsolidated.Entities.CorpusNounWbwOccurance

@@ -15,9 +15,11 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.SpannableString
 import android.view.Gravity
+import androidx.media3.common.C
 import com.example.Constant
 import com.example.mushafconsolidated.Adapters.FlowAyahWordAdapterNoMafoolat.ItemViewAdapter
 import com.example.mushafconsolidated.Adapters.RevalationCity
+import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.NounCorpus
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.VerbCorpus
@@ -45,6 +47,23 @@ object QuranViewUtils {
 
         }
     }
+
+    fun NewsetWordClickListener(view: View, context: Context, word: CorpusEntity, surahName: String, loadItemList: (Bundle, CorpusEntity) -> Unit) {
+        view.setOnClickListener {
+            val dialog = Dialog(context)
+            dialog.setTitle(word.araone + word.aratwo + word.arathree + word.arafour + word.arafive)
+
+            val dataBundle = Bundle()
+            dataBundle.putInt(Constant.SURAH_ID, word.surah)
+            dataBundle.putInt(Constant.AYAHNUMBER, word.ayah)
+            dataBundle.putInt(Constant.WORDNUMBER, word.wordno)
+            dataBundle.putString(Constant.SURAH_ARABIC_NAME, surahName)
+            loadItemList(dataBundle,word)
+
+        }
+    }
+
+
     fun setTranslationText(textView: TextView, translationNote: TextView, entity: QuranEntity?, translationKey: String, noteResId: Int) {
         if (entity != null) {
             textView.text = when (translationKey) {
@@ -113,6 +132,55 @@ object QuranViewUtils {
             .show()
     }
 
+    fun NewshowWordMorphologyTooltip(context: Context, view: View, word: CorpusEntity, isNightmode: String) {
+        val utils = Utils(QuranGrammarApplication.context!!)
+
+        val verbCorpusRootWords =
+            utils.getQuranRoot(
+                word.surah,
+                word.ayah,
+                word.wordno
+            )
+        if (verbCorpusRootWords.isNotEmpty() && verbCorpusRootWords[0].tag == "V") {
+            //    vbdetail = ams.getVerbDetails();
+            print("check")
+        }
+        val corpusNounWord:List<NounCorpus> =
+            utils.getQuranNouns(
+                word.surah,
+                word.ayah,
+                word.wordno
+            )
+        val verbCorpusRootWord : List<VerbCorpus> =
+            utils.getQuranRoot(
+                word.surah,
+                word.ayah,
+                word.wordno
+            )
+        val qm = WordMorphologyDetails(
+            word,
+            corpusNounWord, verbCorpusRootWord
+        )
+        val workBreakDown = qm.workBreakDown
+
+        val backgroundColor = when (isNightmode) {
+            "dark", "blue", "green" -> R.color.background_color
+            "brown","light" -> R.color.background_color
+            else -> R.color.background_color_light_brown
+        }
+
+        SimpleTooltip.Builder(context)
+            .anchorView(view)
+            .text(workBreakDown)
+            .backgroundColor(backgroundColor)
+            .gravity(Gravity.TOP)
+            .modal(true)
+            .arrowDrawable(android.R.drawable.ic_media_previous)
+            .arrowHeight(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
+            .arrowWidth(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
+            .build()
+            .show()
+    }
     fun setIconColors(surahInfoTextView: TextView, isNightMode: String, isMakkiMadani: Int) {
         val icon = if (isMakkiMadani == 1) {
             R.drawable.ic_makkah_48
@@ -158,6 +226,32 @@ object QuranViewUtils {
             tag.corpus!!.tagfive!!,
             rootword
         )!!
+    }
+
+    fun NewgetSpannedRoots(tag: CorpusEntity, rootword: String): SpannableString {
+        return CorpusUtilityorig.ColorizeRootword(
+            tag.tagone!!,
+            tag.tagtwo!!,
+            tag.tagthree!!,
+            tag.tagfour!!,
+            tag.tagfive!!,
+            rootword
+        )!!
+    }
+
+    fun NewgetSpannedWords(tag: CorpusEntity): SpannableString {
+        return CorpusUtilityorig.NewSetWordSpan(
+            tag.tagone,
+            tag.tagtwo,
+            tag.tagthree,
+            tag.tagfour,
+            tag.tagfive,
+            tag.araone!!,
+            tag.aratwo!!,
+            tag.arathree!!,
+            tag.arafour!!,
+            tag.arafive!!
+        )
     }
 
     fun getSpannedWords(tag: QuranCorpusWbw): SpannableString {

@@ -12,7 +12,7 @@ import com.example.mushafconsolidated.Entities.CorpusEntity
 @Dao
 interface CorpusExpandedDao {
     @Query("SELECT * FROM CorpusExpand WHERE surah=:id")
-    fun getVersesBySurah(id: Int): List<CorpusEntity?>?
+    fun getVersesBySurah(id: Int): List<CorpusEntity>
 
     @Query("SELECT * FROM CorpusExpand WHERE surah=:id and ayah=:ayahid")
     fun getVersesBySurahAndAya(id: Int, ayahid: Int): List<CorpusEntity?>?
