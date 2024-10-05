@@ -127,6 +127,9 @@ import javax.inject.Inject
     fun getQuranCorpusWbw(surah: Int, ayah: Int, wordno: Int): List<QuranCorpusWbw> =
         qurandao.getQuranCorpusWbw(surah, ayah, wordno)
 
+     fun getCorpusEntityFilterbywordno(surah: Int, ayah: Int, wordno: Int): List<CorpusEntity> =
+         corpusDao.getCorpusWord(surah, ayah, wordno)
+
     fun getMafoolbihi(surah: Int, ayah: Int, wordno: Int): List<MafoolBihi> =
         mafoolbihi.getMafoolbihi(surah, ayah, wordno)
 

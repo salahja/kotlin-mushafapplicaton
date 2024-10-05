@@ -77,8 +77,7 @@ import com.example.mushafconsolidated.Entities.SurahHeader
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.model.CorpusAyahWord
-import com.example.mushafconsolidated.model.NewQuranCorpusWbw
-import com.example.mushafconsolidated.model.QuranCorpusWbw
+
 import com.example.mushafconsolidated.quranrepo.QuranRepository
 import com.example.mushafconsolidated.quranrepo.QuranVIewModel
 import com.example.mushafconsolidated.receiversimport.AudioAppConstants

@@ -26,7 +26,7 @@ interface CorpusExpandedDao {
         id: Int,
         ayahid: Int,
         wordid: Int
-    ): List<CorpusEntity?>? //   SELECT VerseNew.chapter_no, VerseNew.verse_no, Translation.author_name, TranslationData.translation FROM TranslationData INNER JOIN Translation
+    ): List<CorpusEntity> //   SELECT VerseNew.chapter_no, VerseNew.verse_no, Translation.author_name, TranslationData.translation FROM TranslationData INNER JOIN Translation
     //  ON Translation.translation_id = TranslationData.translation_id INNER JOIN VerseNew ON VerseNew.verseID = TranslationData.verse_id    WHERE TranslationData.translation_id ="en_sahih"   and VerseNew.chapter_no= 2
 
 

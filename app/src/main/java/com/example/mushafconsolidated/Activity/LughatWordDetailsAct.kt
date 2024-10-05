@@ -1109,19 +1109,25 @@ class LughatWordDetailsAct : BaseActivity() {
                     val fragv = Dictionary_frag(this@LughatWordDetailsAct, languages[4].toString())
                     fragv.arguments = dataBundle
                     return fragv.newInstance()
-                } /*else if (position == 5) {
-                        val fragv = FragmentVerb()
-                        fragv.arguments = dataBundle
-                        return fragv.newInstance()
-                    } else if (position == 6) {
+                }
+
+                5->  {
+                    val fragv = FragmentVerb()
+                    fragv.arguments = dataBundle
+                    return fragv.newInstance()
+                }
+                 6->  {
                         val fragvs = FragmentIsmfaelIsmMafools()
                         fragvs.arguments = dataBundle
                         return fragvs.newInstance()
                     }
-                    val fragv = FragmentVerb()
-                    fragv.arguments = dataBundle
-                    return fragv.newInstance()*/
-                else -> return TODO("Provide the return value")
+               else ->{
+
+                   val fragvs = FragmentIsmfaelIsmMafools()
+                   fragvs.arguments = dataBundle
+                   return fragvs.newInstance()
+               }
+
             }
         }
 

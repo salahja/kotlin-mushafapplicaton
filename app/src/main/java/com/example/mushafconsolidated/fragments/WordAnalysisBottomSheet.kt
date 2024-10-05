@@ -44,6 +44,7 @@ import com.example.Constant.VERBTYPE
 import com.example.mushafconsolidated.Activity.LughatWordDetailsAct
 
 import com.example.mushafconsolidated.Activity.WordOccuranceAct
+import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.HalEnt
 import com.example.mushafconsolidated.Entities.LiajlihiEnt
 import com.example.mushafconsolidated.Entities.MafoolBihi
@@ -63,7 +64,6 @@ import com.example.mushafconsolidated.Entities.wbwentity
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.R.layout
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListener
-import com.example.mushafconsolidated.model.QuranCorpusWbw
 import com.example.mushafconsolidated.quranrepo.QuranVIewModel
 import com.example.mushafconsolidatedimport.VerbFormsDialogFrag
 import com.example.utility.CorpusUtilityorig
@@ -99,7 +99,7 @@ class WordAnalysisBottomSheet : DialogFragment() {
     private var tameezWord : List<TameezEnt> = ArrayList()
     private var liajlihiEntArrayList :  List<LiajlihiEnt> = ArrayList()
     private var mutlaqword : List<MafoolMutlaqEnt> = ArrayList()
- var corpusSurahWord: List<QuranCorpusWbw> = ArrayList()
+     var corpusSurahWord: List<CorpusEntity> = ArrayList()
     private var wazannumberslist = ArrayList<String>()
     private var rwAdapter: NewRootWordDisplayAdapter? = null
     var chapterid = 0
@@ -188,7 +188,7 @@ class WordAnalysisBottomSheet : DialogFragment() {
         val corpusNounWord = mainViewModel.getNouncorpus(chapterid, ayanumber, wordno).value
         val verbCorpusRootWord =
             mainViewModel.getVerbRootBySurahAyahWord(chapterid, ayanumber, wordno).value
-         corpusSurahWord = mainViewModel.getQuranCorpusWbw(chapterid, ayanumber, wordno).value!!
+         corpusSurahWord = mainViewModel.getCorpusEntityFilterbywordno(chapterid, ayanumber, wordno).value!!
         val am = NewQuranMorphologyDetails(
             corpusSurahWord,
             corpusNounWord as ArrayList<NounCorpus>?,
@@ -246,43 +246,13 @@ class WordAnalysisBottomSheet : DialogFragment() {
 
         }
         isnoun = wordbdetail["noun"] != null
-/*        if (isparticple) {
-            if (Objects.requireNonNull(wordbdetail["form"])
-                    .toString() == "I"
-            ) {
-                ismujarradparticple = true
-                ismujarrad = true
-            } else {
-                ismujarradparticple = false
-                ismazeed = true
-            }
-        }*/
+
         if (isparticple) {
             // Avoid unnecessary Objects.requireNonNull
             ismujarradparticple = wordbdetail["form"]?.toString() == "I"
             ismujarrad = ismujarradparticple
             ismazeed = !ismujarradparticple
         }
-
-      /*  if (ismujarrad && !isparticple) {
-            mujarradwazan = vbdetail["wazan"].toString()
-            verbmood = if (vbdetail["emph"] != null) {
-                "Emphasized"
-            } else {
-                vbdetail["verbmood"].toString()
-            }
-        } else if (ismazeed && !isparticple) {
-            mazeedwazan = vbdetail["form"].toString()
-            verbmood = if (vbdetail["emph"] != null) {
-                "Emphasized"
-            } else {
-                vbdetail["verbmood"].toString()
-            }
-        } else if (ismujarrad) { //when mujarrad particple use N=nasara bab
-            mujarradwazan = "N"
-        } else if (ismazeed) { //when mazeed get the form
-            mazeedwazan = wordbdetail["form"].toString()
-        }*/
 
         if (ismujarrad && !isparticple) {
             mujarradwazan = vbdetail["wazan"].toString()
@@ -301,206 +271,7 @@ class WordAnalysisBottomSheet : DialogFragment() {
         } else if (ismazeed) {
             mazeedwazan = wordbdetail["form"].toString()
         }
-        //vb.root=String.valueOf(wordbdetail.get("root")));
-      /*  if (isShart || isdem || isharfnasb || isprep || isrelative) {
-            isroot = false
-            isThulathiSarfSagheer = false
-            isMazeedSarfSagheer = false
-            isconjugation = true
-        } else if (isroot && ismujarrad && !isparticple) {
-            vb = VerbWazan()
-            vb.root = root!!
-            vb.wazan = mujarradwazan
-            val listing: java.util.ArrayList<java.util.ArrayList<*>> = GatherAll.instance
-                .getMujarradListing(
-                    verbmood,
-                    root!!,
-                    vb.wazan!!
-                ) //     ThulathiMazeedConjugatonList = iniitThulathiQuerys(vbdetail.get("wazan"), vbdetail.get("root"));
-            val ss = SarfSagheer()
 
-            ss.weakness = (listing[3][0] as VerbDetails).verbtype
-            ss.wazanname = (listing[3][0] as VerbDetails).babname
-            ss.verbroot = (listing[3][0] as VerbDetails).verbroot
-            ss.madhi = (listing[0][0] as MadhiMudharay).hua
-            ss.madhimajhool = (listing[0][1] as MadhiMudharay).hua
-            ss.mudharay = (listing[0][2] as MadhiMudharay).hua
-            ss.mudharaymajhool = (listing[0][3] as MadhiMudharay).hua
-            ss.amrone = (listing[2][0] as AmrNahiAmr).anta
-            ss.nahiamrone = (listing[2][1] as AmrNahiAmr).anta
-            ss.ismfael = (listing[1][0] as FaelMafool).nomsinM
-            ss.ismmafool = (listing[1][1] as FaelMafool).nomsinM
-
-
-
-            ss.verbtype = (listing[3][0] as VerbDetails).mazeedormujarad
-            ss.wazan = (listing[3][0] as VerbDetails).wazannumberorname
-            sarfSagheerList.add(ss)
-            isroot = true
-            isThulathiSarfSagheer = true
-
-            isMazeedSarfSagheer = false
-
-            isconjugation = true
-            val first = root!!.startsWith("أ")
-            val second = root!!.indexOf("أ")
-            if (first) {
-                root = root!!.replace("أ", "ء")
-            } else if (second != -1) {
-                root = root!!.replace("أ", "ء")
-            }
-
-            val model: VerbModel by viewModels()
-            //  val mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
-
-            val triVerb = model.getMujjarlist(root!!).value
-            verbDictList = java.util.ArrayList<MujarradVerbs>()
-            if (triVerb != null) {
-                for (tri in triVerb) {
-                    verbDictList.add(
-                        MujarradVerbs(
-                            tri.verb,
-                            tri.root,
-                            tri.babname,
-                            tri.verbtype,
-                            ""
-                        )
-                    )
-                    wazannumberslist.add(
-                        tri.babname + ("-") + (tri.verbtype + ("-"))
-                    )
-                }
-            }
-        } else if (isroot && ismazeed && !isparticple) {
-
-            val model: VerbModel by viewModels()
-            val mazeedEntityRoots = model.getMazeelist(root!!).value
-
-            if (mazeedEntityRoots != null) {
-                if (mazeedEntityRoots.isNotEmpty()) {
-                    isMazeedSarfSagheer = true
-
-                    isThulathiSarfSagheer = false
-                    isconjugation = true
-                    val listing: java.util.ArrayList<java.util.ArrayList<*>> =
-                        GatherAll.instance.getMazeedListing(verbmood, root!!, mazeedwazan)
-                    val ss = SarfSagheer()
-                    ss.weakness = (listing[3][0] as VerbDetails).verbtype
-                    ss.wazanname = (listing[3][0] as VerbDetails).babname
-                    ss.verbroot = (listing[3][0] as VerbDetails).verbroot
-                    ss.madhi = (listing[0][0] as MadhiMudharay).hua
-                    ss.madhimajhool = (listing[0][1] as MadhiMudharay).hua
-                    ss.mudharay = (listing[0][2] as MadhiMudharay).hua
-                    ss.mudharaymajhool = (listing[0][3] as MadhiMudharay).hua
-                    ss.amrone = (listing[2][0] as AmrNahiAmr).anta
-                    ss.nahiamrone = (listing[2][1] as AmrNahiAmr).anta
-                    ss.ismfael = (listing[1][0] as FaelMafool).nomsinM
-                    ss.ismmafool = (listing[1][1] as FaelMafool).nomsinM
-
-
-
-                    ss.verbtype = (listing[3][0] as VerbDetails).mazeedormujarad
-                    ss.wazan = (listing[3][0] as VerbDetails).wazannumberorname
-                    sarfSagheerList.add(ss)
-                    isroot = true
-                    vb = VerbWazan()
-                    vb.root = vbdetail["root"]
-                    vb.wazan = vbdetail["form"]
-                } else {
-                    isroot = true
-                    vb = VerbWazan()
-                    vb.root = vbdetail["root"]
-                    vb.wazan = vbdetail["form"]
-
-                    isMazeedSarfSagheer = false
-
-                    isThulathiSarfSagheer = false
-                    isconjugation = false
-                }
-            }
-        } else if (isroot && isparticple) {
-            isroot = true
-            isparticple = true
-            isconjugation = false
-            if (!ismujarradparticple) {
-                val form1 = wordbdetail["form"].toString()
-                val root = wordbdetail["root"].toString()
-                vb = VerbWazan()
-                vb.root = root
-                vb.wazan = form1
-                ismfaelmafool = GatherAll.instance.buildMazeedParticiples(root, form1)
-                isNoun = false
-
-            } else {
-                //  var root = vb.root
-                if (root!!.isNotEmpty() && root!!.length != 3) {
-                    root = wordbdetail["root"].toString()
-                }
-                val first = root!!.startsWith("أ")
-                val second = root!!.indexOf("أ")
-                if (first) {
-                    root = root!!.replace("أ", "ء")
-                } else if (second != -1) {
-                    root = root!!.replace("أ", "ء")
-                }
-
-
-                val model: VerbModel by viewModels()
-
-
-                val triVerb = model.getMujjarlist(root!!).value
-                verbDictList = java.util.ArrayList<MujarradVerbs>()
-                if (triVerb != null) {
-                    for (tri in triVerb) {
-                        verbDictList.add(
-                            MujarradVerbs(
-                                tri.verb,
-                                tri.root,
-                                tri.babname,
-                                tri.verbtype,
-                                ""
-                            )
-                        )
-                        wazannumberslist.add(
-                            tri.babname + ("-") + (tri.verbtype + ("-"))
-                        )
-                    }
-                }
-                if (triVerb!!.isNotEmpty()) {
-                    isparticple = true
-                    ismfaelmafool =
-                        GatherAll.instance.getMujarradParticiple(root!!, triVerb[0].bab)
-                    vb.wazan = triVerb[0].bab
-                } else {
-                    isparticple = false
-                }
-            }
-        } else if (isroot && isnoun) {
-            vb = VerbWazan()
-            vb.root = root!!
-            isroot = true
-            isNoun = true
-
-        } else if (isroot && !isconjugation) {
-            val concat = corpusSurahWord[0].corpus.araone + "|" + corpusSurahWord[0].corpus.aratwo
-            arabicword = VerbWazan()
-            val arabicWord =
-                models.getArabicWord(wordbdetail["arabicword"].toString()).value as java.util.ArrayList<lughat?>?
-            val rootDictionary = models.getRootWordDictionary(concat).value as ArrayList<lughat>
-            if (arabicWord!!.size > 0) {
-                arabicword.arabicword = arabicWord[0]!!.arabicword
-                isroot = false
-                isarabicword = true
-            } else if (rootDictionary.isNotEmpty()) {
-                isroot = false
-                isarabicword = true
-            } else {
-                isroot = false
-                isarabicword = false
-            }
-
-        }
-*/
 
         if (isShart || isdem || isharfnasb || isprep || isrelative) {
             isroot = false
@@ -532,7 +303,7 @@ class WordAnalysisBottomSheet : DialogFragment() {
             }
         }
 
-        if (corpusNounWord != null && corpusNounWord.isNotEmpty()) {
+        if (!corpusNounWord.isNullOrEmpty()) {
             when (corpusNounWord[0].tag) {
                 "COND", "T", "LOC" -> {
                     harfNasbAndZarf = corpusNounWord[0].tag  // Directly assign the tag
@@ -609,7 +380,7 @@ class WordAnalysisBottomSheet : DialogFragment() {
                 ismfaelmafool,
                 isparticple,
                 isconjugation,
-                corpusSurahWord as ArrayList<QuranCorpusWbw>,
+                corpusSurahWord as ArrayList<CorpusEntity>,
                 wordbdetail,
                 vbdetail,
                 isMazeedSarfSagheer,
@@ -722,7 +493,7 @@ class WordAnalysisBottomSheet : DialogFragment() {
     }
 
     private fun handleArabicWord() {
-        val concat = corpusSurahWord[0].corpus.araone + "|" + corpusSurahWord[0].corpus.aratwo
+        val concat = corpusSurahWord[0].araone + "|" + corpusSurahWord[0].aratwo
         arabicword = VerbWazan()
         val models: QuranVIewModel by viewModels()
         val arabicWord = models.getArabicWord(wordbdetail["arabicword"].toString()).value as? ArrayList<lughat>
@@ -731,7 +502,7 @@ class WordAnalysisBottomSheet : DialogFragment() {
         isarabicword = arabicWord?.isNotEmpty() ?: false || rootDictionary.isNotEmpty()
         isroot = false
         if (arabicWord?.isNotEmpty() == true) {
-            arabicword.arabicword = arabicWord[0]?.arabicword
+            arabicword.arabicword = arabicWord[0].arabicword
         }
     }
 

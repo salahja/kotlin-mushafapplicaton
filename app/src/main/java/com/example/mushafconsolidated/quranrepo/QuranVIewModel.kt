@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.mushafconsolidated.Entities.BadalErabNotesEnt
 import com.example.mushafconsolidated.Entities.BookMarks
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
+import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.GrammarRules
 import com.example.mushafconsolidated.Entities.HalEnt
 import com.example.mushafconsolidated.Entities.LiajlihiEnt
@@ -74,6 +75,7 @@ class QuranVIewModel @Inject constructor(
 
 
     private var corpuswbwlist: MutableLiveData<List<QuranCorpusWbw>> = MutableLiveData()
+    private var corpusentity: MutableLiveData<List<CorpusEntity>> = MutableLiveData()
     private var quranlist: MutableLiveData<List<QuranEntity>> = MutableLiveData()
 
     var kana: MutableLiveData<List<NewKanaEntity>> = MutableLiveData()
@@ -161,6 +163,12 @@ class QuranVIewModel @Inject constructor(
     fun getQuranCorpusWbw(cid: Int, aid: Int, wid: Int): MutableLiveData<List<QuranCorpusWbw>> {
         corpuswbwlist.value = this.quranRepository.getQuranCorpusWbw(cid, aid, wid)
         return corpuswbwlist
+    }
+
+
+    fun getCorpusEntityFilterbywordno(cid: Int, aid: Int, wid: Int): MutableLiveData<List<CorpusEntity>> {
+        corpusentity.value = this.quranRepository.getCorpusEntityFilterbywordno(cid, aid, wid)
+        return corpusentity
     }
 
 
