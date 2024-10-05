@@ -30,6 +30,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SwitchCompat
+import androidx.compose.ui.semantics.text
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.media3.common.AudioAttributes
@@ -121,14 +122,12 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
     lateinit var quranRepository: QuranRepository
     private  var corpusGroupedByAyah:LinkedHashMap<Int, ArrayList<CorpusEntity>> =
         LinkedHashMap()
-    // private UpdateMafoolFlowAyahWordAdapter flowAyahWordAdapter;
+
     private lateinit var mainViewModel: QuranVIewModel
     private var corpusSurahWord: List<CorpusEntity>? = null
 
     private lateinit var nomafoolatflowAyahWordAdapter: FlowAyahWordAdapterNoMafoolat
 
-
-    private var newnewadapterlist = LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>>()
     private var mausoof = false
     private var mudhaf = false
     private var harfnasb = false
@@ -196,9 +195,6 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
     private lateinit var playfb: MovableFloatingActionButton
     override fun onBackPressed() {
 
-        //unregister broadcast for download ayat
-        /*        LocalBroadcastManager.getInstance(this@WordbywordMushafAct)
-                    .unregisterReceiver(downloadPageAya)*/
         //stop flag of auto start
         startBeforeDownload = false
         if (player != null) {
@@ -206,8 +202,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
         }
         val pref: SharedPreferences = getSharedPreferences("lastaya", MODE_PRIVATE)
         val editor = pref.edit()
-        //    editor.putInt("lastaya", currenttrack);
-//        editor.putInt("trackposition", hlights.get(currenttrack).get(0).getPassage());
+
         editor.apply()
         super.onBackPressed()
     }
@@ -528,53 +523,26 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
 
     private val SinglesendUpdatesToUI: Runnable = object : Runnable {
         override fun run() {
-            var holder: RecyclerView.ViewHolder? = null
-            holder = recyclerView.findViewHolderForAdapterPosition(currenttrack)
-            if (player != null && player!!.isPlaying) {
+            val holder = recyclerView.findViewHolderForAdapterPosition(currenttrack)
+            if (player?.isPlaying == true) {
                 recyclerView.post {
                     recyclerView.scrollToPosition(currenttrack)
                 }
             }
-            val ab = StringBuilder()
-            ab.append("Aya").append(":").append(currenttrack).append(" ").append("of").append(
-                versescount
-            )
-            ayaprogress.text = ab.toString()
+         //   val ab = StringBuilder()
+         //   ab.append("Aya").append(":").append(currenttrack).append(" ").append("of").append(
+           //     versescount
+           // )
+            ayaprogress.text = "Aya: $currenttrack of $versescount"
             if (null != holder) {
                 try {
-                    if (holder.itemView.findViewById<View?>(R.id.flow_word_by_word) != null) {
-                        if (isNightmode == "light") {
-                            val textViews =
-                                holder.itemView.findViewById<View>(R.id.flow_word_by_word)
-                                    .findViewById<TextView>(R.id.word_arabic_textView)
-                            holder.itemView.findViewById<View>(R.id.flow_word_by_word)
-                                .setBackgroundColor(
-                                    ContextCompat.getColor(
-                                        this@WordbywordMushafAct,
-                                        R.color.horizontalview_color_ab
-                                    )
-                                )
-                        } else if (isNightmode == "brown") {
-                            holder.itemView.findViewById<View>(R.id.flow_word_by_word)
-                                .findViewById<TextView>(R.id.word_arabic_textView)
-                            holder.itemView.findViewById<View>(R.id.flow_word_by_word)
-                                .setBackgroundColor(
-                                    ContextCompat.getColor(
-                                        this@WordbywordMushafAct,
-                                        R.color.bg_surface_brown
-                                    )
-                                )
-                        } else {
-                            holder.itemView.findViewById<View>(R.id.flow_word_by_word)
-                                .findViewById<TextView>(R.id.word_arabic_textView)
-                            holder.itemView.findViewById<View>(R.id.flow_word_by_word)
-                                .setBackgroundColor(
-                                    ContextCompat.getColor(
-                                        this@WordbywordMushafAct,
-                                        R.color.bg_surface_dark_blue
-                                    )
-                                )
-                            //   holder.itemView.findViewById(R.id.quran_textView).setBackgroundColor(Constant.MUSLIMMATE);
+                    val flowWordByWord = holder.itemView.findViewById<View?>(R.id.flow_word_by_word)
+                    if (flowWordByWord != null) {
+                        val wordArabicTextView = flowWordByWord.findViewById<TextView>(R.id.word_arabic_textView)
+                        when (isNightmode) {
+                            "light" -> flowWordByWord.setBackgroundColor(ContextCompat.getColor(this@WordbywordMushafAct, R.color.horizontalview_color_ab))
+                            "brown" -> flowWordByWord.setBackgroundColor(ContextCompat.getColor(this@WordbywordMushafAct, R.color.bg_surface_brown))
+                            else -> flowWordByWord.setBackgroundColor(ContextCompat.getColor(this@WordbywordMushafAct, R.color.bg_surface_dark_blue))
                         }
                     } else if (holder.itemView.findViewById<View?>(R.id.rukuview) != null) {
                         println("rukuvue")
@@ -588,11 +556,13 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
                 }
             }
             if (currenttrack > 1) {
-                val holderp = recyclerView.findViewHolderForAdapterPosition(currenttrack - 1)
+                val holderp =
+                    recyclerView.findViewHolderForAdapterPosition(currenttrack - 1)
                 if (null != holderp) {
                     try {
                         val drawingCacheBackgroundColor =
-                            holderp.itemView.findViewById<View>(R.id.flow_word_by_word).drawingCacheBackgroundColor
+                            holderp.itemView.findViewById<View>(R.id.flow_word_by_word)
+                                .drawingCacheBackgroundColor
                         if (holderp.itemView.findViewById<View?>(R.id.flow_word_by_word) != null) {
                             //    holder.itemView.findViewById(R.id.quran_textView).setBackgroundColor(Color.CYAN);
                             holderp.itemView.findViewById<View>(R.id.flow_word_by_word)
@@ -976,7 +946,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
             }
             singleline = true
             //    NewsendUpdatesToUIPassage.run();
-            if (player!!.isPlaying || player!!.playWhenReady) {
+            if (player?.isPlaying == true || player!!.playWhenReady) {
                 SinglesendUpdatesToUI.run()
                 //   sendUpdatesToUI.run();
             } else {
@@ -995,7 +965,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
     }
 
     private fun preparehighlightsNew(passageno: Int, str: StringBuilder, ayahmat: ArrayList<Int>) {
-        val holder = recyclerView.findViewHolderForAdapterPosition(1)
+      //  val holder = recyclerView.findViewHolderForAdapterPosition(1)
         var ayahindex = ayahmat[0]
         ayahmat.size
         val split1 = str.toString().split("﴿".toRegex()).dropLastWhile { it.isEmpty() }
@@ -1283,7 +1253,9 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
 
 
                 val header= SurahHeader(chapter!!.get(0)!!.rukucount,chapter!!.get(0)!!.versescount, chapter[0]!!.chapterid,chapter[0]!!.namearabic,chapter[0]!!.nameenglish)
-
+                surahNameEnglish= chapter[0]?.nameenglish ?: ""
+                surahNameArabic= chapter[0]?.namearabic ?: ""
+                versescount = chapter[0]?.versescount ?: 0
                 val manager = LinearLayoutManager(this@WordbywordMushafAct)
                 manager.orientation = LinearLayoutManager.VERTICAL
                 recyclerView.setHasFixedSize(true)
