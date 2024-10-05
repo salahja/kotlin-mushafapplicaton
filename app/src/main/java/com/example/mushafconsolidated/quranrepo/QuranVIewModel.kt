@@ -1,6 +1,6 @@
 package com.example.mushafconsolidated.quranrepo
 
-import android.util.Log
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -34,9 +34,7 @@ import com.example.mushafconsolidated.model.Juz
 import com.example.mushafconsolidated.model.QuranCorpusWbw
 import com.example.utility.QuranGrammarApplication
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

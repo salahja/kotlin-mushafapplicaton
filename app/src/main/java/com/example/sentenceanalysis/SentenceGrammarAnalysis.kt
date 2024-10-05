@@ -3,7 +3,7 @@ package com.example.sentenceanalysis
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
+
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

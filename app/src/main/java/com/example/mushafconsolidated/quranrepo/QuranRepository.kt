@@ -211,7 +211,7 @@ import javax.inject.Inject
     }
 
 
-     suspend fun getQuranData(chapterNo: Int): QuranData {
+      fun getQuranData(chapterNo: Int): QuranData {
          return QuranData(
 
              allofQuran = qurandao.getQuranVersesBySurahl(chapterNo), // Fetch Quran verses
@@ -220,10 +220,25 @@ import javax.inject.Inject
          )
      }
 
+     fun CorpusAndQuranData(chapterNo: Int): CorpusAndQuranData {
+         return CorpusAndQuranData(
+
+             allofQuran = qurandao.getQuranVersesBySurahl(chapterNo), // Fetch Quran verses
+            copusExpandSurah = corpusDao.getVersesBySurah(chapterNo),
+         )
+     }
+
 }
 
 
 
+data class CorpusAndQuranData(
+
+    val allofQuran: List<QuranEntity>, // Assuming you need this as well
+
+    val copusExpandSurah:List<CorpusEntity>// Assuming you need this as well
+
+)
 
 data class QuranData(
 
