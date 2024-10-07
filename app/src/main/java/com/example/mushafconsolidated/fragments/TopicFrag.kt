@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
@@ -20,27 +21,26 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.Constant
 import com.example.Constant.SURAH_ID
 import com.example.mushafconsolidated.Activity.TafsirFullscreenActivity
-import com.example.mushafconsolidated.Adapters.fragTopicFlowAyahWordAdapter
+import com.example.mushafconsolidated.Adapters.TopicAdapter
 import com.example.mushafconsolidated.Entities.BookMarks
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
+import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SurahSummary
-import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.model.CorpusAyahWord
-import com.example.mushafconsolidated.model.CorpusWbwWord
-import com.example.mushafconsolidated.model.NewQuranCorpusWbw
 import com.example.mushafconsolidated.model.QuranCorpusWbw
+import com.example.mushafconsolidated.quranrepo.QuranRepository
 import com.example.mushafconsolidated.quranrepo.QuranVIewModel
 import com.example.sentenceanalysis.SentenceGrammarAnalysis
-import com.example.utility.CorpusUtilityorig
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import sj.hisnul.fragments.NamesDetail
+import javax.inject.Inject
 import androidx.fragment.app.Fragment as Fragment1
 
 // TODO: Rename parameter arguments, choose names that match
@@ -50,26 +50,28 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment1] subclass.
- * Use the [TopicDetailsFrag.newInstance] factory method to
+ * Use the [TopicFrag.newInstance] factory method to
  * create an instance of this fragment.
  */
 @AndroidEntryPoint
-class TopicDetailsFrag : DialogFragment(), OnItemClickListenerOnLong {
+class TopicFrag : DialogFragment(), OnItemClickListenerOnLong {
     private lateinit var maps: HashMap<String, String>
-    private lateinit var flowAyahWordAdapter: fragTopicFlowAyahWordAdapter
-
+    private lateinit var flowAyahWordAdapter: TopicAdapter
+    @Inject
+    lateinit var quranRepository: QuranRepository
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var corpusayahWordArrayList: ArrayList<CorpusAyahWord>
-    private var corpusSurahWord: List<QuranCorpusWbw>? = null
-    private var newnewadapterlist = LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>>()
-    private var allofQuran: ArrayList<QuranEntity>? = null
+    private var corpusSurahWord: List<CorpusEntity>? = null
+    private var newnewadapterlist = LinkedHashMap<Int, ArrayList<CorpusEntity>>()
+    private var allofQuran: List<QuranEntity>? = null
     private lateinit var mainViewModel: QuranVIewModel
     private lateinit var newcorpusayahWordArrayList: ArrayList<QuranCorpusWbw>
     private lateinit var arrayofquran: ArrayList<ArrayList<QuranEntity>>
-    private lateinit var arrayofadapterlist: ArrayList<LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>>>
-
+    private lateinit var arrayofadapterlist: ArrayList<LinkedHashMap<Int, ArrayList<CorpusEntity>>>
+    private  var corpusGroupedByAyah:LinkedHashMap<Int, ArrayList<CorpusEntity>> =
+        LinkedHashMap()
     //   private lateinit var layoutBottomSheet: RelativeLayout
     //   private var sheetBehavior: BottomSheetBehavior<RelativeLayout?>? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,7 +79,7 @@ class TopicDetailsFrag : DialogFragment(), OnItemClickListenerOnLong {
         val bundle: Bundle? = arguments
         assert(bundle != null)
         maps =
-            bundle!!.getSerializable(TopicDetailsFrag.ARG_OPTIONS_DATA) as HashMap<String, String>
+            bundle!!.getSerializable(TopicFrag.ARG_OPTIONS_DATA) as HashMap<String, String>
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -132,26 +134,42 @@ class TopicDetailsFrag : DialogFragment(), OnItemClickListenerOnLong {
 
             mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
             val surahArrays = mainViewModel.loadListschapter().value
-            allofQuran =
+       /*     allofQuran =
                 mainViewModel.getsurahayahVerses(surah, ayah).value as ArrayList<QuranEntity>?
             corpusSurahWord = mainViewModel.getQuranCorpusWbwbysurahAyah(surah, ayah).value
             val corpus = CorpusUtilityorig(requireContext())
             newnewadapterlist = CorpusUtilityorig.NotcomposeWBWCollection(allofQuran, corpusSurahWord)
-            allofQuran?.let { arrayofquran.add(it) }
-            corpus.setKana(newnewadapterlist, surah, ayah, newnewadapterlist.size)
+            allofQuran?.let { arrayofquran.add(it) }*/
+
+            mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
+           // allofQuran =                mainViewModel.getsurahayahVerses(surah, ayah).value as ArrayList<QuranEntity>?
+            corpusSurahWord = mainViewModel.getCorpusEntityFilterSurahAya(surah, ayah).value
+
+            val corpusAndQurandata = quranRepository.CorpusAndQuranDataSurahAyah(surah,ayah)
+
+            corpusSurahWord=corpusAndQurandata.copusExpandSurah
+            allofQuran=corpusAndQurandata.allofQuran
+            corpusGroupedByAyah = corpusSurahWord!!.groupBy { it.ayah } as LinkedHashMap<Int, ArrayList<CorpusEntity>>
+
+            /*         newnewadapterlist =
+                         CorpusUtilityorig.composeWBWCollectionold(allofQuran, corpusSurahWord)*/
+            allofQuran?.let { arrayofquran.add(it as java.util.ArrayList<QuranEntity>) }
+
+
+        /*    corpus.setKana(newnewadapterlist, surah, ayah, newnewadapterlist.size)
 
             corpus.setMudhafFromDB(newnewadapterlist, surah, ayah, newnewadapterlist.size)
             corpus.SetMousufSifaDB(newnewadapterlist, surah, ayah, newnewadapterlist.size)
             corpus.setKana(newnewadapterlist, surah, ayah, newnewadapterlist.size)
             corpus.setShart(newnewadapterlist, surah, ayah, newnewadapterlist.size)
-            corpus.newnewHarfNasbDb(newnewadapterlist, surah, ayah, newnewadapterlist.size)
+            corpus.newnewHarfNasbDb(newnewadapterlist, surah, ayah, newnewadapterlist.size)*/
 
-            arrayofadapterlist.add(newnewadapterlist)
+            arrayofadapterlist.add(corpusGroupedByAyah)
             //    final Object o6 = wbwa.get(verseglobal).get(0);
             val sb = StringBuilder()
             val activity = requireActivity() as AppCompatActivity
             val listener: OnItemClickListenerOnLong = this
-            flowAyahWordAdapter = fragTopicFlowAyahWordAdapter(activity,requireContext(),childFragmentManager,
+            flowAyahWordAdapter = TopicAdapter(activity,requireContext(),childFragmentManager,
                 arrayofadapterlist,
                 listener,
 
@@ -172,7 +190,7 @@ class TopicDetailsFrag : DialogFragment(), OnItemClickListenerOnLong {
     private fun showLoadingDialog(): AlertDialog {
         val builder = AlertDialog.Builder(
             requireContext(),
-            com.google.android.material.R.style.ThemeOverlay_Material3_Dialog
+            R.style.Theme_MaterialComponents_DayNight_DarkActionBar
         )
         builder.setCancelable(false) // if you want user to wait for some process to finish,
         builder.setView(R.layout.layout_loading_dialog)
@@ -188,9 +206,10 @@ class TopicDetailsFrag : DialogFragment(), OnItemClickListenerOnLong {
     ) {
         val activity = requireActivity() as AppCompatActivity
         val linearLayoutManager = LinearLayoutManager(requireContext())
+
         /*       val flowAyahWordAdapter =
                            TopicFlowAyahWordAdapter(corpusayahWordArrayList, listener, surahname)*/
-        flowAyahWordAdapter = fragTopicFlowAyahWordAdapter(
+        flowAyahWordAdapter = TopicAdapter(
             activity, requireContext(), childFragmentManager,
             arrayofadapterlist,
             listener,
@@ -222,26 +241,43 @@ class TopicDetailsFrag : DialogFragment(), OnItemClickListenerOnLong {
 
     }*/
 
-    private fun newpreparewbwarray(header: String?, suraid: Int, ayah: Int) {
+    private fun newpreparewbwarray(header: String?, surahid: Int, ayah: Int) {
 
 
-        mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
+    /*    mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
         allofQuran =
             mainViewModel.getsurahayahVerses(suraid, ayah).value as ArrayList<QuranEntity>?
         corpusSurahWord = mainViewModel.getQuranCorpusWbwbysurahAyah(suraid, ayah).value
         val corpus = CorpusUtilityorig(requireContext())
         this.newnewadapterlist = CorpusUtilityorig.composeWBWCollectionold(allofQuran, corpusSurahWord)
 
-        this.allofQuran?.let { arrayofquran.add(it) }
-        corpus.setKana(newnewadapterlist, suraid, ayah, newnewadapterlist.size)
+        this.allofQuran?.let { arrayofquran.add(it) }*/
+
+       // mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
+       // allofQuran =            mainViewModel.getsurahayahVerses(surahid, ayah).value as ArrayList<QuranEntity>?
+       // corpusSurahWord = mainViewModel.getCorpusEntityFilterSurahAya(surahid, ayah).value
+
+        val corpusAndQurandata = quranRepository.CorpusAndQuranDataSurahAyah(surahid,ayah)
+        allofQuran = corpusAndQurandata.allofQuran
+        corpusSurahWord=corpusAndQurandata.copusExpandSurah
+
+        corpusGroupedByAyah = corpusSurahWord!!.groupBy { it.ayah } as LinkedHashMap<Int, ArrayList<CorpusEntity>>
+
+        /*         newnewadapterlist =
+                     CorpusUtilityorig.composeWBWCollectionold(allofQuran, corpusSurahWord)*/
+        allofQuran?.let { arrayofquran.add(it as java.util.ArrayList<QuranEntity>) }
+
+
+
+      /*  corpus.setKana(newnewadapterlist, suraid, ayah, newnewadapterlist.size)
 
         corpus.setMudhafFromDB(newnewadapterlist, suraid, ayah, newnewadapterlist.size)
         corpus.SetMousufSifaDB(newnewadapterlist, suraid, ayah, newnewadapterlist.size)
         corpus.setKana(newnewadapterlist, suraid, ayah, newnewadapterlist.size)
         corpus.setShart(newnewadapterlist, suraid, ayah, newnewadapterlist.size)
         corpus.newnewHarfNasbDb(newnewadapterlist, suraid, ayah, newnewadapterlist.size)
-
-        arrayofadapterlist.add(newnewadapterlist)
+*/
+        arrayofadapterlist.add(corpusGroupedByAyah)
         //    final Object o6 = wbwa.get(verseglobal).get(0);
         val sb = StringBuilder()
 
@@ -263,9 +299,9 @@ class TopicDetailsFrag : DialogFragment(), OnItemClickListenerOnLong {
     companion object {
         private const val ARG_OPTIONS_DATA: String = "map"
         fun newInstance(dataBundle: Bundle): Fragment1 {
-            val fragment: TopicDetailsFrag = TopicDetailsFrag()
+            val fragment: TopicFrag = TopicFrag()
             val args: Bundle = Bundle()
-            args.putString(TopicDetailsFrag.ARG_OPTIONS_DATA, dataBundle.toString())
+            args.putString(TopicFrag.ARG_OPTIONS_DATA, dataBundle.toString())
             fragment.arguments = args
             return fragment
         }
@@ -362,8 +398,7 @@ class TopicDetailsFrag : DialogFragment(), OnItemClickListenerOnLong {
             println("check")
         } else if ((tag == "qurantext")) {
             val word: QuranEntity
-            val ayah = flowAyahWordAdapter.ayahWord.corpus!!.ayah
-            val surah = flowAyahWordAdapter.ayahWord.corpus!!.surah
+
             word = if (position != 0) {
                 arrayofquran[position][0]
             } else {
@@ -431,7 +466,7 @@ class TopicDetailsFrag : DialogFragment(), OnItemClickListenerOnLong {
     }
 
     override fun onItemLongClick(position: Int, v: View) {
-        TODO("Not yet implemented")
+        Toast.makeText(requireContext(), "long click", Toast.LENGTH_SHORT).show()
     }
 
     override fun onResume() {

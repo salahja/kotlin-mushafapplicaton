@@ -34,6 +34,7 @@ import com.example.Constant.INDICATIVE
 import com.example.Constant.ISPARTICPLE
 import com.example.Constant.NOUNCASE
 import com.example.Constant.PREPOSITION
+import com.example.Constant.PROPERNOUN
 import com.example.Constant.QURAN_VERB_ROOT
 import com.example.Constant.QURAN_VERB_WAZAN
 import com.example.Constant.RELATIVE
@@ -119,6 +120,7 @@ class WordAnalysisBottomSheet : DialogFragment() {
     var isarabicword = false
     var quadrilateral = false
     private var isnoun = false
+    private var isProperNoun=false
     private var ismujarradparticple = false
     var isimperative = false
     private var spannable: SpannableStringBuilder? = null
@@ -246,6 +248,7 @@ class WordAnalysisBottomSheet : DialogFragment() {
 
         }
         isnoun = wordbdetail["noun"] != null
+        isProperNoun= wordbdetail["noun"]!!.contains("Proper Noun:")
 
         if (isparticple) {
             // Avoid unnecessary Objects.requireNonNull
@@ -760,11 +763,26 @@ class WordAnalysisBottomSheet : DialogFragment() {
                         dataBundle.putString(QURAN_VERB_ROOT, vb.root)
                         dataBundle.putString(QURAN_VERB_WAZAN, " ")
                         dataBundle.putString("arabicword", "")
-                    } else if (isarabicword && !isroot) {
+                    } else if (isarabicword && (!isroot && !isnoun)) {
                         dataBundle.putString("arabicword", wordbdetail["arabicword"].toString())
                         dataBundle.putString(QURAN_VERB_WAZAN, " ")
                         dataBundle.putString(QURAN_VERB_ROOT, " ")
-                    } else if (isroot) {
+                    } else if(isnoun && isProperNoun) {
+                        dataBundle.putString(VERBMOOD, "")
+                        dataBundle.putString(QURAN_VERB_WAZAN, "")
+                        dataBundle.putString(QURAN_VERB_ROOT, "")
+                        dataBundle.putString(VERBTYPE, "")
+                        dataBundle.putString(NOUNCASE, wordbdetail["nouncase"].toString())
+                        dataBundle.putBoolean(PROPERNOUN, true)
+                        val intent = Intent(activity, LughatWordDetailsAct::class.java)
+                        intent.putExtras(dataBundle)
+                        startActivity(intent)
+                    }
+
+
+
+
+                    else if (isroot) {
                         dataBundle.putString("arabicword", "")
                         if (vbdetail["emph"] != null) {
 

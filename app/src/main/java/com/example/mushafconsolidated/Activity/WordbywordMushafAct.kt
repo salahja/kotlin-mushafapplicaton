@@ -30,7 +30,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SwitchCompat
-import androidx.compose.ui.semantics.text
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.media3.common.AudioAttributes
@@ -1227,7 +1226,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
         ex.launch(Dispatchers.IO) {
             val utils = Utils(this@WordbywordMushafAct)
 
-            val corpusAndQurandata = quranRepository.CorpusAndQuranData(surah)
+            val corpusAndQurandata = quranRepository.CorpusAndQuranDataSurah(surah)
 
                 val qurandata = quranRepository.getQuranData(surah)
             allofQuran=   corpusAndQurandata.allofQuran

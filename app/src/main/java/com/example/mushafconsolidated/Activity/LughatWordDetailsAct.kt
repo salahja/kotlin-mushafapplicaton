@@ -166,6 +166,7 @@ class LughatWordDetailsAct : BaseActivity() {
     private var languages = Array(10) { "" } // Initialize with empty strings
    // val defaultLanguages = arrayOf("lanes", "hans", "english", "urdu")
     var dataBundle: Bundle? = null
+    private var isProperNoun=false
     private var isUnaugmentedWazan = false
     private var isAugmentedWazan = false
     private var isnoconjugation = false
@@ -244,6 +245,8 @@ class LughatWordDetailsAct : BaseActivity() {
 
             // Check for noun case
             nouncase = bundle.getString(Constant.NOUNCASE)
+            isProperNoun = bundle.getBoolean(Constant.PROPERNOUN)
+
             isnoun = nouncase != null
             when (nouncase) {
                 "NOM" -> isIsmMarfu = true
@@ -396,6 +399,12 @@ class LughatWordDetailsAct : BaseActivity() {
                 setupTabLayout(tabLayout, viewPager, mazeedparticpletitle)
             }
 
+            isProperNoun ->
+            {
+
+                Toast.makeText(this, "It is Proper Noun", Toast.LENGTH_SHORT).show()
+            }
+
             isAnyIsm() -> {
                 setLanguages(isimperative,ismujarrad,isparticple,isIsmMajroor,isIsmMansub,isIsmMarfu,isAugmentedWazan,isonlyarabicword,isrelative,isdem,isharfnasab,isShart,isprep,isnoconjugation,isdictionary,verbMood)
 
@@ -485,15 +494,15 @@ class LughatWordDetailsAct : BaseActivity() {
             }
 
             else -> {
+                Toast.makeText(this, "Not Configured", Toast.LENGTH_SHORT).show()
+                /*  val view = findViewById<View>(R.id.bookmark)
+             val snackbar = Snackbar.make(view, "Not Configured", Snackbar.LENGTH_LONG)
+        snackbar.setActionTextColor(Color.BLUE)
+             snackbar.setTextColor(Color.CYAN)
+             snackbar.setBackgroundTint(Color.BLACK)
+             snackbar.show()
 
-                val view = findViewById<View>(R.id.bookmark)
-                val snackbar = Snackbar.make(view, "Not Configured", Snackbar.LENGTH_LONG)
-                snackbar.setActionTextColor(Color.BLUE)
-                snackbar.setTextColor(Color.CYAN)
-                snackbar.setBackgroundTint(Color.BLACK)
-                snackbar.show()
-
-                finish()
+             finish()*/
             }
         }
     }

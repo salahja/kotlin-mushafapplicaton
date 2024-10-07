@@ -48,9 +48,7 @@ import com.example.mushafconsolidated.Entities.hanslexicon
 
 import com.example.mushafconsolidated.Entities.lanerootdictionary
 import com.example.mushafconsolidated.Entities.surahsummary
-import com.example.mushafconsolidated.model.NewQuranCorpusWbw
 import com.example.mushafconsolidated.model.QuranCorpusWbw
-import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 
@@ -130,6 +128,10 @@ import javax.inject.Inject
      fun getCorpusEntityFilterbywordno(surah: Int, ayah: Int, wordno: Int): List<CorpusEntity> =
          corpusDao.getCorpusWord(surah, ayah, wordno)
 
+     fun getCorpusEntityFilterSurahAya(surah: Int, ayah: Int): List<CorpusEntity> =
+         corpusDao.getCorpusWordSurahAya(surah, ayah)
+
+
     fun getMafoolbihi(surah: Int, ayah: Int, wordno: Int): List<MafoolBihi> =
         mafoolbihi.getMafoolbihi(surah, ayah, wordno)
 
@@ -152,6 +154,10 @@ import javax.inject.Inject
     val bookmarckcollection: LiveData<List<BookMarks>> = bookm.getCollectionbygroupsLive()
     val chaptersmutable: List<ChaptersAnaEntity?>? = chaptersdao.chapterslist()
 
+
+
+     fun getSingleChapters(cid: Int): List<ChaptersAnaEntity> =
+         chaptersdao.getSingleChapters(cid)
 
     fun getQuranCorpusWbwbysurah(cid: Int): List<QuranCorpusWbw> =
         qurandao.getQuranCorpusWbwbysurah(cid)
@@ -223,7 +229,7 @@ import javax.inject.Inject
          )
      }
 
-     fun CorpusAndQuranData(chapterNo: Int): CorpusAndQuranData {
+     fun CorpusAndQuranDataSurah(chapterNo: Int): CorpusAndQuranData {
          return CorpusAndQuranData(
 
              allofQuran = qurandao.getQuranVersesBySurahl(chapterNo), // Fetch Quran verses
@@ -231,7 +237,16 @@ import javax.inject.Inject
          )
      }
 
-}
+     fun CorpusAndQuranDataSurahAyah(chapterNo: Int,verseid:Int): CorpusAndQuranData {
+         return CorpusAndQuranData(
+
+             allofQuran = qurandao.getQuranVersesBySurahAyah(chapterNo,verseid), // Fetch Quran verses
+             copusExpandSurah = corpusDao.getVersesBySurahAndAya(chapterNo,verseid),
+         )
+     }
+
+
+ }
 
 
 

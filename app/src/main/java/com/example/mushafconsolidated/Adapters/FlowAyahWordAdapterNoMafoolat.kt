@@ -538,38 +538,6 @@ class FlowAyahWordAdapterNoMafoolat(
 
 
 
-    private fun LoadItemList(dataBundle: Bundle, word: wbwentity) {
-        if (issentence) {
-            /* val item = SentenceAnalysisBottomSheet()
-             item.arguments = dataBundle
-             val data = arrayOf(
-                 word.surah.toString(),
-                 word.ayah.toString(),
-                 word.translateEn,
-                 word.wordno.toString()
-             )
-             SentenceAnalysisBottomSheet.newInstance(data).show(
-                 (context as AppCompatActivity).supportFragmentManager,
-                 SentenceAnalysisBottomSheet.TAG
-             )*/
-        } else {
-
-            val item = WordAnalysisBottomSheet()
-            item.arguments = dataBundle
-
-            val data = arrayOf<String?>(
-                word.surah.toString(),
-                word.ayah.toString(),
-                word.en,
-                word.wordno.toString(),
-                SurahName
-            )
-            WordAnalysisBottomSheet.newInstance(data).show(
-                (context as AppCompatActivity).supportFragmentManager,
-                WordAnalysisBottomSheet.TAG
-            )
-        }
-    }
 
 
 

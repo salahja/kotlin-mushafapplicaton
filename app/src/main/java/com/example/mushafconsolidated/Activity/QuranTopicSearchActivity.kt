@@ -22,7 +22,7 @@ import com.example.mushafconsolidated.Entities.quranexplorer
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.R.drawable
 import com.example.mushafconsolidated.Utils
-import com.example.mushafconsolidated.fragments.TopicDetailsFrag
+import com.example.mushafconsolidated.fragments.TopicFrag
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
@@ -108,7 +108,7 @@ class QuranTopicSearchActivity : BaseActivity(), OnItemClickListenerOnLong {
                 val fragmentManagers = this.supportFragmentManager
                 val transactions = fragmentManagers.beginTransaction()
                 transactions.setCustomAnimations(R.anim.slide_down, R.anim.slide_up)
-                val fragvsi = TopicDetailsFrag.newInstance(dataBundle)
+                val fragvsi = TopicFrag.newInstance(dataBundle)
                 fragvsi.arguments = dataBundle
                 transactions.replace(R.id.frame_container, fragvsi)
                 transactions.addToBackStack(null)

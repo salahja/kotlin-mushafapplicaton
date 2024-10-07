@@ -182,6 +182,10 @@ where CorpusExpand.surah=1 and CorpusExpand.ayah=1 and CorpusExpand.wordno=2
     @Query("SELECT * FROM qurans where surah=:surahid")
     fun getQuranVersesBySurahl(surahid: Int): List<QuranEntity>
 
+    @Query("SELECT * FROM qurans where surah=:surahid and ayah=:ayahid")
+    fun getQuranVersesBySurahAyah(surahid: Int,ayahid: Int): List<QuranEntity>
+
+
     @Query("SELECT * FROM qurans where surah=:surahid")
     fun getquranbyRoot(surahid: Int): List<QuranEntity>
 

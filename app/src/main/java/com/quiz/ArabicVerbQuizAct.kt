@@ -28,8 +28,7 @@ import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.databinding.FragmentArabicVerbQuizBinding
 import com.example.mushafconsolidated.fragments.QuranMorphologyDetails
-import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
-import com.example.mushafconsolidated.model.NewQuranCorpusWbw
+
 import com.example.mushafconsolidated.model.NewVerbCorpusWbw
 import com.example.utility.CorpusUtilityorig.Companion.NewSetWordSpan
 import com.google.android.material.button.MaterialButton

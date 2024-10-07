@@ -816,7 +816,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             try {
                 val fileName = "surah$chapterno.json"
               //  var newnewadapterlist: LinkedHashMap<Int, ArrayList<NewCorpusEntity>>? = null
-                val corpusAndQurandata = quranRepository.CorpusAndQuranData(chapterno)
+                val corpusAndQurandata = quranRepository.CorpusAndQuranDataSurah(chapterno)
                 val jsonString = loadJsonFromFile(QuranGrammarApplication.context!!, fileName)
                 if (jsonString != null) {
                     val mapType = object : TypeToken<LinkedHashMap<Int, ArrayList<CorpusEntity>>>() {}.type

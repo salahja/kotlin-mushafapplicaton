@@ -211,7 +211,7 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
                     )
                     newbundle.putString(WORDMEANING, wordDetails.wbw.en)
                     newbundle.putSerializable("map", datas)
-                    val intents = Intent(this@RootBreakupAct, TopicDetailAct::class.java)
+                    val intents = Intent(this@RootBreakupAct, VerbVerseDetails::class.java)
                     intents.putExtras(newbundle)
                     startActivity(intents)
 
@@ -286,7 +286,7 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
                             newbundle.putString(ARABICWORD, wordDetails.arabic)
                             newbundle.putString(WORDMEANING, wordDetails.en)
                             newbundle.putSerializable("map", datas)
-                            val intents = Intent(this@RootBreakupAct, TopicDetailAct::class.java)
+                            val intents = Intent(this@RootBreakupAct, VerbVerseDetails::class.java)
                             intents.putExtras(newbundle)
                             startActivity(intents)
 

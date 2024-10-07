@@ -172,6 +172,13 @@ class QuranVIewModel @Inject constructor(
     }
 
 
+    fun getCorpusEntityFilterSurahAya(cid: Int, aid: Int, ): MutableLiveData<List<CorpusEntity>> {
+        corpusentity.value = this.quranRepository.getCorpusEntityFilterSurahAya(cid, aid)
+        return corpusentity
+    }
+
+
+
     fun gethalsurahayah(cid: Int, aid: Int): MutableLiveData<List<HalEnt>> {
         halword.value = this.quranRepository.gethalsurahayah(cid, aid)
         return halword
@@ -285,6 +292,15 @@ class QuranVIewModel @Inject constructor(
         chapterslist.value = this.quranRepository.chaptersmutable as List<ChaptersAnaEntity>?
         return chapterslist
     }
+    fun getChapterBySurah(chapterId: Int): MutableLiveData<List<ChaptersAnaEntity>> {
+
+        //delay is simulating network request delay
+        //delay(1000)
+        //listOf is simulating usersRepository.getUsers()
+        chapterslist.value = this.quranRepository.getSingleChapters(chapterId)
+        return chapterslist
+    }
+
 
 
     fun getAllChapters(): LiveData<List<ChaptersAnaEntity>> {
