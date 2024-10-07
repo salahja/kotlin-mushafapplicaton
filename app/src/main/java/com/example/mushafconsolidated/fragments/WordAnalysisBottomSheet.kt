@@ -248,7 +248,11 @@ class WordAnalysisBottomSheet : DialogFragment() {
 
         }
         isnoun = wordbdetail["noun"] != null
-        isProperNoun= wordbdetail["noun"]!!.contains("Proper Noun:")
+     //   isProperNoun= wordbdetail["noun"]!!.contains("Proper Noun:")
+
+        wordbdetail["noun"]?.let { noun ->
+            isProperNoun = noun.contains("Proper Noun:")
+        }
 
         if (isparticple) {
             // Avoid unnecessary Objects.requireNonNull
