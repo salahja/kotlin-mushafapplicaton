@@ -2,7 +2,6 @@ package com.example.mushafconsolidated.fragments
 
 
 import NewRootWordDisplayAdapter
-import Utility.ArabicLiterals
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
@@ -64,6 +63,7 @@ import com.example.mushafconsolidated.Entities.lughat
 import com.example.mushafconsolidated.Entities.wbwentity
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.R.layout
+import com.example.mushafconsolidated.databinding.RootDialogFragmentBinding
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListener
 import com.example.mushafconsolidated.quranrepo.QuranVIewModel
 import com.example.mushafconsolidatedimport.VerbFormsDialogFrag
@@ -77,6 +77,7 @@ import database.verbrepo.VerbModel
 
 import org.sj.conjugator.activity.ConjugatorTabsActivity
 import org.sj.conjugator.fragments.SarfSagheer
+import org.sj.conjugator.utilities.ArabicLiterals
 import org.sj.conjugator.utilities.GatherAll
 import org.sj.verbConjugation.AmrNahiAmr
 import org.sj.verbConjugation.FaelMafool
@@ -105,6 +106,8 @@ class WordAnalysisBottomSheet : DialogFragment() {
     private var rwAdapter: NewRootWordDisplayAdapter? = null
     var chapterid = 0
     var ayanumber = 0
+    private var _binding: RootDialogFragmentBinding? = null
+    private val binding get() = _binding!!
     private var isMazeedSarfSagheer = false
     private var isThulathiSarfSagheer = false
     private var isVerb = false
@@ -155,12 +158,14 @@ class WordAnalysisBottomSheet : DialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
-        val view = inflater.inflate(layout.root_dialog_fragment, container, false)
+    ): View {
+        _binding = RootDialogFragmentBinding.inflate(inflater, container, false)
+
+     //   val view = inflater.inflate(layout.root_dialog_fragment, container, false)
         val prefs =
             PreferenceManager.getDefaultSharedPreferences(QuranGrammarApplication.context!!)
         themepreference = prefs.getString("theme", "dark")
-         recyclerView = view.findViewById(R.id.wordByWordRecyclerView)
+         recyclerView = binding.wordByWordRecyclerView
         recyclerView.layoutManager =
         LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, true)
         val bundle = this.requireArguments()
@@ -400,7 +405,7 @@ class WordAnalysisBottomSheet : DialogFragment() {
        // }//scope
 
 
-        return view
+        return binding.root
     }
 
 
@@ -712,236 +717,417 @@ class WordAnalysisBottomSheet : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        rwAdapter!!.SetOnItemClickListener(object : OnItemClickListener {
-            @SuppressLint("SuspiciousIndentation")
+        rwAdapter?.SetOnItemClickListener(object : OnItemClickListener {
             override fun onItemClick(v: View?, position: Int) {
-                val text: CharSequence
-                val text2: CharSequence? = null
                 val viewVerbConjugation = v?.findViewById<View>(R.id.verbconjugationbtn)
-                val verboccuranceid = v?.findViewById<View>(R.id.verboccurance)
+                val verbOccuranceId = v?.findViewById<View>(R.id.verboccurance)
                 val nouns = v?.findViewById<View>(R.id.wordoccurance)
                 val verse = v?.findViewById<View>(R.id.spannableverse)
-                val wordview = v?.findViewById<View>(R.id.wordView)
-                val formview = v?.findViewById<View>(R.id.mazeedmeaning)
-                if (formview != null) {
-                    // val item = VerbFormsDialogFrag()
-                    //    item.setdata(root!!WordMeanings,wbwRootwords,grammarRootsCombined);
-                    //   val fragmentManager = requireActivity().supportFragmentManager
-                    var vbform: String?
-                    if (vbdetail.isNotEmpty()) {
-                        vbform = vbdetail["formnumber"]
-                    } else {
-                        vbform = wordbdetail["formnumber"].toString()
-                        vbform = vbform.replace("\\(".toRegex(), "").replace("\\)".toRegex(), "")
-                    }
-                    if (null != vbform) {
-                        val data = arrayOf<String?>(vbform)
-                        VerbFormsDialogFrag.newInstance(data).show(
-                            Objects.requireNonNull(requireActivity()).supportFragmentManager,
-                            TAG
-                        )
-                    }
-                } else if (wordview != null) {
-                    val dataBundle = Bundle()
-                    if (isHarf) {
-                        if (isharfnasb) {
-                            dataBundle.putBoolean(ACCUSATIVE, true)
-                        } else if (isprep) {
-                            dataBundle.putBoolean(PREPOSITION, true)
-                        } else if (isrelative) {
-                            dataBundle.putBoolean(RELATIVE, true)
-                        } else if (isdem) {
-                            dataBundle.putBoolean(DEMONSTRATIVE, true)
-                        } else if (isShart) {
-                            dataBundle.putBoolean(CONDITIONAL, true)
-                        }
-                        dataBundle.putString("arabicword", wordbdetail["arabicword"].toString())
-                        dataBundle.putString(VERBMOOD, "")
-                        dataBundle.putString(QURAN_VERB_WAZAN, "")
-                        dataBundle.putString(QURAN_VERB_ROOT, "")
-                        dataBundle.putString(VERBTYPE, "")
-                        val intent = Intent(activity, LughatWordDetailsAct::class.java)
-                        intent.putExtras(dataBundle)
-                        startActivity(intent)
-                    } else if (quadrilateral) {
-                        dataBundle.putString(QURAN_VERB_ROOT, vb.root)
-                        dataBundle.putString(QURAN_VERB_WAZAN, " ")
-                        dataBundle.putString("arabicword", "")
-                    } else if (isarabicword && (!isroot && !isnoun)) {
-                        dataBundle.putString("arabicword", wordbdetail["arabicword"].toString())
-                        dataBundle.putString(QURAN_VERB_WAZAN, " ")
-                        dataBundle.putString(QURAN_VERB_ROOT, " ")
-                    } else if(isnoun && isProperNoun) {
-                        dataBundle.putString(VERBMOOD, "")
-                        dataBundle.putString(QURAN_VERB_WAZAN, "")
-                        dataBundle.putString(QURAN_VERB_ROOT, "")
-                        dataBundle.putString(VERBTYPE, "")
-                        dataBundle.putString(NOUNCASE, wordbdetail["nouncase"].toString())
-                        dataBundle.putBoolean(PROPERNOUN, true)
-                        val intent = Intent(activity, LughatWordDetailsAct::class.java)
-                        intent.putExtras(dataBundle)
-                        startActivity(intent)
-                    }
+                val wordView = v?.findViewById<View>(R.id.wordView)
+                val formView = v?.findViewById<View>(R.id.mazeedmeaning)
+
+                formView?.let {
+                    handleFormViewClick()
+                } ?: wordView?.let {
+                    handleWordViewClick()
+                } ?: verse?.let {
+                    handleVerseClick()
+                } ?: nouns?.let {
+                    handleNounsClick()
+                } ?: viewVerbConjugation?.let {
+                    handleVerbConjugationClick()
+                } ?: verbOccuranceId?.let {
+                    handleVerbOccuranceClick()
+                } ?: run {
+                    Toast.makeText(context, "not found", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+    }
 
 
+    private fun handleFormViewClick() {
+        val vbform = vbdetail["formnumber"] ?: wordbdetail["formnumber"].toString()
+        val cleanedForm = vbform.replace(Regex("[()]"), "")
+
+        val data = arrayOf(cleanedForm)
+        VerbFormsDialogFrag.newInstance(data).show(requireActivity().supportFragmentManager, TAG)
+    }
+
+    private fun handleWordViewClick() {
+        val dataBundle = Bundle().apply {
+            if(wordbdetail["arabicword"] !=null) {
+                putString("arabicword", wordbdetail["arabicword"].toString())
+            }
+            putString(VERBMOOD, "")
+            putString(QURAN_VERB_WAZAN, "")
+            putString(QURAN_VERB_ROOT, "")
+            putString(VERBTYPE, "")
+        }
+
+        if (isHarf) {
+            handleHarfCases(dataBundle)
+        } else if (isroot) {
+            handleRootCases(dataBundle)
+        } else {
+            cleanArabicWord(dataBundle)
+        }
+
+        startActivity(Intent(activity, LughatWordDetailsAct::class.java).apply { putExtras(dataBundle) })
+    }
+    private fun cleanArabicWord(dataBundle: Bundle) {
+        var arabicWord = wordbdetail["arabicword"].toString()
+
+        // Remove unwanted Arabic diacritics (Kasra, Shadda, Fatha, Damma)
+        arabicWord = arabicWord.replace(ArabicLiterals.Kasra.toRegex(), "")
+            .replace(SHADDA.toRegex(), "")
+            .replace(ArabicLiterals.Fatha.toRegex(), "")
+            .replace(ArabicLiterals.Damma.toRegex(), "")
+
+        // Add the cleaned Arabic word to the data bundle
+        dataBundle.putString("arabicword", arabicWord)
+
+        // Add default values for other keys
+        dataBundle.putString(VERBMOOD, "")
+        dataBundle.putString(QURAN_VERB_WAZAN, "")
+        dataBundle.putString(QURAN_VERB_ROOT, "")
+        dataBundle.putString(VERBTYPE, "")
+    }
 
 
-                    else if (isroot) {
-                        dataBundle.putString("arabicword", "")
-                        if (vbdetail["emph"] != null) {
+    private fun handleRootCases(dataBundle: Bundle) {
+        dataBundle.putString("arabicword", "")
+        if (vbdetail["emph"] != null) {
 
-                            dataBundle.putString(VERBMOOD, "Emphasized")
-                        } else {
-                            dataBundle.putString(VERBMOOD, vbdetail["verbmood"])
-                        }
+            dataBundle.putString(VERBMOOD, "Emphasized")
+        } else {
+            dataBundle.putString(VERBMOOD, vbdetail["verbmood"])
+        }
+        dataBundle. putString(VERBTYPE, if (ismujarrad) "mujarrad" else "mazeed")
+        if (vbdetail.isNotEmpty()) {
+            dataBundle.putString(QURAN_VERB_WAZAN, vb.wazan)
+            dataBundle.putString(QURAN_VERB_ROOT, vb.root)
+        } else if (isparticple) {
+            dataBundle.putString(VERBMOOD, INDICATIVE)
+            dataBundle.putString(QURAN_VERB_WAZAN, vb.wazan)
+            dataBundle.putString(QURAN_VERB_ROOT, vb.root)
+            dataBundle.putBoolean(ISPARTICPLE, true)
+            if (isNoun) {
+                dataBundle.putString(NOUNCASE, wordbdetail["nouncase"].toString())
+            }
+        } else {
+            if (isNoun) {
+                dataBundle.putString(NOUNCASE, wordbdetail["nouncase"].toString())
+            }
+            dataBundle.putString(QURAN_VERB_ROOT, vb.root)
+            dataBundle.putString(QURAN_VERB_WAZAN, " ")
+        }
+    }
 
+    private fun handleHarfCases(dataBundle: Bundle) {
+        if (isharfnasb) {
+            dataBundle.putBoolean(ACCUSATIVE, true)
+        } else if (isprep) {
+            dataBundle.putBoolean(PREPOSITION, true)
+        } else if (isrelative) {
+            dataBundle.putBoolean(RELATIVE, true)
+        } else if (isdem) {
+            dataBundle.putBoolean(DEMONSTRATIVE, true)
+        } else if (isShart) {
+            dataBundle.putBoolean(CONDITIONAL, true)
+        }
+        dataBundle.putString("arabicword", wordbdetail["arabicword"].toString())
+        dataBundle.putString(VERBMOOD, "")
+        dataBundle.putString(QURAN_VERB_WAZAN, "")
+        dataBundle.putString(QURAN_VERB_ROOT, "")
+        dataBundle.putString(VERBTYPE, "")
+        val intent = Intent(activity, LughatWordDetailsAct::class.java)
+        intent.putExtras(dataBundle)
+        startActivity(intent)
+    }
+
+    private fun handleVerseClick() {
+        val item = GrammerFragmentsBottomSheet()
+        val dataBundle = Bundle().apply {
+            putInt(SURAH_ID, chapterid)
+            putInt(AYAHNUMBER, ayanumber)
+        }
+        val data = arrayOf(chapterid.toString(), ayanumber.toString())
+
+        item.arguments = dataBundle
+        GrammerFragmentsBottomSheet.newInstance(data)
+            .show(requireActivity().supportFragmentManager, TAG)
+    }
+
+    private fun handleNounsClick() {
+        val bundle = Bundle().apply {
+            putString(QURAN_VERB_ROOT, vb.root ?: harfNasbAndZarf)
+        }
+
+        val intent = Intent(activity, WordOccuranceAct::class.java).apply { putExtras(bundle) }
+        startActivity(intent)
+    }
+
+    private fun handleVerbConjugationClick() {
+        if (isroot && isconjugation || isparticple) {
+            val dataBundle = Bundle().apply {
+                putString(VERBTYPE, if (ismujarrad) "mujarrad" else "mazeed")
+                putString(VERBMOOD, vbdetail["emph"]?.let { "Emphasized" } ?: "Indicative")
+                putString(QURAN_VERB_WAZAN, vb.wazan)
+                putString(QURAN_VERB_ROOT, vb.root)
+            }
+
+            val intent = Intent(activity, ConjugatorTabsActivity::class.java).apply { putExtras(dataBundle) }
+            startActivity(intent)
+        }
+    }
+
+    private fun handleVerbOccuranceClick() {
+        val bundle = Bundle().apply {
+            putString(QURAN_VERB_ROOT, vb.root)
+        }
+
+        val intent = Intent(activity, WordOccuranceAct::class.java).apply { putExtras(bundle) }
+        startActivity(intent)
+    }
+
+
+         fun onViewCreateds(view: View, savedInstanceState: Bundle?) {
+            super.onViewCreated(view, savedInstanceState)
+
+            rwAdapter!!.SetOnItemClickListener(object : OnItemClickListener {
+                @SuppressLint("SuspiciousIndentation")
+                override fun onItemClick(v: View?, position: Int) {
+
+                    val text: CharSequence
+                    val text2: CharSequence? = null
+                    val viewVerbConjugation = v?.findViewById<View>(R.id.verbconjugationbtn)
+                    val verboccuranceid = v?.findViewById<View>(R.id.verboccurance)
+                    val nouns = v?.findViewById<View>(R.id.wordoccurance)
+                    val verse = v?.findViewById<View>(R.id.spannableverse)
+                    val wordview = v?.findViewById<View>(R.id.wordView)
+                    val formview = v?.findViewById<View>(R.id.mazeedmeaning)
+
+
+                    if (formview != null) {
+                        // val item = VerbFormsDialogFrag()
+                        //    item.setdata(root!!WordMeanings,wbwRootwords,grammarRootsCombined);
+                        //   val fragmentManager = requireActivity().supportFragmentManager
+                        var vbform: String?
                         if (vbdetail.isNotEmpty()) {
-                            dataBundle.putString(QURAN_VERB_WAZAN, vb.wazan)
-                            dataBundle.putString(QURAN_VERB_ROOT, vb.root)
-                        } else if (isparticple) {
-                            dataBundle.putString(VERBMOOD, INDICATIVE)
-                            dataBundle.putString(QURAN_VERB_WAZAN, vb.wazan)
-                            dataBundle.putString(QURAN_VERB_ROOT, vb.root)
-                            dataBundle.putBoolean(ISPARTICPLE, true)
-                            if (isNoun) {
-                                dataBundle.putString(NOUNCASE, wordbdetail["nouncase"].toString())
-                            }
+                            vbform = vbdetail["formnumber"]
                         } else {
-                            if (isNoun) {
-                                dataBundle.putString(NOUNCASE, wordbdetail["nouncase"].toString())
+                            vbform = wordbdetail["formnumber"].toString()
+                            vbform = vbform.replace("\\(".toRegex(), "").replace("\\)".toRegex(), "")
+                        }
+                        if (null != vbform) {
+                            val data = arrayOf<String>(vbform)
+                            VerbFormsDialogFrag.newInstance(data).show(
+                                Objects.requireNonNull(requireActivity()).supportFragmentManager,
+                                TAG
+                            )
+                        }
+                    } else if (wordview != null) {
+                        val dataBundle = Bundle()
+                        if (isHarf) {
+                            if (isharfnasb) {
+                                dataBundle.putBoolean(ACCUSATIVE, true)
+                            } else if (isprep) {
+                                dataBundle.putBoolean(PREPOSITION, true)
+                            } else if (isrelative) {
+                                dataBundle.putBoolean(RELATIVE, true)
+                            } else if (isdem) {
+                                dataBundle.putBoolean(DEMONSTRATIVE, true)
+                            } else if (isShart) {
+                                dataBundle.putBoolean(CONDITIONAL, true)
                             }
-                            dataBundle.putString(QURAN_VERB_ROOT, vb.root)
-                            dataBundle.putString(QURAN_VERB_WAZAN, " ")
-                        }
-                    } else {
-                        //   dataBundle.putString("arabicword", String.valueOf(wordbdetail.get("arabicword")));
-                        var arabicword = wordbdetail["arabicword"].toString()
-                        val inkasra = arabicword.indexOf(ArabicLiterals.Kasra)
-                        val intshadda = arabicword.indexOf(SHADDA)
-                        val intfatha = arabicword.indexOf(ArabicLiterals.Fatha)
-                        val intdamma = arabicword.indexOf(ArabicLiterals.Damma)
-                        if (inkasra != -1) {
-                            arabicword = arabicword.replace(ArabicLiterals.Kasra.toRegex(), "")
-                        }
-                        if (intshadda != -1) {
-                            arabicword = arabicword.replace(SHADDA.toRegex(), "")
-                        }
-                        if (intfatha != -1) {
-                            arabicword = arabicword.replace(ArabicLiterals.Fatha.toRegex(), "")
-                        }
-                        if (intdamma != -1) {
-                            arabicword = arabicword.replace(ArabicLiterals.Damma.toRegex(), "")
-                        }
-                        dataBundle.putString("arabicword", arabicword)
-                        dataBundle.putString(VERBMOOD, "")
-                        dataBundle.putString(QURAN_VERB_WAZAN, "")
-                        dataBundle.putString(QURAN_VERB_ROOT, "")
-                        dataBundle.putString(VERBTYPE, "")
-                        //    Intent intent = new Intent(getActivity(), WordDictionaryAct.class);
-                        val intent = Intent(activity, LughatWordDetailsAct::class.java)
-                        intent.putExtras(dataBundle)
-                        startActivity(intent)
-                    }
-                    if (isroot || isarabicword) {
-                        try {
-                            if (ismujarrad) {
-                                dataBundle.putString(VERBTYPE, "mujarrad")
-                            } else if (ismazeed) {
-                                dataBundle.putString(VERBTYPE, "mazeed")
-                            } else {
-                                dataBundle.putString(VERBTYPE, "")
-                            }
-                            if (isimperative) {
-                                dataBundle.putBoolean(IMPERATIVE, true)
-                            }
-                            //     Intent intent = new Intent(getActivity(), WordDictionaryAct.class);
+                            dataBundle.putString("arabicword", wordbdetail["arabicword"].toString())
+                            dataBundle.putString(VERBMOOD, "")
+                            dataBundle.putString(QURAN_VERB_WAZAN, "")
+                            dataBundle.putString(QURAN_VERB_ROOT, "")
+                            dataBundle.putString(VERBTYPE, "")
                             val intent = Intent(activity, LughatWordDetailsAct::class.java)
                             intent.putExtras(dataBundle)
                             startActivity(intent)
-                        } catch (e: NullPointerException) {
-                            println("null pointer")
-                        }
-                    } else {
-                        Toast.makeText(context, "not found", Toast.LENGTH_SHORT).show()
-                    }
-                } else if (verse != null) {
-                    val item = GrammerFragmentsBottomSheet()
-                    //    item.setdata(root!!WordMeanings,wbwRootwords,grammarRootsCombined);
-                    //   val fragmentManager = requireActivity().supportFragmentManager
-                    val dataBundle = Bundle()
-                    dataBundle.putInt(SURAH_ID, chapterid)
-                    dataBundle.putInt(AYAHNUMBER, ayanumber)
-                    item.arguments = dataBundle
-                    val data = arrayOf(chapterid.toString(), ayanumber.toString())
-                    GrammerFragmentsBottomSheet.newInstance(data)
-                        .show(Objects.requireNonNull(requireActivity()).supportFragmentManager, TAG)
-                } else if (nouns != null) {
-                    val bundle = Bundle()
-
-                    val intent = Intent(activity, WordOccuranceAct::class.java)
-                    //          val intent = Intent(activity, ComposeAct::class.java)
-                    try {
-                        if (vb.root!! != null) {
-                            bundle.putString(QURAN_VERB_ROOT, vb.root)
-                        } else if (harfNasbAndZarf != null) {
-                            bundle.putString(QURAN_VERB_ROOT, harfNasbAndZarf)
-                        }
-                    } catch (e1: NullPointerException) {
-                        bundle.putString(QURAN_VERB_ROOT, harfNasbAndZarf)
-                        e1.printStackTrace()
-                    }
-                    intent.putExtras(bundle)
-                    //   intent.putExtra(QURAN_VERB_ROOT,vb.getRoot());
-                    startActivity(intent)
-                } else if (viewVerbConjugation != null) {
-                    text = (viewVerbConjugation as MaterialButton).text
-                    if (text.toString() == "Click for Verb Conjugation") {
-                        if (isroot && isconjugation || isparticple) {
-                            val dataBundle = Bundle()
-                            //      ArrayList arrayList = ThulathiMazeedConjugatonList.get(position);
-                            //   arrayList.get(0).ge
-                            if (ismujarrad) {
-                                dataBundle.putString(VERBTYPE, "mujarrad")
-                            } else if (ismazeed) {
-                                dataBundle.putString(VERBTYPE, "mazeed")
-                            }
-                            if (vbdetail.isEmpty()) {
-                                dataBundle.putString(VERBMOOD, "Indicative")
-                            } else {
-
-                                if (vbdetail["emph"] != null) {
-
-                                    dataBundle.putString(VERBMOOD, "Emphasized")
-                                } else {
-                                    dataBundle.putString(VERBMOOD, vbdetail["verbmood"])
-                                }
-
-                            }
-                            dataBundle.putString(QURAN_VERB_WAZAN, vb.wazan)
+                        } else if (quadrilateral) {
                             dataBundle.putString(QURAN_VERB_ROOT, vb.root)
-                            val intent = Intent(activity, ConjugatorTabsActivity::class.java)
+                            dataBundle.putString(QURAN_VERB_WAZAN, " ")
+                            dataBundle.putString("arabicword", "")
+                        } else if (isarabicword && (!isroot && !isnoun)) {
+                            dataBundle.putString("arabicword", wordbdetail["arabicword"].toString())
+                            dataBundle.putString(QURAN_VERB_WAZAN, " ")
+                            dataBundle.putString(QURAN_VERB_ROOT, " ")
+                        } else if(isnoun && isProperNoun) {
+                            dataBundle.putString(VERBMOOD, "")
+                            dataBundle.putString(QURAN_VERB_WAZAN, "")
+                            dataBundle.putString(QURAN_VERB_ROOT, "")
+                            dataBundle.putString(VERBTYPE, "")
+                            dataBundle.putString(NOUNCASE, wordbdetail["nouncase"].toString())
+                            dataBundle.putBoolean(PROPERNOUN, true)
+                            val intent = Intent(activity, LughatWordDetailsAct::class.java)
                             intent.putExtras(dataBundle)
                             startActivity(intent)
                         }
-                    }
-                } else if (verboccuranceid != null) {
-                    //      text2 = ((MaterialButton) verboccuranceid).getText();
-                    if (vb != null) {
+
+
+
+
+                        else if (isroot) {
+                            dataBundle.putString("arabicword", "")
+                            if (vbdetail["emph"] != null) {
+
+                                dataBundle.putString(VERBMOOD, "Emphasized")
+                            } else {
+                                dataBundle.putString(VERBMOOD, vbdetail["verbmood"])
+                            }
+
+                            if (vbdetail.isNotEmpty()) {
+                                dataBundle.putString(QURAN_VERB_WAZAN, vb.wazan)
+                                dataBundle.putString(QURAN_VERB_ROOT, vb.root)
+                            } else if (isparticple) {
+                                dataBundle.putString(VERBMOOD, INDICATIVE)
+                                dataBundle.putString(QURAN_VERB_WAZAN, vb.wazan)
+                                dataBundle.putString(QURAN_VERB_ROOT, vb.root)
+                                dataBundle.putBoolean(ISPARTICPLE, true)
+                                if (isNoun) {
+                                    dataBundle.putString(NOUNCASE, wordbdetail["nouncase"].toString())
+                                }
+                            } else {
+                                if (isNoun) {
+                                    dataBundle.putString(NOUNCASE, wordbdetail["nouncase"].toString())
+                                }
+                                dataBundle.putString(QURAN_VERB_ROOT, vb.root)
+                                dataBundle.putString(QURAN_VERB_WAZAN, " ")
+                            }
+                        } else {
+                            //   dataBundle.putString("arabicword", String.valueOf(wordbdetail.get("arabicword")));
+                            var arabicword = wordbdetail["arabicword"].toString()
+                            val inkasra = arabicword.indexOf(ArabicLiterals.Kasra)
+                            val intshadda = arabicword.indexOf(SHADDA)
+                            val intfatha = arabicword.indexOf(ArabicLiterals.Fatha)
+                            val intdamma = arabicword.indexOf(ArabicLiterals.Damma)
+                            if (inkasra != -1) {
+                                arabicword = arabicword.replace(ArabicLiterals.Kasra.toRegex(), "")
+                            }
+                            if (intshadda != -1) {
+                                arabicword = arabicword.replace(SHADDA.toRegex(), "")
+                            }
+                            if (intfatha != -1) {
+                                arabicword = arabicword.replace(ArabicLiterals.Fatha.toRegex(), "")
+                            }
+                            if (intdamma != -1) {
+                                arabicword = arabicword.replace(ArabicLiterals.Damma.toRegex(), "")
+                            }
+                            dataBundle.putString("arabicword", arabicword)
+                            dataBundle.putString(VERBMOOD, "")
+                            dataBundle.putString(QURAN_VERB_WAZAN, "")
+                            dataBundle.putString(QURAN_VERB_ROOT, "")
+                            dataBundle.putString(VERBTYPE, "")
+                            //    Intent intent = new Intent(getActivity(), WordDictionaryAct.class);
+                            val intent = Intent(activity, LughatWordDetailsAct::class.java)
+                            intent.putExtras(dataBundle)
+                            startActivity(intent)
+                        }
+                        if (isroot || isarabicword) {
+                            try {
+                                if (ismujarrad) {
+                                    dataBundle.putString(VERBTYPE, "mujarrad")
+                                } else if (ismazeed) {
+                                    dataBundle.putString(VERBTYPE, "mazeed")
+                                } else {
+                                    dataBundle.putString(VERBTYPE, "")
+                                }
+                                if (isimperative) {
+                                    dataBundle.putBoolean(IMPERATIVE, true)
+                                }
+                                //     Intent intent = new Intent(getActivity(), WordDictionaryAct.class);
+                                val intent = Intent(activity, LughatWordDetailsAct::class.java)
+                                intent.putExtras(dataBundle)
+                                startActivity(intent)
+                            } catch (e: NullPointerException) {
+                                println("null pointer")
+                            }
+                        } else {
+                            Toast.makeText(context, "not found", Toast.LENGTH_SHORT).show()
+                        }
+                    } else if (verse != null) {
+                        val item = GrammerFragmentsBottomSheet()
+                        //    item.setdata(root!!WordMeanings,wbwRootwords,grammarRootsCombined);
+                        //   val fragmentManager = requireActivity().supportFragmentManager
+                        val dataBundle = Bundle()
+                        dataBundle.putInt(SURAH_ID, chapterid)
+                        dataBundle.putInt(AYAHNUMBER, ayanumber)
+                        item.arguments = dataBundle
+                        val data = arrayOf(chapterid.toString(), ayanumber.toString())
+                        GrammerFragmentsBottomSheet.newInstance(data)
+                            .show(Objects.requireNonNull(requireActivity()).supportFragmentManager, TAG)
+                    } else if (nouns != null) {
                         val bundle = Bundle()
+
                         val intent = Intent(activity, WordOccuranceAct::class.java)
-                        bundle.putString(QURAN_VERB_ROOT, vb.root)
+                        //          val intent = Intent(activity, ComposeAct::class.java)
+                        try {
+                            if (vb.root!! != null) {
+                                bundle.putString(QURAN_VERB_ROOT, vb.root)
+                            } else if (harfNasbAndZarf != null) {
+                                bundle.putString(QURAN_VERB_ROOT, harfNasbAndZarf)
+                            }
+                        } catch (e1: NullPointerException) {
+                            bundle.putString(QURAN_VERB_ROOT, harfNasbAndZarf)
+                            e1.printStackTrace()
+                        }
                         intent.putExtras(bundle)
                         //   intent.putExtra(QURAN_VERB_ROOT,vb.getRoot());
                         startActivity(intent)
+                    } else if (viewVerbConjugation != null) {
+                        text = (viewVerbConjugation as MaterialButton).text
+                        if (text.toString() == "Click for Verb Conjugation") {
+                            if (isroot && isconjugation || isparticple) {
+                                val dataBundle = Bundle()
+                                //      ArrayList arrayList = ThulathiMazeedConjugatonList.get(position);
+                                //   arrayList.get(0).ge
+                                if (ismujarrad) {
+                                    dataBundle.putString(VERBTYPE, "mujarrad")
+                                } else if (ismazeed) {
+                                    dataBundle.putString(VERBTYPE, "mazeed")
+                                }
+                                if (vbdetail.isEmpty()) {
+                                    dataBundle.putString(VERBMOOD, "Indicative")
+                                } else {
+
+                                    if (vbdetail["emph"] != null) {
+
+                                        dataBundle.putString(VERBMOOD, "Emphasized")
+                                    } else {
+                                        dataBundle.putString(VERBMOOD, vbdetail["verbmood"])
+                                    }
+
+                                }
+                                dataBundle.putString(QURAN_VERB_WAZAN, vb.wazan)
+                                dataBundle.putString(QURAN_VERB_ROOT, vb.root)
+                                val intent = Intent(activity, ConjugatorTabsActivity::class.java)
+                                intent.putExtras(dataBundle)
+                                startActivity(intent)
+                            }
+                        }
+                    } else if (verboccuranceid != null) {
+                        //      text2 = ((MaterialButton) verboccuranceid).getText();
+                        if (vb != null) {
+                            val bundle = Bundle()
+                            val intent = Intent(activity, WordOccuranceAct::class.java)
+                            bundle.putString(QURAN_VERB_ROOT, vb.root)
+                            intent.putExtras(bundle)
+                            //   intent.putExtra(QURAN_VERB_ROOT,vb.getRoot());
+                            startActivity(intent)
+                        }
                     }
                 }
-            }
 
 
-        })
+            })
 
 
-    }
+        }
 
     companion object {
         const val TAG = "bottom"

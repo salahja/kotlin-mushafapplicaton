@@ -56,7 +56,7 @@ class VerbFormsDialogFrag : BottomSheetDialogFragment() {
     companion object {
         //   public class VerbFormsDialogFrag extends Fragment {
         private const val ARG_OPTIONS_DATA = "item_count"
-        fun newInstance(data: Array<String?>?): VerbFormsDialogFrag {
+        fun newInstance(data: Array<String>): VerbFormsDialogFrag {
             val fragment = VerbFormsDialogFrag()
             val args = Bundle()
             args.putStringArray(ARG_OPTIONS_DATA, data)

@@ -188,7 +188,7 @@ class MazeedTabSagheerFragmentVerb(private val context: Context) : Fragment() {
                             val item = VerbFormsDialogFrag()
                             //    item.setdata(root!!WordMeanings,wbwRootwords,grammarRootsCombined);
                             val fragmentManager = requireActivity().supportFragmentManager
-                            val data = arrayOf<String?>(form)
+                            val data = arrayOf<String>(form)
                             val transactions = fragmentManager.beginTransaction()
                                 .setCustomAnimations(R.anim.abc_slide_in_top, android.R.anim.fade_out)
                             transactions.show(item)
