@@ -2,8 +2,118 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "66bea1a35614a1b8d50fb6b614530f93",
+    "identityHash": "de2b006dfe1be947fe84603d8615a2df",
     "entities": [
+      {
+        "tableName": "lysa",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`hua` TEXT NOT NULL, `huma` TEXT NOT NULL, `hum` TEXT NOT NULL, `hia` TEXT NOT NULL, `humaf` TEXT NOT NULL, `hunna` TEXT NOT NULL, `anta` TEXT NOT NULL, `antuma` TEXT NOT NULL, `antum` TEXT NOT NULL, `anti` TEXT NOT NULL, `antumaf` TEXT NOT NULL, `antunna` TEXT NOT NULL, `ana` TEXT NOT NULL, `nahnu` TEXT NOT NULL, `grammar` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "hua",
+            "columnName": "hua",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "huma",
+            "columnName": "huma",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hum",
+            "columnName": "hum",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hia",
+            "columnName": "hia",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "humaf",
+            "columnName": "humaf",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hunna",
+            "columnName": "hunna",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "anta",
+            "columnName": "anta",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "antuma",
+            "columnName": "antuma",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "antum",
+            "columnName": "antum",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "anti",
+            "columnName": "anti",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "antumaf",
+            "columnName": "antumaf",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "antunna",
+            "columnName": "antunna",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ana",
+            "columnName": "ana",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nahnu",
+            "columnName": "nahnu",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "grammar",
+            "columnName": "grammar",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
       {
         "tableName": "surahjson",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surah` INTEGER NOT NULL, `jasonstr` TEXT NOT NULL, `docid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
@@ -2235,7 +2345,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '66bea1a35614a1b8d50fb6b614530f93')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'de2b006dfe1be947fe84603d8615a2df')"
     ]
   }
 }

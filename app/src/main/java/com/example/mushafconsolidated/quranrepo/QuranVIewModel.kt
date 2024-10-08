@@ -207,11 +207,6 @@ class QuranVIewModel @Inject constructor(
 
     }
 
-    fun getNouncorpus(surah: Int, ayah: Int, wordno: Int): MutableLiveData<List<NounCorpus>> {
-
-        nounbywordno.value = this.quranRepository.getNouncorpus(surah, ayah, wordno)
-        return nounbywordno
-    }
 
 
     fun getHans(root: String): MutableLiveData<List<hanslexicon>> {
@@ -389,16 +384,24 @@ class QuranVIewModel @Inject constructor(
         return qurancorpus
     }
 
-    fun getsurahayahVerseslist(cid: Int, ayid: Int): LiveData<List<QuranEntity>> {
+    fun getsurahayahVerseslist(cid: Int, ayid: Int): MutableLiveData<List<QuranEntity>> {
 
 
-        viewModelScope.launch {
+
             quranlist.value = quranRepository.getsurahbyayahlist(cid, ayid)
-        }
+
 
 
         return quranlist
     }
+    fun getNouncorpus(surah: Int, ayah: Int, wordno: Int): MutableLiveData<List<NounCorpus>> {
+
+        nounbywordno.value = this.quranRepository.getNouncorpus(surah, ayah, wordno)
+        return nounbywordno
+    }
+
+
+
 
     fun getSurahSummary(cid: Int): LiveData<List<surahsummary>> {
 

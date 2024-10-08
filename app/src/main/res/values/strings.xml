@@ -584,5 +584,6 @@
     <string name="pastdetail">Did not \npast + ‫ما‬ \npresent lightest + ‫لم‬</string>
     <string name="presentdetails">Does not \npresent + ‫ما‬ \nnormal present + ‫ال‬</string>
     <string name="futuredetail">Will not/not yet\npresent light + ‫لن‬\npresent lightest + ‫لَمّا</string>
+    <string name="Lysa">lysa detail\n</string>
     "
 </resources>

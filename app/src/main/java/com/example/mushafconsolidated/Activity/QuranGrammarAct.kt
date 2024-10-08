@@ -1,6 +1,7 @@
 package com.example.mushafconsolidated.Activity
 
 import ArabicrootListFragment
+import Utility.WordDetailContract
 import VerbrootListFragment
 import android.annotation.SuppressLint
 import android.app.ActivityManager
@@ -26,6 +27,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.OptIn
 import androidx.annotation.RequiresApi
@@ -113,6 +115,13 @@ import com.quiz.ArabicVerbQuizActNew
 //import com.example.mushafconsolidated.Entities.JoinVersesTranslationDataTranslation;
 @AndroidEntryPoint
 class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
+
+    private val wordDetailLauncher = registerForActivityResult(WordDetailContract()) { wordFound ->
+        if (!wordFound) {
+            Toast.makeText(this, "Word detail not found", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     private var bundles: Bundle? = null
     private lateinit var mainViewModel: QuranVIewModel
     private var corpusSurahWord: List<CorpusEntity>? = null
@@ -932,88 +941,97 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     @SuppressLint("RestrictedApi")
     override fun onItemClick(v: View, position: Int) {
 
-       val tag=v.tag as String
+    //   val tag=v.tag as String
         val colortag = shared.getBoolean("colortag", true)
-        if(tag=="overflow_img"){
-            @SuppressLint("RestrictedApi") val menuBuilder = MenuBuilder(this)
-            val inflater = MenuInflater(this)
-            inflater.inflate(R.menu.popup_menu, menuBuilder)
-            @SuppressLint("RestrictedApi") val optionsMenu =
-                MenuPopupHelper(this, menuBuilder, v)
-            optionsMenu.setForceShowIcon(true)
+        val tag = v.tag
+        if (tag != null && tag.equals("header")) {
+            // Handle header click
+            Toast.makeText(this@QuranGrammarAct, "Header clicked!", Toast.LENGTH_SHORT).show()
+        } else {
 
-            menuBuilder.setCallback(object : MenuBuilder.Callback {
-                @SuppressLint("RestrictedApi")
-                override fun onMenuItemSelected(menu: MenuBuilder, item: MenuItem): Boolean {
-                    if (item.itemId == R.id.actionTafsir) { // Handle option1 Click
-                        val readingintent =
-                            Intent(this@QuranGrammarAct, TafsirFullscreenActivity::class.java)
-                        val chapterno = corpusSurahWord!![position - 1].surah
-                        val verse = corpusSurahWord!![position - 1].ayah
-                        readingintent.putExtra(Constant.SURAH_ID, chapterno)
-                        readingintent.putExtra(Constant.AYAH_ID, verse)
-                        readingintent.putExtra(Constant.SURAH_ARABIC_NAME, surahArabicName)
-                        startActivity(readingintent)
-                        optionsMenu.dismiss()
-                        return true
-                    }
-                    if (item.itemId == R.id.bookmark) { // Handle option2 Click
-                        bookMarkSelected(position)
-                        optionsMenu.dismiss()
-                        return true
-                    }
-                    if (item.itemId == R.id.jumpto) { // Handle option2 Click
-                        //  SurahAyahPicker();
-                        initDialogComponents(position)
-                        optionsMenu.dismiss()
-                        return true
-                    }
-                    if (item.itemId == R.id.action_share) {
-                        ScreenshotUtils.takeScreenshot(
-                            window.decorView,
-                            QuranGrammarApplication.context!!
-                        )
-                        optionsMenu.dismiss()
-                        return true
-                    }
-                    if (item.itemId == R.id.ivHelp) { // Handle option2 Click
-                        ParticleColorScheme.newInstance().show(
-                            this@QuranGrammarAct.supportFragmentManager, WordAnalysisBottomSheet.TAG
-                        )
-                        optionsMenu.dismiss()
-                        return true
-                    }
-                    if (item.itemId == R.id.colorized) { // Handle option2 Click
-                        if (colortag) {
-                            val editor =
-                                android.preference.PreferenceManager.getDefaultSharedPreferences(
-                                    this@QuranGrammarAct
-                                ).edit()
-                            //     SharedPreferences.Editor editor = getActivity().getSharedPreferences("properties", 0).edit();
-                            editor.putBoolean("colortag", false)
-                            editor.apply()
-                            reloadActivity()
-                        } else {
-                            val editor =
-                                android.preference.PreferenceManager.getDefaultSharedPreferences(
-                                    this@QuranGrammarAct
-                                ).edit()
-                            //     SharedPreferences.Editor editor = getActivity().getSharedPreferences("properties", 0).edit();
-                            editor.putBoolean("colortag", true)
-                            editor.apply()
-                            reloadActivity()
+
+            if (tag == "overflow_img") {
+                @SuppressLint("RestrictedApi") val menuBuilder = MenuBuilder(this)
+                val inflater = MenuInflater(this)
+                inflater.inflate(R.menu.popup_menu, menuBuilder)
+                @SuppressLint("RestrictedApi") val optionsMenu =
+                    MenuPopupHelper(this, menuBuilder, v)
+                optionsMenu.setForceShowIcon(true)
+
+                menuBuilder.setCallback(object : MenuBuilder.Callback {
+                    @SuppressLint("RestrictedApi")
+                    override fun onMenuItemSelected(menu: MenuBuilder, item: MenuItem): Boolean {
+                        if (item.itemId == R.id.actionTafsir) { // Handle option1 Click
+                            val readingintent =
+                                Intent(this@QuranGrammarAct, TafsirFullscreenActivity::class.java)
+                            val chapterno = corpusSurahWord!![position - 1].surah
+                            val verse = corpusSurahWord!![position - 1].ayah
+                            readingintent.putExtra(Constant.SURAH_ID, chapterno)
+                            readingintent.putExtra(Constant.AYAH_ID, verse)
+                            readingintent.putExtra(Constant.SURAH_ARABIC_NAME, surahArabicName)
+                            startActivity(readingintent)
+                            optionsMenu.dismiss()
+                            return true
                         }
-                        optionsMenu.dismiss()
-                        return true
+                        if (item.itemId == R.id.bookmark) { // Handle option2 Click
+                            bookMarkSelected(position)
+                            optionsMenu.dismiss()
+                            return true
+                        }
+                        if (item.itemId == R.id.jumpto) { // Handle option2 Click
+                            //  SurahAyahPicker();
+                            initDialogComponents(position)
+                            optionsMenu.dismiss()
+                            return true
+                        }
+                        if (item.itemId == R.id.action_share) {
+                            ScreenshotUtils.takeScreenshot(
+                                window.decorView,
+                                QuranGrammarApplication.context!!
+                            )
+                            optionsMenu.dismiss()
+                            return true
+                        }
+                        if (item.itemId == R.id.ivHelp) { // Handle option2 Click
+                            ParticleColorScheme.newInstance().show(
+                                this@QuranGrammarAct.supportFragmentManager,
+                                WordAnalysisBottomSheet.TAG
+                            )
+                            optionsMenu.dismiss()
+                            return true
+                        }
+                        if (item.itemId == R.id.colorized) { // Handle option2 Click
+                            if (colortag) {
+                                val editor =
+                                    android.preference.PreferenceManager.getDefaultSharedPreferences(
+                                        this@QuranGrammarAct
+                                    ).edit()
+                                //     SharedPreferences.Editor editor = getActivity().getSharedPreferences("properties", 0).edit();
+                                editor.putBoolean("colortag", false)
+                                editor.apply()
+                                reloadActivity()
+                            } else {
+                                val editor =
+                                    android.preference.PreferenceManager.getDefaultSharedPreferences(
+                                        this@QuranGrammarAct
+                                    ).edit()
+                                //     SharedPreferences.Editor editor = getActivity().getSharedPreferences("properties", 0).edit();
+                                editor.putBoolean("colortag", true)
+                                editor.apply()
+                                reloadActivity()
+                            }
+                            optionsMenu.dismiss()
+                            return true
+                        }
+                        return false
                     }
-                    return false
-                }
 
-                override fun onMenuModeChange(menu: MenuBuilder) {}
-            })
-            optionsMenu.show()
-        }else{
-            qurangrammarmenu(v, position)
+                    override fun onMenuModeChange(menu: MenuBuilder) {}
+                })
+                optionsMenu.show()
+            } else {
+                qurangrammarmenu(v, position)
+            }
         }
     }
     @SuppressLint("RestrictedApi")

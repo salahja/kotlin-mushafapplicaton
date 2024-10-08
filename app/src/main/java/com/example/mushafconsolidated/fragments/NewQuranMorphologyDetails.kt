@@ -39,9 +39,22 @@ open class NewQuranMorphologyDetails(
     open val verbDetails: HashMap<String, String?>
         get() {
             val vbdetail = HashMap<String, String?>()
-            val roots: String = verbcorpusform!![0].root_a!!
+            val laysa=StringBuilder()
+            val roots: String = verbcorpusform?.getOrNull(0)?.root_a ?: "N/A" // Using "N/A" as default
             vbdetail["root"] = roots
-            if (verbcorpusform!!.size > 0) {
+            if(roots.equals("ليس")){
+                vbdetail["thulathi"]="Form 1"
+                vbdetail["root"]="ليس"
+                vbdetail["tense"]="Perfect verb(فعل ماض)"
+                vbdetail["mood"] = verbfeaturesenglisharabic.IND
+                vbdetail["verbmood"] = "Indicative"
+                val gendernumber: String? = verbcorpusform!![0].mood_kananumbers
+                val pngsb = getGenderNumberdetails(gendernumber!!)
+                vbdetail["png"] = laysa.toString()
+                vbdetail["thulathi"]="Form 1"
+                vbdetail["wazan"]="N"
+            }
+          else  if (verbcorpusform!!.size > 0) {
                 if (!verbcorpusform!![0].form.equals("I")) {
                     val mform: String? = verbcorpusform!![0].form
                     convertForms(mform)
@@ -82,9 +95,14 @@ open class NewQuranMorphologyDetails(
                 //     pngsb.append("," + "(form").append(verbcorpusform.get(0).getForm()).append(")");
                 vbdetail["png"] = pngsb.toString()
             } else {
-                vbdetail["png"] = null
+
+                    vbdetail["png"] = null
+
                 //    pngsb.append(",").append(verbcorpusform.get(0).getThulathibab());
             }
+
+                vbdetail["png"] = pngsb.toString()
+
             vbdetail["png"] = pngsb.toString()
             when (verbcorpusform!![0].tense) {
                 "IMPF" -> vbdetail["tense"] = verbfeaturesenglisharabic.IMPF
@@ -175,6 +193,9 @@ open class NewQuranMorphologyDetails(
                 }
             }
             vbdetail["lemma"] = verbcorpusform!![0].lemma_a
+            if(roots.equals("ليس")){
+                vbdetail["png"] = laysa.toString()
+            }
             return vbdetail
         }
 

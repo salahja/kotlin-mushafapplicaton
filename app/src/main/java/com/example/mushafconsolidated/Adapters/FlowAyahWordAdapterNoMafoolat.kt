@@ -627,6 +627,7 @@ class FlowAyahWordAdapterNoMafoolat(
         init {
             view.tag = this
             itemView.setOnClickListener(this)
+            itemView.tag="header"
             if (viewType == 0) {
                 ivLocationmakki = view.findViewById(R.id.ivLocationmakki)
                 ivLocationmadani = view.findViewById(R.id.ivLocationmadani)

@@ -252,6 +252,14 @@ class Dictionary_frag(lughatWordDetailsAct: LughatWordDetailsAct, language: Stri
         val ska: WordLughatAdapter
         val lanesLexiconAdapter: LexiconAdapter
         when (language) {
+
+            "kanainna" -> {
+                val kanainna = mainViewModel.getGramarRulesbyHarf("kanainna").value
+                //     utils.getGrammarRulesByRules("Imperative")
+                worddifinition.add(kanainna!![0].detailsrules)
+                lanesLexiconAdapter = LexiconAdapter(worddifinition, requireContext(), language)
+                recyclerView.adapter = lanesLexiconAdapter
+            }
             "imperative" -> {
                 val isimperative = mainViewModel.getGramarRulesbyHarf("Imperative").value
                 //     utils.getGrammarRulesByRules("Imperative")

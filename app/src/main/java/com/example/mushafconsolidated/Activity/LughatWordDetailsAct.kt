@@ -4,6 +4,8 @@ package com.example.mushafconsolidated.Activity
 import com.example.mushafconsolidated.Activityimport.BaseActivity
 import SharedPref
 import Utility.ArabicLiterals
+import android.app.Activity
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
@@ -29,7 +31,8 @@ import org.sj.conjugator.fragments.FragmentIsmIsmAla
 import org.sj.conjugator.fragments.FragmentIsmZarf
 import org.sj.conjugator.fragments.FragmentIsmfaelIsmMafools
 import org.sj.conjugator.fragments.FragmentVerb
- 
+import org.sj.conjugator.fragments.LaysaVerbFrag
+
 
 @AndroidEntryPoint
 class LughatWordDetailsAct : BaseActivity() {
@@ -61,6 +64,13 @@ class LughatWordDetailsAct : BaseActivity() {
         TabInfo("Urdu Lughat", "urdu")
     )
 
+    private val laysatitles = arrayOf(
+        "Lane Lexicon",
+        "Hans Weir",
+        "كانَ وَأخَواتُها (The كانَ family)",
+        "Past Perfect",
+
+    )
     private val thulathientitles = arrayOf(
         "Lane Lexicon",
         "Hans Weir",
@@ -190,6 +200,7 @@ class LughatWordDetailsAct : BaseActivity() {
     private var isrelative=false
     private var isShart=false
     private var isprep=false
+    private var isLaysa=false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -236,6 +247,9 @@ class LughatWordDetailsAct : BaseActivity() {
             // Cleaning the verb root
             val ss = conjugationRoot.replace("[\\[\\]]".toRegex(), "")
             val verbRoot = ss.replace("[,;\\s]".toRegex(), "")
+            if(verbRoot.equals("ليس")){
+                isLaysa=true
+            }
 
             // Replace 'ل' (ALIF) with hamza if necessary
             val starts = conjugationRoot.indexOf(ArabicLiterals.LALIF)
@@ -371,6 +385,13 @@ class LughatWordDetailsAct : BaseActivity() {
  */
 
         when {
+            isLaysa ->
+            {
+                languages[0] = "lanes"
+                languages[1] = "hans"
+                languages[2] = "kanainna"
+                setupTabLayout(tabLayout, viewPager, laysatitles)
+            }
             (ismujarrad && isparticple && (isIsmMajroor || isIsmMansub || isIsmMarfu))-> {
                 if (verbMood != null) {
                     setLanguages(isimperative,ismujarrad,isparticple,isIsmMajroor,isIsmMansub,isIsmMarfu,isAugmentedWazan,isonlyarabicword,isrelative,isdem,isharfnasab,isShart,isprep,isnoconjugation,isdictionary,verbMood)
@@ -401,8 +422,8 @@ class LughatWordDetailsAct : BaseActivity() {
 
             isProperNoun ->
             {
-
-                Toast.makeText(this, "It is Proper Noun", Toast.LENGTH_SHORT).show()
+                handleWordNotFound()
+              //  Toast.makeText(this, "It is Proper Noun", Toast.LENGTH_SHORT).show()
             }
 
             isAnyIsm() -> {
@@ -494,7 +515,8 @@ class LughatWordDetailsAct : BaseActivity() {
             }
 
             else -> {
-                Toast.makeText(this, "Not Configured", Toast.LENGTH_SHORT).show()
+                handleWordNotFound()
+            //    Toast.makeText(this, "Not Configured", Toast.LENGTH_SHORT).show()
                 /*  val view = findViewById<View>(R.id.bookmark)
              val snackbar = Snackbar.make(view, "Not Configured", Snackbar.LENGTH_LONG)
         snackbar.setActionTextColor(Color.BLUE)
@@ -506,6 +528,16 @@ class LughatWordDetailsAct : BaseActivity() {
             }
         }
     }
+
+    // When the word is not found
+    private fun handleWordNotFound() {
+        val resultIntent = Intent().apply {
+            putExtra("result_message", "Word not found")
+        }
+        setResult(Activity.RESULT_OK, resultIntent)
+        finish() // Finish the activity and send the result back to Activity A
+    }
+
     fun setLanguages(
         isimperative: Boolean,
         ismujarrad: Boolean,
@@ -688,6 +720,9 @@ class LughatWordDetailsAct : BaseActivity() {
     private inner class ViewStateAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
         FragmentStateAdapter(fragmentManager, lifecycle) {
         override fun createFragment(position: Int): Fragment {
+            if(isLaysa){
+                return getLaysa(position)
+            }
             if (isdictionary) {
                 return getdictionary(position)
             } else if (ismujarrad && isparticple && (isIsmMajroor || isIsmMansub || isIsmMarfu)) {
@@ -986,7 +1021,33 @@ class LughatWordDetailsAct : BaseActivity() {
              return fragv.newInstance()*/
             return TODO("Provide the return value")
         }
+        private fun getLaysa(position: Int): Fragment {
+            if (position == 0) {
+                //hanes
+                val fragv = Dictionary_frag(this@LughatWordDetailsAct, languages[0].toString())
+                fragv.arguments = dataBundle
+                return fragv.newInstance()
+            } else if (position == 1) {
+                //kabes
+                val fragv = Dictionary_frag(this@LughatWordDetailsAct, languages[1].toString())
+                fragv.arguments = dataBundle
+                return fragv.newInstance()
 
+            } else if (position == 2) {
+                val fragv = Dictionary_frag(this@LughatWordDetailsAct, languages[2].toString())
+                fragv.arguments = dataBundle
+                return fragv.newInstance()
+            } else if (position == 3) {
+
+                val fragv = LaysaVerbFrag()
+                fragv.arguments = dataBundle
+                return fragv.newInstance()
+            }
+            val fragv = LaysaVerbFrag()
+            fragv.arguments = dataBundle
+            return fragv.newInstance()
+
+        }
         private fun getMujarradImperative(position: Int): Fragment {
             if (position == 0) {
                 //hanes
@@ -1141,7 +1202,10 @@ class LughatWordDetailsAct : BaseActivity() {
         }
 
         override fun getItemCount(): Int {
-            if (isdictionary) {
+            if(isLaysa){
+                return 4
+            }
+          else  if (isdictionary) {
                 return 2
             } else if (isimperative && isAugmentedWazan) {
                 return 7

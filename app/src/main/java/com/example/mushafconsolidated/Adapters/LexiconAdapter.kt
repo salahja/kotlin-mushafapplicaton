@@ -58,7 +58,7 @@ class LexiconAdapter(
         //    mTextView.getSettings().setUseWideViewPort(true);
         //  mTextView.getSettings().setBuiltInZoomControls(true);
         val data: StringBuilder = StringBuilder()
-        if (((language == "imperative") || (language == "genetivenoun") || (language == "accusativenoun") || (language == "nominativenoun") || (language == "accusative") || (language == "preposition") || (language == "conditonal") || (language == "relative") || (language == "dem") || (language == "Jussive") || (language == "Subjunctive"))) {
+        if (((language == "imperative") ||language=="kanainna"|| (language == "genetivenoun") || (language == "accusativenoun") || (language == "nominativenoun") || (language == "accusative") || (language == "preposition") || (language == "conditonal") || (language == "relative") || (language == "dem") || (language == "Jussive") || (language == "Subjunctive"))) {
             // webView.loadDataWithBaseURL(htmlData, "text/html", "utf-8", null);
             holder.wordDictionary.loadDataWithBaseURL(
                 "file:///android_asset/",
