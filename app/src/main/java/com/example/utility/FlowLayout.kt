@@ -12,7 +12,7 @@ class FlowLayout : ViewGroup {
     private var orientation = 0
     private var rtl = true
     var arrayList = ArrayList<String>()
-
+    private var lineSpacing = 0
     constructor(context: Context) : super(context) {
         readStyleParameters(context, null)
     }
@@ -111,6 +111,7 @@ class FlowLayout : ViewGroup {
             lineLengthWithSpacing = lineLength + spacingLength
             val newLine = (lp.newLine || mode != MeasureSpec.UNSPECIFIED) && lineLength > size
             if (newLine) {
+                prevLinePosition += lineThicknessWithSpacing + lineSpacing
                 if (orientation == HORIZONTAL) {
                     realignBottom(start, i, lineThickness)
                     start = i
@@ -206,6 +207,7 @@ class FlowLayout : ViewGroup {
     private fun readStyleParameters(context: Context, attributeSet: AttributeSet?) {
         val a = context.obtainStyledAttributes(attributeSet, R.styleable.FlowLayout)
         try {
+            lineSpacing = a.getDimensionPixelSize(R.styleable.FlowLayout_lineSpacing, 0)
             horizontalSpacing = a.getDimensionPixelSize(R.styleable.FlowLayout_horizontalSpacing, 0)
             verticalSpacing = a.getDimensionPixelSize(R.styleable.FlowLayout_verticalSpacing, 0)
             orientation = a.getInteger(R.styleable.FlowLayout_orientation, HORIZONTAL)

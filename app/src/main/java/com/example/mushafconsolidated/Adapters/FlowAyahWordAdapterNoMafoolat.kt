@@ -82,7 +82,7 @@ class FlowAyahWordAdapterNoMafoolat(
     private var isFABOpen = false
     private var issentence: Boolean = false
     lateinit var rootword: TextView
-
+    private var lineSpacing = 0
     //MaterialTextView arabic;
     private lateinit var arabicChipview: Chip
     private lateinit var arabicTv: MaterialTextView
@@ -426,6 +426,7 @@ class FlowAyahWordAdapterNoMafoolat(
                 val spannedWord = QuranViewUtils.NewgetSpannedWords(word)
                 val arabicView = if (showWbwTranslation && wordByWordDisplay) arabicChipview else arabicTv
                 arabicView.text = spannedWord
+                arabicView.textSize = arabicfontSize.toFloat()
                 arabicView.visibility = View.VISIBLE
             } else {
                 if (showWbwTranslation) {

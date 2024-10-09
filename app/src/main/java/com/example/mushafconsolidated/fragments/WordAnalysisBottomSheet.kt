@@ -1104,7 +1104,7 @@ class WordAnalysisBottomSheet : DialogFragment() {
             cleanArabicWord(dataBundle)
         }
 
-        launchActivityB(dataBundle)
+
 
         launchActivityB(dataBundle)
     }
