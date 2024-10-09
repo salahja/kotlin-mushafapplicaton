@@ -17,8 +17,8 @@
         android:layout_height="wrap_content"
         android:elevation="8dp"
 
-        app:lineSpacing="3dp"
-        android:lineSpacingExtra="-4dp"
+        app:lineSpacing="50dp"
+
 
 
         android:layout_marginTop="-16dp"

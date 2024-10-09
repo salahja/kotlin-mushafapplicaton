@@ -35,7 +35,6 @@ import com.example.Constant.WORDMEANING
 import com.example.Constant.WORDNUMBER
 import com.example.Constant.particlespanDark
 import com.example.mushafconsolidated.Activity.LughatWordDetailsAct
-
 import com.example.mushafconsolidated.Adapters.NounVerbOccuranceListAdapter
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
 import com.example.mushafconsolidated.Entities.CorpusNounWbwOccurance
@@ -43,7 +42,6 @@ import com.example.mushafconsolidated.Entities.CorpusVerbWbwOccurance
 import com.example.mushafconsolidated.Entities.NounCorpusBreakup
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.RootVerbDetails
-import com.example.mushafconsolidated.Entities.RootWordDetails
 import com.example.mushafconsolidated.Entities.VerbCorpusBreakup
 import com.example.mushafconsolidated.Entities.VerbWazan
 import com.example.mushafconsolidated.Entities.hanslexicon
@@ -95,14 +93,14 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
         LinkedHashMap()
     private lateinit var utils: Utils
     private lateinit var lanes: Chip
-    private var rootdetails: ArrayList<RootWordDetails>? = null
+
 
     private var verbdetails: ArrayList<RootVerbDetails>? = null
 
     private var corpusSurahWord: List<QuranCorpusWbw>? = null
     private var allofQuran: List<QuranEntity>? = null
     private lateinit var mainViewModel: QuranVIewModel
-    var isverb = false
+    private var isverb = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRootBreakupBinding.inflate(layoutInflater)
@@ -122,13 +120,13 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
         lanes.setOnClickListener(this)
         lanes.setOnClickListener {
             val bundle = Bundle()
-            //   Intent intent = new Intent(getActivity(), NounOccuranceAsynKAct.class);
+
             val intent = Intent(this@RootBreakupAct, LughatWordDetailsAct::class.java)
-            //   getTypedValues();
+
             bundle.putString(QURAN_VERB_ROOT, root)
             bundle.putBoolean("dictionary", true)
             intent.putExtras(bundle)
-            //   intent.putExtra(QURAN_VERB_ROOT,vb.getRoot());
+
             startActivity(intent)
         }
         val builder = AlertDialog.Builder(this)
@@ -200,7 +198,7 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
 
                     newbundle.putString(
                         SURAH_ARABIC_NAME,
-                        allChapters.value!!.get(wordDetails.corpus.surah).namearabic
+                        allChapters.value!![wordDetails.corpus.surah].namearabic
                     )
 
 
@@ -215,25 +213,6 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
                     intents.putExtras(newbundle)
                     startActivity(intents)
 
-                    //    dataBundle.putSerializable("map", datas)
-
-                    /*   val fragmentManagers = supportFragmentManager
-                       val transactions = fragmentManagers.beginTransaction()
-                       transactions.setCustomAnimations(R.anim.slide_down, R.anim.slide_up)
-                       val fragvsi = TopicDetailsFrag.newInstance(newbundle)
-                       fragvsi.arguments = newbundle
-                       transactions.add(R.id.frame_container, fragvsi)
-                       transactions.addToBackStack(null)
-                       transactions.commit()*/
-
-
-                    /*       val item = TopicDetailsFrag()
-                           val fragmentManager = supportFragmentManager
-                           item.arguments = newbundle
-
-                           fragmentManager.beginTransaction()
-                               .setCustomAnimations(R.anim.abc_slide_in_top, android.R.anim.fade_out).show(item)
-       */
 
 
                 }
@@ -247,7 +226,7 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
             verbDetailsRecAdapter.SetOnItemClickListener(object : OnItemClickListener {
 
                 override fun onItemClick(v: View?, position: Int) {
-                    val dataBundle = Bundle()
+
                     val newbundle = Bundle()
                     val wordDetails = verbdetails!![position]
                     val datas = HashMap<String, String>()
@@ -291,25 +270,6 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
                             startActivity(intents)
 
 
-                            /*
-                                                        val fragmentManagers = supportFragmentManager
-                                                        val transactions = fragmentManagers.beginTransaction()
-                                                        transactions.setCustomAnimations(R.anim.slide_down, R.anim.slide_up)
-                                                        val fragvsi = TopicDetailsFrag.newInstance(newbundle)
-                                                        fragvsi.arguments = newbundle
-                                                        transactions.add(R.id.frame_container, fragvsi)
-                                                        transactions.addToBackStack(null)
-                                                        transactions.commit()*/
-
-
-                            /*    val topfrag: TopicDetailsFrag = TopicDetailsFrag.newInstance(newbundle)
-                                topfrag.show(
-                                    supportFragmentManager,
-                                    TopicDetailsFrag.TAG
-                                )
-    */
-
-
                         }
                     }
                 }
@@ -317,7 +277,7 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
 
             })
         }
-        //    rootDictionary.get(0).getHansweir();
+
     }
 
 
@@ -326,8 +286,9 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
         val ex = Executors.newSingleThreadExecutor()
         ex.execute {
             runOnUiThread { dialog.show() }
-            //  occurances = utils.getNounOccuranceBreakVerses(root);
-            val vroot = root.indexOf("ء")
+            val nounroot = root.replace("ء", "ا")
+            val verbroot = root.replace("ا", "ء")
+         /*   val vroot = root.indexOf("ء")
             var nounroot = ""
             val verb = root.indexOf("ا")
             var verbroot = ""
@@ -340,11 +301,10 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
                 root.replace("ا", "ء")
             } else {
                 root
-            }
+            }*/
             nounCorpusArrayList = utils.getNounBreakup(nounroot) as ArrayList<NounCorpusBreakup>
             verbCorpusArrayList = utils.getVerbBreakUp(verbroot) as ArrayList<VerbCorpusBreakup>
-            var Lemma = ""
-            val incexofgroup = 0
+
             val alist: ArrayList<SpannableString> = ArrayList()
             if (harf) {
                 for (vers in occurances!!) {
@@ -361,22 +321,9 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
                     val ref = SpannableString(sb.toString())
                     ref.setSpan(particlespanDark, 0, sb.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                     val which = shared.getString("selecttranslation", "en_sahih")
-                    var trans: SpannableString? = null
-                    when (which) {
-                        "en_sahih" -> {
-                            trans = SpannableString.valueOf(vers.translation)
-                        }
-
-                        "ur_jalalayn" -> {
-                            trans = SpannableString.valueOf(vers.ur_jalalayn)
-                        }
-
-                        "en_jalalayn" -> {
-                            trans = SpannableString.valueOf(vers.en_jalalayn)
-                        }
-                    }
+                    var trans: SpannableString? = selectTranslation(which, vers)
                     val charSequence = TextUtils.concat(ref, "\n ", spannableVerses)
-                    // alist.add(charSequence as SpannableString)
+
                     alist.add(SpannableString.valueOf(charSequence))
 
                     if (trans != null) {
@@ -390,7 +337,7 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
             for (noun in nounCorpusArrayList) {
                 val list: ArrayList<SpannableString> = ArrayList()
                 list.add(SpannableString.valueOf(""))
-                Lemma = noun.lemma_a!!
+                var Lemma = noun.lemma_a!!
                 if (noun.form.equals("null")) {
                     val sb = java.lang.StringBuilder()
                     val nounexpand = noun.tag?.let { QuranMorphologyDetails.expandTags(it) }
@@ -408,7 +355,6 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
                 } else {
                     val sb = java.lang.StringBuilder()
                     val s = QuranMorphologyDetails.expandTags(noun.propone + noun.proptwo)
-                    //  String s1 = QuranMorphologyDetails.expandTags(noun.getProptwo());
                     val s2 = QuranMorphologyDetails.expandTags(noun.tag!!)
                     var times = ""
                     times = if (noun.count === 1) {
@@ -434,7 +380,7 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
                 val list: ArrayList<SpannableString> = ArrayList()
 
                 list.add(SpannableString.valueOf("yes"))
-                Lemma = verbCorpusBreakup.lemma_a!!
+                var Lemma = verbCorpusBreakup.lemma_a!!
                 if (verbCorpusBreakup.form == "I") {
                     val sb = java.lang.StringBuilder()
                     val mujarrad = java.lang.String.valueOf(
@@ -446,10 +392,9 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
                     expandVerbVerses[sb.toString()] = list
                 } else {
                     val sb = java.lang.StringBuilder()
-                    val s = QuranMorphologyDetails.expandTags(verbCorpusBreakup.tense!!)
-                    val s1 = QuranMorphologyDetails.expandTags(verbCorpusBreakup.voice!!)
-                    //  String s1 = QuranMorphologyDetails.expandTags(noun.getProptwo());
-                    //   String s2 = QuranMorphologyDetails.expandTags(noun.get);
+                    val tense = QuranMorphologyDetails.expandTags(verbCorpusBreakup.tense!!)
+                    val voice = QuranMorphologyDetails.expandTags(verbCorpusBreakup.voice!!)
+
                     val mazeed =
                         java.lang.String.valueOf(
                             QuranMorphologyDetails.getFormName(
@@ -459,7 +404,7 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
                     sb.append(verbCorpusBreakup.count).append("-").append("times").append(" ")
                         .append(verbCorpusBreakup.lemma_a).append(" ").append("occurs as the")
                         .append(" ").append(mazeed)
-                        .append(" ").append(s).append(" ").append(" ").append(s1)
+                        .append(" ").append(tense).append(" ").append(" ").append(voice)
                     expandVerbVerses[sb.toString()] = list
                 }
             }
@@ -467,12 +412,10 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
             expandVerbTitles = java.util.ArrayList(expandVerbVerses.keys)
             expandNounVerses.putAll(expandVerbVerses)
             expandNounTitles.addAll(expandVerbTitles)
-            //post
+
             runOnUiThread {
                 dialog.dismiss()
-                // Intent intent = new Intent();
-                // intent.putExtra("result", 1);
-                //  setResult(RESULT_OK, intent);
+
                 val listAdapter = NounVerbOccuranceListAdapter(
                     this@RootBreakupAct,
                     expandNounTitles,
@@ -516,19 +459,16 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
                                     //   ArrayList<CorpusNounWbwOccurance> verses = utils.getNounOccuranceBreakVerses(split[1]);
                                     val lanesDifinition: java.util.ArrayList<hanslexicon?>? =
                                         utils.getHansDifinition(verbroot) as java.util.ArrayList<hanslexicon?>?
-                                    //    ArrayList<SpannableString> lanesdifinition;
-                                    //   StringBuilder lanessb = new StringBuilder();
+
                                     for (hans in lanesDifinition!!) {
-                                        //  <p style="margin-left:200px; margin-right:50px;">
-                                        //    list.add("<p style=\"margin-left:200px; margin-right:50px;\">");
-                                        //  list.add("<p style=\"margin-left:200px; margin-right:50px;\">");
+
                                         list.add(SpannableString.valueOf(hans!!.definition))
-                                        //
+
                                     }
-                                    list = highLightParadigm(list) as ArrayList<SpannableString>
+
                                     val finalList: ArrayList<SpannableString> =
                                         ArrayList()
-                                    //   val finalList: List<*> = list
+
                                     runOnUiThread {
                                         ex.shutdown()
                                         dialog.dismiss()
@@ -580,11 +520,9 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
                                     val lanesDifinition: java.util.ArrayList<lanelexicon?>? =
                                         utils.getLanesDifinition(root) as java.util.ArrayList<lanelexicon?>?
                                     for (lanes in lanesDifinition!!) {
-                                        //  <p style="margin-left:200px; margin-right:50px;">
-                                        //    list.add("<p style=\"margin-left:200px; margin-right:50px;\">");
-                                        //  list.add("<p style=\"margin-left:200px; margin-right:50px;\">");
+
                                         list.add(SpannableString.valueOf(lanes!!.definition))
-                                        //
+
                                     }
                                     list = highLightParadigm(list) as ArrayList<SpannableString>
                                     val finalList: List<*> = list
@@ -668,16 +606,7 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
                                     )
                                     val which =
                                         shared.getString("selecttranslation", "en_sahih")
-                                    var trans: SpannableString? = null
-                                    if (which == "en_sahih") {
-                                        trans = SpannableString.valueOf(vers.translation)
-                                    } else if (which == "ur_jalalayn") {
-                                        trans = SpannableString.valueOf(vers.ur_jalalayn)
-                                    } else if (which == "en_jalalayn") {
-                                        trans = SpannableString.valueOf(vers.en_jalalayn)
-                                    } else if (which == "en_arberry") {
-                                        trans = SpannableString.valueOf(vers.en_arberry)
-                                    }
+                                    var trans: SpannableString? = selectTranslation(which, vers)
                                     val charSequence =
                                         TextUtils.concat(ref, "\n ", spannableVerses)
                                     //   list.add(charSequence as SpannableString)
@@ -709,13 +638,12 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
                                             vers.araone + vers.aratwo + vers.arathree + vers.arafour + vers.arafive,
                                             vers.qurantext!!
                                         )
-                                    //  SpannableString spannableString = CorpusUtilityorig.SetWordSpanNew(vers.getTagone(), vers.getTagtwo(), vers.getTagthree(), vers.getTagfour(), vers.getTagfive(),
-                                    //     vers.getAraone(), vers.getAratwo(), vers.getArathree(), vers.getArafour(), vers.getArafive());
+
                                     sb.append(vers.surah).append(":").append(vers.ayah)
                                         .append(":").append(
                                             vers.wordno
                                         ).append("-").append(vers.en).append("-")
-                                    //       sb.append(vers.getSurah()).append(":").append(vers.getAyah()).append(":").append(vers.getWordno()).append("-");
+
                                     vers.wordno
                                     val ref = SpannableString(sb.toString())
                                     ref.setSpan(
@@ -820,8 +748,24 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
                 })
             }
         }
-        //  ExpandableRecAdapter expandableRecAdapter=new ExpandableRecAdapter(WordOccuranceAsynKAct.this,expandNounVerses,expandNounTitles);
-        //  recview.setAdapter(expandableRecAdapter);
+
+    }
+
+    private fun selectTranslation(
+        which: String?,
+        vers: CorpusNounWbwOccurance
+    ): SpannableString? {
+        var trans: SpannableString? = null
+        if (which == "en_sahih") {
+            trans = SpannableString.valueOf(vers.translation)
+        } else if (which == "ur_jalalayn") {
+            trans = SpannableString.valueOf(vers.ur_jalalayn)
+        } else if (which == "en_jalalayn") {
+            trans = SpannableString.valueOf(vers.en_jalalayn)
+        } else if (which == "en_arberry") {
+            trans = SpannableString.valueOf(vers.en_arberry)
+        }
+        return trans
     }
 
     override fun onItemClick(v: View?, position: Int) {
