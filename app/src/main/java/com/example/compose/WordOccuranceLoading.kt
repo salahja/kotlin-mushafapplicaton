@@ -15,8 +15,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -49,7 +51,7 @@ fun LoadingData(
     val showDialog by viewModel.open.observeAsState(initial = true) // initially, don't show the dialog
 
     if (isDisplayed) {
-        AlertDialog(
+        BasicAlertDialog(
             onDismissRequest = {
             },
             properties = DialogProperties(
@@ -107,7 +109,7 @@ private fun ProgressIndicatorLoading(
     )
 
     CircularProgressIndicator(
-        progress = 1f,
+        progress = { 1f },
         modifier = Modifier
             .size(progressIndicatorSize)
             .rotate(angle)
@@ -122,13 +124,14 @@ private fun ProgressIndicatorLoading(
                 ),
                 shape = CircleShape
             ),
+        color = Color.White, // Set background color
         strokeWidth = 1.dp,
-        color = Color.White // Set background color
+        trackColor = ProgressIndicatorDefaults.circularTrackColor,
     )
 }
 
 
-@Preview(name = "DataLoadingCIrcular")
+@Preview(name = "DataLoadingCircular")
 @Composable
 private fun PreviewDataLoadingCIrcular() {
     LoadingData(isDisplayed = true)

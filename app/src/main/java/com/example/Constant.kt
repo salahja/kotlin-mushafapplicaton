@@ -82,6 +82,7 @@ object Constant {
     const val SARFKABEER = "sarfkabeer"
     const val QURAN_VERB_ROOT = "root!!"
     const val VERBDETAILS = "verb"
+    const val PROPERNOUN="propernoun"
     const val WORDDETAILS = "worddetails"
     const val QURAN_VOCUBALORY_ROOT = "vroot!!"
     const val MUJARRADVERBTAG = "thulathiverblist"

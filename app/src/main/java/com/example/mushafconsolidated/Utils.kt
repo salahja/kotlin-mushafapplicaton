@@ -33,6 +33,7 @@ import com.example.mushafconsolidated.Entities.hanslexicon
 import com.example.mushafconsolidated.Entities.jsonsurahentity
 import com.example.mushafconsolidated.Entities.lanelexicon
 import com.example.mushafconsolidated.Entities.lughat
+import com.example.mushafconsolidated.Entities.lysaEnt
 import com.example.mushafconsolidated.Entities.qurandictionary
 import com.example.mushafconsolidated.Entities.quranexplorer
 import com.example.mushafconsolidated.Entities.wbwentity
@@ -798,6 +799,9 @@ class Utils {
         return database.QuranDao().getQuranandCorpusandWbwbySurah(cid)
     }
 
+    fun getLaysa()  :List<lysaEnt> {
+        return database.LysaDao().getLysa()
+    }
 
 
     companion object {

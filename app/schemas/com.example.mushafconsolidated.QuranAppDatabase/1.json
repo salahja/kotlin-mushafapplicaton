@@ -2,8 +2,118 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "33f7477f563aecfd59d405190b85e3ae",
+    "identityHash": "de2b006dfe1be947fe84603d8615a2df",
     "entities": [
+      {
+        "tableName": "lysa",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`hua` TEXT NOT NULL, `huma` TEXT NOT NULL, `hum` TEXT NOT NULL, `hia` TEXT NOT NULL, `humaf` TEXT NOT NULL, `hunna` TEXT NOT NULL, `anta` TEXT NOT NULL, `antuma` TEXT NOT NULL, `antum` TEXT NOT NULL, `anti` TEXT NOT NULL, `antumaf` TEXT NOT NULL, `antunna` TEXT NOT NULL, `ana` TEXT NOT NULL, `nahnu` TEXT NOT NULL, `grammar` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "hua",
+            "columnName": "hua",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "huma",
+            "columnName": "huma",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hum",
+            "columnName": "hum",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hia",
+            "columnName": "hia",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "humaf",
+            "columnName": "humaf",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hunna",
+            "columnName": "hunna",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "anta",
+            "columnName": "anta",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "antuma",
+            "columnName": "antuma",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "antum",
+            "columnName": "antum",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "anti",
+            "columnName": "anti",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "antumaf",
+            "columnName": "antumaf",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "antunna",
+            "columnName": "antunna",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ana",
+            "columnName": "ana",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nahnu",
+            "columnName": "nahnu",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "grammar",
+            "columnName": "grammar",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
       {
         "tableName": "surahjson",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surah` INTEGER NOT NULL, `jasonstr` TEXT NOT NULL, `docid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
@@ -1850,7 +1960,7 @@
       },
       {
         "tableName": "CorpusExpand",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surah` INTEGER NOT NULL, `ayah` INTEGER NOT NULL, `wordno` INTEGER NOT NULL, `wordcount` INTEGER NOT NULL, `araone` TEXT, `aratwo` TEXT, `arathree` TEXT, `arafour` TEXT, `arafive` TEXT, `tagone` TEXT, `tagtwo` TEXT, `tagthree` TEXT, `tagfour` TEXT, `tagfive` TEXT, `rootaraone` TEXT, `rootaratwo` TEXT, `rootarathree` TEXT, `rootarafour` TEXT, `rootarafive` TEXT, `lemaraone` TEXT, `lemaratwo` TEXT, `lemarathree` TEXT, `lemarafour` TEXT, `lemarafive` TEXT, `detailsone` TEXT, `detailstwo` TEXT, `detailsthree` TEXT, `detailsfour` TEXT, `detailsfive` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `juz` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surah` INTEGER NOT NULL, `ayah` INTEGER NOT NULL, `wordno` INTEGER NOT NULL, `wordcount` INTEGER NOT NULL, `araone` TEXT, `aratwo` TEXT, `arathree` TEXT, `arafour` TEXT, `arafive` TEXT, `tagone` TEXT, `tagtwo` TEXT, `tagthree` TEXT, `tagfour` TEXT, `tagfive` TEXT, `rootaraone` TEXT, `rootaratwo` TEXT, `rootarathree` TEXT, `rootarafour` TEXT, `rootarafive` TEXT, `lemaraone` TEXT, `lemaratwo` TEXT, `lemarathree` TEXT, `lemarafour` TEXT, `lemarafive` TEXT, `detailsone` TEXT, `detailstwo` TEXT, `detailsthree` TEXT, `detailsfour` TEXT, `detailsfive` TEXT, `en` TEXT NOT NULL, `bn` TEXT NOT NULL, `ind` TEXT NOT NULL, `ur` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `juz` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "surah",
@@ -2023,6 +2133,30 @@
           {
             "fieldPath": "detailsfive",
             "columnName": "detailsfive",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "en",
+            "columnName": "en",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bn",
+            "columnName": "bn",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ind",
+            "columnName": "ind",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ur",
+            "columnName": "ur",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -2211,7 +2345,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '33f7477f563aecfd59d405190b85e3ae')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'de2b006dfe1be947fe84603d8615a2df')"
     ]
   }
 }

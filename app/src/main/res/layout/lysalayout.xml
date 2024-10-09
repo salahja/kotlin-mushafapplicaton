@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.example.justJava.ZoomLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fadeScrollbars="true"
+    android:isScrollContainer="true"
+    android:orientation="vertical"
+    android:scrollbarAlwaysDrawVerticalTrack="true"
+    android:scrollbars="vertical"
+    android:singleLine="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardPastActive"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="10dp"
+            app:rippleColor="@color/colorAccent"
+            app:strokeColor="@color/color_primary_variant"
+            app:strokeWidth="1dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:id="@+id/pastactive"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingStart="5.0dip"
+                android:paddingEnd="3.0dip"
+                android:text="@string/faelmazi"
+                android:textAlignment="center" />
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Start of first horizontal row -->
+        <TextView
+            android:id="@+id/madihum"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:autoSizeMaxTextSize="26sp"
+            android:autoSizeMinTextSize="10sp"
+            android:autoSizeStepGranularity="6sp"
+            android:gravity="center|right"
+            android:text="madihum"
+            app:layout_constraintTop_toBottomOf="@id/cardPastActive"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.33" />
+
+        <TextView
+            android:id="@+id/madhihuma"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center|right"
+            android:text="madhihuma"
+            app:layout_constraintTop_toBottomOf="@id/cardPastActive"
+            app:layout_constraintStart_toEndOf="@id/madihum"
+            app:layout_constraintWidth_percent="0.33" />
+
+        <TextView
+            android:id="@id/madhihua"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:autoSizeMaxTextSize="26sp"
+            android:autoSizeMinTextSize="10sp"
+            android:autoSizeStepGranularity="6sp"
+            android:gravity="center|right"
+            android:text="huua"
+            app:layout_constraintTop_toBottomOf="@id/cardPastActive"
+            app:layout_constraintStart_toEndOf="@id/madhihuma"
+            app:layout_constraintWidth_percent="0.33" />
+
+        <!-- Continue similarly for other rows -->
+        <!-- Example second row -->
+        <TextView
+            android:id="@+id/madihunna"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:autoSizeMaxTextSize="26sp"
+            android:autoSizeMinTextSize="10sp"
+            android:autoSizeStepGranularity="6sp"
+            android:text="madhihunna"
+            android:gravity="center|right"
+            app:layout_constraintTop_toBottomOf="@id/madihum"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.33" />
+
+        <TextView
+            android:id="@+id/madhihumaf"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center|right"
+            android:layout_marginTop="10dp"
+            android:text="madhihumaf"
+            app:layout_constraintTop_toBottomOf="@id/madhihuma"
+            app:layout_constraintStart_toEndOf="@id/madihunna"
+            app:layout_constraintWidth_percent="0.33" />
+
+        <TextView
+            android:id="@id/madhihia"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"
+            android:autoSizeMaxTextSize="26sp"
+            android:autoSizeMinTextSize="10sp"
+            android:autoSizeStepGranularity="6sp"
+            android:text="madhihia"
+            android:gravity="center|right"
+            app:layout_constraintTop_toBottomOf="@id/madhihua"
+            app:layout_constraintStart_toEndOf="@id/madhihumaf"
+            app:layout_constraintWidth_percent="0.33" />
+
+
+        <TextView
+            android:id="@+id/madhiantum"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:autoSizeMaxTextSize="26sp"
+            android:autoSizeMinTextSize="10sp"
+            android:autoSizeStepGranularity="6sp"
+            android:text="madhiantum"
+
+            android:gravity="center|right"
+            app:layout_constraintTop_toBottomOf="@id/madihunna"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.33" />
+
+        <TextView
+            android:id="@+id/madhiantuma"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:text="madhiantuma"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center|right"
+            android:layout_marginTop="10dp"
+
+            app:layout_constraintTop_toBottomOf="@id/madhihumaf"
+            app:layout_constraintStart_toEndOf="@id/madhiantum"
+            app:layout_constraintWidth_percent="0.33" />
+
+        <TextView
+            android:id="@id/madhianta"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"
+            android:text="madhianta"
+            android:autoSizeMaxTextSize="26sp"
+            android:autoSizeMinTextSize="10sp"
+            android:autoSizeStepGranularity="6sp"
+
+            android:gravity="center|right"
+            app:layout_constraintTop_toBottomOf="@id/madhihia"
+            app:layout_constraintStart_toEndOf="@id/madhihumaf"
+            app:layout_constraintWidth_percent="0.33" />
+
+
+        <TextView
+            android:id="@+id/madhiantunna"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:autoSizeMaxTextSize="26sp"
+            android:autoSizeMinTextSize="10sp"
+            android:autoSizeStepGranularity="6sp"
+            android:text="antunna"
+
+            android:gravity="center|right"
+            app:layout_constraintTop_toBottomOf="@id/madhiantum"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.33" />
+
+        <TextView
+            android:id="@+id/madhiantumaf"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:text="madhiantumaf"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center|right"
+            android:layout_marginTop="10dp"
+
+            app:layout_constraintTop_toBottomOf="@id/madhiantuma"
+            app:layout_constraintStart_toEndOf="@id/madhiantunna"
+            app:layout_constraintWidth_percent="0.33" />
+
+        <TextView
+            android:id="@id/madhianti"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"
+            android:text="madhianti"
+            android:autoSizeMaxTextSize="26sp"
+            android:autoSizeMinTextSize="10sp"
+            android:autoSizeStepGranularity="6sp"
+
+            android:gravity="center|right"
+            app:layout_constraintTop_toBottomOf="@id/madhianta"
+            app:layout_constraintStart_toEndOf="@id/madhihumaf"
+            app:layout_constraintWidth_percent="0.33" />
+
+        <TextView
+            android:id="@id/madhinahnu"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:autoSizeMaxTextSize="26sp"
+            android:autoSizeMinTextSize="10sp"
+            android:autoSizeStepGranularity="6sp"
+            android:gravity="center|right"
+            android:paddingStart="5.0dip"
+            android:paddingEnd="3.0dip"
+            android:text="madhinahnu"
+            app:layout_constraintStart_toStartOf="parent"
+
+            app:layout_constraintTop_toBottomOf="@id/madhiantunna"
+            app:layout_constraintWidth_percent="0.50" />
+
+        <TextView
+            android:id="@id/madhiana"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:autoSizeMaxTextSize="26sp"
+            android:autoSizeMinTextSize="10sp"
+            android:autoSizeStepGranularity="6sp"
+            android:gravity="center|right"
+            android:paddingStart="5.0dip"
+            android:paddingEnd="3.0dip"
+
+            android:text="madhiana"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/madhinahnu"
+            app:layout_constraintTop_toBottomOf="@+id/madhianti" />
+        <androidx.cardview.widget.CardView
+            android:id="@+id/lysacard"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="10dp"
+            app:rippleColor="@color/colorAccent"
+            app:strokeColor="@color/color_primary_variant"
+            app:strokeWidth="1dp"
+            app:layout_constraintTop_toBottomOf="@+id/madhiana"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <WebView
+                android:id="@+id/laysa"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingStart="5.0dip"
+                android:paddingEnd="3.0dip"
+                android:text="Details"
+                android:textAlignment="center" />
+
+
+
+
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.example.justJava.ZoomLayout>

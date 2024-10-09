@@ -12,10 +12,10 @@ import com.example.mushafconsolidated.Entities.CorpusEntity
 @Dao
 interface CorpusExpandedDao {
     @Query("SELECT * FROM CorpusExpand WHERE surah=:id")
-    fun getVersesBySurah(id: Int): List<CorpusEntity?>?
+    fun getVersesBySurah(id: Int): List<CorpusEntity>
 
     @Query("SELECT * FROM CorpusExpand WHERE surah=:id and ayah=:ayahid")
-    fun getVersesBySurahAndAya(id: Int, ayahid: Int): List<CorpusEntity?>?
+    fun getVersesBySurahAndAya(id: Int, ayahid: Int): List<CorpusEntity>
 
     //select surah,count(ayah) from CorpusExpand where surah=1 group by ayah
     @Query("select * from CorpusExpand where ayah  between :start and :end")
@@ -26,9 +26,15 @@ interface CorpusExpandedDao {
         id: Int,
         ayahid: Int,
         wordid: Int
-    ): List<CorpusEntity?>? //   SELECT VerseNew.chapter_no, VerseNew.verse_no, Translation.author_name, TranslationData.translation FROM TranslationData INNER JOIN Translation
+    ): List<CorpusEntity> //   SELECT VerseNew.chapter_no, VerseNew.verse_no, Translation.author_name, TranslationData.translation FROM TranslationData INNER JOIN Translation
     //  ON Translation.translation_id = TranslationData.translation_id INNER JOIN VerseNew ON VerseNew.verseID = TranslationData.verse_id    WHERE TranslationData.translation_id ="en_sahih"   and VerseNew.chapter_no= 2
 
+
+    @Query("SELECT * FROM CorpusExpand WHERE surah=:id and ayah=:ayahid")
+    fun getCorpusWordSurahAya(
+        id: Int,
+        ayahid: Int
+    ): List<CorpusEntity>
 
     @Query("SELECT * FROM CorpusExpand WHERE surah=:id")
     fun getVersesBySurahLive(id: Int): LiveData<List<CorpusEntity>>

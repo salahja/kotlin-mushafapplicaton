@@ -16,6 +16,6 @@ interface AnaQuranChapterDao {
 
 
     @Query("SELECT * FROM chaptersana where chapterid=:id")
-    fun getSingleChapters(id: Int): List<ChaptersAnaEntity?>?
+    fun getSingleChapters(id: Int): List<ChaptersAnaEntity>
 }
 

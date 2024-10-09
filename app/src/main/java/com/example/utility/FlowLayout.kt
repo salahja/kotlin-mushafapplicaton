@@ -3,6 +3,9 @@ package com.example.utility
 import android.content.Context
 import android.util.AttributeSet
 import android.view.ViewGroup
+import androidx.annotation.OptIn
+import androidx.media3.common.util.Log
+import androidx.media3.common.util.UnstableApi
 import com.example.mushafconsolidated.R
 import kotlin.math.max
 
@@ -12,7 +15,7 @@ class FlowLayout : ViewGroup {
     private var orientation = 0
     private var rtl = true
     var arrayList = ArrayList<String>()
-
+    private var lineSpacing = 0
     constructor(context: Context) : super(context) {
         readStyleParameters(context, null)
     }
@@ -47,113 +50,194 @@ class FlowLayout : ViewGroup {
             lp.y += height - childHeight
         }
     }
-
+    @OptIn(UnstableApi::class)
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val sizeWidth = MeasureSpec.getSize(widthMeasureSpec) - this.paddingRight - this.paddingLeft
-        val sizeHeight =
-            MeasureSpec.getSize(heightMeasureSpec) - this.paddingRight - this.paddingLeft
+        val sizeHeight = MeasureSpec.getSize(heightMeasureSpec) - this.paddingRight - this.paddingLeft
         val modeWidth = MeasureSpec.getMode(widthMeasureSpec)
         val modeHeight = MeasureSpec.getMode(heightMeasureSpec)
-        val size: Int
-        val mode: Int
-        if (orientation == HORIZONTAL) {
-            size = sizeWidth
-            mode = modeWidth
-        } else {
-            size = sizeHeight
-            mode = modeHeight
-        }
+
+        var lineLengthWithSpacing = 0
+        var lineLength = 0
         var lineThicknessWithSpacing = 0
         var lineThickness = 0
-        var lineLengthWithSpacing = 0
-        var lineLength: Int
         var prevLinePosition = 0
         var controlMaxLength = 0
         var controlMaxThickness = 0
+
         val count = childCount
         var start = 0
+
         for (i in 0 until count) {
             val child = getChildAt(i)
             if (child.visibility == GONE) {
                 continue
             }
+
             child.measure(
-                MeasureSpec.makeMeasureSpec(
-                    sizeWidth,
-                    if (modeWidth == MeasureSpec.EXACTLY) MeasureSpec.AT_MOST else modeWidth
-                ),
-                MeasureSpec.makeMeasureSpec(
-                    sizeHeight,
-                    if (modeHeight == MeasureSpec.EXACTLY) MeasureSpec.AT_MOST else modeHeight
-                )
+                MeasureSpec.makeMeasureSpec(sizeWidth, if (modeWidth == MeasureSpec.EXACTLY) MeasureSpec.AT_MOST else modeWidth),
+                MeasureSpec.makeMeasureSpec(sizeHeight, if (modeHeight == MeasureSpec.EXACTLY) MeasureSpec.AT_MOST else modeHeight)
             )
+
             val lp = child.layoutParams as LayoutParams
             val hSpacing = getHorizontalSpacing(lp)
             val vSpacing = getVerticalSpacing(lp)
+
             val childWidth = child.measuredWidth
             val childHeight = child.measuredHeight
-            var childLength: Int
-            var childThickness: Int
-            var spacingLength: Int
-            var spacingThickness: Int
-            if (orientation == HORIZONTAL) {
-                childLength = childWidth
-                childThickness = childHeight
-                spacingLength = hSpacing
-                spacingThickness = vSpacing
-            } else {
-                childLength = childHeight
-                childThickness = childWidth
-                spacingLength = vSpacing
-                spacingThickness = hSpacing
-            }
+
+            val childLength = if (orientation == HORIZONTAL) childWidth else childHeight
+            val childThickness = if (orientation == HORIZONTAL) childHeight else childWidth
+
             lineLength = lineLengthWithSpacing + childLength
-            lineLengthWithSpacing = lineLength + spacingLength
-            val newLine = (lp.newLine || mode != MeasureSpec.UNSPECIFIED) && lineLength > size
+            lineLengthWithSpacing = lineLength + hSpacing
+
+            // Check if new line needed
+            val newLine = (lp.newLine || lineLength > sizeWidth)  // Adjust condition as needed
             if (newLine) {
-                if (orientation == HORIZONTAL) {
-                    realignBottom(start, i, lineThickness)
-                    start = i
-                }
-                prevLinePosition += lineThicknessWithSpacing
-                lineThickness = childThickness
+                // Adjust vertical position by lineSpacing
+                prevLinePosition += lineThicknessWithSpacing + lineSpacing
+                lineThicknessWithSpacing = 0
+                lineThickness = 0
                 lineLength = childLength
-                lineThicknessWithSpacing = childThickness + spacingThickness
-                lineLengthWithSpacing = lineLength + spacingLength
+                lineLengthWithSpacing = lineLength + hSpacing
+                start = i
             }
-            lineThicknessWithSpacing =
-                max(lineThicknessWithSpacing, childThickness + spacingThickness)
+
+            lineThicknessWithSpacing = max(lineThicknessWithSpacing, childThickness + vSpacing)
             lineThickness = max(lineThickness, childThickness)
-            var posX: Int
-            var posY: Int
-            if (orientation == HORIZONTAL) {
-                posX = if (rtl) {
-                    size - paddingRight - lineLength
-                } else {
-                    paddingLeft + lineLength - childLength
-                }
-                posY = paddingTop + prevLinePosition
-            } else {
-                posX = paddingLeft + prevLinePosition
-                posY = paddingTop + lineLength - childHeight
-            }
-            lp.setPosition(posX, posY)
+
+            // Set child's position
+            lp.setPosition(if (rtl) sizeWidth - lineLength else lineLength - childLength, prevLinePosition)
+
             controlMaxLength = max(controlMaxLength, lineLength)
             controlMaxThickness = prevLinePosition + lineThickness
         }
-        if (orientation == HORIZONTAL) {
-            realignBottom(start, count, lineThickness)
-            setMeasuredDimension(
-                resolveSize(controlMaxLength, widthMeasureSpec),
-                resolveSize(controlMaxThickness, heightMeasureSpec)
-            )
-        } else {
-            setMeasuredDimension(
-                resolveSize(controlMaxThickness, widthMeasureSpec),
-                resolveSize(controlMaxLength, heightMeasureSpec)
-            )
-        }
+
+        // Final line adjustment after loop
+        realignBottom(start, count, lineThickness)
+
+        setMeasuredDimension(
+            resolveSize(controlMaxLength, widthMeasureSpec),
+            resolveSize(controlMaxThickness, heightMeasureSpec)
+        )
     }
+
+    /*
+        @OptIn(UnstableApi::class)
+        override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+            val sizeWidth = MeasureSpec.getSize(widthMeasureSpec) - this.paddingRight - this.paddingLeft
+            val sizeHeight =
+                MeasureSpec.getSize(heightMeasureSpec) - this.paddingRight - this.paddingLeft
+            val modeWidth = MeasureSpec.getMode(widthMeasureSpec)
+            val modeHeight = MeasureSpec.getMode(heightMeasureSpec)
+            val size: Int
+            val mode: Int
+            if (orientation == HORIZONTAL) {
+                size = sizeWidth
+                mode = modeWidth
+            } else {
+                size = sizeHeight
+                mode = modeHeight
+            }
+            var lineThicknessWithSpacing = 0
+            var lineThickness = 0
+            var lineLengthWithSpacing = 0
+            var lineLength: Int
+            var prevLinePosition = 0
+            var controlMaxLength = 0
+            var controlMaxThickness = 0
+            val count = childCount
+            var start = 0
+            for (i in 0 until count) {
+                val child = getChildAt(i)
+                if (child.visibility == GONE) {
+                    continue
+                }
+                child.measure(
+                    MeasureSpec.makeMeasureSpec(
+                        sizeWidth,
+                        if (modeWidth == MeasureSpec.EXACTLY) MeasureSpec.AT_MOST else modeWidth
+                    ),
+                    MeasureSpec.makeMeasureSpec(
+                        sizeHeight,
+                        if (modeHeight == MeasureSpec.EXACTLY) MeasureSpec.AT_MOST else modeHeight
+                    )
+                )
+                val lp = child.layoutParams as LayoutParams
+                val hSpacing = getHorizontalSpacing(lp)
+                val vSpacing = getVerticalSpacing(lp)
+                val childWidth = child.measuredWidth
+                val childHeight = child.measuredHeight
+                var childLength: Int
+                var childThickness: Int
+                var spacingLength: Int
+                var spacingThickness: Int
+                if (orientation == HORIZONTAL) {
+                    childLength = childWidth
+                    childThickness = childHeight
+                    spacingLength = hSpacing
+                    spacingThickness = vSpacing
+                } else {
+                    childLength = childHeight
+                    childThickness = childWidth
+                    spacingLength = vSpacing
+                    spacingThickness = hSpacing
+                }
+                lineLength = lineLengthWithSpacing + childLength
+                lineLengthWithSpacing = lineLength + spacingLength
+                val newLine = (lp.newLine || mode != MeasureSpec.UNSPECIFIED) && lineLength > size
+                if (newLine) {
+
+                    if (orientation == HORIZONTAL) {
+                        realignBottom(start, i, lineThickness)
+                        start = i
+                    }
+
+                    prevLinePosition += lineThicknessWithSpacing + lineSpacing
+                    Log.d("FlowLayout", "Line spacing: $lineSpacing")
+                    Log.d("FlowLayout", "Previous line position: $prevLinePosition")
+                    prevLinePosition += lineThicknessWithSpacing
+                    lineThickness = childThickness
+                    lineLength = childLength
+                    lineThicknessWithSpacing = childThickness + spacingThickness
+                    lineLengthWithSpacing = lineLength + spacingLength
+                }
+                lineThicknessWithSpacing =
+                    max(lineThicknessWithSpacing, childThickness + spacingThickness)
+                lineThickness = max(lineThickness, childThickness)
+                var posX: Int
+                var posY: Int
+                if (orientation == HORIZONTAL) {
+
+                    posX = if (rtl) {
+                        size - paddingRight - lineLength
+
+                    } else {
+                        paddingLeft + lineLength - childLength
+                    }
+                    posY = paddingTop + prevLinePosition
+                } else {
+                    posX = paddingLeft + prevLinePosition
+                    posY = paddingTop + lineLength - childHeight
+                }
+                lp.setPosition(posX, posY)
+                controlMaxLength = max(controlMaxLength, lineLength)
+                controlMaxThickness = prevLinePosition + lineThickness
+            }
+            if (orientation == HORIZONTAL) {
+                realignBottom(start, count, lineThickness)
+                setMeasuredDimension(
+                    resolveSize(controlMaxLength, widthMeasureSpec),
+                    resolveSize(controlMaxThickness, heightMeasureSpec)
+                )
+            } else {
+                setMeasuredDimension(
+                    resolveSize(controlMaxThickness, widthMeasureSpec),
+                    resolveSize(controlMaxLength, heightMeasureSpec)
+                )
+            }
+        }*/
 
     private fun getVerticalSpacing(lp: LayoutParams): Int {
         val vSpacing: Int
@@ -206,6 +290,7 @@ class FlowLayout : ViewGroup {
     private fun readStyleParameters(context: Context, attributeSet: AttributeSet?) {
         val a = context.obtainStyledAttributes(attributeSet, R.styleable.FlowLayout)
         try {
+            lineSpacing = a.getDimensionPixelSize(R.styleable.FlowLayout_lineSpacing, 0)
             horizontalSpacing = a.getDimensionPixelSize(R.styleable.FlowLayout_horizontalSpacing, 0)
             verticalSpacing = a.getDimensionPixelSize(R.styleable.FlowLayout_verticalSpacing, 0)
             orientation = a.getInteger(R.styleable.FlowLayout_orientation, HORIZONTAL)

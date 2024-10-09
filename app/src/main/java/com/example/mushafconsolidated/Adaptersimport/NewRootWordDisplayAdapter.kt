@@ -18,6 +18,7 @@ import android.widget.TextView
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Constant
+import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.HalEnt
 import com.example.mushafconsolidated.Entities.LiajlihiEnt
 import com.example.mushafconsolidated.Entities.MafoolBihi
@@ -46,7 +47,7 @@ class NewRootWordDisplayAdapter : RecyclerView.Adapter<NewRootWordDisplayAdapter
     private var isSarfSagheerMazeed = false
     private var context: Context
 
-    private var corpusexpand: ArrayList<QuranCorpusWbw>? = null
+    private var corpusexpand: ArrayList<CorpusEntity>? = null
     private var isSarfSagheerThulahi = false
     private var isverbconjugation = false
     private var particples = false
@@ -89,7 +90,7 @@ class NewRootWordDisplayAdapter : RecyclerView.Adapter<NewRootWordDisplayAdapter
         ismfaelmafool: ArrayList<ArrayList<*>>?,
         participles: Boolean,
         isverbconjugaton: Boolean,
-        corpusSurahWord: ArrayList<QuranCorpusWbw>?,
+        corpusSurahWord: ArrayList<CorpusEntity>,
         wordbdetail: HashMap<String, SpannableStringBuilder?>?,
         vbdetail: HashMap<String, String?>?,
         mazeedSarfSagheer: Boolean,
@@ -437,8 +438,8 @@ class NewRootWordDisplayAdapter : RecyclerView.Adapter<NewRootWordDisplayAdapter
             //  holder.verbdetails.setTextSize(arabicFontsize);
         }
         holder.referenceView.text =
-            corpusexpand?.get(0)!!.corpus.surah.toString() + ":" + corpusexpand!![0].corpus
-                .ayah + ":" + corpusexpand!![0].corpus.wordno
+            corpusexpand?.get(0)!!.surah.toString() + ":" + corpusexpand!![0]
+                .ayah + ":" + corpusexpand!![0].wordno
         val worddetail: SpannableStringBuilder? = worddetails["worddetails"]
         //  holder.wdetailstv.setText(worddetail, TextView.BufferType.SPANNABLE);
         holder.wdetailstv.text = worddetail

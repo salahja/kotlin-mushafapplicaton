@@ -15,8 +15,6 @@ import android.os.Handler
 import android.os.Looper
 import android.text.format.DateFormat
 import android.util.ArrayMap
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import android.widget.AdapterView
@@ -31,8 +29,6 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.view.menu.MenuBuilder
-import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
@@ -59,7 +55,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Constant
 import com.example.Constant.CHAPTER
-import com.example.Constant.SURAH_ARABIC_NAME
 import com.example.mushafconsolidated.Activityimport.AyahCoordinate
 import com.example.mushafconsolidated.Activityimport.BaseActivity
 import com.example.mushafconsolidated.BottomOptionDialog
@@ -76,12 +71,12 @@ import com.example.mushafconsolidated.databinding.FbarnormalfooterBinding
 import com.example.mushafconsolidated.databinding.RxfetchProgressBinding
 import com.example.mushafconsolidated.databinding.VfourExpandableNewactivityShowAyahsBinding
 import com.example.mushafconsolidated.Adapters.FlowAyahWordAdapterNoMafoolat
+import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.SurahHeader
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.model.CorpusAyahWord
-import com.example.mushafconsolidated.model.NewQuranCorpusWbw
-import com.example.mushafconsolidated.model.QuranCorpusWbw
+
 import com.example.mushafconsolidated.quranrepo.QuranRepository
 import com.example.mushafconsolidated.quranrepo.QuranVIewModel
 import com.example.mushafconsolidated.receiversimport.AudioAppConstants
@@ -95,7 +90,6 @@ import com.example.sentenceanalysis.SentenceGrammarAnalysis
 import com.example.utility.CorpusUtilityorig
 import com.example.utility.CorpusUtilityorig.Companion.HightLightKeyWord
 import com.example.utility.MovableFloatingActionButton
-import com.example.utility.QuranGrammarApplication
 import com.example.utility.ScreenshotUtils
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.button.MaterialButton
@@ -124,16 +118,14 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
 
     @Inject
     lateinit var quranRepository: QuranRepository
-    private  var corpusGroupedByAyah:LinkedHashMap<Int, ArrayList<QuranCorpusWbw>> =
+    private  var corpusGroupedByAyah:LinkedHashMap<Int, ArrayList<CorpusEntity>> =
         LinkedHashMap()
-    // private UpdateMafoolFlowAyahWordAdapter flowAyahWordAdapter;
+
     private lateinit var mainViewModel: QuranVIewModel
-    private var corpusSurahWord: List<QuranCorpusWbw>? = null
+    private var corpusSurahWord: List<CorpusEntity>? = null
 
     private lateinit var nomafoolatflowAyahWordAdapter: FlowAyahWordAdapterNoMafoolat
 
-
-    private var newnewadapterlist = LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>>()
     private var mausoof = false
     private var mudhaf = false
     private var harfnasb = false
@@ -201,9 +193,6 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
     private lateinit var playfb: MovableFloatingActionButton
     override fun onBackPressed() {
 
-        //unregister broadcast for download ayat
-        /*        LocalBroadcastManager.getInstance(this@WordbywordMushafAct)
-                    .unregisterReceiver(downloadPageAya)*/
         //stop flag of auto start
         startBeforeDownload = false
         if (player != null) {
@@ -211,8 +200,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
         }
         val pref: SharedPreferences = getSharedPreferences("lastaya", MODE_PRIVATE)
         val editor = pref.edit()
-        //    editor.putInt("lastaya", currenttrack);
-//        editor.putInt("trackposition", hlights.get(currenttrack).get(0).getPassage());
+
         editor.apply()
         super.onBackPressed()
     }
@@ -353,14 +341,6 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
         // btnStart = binding.btnStart)
         labelTextView = downloadprogressbinding.labelTextView
         mainView = downloadprogressbinding.activityLoading
-     
-
-
-
-
-
-
-
         //     enqueueFiles(Links)
         btnStart!!.setOnClickListener { v: View? ->
             val label = btnStart!!.getText() as String
@@ -541,53 +521,26 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
 
     private val SinglesendUpdatesToUI: Runnable = object : Runnable {
         override fun run() {
-            var holder: RecyclerView.ViewHolder? = null
-            holder = recyclerView.findViewHolderForAdapterPosition(currenttrack)
-            if (player != null && player!!.isPlaying) {
+            val holder = recyclerView.findViewHolderForAdapterPosition(currenttrack)
+            if (player?.isPlaying == true) {
                 recyclerView.post {
                     recyclerView.scrollToPosition(currenttrack)
                 }
             }
-            val ab = StringBuilder()
-            ab.append("Aya").append(":").append(currenttrack).append(" ").append("of").append(
-                versescount
-            )
-            ayaprogress.text = ab.toString()
+         //   val ab = StringBuilder()
+         //   ab.append("Aya").append(":").append(currenttrack).append(" ").append("of").append(
+           //     versescount
+           // )
+            ayaprogress.text = "Aya: $currenttrack of $versescount"
             if (null != holder) {
                 try {
-                    if (holder.itemView.findViewById<View?>(R.id.flow_word_by_word) != null) {
-                        if (isNightmode == "light") {
-                            val textViews =
-                                holder.itemView.findViewById<View>(R.id.flow_word_by_word)
-                                    .findViewById<TextView>(R.id.word_arabic_textView)
-                            holder.itemView.findViewById<View>(R.id.flow_word_by_word)
-                                .setBackgroundColor(
-                                    ContextCompat.getColor(
-                                        this@WordbywordMushafAct,
-                                        R.color.horizontalview_color_ab
-                                    )
-                                )
-                        } else if (isNightmode == "brown") {
-                            holder.itemView.findViewById<View>(R.id.flow_word_by_word)
-                                .findViewById<TextView>(R.id.word_arabic_textView)
-                            holder.itemView.findViewById<View>(R.id.flow_word_by_word)
-                                .setBackgroundColor(
-                                    ContextCompat.getColor(
-                                        this@WordbywordMushafAct,
-                                        R.color.bg_surface_brown
-                                    )
-                                )
-                        } else {
-                            holder.itemView.findViewById<View>(R.id.flow_word_by_word)
-                                .findViewById<TextView>(R.id.word_arabic_textView)
-                            holder.itemView.findViewById<View>(R.id.flow_word_by_word)
-                                .setBackgroundColor(
-                                    ContextCompat.getColor(
-                                        this@WordbywordMushafAct,
-                                        R.color.bg_surface_dark_blue
-                                    )
-                                )
-                            //   holder.itemView.findViewById(R.id.quran_textView).setBackgroundColor(Constant.MUSLIMMATE);
+                    val flowWordByWord = holder.itemView.findViewById<View?>(R.id.flow_word_by_word)
+                    if (flowWordByWord != null) {
+                        val wordArabicTextView = flowWordByWord.findViewById<TextView>(R.id.word_arabic_textView)
+                        when (isNightmode) {
+                            "light" -> flowWordByWord.setBackgroundColor(ContextCompat.getColor(this@WordbywordMushafAct, R.color.horizontalview_color_ab))
+                            "brown" -> flowWordByWord.setBackgroundColor(ContextCompat.getColor(this@WordbywordMushafAct, R.color.bg_surface_brown))
+                            else -> flowWordByWord.setBackgroundColor(ContextCompat.getColor(this@WordbywordMushafAct, R.color.bg_surface_dark_blue))
                         }
                     } else if (holder.itemView.findViewById<View?>(R.id.rukuview) != null) {
                         println("rukuvue")
@@ -601,11 +554,13 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
                 }
             }
             if (currenttrack > 1) {
-                val holderp = recyclerView.findViewHolderForAdapterPosition(currenttrack - 1)
+                val holderp =
+                    recyclerView.findViewHolderForAdapterPosition(currenttrack - 1)
                 if (null != holderp) {
                     try {
                         val drawingCacheBackgroundColor =
-                            holderp.itemView.findViewById<View>(R.id.flow_word_by_word).drawingCacheBackgroundColor
+                            holderp.itemView.findViewById<View>(R.id.flow_word_by_word)
+                                .drawingCacheBackgroundColor
                         if (holderp.itemView.findViewById<View?>(R.id.flow_word_by_word) != null) {
                             //    holder.itemView.findViewById(R.id.quran_textView).setBackgroundColor(Color.CYAN);
                             holderp.itemView.findViewById<View>(R.id.flow_word_by_word)
@@ -989,7 +944,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
             }
             singleline = true
             //    NewsendUpdatesToUIPassage.run();
-            if (player!!.isPlaying || player!!.playWhenReady) {
+            if (player?.isPlaying == true || player!!.playWhenReady) {
                 SinglesendUpdatesToUI.run()
                 //   sendUpdatesToUI.run();
             } else {
@@ -1008,7 +963,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
     }
 
     private fun preparehighlightsNew(passageno: Int, str: StringBuilder, ayahmat: ArrayList<Int>) {
-        val holder = recyclerView.findViewHolderForAdapterPosition(1)
+      //  val holder = recyclerView.findViewHolderForAdapterPosition(1)
         var ayahindex = ayahmat[0]
         ayahmat.size
         val split1 = str.toString().split("﴿".toRegex()).dropLastWhile { it.isEmpty() }
@@ -1271,13 +1226,15 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
         ex.launch(Dispatchers.IO) {
             val utils = Utils(this@WordbywordMushafAct)
 
-
+            val corpusAndQurandata = quranRepository.CorpusAndQuranDataSurah(surah)
 
                 val qurandata = quranRepository.getQuranData(surah)
-                allofQuran=   qurandata.allofQuran
-                corpusSurahWord=qurandata.corpusSurahWord
+            allofQuran=   corpusAndQurandata.allofQuran
+            corpusSurahWord=corpusAndQurandata.copusExpandSurah
 
-                corpusGroupedByAyah = corpusSurahWord!!.groupBy { it.corpus!!.ayah } as LinkedHashMap<Int, ArrayList<QuranCorpusWbw>>
+            corpusGroupedByAyah = corpusSurahWord!!.groupBy { it.ayah } as LinkedHashMap<Int, ArrayList<CorpusEntity>>
+
+
                 //    newnewadapterlist = CorpusUtilityorig.composeWBWCollection(qurandata.allofQuran, qurandata.corpusSurahWord)
 
 
@@ -1294,7 +1251,9 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
 
 
                 val header= SurahHeader(chapter!!.get(0)!!.rukucount,chapter!!.get(0)!!.versescount, chapter[0]!!.chapterid,chapter[0]!!.namearabic,chapter[0]!!.nameenglish)
-
+                surahNameEnglish= chapter[0]?.nameenglish ?: ""
+                surahNameArabic= chapter[0]?.namearabic ?: ""
+                versescount = chapter[0]?.versescount ?: 0
                 val manager = LinearLayoutManager(this@WordbywordMushafAct)
                 manager.orientation = LinearLayoutManager.VERTICAL
                 recyclerView.setHasFixedSize(true)
@@ -1311,7 +1270,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
                     allofQuran!!,
                     corpusGroupedByAyah,
                     this@WordbywordMushafAct,
-                    surahNameArabic,
+                    chapter[0]!!.namearabic,
                     isMakkiMadani,
                     listener
                 )
@@ -1693,53 +1652,10 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
             }
 
 
-           // downloadFilesnew(Links, app_folder_path)
-            /*
-                       startButton!!.setOnClickListener(View.OnClickListener { v: View? ->
-                           val label = startButton!!.getText() as String
-                           val context: Context = this@ShowMushafActivity
-                           if (label == context.getString(R.string.reset)) {
-                               rxFetch!!.deleteAll()
-                               reset()
-                           } else {
-                               startButton!!.setVisibility(View.GONE)
-                               labelTextView!!.setText(R.string.fetch_started)
-                               enqueueFiles(Links,app_folder_path)
-                             //  checkStoragePermission()
-                           }
-                       })*/
-
-            /*      val intent = Intent(this@ShowMushafActivity, DownloadService::class.java)
-                  intent.putStringArrayListExtra(AudioAppConstants.Download.DOWNLOAD_LINKS, Links)
-                  intent.putExtra(AudioAppConstants.Download.DOWNLOAD_LOCATION, app_folder_path)
-                  startService(intent)*/
-        }
-    }
-
-
-
-
-    private fun updateUIWithProgress() {
-        totalFiles = fileProgressMap.size
-        completedFiles = completedFileCount
-        progressTextView!!.text =
-            resources.getString(R.string.complete_over, completedFiles, totalFiles)
-        val progress = downloadProgress
-        progressBar!!.progress = progress
-        if (completedFiles == totalFiles) {
-            labelTextView!!.text = getString(R.string.fetch_done)
-            btnStart!!.setText(R.string.reset)
-            btnStart!!.visibility = View.VISIBLE
-            downloadFooter.visibility = View.GONE
-            //     normalFooter.visibility = View.GONE
-            isDownloading = false
-
-         //   initializePlayer()
-            playerFooter.visibility = View.VISIBLE
-            audio_settings_bottom.visibility = View.GONE
 
         }
     }
+
 
     private val downloadProgress: Int
         private get() {
@@ -1793,8 +1709,8 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
 
 
         if (tag == "overflowbottom") {
-            val chapterno = corpusSurahWord!![position - 1].corpus.surah
-            val verse = corpusSurahWord!![position - 1].corpus.ayah
+            val chapterno = corpusSurahWord!![position - 1].surah
+            val verse = corpusSurahWord!![position - 1].ayah
             val name = surahNameArabic
             val data = arrayOf(chapterno.toString(), verse.toString(), name)
             BottomOptionDialog.newInstance(data)
@@ -1803,50 +1719,12 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
         //    takeScreenShot(window.decorView)
             ScreenshotUtils.takeScreenshot(window.decorView, this)
         } else if (tag == "helpfb") {
-            val chapterno = corpusSurahWord!![position - 1].corpus.surah
+            val chapterno = corpusSurahWord!![position - 1].surah
             val dataBundle = Bundle()
             dataBundle.putInt(Constant.SURAH_ID, chapterno)
             val item = SurahSummary()
             item.arguments = dataBundle
             SurahSummary.newInstance(chapterno).show(supportFragmentManager, NamesDetail.TAG)
-        } else if (tag == "overflow_img") {
-            @SuppressLint("RestrictedApi") val menuBuilder = MenuBuilder(this)
-            val inflater = MenuInflater(this)
-            inflater.inflate(R.menu.popup_menu, menuBuilder)
-            @SuppressLint("RestrictedApi") val optionsMenu =
-                MenuPopupHelper(this, menuBuilder, view)
-            optionsMenu.setForceShowIcon(true)
-// Set Item Click Listener
-            menuBuilder.setCallback(object : MenuBuilder.Callback {
-                override fun onMenuItemSelected(menu: MenuBuilder, item: MenuItem): Boolean {
-                    if (item.itemId == R.id.actionTafsir) { // Handle option1 Click
-                        val readingintent =
-                            Intent(this@WordbywordMushafAct, TafsirFullscreenActivity::class.java)
-                        val chapterno = corpusSurahWord!![position - 1].corpus.surah
-                        val verse = corpusSurahWord!![position - 1].corpus.ayah
-                        readingintent.putExtra(Constant.SURAH_ID, chapterno)
-                        readingintent.putExtra(Constant.AYAH_ID, verse)
-                        readingintent.putExtra(SURAH_ARABIC_NAME, surahNameArabic)
-                        startActivity(readingintent)
-                        optionsMenu.dismiss()
-                        return true
-                    }
-
-                    if (item.itemId == R.id.action_share) {
-                        ScreenshotUtils.takeScreenshot(window.decorView,
-                            QuranGrammarApplication.context!!
-                        )
-                        optionsMenu.dismiss()
-                        return true
-                    }
-
-
-                    return false
-                }
-
-                override fun onMenuModeChange(menu: MenuBuilder) {}
-            })
-            optionsMenu.show()
         } else if (tag == "help_img") {
             println("check")
             ParticleColorScheme.newInstance()

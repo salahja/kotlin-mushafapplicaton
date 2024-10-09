@@ -172,7 +172,7 @@ android:screenOrientation="portrait">
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
         </activity>
         <activity
-            android:name="com.example.quranroots.TopicDetailAct"
+            android:name="com.example.quranroots.VerbVerseDetails"
             android:exported="true"
             android:parentActivityName=".Activity.MainActivity"
              android:taskAffinity="com.example.mushafconsolidated.newtask"

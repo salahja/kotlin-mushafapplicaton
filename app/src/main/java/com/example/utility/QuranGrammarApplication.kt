@@ -24,6 +24,7 @@ import com.example.utility.ThemeHelper.applyTheme
 import dagger.hilt.android.HiltAndroidApp
 import database.verbrepo.VerbGraph
 import leakcanary.LeakCanary
+import sj.hisnul.newepository.Graph
 
 import java.util.Locale
 @HiltAndroidApp
@@ -43,7 +44,7 @@ class QuranGrammarApplication : Application() {
         if (context == null) {
             context = this
         }
-      
+        Graph.provide(this)
         VerbGraph.provide(this)
 
 

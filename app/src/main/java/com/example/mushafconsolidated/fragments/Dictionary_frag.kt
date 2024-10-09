@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Constant
 import com.example.mushafconsolidated.Activity.LughatWordDetailsAct
-import com.example.mushafconsolidated.Adaptersimport.LexiconAdapter
+import com.example.mushafconsolidated.Adapters.LexiconAdapter
 import com.example.mushafconsolidated.Adaptersimport.WordLughatAdapter
 import com.example.mushafconsolidated.Entities.GrammarRules
 import com.example.mushafconsolidated.Entities.lughat
@@ -252,6 +252,14 @@ class Dictionary_frag(lughatWordDetailsAct: LughatWordDetailsAct, language: Stri
         val ska: WordLughatAdapter
         val lanesLexiconAdapter: LexiconAdapter
         when (language) {
+
+            "kanainna" -> {
+                val kanainna = mainViewModel.getGramarRulesbyHarf("kanainna").value
+                //     utils.getGrammarRulesByRules("Imperative")
+                worddifinition.add(kanainna!![0].detailsrules)
+                lanesLexiconAdapter = LexiconAdapter(worddifinition, requireContext(), language)
+                recyclerView.adapter = lanesLexiconAdapter
+            }
             "imperative" -> {
                 val isimperative = mainViewModel.getGramarRulesbyHarf("Imperative").value
                 //     utils.getGrammarRulesByRules("Imperative")
