@@ -11,10 +11,11 @@ import androidx.compose.ui.semantics.setText
 import androidx.compose.ui.semantics.text
 import androidx.core.content.ContextCompat
 import androidx.core.text.color
-import android.graphics.Color
+
 import android.os.Bundle
 import android.text.SpannableString
 import android.view.Gravity
+
 import androidx.media3.common.C
 import com.example.Constant
 import com.example.mushafconsolidated.Adapters.FlowAyahWordAdapterNoMafoolat.ItemViewAdapter
@@ -28,9 +29,14 @@ import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.fragments.WordMorphologyDetails
 import com.example.mushafconsolidated.model.QuranCorpusWbw
+import com.example.mushafconsolidated.model.Word
 import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip
 import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltipUtils
-
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Typeface
 object QuranViewUtils {
 
     fun setWordClickListener(view: View, context: Context, word: QuranCorpusWbw, surahName: String, loadItemList: (Bundle, wbwentity) -> Unit) {
@@ -47,6 +53,29 @@ object QuranViewUtils {
 
         }
     }
+
+        // ... other functions ...
+
+        fun setWordTranslation(translation: TextView, word: CorpusEntity, wbw: String) {
+            when (wbw) {
+                "en" -> {
+                    translation.text = word.en
+                    translation.paintFlags = translation.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+                }
+                "bn" -> {
+                    translation.text = word.bn
+                    translation.paintFlags = translation.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+                }
+                "in" -> {
+                    translation.text = word.ind
+                    translation.paintFlags = translation.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+                }
+                "ur" -> {
+                    translation.text = word.ur
+                    translation.paintFlags = translation.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+                }
+            }
+        }
 
     fun NewsetWordClickListener(view: View, context: Context, word: CorpusEntity, surahName: String, loadItemList: (Bundle, CorpusEntity) -> Unit) {
         view.setOnClickListener {

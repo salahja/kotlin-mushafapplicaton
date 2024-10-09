@@ -533,16 +533,18 @@ class FlowAyahWordAdapter(
         }
         setChapterInfo(holder, ayahWord)
         //  setAdapterposition(position);
-        wordBywordWithTranslation(
-            showrootkey,
-            holder,
-            showWordColor,
-            wbw,
-            ayahWord,
-            ayahWordArrayList,
-            showWordByword,
-            position
-        )
+        if (wbw != null) {
+            wordBywordWithTranslation(
+                showrootkey,
+                holder,
+                showWordColor,
+                wbw,
+                ayahWord,
+                ayahWordArrayList,
+                showWordByword,
+                position
+            )
+        }
         if (showTransliteration) {
             if (entity != null) {
                 holder.quran_transliteration.text =
@@ -658,7 +660,7 @@ class FlowAyahWordAdapter(
         showrootkey: Boolean,
         holder: ItemViewAdapter,
         showWordColor: Boolean,
-        wbw: String?,
+        wbw: String,
         ayahWord: ArrayList<CorpusEntity>?,
         ayahWordArrayList: LinkedHashMap<Int, ArrayList<CorpusEntity>>,
         showWbwTranslation: Boolean,
@@ -725,27 +727,7 @@ class FlowAyahWordAdapter(
             arabicTv.typeface = colorwordfont
             arabicChipview.typeface = colorwordfont
             if (showWbwTranslation) {
-                when (wbw) {
-                    "en" -> {
-                        translation.text = word.en
-                        translation.paintFlags = translation.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-                    }
-
-                    "bn" -> {
-                        translation.text = word.bn
-                        translation.paintFlags = translation.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-                    }
-
-                    "in" -> {
-                        translation.text = word.ind
-                        translation.paintFlags = translation.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-                    }
-
-                    "ur" -> {
-                        translation.text = word.ur
-                        translation.paintFlags = translation.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-                    }
-                }
+                QuranViewUtils.setWordTranslation(translation, word, wbw )
                 //  translation.setTextColor(ContextCompat.getColor(context,R.color.neutral2));
             }
             if (!defaultfont) {
