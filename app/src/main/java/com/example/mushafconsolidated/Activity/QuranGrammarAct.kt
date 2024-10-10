@@ -697,7 +697,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                 executeSurahWordByWord()
                 //     asyncTaskcorpus = new refactoringcurrentSurahSyncWordByWord().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
-        val sura: String = this.soraList[selectedSurahIndex - 1].chapterid.toString()
+        val sura: String = this.soraList[selectedSurahIndex].chapterid.toString()
         this.chapterno = this.soraList[selectedSurahIndex].chapterid
         surahArabicName = this.soraList[selectedSurahIndex].nameenglish
         surahArabicName = this.soraList[selectedSurahIndex].namearabic
