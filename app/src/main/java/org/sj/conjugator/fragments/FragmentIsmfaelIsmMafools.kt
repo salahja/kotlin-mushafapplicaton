@@ -17,7 +17,8 @@ import com.example.mushafconsolidated.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.sj.conjugator.adapter.IsmFaelIsmMafoolSarfKabeerAdapter
 import org.sj.conjugator.utilities.GatherAll
- 
+import org.sj.data.IsmFaelMafoolResult
+
 
 class FragmentIsmfaelIsmMafools : Fragment() {
     var recyclerView: RecyclerView? = null
@@ -103,26 +104,26 @@ class FragmentIsmfaelIsmMafools : Fragment() {
     }
 
     private fun initMazeedAdapterNew() {
-        val arrayLists: ArrayList<ArrayList<*>> =
+        val arrayLists: IsmFaelMafoolResult? =
             GatherAll.instance.buildMazeedParticiples(verbroot!!, augmentedFormula!!)
-        if (arrayLists.isNotEmpty()) {
+
             val ska = IsmFaelIsmMafoolSarfKabeerAdapter(arrayLists, requireContext(), false)
             recyclerView!!.adapter = ska
             recyclerView!!.setHasFixedSize(true)
             recyclerView!!.layoutManager = LinearLayoutManager(context)
-        }
+
     }
 
     private fun ninitThulathiAdapter() {
-        val mujarradListing: ArrayList<ArrayList<*>> =
+        val mujarradListing: IsmFaelMafoolResult? =
             GatherAll.instance.getMujarradParticiple(verbroot, unaugmentedFormula)
-        if (mujarradListing.isNotEmpty()) {
+
             val newsarf = true
             val ska = IsmFaelIsmMafoolSarfKabeerAdapter(mujarradListing, requireContext(), newsarf)
             recyclerView!!.adapter = ska
             recyclerView!!.setHasFixedSize(true)
             recyclerView!!.layoutManager = LinearLayoutManager(context)
-        }
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

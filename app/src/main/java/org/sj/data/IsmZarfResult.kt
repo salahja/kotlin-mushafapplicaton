@@ -13,19 +13,12 @@ import org.sj.verbConjugation.MadhiMudharay
 import org.sj.verbConjugation.NahiAmr
 
 
-data class MujarradResult(
-    val madhiMudharayList: List<MadhiMudharay>,
-    val ismFaelMafoolList: List<FaelMafool>,
-    val amrList: List<Amr>,
-    val nahiAmr:  List<NahiAmr>,
+data class IsmZarfResult(
+
     val ismZarfMafilun: List<IsmZarfMafilun>,
     val ismZarfMafalatun: List <IsmZarfMafalatun>,
-    val ismZarfMafalun: MutableList<IsmZarfMafalun>,
-    val  ismAlaMifal: List<IsmAlaMifalun>,
-    val ismALAMifalatun: List<IsmAlaMifalatun>,
-    val  ismAlaMifaalun: List<IsmAlaMifaalun>,
+    val ismZarfMafalun: List<IsmZarfMafalun>,
 
 
-    val verbDetailsList: List<VerbDetails?>
 )
 

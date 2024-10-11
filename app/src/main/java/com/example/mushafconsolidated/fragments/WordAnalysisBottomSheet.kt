@@ -78,6 +78,7 @@ import org.sj.conjugator.activity.ConjugatorTabsActivity
 import org.sj.conjugator.fragments.SarfSagheer
 import org.sj.conjugator.utilities.ArabicLiterals
 import org.sj.conjugator.utilities.GatherAll
+import org.sj.data.IsmFaelMafoolResult
 
 import java.util.Objects
 
@@ -142,7 +143,7 @@ class WordAnalysisBottomSheet : DialogFragment() {
 
     // --Commented out by Inspection (11/01/22, 8:24 AM):private View selectedview;
     private lateinit var dialog: AlertDialog
-    private var ismfaelmafool: ArrayList<ArrayList<*>>? = null
+    private var ismfaelmafool:            IsmFaelMafoolResult? = null
     private lateinit var vb: VerbWazan
     private lateinit var arabicword: VerbWazan
     private val dark = false
@@ -747,8 +748,8 @@ class WordAnalysisBottomSheet : DialogFragment() {
         ss.mudharaymajhool = listing?.madhiMudharayList?.get(3)?.hua
         ss.amrone= listing?.amrList?.get(0)?.anta
         ss.nahiamrone= listing?.nahiAmr?.get(0)?.anta
-        ss.ismfael= listing?.skabeerIsmList?.get(0)?.nomsinM
-        ss.ismmafool= listing?.skabeerIsmList?.get(1)?.nomsinM
+        ss.ismfael= listing?.ismFaelMafoolList?.get(0)?.nomsinM
+        ss.ismmafool= listing?.ismFaelMafoolList?.get(1)?.nomsinM
         ss.ismalaone = listing?.ismALAMifalatun?.get(0)?.nomsinMifalatun
         ss.ismalatwo = listing?.ismAlaMifal?.get(0)?.nomdualMifalun
         ss.ismalathree = listing?.ismAlaMifal?.get(0)?.nomsinMifalun

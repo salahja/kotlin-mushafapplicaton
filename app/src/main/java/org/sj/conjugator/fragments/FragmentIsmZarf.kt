@@ -18,7 +18,8 @@ import com.example.mushafconsolidated.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.sj.conjugator.adapter.IsmZarffKabeerAdapter
 import org.sj.conjugator.utilities.GatherAll
- 
+import org.sj.data.IsmZarfResult
+
 
 class FragmentIsmZarf : Fragment() {
     var recyclerView: RecyclerView? = null
@@ -93,14 +94,14 @@ class FragmentIsmZarf : Fragment() {
 
     private fun initMazeedAdapterNew() {}
     private fun ninitThulathiAdapter() {
-        val mujarradListing: ArrayList<ArrayList<*>> =
+        val mujarradListing: IsmZarfResult? =
             GatherAll.instance.getMujarradZarf(verbroot, unaugmentedFormula)
-        if (mujarradListing.isNotEmpty()) {
+
             val ska = IsmZarffKabeerAdapter(mujarradListing, requireContext())
             recyclerView!!.adapter = ska
             recyclerView!!.setHasFixedSize(true)
             recyclerView!!.layoutManager = LinearLayoutManager(context)
-        }
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -68,8 +68,8 @@ class MujarradVerbSarfKabeerAdapter(
         val madhi=madhimudhary
 
 
-        val ismfael=sarfSagheer?.skabeerIsmList?.get(0)
-        val ismmafool=sarfSagheer?.skabeerIsmList?.get(1)
+        val ismfael=sarfSagheer?.ismFaelMafoolList?.get(0)
+        val ismmafool=sarfSagheer?.ismFaelMafoolList?.get(1)
         val amr=sarfSagheer?.amrList?.get(0)
         val nahiamr=sarfSagheer?.nahiAmr?.get(0)
 

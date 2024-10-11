@@ -13,10 +13,11 @@ import com.example.mushafconsolidated.R
 import com.example.utility.QuranGrammarApplication
 import org.sj.conjugator.interfaces.OnItemClickListener
 import org.sj.conjugator.utilities.SharedPref
+import org.sj.data.IsmFaelMafoolResult
 import org.sj.verbConjugation.FaelMafool
 
 class IsmFaelIsmMafoolSarfKabeerAdapter(
-    lists: ArrayList<ArrayList<*>>,
+    lists: IsmFaelMafoolResult?,
     private val context: Context,
     private var newsarf: Boolean
                                        ) :
@@ -56,16 +57,16 @@ class IsmFaelIsmMafoolSarfKabeerAdapter(
         //  final List sarf = sarfSagheer.get(position);
         val newsarf = true
 
-        val ismfael = sarfSagheer[0][0]
-        val ismmafool = sarfSagheer[0][1]
+        val ismfael = sarfSagheer?.ismFaelMafoolList
+        val ismmafool = sarfSagheer?.ismFaelMafoolList
        // val ismfael=faelmafoolMas
       //  val ismmafool=faelmafoolFem
         if (newsarf) {
             SetTypeFace(holder)
-            IsmFael(ismfael as FaelMafool,holder, 0)
-            IsmFaelFem(ismfael as FaelMafool,holder, 0)
-            IsmMafool(ismmafool as FaelMafool, holder, 1)
-            IsmMafoolFem(ismmafool as  FaelMafool, holder, 1)
+            IsmFael(ismfael!![0]  ,holder, 0)
+            IsmFaelFem(ismfael!![0]  ,holder, 0)
+            IsmMafool(ismmafool!![1]  , holder, 1)
+            IsmMafoolFem(ismmafool!![1]   , holder, 1)
         }/* else {
             SetTypeFace(holder)
             IsmFael(ismfael, holder, 6)
@@ -445,14 +446,6 @@ class IsmFaelIsmMafoolSarfKabeerAdapter(
         }
     }
 
-    override fun getItemId(position: Int): Long {
-        //  Surah surah = surahArrayList.get(position);
-        return sarfSagheer.size.toLong()
-    }
-
-    fun getItem(position: Int): Any {
-        return sarfSagheer[position]
-    }
 
     override fun getItemCount(): Int {
         //   return sarfSagheer.size();

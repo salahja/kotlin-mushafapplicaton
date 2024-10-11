@@ -136,8 +136,8 @@ class MazeedTabSagheerFragmentVerb(private val context: Context) : Fragment() {
         ss.mudharaymajhool =listing?.madhiMudharayList?.get(3)?.hua!!.replace("[", "").replace("]", "")
         ss.amrone =listing.amrList?.get(0)?.anta!!.replace("[", "").replace("]", "")
         ss.nahiamrone= listing?.nahiAmr?.get(0)?.anta!!.replace("[", "").replace("]", "")
-        ss.ismfael = listing.skabeerIsmList.get(0).nomsinM!!.replace("[", "").replace("]", "")
-        ss.ismmafool = listing.skabeerIsmList.get(1).nomsinM!!.replace("[", "").replace("]", "")
+        ss.ismfael = listing.ismFaelMafoolList.get(0).nomsinM!!.replace("[", "").replace("]", "")
+        ss.ismmafool = listing.ismFaelMafoolList.get(1).nomsinM!!.replace("[", "").replace("]", "")
         ss.ismalaone = listing.ismAlaMifal.get(0).nomsinMifalun
         ss.ismalatwo = listing.ismALAMifalatun.get(0).nomsinMifalatun
         ss.ismalathree = listing.ismAlaMifal.get(0).nomsinMifalun

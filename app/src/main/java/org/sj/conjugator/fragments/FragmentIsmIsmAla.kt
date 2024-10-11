@@ -19,7 +19,8 @@ import com.example.mushafconsolidated.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.sj.conjugator.adapter.IsmAlaSarfKabeerAdapter
 import org.sj.conjugator.utilities.GatherAll
- 
+import org.sj.data.IsmAlaResult
+
 
 class FragmentIsmIsmAla : Fragment() {
     private var isAugmented = false
@@ -100,14 +101,14 @@ class FragmentIsmIsmAla : Fragment() {
     private fun initMazeedAdapterNew() {}
     private fun ninitThulathiAdapter() {
         //   OldThulathi();
-        val mujarradListing: ArrayList<ArrayList<*>> =
+        val mujarradListing: IsmAlaResult? =
             GatherAll.instance.getMujarradIsmAla(verbroot, unaugmentedFormula)
-        if (mujarradListing.isNotEmpty()) {
+
             val ska = IsmAlaSarfKabeerAdapter(mujarradListing, requireContext())
             recyclerView!!.adapter = ska
             recyclerView!!.setHasFixedSize(true)
             recyclerView!!.layoutManager = LinearLayoutManager(context)
-        }
+
     }
 
     companion object {
