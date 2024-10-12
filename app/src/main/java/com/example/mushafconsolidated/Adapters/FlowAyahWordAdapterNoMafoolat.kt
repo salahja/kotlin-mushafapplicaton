@@ -19,6 +19,7 @@ import android.text.Html
 import android.text.SpannableString
 import android.text.SpannableString.valueOf
 import android.text.format.DateFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,6 +41,7 @@ import com.example.mushafconsolidated.Entities.SurahHeader
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SurahSummary
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
+import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet.Companion.TAG
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 
 import com.example.mushafconsolidatedimport.Config
@@ -58,7 +60,6 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.Date
-import kotlin.collections.getOrPut
 
 const val TAUBA_CHAPTER_NUMBER = 9
 
@@ -459,13 +460,21 @@ class FlowAyahWordAdapterNoMafoolat(
 
 
             //arabicTv
-
+            var spannedWord = SpannableString(" ")
             if (showWordColor) {
 
-                val spannedWord = spannedWordsCache.getOrPut(word) {
+                // Check if the word is already cached
+                spannedWord = spannedWordsCache.getOrPut(word) {
+                    // Log when we're generating a new SpannableString and storing it in the cache
+                    Log.d(TAG, "FROM FILE (generated new SpannableString)")
                     QuranViewUtils.NewgetSpannedWords(word)
                 }
-               // val spannedWord = QuranViewUtils.NewgetSpannedWords(word)
+
+                // Log when we're fetching the word from cache
+                if (spannedWordsCache.containsKey(word)) {
+                    Log.d(TAG, "FROM CACHE")
+                }
+
                 val arabicView =
                     if (showWbwTranslation && wordByWordDisplay) arabicChipview else arabicTv
                 arabicView.text = spannedWord

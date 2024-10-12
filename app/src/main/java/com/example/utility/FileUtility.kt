@@ -1,5 +1,6 @@
 import android.Manifest
 import android.app.Activity
+import android.app.BackgroundServiceStartNotAllowedException
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Environment
@@ -22,10 +23,11 @@ class FileUtility(var context: Context) {
         surahId: Int,
         verseId: Int,
         wordno: Int,
-        wordsAr: String
+        startIndex:Int,
+        endIndex:Int,
     ): Int {
         val ammended = ArrayList<String>()
-        ammended.add("$surahId|$verseId|$wordno|$wordsAr|")
+        ammended.add("$surahId|$verseId|$wordno|$startIndex|$endIndex")
         val state = Environment.getExternalStorageState()
         var status = 0
         if (Environment.MEDIA_MOUNTED == state) {

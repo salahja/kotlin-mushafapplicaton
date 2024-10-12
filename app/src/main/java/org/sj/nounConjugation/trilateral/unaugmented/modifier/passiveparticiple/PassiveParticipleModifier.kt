@@ -4,6 +4,7 @@ import org.sj.nounConjugation.NounLamAlefModifier
 import org.sj.nounConjugation.NounSunLamModifier
 import org.sj.nounConjugation.trilateral.unaugmented.modifier.ConjugationResult
 import org.sj.nounConjugation.trilateral.unaugmented.modifier.IUnaugmentedTrilateralNounModifier
+import org.sj.verbConjugation.FaelMafool
 import org.sj.verbConjugation.trilateral.unaugmented.UnaugmentedTrilateralRoot
 
 /**
@@ -24,6 +25,77 @@ import org.sj.verbConjugation.trilateral.unaugmented.UnaugmentedTrilateralRoot
  * @author Haytham Mohtasseb Billah
  * @version 1.0
  */
+
+class PassiveParticipleModifier private constructor() : IUnaugmentedTrilateralNounModifier {
+    private val vocalizer = Vocalizer()
+    private val mahmouz = Mahmouz()
+
+    override fun build(
+        root: UnaugmentedTrilateralRoot,
+        kov: Int,
+        conjugations: List<*>,
+        formula: String
+    ): ConjugationResult {
+        val conjResult = ConjugationResult(kov, root, conjugations as List<*>, formula)
+
+        // Apply modifiers
+        vocalizer.apply(conjResult)
+        mahmouz.apply(conjResult)
+        NounLamAlefModifier.instance.apply(conjResult)
+        NounSunLamModifier.instance.apply(conjResult)
+
+        // Process the final result
+        val splitResults = processConjugationResult(conjResult.finalResult.toString())
+
+        // Assign values to FaelMafool
+        assignFaelMafool(conjResult.faelMafool, splitResults)
+
+        return conjResult
+    }
+
+    // Helper method to safely process the conjugation result string
+    private fun processConjugationResult(resultString: String): List<String> {
+        return resultString
+            .replace("[", "") // Remove any brackets if present
+            .replace("]", "")
+            .split(",")
+            .map { it.trim() } // Ensure trimming spaces
+    }
+
+    // Helper method to assign conjugation results to `FaelMafool`
+    private fun assignFaelMafool(faelMafool: FaelMafool, results: List<String>) {
+        try {
+            faelMafool.nomsinM = results.getOrNull(0) ?: ""
+            faelMafool.nomdualM = results.getOrNull(2) ?: ""
+            faelMafool.nomplurarM = results.getOrNull(4) ?: ""
+            faelMafool.accsinM = results.getOrNull(6) ?: ""
+            faelMafool.accdualM = results.getOrNull(8) ?: ""
+            faelMafool.accplurarlM = results.getOrNull(10) ?: ""
+            faelMafool.gensinM = results.getOrNull(12) ?: ""
+            faelMafool.gendualM = results.getOrNull(14) ?: ""
+            faelMafool.genplurarM = results.getOrNull(16) ?: ""
+
+            faelMafool.nomsinF = results.getOrNull(1) ?: ""
+            faelMafool.nomdualF = results.getOrNull(3) ?: ""
+            faelMafool.nomplurarF = results.getOrNull(5) ?: ""
+            faelMafool.accsinF = results.getOrNull(7) ?: ""
+            faelMafool.accdualF = results.getOrNull(9) ?: ""
+            faelMafool.accplurarlF = results.getOrNull(11) ?: ""
+            faelMafool.gensinF = results.getOrNull(13) ?: ""
+            faelMafool.gendualF = results.getOrNull(15) ?: ""
+            faelMafool.genplurarF = results.getOrNull(17) ?: ""
+        } catch (e: Exception) {
+            // Optionally log the error for debugging purposes
+            println("Error assigning FaelMafool: ${e.message}")
+        }
+    }
+
+    companion object {
+        val instance = PassiveParticipleModifier()
+    }
+}
+
+/*
 class PassiveParticipleModifier private constructor() : IUnaugmentedTrilateralNounModifier {
     private val vocalizer = Vocalizer()
     private val mahmouz = Mahmouz()
@@ -67,4 +139,4 @@ class PassiveParticipleModifier private constructor() : IUnaugmentedTrilateralNo
     companion object {
         val instance = PassiveParticipleModifier()
     }
-}
+}*/

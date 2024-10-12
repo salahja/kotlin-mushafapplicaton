@@ -172,10 +172,16 @@ class QuranVIewModel @Inject constructor(
     }
 
 
-    fun getCorpusEntityFilterSurahAya(cid: Int, aid: Int, ): MutableLiveData<List<CorpusEntity>> {
-        corpusentity.value = this.quranRepository.getCorpusEntityFilterSurahAya(cid, aid)
+    fun getCorpusEntityFilterSurahAya(cid: Int, aid: Int, ): List<CorpusEntity> {
+      return  this.quranRepository.getCorpusEntityFilterSurahAya(cid, aid)
+
+    }
+
+    fun getCorpusEntityFilterSurah(cid: Int ): MutableLiveData<List<CorpusEntity>> {
+        corpusentity.value = this.quranRepository.getCorpusEntityFilterSurah(cid)
         return corpusentity
     }
+
 
 
 

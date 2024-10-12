@@ -130,7 +130,8 @@ import javax.inject.Inject
 
      fun getCorpusEntityFilterSurahAya(surah: Int, ayah: Int): List<CorpusEntity> =
          corpusDao.getCorpusWordSurahAya(surah, ayah)
-
+     fun getCorpusEntityFilterSurah(surah: Int, ): List<CorpusEntity> =
+         corpusDao.getVersesBySurahLive(surah)
 
     fun getMafoolbihi(surah: Int, ayah: Int, wordno: Int): List<MafoolBihi> =
         mafoolbihi.getMafoolbihi(surah, ayah, wordno)

@@ -180,7 +180,7 @@ class VerbVerseDetails : BaseActivity(), OnItemClickListenerOnLong {
 
       //  mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
         allofQuran = mainViewModel.getsurahayahVerses(suraid, ayah).value as ArrayList<QuranEntity>?
-        corpusSurahWord = mainViewModel.getCorpusEntityFilterSurahAya(suraid, ayah).value
+        corpusSurahWord = mainViewModel.getCorpusEntityFilterSurahAya(suraid, ayah)
         val corpus = CorpusUtilityorig(this)
      //   newnewadapterlist = CorpusUtilityorig.NotcomposeWBWCollection(allofQuran, corpusSurahWord)
 

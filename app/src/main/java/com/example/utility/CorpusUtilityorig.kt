@@ -1,5 +1,6 @@
 package com.example.utility
 
+import FileUtility
 import android.app.Activity
 import android.content.Context
 import android.graphics.Color
@@ -2748,53 +2749,7 @@ class CorpusUtilityorig(private var context: Context?) {
         }
 
 
-        fun setAbsoluteNegationsss(
-            corpus: java.util.ArrayList<CorpusEntity>?,
-            spannableVerse: SpannableString
-        ) {
-            var i = 0
-            while (i < (corpus?.size ?: 0)) {
-                val word = corpus?.get(i)
 
-                // Check if the word is an ACC noun and there is a preceding NEG tag
-                val isAcc = word?.detailsone?.contains("ACC")
-                if (isAcc == true &&
-                    (i > 0 && corpus?.get(i - 1)?.tagone == "NEG") && // Preceding NEG tag
-                    (i < corpus.size - 2) && // Ensure valid following words
-                    (corpus[i + 1].tagone == "P") && // Following P tag
-                    (corpus[i + 1].tagtwo == "PRON") // Following PRON tag
-                ) {
-                    // Handle valid NEG - find indices for the valid NEG word
-                    val negText = corpus[i - 1].araone ?: ""
-                    val negStartIndex = spannableVerse.indexOf(negText)
-                    val negEndIndex = negStartIndex + negText.length
-
-                    // Get prepositional phrase and pronoun
-                    val pWord = corpus[i + 1].araone ?: ""
-                    val pronWord = corpus[i + 1].aratwo ?: ""
-
-                    // Find indices for the prepositional phrase
-                    val phraseStartIndex = spannableVerse.indexOf(pWord, negEndIndex)
-                    val phraseEndIndex = phraseStartIndex + pWord.length + pronWord.length
-
-                    // Apply underline span for this absolute negation phrase if valid indices are found
-                    if (negStartIndex != -1 && phraseStartIndex != -1) {
-                        spannableVerse.setSpan(
-                            UnderlineSpan(),
-                            negStartIndex,
-                            phraseEndIndex,
-                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                        )
-                    }
-
-                    // Skip past this valid instance (jump ahead to avoid re-checking same words)
-                    i += 2 // Skip checking the P and PRON words
-                } else {
-                    // Move to next word if current doesn't match absolute negation pattern
-                    i++
-                }
-            }
-        }
 
         fun setAbsoluteNegationlatest(corpus: java.util.ArrayList<CorpusEntity>?, spannableVerse: SpannableString) {
             var validNegFound = false
@@ -2877,19 +2832,19 @@ class CorpusUtilityorig(private var context: Context?) {
 
 
                   var startIndex=0
+                    // Find the start index of the NEG word
 
-                //    val occurrences = findWordOccurrences(spannableVerse.toString(), targetWord)
-                    // Find the start and end index of the NEG word in the spannableVerse
-            /*        for ((wordNo, index) in occurrences) {
-                        if(corpus[i-1].wordno==wordNo){
-                            startindex=index
+                /*    for ((wordNo, index) in occurrences) {
+                        if(corpus[i-1].wordno == wordNo) {
+
+                            startIndex = index
                             break
                         }
-                        println("Word found at word number $wordNo, index $index")
-                    }*/
+
+                    } */
 
                      startIndex = occurrences.firstOrNull { (wordNo, _) -> corpus[i - 1].wordno == wordNo }?.second ?: -1
-
+                    // Find the start index of the NEG word
                     var prepositionalPhrase=""
                     if (corpus[i + 1].tagone == "P" && (corpus[i + 1].tagtwo!!.contains("PRON"))){
                         prepositionalPhrase=corpus[i + 1].araone!!+corpus[i + 1].aratwo!!
@@ -2900,7 +2855,10 @@ class CorpusUtilityorig(private var context: Context?) {
                     // Find the indices for the prepositional phrase
                     val phraseStartIndex = spannableVerse.indexOf(prepositionalPhrase, startIndex)
                     val phraseEndIndex = phraseStartIndex + prepositionalPhrase.length
-
+                    val fileu=FileUtility(QuranGrammarApplication.context!!)
+                    val chapterno=corpus[0].surah
+                  //  val fileName = "surah$chapterno.csv"
+                  //  fileu.writetofile(fileName,corpus[0].surah,corpus[0].ayah,corpus[0].wordno,startIndex,phraseEndIndex)
                     // Apply underline span for the absolute negation phrase
                     if (startIndex != -1 && phraseStartIndex != -1) {
                         spannableVerse.setSpan(
