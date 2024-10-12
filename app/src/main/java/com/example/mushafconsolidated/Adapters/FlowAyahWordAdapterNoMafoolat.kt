@@ -58,6 +58,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.Date
+import kotlin.collections.getOrPut
 
 const val TAUBA_CHAPTER_NUMBER = 9
 
@@ -74,6 +75,7 @@ class FlowAyahWordAdapterNoMafoolat(
     listener: OnItemClickListenerOnLong?,
 ) : RecyclerView.Adapter<FlowAyahWordAdapterNoMafoolat.ItemViewAdapter>() //implements OnItemClickListenerOnLong {
 {
+    private val spannedWordsCache = HashMap<CorpusEntity, SpannableString>()
     private var wordByWordDisplay: Boolean = false
     private var ayahWord: ArrayList<CorpusEntity>? = null
     private var defaultfont: Boolean = false
@@ -393,7 +395,10 @@ class FlowAyahWordAdapterNoMafoolat(
     ) {
 
         if (spannableverse != null) {
-            CorpusUtilityorig.setAyahGrammaticalPhrases(spannableverse, surah, ayah)
+          //  CorpusUtilityorig.setAyahGrammaticalPhrases(spannableverse, surah, ayah)
+            val spann=SpannableString("لَا يُكَلِّفُ ٱللَّهُ نَفْسًا إِلَّا وُسْعَهَاۚ لَهَا مَا كَسَبَتْ وَعَلَيْهَا مَا ٱكْتَسَبَتْۗ رَبَّنَا لَا تُؤَاخِذْنَآ إِن نَّسِينَآ أَوْ أَخْطَأْنَاۚ رَبَّنَا وَلَا تَحْمِلْ عَلَيْنَآ إِصْرًا كَمَا حَمَلْتَهُۥ عَلَى ٱلَّذِينَ مِن قَبْلِنَاۚ رَبَّنَا وَلَا تُحَمِّلْنَا مَا لَا طَاقَةَ لَنَا بِهِۦۖ وَٱعْفُ عَنَّا وَٱغْفِرْ لَنَا وَٱرْحَمْنَآۚ أَنتَ مَوْلَىٰنَا فَٱنصُرْنَا عَلَى ٱلْقَوْمِ ٱلْكَٰفِرِينَ ")
+           CorpusUtilityorig.  setAbsoluteNegation(ayahWord,spannableverse)
+           // CorpusUtilityorig.setAbsoluteNegation(ayahWord,spann)
             holder.quran_textView.text = spannableverse
         }
 
@@ -457,11 +462,10 @@ class FlowAyahWordAdapterNoMafoolat(
 
             if (showWordColor) {
 
-                word.araone + word.aratwo + word.arathree + word.arafour + word.arafive
-
-                //  val spannedword: SpannableString = getSpannedWords(word)
-                //val spannedWord = getSpannedWords(word)
-                val spannedWord = QuranViewUtils.NewgetSpannedWords(word)
+                val spannedWord = spannedWordsCache.getOrPut(word) {
+                    QuranViewUtils.NewgetSpannedWords(word)
+                }
+               // val spannedWord = QuranViewUtils.NewgetSpannedWords(word)
                 val arabicView =
                     if (showWbwTranslation && wordByWordDisplay) arabicChipview else arabicTv
                 arabicView.text = spannedWord
@@ -486,27 +490,7 @@ class FlowAyahWordAdapterNoMafoolat(
 
             if (showWbwTranslation) {
                 QuranViewUtils.setWordTranslation(translationTextView, word, wbw )
-              /*  when (wbw) {
-                    "en" -> {
-                        translationTextView.text = word.en
-                        translationTextView.paintFlags = translationTextView.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-                    }
 
-                    "bn" -> {
-                        translationTextView.text = word.bn
-                        translationTextView.paintFlags = translationTextView.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-                    }
-
-                    "in" -> {
-                        translationTextView.text = word.ind
-                        translationTextView.paintFlags = translationTextView.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-                    }
-
-                   "ur" -> {
-                         translationTextView.text = word.ur
-                         translationTextView.paintFlags = translationTextView.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-                     }
-                }*/
 
             }
             if (!defaultfont) {

@@ -16,6 +16,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import com.example.Constant
 import com.example.justJava.FrameSpan
+import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.CorpusExpandWbwPOJO
 import com.example.mushafconsolidated.Entities.NasbListingPojo
 import com.example.mushafconsolidated.Entities.NewMudhafEntity
@@ -2384,6 +2385,7 @@ class CorpusUtilityorig(private var context: Context?) {
         fun setAyahGrammaticalPhrases(spannableverse: SpannableString?, surah: Int, ayah: Int) {
 
             if (spannableverse != null) {
+
                 setMudhafFromDBforAyah(spannableverse, surah, ayah)
                 setMausoofforayah(spannableverse, surah, ayah)
                 setShartSurahAyah(spannableverse, surah, ayah)
@@ -2743,6 +2745,406 @@ class CorpusUtilityorig(private var context: Context?) {
             } catch (e: IndexOutOfBoundsException) {
                 //System.out.println(e.getMessage());
             }
+        }
+
+
+        fun setAbsoluteNegationsss(
+            corpus: java.util.ArrayList<CorpusEntity>?,
+            spannableVerse: SpannableString
+        ) {
+            var i = 0
+            while (i < (corpus?.size ?: 0)) {
+                val word = corpus?.get(i)
+
+                // Check if the word is an ACC noun and there is a preceding NEG tag
+                val isAcc = word?.detailsone?.contains("ACC")
+                if (isAcc == true &&
+                    (i > 0 && corpus?.get(i - 1)?.tagone == "NEG") && // Preceding NEG tag
+                    (i < corpus.size - 2) && // Ensure valid following words
+                    (corpus[i + 1].tagone == "P") && // Following P tag
+                    (corpus[i + 1].tagtwo == "PRON") // Following PRON tag
+                ) {
+                    // Handle valid NEG - find indices for the valid NEG word
+                    val negText = corpus[i - 1].araone ?: ""
+                    val negStartIndex = spannableVerse.indexOf(negText)
+                    val negEndIndex = negStartIndex + negText.length
+
+                    // Get prepositional phrase and pronoun
+                    val pWord = corpus[i + 1].araone ?: ""
+                    val pronWord = corpus[i + 1].aratwo ?: ""
+
+                    // Find indices for the prepositional phrase
+                    val phraseStartIndex = spannableVerse.indexOf(pWord, negEndIndex)
+                    val phraseEndIndex = phraseStartIndex + pWord.length + pronWord.length
+
+                    // Apply underline span for this absolute negation phrase if valid indices are found
+                    if (negStartIndex != -1 && phraseStartIndex != -1) {
+                        spannableVerse.setSpan(
+                            UnderlineSpan(),
+                            negStartIndex,
+                            phraseEndIndex,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+                    }
+
+                    // Skip past this valid instance (jump ahead to avoid re-checking same words)
+                    i += 2 // Skip checking the P and PRON words
+                } else {
+                    // Move to next word if current doesn't match absolute negation pattern
+                    i++
+                }
+            }
+        }
+
+        fun setAbsoluteNegationlatest(corpus: java.util.ArrayList<CorpusEntity>?, spannableVerse: SpannableString) {
+            var validNegFound = false
+            var negOccurrences = mutableListOf<Pair<Int, Int>>()  // Stores wordno and index of each "NEG" occurrence
+
+            // Loop through the corpus to find all occurrences of "NEG"
+            for (i in corpus?.indices!!) {
+                val word = corpus[i]
+
+                // Check if the word has a "NEG" tag
+                if (word.tagone == "NEG") {
+                    val negWordNo = word.wordno
+                    val negIndex = spannableVerse.indexOf(word.araone!!)
+                    negOccurrences.add(Pair(negWordNo, negIndex))
+                }
+            }
+
+            // Now process each occurrence of "NEG" and apply negation rule if valid
+            for (i in corpus.indices) {
+                val word = corpus[i]
+
+                // Check for the scenario: Noun (ACC), preceding valid NEG, following P + PRON
+                val isAcc = word?.detailsone?.contains("ACC")
+                if (isAcc == true &&
+                    (i > 0 && corpus[i - 1].tagone == "NEG") && // Preceding NEG tag
+                    (i < corpus.size - 2) && // Ensure valid following words
+                    (corpus[i + 1].tagone == "P") && // Following P tag
+                    (corpus[i + 1].tagtwo == "PRON") // Following PRON tag
+                ) {
+                    // Get the valid NEG occurrence (assuming the last one should be used if there are multiple)
+                    val validNegIndex = negOccurrences.lastOrNull { it.first == corpus[i - 1].wordno }?.second
+
+                    // If valid NEG index is found, continue
+                    if (validNegIndex != null && !validNegFound) {
+                        validNegFound = true // Mark the valid NEG found
+
+                        // Get the start and end index of the NEG word in the verse
+                        val negStartIndex = validNegIndex
+                        val negEndIndex = negStartIndex + corpus[i - 1].araone!!.length
+
+                        // Get the prepositional word and pronoun word from the corpus
+                        val pWord = corpus[i + 1].araone ?: ""
+                        val pronWord = corpus[i + 1].aratwo ?: ""
+
+                        // Find the indices for the prepositional phrase
+                        val phraseStartIndex = spannableVerse.indexOf(pWord, negEndIndex)
+                        val phraseEndIndex = phraseStartIndex + pWord.length + pronWord.length
+
+                        // Apply underline span for the absolute negation phrase
+                        spannableVerse.setSpan(
+                            UnderlineSpan(),
+                            negStartIndex,
+                            phraseEndIndex,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+                    }
+                }
+            }
+        }
+
+        fun setAbsoluteNegation(
+            corpus: java.util.ArrayList<CorpusEntity>?,
+            spannableVerse: SpannableString
+        ) {
+            for (i in corpus?.indices!!) {
+                val word = corpus[i]
+                if(corpus[0].ayah==256){
+                    println("check")
+                }
+                val targetWords = listOf("لَآ", "لَا", "لَّا")
+                val occurrences = findWordOccurrencesArabic(spannableVerse.toString(), targetWords)
+                // Check for the scenario: Noun (ACC), preceding NEG, following P + PRON
+                val isAcc = word?.detailsone?.contains("ACC")
+                if (isAcc!! && // Current word is ACC
+                    i > 0 && corpus[i - 1].tagone == "NEG" && // Preceding word is NEG
+                    corpus[i].tagone == "N" && // Current word is N
+                    i < corpus.size - 2 && // Ensure enough following words
+                    ((corpus[i + 1].tagone == "P") && (corpus[i + 1].tagtwo!!.contains("PRON")) || (corpus[i + 1].tagone == "P")) // Following word is P with or without PRON
+                ){
+
+
+                  var startIndex=0
+
+                //    val occurrences = findWordOccurrences(spannableVerse.toString(), targetWord)
+                    // Find the start and end index of the NEG word in the spannableVerse
+            /*        for ((wordNo, index) in occurrences) {
+                        if(corpus[i-1].wordno==wordNo){
+                            startindex=index
+                            break
+                        }
+                        println("Word found at word number $wordNo, index $index")
+                    }*/
+
+                     startIndex = occurrences.firstOrNull { (wordNo, _) -> corpus[i - 1].wordno == wordNo }?.second ?: -1
+
+                    var prepositionalPhrase=""
+                    if (corpus[i + 1].tagone == "P" && (corpus[i + 1].tagtwo!!.contains("PRON"))){
+                        prepositionalPhrase=corpus[i + 1].araone!!+corpus[i + 1].aratwo!!
+                    }else if(corpus[i + 1].tagone == "P"){
+                        prepositionalPhrase=corpus[i + 1].araone!!
+                    }
+
+                    // Find the indices for the prepositional phrase
+                    val phraseStartIndex = spannableVerse.indexOf(prepositionalPhrase, startIndex)
+                    val phraseEndIndex = phraseStartIndex + prepositionalPhrase.length
+
+                    // Apply underline span for the absolute negation phrase
+                    if (startIndex != -1 && phraseStartIndex != -1) {
+                        spannableVerse.setSpan(
+                            UnderlineSpan(),
+                            startIndex,
+                            phraseEndIndex,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+                    }
+                }
+            }
+        }
+
+        fun findWordOccurrencesArabic(text: String, targetWords: List<String>): List<Pair<Int, Int>> {
+            val occurrences = mutableListOf<Pair<Int, Int>>()
+            val words = text.split(Regex("\\s+")) // Split the text into words
+            var wordIndex = 0
+            var wordNo = 1
+
+            for (word in words) {
+                if (targetWords.any { it.equals(word, ignoreCase = true) }) { // Check against all flavors
+                    occurrences.add(Pair(wordNo, wordIndex))
+                }
+                wordIndex += word.length + 1 // Add 1 for the space
+                wordNo++
+            }
+
+            return occurrences
+        }
+        fun setAbsoluteNegationthree(
+            corpus: java.util.ArrayList<CorpusEntity>?,
+
+            spannableverse: SpannableString
+        ) {
+            // Split the Quran text into individual words
+            val quranWords = spannableverse.split(" ")
+
+            // Iterate through the corpus
+            for (i in corpus?.indices!!) {
+                val word = corpus[i]
+
+                // Check for the scenario: Noun (ACC), preceding NEG, following P + PRON
+                val isAcc = word?.detailsone?.contains("ACC")
+                if (isAcc == true
+                    && i > 0 && corpus[i - 1].tagone == "NEG" // Preceding tag is NEG
+                    && i < (corpus.size - 2) // Ensure enough following words
+                    && corpus[i + 1].tagone == "P" // Following word has tag P
+                    && corpus[i + 1].tagtwo == "PRON" // Following word has tag PRON
+                ) {
+                    // Find start index using wordno of "NEG"
+                    val negWordStartIndex = findWordIndexByWordNo(quranWords, corpus[i - 1])
+
+                    // Find end index using wordno of the last part of the pattern (PRON word)
+                    val pronWordEndIndex = findWordIndexByWordNo(quranWords, corpus[i + 1])
+                   // + (corpus[i + 1].araone?.length ?: 0) +(corpus[i + 1].aratwo?.length ?: 0)
+                    println(spannableverse.subSequence(negWordStartIndex,pronWordEndIndex))
+                    // Apply span (underline) to the sentence between start and end index
+                    spannableverse.setSpan(
+                        UnderlineSpan(),
+                        negWordStartIndex,
+                        pronWordEndIndex,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                }
+            }
+        }
+
+        // Helper function to find the index of a Quran word in the text using wordno
+        fun findWordIndexByWordNo(
+            quranWords: List<String>,
+            corpusWord: CorpusEntity
+        ): Int {
+            var currentIndex = 0
+            for (i in quranWords.indices) {
+                // Match based on the wordno in CorpusEntity
+                if (i == corpusWord.wordno) {
+                    // Get the index of the word in the entire Quran text
+                    println(quranWords.take(i).joinToString (" "))
+                    currentIndex = quranWords.take(i).joinToString(" ").length
+                    break
+                }
+            }
+            return currentIndex
+        }
+
+
+        fun twosetAbsoluteNegation(
+            corpus: java.util.ArrayList<CorpusEntity>?,
+          // Assuming this has the verse text
+            spannableverse: SpannableString
+        ) {
+            // Split the Quran text into individual words
+            val quranWords = spannableverse.split(" ")
+
+            // Iterate through the corpus
+            for (i in corpus?.indices!!) {
+                val word = corpus[i]
+
+                // Check for the scenario: Noun (ACC), preceding NEG, following P + PRON
+                val isAcc = word?.detailsone?.contains("ACC")
+                if (isAcc == true
+                    && i > 0 && corpus[i - 1].tagone == "NEG" // Preceding tag is NEG
+                    && i < (corpus.size - 2) // Ensure enough following words
+                    && corpus[i + 1].tagone == "P" // Following word has tag P
+                    && corpus[i + 1].tagtwo == "PRON" // Following word has tag PRON
+                ) {
+                    // Find the start index by matching the Quran word with the Corpus word (NEG)
+                    val negWordIndex = twofindWordIndexByWordNo(quranWords, corpus[i - 1])
+                    val oldnegWordIndex = twofindWordIndexByWordNo(quranWords, corpus[i - 1])
+                    // Calculate end index by matching Quran words for P and PRON
+                    val pWordLength = corpus[i + 1].araone?.length ?: 0
+                    val pronWordLength = corpus[i + 1].aratwo?.length ?: 0
+                    val phraseEndIndex = negWordIndex + pWordLength + pronWordLength
+
+                    // Apply span (underline) to the sentence between start and end index
+                    spannableverse.setSpan(
+                        UnderlineSpan(),
+                        negWordIndex,
+                        phraseEndIndex,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                }
+            }
+        }
+
+        // Helper function to find the index of a Quran word in the text using wordno
+        fun twofindWordIndexByWordNo(
+            quranWords: List<String>,
+            corpusWord: CorpusEntity
+        ): Int {
+            var currentIndex = 0
+            for (i in quranWords.indices) {
+                // Match based on the wordno in CorpusEntity
+                if (i == corpusWord.wordno) {
+                    // Get the index of the word in the entire Quran text
+                    currentIndex = quranWords.take(i).joinToString(" ").length
+                    break
+                }
+            }
+            return currentIndex
+        }
+
+
+
+
+
+
+        fun setAbsoluteNegationtwo(
+            corpus: java.util.ArrayList<CorpusEntity>?,
+            spannableverse: SpannableString
+        ) {
+            var startIndex = 0
+            var currentSentence = spannableverse.toString()
+
+            // Iterate through the corpus list
+            for (i in corpus?.indices!!) {
+                val word = corpus[i]
+
+                // Check for the scenario: Noun (ACC), preceding NEG, following P + PRON
+                val isAcc = word?.detailsone?.contains("ACC")
+                if (isAcc == true
+                    && i > 0 && corpus[i - 1].tagone == "NEG" // Check for preceding NEG tag
+                    && i < (corpus.size - 2) // Ensure there are enough following words
+                    && corpus[i + 1].tagone == "P" // Following word has tag P (preposition)
+                    && corpus[i + 1].tagtwo == "PRON" // Following word has tag PRON (pronoun)
+                ) {
+                    // Get the index of the NEG tag before the ACC noun
+                    startIndex = findNegTagIndex(currentSentence, corpus, i - 1)
+
+                    // Calculate the length of the following phrase (P + PRON)
+                    val firstCharLength = corpus[i + 1].araone?.length ?: 0
+                    val secondCharLength = corpus[i + 1].aratwo?.length ?: 0
+                    val nounLength= corpus[i].araone?.length ?: 0
+
+
+                    var endIndex = currentSentence.indexOf(corpus[i +1].araone+corpus[i+1].aratwo!!)
+                    endIndex+=firstCharLength+secondCharLength
+                    // Apply span (underline) to the sentence between startIndex and endIndex
+                    spannableverse.setSpan(
+                        UnderlineSpan(),
+                        startIndex,
+                        endIndex ,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                }
+            }
+        }
+
+        // Helper function to find the correct index of the NEG tag in the sentence
+        fun findNegTagIndex(
+            sentence: String,
+            corpus: ArrayList<CorpusEntity>,
+            negIndex: Int
+        ): Int {
+            var startIndex = 0
+            var currentIndex = 0
+
+            // Iterate through the sentence to find the correct NEG tag index
+            for (i in 0..negIndex) {
+                val negWord = corpus[i].araone
+                currentIndex = sentence.indexOf(negWord ?: "", currentIndex)
+
+                // If the current word is the NEG tag, return its index
+                if (i == negIndex) {
+                    startIndex = currentIndex
+                    break
+                }
+            }
+            return startIndex
+        }
+
+
+
+
+        fun setAbsoluteNegations(
+            corpus: java.util.ArrayList<CorpusEntity>?,
+            spannableverse: SpannableString
+        ) {
+            var startIndex = 0
+         var currentSentence=""
+          for( i in corpus?.indices!!){
+              val word = corpus.get(i)
+
+
+              // Check for the scenario: Noun (ACC), preceding NEG, following P + PRON
+               currentSentence = spannableverse.toString()
+              val isAcc = word?.detailsone?.contains("ACC")
+              if ((isAcc == true)
+                  && // Noun is ACC
+                  (i > 0) && (corpus[i - 1].tagone == "NEG") && // Preceding tag is NEG
+                  (i < (corpus.size - 2)) && // Check for enough following words
+                  (corpus[i + 1].tagone == "P") && // Following tag is P
+                  (corpus[i + 1].tagtwo == "PRON") // Following tag is PRON
+              )  {
+                  startIndex = currentSentence.indexOf(corpus[i - 1].araone!!)
+                  val firstChar = corpus[i + 1].araone?.length
+                  val secondCHar= corpus[i+1].aratwo?.length!!
+                  val endIndex = currentSentence.indexOf(corpus[i +1].araone+corpus[i+1].aratwo!!)
+
+                  spannableverse.setSpan( UnderlineSpan(),startIndex, endIndex+ firstChar!! +secondCHar!!, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+
+              }
+          }
         }
 
 
