@@ -3,20 +3,16 @@ package org.sj.conjugator.adapter
 import android.content.Context
 import android.graphics.Typeface
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mushafconsolidated.Entities.lysaEnt
 import com.example.mushafconsolidated.R
-import com.example.mushafconsolidated.databinding.GrammarruleListContentBinding
 import com.example.mushafconsolidated.databinding.LysalayoutBinding
 import com.example.utility.QuranGrammarApplication
 import org.sj.conjugator.interfaces.OnItemClickListener
 import org.sj.conjugator.utilities.SharedPref
-import org.sj.verbConjugation.AmrNahiAmr
-import org.sj.verbConjugation.MadhiMudharay
 
 class LaysaAdapter(
     private var sarfSagheer: List<lysaEnt>,

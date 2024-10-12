@@ -143,7 +143,7 @@ class TopicFrag : DialogFragment(), OnItemClickListenerOnLong {
 
             mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
            // allofQuran =                mainViewModel.getsurahayahVerses(surah, ayah).value as ArrayList<QuranEntity>?
-            corpusSurahWord = mainViewModel.getCorpusEntityFilterSurahAya(surah, ayah).value
+            corpusSurahWord = mainViewModel.getCorpusEntityFilterSurahAya(surah, ayah)
 
             val corpusAndQurandata = quranRepository.CorpusAndQuranDataSurahAyah(surah,ayah)
 

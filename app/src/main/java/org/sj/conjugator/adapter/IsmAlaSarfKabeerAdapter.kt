@@ -13,6 +13,7 @@ import com.example.mushafconsolidated.R
 import com.example.utility.QuranGrammarApplication
 import org.sj.conjugator.interfaces.OnItemClickListener
 import org.sj.conjugator.utilities.SharedPref
+import org.sj.data.IsmAlaResult
 import org.sj.verbConjugation.IsmAlaMifaalun
 import org.sj.verbConjugation.IsmAlaMifalatun
 import org.sj.verbConjugation.IsmAlaMifalun
@@ -20,7 +21,7 @@ import org.sj.verbConjugation.IsmAlaMifalun
 @Suppress("SameParameterValue", "SameParameterValue", "SameParameterValue", "SameParameterValue",
     "SameParameterValue", "SameParameterValue"
          )
-class IsmAlaSarfKabeerAdapter(lists: ArrayList<ArrayList<*>>, private val context: Context) :
+class IsmAlaSarfKabeerAdapter(lists: IsmAlaResult?, private val context: Context) :
     RecyclerView.Adapter<IsmAlaSarfKabeerAdapter.ViewHolder>() {
     private var sharedPreferences: SharedPreferences? = null
     var bookmarkpostion = 0
@@ -50,20 +51,24 @@ class IsmAlaSarfKabeerAdapter(lists: ArrayList<ArrayList<*>>, private val contex
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val ismalaf = sarfSagheer[0].size
-        val ismalas = sarfSagheer[1].size
+
         //   if (ismalas == 9) {
         //   IsmAlamifalmifalatunNaqis(holder, 1);
         // } else {
         //     IsmAlamifalmifalatun(holder, 0);
         //  }
-        val mifalun =sarfSagheer[0][0]
-        val mifalatun =sarfSagheer[1][0]
-        val mifaalun = sarfSagheer[2][0]
+        /*
+            ismAlaMifal = listOf(mifalResult) ,
+            ismALAMifalatun =listOf(mifalatunResult),
+            ismAlaMifaalun = listOf(mifaalResult)
+         */
+        val mifalun =sarfSagheer?.ismAlaMifal
+        val mifalatun =sarfSagheer?.ismALAMifalatun
+        val mifaalun = sarfSagheer?.ismAlaMifaalun
 
-        IsmAlamifalmifal(mifalun as IsmAlaMifalun ,holder, 0)
-        IsmAlaMifalatun(mifalatun as IsmAlaMifalatun,holder, 1)
-        IsmAlaMifaal(mifaalun as IsmAlaMifaalun     ,holder, 2)
+        IsmAlamifalmifal(mifalun  ,holder, 0)
+        IsmAlaMifalatun(mifalatun ,holder, 1)
+        IsmAlaMifaal(mifaalun      ,holder, 2)
         gcase(holder)
         ismalanumbers(holder)
         FontSIzeSelection(holder)
@@ -125,15 +130,15 @@ class IsmAlaSarfKabeerAdapter(lists: ArrayList<ArrayList<*>>, private val contex
         }
     }
 
-    private fun IsmAlaMifaal(mifaal: IsmAlaMifaalun, holder: ViewHolder, position: Int) {
-        val mifaalone =  mifaal.nomsinMifaalun
-        val mifaaltwo = mifaal.nomdualMifaalun
+    private fun IsmAlaMifaal(mifaal: List<IsmAlaMifaalun>?, holder: ViewHolder, position: Int) {
+        val mifaalone =  mifaal?.get(0)?.nomsinMifaalun
+        val mifaaltwo = mifaal?.get(0)?.nomdualMifaalun
         val mifaalthree = "-" //String mifaalthree);
-        val mifaalfour =  mifaal.accsinMifaalun
-        val mifaalfive = mifaal.accdualMifaalun
+        val mifaalfour =  mifaal?.get(0)?.accsinMifaalun
+        val mifaalfive = mifaal?.get(0)?.accdualMifaalun
         val mifaalsix = "-" //String mifaalsix);
-        val mifaalseven =  mifaal.gensinMifaalun
-        val mifaaleight =  mifaal.gendualMifaalun
+        val mifaalseven =  mifaal?.get(0)?.gensinMifaalun
+        val mifaaleight =  mifaal?.get(0)?.gendualMifaalun
         val mifaalnine = "-" //mifaalnine);
         //     FontSIzeSelection(holder);
         SetTypeface(holder)
@@ -148,15 +153,15 @@ class IsmAlaSarfKabeerAdapter(lists: ArrayList<ArrayList<*>>, private val contex
         holder.mifaalnine.text = mifaalnine
     }
 
-    private fun IsmAlamifalmifal(mifal: IsmAlaMifalun, holder: ViewHolder, position: Int) {
-        val mifalone =mifal.nomsinMifalun
-        val mifaltwo = mifal.nomdualMifalun //String smifaltwo);
+    private fun IsmAlamifalmifal(mifal: List<IsmAlaMifalun>?, holder: ViewHolder, position: Int) {
+        val mifalone =mifal?.get(0)?.nomsinMifalun
+        val mifaltwo = mifal?.get(0)?.nomdualMifalun //String smifaltwo);
         val mifalthree = "-" //String smifalthree);
-        val mifalfour =mifal.accsinMifalun
-        val mifalfive = mifal.accdualMifalun
+        val mifalfour =mifal?.get(0)?.accsinMifalun
+        val mifalfive = mifal?.get(0)?.accdualMifalun
         val mifalsix = "-"
-        val mifalseven = mifal.gensinMifalun
-        val mifaleight = mifal.gendualMifalun//String smifaleight);
+        val mifalseven = mifal?.get(0)?.gensinMifalun
+        val mifaleight = mifal?.get(0)?.gendualMifalun//String smifaleight);
         val mifalnine = "-" //mifalnine);
         //    FontSIzeSelection(holder);
         SetTypeface(holder)
@@ -173,15 +178,15 @@ class IsmAlaSarfKabeerAdapter(lists: ArrayList<ArrayList<*>>, private val contex
         holder.mifalnine.text = mifalnine
     }
 
-    private fun IsmAlaMifalatun(mifalatun: IsmAlaMifalatun, holder: ViewHolder, position: Int) {
-        val mifalatunone = mifalatun.nomsinMifalatun
-        val mifalatuntwo = mifalatun.nomdualMifalatun
+    private fun IsmAlaMifalatun(mifalatun: List<IsmAlaMifalatun>?, holder: ViewHolder, position: Int) {
+        val mifalatunone = mifalatun?.get(0)?.nomsinMifalatun
+        val mifalatuntwo = mifalatun?.get(0)?.nomdualMifalatun
         val mifalatunthree = "-" //String mifalatunthree);
-        val mifalatunfour = mifalatun.accsinMifalatun
-        val mifalatunfive = mifalatun.accdualMifalatun
+        val mifalatunfour = mifalatun?.get(0)?.accsinMifalatun
+        val mifalatunfive = mifalatun?.get(0)?.accdualMifalatun
         val mifalatunsix = "-" //String mifalatunsix);
-        val mifalatunseven =mifalatun.gensinMifalatun
-        val mifalatuneight =mifalatun.gendualMifalatun
+        val mifalatunseven =mifalatun?.get(0)?.gensinMifalatun
+        val mifalatuneight =mifalatun?.get(0)?.gendualMifalatun
         val mifalatunnine = "-" //mifalatunnine);
         //    FontSIzeSelection(holder);
         SetTypeface(holder)
@@ -323,14 +328,6 @@ class IsmAlaSarfKabeerAdapter(lists: ArrayList<ArrayList<*>>, private val contex
         holder.mifaalnine.typeface = arabicTypeface //(mifaalnine);
     }
 
-    override fun getItemId(position: Int): Long {
-        //  Surah surah = surahArrayList.get(position);
-        return sarfSagheer.size.toLong()
-    }
-
-    fun getItem(position: Int): Any {
-        return sarfSagheer[position]
-    }
 
     override fun getItemCount(): Int {
         //  return sarfSagheer.size();

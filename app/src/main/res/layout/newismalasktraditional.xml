@@ -50,8 +50,9 @@
                         android:gravity="center"
                         android:paddingStart="5.0dip"
                         android:paddingEnd="3.0dip"
+                        android:textStyle="bold"
                         android:text="@string/ismalaone"
-                        android:textSize="20dp" />
+                        android:textSize="40dp" />
 
 
                 </LinearLayout>
@@ -80,6 +81,7 @@
                     android:gravity="center|right"
                     android:paddingStart="5.0dip"
                     android:paddingEnd="3.0dip"
+
                     android:textSize="20dp" />
 
 
@@ -363,7 +365,8 @@
                         android:paddingStart="5.0dip"
                         android:paddingEnd="3.0dip"
                         android:text="@string/ismalatwo"
-                        android:textSize="20dp" />
+                        android:textStyle="bold"
+                        android:textSize="30dp" />
 
 
                 </LinearLayout>
@@ -740,7 +743,8 @@
                         android:paddingStart="5.0dip"
                         android:paddingEnd="3.0dip"
                         android:text="@string/ismalthree"
-                        android:textSize="20dp" />
+                        android:textStyle="bold"
+                        android:textSize="30dp" />
 
 
                 </LinearLayout>
@@ -1063,8 +1067,9 @@
                         android:gravity="center"
                         android:paddingStart="5.0dip"
                         android:paddingEnd="3.0dip"
+                        android:textStyle="bold"
                         android:text="@string/ismalthree"
-                        android:textSize="20dp" />
+                        android:textSize="30dp" />
 
 
                 </LinearLayout>

@@ -1,6 +1,6 @@
 package org.sj.verbConjugation.trilateral.augmented
 
-import org.sj.verbConjugation.AmrNahiAmr
+import org.sj.verbConjugation.Amr
 import org.sj.verbConjugation.FaelMafool
 import org.sj.verbConjugation.MadhiMudharay
 
@@ -16,7 +16,7 @@ class MazeedConjugationResult {
     var finalResult: List<*>
     var madhiMudharay: MadhiMudharay = MadhiMudharay()
     var faelMafool: FaelMafool = FaelMafool()
-    var amrandnahi: AmrNahiAmr = AmrNahiAmr()
+    var amrandnahi: Amr = Amr()
         protected set
     //13 conjugated verbs
     constructor(kov: Int, formulaNo: Int, root: AugmentedTrilateralRoot, originalResult: List<*>) {

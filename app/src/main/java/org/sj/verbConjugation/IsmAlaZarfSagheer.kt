@@ -12,7 +12,14 @@ class IsmAlaZarfSagheer {
     var zarfMafilun: String? = null
     var zarfMafalun: String? = null
     var zarfMafalatun: String? = null
-    constructor()
+    constructor(
+        ismALAMifalatun: List<IsmAlaMifalatun>,
+        ismAlaMifaal: List<IsmAlaMifaalun>,
+        ismAlaMifal: List<IsmAlaMifalun>,
+        zarfMafalatun: List<IsmZarfMafalatun>,
+        zarfMafalun: List<IsmZarfMafalun>,
+        zarfMafilun: List<IsmZarfMafilun>
+    )
     constructor(
 
 

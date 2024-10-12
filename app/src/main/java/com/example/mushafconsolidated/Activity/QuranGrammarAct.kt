@@ -15,6 +15,8 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.text.Spanned
+import android.text.style.UnderlineSpan
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuInflater
@@ -44,12 +46,14 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.media3.common.util.Log
 import androidx.media3.common.util.UnstableApi
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+
 import com.example.Constant
 import com.example.Constant.SURAHFRAGTAG
 import com.example.mushafconsolidated.BottomOptionDialog
@@ -76,6 +80,7 @@ import com.example.mushafconsolidated.fragments.FlowAyahWordAdapter
 import com.example.mushafconsolidated.Adapters.FlowAyahWordAdapterNoMafoolat
 import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.SurahHeader
+import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.quranrepo.QuranRepository
 import com.example.mushafconsolidated.quranrepo.QuranVIewModel
@@ -83,7 +88,9 @@ import com.example.mushafconsolidated.settingsimport.Constants
 import com.example.mushafconsolidatedimport.ParticleColorScheme
 import com.example.sentenceanalysis.SentenceGrammarAnalysis
 import com.example.utility.CorpusUtilityorig
+import com.example.utility.CorpusUtilityorig.Companion.findWordOccurrencesArabic
 import com.example.utility.QuranGrammarApplication
+import com.example.utility.QuranGrammarApplication.Companion.context
 import com.example.utility.ScreenshotUtils
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.color.DynamicColors
@@ -111,11 +118,16 @@ import javax.inject.Inject
 
 import com.google.gson.Gson
 import com.quiz.ArabicVerbQuizActNew
+import java.io.OutputStreamWriter
+import kotlin.collections.List
+import kotlin.concurrent.write
+import kotlin.collections.List as CollectionsList
 
 //import com.example.mushafconsolidated.Entities.JoinVersesTranslationDataTranslation;
 @AndroidEntryPoint
 class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
+    private lateinit var extractedSentencesWithIndices: CollectionsList<Pair<String, Pair<Int, Int>>>
     private val wordDetailLauncher = registerForActivityResult(WordDetailContract()) { wordFound ->
         if (!wordFound) {
             Toast.makeText(this, "Word detail not found", Toast.LENGTH_SHORT).show()
@@ -124,9 +136,9 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
     private var bundles: Bundle? = null
     private lateinit var mainViewModel: QuranVIewModel
-    private var corpusSurahWord: List<CorpusEntity>? = null
+    private var corpusSurahWord: CollectionsList<CorpusEntity>? = null
 
-    private  var corpusGroupedByAyah:LinkedHashMap<Int, ArrayList<CorpusEntity>> =
+    private var corpusGroupedByAyah: LinkedHashMap<Int, ArrayList<CorpusEntity>> =
         LinkedHashMap()
 
 
@@ -170,7 +182,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     private lateinit var soraList: ArrayList<ChaptersAnaEntity>
     private var kana = false
     private var mafoolat = false
-    private lateinit var allofQuran: List<QuranEntity>
+    private lateinit var allofQuran: CollectionsList<QuranEntity>
     private lateinit var shared: SharedPreferences
 
 
@@ -181,12 +193,12 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
     //  private OnClickListener onClickListener;
     //  private val newadapterlist = LinkedHashMap<Int, ArrayList<NewCorpusAyahWord>>()
-    private var mafoolbihiwords: List<MafoolBihi?> = emptyList()
-    private var liajlihient: List<LiajlihiEnt?>? = emptyList()
-    private var mutlaqEntList: List<MafoolMutlaqEnt?> = emptyList()
-    private var tameezEntList: List<TameezEnt?> = emptyList()
-    private var badalErabNotesEnts: List<BadalErabNotesEnt?> = emptyList()
-    private var jumlahaliya: List<HalEnt?> = emptyList()
+    private var mafoolbihiwords: CollectionsList<MafoolBihi?> = emptyList()
+    private var liajlihient: CollectionsList<LiajlihiEnt?>? = emptyList()
+    private var mutlaqEntList: CollectionsList<MafoolMutlaqEnt?> = emptyList()
+    private var tameezEntList: CollectionsList<TameezEnt?> = emptyList()
+    private var badalErabNotesEnts: CollectionsList<BadalErabNotesEnt?> = emptyList()
+    private var jumlahaliya: CollectionsList<HalEnt?> = emptyList()
     private var isMakkiMadani = 0
     var chapterno = 0
     private lateinit var parentRecyclerView: RecyclerView
@@ -296,6 +308,11 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         rukucount = list[chapterno - 1].rukucount
         surahArabicName = surahname.toString()
         surahEnglishName = list[chapterno - 1].nameenglish
+        val utils = Utils(this)
+        //  extractLaNafiyaJinsone()
+       // extractLaNafiya()
+
+
 
         supportFragmentManager.commit {
             replace<NewSurahDisplayFrag>(R.id.frame_container_qurangrammar, SURAHFRAGTAG)
@@ -305,6 +322,114 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             supportFragmentManager.saveBackStack("replacement")
         }
     }
+
+    private fun extractLaNafiya() {
+        mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
+
+        val allAbsoluteNegationData = ArrayList<List<String>>()
+
+
+        for (i in 2..114) {
+            val corpus = mainViewModel.getCorpusEntityFilterSurah(1)
+            val quran = mainViewModel.getquranbySUrah(i)
+            for (s in quran.value!!.indices) {
+
+                val corpusEntity = mainViewModel.getCorpusEntityFilterSurahAya(
+                    i,
+                    quran.value!![s].ayah
+                ) as ArrayList<CorpusEntity>
+
+
+                val absoluteNegationDataList =
+                    setAbsoluteNegations(corpusEntity, quran.value!![s].qurantext)
+                if (absoluteNegationDataList.isNotEmpty()) {
+                    allAbsoluteNegationData.add(absoluteNegationDataList)
+                }
+                println(quran.value!![s].ayah)
+            }
+
+        }
+        val fileName = "absolute_negation_data.txt"
+        writeAbsoluteNegationDataToFile(context!!, allAbsoluteNegationData, fileName)
+    }
+
+    @OptIn(UnstableApi::class)
+    fun writeAbsoluteNegationDataToFile(context: Context, allAbsoluteNegationData: ArrayList<List<String>>, fileName: String) {
+        try {
+            val fileOutputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE)
+            val outputStreamWriter = OutputStreamWriter(fileOutputStream)
+
+            for (absoluteNegationDataList in allAbsoluteNegationData) {
+                for (dataString in absoluteNegationDataList) {
+                    outputStreamWriter.write(dataString + "\n") // Write each data string to a new line
+                }
+            }
+
+            outputStreamWriter.close()
+        } catch (e: Exception) {
+            Log.e("FileIO", "Error writing to file: ${e.message}")
+        }
+    }
+
+    fun setAbsoluteNegations(
+        corpus: java.util.ArrayList<CorpusEntity>?,
+        spannableVerse: String
+    ): List<String> {
+        val absoluteNegationData = mutableListOf<String>() // List to store the data
+
+        if (corpus == null) return absoluteNegationData // Handle null corpus
+
+        for (i in corpus.indices) {
+            val word = corpus[i]
+
+            // Check for the scenario: Noun (ACC), preceding NEG, following P + PRON
+            val isAcc = word.detailsone!!.contains("ACC")
+            if (isAcc &&
+                i > 0 && corpus[i - 1].tagone == "NEG" &&
+                corpus[i].tagone == "N" &&
+                i < corpus.size - 2 &&
+                corpus[i + 1].tagone == "P" // Following word is P (with or without PRON)
+            ) {
+                val targetWords = listOf("لَآ", "لَا", "لَّا")
+                val occurrences = findWordOccurrencesArabic(spannableVerse.toString(), targetWords)
+
+                // Find the start index of the NEG word
+                val startIndex =
+                    occurrences.firstOrNull { (wordNo, _) -> corpus[i - 1].wordno == wordNo }?.second
+                        ?: -1
+
+                // Build the prepositional phrase
+                val prepositionalPhrase = if (corpus[i + 1].tagtwo!!.contains("PRON")) {
+                    corpus[i + 1].araone + corpus[i + 1].aratwo
+                } else {
+                    corpus[i + 1].araone
+                }
+
+                // Find the indices for the prepositional phrase
+                val phraseStartIndex =
+                    spannableVerse.indexOf(prepositionalPhrase.toString(), startIndex)
+                val phraseEndIndex = phraseStartIndex + prepositionalPhrase!!.length
+
+                // Apply underline span
+                if (startIndex != -1 && phraseStartIndex != -1) {
+                    /*    spannableVerse.setSpan(
+                            UnderlineSpan(),
+                            startIndex,
+                            phraseEndIndex,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )*/
+
+                    // Add data to the list
+                    val dataString =
+                        "${word.surah}|${word.ayah}|${word.wordno}|$startIndex|$phraseEndIndex"
+                    absoluteNegationData.add(dataString)
+                }
+            }
+        }
+
+        return absoluteNegationData // Return the list of data strings
+    }
+
 
     private fun loadSurahFromIntentData() {
         bundles = intent.extras
@@ -697,7 +822,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                 executeSurahWordByWord()
                 //     asyncTaskcorpus = new refactoringcurrentSurahSyncWordByWord().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
-        val sura: String = this.soraList[selectedSurahIndex - 1].chapterid.toString()
+        val sura: String = this.soraList[selectedSurahIndex].chapterid.toString()
         this.chapterno = this.soraList[selectedSurahIndex].chapterid
         surahArabicName = this.soraList[selectedSurahIndex].nameenglish
         surahArabicName = this.soraList[selectedSurahIndex].namearabic
@@ -793,8 +918,8 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         val corpus = CorpusUtilityorig(this)
         val scope = CoroutineScope(Dispatchers.Main)
 
- //bysurah(dialog, scope,  listener)
-      bysurahjsonStorage(dialog, scope, listener)
+        //bysurah(dialog, scope,  listener)
+        bysurahjsonStorage(dialog, scope, listener)
 
     }
 
@@ -804,17 +929,17 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         return try {
             file.readText()
         } catch (e: Exception) {
-           // e.printStackTrace()
+            // e.printStackTrace()
             null // Return null if an error occurs
         }
     }
 
 
-   @OptIn(UnstableApi::class)
+    @OptIn(UnstableApi::class)
     private fun bysurahjsonStorage(
-       dialog: AlertDialog,
-       ex: CoroutineScope,
-       listener: OnItemClickListenerOnLong,
+        dialog: AlertDialog,
+        ex: CoroutineScope,
+        listener: OnItemClickListenerOnLong,
     ) {
         runOnUiThread {
             dialog.show()
@@ -824,21 +949,23 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         ex.launch(Dispatchers.IO) {
             try {
                 val fileName = "surah$chapterno.json"
-              //  var newnewadapterlist: LinkedHashMap<Int, ArrayList<NewCorpusEntity>>? = null
+                //  var newnewadapterlist: LinkedHashMap<Int, ArrayList<NewCorpusEntity>>? = null
                 val corpusAndQurandata = quranRepository.CorpusAndQuranDataSurah(chapterno)
                 val jsonString = loadJsonFromFile(QuranGrammarApplication.context!!, fileName)
                 if (jsonString != null) {
-                    val mapType = object : TypeToken<LinkedHashMap<Int, ArrayList<CorpusEntity>>>() {}.type
+                    val mapType =
+                        object : TypeToken<LinkedHashMap<Int, ArrayList<CorpusEntity>>>() {}.type
                     val gson = Gson()
                     allofQuran = corpusAndQurandata.allofQuran
                     corpusGroupedByAyah = gson.fromJson(jsonString, mapType)
                     println("check")
                 } else {
 
-                    allofQuran=   corpusAndQurandata.allofQuran
-                    corpusSurahWord=corpusAndQurandata.copusExpandSurah
+                    allofQuran = corpusAndQurandata.allofQuran
+                    corpusSurahWord = corpusAndQurandata.copusExpandSurah
 
-                    corpusGroupedByAyah = corpusSurahWord!!.groupBy { it.ayah } as LinkedHashMap<Int, ArrayList<CorpusEntity>>
+                    corpusGroupedByAyah =
+                        corpusSurahWord!!.groupBy { it.ayah } as LinkedHashMap<Int, ArrayList<CorpusEntity>>
 
                     if (mafoolat) {
                         val chapterData = quranRepository.getChapterData(chapterno)
@@ -862,9 +989,10 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                     if (jumptostatus) {
                         surahorpart = chapterno
                     }
-                    val header=SurahHeader(rukucount,versescount,chapterno,surahArabicName," ")
+                    val header =
+                        SurahHeader(rukucount, versescount, chapterno, surahArabicName, " ")
 
-                 //   HightLightKeyWord(allofQuran)
+                    //   HightLightKeyWord(allofQuran)
 
                     val adapter = if (!mushafview && mafoolat) {
                         FlowAyahWordAdapter(
@@ -895,10 +1023,10 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                             listener,
 
 
-                        )
+                            )
                     }
-              //      adapter.addContext(this@QuranGrammarAct)
-                  //  adapter.addContext(this@QuranGrammarAct)
+                    //      adapter.addContext(this@QuranGrammarAct)
+                    //  adapter.addContext(this@QuranGrammarAct)
                     parentRecyclerView.setHasFixedSize(true)
                     parentRecyclerView.adapter = adapter
                     parentRecyclerView.post { parentRecyclerView.scrollToPosition(verseNo) }
@@ -917,7 +1045,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     @OptIn(UnstableApi::class)
     private fun saveJsonFile(context: Context, fileName: String, jsonData: String) {
         try {
-            val fileOutputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE)
+            val fileOutputStream = context.openFileOutput(fileName, MODE_PRIVATE)
             fileOutputStream.write(jsonData.toByteArray())
             fileOutputStream.close()
             Log.d("JSON", "File saved successfully: $fileName")
@@ -941,7 +1069,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     @SuppressLint("RestrictedApi")
     override fun onItemClick(v: View, position: Int) {
 
-    //   val tag=v.tag as String
+        //   val tag=v.tag as String
         val colortag = shared.getBoolean("colortag", true)
         val tag = v.tag
         if (tag != null && tag.equals("header")) {
@@ -1034,6 +1162,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             }
         }
     }
+
     @SuppressLint("RestrictedApi")
     fun qurangrammarmenu(view: View, position: Int) {
         val tag = view.tag as String
@@ -1050,13 +1179,12 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             "jumptofb" -> handleJumpTo(position)
             "sharefb" -> handleShare()
             "helpfb" -> handleHelp(position)
-         //  "overflow_img" ->   overFlowMenu(view, position)
+            //  "overflow_img" ->   overFlowMenu(view, position)
             "help_img" -> handleHelpImage(position)
             "tafsir" -> handleTafsir(position)
             "qurantext" -> handleQuranText(position)
         }
     }
-
 
 
     private fun handleOverflowBottom(position: Int) {
@@ -1072,7 +1200,8 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         ScreenshotUtils.takeScreenshot(window.decorView, this)
     }
 
-    private fun handleJumpTo(position: Int) {    initDialogComponents(position)
+    private fun handleJumpTo(position: Int) {
+        initDialogComponents(position)
     }
 
     private fun handleColorize(view: View) {
@@ -1298,7 +1427,6 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     }
 
 
-
     private fun handleHelp(position: Int) {
         val chapterno = corpusSurahWord!![position - 1].surah
         val dataBundle = Bundle()
@@ -1308,6 +1436,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         SurahSummary.newInstance(chapterno).show(supportFragmentManager, NamesDetail.TAG)
 
     }
+
     private fun handleHelpImage(position: Int) {
         println("check")/* ParticleColorScheme.newInstance()
                  .show(this@QuranGrammarAct.supportFragmentManager, WordAnalysisBottomSheet.TAG)*/
@@ -1325,7 +1454,8 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
 
     }
-    private fun handleQuranText(position: Int){
+
+    private fun handleQuranText(position: Int) {
         val word: QuranEntity = if (position != 0) {
             allofQuran[position - 1]
         } else {
@@ -1337,7 +1467,8 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         loadItemList(dataBundle)
 
     }
-    private fun handleTafsir(position: Int){
+
+    private fun handleTafsir(position: Int) {
         val readingintent = Intent(this@QuranGrammarAct, TafsirFullscreenActivity::class.java)
         val chapterno = allofQuran[position - 1].surah
         val verse = allofQuran[position - 1].ayah
@@ -1375,8 +1506,8 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
     private fun bookMarkSelected(position: Int) {
         //  position = flowAyahWordAdapter.getAdapterposition();
-        val chapterno = allofQuran[position-1].surah
-        val verse =allofQuran[position-1].ayah
+        val chapterno = allofQuran[position - 1].surah
+        val verse = allofQuran[position - 1].ayah
         val en = BookMarks()
         en.header = "pins"
         en.chapterno = chapterno.toString()

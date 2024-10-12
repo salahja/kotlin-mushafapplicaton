@@ -27,6 +27,7 @@ import org.sj.conjugator.activity.ConjugatorTabsActivity
 import org.sj.conjugator.adapter.SarfMujarradSarfSagheerListingAdapter
 import org.sj.conjugator.interfaces.OnItemClickListener
 import org.sj.conjugator.utilities.GatherAll
+import org.sj.data.MujarradResult
 import java.util.concurrent.Executors
 @AndroidEntryPoint
 class RulesMujarradVerbList : Fragment {
@@ -127,30 +128,32 @@ class RulesMujarradVerbList : Fragment {
         mujarradBYWeakness: ArrayList<MujarradVerbs>
     ) {
         for (s in mujarradBYWeakness) {
-            val listing: ArrayList<ArrayList<*>> = GatherAll.instance.getMujarradListing(
+            val result: MujarradResult? = GatherAll.instance.getMujarradListing(
                 verbmood, s.root
             )
 
-            val ss = SarfSagheer()
-            ss.weakness = listing[0][0].toString()
-            ss.wazanname = listing[0][1].toString()
-            ss.verbroot = listing[0][2].toString()
-            ss.madhi = listing[0][3].toString()
-            ss.madhimajhool = listing[0][4].toString()
-            ss.mudharay = listing[0][5].toString()
-            ss.mudharaymajhool = listing[0][6].toString()
-            ss.amrone = listing[0][7].toString()
-            ss.nahiamrone = listing[0][8].toString()
-            ss.ismfael = listing[0][9].toString()
-            ss.ismmafool = listing[0][10].toString()
-            ss.ismalaone = listing[0][11].toString()
-            ss.ismalatwo = listing[0][12].toString()
-            ss.ismalathree = listing[0][13].toString()
-            ss.zarfone = listing[0][13].toString()
-            ss.zarftwo = listing[0][15].toString()
-            ss.zarfthree = listing[0][16].toString()
-            ss.verbtype = listing[0][17].toString()
-            ss.wazan = listing[0][18].toString()
+
+            val ss = SarfSagheer().apply {
+                weakness = result?.verbDetailsList?.get(0)?.verbtype
+                wazanname = result?.verbDetailsList?.get(0)?.babname
+                verbroot = result?.verbDetailsList?.get(0)?.verbroot
+                madhi = result?.madhiMudharayList?.get(0)?.hua
+                madhimajhool = result?.madhiMudharayList?.get(1)?.hua
+                mudharay = result?.madhiMudharayList?.get(2)?.hua
+                mudharaymajhool = result?.madhiMudharayList?.get(3)?.hua
+                amrone = result?.amrList?.get(0)?.anta
+                nahiamrone = result?.nahiAmr?.get(0)?.anta
+                ismfael = result?.ismFaelMafoolList?.get(0)?.nomsinM
+                ismmafool = result?.ismFaelMafoolList?.get(1)?.nomsinM
+                ismalaone=""
+                ismalatwo=""
+                ismalathree=""
+                zarfone=""
+                zarftwo=""
+                zarfthree=""
+                verbtype = result?.verbDetailsList?.get(0)?.mazeedormujarad
+                wazan = result?.verbDetailsList?.get(0)?.wazannumberorname
+            }
             /*
       ss.setWeakness(listing.get(0).get(0).toString());
       ss.setWazanname(listing.get(0).get(1).toString());

@@ -1,6 +1,6 @@
 package org.sj.verbConjugation
 
-class AmrNahiAmr {
+class Amr {
 
     var anta: String? = null
     var antuma: String? = null

@@ -1,7 +1,14 @@
 package org.sj.conjugator.utilities
 
-import dagger.hilt.android.AndroidEntryPoint
+
+
+import VerbDetails
 import org.sj.conjugator.activity.SystemConstants
+import org.sj.data.IsmAlaResult
+import org.sj.data.IsmFaelMafoolResult
+import org.sj.data.IsmZarfResult
+import org.sj.data.MazeedResult
+import org.sj.data.MujarradResult
 import org.sj.nounConjugation.trilateral.augmented.AugmentedTrilateralActiveParticipleConjugator
 import org.sj.nounConjugation.trilateral.augmented.AugmentedTrilateralPassiveParticipleConjugator
 import org.sj.nounConjugation.trilateral.unaugmented.UnaugmentedTrilateralActiveParticipleConjugator
@@ -12,43 +19,50 @@ import org.sj.nounConjugation.trilateral.unaugmented.modifier.instrumental.Instr
 import org.sj.nounConjugation.trilateral.unaugmented.modifier.passiveparticiple.PassiveParticipleModifier
 import org.sj.nounConjugation.trilateral.unaugmented.modifier.timeandplace.TimeAndPlaceModifier
 import org.sj.nounConjugation.trilateral.unaugmented.timeandplace.TimeAndPlaceConjugator
-import org.sj.verbConjugation.AmrNahiAmr
+import org.sj.verbConjugation.Amr
 import org.sj.verbConjugation.FaelMafool
 import org.sj.verbConjugation.IsmAlaMifaalun
 import org.sj.verbConjugation.IsmAlaMifalatun
 import org.sj.verbConjugation.IsmAlaMifalun
-import org.sj.verbConjugation.IsmAlaZarfSagheer
 import org.sj.verbConjugation.IsmZarfMafalatun
 import org.sj.verbConjugation.IsmZarfMafalun
 import org.sj.verbConjugation.IsmZarfMafilun
 import org.sj.verbConjugation.MadhiMudharay
-import org.sj.verbConjugation.VerbDetails
+import org.sj.verbConjugation.NahiAmr
+import org.sj.verbConjugation.trilateral.augmented.AugmentedPastVerb
+import org.sj.verbConjugation.trilateral.augmented.AugmentedPresentVerb
+
+
+import org.sj.verbConjugation.trilateral.augmented.AugmentedTrilateralRoot
 import org.sj.verbConjugation.trilateral.augmented.active.past.AugmentedActivePastConjugator
 import org.sj.verbConjugation.trilateral.augmented.active.present.AugmentedActivePresentConjugator
 import org.sj.verbConjugation.trilateral.augmented.imperative.AugmentedImperativeConjugator
+import org.sj.verbConjugation.trilateral.augmented.imperative.AugmentedImperativeVerb
 import org.sj.verbConjugation.trilateral.augmented.modifier.AugmentedTrilateralModifier
 import org.sj.verbConjugation.trilateral.augmented.passive.past.AugmentedPassivePastConjugator
 import org.sj.verbConjugation.trilateral.augmented.passive.present.AugmentedPassivePresentConjugator
 import org.sj.verbConjugation.trilateral.unaugmented.ConjugationResult
 import org.sj.verbConjugation.trilateral.unaugmented.UnaugmentedImperativeConjugator
+import org.sj.verbConjugation.trilateral.unaugmented.UnaugmentedTrilateralRoot
 import org.sj.verbConjugation.trilateral.unaugmented.active.ActivePastConjugator
 import org.sj.verbConjugation.trilateral.unaugmented.active.ActivePresentConjugator
 import org.sj.verbConjugation.trilateral.unaugmented.modifier.UnaugmentedTrilateralModifier
 import org.sj.verbConjugation.trilateral.unaugmented.passive.PassivePastConjugator
 import org.sj.verbConjugation.trilateral.unaugmented.passive.PassivePresentConjugator
 import org.sj.verbConjugation.util.KovRulesManager
-import org.sj.verbConjugation.util.OSarfDictionary
+import org.sj.verbConjugation.util.SarfDictionaryAmended
+import org.sj.verbConjugation.util.TrilateralKovRule
 
 class GatherAll {
     fun getMujarradListing(
         verbmood: String?,
         verbroot: String?,
         unaugmentedFormula: String,
-                          ): ArrayList<ArrayList<*>> {
+                          ): MujarradResult? {
         return buildUnaugmentedLists(verbmood, verbroot, unaugmentedFormula)
     }
 
-    fun getMujarradListing(verbmood: String, verbroot: String): ArrayList<ArrayList<*>> {
+    fun getMujarradListing(verbmood: String, verbroot: String): MujarradResult? {
         return buildUnaugmentedLists(verbmood, verbroot)
         /*
           ArrayList<ArrayList> skabeer = buildUnaugmentedLists(verbmood, verbroot);
@@ -56,229 +70,175 @@ class GatherAll {
          */
     }
 
-    fun getMazeedListing(verbmood: String, verbroot: String): ArrayList<ArrayList<*>> {
+    fun getMazeedListing(verbmood: String, verbroot: String): MazeedResult? {
         return buildMazeedList(verbmood, verbroot)
     }
 
     fun getMujarradParticiple(
         verbroot: String?,
         unaugmentedFormula: String?,
-                             ): ArrayList<ArrayList<*>> {
+                             ): IsmFaelMafoolResult? {
         return buildMujarradParticipleList(verbroot!!, unaugmentedFormula!!)
     }
 
-    fun getMujarradIsmAla(verbroot: String?, unaugmentedFormula: String?): ArrayList<ArrayList<*>> {
+    fun getMujarradIsmAla(verbroot: String?, unaugmentedFormula: String?): IsmAlaResult? {
         return buildUnAugmentedNounofInstrument(verbroot!!, unaugmentedFormula!!)
     }
 
-    fun getMujarradZarf(verbroot: String, unaugmentedFormula: String): ArrayList<ArrayList<*>> {
+    fun getMujarradZarf(verbroot: String, unaugmentedFormula: String): IsmZarfResult? {
         return buildUnAugmentedNounofTimeAndPlace(verbroot, unaugmentedFormula)
     }
-
     private fun buildUnAugmentedNounofTimeAndPlace(
-        verbroot: String,
-        unaugmentedFormula: String,
-                                                  ): ArrayList<ArrayList<*>> {
-        val skabeer = ArrayList<ArrayList<*>>()
-        val c1 = verbroot[0]
-        val c2 = verbroot[1]
-        val c3 = verbroot[2]
-        val rule = KovRulesManager.instance.getTrilateralKovRule(c1, c2, c3)
+        verbRoot: String,
+        unaugmentedFormula: String
+    ): IsmZarfResult? {
+        // Get the first, second, and third characters of the root
+        val firstCharacter = verbRoot[0]
+        val secondCharacter = verbRoot[1]
+        val thirdCharacter = verbRoot[2]
 
+        // Retrieve the rule based on the KOV
+        val rule = KovRulesManager.instance.getTrilateralKovRule(firstCharacter, secondCharacter, thirdCharacter)
+            ?: return null
 
-        val ismZarfMafilunarr = ArrayList<IsmZarfMafilun>()
-        val ismzarfmafalatunarr = ArrayList<IsmZarfMafalatun>()
-        val ismzarfmafalunarr = ArrayList<IsmZarfMafalun>()
-        val unaugmentedTrilateralRoot =
-            OSarfDictionary.instance.getUnaugmentedTrilateralRoots(verbroot, unaugmentedFormula)
-        /*
-    "A" -> "مَفْعَل"
-"B" -> "مَفْعِل"
-"C" -> "مَفْعَلَة"
-     */if (unaugmentedTrilateralRoot != null) {
+        // Retrieve the unaugmented trilateral root
+        val unaugmentedTrilateralRoot = SarfDictionaryAmended.instance.getUnaugmentedTrilateralRoots(verbRoot, unaugmentedFormula)
+            ?: return null
 
-            val zarfconjugator = TimeAndPlaceConjugator.instance
-            val zarfmodifier = TimeAndPlaceModifier.instance
-            val mafalconjuationlist =
-                zarfconjugator.createNounList(unaugmentedTrilateralRoot, "مَفْعَل")
-            val mafal = zarfmodifier.build(
-                unaugmentedTrilateralRoot,
-                rule!!.kov,
-                mafalconjuationlist,
-                "مَفْعَل"
-                                          )
-            val zarfinalmafal = mafal.finalResult
-            val mafilconjugationlist =
-                zarfconjugator.createNounList(unaugmentedTrilateralRoot, "مَفْعِل")
-            val mafil = zarfmodifier.build(
-                unaugmentedTrilateralRoot,
-                rule.kov,
-                mafilconjugationlist,
-                "مَفْعِل"
-                                          )
-            val zarffinalmafil = mafil.finalResult
-            val mafalatunconjugationlist =
-                zarfconjugator.createNounList(unaugmentedTrilateralRoot, "مَفْعَلَة")
-            val mafalatun = zarfmodifier.build(
-                unaugmentedTrilateralRoot,
-                rule.kov,
-                mafalatunconjugationlist,
-                "مَفْعَلَة"
-                                              )
-            val zarffinalmafalatun = mafalatun.finalResult
-            val zarfmafal: MutableList<String> = ArrayList()
-            val zarfmafil: MutableList<String> = ArrayList()
-            val zarfmafalatun: MutableList<String> = ArrayList()
-            for (s in zarfinalmafal) {
-                if (s.toString().isNotEmpty()) {
-                    zarfmafal.add(s.toString())
-                }
-            }
-            for (s in zarffinalmafil) {
-                if (s.toString().isNotEmpty()) {
-                    zarfmafil.add(s.toString())
-                }
-            }
-            for (s in zarffinalmafalatun) {
-                if (s.toString().isNotEmpty()) {
-                    zarfmafalatun.add(s.toString())
-                }
-            }
+        // Initialize the conjugator and modifier for time and place
+        val zarfConjugator = TimeAndPlaceConjugator.instance
+        val zarfModifier = TimeAndPlaceModifier.instance
 
+        // Create and modify noun lists for different patterns
+        val mafalConjugationResult = zarfConjugator.createNounList(unaugmentedTrilateralRoot, "مَفْعَل")
+        val mafalResult = zarfModifier.build(unaugmentedTrilateralRoot, rule.kov, mafalConjugationResult, "مَفْعَل").zarfMafalun
 
-            ismZarfMafilunarr.add( mafil.zarfMafilun)
-            ismzarfmafalatunarr.add(  mafalatun.zarfMafalatun)
-            ismzarfmafalunarr.add( mafal.zarfMafalun)
-            skabeer.add(ismZarfMafilunarr)
-            skabeer.add( ismzarfmafalatunarr )
-            skabeer.add(ismzarfmafalunarr)
-            return skabeer
-        }
-        return skabeer
+        val mafilConjugationResult = zarfConjugator.createNounList(unaugmentedTrilateralRoot, "مَفْعِل")
+        val mafilResult = zarfModifier.build(unaugmentedTrilateralRoot, rule.kov, mafilConjugationResult, "مَفْعِل").zarfMafilun
+
+        val mafalatunConjugationResult = zarfConjugator.createNounList(unaugmentedTrilateralRoot, "مَفْعَلَة")
+        val mafalatunResult = zarfModifier.build(unaugmentedTrilateralRoot, rule.kov, mafalatunConjugationResult, "مَفْعَلَة").zarfMafalatun
+
+        // Build and return the IsmZarfResult using the results from each pattern
+        return IsmZarfResult(
+            ismZarfMafilun = listOf(mafilResult),
+            ismZarfMafalatun = listOf(mafalatunResult),
+            ismZarfMafalun = listOf(mafalResult)
+        )
     }
 
+
     private fun buildUnAugmentedNounofInstrument(
-        verbroot: String,
-        unaugmentedFormula: String,
-                                                ): ArrayList<ArrayList<*>> {
-        val skabeer = ArrayList<ArrayList<*>>()
-        val c1 = verbroot[0]
-        val c2 = verbroot[1]
-        val c3 = verbroot[2]
-        val ismalamifalunarr = ArrayList<IsmAlaMifalun>()
-        val ismalamifalatunarr= ArrayList<IsmAlaMifalatun>()
-        val ismaalamifaalunarr = ArrayList<IsmAlaMifaalun>()
+        verbRoot: String,
+        unaugmentedFormula: String
+    ): IsmAlaResult? {
+        // Get the first, second, and third characters of the root
+        val firstCharacter = verbRoot[0]
+        val secondCharacter = verbRoot[1]
+        val thirdCharacter = verbRoot[2]
 
-        val alamifal :IsmAlaMifalun
-        val alaMifalatun:IsmAlaMifalatun
+        // Retrieve the rule based on the KOV
+        val rule = KovRulesManager.instance.getTrilateralKovRule(firstCharacter, secondCharacter, thirdCharacter)
+            ?: return null
 
-        val alaMifaalun:IsmAlaMifaalun
+        // Retrieve the unaugmented trilateral root
+        val unaugmentedTrilateralRoot = SarfDictionaryAmended.instance.getUnaugmentedTrilateralRoots(verbRoot, unaugmentedFormula)
+            ?: return null
 
-        val rule = KovRulesManager.instance.getTrilateralKovRule(c1, c2, c3)
-        val unaugmentedTrilateralRoot =
-            OSarfDictionary.instance.getUnaugmentedTrilateralRoots(verbroot, unaugmentedFormula)
-        if (unaugmentedTrilateralRoot != null) {
-            val conjugator = StandardInstrumentalConjugator.instance
-            val modifier = InstrumentalModifier.instance
-            val mifal = conjugator.createNounList(unaugmentedTrilateralRoot, "مِفْعَل")
-            val mifalunResult: ConjugationResult =
-                modifier.build(unaugmentedTrilateralRoot, rule!!.kov, mifal, "مِفْعَل")
+        // Initialize conjugator and modifier
+        val conjugator = StandardInstrumentalConjugator.instance
+        val modifier = InstrumentalModifier.instance
 
-            val mifalatun = conjugator.createNounList(unaugmentedTrilateralRoot, "مِفْعَلَة")
-            val mifalatunResult: ConjugationResult =
-                modifier.build(unaugmentedTrilateralRoot, rule.kov, mifalatun, "مِفْعَلَة")
+        // Create and modify the noun list for each pattern
+        val mifal = conjugator.createNounList(unaugmentedTrilateralRoot, "مِفْعَل")
+        val mifalResult = modifier.build(unaugmentedTrilateralRoot, rule.kov, mifal, "مِفْعَل").alaMifalun
 
-            val mifaal = conjugator.createNounList(unaugmentedTrilateralRoot, "مِفْعَال")
-            val MifaalResult            : ConjugationResult =
-                modifier.build(unaugmentedTrilateralRoot, rule.kov, mifaal, "مِفْعَال")
+        val mifalatun = conjugator.createNounList(unaugmentedTrilateralRoot, "مِفْعَلَة")
+        val mifalatunResult = modifier.build(unaugmentedTrilateralRoot, rule.kov, mifalatun, "مِفْعَلَة").alaMifalatun
 
-            val faalatun = conjugator.createNounList(unaugmentedTrilateralRoot, "فَعَّالَة")
-            val conjResultfaalatun: ConjugationResult =
-                modifier.build(unaugmentedTrilateralRoot, rule.kov, faalatun, "فَعَّالَة")
-            val alamifal: MutableList<String> = ArrayList()
-            val alamifalatun: MutableList<String> = ArrayList()
-            val alamifaal: MutableList<String> = ArrayList()
+        val mifaal = conjugator.createNounList(unaugmentedTrilateralRoot, "مِفْعَال")
+        val mifaalResult = modifier.build(unaugmentedTrilateralRoot, rule.kov, mifaal, "مِفْعَال").alaMifaalun
 
-            val ismfalamifalun = mifalunResult.alaMifalun
-            val ismfalamifalatun = mifalatunResult.alaMifalatun
-            val ismfalamifaaal = MifaalResult.alaMifaalun
-            ismalamifalunarr.add(ismfalamifalun)
-            ismalamifalatunarr.add(ismfalamifalatun)
-            ismaalamifaalunarr.add(ismfalamifaaal)
-            skabeer.add(ismalamifalunarr)
-            skabeer.add(ismalamifalatunarr)
-            skabeer.add(ismaalamifaalunarr)
-            return skabeer
-        }
-        return skabeer
+        // Build the result using the IsmAlaResult data class
+        return IsmAlaResult(
+            ismAlaMifal = listOf(mifalResult) ,
+            ismALAMifalatun =listOf(mifalatunResult),
+            ismAlaMifaalun = listOf(mifaalResult)
+        )
     }
 
     private fun buildMujarradParticipleList(
-        verbroot: String,
-        unaugmentedFormula: String,
-                                           ): ArrayList<ArrayList<*>> {
+        verbRoot: String,
+        unaugmentedFormula: String
+    ): IsmFaelMafoolResult? {
+        // Extract the root characters
+        val firstCharacter = verbRoot[0]
+        val secondCharacter = verbRoot[1]
+        val thirdCharacter = verbRoot[2]
 
-        val c1 = verbroot[0]
-        val c2 = verbroot[1]
-        val c3 = verbroot[2]
+        // Retrieve the KOV rule
+        val rule = KovRulesManager.instance.getTrilateralKovRule(firstCharacter, secondCharacter, thirdCharacter)
+            ?: return null
 
-        val finallist = ArrayList<ArrayList<*>>()
-        val arrayofFaelMafool = ArrayList<FaelMafool>()
-        val faelobj: FaelMafool
-        val mafoolobj: FaelMafool
+        // Retrieve the unaugmented trilateral root
+        val unaugmentedTrilateralRoot = SarfDictionaryAmended.instance.getUnaugmentedTrilateralRoots(verbRoot, unaugmentedFormula)
+            ?: return null
 
-        val rule = KovRulesManager.instance.getTrilateralKovRule(c1, c2, c3)
-        val unaugmentedTrilateralRoot =
-            OSarfDictionary.instance.getUnaugmentedTrilateralRoots(verbroot, unaugmentedFormula)
-        //ismfale and ismmafool
-        val conjugatedIsmFael =
-            UnaugmentedTrilateralActiveParticipleConjugator.instance.createNounList(
-                unaugmentedTrilateralRoot,
-                unaugmentedTrilateralRoot.conjugation!!
-                                                                                   )
-        val conjugationResult = ActiveParticipleModifier.instance
-            .build(unaugmentedTrilateralRoot, rule!!.kov, conjugatedIsmFael, "")
-        val conjugatedIsmMafool =
-            UnaugmentedTrilateralPassiveParticipleConjugator.instance.createNounList(
-                unaugmentedTrilateralRoot,
-                unaugmentedTrilateralRoot.conjugation!!
-                                                                                    )
-        val ismmafoolresult = PassiveParticipleModifier.instance
-            .build(unaugmentedTrilateralRoot, rule.kov, conjugatedIsmMafool, "")
+        // Create noun lists for active and passive participles
+        val conjugatedIsmFael = UnaugmentedTrilateralActiveParticipleConjugator.instance.createNounList(
+            unaugmentedTrilateralRoot, unaugmentedTrilateralRoot.conjugation!!
+        )
 
+        val conjugatedIsmMafool = UnaugmentedTrilateralPassiveParticipleConjugator.instance.createNounList(
+            unaugmentedTrilateralRoot, unaugmentedTrilateralRoot.conjugation!!
+        )
 
-        faelobj = conjugationResult.faelMafool
-        mafoolobj = ismmafoolresult.faelMafool
-        arrayofFaelMafool.add(faelobj)
-        arrayofFaelMafool.add(mafoolobj)
-        finallist.add(arrayofFaelMafool)
-        val vdetails: MutableList<String> = ArrayList()
-        vdetails.add(rule.desc.toString())
-        vdetails.add(unaugmentedTrilateralRoot.conjugationname!!)
+        // Modify the participles using the modifiers
+        val conjugationResult = ActiveParticipleModifier.instance.build(
+            unaugmentedTrilateralRoot, rule.kov, conjugatedIsmFael, ""
+        )
 
+        val ismmafoolResult = PassiveParticipleModifier.instance.build(
+            unaugmentedTrilateralRoot, rule.kov, conjugatedIsmMafool, ""
+        )
 
+        // Extract the results for Fael (Active) and Mafool (Passive)
+        val faelObj = conjugationResult.faelMafool
+        val mafoolObj = ismmafoolResult.faelMafool
 
+        // Build the list of participles (Fael and Mafool)
+        val ismFaelMafoolList = listOf(faelObj, mafoolObj)
 
+        // Gather verb details
+        val verbDetailsList = listOf(
+            rule.desc.toString(),
+            unaugmentedTrilateralRoot.conjugationname
+        )
 
-        return finallist//buildMujarradParticipleList
-
-
-
+        // Return the result as an instance of IsmFaelMafoolResult
+        return IsmFaelMafoolResult(
+            ismFaelMafoolList = ismFaelMafoolList,
+            verbDetailsList = verbDetailsList
+        )
     }
+
+
+
+
 
     fun getMazeedListing(
         verbmood: String?,
         verbroot: String?,
         augmentedFormula: String?,
-                        ): ArrayList<ArrayList<*>> {
+                        ): MazeedResult? {
         return buildMazeedList(verbmood!!, verbroot!!, augmentedFormula!!)
     }
 
-    private fun buildUnaugmentedLists(verbmood: String, verbroot: String): ArrayList<ArrayList<*>> {
+    private fun buildUnaugmentedListsols(verbmood: String, verbroot: String): ArrayList<ArrayList<*>> {
         val skabeer = ArrayList<ArrayList<*>>()
-        val c1 = verbroot[0]
-        val c2 = verbroot[1]
-        val c3 = verbroot[2]
+        val firstCharacter = verbroot[0]
+        val secondCharacter = verbroot[1]
+        val thirdCharacter = verbroot[2]
 
         var madhimajhool: List<*>
         var mudharay: List<*>? = null
@@ -286,9 +246,9 @@ class GatherAll {
         var nahiamr: List<*>
         var madhi: List<*>
         var mudharaymajhool: List<*>? = null
-        val rule = KovRulesManager.instance.getTrilateralKovRule(c1, c2, c3)
+        val rule = KovRulesManager.instance.getTrilateralKovRule(firstCharacter, secondCharacter, thirdCharacter)
         val unaugmentedTrilateralRoot =
-            OSarfDictionary.instance.getUnaugmentedTrilateralRoots(verbroot)
+            SarfDictionaryAmended.instance.getUnaugmentedTrilateralRoots(verbroot)
         if (unaugmentedTrilateralRoot != null) {
             //   madhi = org.sj.verb.trilateral.unaugmented.active.ActivePastConjugator.instance.createVerbList((UnaugmentedTrilateralRoot) unaugmentedTrilateralRoot);
             madhi = ActivePastConjugator.instance.createVerbList(unaugmentedTrilateralRoot)
@@ -353,7 +313,7 @@ class GatherAll {
                 unaugmentedTrilateralRoot, rule.kov, nahiamr as MutableList<*>,
                 SystemConstants.PRESENT_TENSE, true, true
                                                                           )
-            //ismfale and ismmafool
+            //ismfale and ismMafool
             val conjugatedIsmFael =
                 UnaugmentedTrilateralActiveParticipleConjugator.instance.createNounList(
                     unaugmentedTrilateralRoot,
@@ -371,21 +331,28 @@ class GatherAll {
                 .build(unaugmentedTrilateralRoot, rule.kov, conjugatedIsmMafool, "")
             val ismmafoolresultFinalResult = ismmafoolresult.finalResult
 
+            //ismala
             val conjugator = StandardInstrumentalConjugator.instance
             val modifier = InstrumentalModifier.instance
+
             val mifal = conjugator.createNounList(unaugmentedTrilateralRoot, "مِفْعَل")
             val conjResultmifal: ConjugationResult =
                 modifier.build(unaugmentedTrilateralRoot, rule.kov, mifal, "مِفْعَل")
             val finalAlamifal = conjResultmifal.finalResult
+
             val mifalatun = conjugator.createNounList(unaugmentedTrilateralRoot, "مِفْعَلَة")
             val conjResult: ConjugationResult =
                 modifier.build(unaugmentedTrilateralRoot, rule.kov, mifalatun, "مِفْعَلَة")
             val finalAlamifalatun = conjResult.finalResult as ArrayList<Any>
+
             val mifaal = conjugator.createNounList(unaugmentedTrilateralRoot, "مِفْعَال")
             val conjResultmifaal: ConjugationResult =
                 modifier.build(unaugmentedTrilateralRoot, rule.kov, mifaal, "مِفْعَال")
             val finalAlamifaal = conjResultmifaal.finalResult
-            val faalatun = conjugator.createNounList(unaugmentedTrilateralRoot, "فَعَّالَة")
+
+
+
+
             //zarf
             val zarfconjugator = TimeAndPlaceConjugator.instance
             val zarfmodifier = TimeAndPlaceModifier.instance
@@ -546,12 +513,804 @@ class GatherAll {
     }
 
     private fun buildUnaugmentedLists(
+        verbMood: String?,
+        verbRoot: String?,
+
+    ): MujarradResult? {
+
+        val madhiMudharayList = mutableListOf<MadhiMudharay>()
+        val skabeerIsmList = mutableListOf<FaelMafool>()
+        val amrList = mutableListOf<Amr>()
+        val amrNahiList = mutableListOf<NahiAmr>()
+        val ismZarfMafilunList = mutableListOf<IsmZarfMafilun>()
+        val ismZarfMafalatunList = mutableListOf<IsmZarfMafalatun>()
+        val ismZarfMafalunList = mutableListOf<IsmZarfMafalun>()
+        val ismAlaMifalun = mutableListOf<IsmAlaMifalun>()
+        val ismAlaMifalatun  = mutableListOf<IsmAlaMifalatun>()
+        val ismAlaMifaalun = mutableListOf<IsmAlaMifaalun>()
+        val verbDetailsList = mutableListOf<VerbDetails?>()
+
+        val firstCharacter = verbRoot?.getOrNull(0)
+        val secondCharacter = verbRoot?.getOrNull(1)
+        val thirdCharacter = verbRoot?.getOrNull(2)
+        val unaugmentedTrilateralRoot =
+            verbRoot?.let { SarfDictionaryAmended.instance.getUnaugmentedTrilateralRoots(it) }
+        if (firstCharacter != null && secondCharacter != null && thirdCharacter != null) {
+            val rule = KovRulesManager.instance.getTrilateralKovRule(firstCharacter, secondCharacter, thirdCharacter)
+
+
+
+            if (unaugmentedTrilateralRoot != null) {
+                val madhi = ActivePastConjugator.instance.createVerbList(unaugmentedTrilateralRoot)
+                val madhimajhool = PassivePastConjugator.instance.createVerbList(unaugmentedTrilateralRoot)
+
+                val mudharay = when (verbMood) {
+                    "Indicative" -> ActivePresentConjugator.instance.createNominativeVerbList(unaugmentedTrilateralRoot)
+                    "Subjunctive" -> ActivePresentConjugator.instance.createAccusativeVerbList(unaugmentedTrilateralRoot)
+                    "Jussive" -> ActivePresentConjugator.instance.createJussiveVerbList(unaugmentedTrilateralRoot)
+                    "Emphasized" -> ActivePresentConjugator.instance.createEmphasizedVerbList(unaugmentedTrilateralRoot)
+                    else -> null
+                }
+                val mudharaymajhool = when (verbMood) {
+                    "Indicative" -> PassivePresentConjugator.instance.createNominativeVerbList(unaugmentedTrilateralRoot)
+                    "Subjunctive" -> PassivePresentConjugator.instance.createAccusativeVerbList(unaugmentedTrilateralRoot)
+                    "Jussive" -> PassivePresentConjugator.instance.createJussiveVerbList(unaugmentedTrilateralRoot)
+                    "Emphasized" -> PassivePresentConjugator.instance.createEmphasizedVerbList(unaugmentedTrilateralRoot)
+                    else -> null
+                }
+
+                val amr = UnaugmentedImperativeConjugator.instance.createVerbList(unaugmentedTrilateralRoot)
+                val nahiamr = ActivePresentConjugator.instance.createJussiveVerbList(unaugmentedTrilateralRoot)
+
+                val madhimodified = UnaugmentedTrilateralModifier.instance.build(
+                    unaugmentedTrilateralRoot, rule!!.kov, madhi as MutableList<*>, SystemConstants.PAST_TENSE, true, true
+                ).madhiMudharay
+
+                val madhimajhoolmodified = UnaugmentedTrilateralModifier.instance.build(
+                    unaugmentedTrilateralRoot, rule.kov, madhimajhool as MutableList<*>, SystemConstants.PAST_TENSE, false, true
+                ).madhiMudharay
+
+                val mudharayModified = UnaugmentedTrilateralModifier.instance.build(
+                    unaugmentedTrilateralRoot, rule.kov, mudharay!! as MutableList<*>, SystemConstants.PRESENT_TENSE, true, true
+                ).madhiMudharay
+
+                val mudharayMajhoolModified = UnaugmentedTrilateralModifier.instance.build(
+                    unaugmentedTrilateralRoot, rule.kov, mudharaymajhool!! as MutableList<*>, SystemConstants.PRESENT_TENSE, false, true
+                ).madhiMudharay
+
+                madhiMudharayList.addAll(listOf(madhimodified, madhimajhoolmodified, mudharayModified, mudharayMajhoolModified))
+
+                val amrModified = UnaugmentedTrilateralModifier.instance.build(
+                    unaugmentedTrilateralRoot, rule.kov, amr.toMutableList(), SystemConstants.NOT_EMPHASIZED_IMPERATIVE_TENSE, true, true
+                ).amrandnahi
+
+
+
+                val new = NahiAmr()
+                val fornahiamr = nahiamr.subList(6, 11)
+                val la = "لا "
+                new.anta = la + fornahiamr[0].toString()
+                new.antuma = la + fornahiamr[1].toString()
+                new.antum = la + fornahiamr[2].toString()
+                new.anti = la + fornahiamr[3].toString()
+                new.antumaf = la + fornahiamr[1].toString()
+                new.antunna = la + fornahiamr[4].toString()
+
+
+                val newAmr = Amr().apply {
+
+                    anta = la + fornahiamr[0].toString()
+                    antuma = la + fornahiamr[1].toString()
+                    antum = la + fornahiamr[2].toString()
+                    anti = la + fornahiamr[3].toString()
+                    antumaf = la + fornahiamr[1].toString()
+                    antunna = la + fornahiamr[4].toString()
+                }
+
+
+
+                amrList.addAll(listOf(amrModified))
+                amrNahiList.addAll(listOf(new))
+
+                // Add IsmFael and IsmMafool (FaelMafool)
+                val fael = ActiveParticipleModifier.instance.build(
+                    unaugmentedTrilateralRoot, rule.kov, UnaugmentedTrilateralActiveParticipleConjugator.instance.createNounList(unaugmentedTrilateralRoot, unaugmentedTrilateralRoot.conjugation!!), ""
+                ).faelMafool
+
+                val mafool = PassiveParticipleModifier.instance.build(
+                    unaugmentedTrilateralRoot, rule.kov, UnaugmentedTrilateralPassiveParticipleConjugator.instance.createNounList(unaugmentedTrilateralRoot, unaugmentedTrilateralRoot.conjugation!!), ""
+                ).faelMafool
+
+                skabeerIsmList.addAll(listOf(fael, mafool))
+                // Create noun lists for "مِفْعَل", "مِفْعَلَة", and "مِفْعَال"
+                /*             val conjugator = StandardInstrumentalConjugator.instance
+                             val modifier = InstrumentalModifier.instance
+                             val mifal = conjugator.createNounList(unaugmentedRoot, "مِفْعَل")
+                             val conjResultmifal: ConjugationResult =
+                                 modifier.build(unaugmentedRoot, rule.kov, mifal, "مِفْعَل")
+                             val finalIsmAlaMifalun = conjResultmifal.finalResult
+
+                             val mifalatun = conjugator.createNounList(unaugmentedRoot, "مِفْعَلَة")
+                             val conjResultMifalatun: ConjugationResult =
+                                 modifier.build(unaugmentedRoot, rule.kov, mifalatun, "مِفْعَلَة")
+                             val finalIsmAlaMifalatun = conjResultMifalatun.finalResult as ArrayList<Any>
+
+                             val ismAlaMifaalun = conjugator.createNounList(unaugmentedRoot, "مِفْعَال")
+                             val conjResultMifaal: ConjugationResult =
+                                 modifier.build(unaugmentedRoot, rule.kov, ismAlaMifaalun, "مِفْعَال")
+                             val finalIsmAlaMifaalun = conjResultMifaal.finalResult
+             */
+
+
+                // Add IsmZarf and IsmAla (Time and Place Nouns)
+                ismZarfMafilunList.addAll(buildIsmZarfMafilun(unaugmentedTrilateralRoot, rule))
+                ismZarfMafalatunList.addAll(buildIsmZarfMafalatun(unaugmentedTrilateralRoot, rule))
+                ismZarfMafalunList.addAll(buildIsmZarfMafalun(unaugmentedTrilateralRoot, rule))
+
+                ismAlaMifalun.addAll(buildIsmAlaMifalun(unaugmentedTrilateralRoot, rule))
+                ismAlaMifalatun.addAll(buildIsmAlaMifalatun(unaugmentedTrilateralRoot, rule))
+                ismAlaMifaalun.addAll(buildIsmAlaMifaalun(unaugmentedTrilateralRoot, rule))
+
+
+                // Add VerbDetails
+                val verbDetails = VerbDetails().apply {
+                    verbtype = rule.desc.toString()
+                    babname = unaugmentedTrilateralRoot.conjugationname.toString()
+                    mazeedormujarad = "mujarrad"
+                    wazannumberorname = unaugmentedTrilateralRoot.rulename.toString()
+                    verbroot = verbRoot
+                }
+                verbDetailsList.add(verbDetails)
+
+                return MujarradResult(
+                    madhiMudharayList,
+                    skabeerIsmList,
+                    amrList,
+                    amrNahiList ,
+                    ismZarfMafilunList,
+                    ismZarfMafalatunList,
+                    ismZarfMafalunList,
+                    ismAlaMifalun ,
+                    ismAlaMifalatun,
+                    ismAlaMifaalun,
+                    verbDetailsList
+                )
+            }
+        }
+        return null
+    }
+
+    private fun buildUnaugmentedLists(
+        verbMood: String?,
+        verbRoot: String?,
+        unaugmentedFormula: String
+    ): MujarradResult? {
+
+        val madhiMudharayList = mutableListOf<MadhiMudharay>()
+        val skabeerIsmList = mutableListOf<FaelMafool>()
+        val amrList = mutableListOf<Amr>()
+        val amrNahiList = mutableListOf<NahiAmr>()
+        val ismZarfMafilunList = mutableListOf<IsmZarfMafilun>()
+        val ismZarfMafalatunList = mutableListOf<IsmZarfMafalatun>()
+        val ismZarfMafalunList = mutableListOf<IsmZarfMafalun>()
+        val ismAlaMifalun = mutableListOf<IsmAlaMifalun>()
+        val ismAlaMifalatun  = mutableListOf<IsmAlaMifalatun>()
+        val ismAlaMifaalun = mutableListOf<IsmAlaMifaalun>()
+        val verbDetailsList = mutableListOf<VerbDetails?>()
+
+        val firstCharacter = verbRoot?.getOrNull(0)
+        val secondCharacter = verbRoot?.getOrNull(1)
+        val thirdCharacter = verbRoot?.getOrNull(2)
+
+        if (firstCharacter != null && secondCharacter != null && thirdCharacter != null) {
+            val rule = KovRulesManager.instance.getTrilateralKovRule(firstCharacter, secondCharacter, thirdCharacter)
+
+            val unaugmentedRoot = SarfDictionaryAmended.instance.getUnaugmentedTrilateralRoots(verbRoot, unaugmentedFormula)
+            if (unaugmentedRoot != null) {
+                val madhi = ActivePastConjugator.instance.createVerbList(unaugmentedRoot)
+                val madhimajhool = PassivePastConjugator.instance.createVerbList(unaugmentedRoot)
+
+                val mudharay = when (verbMood) {
+                    "Indicative" -> ActivePresentConjugator.instance.createNominativeVerbList(unaugmentedRoot)
+                    "Subjunctive" -> ActivePresentConjugator.instance.createAccusativeVerbList(unaugmentedRoot)
+                    "Jussive" -> ActivePresentConjugator.instance.createJussiveVerbList(unaugmentedRoot)
+                    "Emphasized" -> ActivePresentConjugator.instance.createEmphasizedVerbList(unaugmentedRoot)
+                    else -> null
+                }
+                val mudharaymajhool = when (verbMood) {
+                    "Indicative" -> PassivePresentConjugator.instance.createNominativeVerbList(unaugmentedRoot)
+                    "Subjunctive" -> PassivePresentConjugator.instance.createAccusativeVerbList(unaugmentedRoot)
+                    "Jussive" -> PassivePresentConjugator.instance.createJussiveVerbList(unaugmentedRoot)
+                    "Emphasized" -> PassivePresentConjugator.instance.createEmphasizedVerbList(unaugmentedRoot)
+                    else -> null
+                }
+
+                val amr = UnaugmentedImperativeConjugator.instance.createVerbList(unaugmentedRoot)
+                val nahiamr = ActivePresentConjugator.instance.createJussiveVerbList(unaugmentedRoot)
+
+                val madhimodified = UnaugmentedTrilateralModifier.instance.build(
+                    unaugmentedRoot, rule!!.kov, madhi as MutableList<*>, SystemConstants.PAST_TENSE, true, true
+                ).madhiMudharay
+
+                val madhimajhoolmodified = UnaugmentedTrilateralModifier.instance.build(
+                    unaugmentedRoot, rule.kov, madhimajhool as MutableList<*>, SystemConstants.PAST_TENSE, false, true
+                ).madhiMudharay
+
+                val mudharayModified = UnaugmentedTrilateralModifier.instance.build(
+                    unaugmentedRoot, rule.kov, mudharay!! as MutableList<*>, SystemConstants.PRESENT_TENSE, true, true
+                ).madhiMudharay
+
+                val mudharayMajhoolModified = UnaugmentedTrilateralModifier.instance.build(
+                    unaugmentedRoot, rule.kov, mudharaymajhool!! as MutableList<*>, SystemConstants.PRESENT_TENSE, false, true
+                ).madhiMudharay
+
+                madhiMudharayList.addAll(listOf(madhimodified, madhimajhoolmodified, mudharayModified, mudharayMajhoolModified))
+
+                val amrModified = UnaugmentedTrilateralModifier.instance.build(
+                    unaugmentedRoot, rule.kov, amr.toMutableList(), SystemConstants.NOT_EMPHASIZED_IMPERATIVE_TENSE, true, true
+                ).amrandnahi
+
+
+
+                val new = NahiAmr()
+                val fornahiamr = nahiamr.subList(6, 11)
+                val la = "لا "
+                new.anta = la + fornahiamr[0].toString()
+                new.antuma = la + fornahiamr[1].toString()
+                new.antum = la + fornahiamr[2].toString()
+                new.anti = la + fornahiamr[3].toString()
+                new.antumaf = la + fornahiamr[1].toString()
+                new.antunna = la + fornahiamr[4].toString()
+
+
+                val newAmr = Amr().apply {
+
+                    anta = la + fornahiamr[0].toString()
+                    antuma = la + fornahiamr[1].toString()
+                    antum = la + fornahiamr[2].toString()
+                    anti = la + fornahiamr[3].toString()
+                    antumaf = la + fornahiamr[1].toString()
+                    antunna = la + fornahiamr[4].toString()
+                }
+
+
+
+                amrList.addAll(listOf(amrModified))
+                amrNahiList.addAll(listOf(new))
+
+                // Add IsmFael and IsmMafool (FaelMafool)
+                val fael = ActiveParticipleModifier.instance.build(
+                    unaugmentedRoot, rule.kov, UnaugmentedTrilateralActiveParticipleConjugator.instance.createNounList(unaugmentedRoot, unaugmentedRoot.conjugation!!), ""
+                ).faelMafool
+
+                val mafool = PassiveParticipleModifier.instance.build(
+                    unaugmentedRoot, rule.kov, UnaugmentedTrilateralPassiveParticipleConjugator.instance.createNounList(unaugmentedRoot, unaugmentedRoot.conjugation!!), ""
+                ).faelMafool
+
+                skabeerIsmList.addAll(listOf(fael, mafool))
+                // Create noun lists for "مِفْعَل", "مِفْعَلَة", and "مِفْعَال"
+   /*             val conjugator = StandardInstrumentalConjugator.instance
+                val modifier = InstrumentalModifier.instance
+                val mifal = conjugator.createNounList(unaugmentedRoot, "مِفْعَل")
+                val conjResultmifal: ConjugationResult =
+                    modifier.build(unaugmentedRoot, rule.kov, mifal, "مِفْعَل")
+                val finalIsmAlaMifalun = conjResultmifal.finalResult
+
+                val mifalatun = conjugator.createNounList(unaugmentedRoot, "مِفْعَلَة")
+                val conjResultMifalatun: ConjugationResult =
+                    modifier.build(unaugmentedRoot, rule.kov, mifalatun, "مِفْعَلَة")
+                val finalIsmAlaMifalatun = conjResultMifalatun.finalResult as ArrayList<Any>
+
+                val ismAlaMifaalun = conjugator.createNounList(unaugmentedRoot, "مِفْعَال")
+                val conjResultMifaal: ConjugationResult =
+                    modifier.build(unaugmentedRoot, rule.kov, ismAlaMifaalun, "مِفْعَال")
+                val finalIsmAlaMifaalun = conjResultMifaal.finalResult
+*/
+
+
+                // Add IsmZarf and IsmAla (Time and Place Nouns)
+               ismZarfMafilunList.addAll(buildIsmZarfMafilun(unaugmentedRoot, rule))
+                ismZarfMafalatunList.addAll(buildIsmZarfMafalatun(unaugmentedRoot, rule))
+                ismZarfMafalunList.addAll(buildIsmZarfMafalun(unaugmentedRoot, rule))
+
+                 ismAlaMifalun.addAll(buildIsmAlaMifalun(unaugmentedRoot, rule))
+                 ismAlaMifalatun.addAll(buildIsmAlaMifalatun(unaugmentedRoot, rule))
+                ismAlaMifaalun.addAll(buildIsmAlaMifaalun(unaugmentedRoot, rule))
+
+
+                // Add VerbDetails
+                val verbDetails = VerbDetails().apply {
+                    verbtype = rule.desc.toString()
+                    babname = unaugmentedRoot.conjugationname.toString()
+                    mazeedormujarad = "mujarrad"
+                    wazannumberorname = unaugmentedRoot.rulename.toString()
+                    verbroot = verbRoot
+                }
+                verbDetailsList.add(verbDetails)
+
+                return MujarradResult(
+                    madhiMudharayList,
+                    skabeerIsmList,
+                    amrList,
+                    amrNahiList ,
+                    ismZarfMafilunList,
+                    ismZarfMafalatunList,
+                    ismZarfMafalunList,
+                    ismAlaMifalun ,
+                    ismAlaMifalatun,
+                    ismAlaMifaalun,
+                    verbDetailsList
+                )
+            }
+        }
+        return null
+    }
+
+
+    private fun buildIsmAlaMifalun(
+        unaugmentedRoot: UnaugmentedTrilateralRoot,
+        rule: TrilateralKovRule
+    ): Collection<IsmAlaMifalun> {
+
+        val ismConjugator = StandardInstrumentalConjugator.instance
+        val ismModifier = InstrumentalModifier.instance
+        val mifallist = ismConjugator.createNounList(unaugmentedRoot, "مِفْعَل")
+         return listOf(ismModifier.build(unaugmentedRoot, rule.kov, mifallist, "مِفْعَل").alaMifalun)
+    }
+
+
+    private fun buildIsmAlaMifalatun(
+        unaugmentedRoot: UnaugmentedTrilateralRoot,
+        rule: TrilateralKovRule
+    ): Collection<IsmAlaMifalatun> {
+
+        val ismConjugator = StandardInstrumentalConjugator.instance
+        val ismModifier = InstrumentalModifier.instance
+        val mifalatunlist = ismConjugator.createNounList(unaugmentedRoot, "مِفْعَلَة")
+
+        return listOf(ismModifier.build(unaugmentedRoot, rule.kov, mifalatunlist, "مِفْعَلَة").alaMifalatun)
+    }
+
+
+    private fun buildIsmAlaMifaalun(
+        unaugmentedRoot: UnaugmentedTrilateralRoot,
+        rule: TrilateralKovRule
+    ): Collection<IsmAlaMifaalun> {
+
+        val ismConjugator = StandardInstrumentalConjugator.instance
+        val ismModifier = InstrumentalModifier.instance
+        val mifalatunlist = ismConjugator.createNounList(unaugmentedRoot, "مِفْعَال")
+
+        return listOf(ismModifier.build(unaugmentedRoot, rule.kov, mifalatunlist, "مِفْعَال").alaMifaalun)
+    }
+
+    private fun buildIsmZarfMafilun(
+        unaugmentedRoot: UnaugmentedTrilateralRoot,
+       rule: TrilateralKovRule
+    ): Collection<IsmZarfMafilun> {
+        val zarfConjugator = TimeAndPlaceConjugator.instance
+        val zarfModifier = TimeAndPlaceModifier.instance
+        val zarfList = zarfConjugator.createNounList(unaugmentedRoot, "مَفْعِل")
+        return listOf(zarfModifier.build(unaugmentedRoot, rule.kov, zarfList, "مَفْعِل").zarfMafilun)
+    }
+
+
+
+
+    private fun buildIsmZarfMafalatun(
+        unaugmentedRoot: UnaugmentedTrilateralRoot,
+        rule: TrilateralKovRule
+    ): Collection<IsmZarfMafalatun> {
+        val zarfConjugator = TimeAndPlaceConjugator.instance
+        val zarfModifier = TimeAndPlaceModifier.instance
+        val zarfList = zarfConjugator.createNounList(unaugmentedRoot, "مَفْعَلَة")
+        return listOf(zarfModifier.build(unaugmentedRoot, rule.kov, zarfList, "مَفْعَلَة").zarfMafalatun)
+    }
+
+    private fun buildIsmZarfMafalun(
+        unaugmentedRoot: UnaugmentedTrilateralRoot,
+        rule: TrilateralKovRule
+    ): Collection<IsmZarfMafalun> {
+
+
+             val zarfconjugator = TimeAndPlaceConjugator.instance
+                val zarfmodifier = TimeAndPlaceModifier.instance
+                val IsmZarfMafalunResult =
+                    zarfconjugator.createNounList(unaugmentedRoot, "مَفْعَل")
+                val ismZarafMafalunResult = zarfmodifier.build(
+                    unaugmentedRoot,
+                    rule.kov,
+                    IsmZarfMafalunResult,
+                    "مَفْعَل"
+                                                              )
+                val zarfinalmafal = ismZarafMafalunResult.finalResult
+                val mafilconjugationlist =
+                    zarfconjugator.createNounList(unaugmentedRoot, "مَفْعِل")
+                val ismZarfMafilunResult = zarfmodifier.build(
+                    unaugmentedRoot,
+                    rule.kov,
+                    mafilconjugationlist,
+                    "مَفْعِل"
+                                                             )
+                val zarffinalmafil = ismZarfMafilunResult.finalResult
+
+
+        val zarfConjugator = TimeAndPlaceConjugator.instance
+        val zarfModifier = TimeAndPlaceModifier.instance
+        val zarfList = zarfConjugator.createNounList(unaugmentedRoot, "مَفْعَل")
+        return listOf(zarfModifier.build(unaugmentedRoot, rule.kov, zarfList, "مَفْعَل").zarfMafalun)
+    }
+
+
+
+
+    private fun buildMazeedList(
+        verbMood: String,
+        verbRoot: String,
+        augmentedFormula: String
+    ): MazeedResult? {
+        // Get the augmented root
+        val augmentedRoot = SarfDictionaryAmended.instance.getAugmentedTrilateralRoot(verbRoot, augmentedFormula)
+            ?: return null // Return null if the root is not found
+
+        // Get the rule for the verb root
+        val rule = KovRulesManager.instance.getTrilateralKovRule(verbRoot[0], verbRoot[1], verbRoot[2])
+            ?: return null
+
+        // Initialize lists
+        val madhiMudharayList = mutableListOf<MadhiMudharay>()
+        val skabeerIsmList = mutableListOf<FaelMafool>()
+        val amrList = mutableListOf<Amr>()
+        val nahiAmrList = mutableListOf<NahiAmr>()
+        val verbDetailsList = mutableListOf<VerbDetails>()
+
+        // Conjugate Madhi (past) and Madhimajhool (passive past)
+        val madhi = AugmentedActivePastConjugator.instance.createVerbList(augmentedRoot, augmentedFormula.toInt())
+        val madhiMajhool = AugmentedPassivePastConjugator.instance.createVerbList(augmentedRoot, augmentedFormula.toInt())
+
+        // Handle different moods for Mudharay (present) and MudharayMajhool (passive present)
+        val mudharay = getMudharayConjugation(verbMood, augmentedRoot, augmentedFormula.toInt(), true)
+        val mudharayMajhool = getMudharayConjugation(verbMood, augmentedRoot, augmentedFormula.toInt(), false)
+
+        // Process Amr and NahiAmr conjugations
+        val amr = AugmentedImperativeConjugator.instance.notEmphsizedConjugator.createVerbList(augmentedRoot, augmentedFormula.toInt())
+        val nahiAmr = AugmentedActivePresentConjugator.instance.jussiveConjugator.createVerbList(augmentedRoot, augmentedFormula.toInt())
+
+        // Modify and apply conjugations
+        madhiMudharayList.addAll(getModifiedConjugations(madhi, madhiMajhool, mudharay, mudharayMajhool, augmentedRoot, rule))
+
+        // Process IsmFael and IsmMafool
+        val instance1 = AugmentedTrilateralActiveParticipleConjugator.instance
+        val ismFaelList = getModifiedActiveNouns(AugmentedTrilateralActiveParticipleConjugator.instance, augmentedRoot, augmentedFormula.toInt(), rule)
+
+        val ismMafoolList = getModifiedPassiveNouns(AugmentedTrilateralPassiveParticipleConjugator.instance, augmentedRoot, augmentedFormula.toInt(), rule)
+
+
+        skabeerIsmList.addAll(listOf(ismFaelList, ismMafoolList))
+
+        // Handle Amr and NahiAmr conjugations
+        amrList.addAll(buildAmr(amr))
+
+       nahiAmrList.addAll(buildNahiAmr(nahiAmr))
+        // Build VerbDetails
+        val verbDetails = VerbDetails(
+            verbtype = rule.desc,
+            babname = augmentedRoot.babname ?: "",
+            mazeedormujarad = "mazeed",
+            wazannumberorname = augmentedRoot.form?.toString() ?: "",
+            verbroot = verbRoot
+        )
+        verbDetailsList.add(verbDetails)
+
+        // Return the final result using the MazeedResult data class
+        return MazeedResult(
+            madhiMudharayList = madhiMudharayList,
+            skabeerIsmList = skabeerIsmList,
+            amrList = amrList,
+            nahiAmrList = nahiAmrList,
+            verbDetailsList = verbDetailsList
+        )
+    }
+
+
+
+// Helper functions
+
+    // Get Mudharay or MudharayMajhool based on the verb mood
+    private fun getMudharayConjugation(
+        verbMood: String,
+        augmentedRoot: AugmentedTrilateralRoot,
+        augmentedFormula: Int,
+        isActive: Boolean
+    ): List<AugmentedPresentVerb?>? {
+        return when (verbMood) {
+            "Indicative" -> if (isActive) {
+                AugmentedActivePresentConjugator.instance.nominativeConjugator.createVerbList(augmentedRoot,augmentedFormula)
+
+            } else {
+                AugmentedPassivePresentConjugator.instance.nominativeConjugator.createVerbList(augmentedRoot, augmentedFormula)
+            }
+            "Subjunctive" -> if (isActive) {
+                AugmentedActivePresentConjugator.instance.accusativeConjugator.createVerbList(augmentedRoot, augmentedFormula)
+            } else {
+                AugmentedPassivePresentConjugator.instance.accusativeConjugator.createVerbList(augmentedRoot, augmentedFormula)
+            }
+            "Jussive" -> if (isActive) {
+                AugmentedActivePresentConjugator.instance.jussiveConjugator.createVerbList(augmentedRoot, augmentedFormula)
+            } else {
+                AugmentedPassivePresentConjugator.instance.jussiveConjugator.createVerbList(augmentedRoot, augmentedFormula)
+            }
+            "Emphasized" -> if (isActive) {
+                AugmentedActivePresentConjugator.instance.jussiveConjugator.createVerbList(augmentedRoot, augmentedFormula)
+            } else {
+                AugmentedPassivePresentConjugator.instance.emphasizedConjugator.createVerbList(augmentedRoot, augmentedFormula)
+            }
+            else -> null
+        }
+    }
+
+
+    // Get modified conjugations for Madhi, Madhimajhool, Mudharay, and MudharayMajhool
+    private fun getModifiedConjugations(
+        madhi: List<AugmentedPastVerb?>,
+        madhiMajhool: List<AugmentedPastVerb?>,
+        mudharay: List<AugmentedPresentVerb?>?,
+        mudharayMajhool: List<AugmentedPresentVerb?>?,
+        augmentedRoot: AugmentedTrilateralRoot,
+        rule: TrilateralKovRule
+    ): List<MadhiMudharay> {
+        val madhiResult = AugmentedTrilateralModifier.instance.build(
+            augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), madhi, SystemConstants.PAST_TENSE, true, true
+        )
+        val madhiMajhoolResult = AugmentedTrilateralModifier.instance.build(
+            augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), madhiMajhool, SystemConstants.PAST_TENSE, true, true
+        )
+        val mudharayResult = mudharay?.let {
+            AugmentedTrilateralModifier.instance.build(augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), it, SystemConstants.PRESENT_TENSE, true, true)
+        }
+        val mudharayMajhoolResult = mudharayMajhool?.let {
+            AugmentedTrilateralModifier.instance.build(augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), it, SystemConstants.PRESENT_TENSE, false, true)
+        }
+
+        return listOf(madhiResult.madhiMudharay, madhiMajhoolResult.madhiMudharay) +
+                listOfNotNull(mudharayResult?.madhiMudharay, mudharayMajhoolResult?.madhiMudharay)
+    }
+
+    // Get modified IsmFael and IsmMafool nouns
+    private fun getModifiedActiveNouns(
+        instance: AugmentedTrilateralActiveParticipleConjugator,
+        augmentedRoot: AugmentedTrilateralRoot,
+        augmentedFormula: Int,
+        rule: TrilateralKovRule
+    ): FaelMafool {
+        val nounList = instance.createNounList(augmentedRoot, augmentedFormula)
+        return org.sj.nounConjugation.trilateral.augmented.modifier.activeparticiple.ActiveParticipleModifier.instance
+            .build(augmentedRoot, rule.kov, augmentedFormula, nounList, true).faelMafool
+    }
+    // Get modified IsmFael and IsmMafool nouns
+    private fun getModifiedPassiveNouns(
+        instance: AugmentedTrilateralPassiveParticipleConjugator,
+        augmentedRoot: AugmentedTrilateralRoot,
+        augmentedFormula: Int,
+        rule: TrilateralKovRule
+    ): FaelMafool {
+        val nounList = instance.createNounList(augmentedRoot, augmentedFormula)
+        return org.sj.nounConjugation.trilateral.augmented.modifier.activeparticiple.ActiveParticipleModifier.instance
+            .build(augmentedRoot, rule.kov, augmentedFormula, nounList, true).faelMafool
+    }
+    private fun buildAmr(amr: List<AugmentedImperativeVerb?>): List<Amr> {
+        val amrObj = Amr().apply {
+            anta = amr.getOrNull(2)?.toString() ?: ""
+            antuma = amr.getOrNull(4)?.toString() ?: ""
+            antum = amr.getOrNull(5)?.toString() ?: ""
+            anti = amr.getOrNull(3)?.toString() ?: ""
+            antumaf = amr.getOrNull(4)?.toString() ?: ""
+            antunna = amr.getOrNull(6)?.toString() ?: ""
+        }
+
+
+
+        return listOf(amrObj)
+    }
+
+    // Build Amr and NahiAmr lists
+    private fun buildNahiAmr(nahiAmr: List<AugmentedPresentVerb?>): List<NahiAmr> {
+
+        val fornahiamr = nahiAmr.subList(6, 11)
+
+
+        val nahiAmrObj = NahiAmr().apply {
+            anta = "لا " + (fornahiamr.getOrNull(0)?.toString() ?: "")
+            antuma = "لا " + (fornahiamr.getOrNull(1)?.toString() ?: "")
+            antum = "لا " + (fornahiamr.getOrNull(2)?.toString() ?: "")
+            anti = "لا " + (fornahiamr.getOrNull(3)?.toString() ?: "")
+            antumaf = "لا " + (fornahiamr.getOrNull(1)?.toString() ?: "")
+            antunna = "لا " + (fornahiamr.getOrNull(4)?.toString() ?: "")
+        }
+
+        return listOf(nahiAmrObj)
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    fun buildMazeedParticiples(
+        verbRoot: String,
+        augmentedFormula: String
+    ): IsmFaelMafoolResult? {
+
+        // Modify the verb root if necessary (replace "ا" or "أ" with "ء")
+        var modifiedVerbRoot = verbRoot.replace("ا", "ء").replace("أ", "ء")
+
+        // Extract the root characters
+        val firstCharacter = modifiedVerbRoot[0]
+        val secondCharacter = modifiedVerbRoot[1]
+        val thirdCharacter = modifiedVerbRoot[2]
+
+        // Retrieve the augmented trilateral root
+        val augmentedRoot = SarfDictionaryAmended.instance.getAugmentedTrilateralRoot(modifiedVerbRoot, augmentedFormula)
+            ?: return null // If the root is not found, return null
+
+        // Retrieve the KOV rule
+        val rule = KovRulesManager.instance.getTrilateralKovRule(firstCharacter, secondCharacter, thirdCharacter)
+            ?: return null // If the rule is not found, return null
+
+        // Generate active participle (Ism Fael)
+        val ismFaelList = AugmentedTrilateralActiveParticipleConjugator.instance
+            .createNounList(augmentedRoot, augmentedFormula.toInt())
+
+        val conjResult = org.sj.nounConjugation.trilateral.augmented.modifier.activeparticiple.ActiveParticipleModifier.instance.build(
+            augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), ismFaelList, true
+        )
+
+
+        // Generate passive participle (Ism Mafool)
+        val ismMafoolList = AugmentedTrilateralPassiveParticipleConjugator.instance
+            .createNounList(augmentedRoot, augmentedFormula.toInt())
+
+        val ismmafoolResult = org.sj.nounConjugation.trilateral.augmented.modifier.activeparticiple.ActiveParticipleModifier.instance.build(
+            augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), ismMafoolList, true
+        )
+
+
+
+
+        // Create the list of active and passive participles
+        val ismFaelMafoolList = listOf(conjResult.faelMafool, ismmafoolResult.faelMafool)
+
+        // Gather verb details (description and conjugation name)
+        val verbDetailsList = listOf(
+            rule.desc.toString(),
+            augmentedRoot.babname
+        )
+
+        // Return the result as an instance of IsmFaelMafoolResult
+        return IsmFaelMafoolResult(
+            ismFaelMafoolList = ismFaelMafoolList,
+            verbDetailsList = verbDetailsList
+        )
+    }
+
+
+
+    private fun buildMazeedList(verbMood: String, verbRoot: String): MazeedResult? {
+        val augmentedRoot = SarfDictionaryAmended.instance.getAugmentedTrilateralRoot(verbRoot) ?: return null
+        val amrList = mutableListOf<Amr>()
+        val nahiAmrList = mutableListOf<NahiAmr>()
+        val rule = KovRulesManager.instance.getTrilateralKovRule(verbRoot[0], verbRoot[1], verbRoot[2])
+
+        // Get lists of conjugated verbs for different tenses and moods
+        val madhi = AugmentedActivePastConjugator.instance.createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
+        val madhimajhool = AugmentedPassivePastConjugator.instance.createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
+        val mudharay = getMudharayList(verbMood, augmentedRoot)
+        val mudharaymajhool = getMudharayMajhoolList(verbMood, augmentedRoot)
+        val amr = AugmentedImperativeConjugator.instance.notEmphsizedConjugator.createVerbList(augmentedRoot, augmentedRoot.form!!.toInt()).toMutableList()
+        val nahiamr = AugmentedActivePresentConjugator.instance.jussiveConjugator.createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
+
+        // Apply modifiers to the verb conjugations
+        val madhiModified = AugmentedTrilateralModifier.instance.build(augmentedRoot, rule!!.kov, augmentedRoot.form!!.toInt(), madhi, SystemConstants.PAST_TENSE, true, true)
+        val madhimajhoolModified = AugmentedTrilateralModifier.instance.build(augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), madhimajhool, SystemConstants.PAST_TENSE, true, true)
+        val mudharayModified = AugmentedTrilateralModifier.instance.build(augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), mudharay!!, SystemConstants.PRESENT_TENSE, true, true)
+        val mudharaymajhoolModified = AugmentedTrilateralModifier.instance.build(augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), mudharaymajhool!!, SystemConstants.PRESENT_TENSE, false, true)
+        val amrModified = AugmentedTrilateralModifier.instance.build(augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), amr, SystemConstants.NOT_EMPHASIZED_IMPERATIVE_TENSE, true, true)
+        val nahiamrModified = AugmentedTrilateralModifier.instance.build(augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), nahiamr, SystemConstants.PRESENT_TENSE, true, true)
+
+        // Create ism fael and ism mafool
+        val ismFael = AugmentedTrilateralActiveParticipleConjugator.instance.createNounList(augmentedRoot, augmentedRoot.form!!.toInt())
+        val ismMafool = AugmentedTrilateralPassiveParticipleConjugator.instance.createNounList(augmentedRoot, augmentedRoot.form!!.toInt())
+
+        // Modifying ism fael and ism mafool
+        val faelObj = org.sj.nounConjugation.trilateral.augmented.modifier.activeparticiple.ActiveParticipleModifier.instance.build(augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), ismFael, true).faelMafool
+        val mafoolObj = org.sj.nounConjugation.trilateral.augmented.modifier.activeparticiple.ActiveParticipleModifier.instance.build(augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), ismMafool, true).faelMafool
+
+        // Create AmrNahiAmr objects
+       amrList.addAll(buildAmr(amr))
+        nahiAmrList.addAll(buildNahiAmr(nahiamr))
+      //  val amrObj = amrModified.amrandnahi
+       // val newNahiAmr = buildNahiAmr(nahiamr)
+
+        // Populate lists
+        val madhiMudharayList = listOf(
+            madhiModified.madhiMudharay,
+            madhimajhoolModified.madhiMudharay,
+            mudharayModified.madhiMudharay,
+            mudharaymajhoolModified.madhiMudharay
+        )
+
+        val skabeerIsmList = listOf(faelObj, mafoolObj)
+
+        val verbDetailsList = listOf(
+            augmentedRoot.babname?.let {
+                VerbDetails(
+                    verbtype = rule.desc.toString(),
+                    babname = it,
+                    mazeedormujarad = "mazeed",
+                    wazannumberorname = augmentedRoot.form!!,
+                    verbroot = verbRoot
+                )
+            }
+        )
+
+        return MazeedResult(
+            madhiMudharayList = madhiMudharayList,
+            skabeerIsmList = skabeerIsmList,
+            amrList = amrList,
+            nahiAmrList = nahiAmrList,
+            verbDetailsList = verbDetailsList
+        )
+    }
+
+    // Helper function to build Mudharay based on verb mood
+    private fun getMudharayList(verbMood: String, augmentedRoot: AugmentedTrilateralRoot): List<*>? {
+        return when (verbMood) {
+            "Indicative" -> AugmentedActivePresentConjugator.instance.nominativeConjugator.createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
+            "Subjunctive" -> AugmentedActivePresentConjugator.instance.accusativeConjugator.createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
+            "Jussive" -> AugmentedActivePresentConjugator.instance.jussiveConjugator.createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
+            "Emphasized" -> AugmentedActivePresentConjugator.instance.emphasizedConjugator.createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
+            else -> null
+        }
+    }
+
+    // Helper function to build MudharayMajhool based on verb mood
+    private fun getMudharayMajhoolList(verbMood: String, augmentedRoot: AugmentedTrilateralRoot): List<*>? {
+        return when (verbMood) {
+            "Indicative" -> AugmentedPassivePresentConjugator.instance.nominativeConjugator.createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
+            "Subjunctive" -> AugmentedPassivePresentConjugator.instance.accusativeConjugator.createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
+            "Jussive" -> AugmentedPassivePresentConjugator.instance.jussiveConjugator.createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
+            "Emphasized" -> AugmentedPassivePresentConjugator.instance.emphasizedConjugator.createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
+            else -> null
+        }
+    }
+
+
+
+
+
+
+
+
+    companion object {
+        val instance = GatherAll()
+    }
+}
+
+/*
+    private fun buildUnaugmentedListsold(
         verbmood: String?,
         verbroot: String?,
         unaugmentedFormula: String,
                                      ): ArrayList<ArrayList<*>> {
 
-        val finallist = ArrayList<ArrayList<*>>()
+        val finalList = ArrayList<ArrayList<*>>()
         val madhimuhdarymainobj = ArrayList<MadhiMudharay>()
         val ismalamifalunarr = ArrayList<IsmAlaMifalun>()
         val ismalamifalatunarr= ArrayList<IsmAlaMifalatun>()
@@ -567,8 +1326,8 @@ class GatherAll {
         val mudharyobj: MadhiMudharay
         val mudharaymajhoolobj: MadhiMudharay
         val madhiobj: MadhiMudharay
-        val faelobj: FaelMafool
-        val mafoolobj: FaelMafool
+        val faelObj: FaelMafool
+        val mafoolObj: FaelMafool
         val amrobj: AmrNahiAmr
         val alamifal :IsmAlaMifalun
         val alaMifalatun:IsmAlaMifalatun
@@ -581,27 +1340,22 @@ class GatherAll {
         val zarfMafalatun:IsmZarfMafalatun
 
         val verbDetailsobj = VerbDetails()
-        val c1 = verbroot?.get(0)
-        val c2 = verbroot?.get(1)
-        val c3 = verbroot?.get(2)
+        val firstCharacter = verbroot?.get(0)
+        val secondCharacter = verbroot?.get(1)
+        val thirdCharacter = verbroot?.get(2)
         val madhimajhool: List<*>
         var mudharay: List<*>? = null
         val amr: MutableList<*>
         val nahiamr: List<*>
         val madhi: List<*>
         var mudharaymajhool: List<*>? = null
-        val rule = KovRulesManager.instance.getTrilateralKovRule(c1!!, c2!!, c3!!)
+        val rule = KovRulesManager.instance.getTrilateralKovRule(firstCharacter!!, secondCharacter!!, thirdCharacter!!)
         val unaugmentedTrilateralRoot =
             OSarfDictionary.instance.getUnaugmentedTrilateralRoots(verbroot, unaugmentedFormula)
         if (unaugmentedTrilateralRoot != null) {
-            //   madhi = org.sj.verb.trilateral.unaugmented.active.ActivePastConjugator.instance.createVerbList((UnaugmentedTrilateralRoot) unaugmentedTrilateralRoot);
+
             madhi = ActivePastConjugator.instance.createVerbList(unaugmentedTrilateralRoot)
-            //  result = sarf.verb.trilateral.unaugmented.active.ActivePastConjugator.getInstance().createVerbList((UnaugmentedTrilateralRoot) root);
-            /*       val build = UnaugmentedTrilateralModifier.instance
-                       .build(
-                           unaugmentedTrilateralRoot, rule!!.kov, madhi as MutableList<*>,
-                           SystemConstants.PAST_TENSE, true, true
-                       )*/
+
             madhimajhool =
                 PassivePastConjugator.instance.createVerbList(unaugmentedTrilateralRoot)
 
@@ -638,23 +1392,11 @@ class GatherAll {
                 .createJussiveVerbList(unaugmentedTrilateralRoot)
             amr = UnaugmentedImperativeConjugator.instance
                 .createVerbList(unaugmentedTrilateralRoot).toMutableList()
-            //    public ConjugationResult build(UnaugmentedTrilateralRoot root!!, int kov, List conjugations, String tense, boolean active, boolean applyGemination) {
-            //   result =  AugmentedActivePastConjugator.instance.createVerbList(augmentedRoot, getForm());
+
             val madhiconjresult = UnaugmentedTrilateralModifier.instance.build(
                 unaugmentedTrilateralRoot, rule!!.kov, madhi as MutableList<*>,
                 SystemConstants.PAST_TENSE, true, true
                                                                               )
-/*
-            val conjResult: ConjugationResult =
-                UnaugmentedTrilateralModifier.instance()
-                    .build(
-                        unaugmentedTrilateralRoot,
-                        unaugmentedTrilateralRoot, rule!!.kov,
-                        madhi,
-                        SystemConstants.PAST_TENSE,
-                        true
-                          )
-*/
 
 
 
@@ -675,11 +1417,8 @@ class GatherAll {
                 unaugmentedTrilateralRoot, rule.kov, amr,
                 SystemConstants.NOT_EMPHASIZED_IMPERATIVE_TENSE, true, true
                                                                       )
-            val nahiamrconj = UnaugmentedTrilateralModifier.instance.build(
-                unaugmentedTrilateralRoot, rule.kov, nahiamr as MutableList<*>,
-                SystemConstants.PRESENT_TENSE, true, true
-                                                                          )
-            //ismfale and ismmafool
+
+            //ismfale and ismMafool
             val conjugatedIsmFael =
                 UnaugmentedTrilateralActiveParticipleConjugator.instance.createNounList(
                     unaugmentedTrilateralRoot,
@@ -687,7 +1426,7 @@ class GatherAll {
                                                                                        )
             val faelconjugatoinResult = ActiveParticipleModifier.instance
                 .build(unaugmentedTrilateralRoot, rule.kov, conjugatedIsmFael, "")
-            val finalIsmFael = faelconjugatoinResult.finalResult
+
             val conjugatedIsmMafool =
                 UnaugmentedTrilateralPassiveParticipleConjugator.instance.createNounList(
                     unaugmentedTrilateralRoot,
@@ -695,17 +1434,11 @@ class GatherAll {
                                                                                         )
             val mafoolconjugationresult = PassiveParticipleModifier.instance
                 .build(unaugmentedTrilateralRoot, rule.kov, conjugatedIsmMafool, "")
-            val ismmafoolresultFinalResult = mafoolconjugationresult.finalResult
-            ///ismala
-            /*
-    0 = "مِفْعَل"
-1 = "مِفْعَلَة"
-2 = "مِفْعَال"
-3 = "فَعَّالَة"
-     */
+
+
             val conjugator = StandardInstrumentalConjugator.instance
             val modifier = InstrumentalModifier.instance
-            val title = "مِفْعَلَة"
+
             val mifal = conjugator.createNounList(unaugmentedTrilateralRoot, "مِفْعَل")
             val ismAalaMifalunResult: ConjugationResult =
                 modifier.build(unaugmentedTrilateralRoot, rule.kov, mifal, "مِفْعَل")
@@ -765,25 +1498,14 @@ class GatherAll {
             new.antumaf = la + fornahiamr[1].toString()
             new.antunna = la + fornahiamr[4].toString()
 
-
-
-
-
-
-
-
-
-
-
-
             arrayofamrobj.add(amrobj)
             arrayofamrobj.add(new)
 
-            faelobj = faelconjugatoinResult.faelMafool
-            mafoolobj = mafoolconjugationresult.faelMafool
+            faelObj = faelconjugatoinResult.faelMafool
+            mafoolObj = mafoolconjugationresult.faelMafool
 
-            skabeerismobj.add(faelobj)
-            skabeerismobj.add(mafoolobj)
+            skabeerismobj.add(faelObj)
+            skabeerismobj.add(mafoolObj)
             //     arrayofskabeerismobj.add(skabeerismobj)
             madhiobj = madhiconjresult.madhiMudharay
             madhimajhoolobj = madhimajhoolconj.madhiMudharay
@@ -791,25 +1513,7 @@ class GatherAll {
 
             mudharyobj = mudharayconj.madhiMudharay
             mudharaymajhoolobj = mudharaymajhoolconj.madhiMudharay
-            /*
-                    val ismalamifalunarr = ArrayList<IsmAlaMifalun>()
-        val ismalamifalatunarr= ArrayList<IsmAlaMifalatun>()
-        val ismaalamifaalunarr = ArrayList<IsmAlaMifaalun>()
 
-        val ismZarfMafilunarr = ArrayList<IsmZarfMafilun>()
-        val ismzarfmafalatunarr = ArrayList<IsmZarfMafalatun>()
-        val ismzarfmafalunarr = ArrayList<IsmZarfMafalun>()
-
-             */
-   /*
-           val ismalamifalunarr = ArrayList<IsmAlaMifalun>()
-        val ismalamifalatunarr= ArrayList<IsmAlaMifalatun>()
-        val ismaalamifaalunarr = ArrayList<IsmAlaMifaalun>()
-
-        val  = ArrayList<IsmZarfMafilun>()
-        val ismzarfmafalatunarr = ArrayList<IsmZarfMafalatun>()
-        val ismzarfmafalunarr = ArrayList<IsmZarfMafalun>()
-    */
              alamifal=ismAalaMifalunResult.alaMifalun
              alaMifaalun=ismAlaMifaalun.alaMifaalun
             alaMifalatun=ismALaMifalatunResult.alaMifalatun
@@ -830,18 +1534,25 @@ class GatherAll {
             madhimuhdarymainobj.add(mudharaymajhoolobj)
 
             verbDetailsobj.verbtype = rule.desc.toString()
-            verbDetailsobj.babname = unaugmentedTrilateralRoot.conjugationname
+            verbDetailsobj.babname = unaugmentedTrilateralRoot.conjugationname.toString()
             verbDetailsobj.mazeedormujarad = "mujarrad"
-            verbDetailsobj.wazannumberorname = unaugmentedTrilateralRoot.rulename
+            verbDetailsobj.wazannumberorname = unaugmentedTrilateralRoot.rulename.toString()
             verbDetailsobj.verbroot = verbroot
 
             arrayofverbdetails.add(verbDetailsobj)
             //   arrayofskabeermadhimudharay.add(madhimuhdarymainobj)
-            finallist.add(madhimuhdarymainobj)
-            finallist.add(skabeerismobj)
-            finallist.add(arrayofamrobj)
-            finallist.add(arrayofverbdetails)
-            val ismalazarf = IsmAlaZarfSagheer()
+            finalList.add(madhimuhdarymainobj)
+            finalList.add(skabeerismobj)
+            finalList.add(arrayofamrobj)
+            finalList.add(arrayofverbdetails)
+            val ismalazarf = IsmAlaZarfSagheer(
+                finalIsmAlaMifalatun.filterIsInstance<IsmAlaMifalatun>(),
+                finalIsmAlaMifaalun.filterIsInstance<IsmAlaMifaalun>(),
+                finalIsmAlaMifalun.filterIsInstance<IsmAlaMifalun>(),
+                ismZarfMafalatunList.filterIsInstance<IsmZarfMafalatun>(),
+                ismZarfMafalunList.filterIsInstance<IsmZarfMafalun>(),
+                ismZarfMafilunList.filterIsInstance<IsmZarfMafilun>()
+            )
 
             ismalazarf.ismAlaMifal = finalAlamifal[0].toString()
             ismalazarf.ismALAMifalatun = finalAlamifalatun[1].toString()
@@ -852,63 +1563,62 @@ class GatherAll {
             ismalazarf.zarfMafalatun = zarffinalmafalatun[1].toString()
             val ismalazarfobject = ArrayList<IsmAlaZarfSagheer>()
             ismalazarfobject.add(ismalazarf)
-            finallist.add(ismalazarfobject)
+            finalList.add(ismalazarfobject)
 
-            finallist.add(ismalamifalunarr)
-            finallist.add(ismalamifalatunarr)
-            finallist.add(ismaalamifaalunarr)
-            finallist.add(ismZarfMafilunarr)
+            finalList.add(ismalamifalunarr)
+            finalList.add(ismalamifalatunarr)
+            finalList.add(ismaalamifaalunarr)
+            finalList.add(ismZarfMafilunarr)
 
-            finallist.add(ismzarfmafalatunarr)
-            finallist.add(ismzarfmafalunarr)
+            finalList.add(ismzarfmafalatunarr)
+            finalList.add(ismzarfmafalunarr)
 
 
 
 
 
             //  skabeer.add((ArrayList) strings);
-            return finallist
+            return finalList
         }
-        return finallist
-    }
-
-    private fun buildMazeedList(
+        return finalList
+    }*/
+/*    private fun buildMazeedListold(
         verbmood: String,
         verbroot: String,
         augmentedFormula: String,
-                               ): ArrayList<ArrayList<*>> {
+    ): ArrayList<ArrayList<*>> {
         val augmentedRoot =
             OSarfDictionary.instance.getAugmentedTrilateralRoot(verbroot, augmentedFormula)
-        var ismfael: List<*>
-        var ismmafool: List<*>
+        var ismFael: List<*>
+        var ismMafool: List<*>
         var madhimajhool: List<*>
         lateinit var mudharay: List<*>
         var amr: MutableList<*>
         var nahiamr: MutableList<*>
         var madhi: List<*>
         lateinit var mudharaymajhool: List<*>
-        val c1 = verbroot[0]
-        val c2 = verbroot[1]
-        val c3 = verbroot[2]
+        val firstCharacter = verbroot[0]
+        val secondCharacter = verbroot[1]
+        val thirdCharacter = verbroot[2]
         val skabeer = ArrayList<ArrayList<*>>()
-        val finallist = ArrayList<ArrayList<*>>()
+        val finalList = ArrayList<ArrayList<*>>()
         val madhimuhdarymainobj = ArrayList<MadhiMudharay>()
         val skabeerismobj = ArrayList<FaelMafool>()
-        val arrayofamrobj = ArrayList<AmrNahiAmr>()
+        val arrayofamrobj = ArrayList<Amr>()
         val arrayofverbdetails = ArrayList<VerbDetails>()
         val madhimajhoolobj: MadhiMudharay
         val mudharyobj: MadhiMudharay
         val mudharaymajhoolobj: MadhiMudharay
         val madhiobj: MadhiMudharay
-        val faelobj: FaelMafool
-        val mafoolobj: FaelMafool
-        val amrobj: AmrNahiAmr
+        val faelObj: FaelMafool
+        val mafoolObj: FaelMafool
+        val amrobj: Amr
         val verbDetailsobj = VerbDetails()
 
 
 
         if (augmentedRoot != null) {
-            val rule = KovRulesManager.instance.getTrilateralKovRule(c1, c2, c3)
+            val rule = KovRulesManager.instance.getTrilateralKovRule(firstCharacter, secondCharacter, thirdCharacter)
             madhi = AugmentedActivePastConjugator.instance
                 .createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
             madhimajhool = AugmentedPassivePastConjugator.instance
@@ -919,12 +1629,12 @@ class GatherAll {
                         AugmentedActivePresentConjugator.instance.nominativeConjugator.createVerbList(
                             augmentedRoot,
                             augmentedFormula.toInt()
-                                                                                                     )
+                        )
                     mudharaymajhool =
                         AugmentedPassivePresentConjugator.instance.nominativeConjugator.createVerbList(
                             augmentedRoot,
                             augmentedFormula.toInt()
-                                                                                                      )
+                        )
                 }
 
                 "Subjunctive" -> {
@@ -932,12 +1642,12 @@ class GatherAll {
                         AugmentedActivePresentConjugator.instance.accusativeConjugator.createVerbList(
                             augmentedRoot,
                             augmentedFormula.toInt()
-                                                                                                     )
+                        )
                     mudharaymajhool =
                         AugmentedPassivePresentConjugator.instance.accusativeConjugator.createVerbList(
                             augmentedRoot,
                             augmentedFormula.toInt()
-                                                                                                      )
+                        )
                 }
 
                 "Jussive" -> {
@@ -945,12 +1655,12 @@ class GatherAll {
                         AugmentedActivePresentConjugator.instance.jussiveConjugator.createVerbList(
                             augmentedRoot,
                             augmentedFormula.toInt()
-                                                                                                  )
+                        )
                     mudharaymajhool =
                         AugmentedPassivePresentConjugator.instance.jussiveConjugator.createVerbList(
                             augmentedRoot,
                             augmentedFormula.toInt()
-                                                                                                   )
+                        )
                 }
 
                 "Emphasized" -> {
@@ -958,12 +1668,12 @@ class GatherAll {
                         AugmentedActivePresentConjugator.instance.emphasizedConjugator.createVerbList(
                             augmentedRoot,
                             augmentedFormula.toInt()
-                                                                                                     )
+                        )
                     mudharaymajhool =
                         AugmentedPassivePresentConjugator.instance.emphasizedConjugator.createVerbList(
                             augmentedRoot,
                             augmentedFormula.toInt()
-                                                                                                      )
+                        )
                 }
             }
 
@@ -973,53 +1683,53 @@ class GatherAll {
                 AugmentedActivePresentConjugator.instance.jussiveConjugator.createVerbList(
                     augmentedRoot,
                     augmentedFormula.toInt()
-                                                                                          )
+                )
                     .toMutableList()
             amr = AugmentedImperativeConjugator.instance.notEmphsizedConjugator.createVerbList(
                 augmentedRoot,
                 augmentedFormula.toInt()
-                                                                                              )
+            )
                 .toMutableList()
             val madhiconjresult = AugmentedTrilateralModifier.instance.build(
                 augmentedRoot, rule!!.kov, augmentedRoot.form!!.toInt(), madhi,
                 SystemConstants.PAST_TENSE, true, true
-                                                                            )
+            )
             val madhimajhoolconj = AugmentedTrilateralModifier.instance.build(
                 augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), madhimajhool,
                 SystemConstants.PAST_TENSE, true, true
-                                                                             )
+            )
             val mudharayconj = AugmentedTrilateralModifier.instance.build(
                 augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), mudharay,
                 SystemConstants.PRESENT_TENSE, true, true
-                                                                         )
+            )
             val mudharaymajhoolconj =
                 AugmentedTrilateralModifier.instance.build(
                     augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(),
                     mudharaymajhool,
                     SystemConstants.PRESENT_TENSE, false, true
-                                                          )
+                )
             val amrconj = AugmentedTrilateralModifier.instance.build(
                 augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), amr,
                 SystemConstants.NOT_EMPHASIZED_IMPERATIVE_TENSE, true, true
-                                                                    )
+            )
             val nahiamrconj = AugmentedTrilateralModifier.instance.build(
                 augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), nahiamr,
                 SystemConstants.PRESENT_TENSE, true, true
-                                                                        )
-            ismfael = AugmentedTrilateralActiveParticipleConjugator.instance
+            )
+            ismFael = AugmentedTrilateralActiveParticipleConjugator.instance
                 .createNounList(augmentedRoot, augmentedFormula.toInt())
             val ismfaleresult =
                 org.sj.nounConjugation.trilateral.augmented.modifier.activeparticiple.ActiveParticipleModifier.instance
-                    .build(augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), ismfael, true)
+                    .build(augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), ismFael, true)
 
-            ismmafool = AugmentedTrilateralPassiveParticipleConjugator.instance
+            ismMafool = AugmentedTrilateralPassiveParticipleConjugator.instance
                 .createNounList(augmentedRoot, augmentedFormula.toInt())
             val ismmafoolresult =
                 org.sj.nounConjugation.trilateral.augmented.modifier.activeparticiple.ActiveParticipleModifier.instance
-                    .build(augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), ismmafool, true)
+                    .build(augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), ismMafool, true)
             val la = "لا "
             amrobj = amrconj.amrandnahi
-            val new = AmrNahiAmr()
+            val new = Amr()
             val fornahiamr = nahiamr.subList(6, 11)
 
             new.anta = la + fornahiamr[0].toString()
@@ -1033,11 +1743,11 @@ class GatherAll {
             arrayofamrobj.add(amrobj)
             arrayofamrobj.add(new)
 
-            faelobj = ismfaleresult.faelMafool
-            mafoolobj = ismmafoolresult.faelMafool
+            faelObj = ismfaleresult.faelMafool
+            mafoolObj = ismmafoolresult.faelMafool
 
-            skabeerismobj.add(faelobj)
-            skabeerismobj.add(mafoolobj)
+            skabeerismobj.add(faelObj)
+            skabeerismobj.add(mafoolObj)
             //     arrayofskabeerismobj.add(skabeerismobj)
             madhiobj = madhiconjresult.madhiMudharay
             madhimajhoolobj = madhimajhoolconj.madhiMudharay
@@ -1051,15 +1761,15 @@ class GatherAll {
             madhimuhdarymainobj.add(mudharaymajhoolobj)
 
             verbDetailsobj.verbtype = rule.desc.toString()
-            verbDetailsobj.babname = augmentedRoot.babname
+            verbDetailsobj.babname = augmentedRoot.babname.toString()
             verbDetailsobj.mazeedormujarad = "mazeed"
-            verbDetailsobj.wazannumberorname = augmentedRoot.form
+            verbDetailsobj.wazannumberorname = augmentedRoot.form!!
             verbDetailsobj.verbroot = verbroot
-            finallist.add(madhimuhdarymainobj)
-            finallist.add(skabeerismobj)
-            finallist.add(arrayofamrobj)
+            finalList.add(madhimuhdarymainobj)
+            finalList.add(skabeerismobj)
+            finalList.add(arrayofamrobj)
             arrayofverbdetails.add(verbDetailsobj)
-            finallist.add(arrayofverbdetails)
+            finalList.add(arrayofverbdetails)
 
 
 
@@ -1069,44 +1779,101 @@ class GatherAll {
 
 
 
-            return finallist//buildAugmentedLists
+            return finalList//buildAugmentedLists
         }
-        return finallist
-    }
+        return finalList
+    }*/
 
-    private fun buildMazeedList(verbmood: String, verbroot: String): ArrayList<ArrayList<*>> {
+/*
+    fun buildMazeedParticiplesold(
+        verbroot: String,
+        augmentedFormula: String,
+                              ): ArrayList<ArrayList<*>> {
+        var modifiedVebroot = verbroot
+        val firstCharacter = modifiedVebroot.get(0)
+        val secondCharacter = modifiedVebroot.get(1)
+        val thirdCharacter = modifiedVebroot.get(2)
+        val finalList = ArrayList<ArrayList<*>>()
+        val arrayofFaelMafool = ArrayList<FaelMafool>()
+        val faelObj: FaelMafool
+        val mafoolObj: FaelMafool
+        val alephIndex = modifiedVebroot.indexOf("ا")
+        val alephHamzaIndex = modifiedVebroot.indexOf("أ")
+        if (alephIndex != -1) {
+            if (modifiedVebroot != null) {
+                modifiedVebroot = modifiedVebroot.replace("ا", "ء")
+            }
+        } else if (alephHamzaIndex != -1) {
+            if (modifiedVebroot != null) {
+                modifiedVebroot = modifiedVebroot.replace("أ", "ء")
+            }
+        }
+        val augmentedRoot =
+            OSarfDictionary.instance.getAugmentedTrilateralRoot(modifiedVebroot, augmentedFormula)
+        var ismFael: List<*>?
+        var ismMafool: List<*>?
+
+        if (augmentedRoot != null) {
+            val rule = KovRulesManager.instance.getTrilateralKovRule(firstCharacter, secondCharacter, thirdCharacter)
+            ismFael = AugmentedTrilateralActiveParticipleConjugator.instance
+                .createNounList(augmentedRoot, augmentedFormula.toInt())
+            val conjResult =
+                org.sj.nounConjugation.trilateral.augmented.modifier.activeparticiple.ActiveParticipleModifier.instance
+                    .build(augmentedRoot, rule!!.kov, augmentedRoot.form!!.toInt(), ismFael, true)
+
+            ismMafool = AugmentedTrilateralPassiveParticipleConjugator.instance.createNounList(augmentedRoot, augmentedFormula.toInt())
+            val ismmafoolresult =org.sj.nounConjugation.trilateral.augmented.modifier.activeparticiple.ActiveParticipleModifier.instance
+                    .build(augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), ismMafool, true)
+
+
+
+            faelObj = conjResult.faelMafool
+            mafoolObj = ismmafoolresult.faelMafool
+            arrayofFaelMafool.add(faelObj)
+            arrayofFaelMafool.add(mafoolObj)
+
+            finalList.add(arrayofFaelMafool)
+
+            return finalList
+        }
+        return finalList
+    }
+*/
+
+
+/*    private fun buildMazeedListold(verbmood: String, verbroot: String): ArrayList<ArrayList<*>> {
         val augmentedRoot = OSarfDictionary.instance.getAugmentedTrilateralRoot(verbroot)
-        var ismfael: List<*>
-        var ismmafool: List<*>
+        var ismFael: List<*>
+        var ismMafool: List<*>
         var madhimajhool: List<*>
         var mudharay: List<*>? = null
         var amr: MutableList<*>
         var nahiamr: List<*>
         var madhi: List<*>
         var mudharaymajhool: List<*>? = null
-        val finallist = ArrayList<ArrayList<*>>()
-        val c1 = verbroot[0]
-        val c2 = verbroot[1]
-        val c3 = verbroot[2]
+        val finalList = ArrayList<ArrayList<*>>()
+        val firstCharacter = verbroot[0]
+        val secondCharacter = verbroot[1]
+        val thirdCharacter = verbroot[2]
         val madhimuhdarymainobj = ArrayList<MadhiMudharay>()
-        val arrayofFaelMafool = ArrayList<FaelMafool>()
-        val arrayofamrobj = ArrayList<AmrNahiAmr>()
+
+        val arrayofamrobj = ArrayList<Amr>()
         val skabeer = ArrayList<ArrayList<*>>()
         val madhimajhoolobj: MadhiMudharay
         val mudharyobj: MadhiMudharay
         val mudharaymajhoolobj: MadhiMudharay
         val madhiobj: MadhiMudharay
-        val faelobj: FaelMafool
-        val mafoolobj: FaelMafool
-        val amrobj: AmrNahiAmr
-        val amrnahiobj: AmrNahiAmr
+        val faelObj: FaelMafool
+        val mafoolObj: FaelMafool
+        val amrobj: Amr
+
         val verbDetailsobj = VerbDetails()
         val skabeerismobj = ArrayList<FaelMafool>()
 
         val arrayofverbdetails = ArrayList<VerbDetails>()
-        val rule = KovRulesManager.instance.getTrilateralKovRule(c1, c2, c3)
+        val rule = KovRulesManager.instance.getTrilateralKovRule(firstCharacter, secondCharacter, thirdCharacter)
         if (augmentedRoot != null) {
-            //    if (selectionInfo.isAugmented()) {
+
             madhi = AugmentedActivePastConjugator.instance
                 .createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
             madhimajhool = AugmentedPassivePastConjugator.instance
@@ -1117,12 +1884,12 @@ class GatherAll {
                         AugmentedActivePresentConjugator.instance.nominativeConjugator.createVerbList(
                             augmentedRoot,
                             augmentedRoot.form!!.toInt()
-                                                                                                     )
+                        )
                     mudharaymajhool =
                         AugmentedPassivePresentConjugator.instance.nominativeConjugator.createVerbList(
                             augmentedRoot,
                             augmentedRoot.form!!.toInt()
-                                                                                                      )
+                        )
                 }
 
                 "Subjunctive" -> {
@@ -1130,12 +1897,12 @@ class GatherAll {
                         AugmentedActivePresentConjugator.instance.accusativeConjugator.createVerbList(
                             augmentedRoot,
                             augmentedRoot.form!!.toInt()
-                                                                                                     )
+                        )
                     mudharaymajhool =
                         AugmentedPassivePresentConjugator.instance.accusativeConjugator.createVerbList(
                             augmentedRoot,
                             augmentedRoot.form!!.toInt()
-                                                                                                      )
+                        )
                 }
 
                 "Jussive" -> {
@@ -1143,12 +1910,12 @@ class GatherAll {
                         AugmentedActivePresentConjugator.instance.jussiveConjugator.createVerbList(
                             augmentedRoot,
                             augmentedRoot.form!!.toInt()
-                                                                                                  )
+                        )
                     mudharaymajhool =
                         AugmentedPassivePresentConjugator.instance.jussiveConjugator.createVerbList(
                             augmentedRoot,
                             augmentedRoot.form!!.toInt()
-                                                                                                   )
+                        )
                 }
 
                 "Emphasized" -> {
@@ -1156,63 +1923,63 @@ class GatherAll {
                         AugmentedActivePresentConjugator.instance.emphasizedConjugator.createVerbList(
                             augmentedRoot,
                             augmentedRoot.form!!.toInt()
-                                                                                                     )
+                        )
                     mudharaymajhool =
                         AugmentedPassivePresentConjugator.instance.emphasizedConjugator.createVerbList(
                             augmentedRoot,
                             augmentedRoot.form!!.toInt()
-                                                                                                      )
+                        )
                 }
             }
             nahiamr =
                 AugmentedActivePresentConjugator.instance.jussiveConjugator.createVerbList(
                     augmentedRoot,
                     augmentedRoot.form!!.toInt()
-                                                                                          )
+                )
             amr = AugmentedImperativeConjugator.instance.notEmphsizedConjugator.createVerbList(
                 augmentedRoot,
                 augmentedRoot.form!!.toInt()
-                                                                                              )
+            )
                 .toMutableList()
             val madhiconjresult = AugmentedTrilateralModifier.instance.build(
                 augmentedRoot, rule!!.kov, augmentedRoot.form!!.toInt(), madhi,
                 SystemConstants.PAST_TENSE, true, true
-                                                                            )
+            )
             val madhimajhoolconj = AugmentedTrilateralModifier.instance.build(
                 augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), madhimajhool,
                 SystemConstants.PAST_TENSE, true, true
-                                                                             )
+            )
             val mudharayconj = AugmentedTrilateralModifier.instance.build(
                 augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), mudharay!!,
                 SystemConstants.PRESENT_TENSE, true, true
-                                                                         )
+            )
             val mudharaymajhoolconj = AugmentedTrilateralModifier.instance.build(
                 augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), mudharaymajhool!!,
                 SystemConstants.PRESENT_TENSE, false, true
-                                                                                )
+            )
             val amrconj = AugmentedTrilateralModifier.instance.build(
                 augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), amr,
                 SystemConstants.NOT_EMPHASIZED_IMPERATIVE_TENSE, true, true
-                                                                    )
+            )
             val nahiamrconj = AugmentedTrilateralModifier.instance.build(
                 augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), nahiamr,
                 SystemConstants.PRESENT_TENSE, true, true
-                                                                        )
-            ismfael = AugmentedTrilateralActiveParticipleConjugator.instance
+            )
+            ismFael = AugmentedTrilateralActiveParticipleConjugator.instance
                 .createNounList(augmentedRoot, augmentedRoot.form!!.toInt())
-            ismmafool = AugmentedTrilateralPassiveParticipleConjugator.instance
+            ismMafool = AugmentedTrilateralPassiveParticipleConjugator.instance
                 .createNounList(augmentedRoot, augmentedRoot.form!!.toInt())
             val conjResult =
                 org.sj.nounConjugation.trilateral.augmented.modifier.activeparticiple.ActiveParticipleModifier.instance
-                    .build(augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), ismfael, true)
+                    .build(augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), ismFael, true)
             val mafoolresult =
                 org.sj.nounConjugation.trilateral.augmented.modifier.activeparticiple.ActiveParticipleModifier.instance
-                    .build(augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), ismmafool, true)
+                    .build(augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), ismMafool, true)
 
 
             val la = "لا "
             amrobj = amrconj.amrandnahi
-            val new = AmrNahiAmr()
+            val new = Amr()
             val fornahiamr = nahiamr.subList(6, 11)
 
             new.anta = la + fornahiamr[0].toString()
@@ -1221,47 +1988,35 @@ class GatherAll {
             new.anti = la + fornahiamr[3].toString()
             new.antumaf = la + fornahiamr[1].toString()
             new.antunna = la + fornahiamr[4].toString()
-
-
             arrayofamrobj.add(amrobj)
             arrayofamrobj.add(new)
-
-            faelobj = conjResult.faelMafool
-            mafoolobj = mafoolresult.faelMafool
-
-            skabeerismobj.add(faelobj)
-            skabeerismobj.add(mafoolobj)
+            faelObj = conjResult.faelMafool
+            mafoolObj = mafoolresult.faelMafool
+            skabeerismobj.add(faelObj)
+            skabeerismobj.add(mafoolObj)
             //     arrayofskabeerismobj.add(skabeerismobj)
             madhiobj = madhiconjresult.madhiMudharay
             madhimajhoolobj = madhimajhoolconj.madhiMudharay
-
-
             mudharyobj = mudharayconj.madhiMudharay
             mudharaymajhoolobj = mudharaymajhoolconj.madhiMudharay
             madhimuhdarymainobj.add(madhiobj)
             madhimuhdarymainobj.add(madhimajhoolobj)
             madhimuhdarymainobj.add(mudharyobj)
             madhimuhdarymainobj.add(mudharaymajhoolobj)
-
             verbDetailsobj.verbtype = rule.desc.toString()
-            verbDetailsobj.babname = augmentedRoot.babname
+            verbDetailsobj.babname = augmentedRoot.babname.toString()
             verbDetailsobj.mazeedormujarad = "mazeed"
-            verbDetailsobj.wazannumberorname = augmentedRoot.form
+            verbDetailsobj.wazannumberorname = augmentedRoot.form!!
             verbDetailsobj.verbroot = verbroot
-            finallist.add(madhimuhdarymainobj)
-            finallist.add(skabeerismobj)
-            finallist.add(arrayofamrobj)
+            finalList.add(madhimuhdarymainobj)
+            finalList.add(skabeerismobj)
+            finalList.add(arrayofamrobj)
             arrayofverbdetails.add(verbDetailsobj)
-            finallist.add(arrayofverbdetails)
-
-
-
-
-
-            ismfael = conjResult.finalResult
-            ismmafool = AugmentedTrilateralPassiveParticipleConjugator.instance
+            finalList.add(arrayofverbdetails)
+            ismFael = conjResult.finalResult
+            AugmentedTrilateralPassiveParticipleConjugator.instance
                 .createNounList(augmentedRoot, augmentedRoot.form!!.toInt())
-            ismmafool = conjResult.finalResult
+            ismMafool = conjResult.finalResult
             madhi = madhiconjresult.finalResult
             madhimajhool = madhimajhoolconj.finalResult
             mudharay = mudharayconj.finalResult
@@ -1312,10 +2067,10 @@ class GatherAll {
                     listmudharymajhool.add("-")
                 }
             }
-            for (s in ismfael) {
+            for (s in ismFael) {
                 listismfael.add(s.toString())
             }
-            for (s in ismmafool) {
+            for (s in ismMafool) {
                 listismmafool.add(s.toString())
             }
             for (s in amr) {
@@ -1349,68 +2104,344 @@ class GatherAll {
             skabeer.add(listamrnahi as ArrayList<*>)
             skabeer.add(listismfael as ArrayList<*>)
             skabeer.add(listismmafool as ArrayList<*>)
-            return finallist
+            return finalList
         }
-        return finallist
+        return finalList
+    }*/
+
+
+
+/*
+private fun buildMazeedListOLD(
+    verbmood: String,
+    verbroot: String,
+    augmentedFormula: String,
+): ArrayList<ArrayList<*>> {
+    val augmentedRoot =
+        OSarfDictionary.instance.getAugmentedTrilateralRoot(verbroot, augmentedFormula)
+
+    // If root not found, return an empty list
+    if (augmentedRoot == null) return arrayListOf()
+    var berb=verbroot
+    // Get the first, second, third characters of the verb root
+    val rule = KovRulesManager.instance.getTrilateralKovRule(
+        verbroot[0], verbroot[1], verbroot[2]
+    ) ?: return arrayListOf()
+
+    // Initialize lists for Madhi/Mudhary conjugations
+    val madhiMudharayList = ArrayList<MadhiMudharay>()
+    val skabeerIsmList = ArrayList<FaelMafool>()
+    val amrList = ArrayList<Amr>()
+    val verbDetailsList = ArrayList<VerbDetails>()
+
+    // Retrieve verb conjugations
+    val madhi = AugmentedActivePastConjugator.instance
+        .createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
+    val madhimajhool = AugmentedPassivePastConjugator.instance
+        .createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
+
+    // Handle verb mood and retrieve the appropriate conjugations
+    val mudharay = when (verbmood) {
+        "Indicative" -> AugmentedActivePresentConjugator.instance.nominativeConjugator
+        "Subjunctive" -> AugmentedActivePresentConjugator.instance.accusativeConjugator
+        "Jussive" -> AugmentedActivePresentConjugator.instance.jussiveConjugator
+        "Emphasized" -> AugmentedActivePresentConjugator.instance.emphasizedConjugator
+        else -> null
+    }?.createVerbList(augmentedRoot, augmentedFormula.toInt())
+
+    val mudharaymajhool = when (verbmood) {
+        "Indicative" -> AugmentedPassivePresentConjugator.instance.nominativeConjugator
+        "Subjunctive" -> AugmentedPassivePresentConjugator.instance.accusativeConjugator
+        "Jussive" -> AugmentedPassivePresentConjugator.instance.jussiveConjugator
+        "Emphasized" -> AugmentedPassivePresentConjugator.instance.emphasizedConjugator
+        else -> null
+    }?.createVerbList(augmentedRoot, augmentedFormula.toInt())
+
+    // Process Amr and NahiAmr conjugations
+    val amr = AugmentedImperativeConjugator.instance.notEmphsizedConjugator
+        .createVerbList(augmentedRoot, augmentedFormula.toInt())
+    val nahiamr = AugmentedActivePresentConjugator.instance.jussiveConjugator
+        .createVerbList(augmentedRoot, augmentedFormula.toInt())
+
+    // Apply modifications to each conjugation group
+    val madhiconjresult = AugmentedTrilateralModifier.instance.build(
+        augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), madhi,
+        SystemConstants.PAST_TENSE, true, true
+    )
+    val madhimajhoolconj = AugmentedTrilateralModifier.instance.build(
+        augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), madhimajhool,
+        SystemConstants.PAST_TENSE, true, true
+    )
+    val mudharayconj = mudharay?.let {
+        AugmentedTrilateralModifier.instance.build(
+            augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), it,
+            SystemConstants.PRESENT_TENSE, true, true
+        )
+    }
+    val mudharaymajhoolconj = mudharaymajhool?.let {
+        AugmentedTrilateralModifier.instance.build(
+            augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), it,
+            SystemConstants.PRESENT_TENSE, false, true
+        )
     }
 
-    fun buildMazeedParticiples(
+    // Process active and passive participles (ismFael and ismMafool)
+    val ismFael = AugmentedTrilateralActiveParticipleConjugator.instance.createNounList(augmentedRoot, augmentedFormula.toInt())
+    val ismfaleresult = org.sj.nounConjugation.trilateral.augmented.modifier.activeparticiple.ActiveParticipleModifier.instance.build(augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), ismFael, true)
+
+    val ismMafool = AugmentedTrilateralPassiveParticipleConjugator.instance
+        .createNounList(augmentedRoot, augmentedFormula.toInt())
+    val ismmafoolresult = org.sj.nounConjugation.trilateral.augmented.modifier.activeparticiple
+        .ActiveParticipleModifier.instance.build(augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), ismMafool, true)
+
+    // Add conjugated results to lists
+    madhiMudharayList.addAll(
+        listOf(madhiconjresult.madhiMudharay, madhimajhoolconj.madhiMudharay)
+    )
+    mudharayconj?.let { madhiMudharayList.add(it.madhiMudharay) }
+    mudharaymajhoolconj?.let { madhiMudharayList.add(it.madhiMudharay) }
+
+    skabeerIsmList.addAll(
+        listOf(ismfaleresult.faelMafool, ismmafoolresult.faelMafool)
+    )
+
+    // Handle Amr and NahiAmr
+    // Handle Amr and NahiAmr
+    val amrobj = Amr() // Create a new AmrNahiAmr object
+    val nahiamrList = nahiamr.subList(6, 11) // Adjust this based on your needs
+    amrobj.anta = "لا " + nahiamrList[0].toString()
+    amrobj.antuma = "لا " + nahiamrList[1].toString()
+    amrobj.antum = "لا " + nahiamrList[2].toString()
+    amrobj.anti = "لا " + nahiamrList[3].toString()
+// Add additional properties as necessary...
+
+// Create a new instance for the other conjugation
+    val newAmr = Amr().apply {
+        anta = "لا " + nahiamrList[0].toString()
+        antuma = "لا " + nahiamrList[1].toString()
+        antum = "لا " + nahiamrList[2].toString()
+        anti = "لا " + nahiamrList[3].toString()
+        // Add other conjugations as needed...
+    }
+
+// Add the AmrNahiAmr objects to the list
+    amrList.add(amrobj)
+    amrList.add(newAmr)
+    var verbDetailsss = VerbDetails(verbroot = "initialRoot")
+// verbDetails is now mutable
+
+
+    // Verb details
+    val verbDetails = VerbDetails().apply {
+        verbtype = rule.desc.toString()
+        babname = augmentedRoot.babname.toString()
+        mazeedormujarad = "mazeed"
+        wazannumberorname = augmentedRoot.form!!
+        berb = verbroot
+    }
+    verbDetailsList.add(verbDetails)
+
+    // Return the final list
+    val finalList = arrayListOf(
+        madhiMudharayList,
+        skabeerIsmList,
+        amrList,
+        verbDetailsList
+    )
+
+    return finalList
+}*/
+
+/*
+    private fun buildUnAugmentedNounofInstrumentols(
         verbroot: String,
-        augmentedFormula: String,
-                              ): ArrayList<ArrayList<*>> {
-        var verbroot1 = verbroot
-        val c1 = verbroot1.get(0)
-        val c2 = verbroot1.get(1)
-        val c3 = verbroot1.get(2)
-        val finallist = ArrayList<ArrayList<*>>()
+        unaugmentedFormula: String,
+                                                ): ArrayList<ArrayList<*>> {
+        val skabeer = ArrayList<ArrayList<*>>()
+        val firstCharacter = verbroot[0]
+        val secondCharacter = verbroot[1]
+        val thirdCharacter = verbroot[2]
+        val ismalamifalunarr = ArrayList<IsmAlaMifalun>()
+        val ismalamifalatunarr= ArrayList<IsmAlaMifalatun>()
+        val ismaalamifaalunarr = ArrayList<IsmAlaMifaalun>()
+
+
+        val rule = KovRulesManager.instance.getTrilateralKovRule(firstCharacter, secondCharacter, thirdCharacter)
+        val unaugmentedTrilateralRoot =
+            OSarfDictionary.instance.getUnaugmentedTrilateralRoots(verbroot, unaugmentedFormula)
+        if (unaugmentedTrilateralRoot != null) {
+            val conjugator = StandardInstrumentalConjugator.instance
+            val modifier = InstrumentalModifier.instance
+            val mifal = conjugator.createNounList(unaugmentedTrilateralRoot, "مِفْعَل")
+            val mifalunResult: ConjugationResult =
+                modifier.build(unaugmentedTrilateralRoot, rule!!.kov, mifal, "مِفْعَل")
+
+            val mifalatun = conjugator.createNounList(unaugmentedTrilateralRoot, "مِفْعَلَة")
+            val mifalatunResult: ConjugationResult =
+                modifier.build(unaugmentedTrilateralRoot, rule.kov, mifalatun, "مِفْعَلَة")
+
+            val mifaal = conjugator.createNounList(unaugmentedTrilateralRoot, "مِفْعَال")
+            val MifaalResult            : ConjugationResult =
+                modifier.build(unaugmentedTrilateralRoot, rule.kov, mifaal, "مِفْعَال")
+
+            val faalatun = conjugator.createNounList(unaugmentedTrilateralRoot, "فَعَّالَة")
+            val conjResultfaalatun: ConjugationResult =
+                modifier.build(unaugmentedTrilateralRoot, rule.kov, faalatun, "فَعَّالَة")
+            val alamifal: MutableList<String> = ArrayList()
+            val alamifalatun: MutableList<String> = ArrayList()
+            val alamifaal: MutableList<String> = ArrayList()
+
+            val ismfalamifalun = mifalunResult.alaMifalun
+            val ismfalamifalatun = mifalatunResult.alaMifalatun
+            val ismfalamifaaal = MifaalResult.alaMifaalun
+            ismalamifalunarr.add(ismfalamifalun)
+            ismalamifalatunarr.add(ismfalamifalatun)
+            ismaalamifaalunarr.add(ismfalamifaaal)
+            skabeer.add(ismalamifalunarr)
+            skabeer.add(ismalamifalatunarr)
+            skabeer.add(ismaalamifaalunarr)
+            return skabeer
+        }
+        return skabeer
+    }*/
+/*
+
+    private fun buildUnAugmentedNounofTimeAndPlaceolsd(
+        verbRoot: String,
+        unaugmentedFormula: String,
+                                                  ): ArrayList<ArrayList<*>> {
+        val skabeer = ArrayList<ArrayList<*>>()
+        val firstCharacter = verbRoot[0]
+        val secondCharacter = verbRoot[1]
+        val thirdCharacter = verbRoot[2]
+        val rule = KovRulesManager.instance.getTrilateralKovRule(firstCharacter, secondCharacter, thirdCharacter)
+
+
+        val ismZarfMafilunarr = ArrayList<IsmZarfMafilun>()
+        val ismzarfmafalatunarr = ArrayList<IsmZarfMafalatun>()
+        val ismzarfmafalunarr = ArrayList<IsmZarfMafalun>()
+        val unaugmentedTrilateralRoot =
+            OSarfDictionary.instance.getUnaugmentedTrilateralRoots(verbRoot, unaugmentedFormula)
+        */
+/*
+    "A" -> "مَفْعَل"
+"B" -> "مَفْعِل"
+"C" -> "مَفْعَلَة"
+     *//*
+if (unaugmentedTrilateralRoot != null) {
+
+            val zarfConjugator = TimeAndPlaceConjugator.instance
+            val zarfModifier = TimeAndPlaceModifier.instance
+            val mafalConjugationResult =
+                zarfConjugator.createNounList(unaugmentedTrilateralRoot, "مَفْعَل")
+            val mafal = zarfModifier.build(
+                unaugmentedTrilateralRoot,
+                rule!!.kov,
+                mafalConjugationResult,
+                "مَفْعَل"
+                                          )
+            val zarfFinalMafal = mafal.finalResult
+            val mafilconjugationlist =
+                zarfConjugator.createNounList(unaugmentedTrilateralRoot, "مَفْعِل")
+            val mafil = zarfModifier.build(
+                unaugmentedTrilateralRoot,
+                rule.kov,
+                mafilconjugationlist,
+                "مَفْعِل"
+                                          )
+            val zarfFinalMafil = mafil.finalResult
+            val mafalatunCOnjugationList =
+                zarfConjugator.createNounList(unaugmentedTrilateralRoot, "مَفْعَلَة")
+            val mafalatun = zarfModifier.build(
+                unaugmentedTrilateralRoot,
+                rule.kov,
+                mafalatunCOnjugationList,
+                "مَفْعَلَة"
+                                              )
+            val zarffinalmafalatun = mafalatun.finalResult
+            val zarfmafal: MutableList<String> = ArrayList()
+            val zarfmafil: MutableList<String> = ArrayList()
+            val zarfmafalatun: MutableList<String> = ArrayList()
+            for (s in zarfFinalMafal) {
+                if (s.toString().isNotEmpty()) {
+                    zarfmafal.add(s.toString())
+                }
+            }
+            for (s in zarfFinalMafil) {
+                if (s.toString().isNotEmpty()) {
+                    zarfmafil.add(s.toString())
+                }
+            }
+            for (s in zarffinalmafalatun) {
+                if (s.toString().isNotEmpty()) {
+                    zarfmafalatun.add(s.toString())
+                }
+            }
+
+
+            ismZarfMafilunarr.add( mafil.zarfMafilun)
+            ismzarfmafalatunarr.add(  mafalatun.zarfMafalatun)
+            ismzarfmafalunarr.add( mafal.zarfMafalun)
+            skabeer.add(ismZarfMafilunarr)
+            skabeer.add( ismzarfmafalatunarr )
+            skabeer.add(ismzarfmafalunarr)
+            return skabeer
+        }
+        return skabeer
+    }
+*/
+/* fun getMazeedListingorss(verbmood: String, verbroot: String): ArrayList<ArrayList<*>> {
+       return buildMazeedList(verbmood, verbroot)
+   }*/
+/*private fun buildMujarradParticipleListold(
+        verbroot: String,
+        unaugmentedFormula: String,
+                                           ): ArrayList<ArrayList<*>> {
+
+        val firstCharacter = verbroot[0]
+        val secondCharacter = verbroot[1]
+        val thirdCharacter = verbroot[2]
+
+        val finalList = ArrayList<ArrayList<*>>()
         val arrayofFaelMafool = ArrayList<FaelMafool>()
-        val faelobj: FaelMafool
-        val mafoolobj: FaelMafool
-        val aleph = verbroot1.indexOf("ا")
-        val alephhamza = verbroot1.indexOf("أ")
-        if (aleph != -1) {
-            if (verbroot1 != null) {
-                verbroot1 = verbroot1.replace("ا", "ء")
-            }
-        } else if (alephhamza != -1) {
-            if (verbroot1 != null) {
-                verbroot1 = verbroot1.replace("أ", "ء")
-            }
-        }
-        val augmentedRoot =
-            OSarfDictionary.instance.getAugmentedTrilateralRoot(verbroot1, augmentedFormula)
-        var ismfael: List<*>?
-        var ismmafool: List<*>?
+        val faelObj: FaelMafool
+        val mafoolObj: FaelMafool
 
-        if (augmentedRoot != null) {
-            val rule = KovRulesManager.instance.getTrilateralKovRule(c1, c2, c3)
-            ismfael = AugmentedTrilateralActiveParticipleConjugator.instance
-                .createNounList(augmentedRoot, augmentedFormula.toInt())
-            val conjResult =
-                org.sj.nounConjugation.trilateral.augmented.modifier.activeparticiple.ActiveParticipleModifier.instance
-                    .build(augmentedRoot, rule!!.kov, augmentedRoot.form!!.toInt(), ismfael, true)
-
-            ismmafool = AugmentedTrilateralPassiveParticipleConjugator.instance
-                .createNounList(augmentedRoot, augmentedFormula.toInt())
-            val ismmafoolresult =
-                org.sj.nounConjugation.trilateral.augmented.modifier.activeparticiple.ActiveParticipleModifier.instance
-                    .build(augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), ismmafool, true)
+        val rule = KovRulesManager.instance.getTrilateralKovRule(firstCharacter, secondCharacter, thirdCharacter)
+        val unaugmentedTrilateralRoot =
+            SarfDictionaryAmended.instance.getUnaugmentedTrilateralRoots(verbroot, unaugmentedFormula)
+        //ismfale and ismMafool
+        val conjugatedIsmFael =
+            UnaugmentedTrilateralActiveParticipleConjugator.instance.createNounList(
+                unaugmentedTrilateralRoot,
+                unaugmentedTrilateralRoot.conjugation!!
+                                                                                   )
+        val conjugationResult = ActiveParticipleModifier.instance
+            .build(unaugmentedTrilateralRoot, rule!!.kov, conjugatedIsmFael, "")
+        val conjugatedIsmMafool =
+            UnaugmentedTrilateralPassiveParticipleConjugator.instance.createNounList(
+                unaugmentedTrilateralRoot,
+                unaugmentedTrilateralRoot.conjugation!!
+                                                                                    )
+        val ismmafoolresult = PassiveParticipleModifier.instance
+            .build(unaugmentedTrilateralRoot, rule.kov, conjugatedIsmMafool, "")
 
 
+        faelObj = conjugationResult.faelMafool
+        mafoolObj = ismmafoolresult.faelMafool
+        arrayofFaelMafool.add(faelObj)
+        arrayofFaelMafool.add(mafoolObj)
+        finalList.add(arrayofFaelMafool)
+        val vdetails: MutableList<String> = ArrayList()
+        vdetails.add(rule.desc.toString())
+        vdetails.add(unaugmentedTrilateralRoot.conjugationname!!)
 
-            faelobj = conjResult.faelMafool
-            mafoolobj = ismmafoolresult.faelMafool
-            arrayofFaelMafool.add(faelobj)
-            arrayofFaelMafool.add(mafoolobj)
 
-            finallist.add(arrayofFaelMafool)
 
-            return finallist
-        }
-        return finallist
-    }
 
-    companion object {
-        val instance = GatherAll()
-    }
-}
+
+        return finalList//buildMujarradParticipleList
+
+
+
+    }*/

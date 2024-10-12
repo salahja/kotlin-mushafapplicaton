@@ -27,12 +27,12 @@ import com.example.mushafconsolidated.Entities.TameezEnt
 import com.example.mushafconsolidated.Entities.lughat
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListener
-import com.example.mushafconsolidated.model.QuranCorpusWbw
 import com.example.utility.CorpusUtilityorig
 import com.example.utility.QuranGrammarApplication
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import org.sj.conjugator.fragments.SarfSagheer
+import org.sj.data.IsmFaelMafoolResult
 import org.sj.verbConjugation.FaelMafool
 
 class NewRootWordDisplayAdapter : RecyclerView.Adapter<NewRootWordDisplayAdapter.ItemViewAdapter> {
@@ -58,7 +58,7 @@ class NewRootWordDisplayAdapter : RecyclerView.Adapter<NewRootWordDisplayAdapter
     private var isviewtype = 2
     private lateinit var worddetails: HashMap<String, SpannableStringBuilder?>
     private lateinit var vbdetail: HashMap<String, String?>
-    private lateinit var ismfaelmafool: ArrayList<ArrayList<*>>
+    private   var ismfaelmafool: IsmFaelMafoolResult? = null
     private lateinit var spannable: SpannableStringBuilder
     private lateinit var worddictorary: ArrayList<lughat>
     private lateinit var wazannumberslist: ArrayList<String>
@@ -87,7 +87,7 @@ class NewRootWordDisplayAdapter : RecyclerView.Adapter<NewRootWordDisplayAdapter
         wazannumberslist: ArrayList<String>?,
         spannable: SpannableStringBuilder?,
         noun: Boolean,
-        ismfaelmafool: ArrayList<ArrayList<*>>?,
+        ismfaelmafool: IsmFaelMafoolResult?,
         participles: Boolean,
         isverbconjugaton: Boolean,
         corpusSurahWord: ArrayList<CorpusEntity>,
@@ -490,13 +490,13 @@ class NewRootWordDisplayAdapter : RecyclerView.Adapter<NewRootWordDisplayAdapter
         Fonttypeface(holder)
         //   VerbHeader(holder);
         if (particples) {
-            val ismfael = ismfaelmafool[0][0]
-            val ismmafool = ismfaelmafool[0][1]
+            val ismfael = ismfaelmafool?.ismFaelMafoolList
+            val ismmafool = ismfaelmafool?.ismFaelMafoolList
             setTypeFace(holder)
-            ismFael(ismfael as FaelMafool, holder)
-            ismFaelFem(ismfael as FaelMafool, holder)
-            ismMafool(ismmafool as FaelMafool, holder)
-            ismMafoolFem(ismmafool as FaelMafool, holder)
+            ismFael(ismfael!![0]  , holder)
+            ismFaelFem(ismfael!![0]  , holder)
+            ismMafool(ismmafool!![1]  , holder)
+            ismMafoolFem(ismmafool[1]  , holder)
             gcase(holder)
             ismfaelmafoolnumbers(holder)
             fontSIzeSelection(holder)

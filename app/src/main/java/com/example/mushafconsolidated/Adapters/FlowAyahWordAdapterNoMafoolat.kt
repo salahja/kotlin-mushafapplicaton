@@ -19,6 +19,7 @@ import android.text.Html
 import android.text.SpannableString
 import android.text.SpannableString.valueOf
 import android.text.format.DateFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,6 +41,7 @@ import com.example.mushafconsolidated.Entities.SurahHeader
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SurahSummary
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
+import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet.Companion.TAG
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 
 import com.example.mushafconsolidatedimport.Config
@@ -74,6 +76,7 @@ class FlowAyahWordAdapterNoMafoolat(
     listener: OnItemClickListenerOnLong?,
 ) : RecyclerView.Adapter<FlowAyahWordAdapterNoMafoolat.ItemViewAdapter>() //implements OnItemClickListenerOnLong {
 {
+    private val spannedWordsCache = HashMap<CorpusEntity, SpannableString>()
     private var wordByWordDisplay: Boolean = false
     private var ayahWord: ArrayList<CorpusEntity>? = null
     private var defaultfont: Boolean = false
@@ -393,7 +396,10 @@ class FlowAyahWordAdapterNoMafoolat(
     ) {
 
         if (spannableverse != null) {
-            CorpusUtilityorig.setAyahGrammaticalPhrases(spannableverse, surah, ayah)
+          //  CorpusUtilityorig.setAyahGrammaticalPhrases(spannableverse, surah, ayah)
+            val spann=SpannableString("لَا يُكَلِّفُ ٱللَّهُ نَفْسًا إِلَّا وُسْعَهَاۚ لَهَا مَا كَسَبَتْ وَعَلَيْهَا مَا ٱكْتَسَبَتْۗ رَبَّنَا لَا تُؤَاخِذْنَآ إِن نَّسِينَآ أَوْ أَخْطَأْنَاۚ رَبَّنَا وَلَا تَحْمِلْ عَلَيْنَآ إِصْرًا كَمَا حَمَلْتَهُۥ عَلَى ٱلَّذِينَ مِن قَبْلِنَاۚ رَبَّنَا وَلَا تُحَمِّلْنَا مَا لَا طَاقَةَ لَنَا بِهِۦۖ وَٱعْفُ عَنَّا وَٱغْفِرْ لَنَا وَٱرْحَمْنَآۚ أَنتَ مَوْلَىٰنَا فَٱنصُرْنَا عَلَى ٱلْقَوْمِ ٱلْكَٰفِرِينَ ")
+           CorpusUtilityorig.  setAbsoluteNegation(ayahWord,spannableverse)
+           // CorpusUtilityorig.setAbsoluteNegation(ayahWord,spann)
             holder.quran_textView.text = spannableverse
         }
 
@@ -454,14 +460,21 @@ class FlowAyahWordAdapterNoMafoolat(
 
 
             //arabicTv
-
+            var spannedWord = SpannableString(" ")
             if (showWordColor) {
 
-                word.araone + word.aratwo + word.arathree + word.arafour + word.arafive
+                // Check if the word is already cached
+                spannedWord = spannedWordsCache.getOrPut(word) {
+                    // Log when we're generating a new SpannableString and storing it in the cache
+                    Log.d(TAG, "FROM FILE (generated new SpannableString)")
+                    QuranViewUtils.NewgetSpannedWords(word)
+                }
 
-                //  val spannedword: SpannableString = getSpannedWords(word)
-                //val spannedWord = getSpannedWords(word)
-                val spannedWord = QuranViewUtils.NewgetSpannedWords(word)
+                // Log when we're fetching the word from cache
+                if (spannedWordsCache.containsKey(word)) {
+                    Log.d(TAG, "FROM CACHE")
+                }
+
                 val arabicView =
                     if (showWbwTranslation && wordByWordDisplay) arabicChipview else arabicTv
                 arabicView.text = spannedWord
@@ -486,27 +499,7 @@ class FlowAyahWordAdapterNoMafoolat(
 
             if (showWbwTranslation) {
                 QuranViewUtils.setWordTranslation(translationTextView, word, wbw )
-              /*  when (wbw) {
-                    "en" -> {
-                        translationTextView.text = word.en
-                        translationTextView.paintFlags = translationTextView.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-                    }
 
-                    "bn" -> {
-                        translationTextView.text = word.bn
-                        translationTextView.paintFlags = translationTextView.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-                    }
-
-                    "in" -> {
-                        translationTextView.text = word.ind
-                        translationTextView.paintFlags = translationTextView.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-                    }
-
-                   "ur" -> {
-                         translationTextView.text = word.ur
-                         translationTextView.paintFlags = translationTextView.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-                     }
-                }*/
 
             }
             if (!defaultfont) {

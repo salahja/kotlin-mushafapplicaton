@@ -12,14 +12,16 @@ import com.example.mushafconsolidated.R
 import com.example.utility.QuranGrammarApplication
 import org.sj.conjugator.interfaces.OnItemClickListener
 import org.sj.conjugator.utilities.SharedPref
-import org.sj.verbConjugation.AmrNahiAmr
+import org.sj.data.MujarradResult
+import org.sj.verbConjugation.Amr
 import org.sj.verbConjugation.MadhiMudharay
+import org.sj.verbConjugation.NahiAmr
 
-class VerbSarfKabeerAdapter(
-    private var sarfSagheer: ArrayList<ArrayList<*>>,
+class MujarradVerbSarfKabeerAdapter(
+    private var sarfSagheer: MujarradResult?,
     private val context: Context
 ) :
-    RecyclerView.Adapter<VerbSarfKabeerAdapter.ViewHolder>() {
+    RecyclerView.Adapter<MujarradVerbSarfKabeerAdapter.ViewHolder>() {
     var bookmarkpostion = 0
     var mItemClickListener: OnItemClickListener? = null
     private var arabicTypeface: Typeface? = null
@@ -58,19 +60,19 @@ class VerbSarfKabeerAdapter(
             context.assets,
             arabic_font_selection
         )
-        val madhimudhary = sarfSagheer[0]
-        val faelmafool = sarfSagheer[1]
-        val amrandnahi = sarfSagheer[2]
 
-        val madhi=madhimudhary[0]
-        val madhimajhool=madhimudhary[1]
-        val mudharaymaroof=madhimudhary[2]
-        val mudharaymajhool=madhimudhary[3]
+        val madhimudhary =  sarfSagheer?.madhiMudharayList?.get(0)
+        val madhimajhool =  sarfSagheer?.madhiMudharayList?.get(1)
+        val mudharaymaroof =  sarfSagheer?.madhiMudharayList?.get(2)
+        val mudharaymajhool =  sarfSagheer?.madhiMudharayList?.get(3)
+        val madhi=madhimudhary
 
-        val ismfael=faelmafool[0]
-        val ismmafool=faelmafool[1]
-        val amr=amrandnahi[0]
-        val nahiamr=amrandnahi[1]
+
+        val ismfael=sarfSagheer?.ismFaelMafoolList?.get(0)
+        val ismmafool=sarfSagheer?.ismFaelMafoolList?.get(1)
+        val amr=sarfSagheer?.amrList?.get(0)
+        val nahiamr=sarfSagheer?.nahiAmr?.get(0)
+
 
 
 
@@ -79,8 +81,8 @@ class VerbSarfKabeerAdapter(
         MudhariMaroof(mudharaymaroof as MadhiMudharay,holder, 2)
         MadhiMajhool(madhimajhool as MadhiMudharay,holder, 1)
         MudhariMajhool(mudharaymajhool as MadhiMudharay,holder, 3)
-      Amar(amrandnahi[0] as AmrNahiAmr,holder, 4)
-   AmarNahi(amrandnahi[1] as AmrNahiAmr,holder, 5)
+      Amar(amr as Amr,holder, 4)
+      AmarNahi(nahiamr as NahiAmr,holder, 5)
         if (!aBoolean) {
             pronouns(holder)
         }
@@ -118,7 +120,7 @@ class VerbSarfKabeerAdapter(
         holder.nahnuid.typeface = arabicTypeface //(array[13]);
     }
 
-    private fun AmarNahi(amr: AmrNahiAmr, holder: ViewHolder, position: Int) {
+    private fun AmarNahi(amr: NahiAmr, holder: ViewHolder, position: Int) {
         val anta: String
         val antuma: String
         val antum: String
@@ -184,7 +186,7 @@ class VerbSarfKabeerAdapter(
         holder.nahiamrantunna.text = antunna
     }
 
-    private fun Amar(amr: AmrNahiAmr, holder: ViewHolder, position: Int) {
+    private fun Amar(amr: Amr, holder: ViewHolder, position: Int) {
         val anta: String
         val antuma: String
         val antum: String
@@ -920,14 +922,14 @@ class VerbSarfKabeerAdapter(
         holder.madhinahnu.text = nahnu
     }
 
-    override fun getItemId(position: Int): Long {
+  /*  override fun getItemId(position: Int): Long {
         //  Surah surah = surahArrayList.get(position);
         return sarfSagheer.size.toLong()
     }
 
     fun getItem(position: Int): Any {
         return sarfSagheer[position]
-    }
+    }*/
 
     override fun getItemCount(): Int {
         //    return sarfSagheer.size();

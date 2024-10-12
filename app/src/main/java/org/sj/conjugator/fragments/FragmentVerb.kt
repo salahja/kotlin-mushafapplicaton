@@ -14,9 +14,12 @@ import com.example.Constant.VERBMOOD
 import com.example.Constant.VERBTYPE
 import com.example.mushafconsolidated.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import org.sj.conjugator.adapter.VerbSarfKabeerAdapter
+import org.sj.conjugator.adapter.MazeedVerbSarfKabeerAdapter
+import org.sj.conjugator.adapter.MujarradVerbSarfKabeerAdapter
 import org.sj.conjugator.utilities.GatherAll
- 
+import org.sj.data.MazeedResult
+import org.sj.data.MujarradResult
+
 
 class FragmentVerb : Fragment() {
     var recyclerView: RecyclerView? = null
@@ -80,26 +83,25 @@ class FragmentVerb : Fragment() {
         if (isUnAugmented) {
             ninitThulathiAdapter()
         } else {
-            val indictive: ArrayList<ArrayList<*>> =
+            val indictive: MazeedResult? =
                 GatherAll.instance.getMazeedListing(verbmood, verbroot, augmentedFormula)
-            val sk: VerbSarfKabeerAdapter
-            if (indictive.isNotEmpty()) {
-               // indictive.removeAt(0)
-                sk = VerbSarfKabeerAdapter(indictive, requireContext())
+            val sk: MazeedVerbSarfKabeerAdapter
+
+                sk = MazeedVerbSarfKabeerAdapter(indictive, requireContext())
                 recyclerView!!.adapter = sk
                 recyclerView!!.setHasFixedSize(true)
                 recyclerView!!.layoutManager = LinearLayoutManager(context)
-            }
+
         }
         recyclerView = view.findViewById(R.id.sarfrecview)
         return skabeer
     }
 
     private fun ninitThulathiAdapter() {
-        val mujarradListing: ArrayList<ArrayList<*>> =
+        val mujarradListing: MujarradResult? =
             GatherAll.instance.getMujarradListing(verbmood, verbroot, unaugmentedFormula)
       //  mujarradListing.removeAt(0)
-        val ska = VerbSarfKabeerAdapter(mujarradListing, requireContext())
+        val ska = MujarradVerbSarfKabeerAdapter(mujarradListing, requireContext())
         recyclerView!!.adapter = ska
         recyclerView!!.setHasFixedSize(true)
         recyclerView!!.layoutManager = LinearLayoutManager(context)

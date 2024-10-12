@@ -1,6 +1,6 @@
 package org.sj.verbConjugation.trilateral.unaugmented
 
-import org.sj.verbConjugation.AmrNahiAmr
+import org.sj.verbConjugation.Amr
 import org.sj.verbConjugation.FaelMafool
 import org.sj.verbConjugation.IsmAlaMifaalun
 import org.sj.verbConjugation.IsmAlaMifalatun
@@ -29,7 +29,7 @@ open class ConjugationResult(
     var alaMifalatun: IsmAlaMifalatun =IsmAlaMifalatun()
     var alaMifaalun: IsmAlaMifaalun =IsmAlaMifaalun()
 
-        var amrandnahi: AmrNahiAmr= AmrNahiAmr()
+        var amrandnahi: Amr= Amr()
         protected set
 
     init {
