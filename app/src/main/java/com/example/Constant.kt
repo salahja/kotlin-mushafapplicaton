@@ -188,7 +188,7 @@ object Constant {
     //  public static final int MARIGOLD = ContextCompat.getColor(QuranGrammarApplication.context!!, R.color.marigold);
     val FORESTGREEN =
         ContextCompat.getColor(QuranGrammarApplication.context!!, R.color.sforestgreen)
-    private val LIME = ContextCompat.getColor(QuranGrammarApplication.context!!, R.color.Lime)
+    val LIME = ContextCompat.getColor(QuranGrammarApplication.context!!, R.color.Lime)
     val KASHMIRIGREEN =
         ContextCompat.getColor(QuranGrammarApplication.context!!, R.color.kashmirigreen)
     val MIDNIGHTBLUE =
@@ -262,6 +262,7 @@ object Constant {
             R.color.steelemetal
         )
     )
+    var mudhafspanLight = ForegroundColorSpan(DARKGOLDENROD)
     var timeadverbspanLight = ForegroundColorSpan(BROWN)
     var locationadverspanLight = ForegroundColorSpan(SALMON)
     var demonstrativespanLight = ForegroundColorSpan(BROWN)
@@ -277,7 +278,7 @@ object Constant {
     var supplementspanLight = ForegroundColorSpan(WBURNTUMBER)
     var sifaspansLight = BackgroundColorSpan(WBURNTUMBER)
     var sifaspanLight = BackgroundColorSpan(CYANLIGHTEST)
-    var mudhafspanLight = BackgroundColorSpan(CYANLIGHT)
+   // var mudhafspanLight = BackgroundColorSpan(CYANLIGHT)
     var mudhafspansLight = BackgroundColorSpan(MIDNIGHTBLUE)
     var harfinnaspanLight = ForegroundColorSpan(Color.GREEN)
     var harfismspanLight = ForegroundColorSpan(BCYAN)
@@ -317,6 +318,7 @@ object Constant {
     var sifaspanDark = BackgroundColorSpan(CYANLIGHTEST)
 
     //   public static BackgroundColorSpan mudhafspanDark = new BackgroundColorSpan(CYANLIGHT);
+    var mudhafspanDarks = ForegroundColorSpan(LIME)
     var mudhafspansDark = BackgroundColorSpan(MIDNIGHTBLUE)
     var harfinnaspanDark = ForegroundColorSpan(Color.GREEN)
     var harfismspanDark = ForegroundColorSpan(BCYAN)

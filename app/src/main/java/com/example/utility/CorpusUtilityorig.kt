@@ -4,18 +4,23 @@ import FileUtility
 import android.app.Activity
 import android.content.Context
 import android.graphics.Color
+import android.graphics.Typeface
 import android.preference.PreferenceManager
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
+import android.text.TextPaint
 import android.text.TextUtils
 import android.text.style.BackgroundColorSpan
 import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import com.example.Constant
+import com.example.Constant.mudhafspanDarks
+import com.example.Constant.mudhafspanLight
 import com.example.justJava.FrameSpan
 import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.CorpusExpandWbwPOJO
@@ -3103,6 +3108,91 @@ class CorpusUtilityorig(private var context: Context?) {
 
               }
           }
+        }
+
+        fun setMausoofSifaFromCache(spannableverse: SpannableString, sifaIndexList: MutableList<List<Int>>?) {
+            if (sifaIndexList != null) {
+                for (indexes in sifaIndexList) {
+                    val startIndex = indexes[0]
+                    val endIndex = indexes[1]
+                    if (dark) {
+                        Constant.sifaspansDark = BackgroundColorSpan(Constant.WBURNTUMBER)
+                    } else {
+                        Constant.sifaspansDark = BackgroundColorSpan(Constant.CYANLIGHTEST)
+                    }
+
+                    if (spannableverse != null) {
+                        spannableverse.setSpan(
+                            Constant.sifaspansDark,
+                            startIndex  ,
+                            endIndex  ,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+                    }
+                }
+            }
+        }
+
+        fun setMudhafFromCache(spannableverse: SpannableString, mudhafIndexList: MutableList<List<Int>>?) {
+            if (mudhafIndexList != null) {
+                for (indexes in mudhafIndexList) {
+                    val startIndex = indexes[0]
+                    val endIndex = indexes[1]
+                    if (dark) {
+                        Constant.mudhafspanDarks
+                    } else {
+                        Constant.mudhafspanLight
+                    }
+                    if (spannableverse != null) {
+                        val colorSpan = if (dark) {
+                            Constant.mudhafspanDarks
+                        } else {
+                            Constant.mudhafspanLight
+                        }
+
+                        spannableverse.setSpan(
+                            colorSpan,
+                            startIndex,
+                            endIndex,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+                    }
+                }
+            }
+
+        }
+
+        fun setAbsoluteNegationFromCache(spannableverse: SpannableString, absoluteNegationIndexes: List<Any>) {
+            val underlineSpan = UnderlineSpan()
+            val offsetUnderlineSpan = object : UnderlineSpan() {
+                override fun updateDrawState(ds: TextPaint) {
+                    ds.baselineShift += ds.ascent().toInt() / 2 // Adjust offset as needed
+                    super.updateDrawState(ds)
+                }
+            }
+
+            if(absoluteNegationIndexes.isNotEmpty()){
+
+                spannableverse.setSpan(
+                    underlineSpan,
+                    absoluteNegationIndexes[0] as Int,
+                    absoluteNegationIndexes[1] as Int,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                spannableverse.setSpan(
+                    offsetUnderlineSpan,
+                    absoluteNegationIndexes[0] as Int,
+                    absoluteNegationIndexes[1] as Int,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                val boldSpan = StyleSpan(Typeface.BOLD)
+                spannableverse.setSpan(boldSpan,
+                    absoluteNegationIndexes[0] as Int,
+                    absoluteNegationIndexes[1] as Int,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+            }
+
         }
 
 

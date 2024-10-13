@@ -18,8 +18,10 @@ import android.text.Html
 import android.text.SpannableString
 import android.text.SpannableString.valueOf
 import android.text.Spanned
+import android.text.TextPaint
 import android.text.format.DateFormat
 import android.text.style.BackgroundColorSpan
+import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
 import android.util.Log
 import android.view.LayoutInflater
@@ -459,71 +461,26 @@ class FlowAyahWordAdapterNoMafoolat(
         spannableverse: SpannableString?,
 
 
-        indexes: List<Any>,
-        indexesList: MutableList<List<Int>>?,
+        absoluteNegationIndexes: List<Any>,
+        sifaIndexList: MutableList<List<Int>>?,
         mudhafIndexList: MutableList<List<Int>>?,
         surah: Int,
         ayah: Int,
 
         ) {
-        if (indexesList != null) {
-            for (indexes in indexesList) {
-                val startIndex = indexes[0]
-                val endIndex = indexes[1]
-                if (dark) {
-                    Constant.sifaspansDark = BackgroundColorSpan(Constant.WBURNTUMBER)
-                } else {
-                    Constant.sifaspansDark = BackgroundColorSpan(Constant.CYANLIGHTEST)
-                }
 
-                if (spannableverse != null) {
-                    spannableverse.setSpan(
-                        Constant.sifaspansDark,
-                        startIndex  ,
-                        endIndex  ,
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                    )
-                }
-            }
-        }
 
-        if (mudhafIndexList != null) {
-            for (indexes in mudhafIndexList) {
-                val startIndex = indexes[0]
-                val endIndex = indexes[1]
-                if (dark) {
-                    Constant.mudhafspansDark = BackgroundColorSpan(Constant.MIDNIGHTBLUE)
-                } else {
-                    Constant.mudhafspansDark = BackgroundColorSpan(Constant.GOLD)
-                }
-                if (spannableverse != null) {
-                    spannableverse.setSpan(
-                        Constant.mudhafspansDark,
-                        startIndex,
-                        endIndex,
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                    )
-                }
-            }
-        }
 
 
 
 
 
         if (spannableverse != null) {
-            if(indexes.isNotEmpty()){
 
-                spannableverse.setSpan(
-                        UnderlineSpan(),
-                    indexes[0] as Int,
-                        indexes[1] as Int,
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                    )
-
-            }
              CorpusUtilityorig.setAyahGrammaticalPhrases(spannableverse, surah, ayah)
-
+            CorpusUtilityorig.setMausoofSifaFromCache(spannableverse, sifaIndexList)
+            CorpusUtilityorig.setMudhafFromCache(spannableverse, mudhafIndexList)
+            CorpusUtilityorig.setAbsoluteNegationFromCache(spannableverse, absoluteNegationIndexes)
          //  CorpusUtilityorig.  setAbsoluteNegation(ayahWord,spannableverse)
             holder.quran_textView.text = spannableverse
          //   lateinit var quran_textView: MaterialTextView
