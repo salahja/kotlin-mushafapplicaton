@@ -13,7 +13,7 @@ interface SifaDao {
     @get:Query("SELECT * FROM sifa order by surah,ayah,wordno ")
     val sifaindexesAll: List<SifaEntity>
 
-    @Query("SELECT * FROM sifa where surah=:id order by surah,ayah,wordno ")
+    @Query("SELECT * FROM sifa where surah=:id order by ayah,wordno ")
     fun getSifaindexesBySurah(id: Int): List<SifaEntity>
 
     @Query("SELECT * FROM sifa where surah=:id and ayah=:ayd order by surah,ayah,wordno ")

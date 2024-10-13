@@ -134,15 +134,27 @@ class QuranViewModel @Inject constructor(
         return nasab
     }
 
-    fun getmudhaf(surah: Int, ayah: Int): LiveData<List<NewMudhafEntity>> {
-        mudhaf.value = this.quranRepository.getmudhaf(surah, ayah)
-        return mudhaf
+    fun getmudhafFilterSurahAyah(surah: Int, ayah: Int): List<NewMudhafEntity> {
+   return this.quranRepository.getmudhaf(surah, ayah)
+
+    }
+    fun getmudhafFilterSurah(surah: Int): List<NewMudhafEntity> {
+        return this.quranRepository.getmudhafsurah(surah)
+
     }
 
-    fun getsifa(surah: Int, ayah: Int): LiveData<List<SifaEntity>> {
-        sifa.value = this.quranRepository.getsifa(surah, ayah)
-        return sifa
+
+
+    fun getsifaFileterSurahAyah(surah: Int, ayah: Int): List<SifaEntity> {
+        return  this.quranRepository.getsifa(surah, ayah)
+
     }
+    fun getsifaFileterSurah(surah: Int): List<SifaEntity> {
+        return  this.quranRepository.getsifaFilterSurah(surah)
+
+    }
+
+
 
 
     fun getVerbRootBySurahAyahWord(

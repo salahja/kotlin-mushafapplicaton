@@ -2387,8 +2387,8 @@ class CorpusUtilityorig(private var context: Context?) {
 
             if (spannableverse != null) {
 
-                setMudhafFromDBforAyah(spannableverse, surah, ayah)
-                setMausoofforayah(spannableverse, surah, ayah)
+           //     setMudhafFromDBforAyah(spannableverse, surah, ayah)
+              //  setMausoofforayah(spannableverse, surah, ayah)
                 setShartSurahAyah(spannableverse, surah, ayah)
                 setInnahIsmSurahAyah(spannableverse,surah,ayah)
                 setKanaSurahAyah(spannableverse,surah,ayah)

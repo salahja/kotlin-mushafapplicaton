@@ -927,7 +927,7 @@ class WordAnalysisBottomSheet : DialogFragment() {
 
     private fun setMudhaf(model: QuranViewModel) {
         val mudhafSurahAyah =
-            model.getmudhaf(chapterId, ayahNumber).value as ArrayList<NewMudhafEntity>
+            model.getmudhafFilterSurahAyah(chapterId, ayahNumber) as ArrayList<NewMudhafEntity>
         if (mudhafSurahAyah != null) {
             for (mudhafEntity in mudhafSurahAyah) {
                 Constant.mudhafspansDark = getSpancolor(true)
@@ -946,7 +946,7 @@ class WordAnalysisBottomSheet : DialogFragment() {
         corpusSurahWord: ArrayList<QuranEntity>,
     ) {
         val sifabySurahAyah =
-            model.getsifa(chapterId, ayahNumber).value as ArrayList<SifaEntity>
+            model.getsifaFileterSurahAyah(chapterId, ayahNumber) as ArrayList<SifaEntity>
         val quranverses: String = corpusSurahWord[0].qurantext
         for (shartEntity in sifabySurahAyah) {
             Constant.sifaspansDark = getSpancolor(false)

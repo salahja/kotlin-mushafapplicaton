@@ -107,9 +107,12 @@ import javax.inject.Inject
     fun getmudhaf(surah: Int, ayah: Int): List<NewMudhafEntity> =
         mudhafDao.getMudhafSurahAyah(surah, ayah)
 
+
+
     fun getsifa(surah: Int, ayah: Int): List<SifaEntity> =
         mousufSifa.getSifaindexesBySurahAyah(surah, ayah)
-
+     fun getsifaFilterSurah(surah: Int, ): List<SifaEntity> =
+         mousufSifa.getSifaindexesBySurah(surah)
     fun getkanasurah(surah: Int): List<NewKanaEntity> = kanaDao.getkanabysurah(surah)
 
     fun getshartsurah(surah: Int): List<NewShartEntity> = shartDAO.getShartBySurah(surah)

@@ -19,6 +19,7 @@ import android.text.SpannableString
 import android.text.SpannableString.valueOf
 import android.text.Spanned
 import android.text.format.DateFormat
+import android.text.style.BackgroundColorSpan
 import android.text.style.UnderlineSpan
 import android.util.Log
 import android.view.LayoutInflater
@@ -38,7 +39,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.Constant
 import com.example.mushafconsolidated.Entities.AbsoluteNegationEnt
 import com.example.mushafconsolidated.Entities.CorpusEntity
+import com.example.mushafconsolidated.Entities.NewMudhafEntity
 import com.example.mushafconsolidated.Entities.QuranEntity
+import com.example.mushafconsolidated.Entities.SifaEntity
 import com.example.mushafconsolidated.Entities.SurahHeader
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SurahSummary
@@ -49,6 +52,8 @@ import com.example.mushafconsolidated.quranrepo.QuranViewModel
 
 import com.example.mushafconsolidatedimport.Config
 import com.example.utility.AnimationUtility
+import com.example.utility.CorpusUtilityorig
+import com.example.utility.CorpusUtilityorig.Companion.dark
 import com.example.utility.FlowLayout
 import com.example.utility.QuranGrammarApplication
 import com.example.utility.QuranViewUtils
@@ -81,7 +86,11 @@ class FlowAyahWordAdapterNoMafoolat(
 {
     private var spannableverse: SpannableString? = null
     private var absoluteNegationData: List<AbsoluteNegationEnt>
+    private lateinit var sifaDta : List<SifaEntity>
+    private lateinit var mudhafData : List<NewMudhafEntity>
     private val spannedWordsCache = HashMap<CorpusEntity, SpannableString>()
+
+
     private var wordByWordDisplay: Boolean = false
     private var ayahWord: ArrayList<CorpusEntity>? = null
     private var defaultfont: Boolean = false
@@ -100,7 +109,13 @@ class FlowAyahWordAdapterNoMafoolat(
     private var headercolor = 0
 
     private lateinit var colorwordfont: Typeface
+
     private val absoluteNegationCache = HashMap<Pair<Int, Int>, List<Int>>() //
+   // private val sifaCache = LinkedHashMap<Pair<Int, Int>, List<Int>>()
+
+    private val sifaCache = HashMap<Pair<Int, Int>, MutableList<List<Int>>>()//
+
+    private val mudhafCache = HashMap<Pair<Int, Int>, MutableList<List<Int>>>()//
     //   private lateinit var  ayahWord: CorpusAyahWord
     //  private  var ayahWord: QuranCorpusWbw? = null
     private val isaudio: Boolean
@@ -117,6 +132,25 @@ class FlowAyahWordAdapterNoMafoolat(
             val indexes = listOf(data.startindex, data.endindex) // Modified line
             absoluteNegationCache[key] = indexes
         }
+        sifaDta = quranModel.getsifaFileterSurah(    allofQuran.get(0).surah)
+
+        for (data in sifaDta) {
+            val key = Pair(data.surah, data.ayah)
+            val indexes = listOf(data.startindex, data.endindex) // Modified line
+            sifaCache.getOrPut(key) { mutableListOf() }.add(indexes)
+
+        }
+        mudhafData = quranModel.getmudhafFilterSurah(    allofQuran.get(0).surah)
+
+        for (data in mudhafData) {
+            val key = Pair(data.surah, data.ayah)
+            val indexes = listOf(data.startindex, data.endindex) // Modified line
+            mudhafCache.getOrPut(key) { mutableListOf() }.add(indexes)
+
+        }
+
+
+
 
         sharedPreferences.getBoolean(Config.SHOW_Erab, Config.defaultShowErab)
         issentence = sharedPreferences.getBoolean("grammarsentence", false)
@@ -126,6 +160,7 @@ class FlowAyahWordAdapterNoMafoolat(
         if (listener != null) {
             mItemClickListener = listener
         }
+
         this.isaudio = isaudio
     }
 
@@ -279,10 +314,15 @@ class FlowAyahWordAdapterNoMafoolat(
 
         val key = Pair(entity!!.surah, entity!!.ayah)
 
-        val indexes = absoluteNegationCache[key] // Check cache first
+        val absoluteNegationIndexes = absoluteNegationCache[key] // Check cache first
             ?: quranModel.getAbsoluteNegationFilerSurahAyah(entity.surah, entity.ayah)
-        //   holder.flowwbw.setBackgroundColor(R.style.Theme_DarkBlue);
 
+        val sifaIndexes = sifaCache[key] // Check cache first
+            ?: quranModel.getsifaFileterSurahAyah(entity.surah, entity.ayah)
+        val mudhafIndexes = mudhafCache[key] // Check cache first
+            ?: quranModel.getmudhafFilterSurahAyah(entity.surah, entity.ayah)
+        val sifaIndexList = sifaCache[key]
+        val mudhafIndexList = mudhafCache[key]
 
         ayahWord = this.ayahWordArrayList[position + 1]
         if (entity != null) {
@@ -293,7 +333,7 @@ class FlowAyahWordAdapterNoMafoolat(
 
         setAyahGrammaticalPhrases(
 
-            holder, spannableverse,indexes
+            holder, spannableverse,absoluteNegationIndexes,sifaIndexList,mudhafIndexList,entity.surah,entity.ayah
         )
 
         holder.base_cardview.visibility = View.GONE
@@ -420,8 +460,56 @@ class FlowAyahWordAdapterNoMafoolat(
 
 
         indexes: List<Any>,
+        indexesList: MutableList<List<Int>>?,
+        mudhafIndexList: MutableList<List<Int>>?,
+        surah: Int,
+        ayah: Int,
 
-    ) {
+        ) {
+        if (indexesList != null) {
+            for (indexes in indexesList) {
+                val startIndex = indexes[0]
+                val endIndex = indexes[1]
+                if (dark) {
+                    Constant.sifaspansDark = BackgroundColorSpan(Constant.WBURNTUMBER)
+                } else {
+                    Constant.sifaspansDark = BackgroundColorSpan(Constant.CYANLIGHTEST)
+                }
+
+                if (spannableverse != null) {
+                    spannableverse.setSpan(
+                        Constant.sifaspansDark,
+                        startIndex  ,
+                        endIndex  ,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                }
+            }
+        }
+
+        if (mudhafIndexList != null) {
+            for (indexes in mudhafIndexList) {
+                val startIndex = indexes[0]
+                val endIndex = indexes[1]
+                if (dark) {
+                    Constant.mudhafspansDark = BackgroundColorSpan(Constant.MIDNIGHTBLUE)
+                } else {
+                    Constant.mudhafspansDark = BackgroundColorSpan(Constant.GOLD)
+                }
+                if (spannableverse != null) {
+                    spannableverse.setSpan(
+                        Constant.mudhafspansDark,
+                        startIndex,
+                        endIndex,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                }
+            }
+        }
+
+
+
+
 
         if (spannableverse != null) {
             if(indexes.isNotEmpty()){
@@ -434,7 +522,7 @@ class FlowAyahWordAdapterNoMafoolat(
                     )
 
             }
-          //  CorpusUtilityorig.setAyahGrammaticalPhrases(spannableverse, surah, ayah)
+             CorpusUtilityorig.setAyahGrammaticalPhrases(spannableverse, surah, ayah)
 
          //  CorpusUtilityorig.  setAbsoluteNegation(ayahWord,spannableverse)
             holder.quran_textView.text = spannableverse
