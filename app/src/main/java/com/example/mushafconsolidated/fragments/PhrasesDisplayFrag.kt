@@ -41,7 +41,7 @@ import com.example.mushafconsolidated.databinding.PhrasesListSurahJuzBinding
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListener
 import com.example.mushafconsolidated.intrfaceimport.PassdataInterface
 import com.example.mushafconsolidated.model.Juz
-import com.example.mushafconsolidated.quranrepo.QuranVIewModel
+import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationBarView
 import dagger.hilt.android.AndroidEntryPoint
@@ -251,7 +251,7 @@ class PhrasesDisplayFrag : Fragment(), SearchView.OnQueryTextListener {
         mousufrd.setOnClickListener { v: View? ->
 
         }
-        val viewmodel: QuranVIewModel by viewModels()
+        val viewmodel: QuranViewModel by viewModels()
         ParentAdapter = NewSurahDisplayAdapter(context)
         viewmodel.getAllChapters().observe(viewLifecycleOwner) {
             parentRecyclerView.layoutManager = mLayoutManager

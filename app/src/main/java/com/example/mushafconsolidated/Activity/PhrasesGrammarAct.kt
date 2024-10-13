@@ -86,7 +86,7 @@ import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.model.NewQuranCorpusWbw
 import com.example.mushafconsolidated.model.QuranCorpusWbw
-import com.example.mushafconsolidated.quranrepo.QuranVIewModel
+import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.example.mushafconsolidated.settingsimport.Constants
 import com.example.mushafconsolidatedimport.ParticleColorScheme
 import com.example.sentenceanalysis.SentenceGrammarAnalysis
@@ -124,7 +124,7 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
     private lateinit var sifaSentences:List<SifaListingPojo>
     private var bundle: Intent? = null
     private var bundles: Bundle? = null
-    private lateinit var mainViewModel: QuranVIewModel
+    private lateinit var mainViewModel: QuranViewModel
     private var corpusSurahWord: List<QuranCorpusWbw>? = null
 
     private var newnewadapterlist = LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>>()
@@ -254,7 +254,7 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
         super.onCreate(savedInstanceState)
         binding = PhrasesNewFragmentReadingBinding.inflate(layoutInflater)
 
-        mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
+        mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
         val view = binding.root
         setContentView(view)
         // Get a reference to the ViewModel scoped to this Fragment
@@ -301,7 +301,7 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
            harf=      bundles!!.getString(Constant.HARF,"")
             val chapter = bundles!!.getInt(Constant.SURAH_ID, 1)
             mushafview = bundles!!.getBoolean("passages", false)
-            val mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
+            val mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
             val list = mainViewModel.loadListschapter().value
 
             initView()
@@ -321,7 +321,7 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
         } else {
             initView()
             initnavigation()
-            val mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
+            val mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
             val list = mainViewModel.loadListschapter().value
             //    final boolean chapterorpartb = bundle.getBooleanExtra(CHAPTERORPART, true);
             initView()
@@ -954,7 +954,7 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
             }
 
 
-            val viewmodel: QuranVIewModel by viewModels()
+            val viewmodel: QuranViewModel by viewModels()
 
             if(sifaSentences.isNotEmpty()){
                 sifFlowAdapter= SifaPhrasesFlowAdapter(
@@ -1514,7 +1514,7 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
         }
         if (tag == "arrowforward") {
             val currentsurah = quranEntity.surah
-            val mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
+            val mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
             if (currentsurah != 114) {
                 soraList = mainViewModel.loadListschapter().value as ArrayList<ChaptersAnaEntity>
 
@@ -1538,7 +1538,7 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
         } else if (tag == "arrowback") {
             val currentsurah = quranEntity.surah
             if (currentsurah != 1) {
-                val mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
+                val mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
 
                 soraList = mainViewModel.loadListschapter().value as ArrayList<ChaptersAnaEntity>
 
@@ -1779,7 +1779,7 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
         en.chapterno = chapterno.toString()
         en.verseno = verse.toString()
         en.surahname = surahArabicName
-        val viewmodel: QuranVIewModel by viewModels()
+        val viewmodel: QuranViewModel by viewModels()
 
         viewmodel.Insertbookmark(en)
         val view = findViewById<View>(R.id.bookmark)

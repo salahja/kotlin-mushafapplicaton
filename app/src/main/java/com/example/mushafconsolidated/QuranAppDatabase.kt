@@ -6,6 +6,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.mushafconsolidated.DAO.AbsoluteNegationDao
 import com.example.mushafconsolidated.DAO.AnaQuranChapterDao
 import com.example.mushafconsolidated.DAO.BadalErabNotesDao
 import com.example.mushafconsolidated.DAO.BookMarkDao
@@ -37,6 +38,7 @@ import com.example.mushafconsolidated.DAO.qurandictionaryDao
 import com.example.mushafconsolidated.DAO.surahsummaryDao
 import com.example.mushafconsolidated.DAO.tameezDao
 import com.example.mushafconsolidated.DAO.wbwDao
+import com.example.mushafconsolidated.Entities.AbsoluteNegationEnt
 import com.example.mushafconsolidated.Entities.BadalErabNotesEnt
 import com.example.mushafconsolidated.Entities.BookMarks
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
@@ -83,7 +85,7 @@ import java.io.File
 /*@Module
 @InstallIn(SingletonComponent::class)*/
 @Database(
-    entities = [lysaEnt::class,jsonsurahentity::class,MufradatEntity::class,AllahNamesDetails::class, lanerootdictionary::class, Qari::class, surahsummary::class, quranexplorer::class, AllahNames::class, MafoolMutlaqEnt::class, BadalErabNotesEnt::class, HalEnt::class, MafoolBihi::class, LiajlihiEnt::class, TameezEnt::class, GrammarRules::class, hanslexicon::class, qurandictionary::class, lanelexicon::class, lughat::class, NewNasbEntity::class, NewShartEntity::class, NewKanaEntity::class, NewMudhafEntity::class, SifaEntity::class, wbwentity::class, NounCorpus::class, VerbCorpus::class, QuranEntity::class, CorpusEntity::class, BookMarks::class, ChaptersAnaEntity::class],
+    entities = [AbsoluteNegationEnt::class,lysaEnt::class,jsonsurahentity::class,MufradatEntity::class,AllahNamesDetails::class, lanerootdictionary::class, Qari::class, surahsummary::class, quranexplorer::class, AllahNames::class, MafoolMutlaqEnt::class, BadalErabNotesEnt::class, HalEnt::class, MafoolBihi::class, LiajlihiEnt::class, TameezEnt::class, GrammarRules::class, hanslexicon::class, qurandictionary::class, lanelexicon::class, lughat::class, NewNasbEntity::class, NewShartEntity::class, NewKanaEntity::class, NewMudhafEntity::class, SifaEntity::class, wbwentity::class, NounCorpus::class, VerbCorpus::class, QuranEntity::class, CorpusEntity::class, BookMarks::class, ChaptersAnaEntity::class],
     version = 1
 )
 abstract class QuranAppDatabase : RoomDatabase() {
@@ -100,6 +102,8 @@ abstract class QuranAppDatabase : RoomDatabase() {
      * @return
      */// public abstract WordbywordPojoDao WordbywordPojoDao();
     abstract fun BookMarkDao(): BookMarkDao
+    abstract fun AbsoluteNegationDao(): AbsoluteNegationDao
+
 
     /**
      * Raw dao

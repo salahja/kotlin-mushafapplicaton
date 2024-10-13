@@ -15,8 +15,6 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.text.Spanned
-import android.text.style.UnderlineSpan
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuInflater
@@ -46,7 +44,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.media3.common.util.Log
 import androidx.media3.common.util.UnstableApi
@@ -83,7 +80,7 @@ import com.example.mushafconsolidated.Entities.SurahHeader
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.quranrepo.QuranRepository
-import com.example.mushafconsolidated.quranrepo.QuranVIewModel
+import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.example.mushafconsolidated.settingsimport.Constants
 import com.example.mushafconsolidatedimport.ParticleColorScheme
 import com.example.sentenceanalysis.SentenceGrammarAnalysis
@@ -120,7 +117,6 @@ import com.google.gson.Gson
 import com.quiz.ArabicVerbQuizActNew
 import java.io.OutputStreamWriter
 import kotlin.collections.List
-import kotlin.concurrent.write
 import kotlin.collections.List as CollectionsList
 
 //import com.example.mushafconsolidated.Entities.JoinVersesTranslationDataTranslation;
@@ -135,7 +131,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     }
 
     private var bundles: Bundle? = null
-    private lateinit var mainViewModel: QuranVIewModel
+    private lateinit var mainViewModel: QuranViewModel
     private var corpusSurahWord: CollectionsList<CorpusEntity>? = null
 
     private var corpusGroupedByAyah: LinkedHashMap<Int, ArrayList<CorpusEntity>> =
@@ -268,7 +264,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         super.onCreate(savedInstanceState)
         binding = NewFragmentReadingBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
+        mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
         materialToolbar = binding.toolbarmain
         setSupportActionBar(materialToolbar)
 
@@ -324,7 +320,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     }
 
     private fun extractLaNafiya() {
-        mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
+        mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
 
         val allAbsoluteNegationData = ArrayList<List<String>>()
 
@@ -436,7 +432,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
         val chapter = bundles!!.getInt(Constant.SURAH_ID, 1)
         mushafview = bundles!!.getBoolean("passages", false)
-        mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
+        mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
         val list = mainViewModel.loadListschapter().value
 
         initView()
@@ -1021,6 +1017,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                             surahArabicName,
                             isMakkiMadani,
                             listener,
+                            mainViewModel,
 
 
                             )
@@ -1228,7 +1225,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
     private fun handleArrowForward(quranEntity: QuranEntity) {
         val currentsurah = quranEntity.surah
-        val mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
+        val mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
         if (currentsurah != 114) {
             soraList = mainViewModel.loadListschapter().value as ArrayList<ChaptersAnaEntity>
 
@@ -1252,7 +1249,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     private fun handleArrowBack(quranEntity: QuranEntity) {
         val currentsurah = quranEntity.surah
         if (currentsurah != 1) {
-            val mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
+            val mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
 
             soraList = mainViewModel.loadListschapter().value as ArrayList<ChaptersAnaEntity>
 
@@ -1308,7 +1305,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         }
         if (tag == "arrowforward") {
             val currentsurah = quranEntity.surah
-            val mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
+            val mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
             if (currentsurah != 114) {
                 soraList = mainViewModel.loadListschapter().value as ArrayList<ChaptersAnaEntity>
 
@@ -1330,7 +1327,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         } else if (tag == "arrowback") {
             val currentsurah = quranEntity.surah
             if (currentsurah != 1) {
-                val mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
+                val mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
 
                 soraList = mainViewModel.loadListschapter().value as ArrayList<ChaptersAnaEntity>
 
@@ -1513,7 +1510,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         en.chapterno = chapterno.toString()
         en.verseno = verse.toString()
         en.surahname = surahArabicName
-        val viewmodel: QuranVIewModel by viewModels()
+        val viewmodel: QuranViewModel by viewModels()
 
         viewmodel.Insertbookmark(en)
         val view = findViewById<View>(R.id.bookmark)

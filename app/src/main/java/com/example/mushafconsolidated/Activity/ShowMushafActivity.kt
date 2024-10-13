@@ -73,7 +73,7 @@ import com.example.mushafconsolidated.databinding.RxfetchProgressBinding
 
 import com.example.mushafconsolidated.databinding.VfourExpandableNewactivityShowAyahsBinding
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
-import com.example.mushafconsolidated.quranrepo.QuranVIewModel
+import com.example.mushafconsolidated.quranrepo.QuranViewModel
 
 import com.example.mushafconsolidated.receiversimport.AudioAppConstants
 import com.example.mushafconsolidated.receiversimport.DownloadService
@@ -157,7 +157,7 @@ class ShowMushafActivity : BaseActivity(), OnItemClickListenerOnLong, View.OnCli
     private val handler = Handler()
     private lateinit var marray: MutableList<MediaItem>
     private var marrayrange: List<MediaItem>? = null
-    private lateinit var mainViewModel: QuranVIewModel
+    private lateinit var mainViewModel: QuranViewModel
 
     //private val singleverse: String
     private var isSingle = false

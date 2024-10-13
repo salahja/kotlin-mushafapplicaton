@@ -2,8 +2,58 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "de2b006dfe1be947fe84603d8615a2df",
+    "identityHash": "6fa246390cd7ec70850a7cb2f8d6240b",
     "entities": [
+      {
+        "tableName": "absolute_negation",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surahid` INTEGER NOT NULL, `ayahid` INTEGER NOT NULL, `wordno` INTEGER NOT NULL, `startindex` INTEGER NOT NULL, `endindex` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "surahid",
+            "columnName": "surahid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ayahid",
+            "columnName": "ayahid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wordno",
+            "columnName": "wordno",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startindex",
+            "columnName": "startindex",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "endindex",
+            "columnName": "endindex",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
       {
         "tableName": "lysa",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`hua` TEXT NOT NULL, `huma` TEXT NOT NULL, `hum` TEXT NOT NULL, `hia` TEXT NOT NULL, `humaf` TEXT NOT NULL, `hunna` TEXT NOT NULL, `anta` TEXT NOT NULL, `antuma` TEXT NOT NULL, `antum` TEXT NOT NULL, `anti` TEXT NOT NULL, `antumaf` TEXT NOT NULL, `antunna` TEXT NOT NULL, `ana` TEXT NOT NULL, `nahnu` TEXT NOT NULL, `grammar` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
@@ -2345,7 +2395,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'de2b006dfe1be947fe84603d8615a2df')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6fa246390cd7ec70850a7cb2f8d6240b')"
     ]
   }
 }

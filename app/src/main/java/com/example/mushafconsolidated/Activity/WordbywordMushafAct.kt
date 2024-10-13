@@ -78,7 +78,7 @@ import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.model.CorpusAyahWord
 
 import com.example.mushafconsolidated.quranrepo.QuranRepository
-import com.example.mushafconsolidated.quranrepo.QuranVIewModel
+import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.example.mushafconsolidated.receiversimport.AudioAppConstants
 import com.example.mushafconsolidated.receiversimport.DownloadService
 import com.example.mushafconsolidated.receiversimport.FileManager
@@ -121,7 +121,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
     private  var corpusGroupedByAyah:LinkedHashMap<Int, ArrayList<CorpusEntity>> =
         LinkedHashMap()
 
-    private lateinit var mainViewModel: QuranVIewModel
+    private lateinit var mainViewModel: QuranViewModel
     private var corpusSurahWord: List<CorpusEntity>? = null
 
     private lateinit var nomafoolatflowAyahWordAdapter: FlowAyahWordAdapterNoMafoolat
@@ -256,7 +256,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
         setUpViews()
         reset()
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
+        mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
 
         getpreferences()
 
@@ -1201,7 +1201,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
         )
         builder.setCancelable(false) // if you want user to wait for some process to finish,
         builder.setView(R.layout.layout_loading_dialog)
-        val mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
+        val mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
         val dialog = builder.create()
         corpusayahWordArrayList = ArrayList()
 
@@ -1272,7 +1272,8 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
                     this@WordbywordMushafAct,
                     chapter[0]!!.namearabic,
                     isMakkiMadani,
-                    listener
+                    listener,
+                    mainViewModel
                 )
 
                 nomafoolatflowAyahWordAdapter.addContext(this@WordbywordMushafAct)

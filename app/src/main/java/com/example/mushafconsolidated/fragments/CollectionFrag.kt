@@ -21,7 +21,7 @@ import com.example.mushafconsolidated.DAO.BookMarksPojo
 import com.example.mushafconsolidated.Entities.BookMarks
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListener
-import com.example.mushafconsolidated.quranrepo.QuranVIewModel
+import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.example.utility.SwipeToDeleteCallback
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,7 +43,7 @@ class CollectionFrag constructor() : Fragment() {
         //  val bookMarksNew: List<BookMarksPojo?>? = utils.collectionC
         //       val bookMarksNew = utils.getCollectionbygroups()
 
-        val vmodel: QuranVIewModel by viewModels()
+        val vmodel: QuranViewModel by viewModels()
         //vmodel.getBookmarksCollection().value
         collectionShowAdapter = CollectionShowAdapter(activity)
         vmodel.getBookmarksCollection().observe(viewLifecycleOwner, Observer {
@@ -101,7 +101,7 @@ class CollectionFrag constructor() : Fragment() {
                     //      bookmarksShowAdapter.getBookMarkArrayList(bookmarkid)
                     //  Utils butils = new Utils(getActivity());
                     //  butils.deleteBookmarks(bookmarid);
-                    val vm: QuranVIewModel by viewModels()
+                    val vm: QuranViewModel by viewModels()
                     item.header?.let { vm.deleteCollection(it) }
                     /*  if (item != null) {
                           Utils.Companion.deleteCollection(item.header)

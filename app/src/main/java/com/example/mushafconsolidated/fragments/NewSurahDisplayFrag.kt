@@ -17,7 +17,6 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.media3.common.util.UnstableApi
@@ -26,7 +25,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.Constant
 import com.example.Constant.ISMAKKI
 import com.example.Constant.RUKUCOUNT
-import com.example.Constant.SURAHFRAGTAG
 import com.example.Constant.SURAHNAME
 import com.example.Constant.SURAH_ID
 import com.example.Constant.VERSESCOUNT
@@ -41,8 +39,7 @@ import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListener
 import com.example.mushafconsolidated.intrfaceimport.PassdataInterface
 import com.example.mushafconsolidated.model.Juz
-import com.example.mushafconsolidated.quranrepo.QuranVIewModel
-import com.example.mushafconsolidated.settingsimport.Constants
+import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.example.utility.QuranGrammarApplication
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -300,7 +297,7 @@ class NewSurahDisplayFrag : Fragment(), SearchView.OnQueryTextListener {
             intent.putExtra(Constant.AYAH_ID, 255)
             startActivity(intent)
         }
-        val viewmodel: QuranVIewModel by viewModels()
+        val viewmodel: QuranViewModel by viewModels()
         ParentAdapter = NewSurahDisplayAdapter(context)
         viewmodel.getAllChapters().observe(viewLifecycleOwner) {
             parentRecyclerView.layoutManager = mLayoutManager

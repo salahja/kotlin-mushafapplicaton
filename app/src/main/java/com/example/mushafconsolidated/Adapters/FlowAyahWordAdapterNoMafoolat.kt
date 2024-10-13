@@ -10,7 +10,6 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Environment
@@ -18,7 +17,9 @@ import android.preference.PreferenceManager
 import android.text.Html
 import android.text.SpannableString
 import android.text.SpannableString.valueOf
+import android.text.Spanned
 import android.text.format.DateFormat
+import android.text.style.UnderlineSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -35,6 +36,7 @@ import androidx.core.content.FileProvider
 
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Constant
+import com.example.mushafconsolidated.Entities.AbsoluteNegationEnt
 import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.SurahHeader
@@ -43,10 +45,10 @@ import com.example.mushafconsolidated.SurahSummary
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet.Companion.TAG
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
+import com.example.mushafconsolidated.quranrepo.QuranViewModel
 
 import com.example.mushafconsolidatedimport.Config
 import com.example.utility.AnimationUtility
-import com.example.utility.CorpusUtilityorig
 import com.example.utility.FlowLayout
 import com.example.utility.QuranGrammarApplication
 import com.example.utility.QuranViewUtils
@@ -74,8 +76,11 @@ class FlowAyahWordAdapterNoMafoolat(
     private val SurahName: String,
     private val isMakkiMadani: Int,
     listener: OnItemClickListenerOnLong?,
+    mainViewModel: QuranViewModel,
 ) : RecyclerView.Adapter<FlowAyahWordAdapterNoMafoolat.ItemViewAdapter>() //implements OnItemClickListenerOnLong {
 {
+    private var spannableverse: SpannableString? = null
+    private var absoluteNegationData: List<AbsoluteNegationEnt>
     private val spannedWordsCache = HashMap<CorpusEntity, SpannableString>()
     private var wordByWordDisplay: Boolean = false
     private var ayahWord: ArrayList<CorpusEntity>? = null
@@ -84,7 +89,7 @@ class FlowAyahWordAdapterNoMafoolat(
     private var issentence: Boolean = false
     lateinit var rootword: TextView
     private var lineSpacing = 0
-
+    private lateinit var quranModel: QuranViewModel
     //MaterialTextView arabic;
     private lateinit var arabicChipview: Chip
     private lateinit var arabicTv: MaterialTextView
@@ -95,7 +100,7 @@ class FlowAyahWordAdapterNoMafoolat(
     private var headercolor = 0
 
     private lateinit var colorwordfont: Typeface
-
+    private val absoluteNegationCache = HashMap<Pair<Int, Int>, List<Int>>() //
     //   private lateinit var  ayahWord: CorpusAyahWord
     //  private  var ayahWord: QuranCorpusWbw? = null
     private val isaudio: Boolean
@@ -105,6 +110,14 @@ class FlowAyahWordAdapterNoMafoolat(
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(
             context
         )
+       this.quranModel=mainViewModel
+         absoluteNegationData = quranModel.getAbsoluteNegationFilterSurah(    allofQuran.get(0).surah)
+        for (data in absoluteNegationData) {
+            val key = Pair(data.surahid, data.ayahid)
+            val indexes = listOf(data.startindex, data.endindex) // Modified line
+            absoluteNegationCache[key] = indexes
+        }
+
         sharedPreferences.getBoolean(Config.SHOW_Erab, Config.defaultShowErab)
         issentence = sharedPreferences.getBoolean("grammarsentence", false)
         arabicfontSize = sharedPreferences.getInt("pref_font_arabic_key", 18)
@@ -164,6 +177,9 @@ class FlowAyahWordAdapterNoMafoolat(
             context
         )
 
+
+
+
         isNightmode = sharedPreferences.getString("themepref", "dark").toString()
         val arabic_font_selection =
             sharedPreferences.getString("Arabic_Font_Selection", "quranicfontregular.ttf")
@@ -216,6 +232,7 @@ class FlowAyahWordAdapterNoMafoolat(
 
 
         } else {
+
             displayAyats(
                 showrootkey,
                 holder,
@@ -229,6 +246,7 @@ class FlowAyahWordAdapterNoMafoolat(
                 showTranslation,
                 showWordByword,
                 whichtranslation
+
             )
         }
     }
@@ -247,8 +265,8 @@ class FlowAyahWordAdapterNoMafoolat(
         showTranslation: Boolean,
         showWordByword: Boolean,
         whichtranslation: String?,
+
     ) {
-        //   holder.flowwbw.setBackgroundColor(R.style.Theme_DarkBlue);
         var entity: QuranEntity? = null
         val wbw = sharedPreferences.getString("wbw", "en")
 
@@ -259,15 +277,23 @@ class FlowAyahWordAdapterNoMafoolat(
             println("check")
         }
 
+        val key = Pair(entity!!.surah, entity!!.ayah)
+
+        val indexes = absoluteNegationCache[key] // Check cache first
+            ?: quranModel.getAbsoluteNegationFilerSurahAyah(entity.surah, entity.ayah)
+        //   holder.flowwbw.setBackgroundColor(R.style.Theme_DarkBlue);
+
+
         ayahWord = this.ayahWordArrayList[position + 1]
         if (entity != null) {
             QuranViewUtils.storepreferences(context, entity, SurahName)
         }
-        val spannableverse = valueOf(SpannableString(entity?.qurantext))
+        spannableverse = valueOf(SpannableString(entity?.qurantext))
+
 
         setAyahGrammaticalPhrases(
-            holder, spannableverse,
-            ayahWord!![0].ayah, (ayahWord!![0].surah ?: 1)
+
+            holder, spannableverse,indexes
         )
 
         holder.base_cardview.visibility = View.GONE
@@ -391,16 +417,28 @@ class FlowAyahWordAdapterNoMafoolat(
     private fun setAyahGrammaticalPhrases(
         holder: ItemViewAdapter,
         spannableverse: SpannableString?,
-        ayah: Int,
-        surah: Int
+
+
+        indexes: List<Any>,
+
     ) {
 
         if (spannableverse != null) {
+            if(indexes.isNotEmpty()){
+
+                spannableverse.setSpan(
+                        UnderlineSpan(),
+                    indexes[0] as Int,
+                        indexes[1] as Int,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+
+            }
           //  CorpusUtilityorig.setAyahGrammaticalPhrases(spannableverse, surah, ayah)
-            val spann=SpannableString("لَا يُكَلِّفُ ٱللَّهُ نَفْسًا إِلَّا وُسْعَهَاۚ لَهَا مَا كَسَبَتْ وَعَلَيْهَا مَا ٱكْتَسَبَتْۗ رَبَّنَا لَا تُؤَاخِذْنَآ إِن نَّسِينَآ أَوْ أَخْطَأْنَاۚ رَبَّنَا وَلَا تَحْمِلْ عَلَيْنَآ إِصْرًا كَمَا حَمَلْتَهُۥ عَلَى ٱلَّذِينَ مِن قَبْلِنَاۚ رَبَّنَا وَلَا تُحَمِّلْنَا مَا لَا طَاقَةَ لَنَا بِهِۦۖ وَٱعْفُ عَنَّا وَٱغْفِرْ لَنَا وَٱرْحَمْنَآۚ أَنتَ مَوْلَىٰنَا فَٱنصُرْنَا عَلَى ٱلْقَوْمِ ٱلْكَٰفِرِينَ ")
-           CorpusUtilityorig.  setAbsoluteNegation(ayahWord,spannableverse)
-           // CorpusUtilityorig.setAbsoluteNegation(ayahWord,spann)
+
+         //  CorpusUtilityorig.  setAbsoluteNegation(ayahWord,spannableverse)
             holder.quran_textView.text = spannableverse
+         //   lateinit var quran_textView: MaterialTextView
         }
 
     }
@@ -614,7 +652,7 @@ class FlowAyahWordAdapterNoMafoolat(
 
         lateinit var mafoolbihi: TextView
         private lateinit var erab_notes: TextView
-        lateinit var quran_textView: MaterialTextView
+     lateinit var quran_textView: MaterialTextView
         private lateinit var quran_transliterationnote: TextView
         lateinit var quran_jalalaynnote: TextView
         lateinit var erab_textViewnote: TextView

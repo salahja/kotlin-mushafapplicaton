@@ -17,6 +17,7 @@ import org.sj.verbConjugation.Amr
 import org.sj.verbConjugation.MadhiMudharay
 import org.sj.verbConjugation.NahiAmr
 
+
 class MazeedVerbSarfKabeerAdapter(
     private var sarfSagheer: MazeedResult?,
     private val context: Context

@@ -2,6 +2,7 @@ package com.example.mushafconsolidated.quranrepo
 
 
 import androidx.lifecycle.LiveData
+import com.example.mushafconsolidated.DAO.AbsoluteNegationDao
 import com.example.mushafconsolidated.DAO.AnaQuranChapterDao
 import com.example.mushafconsolidated.DAO.BadalErabNotesDao
 import com.example.mushafconsolidated.DAO.BookMarkDao
@@ -26,6 +27,7 @@ import com.example.mushafconsolidated.DAO.liajlihiDao
 import com.example.mushafconsolidated.DAO.surahsummaryDao
 import com.example.mushafconsolidated.DAO.tameezDao
 import com.example.mushafconsolidated.DAO.wbwDao
+import com.example.mushafconsolidated.Entities.AbsoluteNegationEnt
 
 import com.example.mushafconsolidated.Entities.BadalErabNotesEnt
 import com.example.mushafconsolidated.Entities.BookMarks
@@ -54,6 +56,7 @@ import javax.inject.Inject
 
 
  class QuranRepository @Inject constructor(
+     var absoluteNegationDao:AbsoluteNegationDao,
      var wbwdao:wbwDao,
      var corpusDao: CorpusExpandedDao,
      var qurandao: QuranDao,
@@ -130,6 +133,16 @@ import javax.inject.Inject
 
      fun getCorpusEntityFilterSurahAya(surah: Int, ayah: Int): List<CorpusEntity> =
          corpusDao.getCorpusWordSurahAya(surah, ayah)
+
+     fun getAbsoluteNegationFilerSurahAyah(surah: Int, ayah: Int): List<AbsoluteNegationEnt> =
+         absoluteNegationDao.getAbsoluteNegationFilterSurahAyah(surah, ayah)
+
+     fun getAbsoluteNegationAll(): List<AbsoluteNegationEnt> =
+         absoluteNegationDao.getAbsoluteNegationAll()
+
+     fun getAbsoluteNegationFilterSurah(surah: Int): List<AbsoluteNegationEnt> =
+         absoluteNegationDao.getAbsoluteNegationFilterSurah(surah)
+
      fun getCorpusEntityFilterSurah(surah: Int, ): List<CorpusEntity> =
          corpusDao.getVersesBySurahLive(surah)
 

@@ -12,7 +12,7 @@ import com.example.Constant.SURAH_ID
 
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.Utils
-import com.example.mushafconsolidated.quranrepo.QuranVIewModel
+import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -44,7 +44,7 @@ class TafsirFullscreenActivity : BaseActivity() {
             setSupportActionBar(materialToolbar)
             supportActionBar?.setDisplayShowHomeEnabled(true)
         }
-        val viewmodel: QuranVIewModel by viewModels()
+        val viewmodel: QuranViewModel by viewModels()
 
         viewmodel.getsurahayahVerses(sura!!, ayah!!).observe(this) {
             //   val list: List<QuranEntity?>? = Utils.getsurahayahVerses(sura!!, ayah!!)

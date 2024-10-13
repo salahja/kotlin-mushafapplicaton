@@ -63,7 +63,7 @@ import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.model.QuranCorpusWbw
 import com.example.mushafconsolidated.model.SarfSagheerPOJO
 import com.example.mushafconsolidated.model.Word
-import com.example.mushafconsolidated.quranrepo.QuranVIewModel
+import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.Executors
@@ -86,7 +86,7 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
     enum class NasbPart { HARF, ISM, KHABAR }
     private var whichwbw: String? = null
  //   private enum class NasbPart { HARF, ISM, KHABAR }
-    val model: QuranVIewModel by viewModels()
+    val model: QuranViewModel by viewModels()
     private var dark: Boolean = false
     private var quran: List<QuranEntity>? = null
     private var corpusSurahWord: List<QuranCorpusWbw>? = null
@@ -130,7 +130,7 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
         ayanumber = stringArray[1].toInt()
         val ex = Executors.newSingleThreadExecutor()
         val utils = Utils(activity)
-        val model = ViewModelProvider(requireActivity())[QuranVIewModel::class.java]
+        val model = ViewModelProvider(requireActivity())[QuranViewModel::class.java]
         corpusSurahWord = model.getQuranCorpusWbw(chapterid, ayanumber, 1).value
         quran = model.getsurahayahVerseslist(chapterid, ayanumber).value
 

@@ -1,6 +1,7 @@
 package Utility
 
 import android.content.Context
+import com.example.mushafconsolidated.DAO.AbsoluteNegationDao
 import com.example.mushafconsolidated.DAO.AnaQuranChapterDao
 import com.example.mushafconsolidated.DAO.BadalErabNotesDao
 import com.example.mushafconsolidated.DAO.BookMarkDao
@@ -56,6 +57,13 @@ object AppModule {
     fun getQuranDao(appDB: QuranAppDatabase): QuranDao {
 
         return appDB.QuranDao()
+    }
+
+    @Singleton
+    @Provides
+    fun getAbsoluteNegationDao(appDB: QuranAppDatabase): AbsoluteNegationDao {
+
+        return appDB.AbsoluteNegationDao()
     }
 
     @Singleton
