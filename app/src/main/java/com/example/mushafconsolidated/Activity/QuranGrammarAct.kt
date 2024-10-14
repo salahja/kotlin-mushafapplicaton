@@ -1005,7 +1005,8 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                             this@QuranGrammarAct,
                             surahArabicName,
                             isMakkiMadani,
-                            listener
+                            listener,
+                            mainViewModel,
                         )
                     } else {
                         FlowAyahWordAdapterNoMafoolat(

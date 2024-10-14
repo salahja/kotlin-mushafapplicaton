@@ -454,13 +454,6 @@ class FlowAyahWordAdapterNoMafoolat(
         ayah: Int,
 
         ) {
-
-
-
-
-
-
-
         if (spannableverse != null) {
 
              CorpusUtilityorig.setAyahGrammaticalPhrases(spannableverse, surah, ayah)
