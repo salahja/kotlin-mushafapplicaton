@@ -37,7 +37,56 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
+import androidx.compose.ui.geometry.isEmpty
+import com.example.mushafconsolidated.quranrepo.QuranViewModel
+
 object QuranViewUtils {
+    private val absoluteNegationCache = HashMap<Pair<Int, Int>, List<Int>>()
+    private val sifaCache = HashMap<Pair<Int, Int>, MutableList<List<Int>>>()
+    private val mudhafCache = HashMap<Pair<Int, Int>, MutableList<List<Int>>>()
+    private lateinit var quranModel: QuranViewModel
+
+
+    fun initialize(quranModel: QuranViewModel) {
+        this.quranModel = quranModel // Initialize quranModel
+    }
+
+
+
+
+
+        // Function to load and cache Absolute Negation Data
+        fun cacheAbsoluteNegationData(quranModel: QuranViewModel, surah: Int, absoluteNegationCache: MutableMap<Pair<Int, Int>, List<Int>>) {
+            val absoluteNegationData = quranModel.getAbsoluteNegationFilterSurah(surah)
+            for (data in absoluteNegationData) {
+                val key = Pair(data.surahid, data.ayahid)
+                val indexes = listOf(data.startindex, data.endindex)
+                absoluteNegationCache[key] = indexes
+            }
+        }
+
+        // Function to load and cache Sifa Data
+        fun cacheSifaData(quranModel: QuranViewModel, surah: Int, sifaCache: MutableMap<Pair<Int, Int>, MutableList<List<Int>>>) {
+            val sifaData = quranModel.getsifaFileterSurah(surah)
+            for (data in sifaData) {
+                val key = Pair(data.surah, data.ayah)
+                val indexes = listOf(data.startindex, data.endindex)
+                sifaCache.getOrPut(key) { mutableListOf() }.add(indexes)
+            }
+        }
+
+        // Function to load and cache Mudhaf Data
+        fun cacheMudhafData(quranModel: QuranViewModel, surah: Int, mudhafCache: MutableMap<Pair<Int, Int>, MutableList<List<Int>>>) {
+            val mudhafData = quranModel.getmudhafFilterSurah(surah)
+            for (data in mudhafData) {
+                val key = Pair(data.surah, data.ayah)
+                val indexes = listOf(data.startindex, data.endindex)
+                mudhafCache.getOrPut(key) { mutableListOf() }.add(indexes)
+            }
+        }
+
+
+
 
     fun setWordClickListener(view: View, context: Context, word: QuranCorpusWbw, surahName: String, loadItemList: (Bundle, wbwentity) -> Unit) {
         view.setOnClickListener {

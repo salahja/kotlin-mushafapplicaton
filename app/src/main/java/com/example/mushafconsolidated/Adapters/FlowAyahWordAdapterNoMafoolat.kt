@@ -87,7 +87,7 @@ class FlowAyahWordAdapterNoMafoolat(
 ) : RecyclerView.Adapter<FlowAyahWordAdapterNoMafoolat.ItemViewAdapter>() //implements OnItemClickListenerOnLong {
 {
     private var spannableverse: SpannableString? = null
-    private var absoluteNegationData: List<AbsoluteNegationEnt>
+    //private var absoluteNegationData: List<AbsoluteNegationEnt>
     private lateinit var sifaDta : List<SifaEntity>
     private lateinit var mudhafData : List<NewMudhafEntity>
     private val spannedWordsCache = HashMap<CorpusEntity, SpannableString>()
@@ -115,7 +115,7 @@ class FlowAyahWordAdapterNoMafoolat(
     private val absoluteNegationCache = HashMap<Pair<Int, Int>, List<Int>>() //
    // private val sifaCache = LinkedHashMap<Pair<Int, Int>, List<Int>>()
 
-    private val sifaCache = HashMap<Pair<Int, Int>, MutableList<List<Int>>>()//
+    private var sifaCache = HashMap<Pair<Int, Int>, MutableList<List<Int>>>()//
 
     private val mudhafCache = HashMap<Pair<Int, Int>, MutableList<List<Int>>>()//
     //   private lateinit var  ayahWord: CorpusAyahWord
@@ -127,29 +127,17 @@ class FlowAyahWordAdapterNoMafoolat(
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(
             context
         )
+
        this.quranModel=mainViewModel
-         absoluteNegationData = quranModel.getAbsoluteNegationFilterSurah(    allofQuran.get(0).surah)
-        for (data in absoluteNegationData) {
-            val key = Pair(data.surahid, data.ayahid)
-            val indexes = listOf(data.startindex, data.endindex) // Modified line
-            absoluteNegationCache[key] = indexes
-        }
-        sifaDta = quranModel.getsifaFileterSurah(    allofQuran.get(0).surah)
+        QuranViewUtils.initialize(mainViewModel)
+        // Assuming you have a QuranModel instance and caches like before
+        val surah = allofQuran[0].surah
 
-        for (data in sifaDta) {
-            val key = Pair(data.surah, data.ayah)
-            val indexes = listOf(data.startindex, data.endindex) // Modified line
-            sifaCache.getOrPut(key) { mutableListOf() }.add(indexes)
+// Call utility functions to cache the data
+           QuranViewUtils.cacheAbsoluteNegationData(quranModel, surah, absoluteNegationCache)
+         QuranViewUtils.cacheSifaData(quranModel, surah, sifaCache)
+        QuranViewUtils.cacheMudhafData(quranModel, surah, mudhafCache)
 
-        }
-        mudhafData = quranModel.getmudhafFilterSurah(    allofQuran.get(0).surah)
-
-        for (data in mudhafData) {
-            val key = Pair(data.surah, data.ayah)
-            val indexes = listOf(data.startindex, data.endindex) // Modified line
-            mudhafCache.getOrPut(key) { mutableListOf() }.add(indexes)
-
-        }
 
 
 
@@ -314,15 +302,13 @@ class FlowAyahWordAdapterNoMafoolat(
             println("check")
         }
 
+
         val key = Pair(entity!!.surah, entity!!.ayah)
 
         val absoluteNegationIndexes = absoluteNegationCache[key] // Check cache first
             ?: quranModel.getAbsoluteNegationFilerSurahAyah(entity.surah, entity.ayah)
 
-        val sifaIndexes = sifaCache[key] // Check cache first
-            ?: quranModel.getsifaFileterSurahAyah(entity.surah, entity.ayah)
-        val mudhafIndexes = mudhafCache[key] // Check cache first
-            ?: quranModel.getmudhafFilterSurahAyah(entity.surah, entity.ayah)
+
         val sifaIndexList = sifaCache[key]
         val mudhafIndexList = mudhafCache[key]
 
@@ -1093,10 +1079,32 @@ class FlowAyahWordAdapterNoMafoolat(
     }
 }
 
-private fun QuranViewUtils.setWordTranslation(translationTextView: TextView?, word: CorpusEntity, languageCode: String) {
 
-}
 
 enum class RevalationCity {
     MAKKI, MADANI
 }
+
+
+/* absoluteNegationData = quranModel.getAbsoluteNegationFilterSurah(    allofQuran.get(0).surah)
+ for (data in absoluteNegationData) {
+     val key = Pair(data.surahid, data.ayahid)
+     val indexes = listOf(data.startindex, data.endindex) // Modified line
+     absoluteNegationCache[key] = indexes
+ }
+ sifaDta = quranModel.getsifaFileterSurah(    allofQuran.get(0).surah)
+
+ for (data in sifaDta) {
+     val key = Pair(data.surah, data.ayah)
+     val indexes = listOf(data.startindex, data.endindex) // Modified line
+     sifaCache.getOrPut(key) { mutableListOf() }.add(indexes)
+
+ }
+ mudhafData = quranModel.getmudhafFilterSurah(    allofQuran.get(0).surah)
+
+ for (data in mudhafData) {
+     val key = Pair(data.surah, data.ayah)
+     val indexes = listOf(data.startindex, data.endindex) // Modified line
+     mudhafCache.getOrPut(key) { mutableListOf() }.add(indexes)
+
+ }*/
