@@ -81,22 +81,9 @@ class ExpandableVerseViewModel(
         val list = java.util.LinkedHashMap<String, List<AnnotatedString>>()
 
         val harfnasbarray: MutableList<AnnotatedString> = ArrayList()
-        /*     setNewNasb(harfnasbarray)
-             val mausoofsifaarray: MutableList<AnnotatedString> =  ArrayList()
-             setMausoof(mausoofsifaarray)
-
-
-             val kanaarray: MutableList<AnnotatedString> =  ArrayList()
-             newsetKana(kanaarray)*/
 
         val mudhafarray: MutableList<AnnotatedString> = ArrayList()
-        /*        expandableListDetail["Verse"] = verse
-                expandableListDetail["Translation"] = translation
-                expandableListDetail["Conditional/جملة شرطية\""] = shartarray
-                expandableListDetail["Accusative/ "] = harfnasbarray
-                expandableListDetail["Verb kāna/كان واخواتها"] = kanaarray
-                expandableListDetail["Adjectival Phrases/مرکب توصیفی"] = mausoofsifaarray
-                expandableListDetail["Possessive/إضافَة"] = mudhafarray*/
+
         viewModelScope.launch {
             withContext(Dispatchers.Default) {
                 val testList = arrayListOf<VerseAnalysisModel>()
@@ -1000,70 +987,6 @@ class ExpandableVerseViewModel(
                 sb.append(getSelectedTranslation(w, choice)).append(" ")
             }
             mausoofsifaarray.add(AnnotatedString(sb.toString()))
-        }
-    }
-    private fun setMausoofs(
-        mausoofsifaarray: MutableList<AnnotatedString>,
-        thememode: Boolean,
-        choice: Int,
-        chapterid: Int,
-        ayanumber: Int
-    ) {
-        val utils = Utils(QuranGrammarApplication.context)
-        val sifabySurahAyah: List<SifaEntity>? =
-            utils.getSifabySurahAyah(chapterid, ayanumber)
-        var tagcolor: Color? = null
-        tagcolor = if (thememode) {
-            ComposeConstant.sifaspansDark
-        } else {
-            ComposeConstant.sifaspansLight
-
-        }
-
-        if (sifabySurahAyah != null) {
-            for (shartEntity in sifabySurahAyah) {
-                val builder = AnnotatedString.Builder()
-                val quranverses: String = quran!![0].qurantext
-
-                val start = shartEntity.startindex
-                val end = shartEntity.endindex
-                //   builder.append(source)
-                val tagonestyle = SpanStyle(
-                    color = tagcolor,
-                    textDecoration = TextDecoration.Underline
-                )
-
-                val substr =
-                    quranverses.substring(shartEntity.startindex, shartEntity.endindex)
-                builder.append(substr)
-                builder.addStyle(
-                    tagonestyle, 0,
-                    substr.length
-                )
-                mausoofsifaarray.add(builder.toAnnotatedString())
-
-
-                val sequence =
-                    quranverses.substring(shartEntity.startindex, shartEntity.endindex)
-
-                val wordfrom = shartEntity.wordno - 1
-                val wordto = shartEntity.wordno
-                val ssb = StringBuilder()
-                val list: List<wbwentity>? = utils.getwbwQuranbTranslation(
-                    corpusSurahWord!![0].corpus.surah,
-                    corpusSurahWord!![0].corpus.ayah,
-                    wordfrom,
-                    wordto
-                )
-                if (list != null) {
-                    for (w in list) {
-                        StringBuilder()
-                        val temp: StringBuilder = getSelectedTranslation(w, choice)
-                        ssb.append(temp).append(" ")
-                    }
-                }
-                mausoofsifaarray.add(AnnotatedString(ssb.toString()))
-            }
         }
     }
 

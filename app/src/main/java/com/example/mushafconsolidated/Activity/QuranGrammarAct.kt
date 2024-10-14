@@ -78,6 +78,7 @@ import com.example.mushafconsolidated.Adapters.FlowAyahWordAdapterNoMafoolat
 import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.SurahHeader
 import com.example.mushafconsolidated.Utils
+import com.example.mushafconsolidated.fragments.GrammerFragmentsBottomSheet
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.quranrepo.QuranRepository
 import com.example.mushafconsolidated.quranrepo.QuranViewModel
@@ -1052,15 +1053,34 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         }
     }
 
+    private fun loadItemListGrammarLineWise(surah: Int, ayah: Int) {
 
-    private fun loadItemList(dataBundle: Bundle) {
+
+        val builder = AlertDialog.Builder(this)
+        builder.setCancelable(false) // if you want user to wait for some process to finish,
+        builder.setView(R.layout.layout_loading_dialog)
+        val item = GrammerFragmentsBottomSheet()
+        val fragmentManager = supportFragmentManager
+       // item.arguments = dataBundle
+
+        fragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.abc_slide_in_top, android.R.anim.fade_out).show(item)
+        // transactions.show(item);
+        val data =
+            arrayOf(surah.toString(), ayah.toString())
+        GrammerFragmentsBottomSheet.newInstance(data)
+            .show(supportFragmentManager, WordAnalysisBottomSheet.TAG)
+
+
+    }
+    private fun loadItemListCompose(dataBundle: Bundle) {
         val homeactivity = Intent(this@QuranGrammarAct, SentenceGrammarAnalysis::class.java)
         homeactivity.putExtras(dataBundle)
-        //  val homeactivity = Intent(this@MainActivity, DownloadListActivity::class.java)
-
-        intent.addCategory(Intent.CATEGORY_LAUNCHER)
+         intent.addCategory(Intent.CATEGORY_LAUNCHER)
         startActivity(homeactivity)
-        //    finish();
+
+
+
 
     }
 
@@ -1420,7 +1440,9 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             val dataBundle = Bundle()
             dataBundle.putInt(Constant.SURAH_ID, word.surah)
             dataBundle.putInt(Constant.AYAH_ID, Math.toIntExact(word.ayah.toLong()))
-            loadItemList(dataBundle)
+            loadItemListCompose(dataBundle)
+         //   loadItemListGrammarLineWise(word.surah, word.ayah)
+
         }
     }
 
@@ -1459,10 +1481,27 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         } else {
             allofQuran[position]
         }
-        val dataBundle = Bundle()
+    /*   val dataBundle = Bundle()
         dataBundle.putInt(Constant.SURAH_ID, word.surah)
         dataBundle.putInt(Constant.AYAH_ID, Math.toIntExact(word.ayah.toLong()))
-        loadItemList(dataBundle)
+        loadItemListCompose(dataBundle)*/
+
+
+        val builder = AlertDialog.Builder(this)
+        builder.setCancelable(false) // if you want user to wait for some process to finish,
+        builder.setView(R.layout.layout_loading_dialog)
+        val item = GrammerFragmentsBottomSheet()
+        val fragmentManager = supportFragmentManager
+        // item.arguments = dataBundle
+
+        fragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.abc_slide_in_top, android.R.anim.fade_out).show(item)
+        // transactions.show(item);
+        val data =
+            arrayOf(word.surah.toString(), word.ayah.toString())
+        GrammerFragmentsBottomSheet.newInstance(data)
+            .show(supportFragmentManager, WordAnalysisBottomSheet.TAG)
+
 
     }
 

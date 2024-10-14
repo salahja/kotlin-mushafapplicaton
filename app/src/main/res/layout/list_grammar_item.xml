@@ -14,9 +14,13 @@
         android:layout_height="wrap_content"
 
         android:paddingStart="?android:attr/expandableListPreferredChildPaddingLeft"
+        android:paddingEnd="?android:attr/expandableListPreferredChildPaddingLeft"
         android:textDirection="anyRtl"
-        android:textSize="23sp" />
-
+        android:textSize="23sp"
+        android:lineSpacingExtra="-4dp"
+        android:includeFontPadding="false"
+        android:dividerHeight="0dp"
+         />
 
     <TextView
         android:id="@+id/expandedListItemverb"
@@ -26,7 +30,11 @@
 
         android:paddingStart="?android:attr/expandableListPreferredChildPaddingLeft"
 
-        android:textSize="23sp" />
+        android:textSize="23sp"
+        android:lineSpacingExtra="-4dp"
+        android:includeFontPadding="false"
+        android:dividerHeight="0dp"
+          />
 
 
 </LinearLayout>

@@ -45,7 +45,11 @@ class GrammarFragmentsListAdapter(
             Typeface.createFromAsset(QuranGrammarApplication.context!!.assets, "Roboto.ttf")
         val expandedListTextView =
             convertView?.findViewById<View>(R.id.expandedListItem) as TextView
-        expandedListTextView.text = expandedListText as CharSequence?
+
+            expandedListTextView.text = expandedListText as CharSequence?
+        //    expandedListTextView.setLineSpacing(0f, 0f)
+
+
         //    expandedListTextView.setTypeface(mequran);
         return convertView
     }
@@ -81,6 +85,7 @@ class GrammarFragmentsListAdapter(
         }
         val listTitleTextView = convertView
             ?.findViewById<View>(R.id.listTitle) as TextView
+        convertView?.setPadding(50, 0, 50, 0)
         val prefs =
             PreferenceManager.getDefaultSharedPreferences(QuranGrammarApplication.context)
         val preferences = prefs.getString("theme", "dark")

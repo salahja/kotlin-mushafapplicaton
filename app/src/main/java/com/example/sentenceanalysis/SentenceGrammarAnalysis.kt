@@ -22,15 +22,11 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class SentenceGrammarAnalysis : AppCompatActivity() {
 
-// --Commented out by Inspection START (03/10/24, 10:34 pm):
-//    // val darkTheme = themeViewModel.darkTheme.observeAsState(initial = true)
-//    private val cardsViewModel by viewModels<CardsViewModel>()
-// --Commented out by Inspection STOP (03/10/24, 10:34 pm)
     private lateinit var shared: SharedPreferences
     var root: String? = null
     private var thememode = false
 
-    //   private val viewModel by viewModels<ExpandableListViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -55,7 +51,7 @@ class SentenceGrammarAnalysis : AppCompatActivity() {
                     it, ayah!!, thememode, 0
                 )
             })
-            //   VerseAnalysisScreen(versemodel,navController,  chapterid, verseid,)
+
 
 
             AppTheme(systemInDarkTheme) {

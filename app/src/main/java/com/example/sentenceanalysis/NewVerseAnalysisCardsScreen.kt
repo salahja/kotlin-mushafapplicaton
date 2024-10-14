@@ -172,12 +172,7 @@ fun ExpandableVerseCard(
     }
 
     Card(
-        //backgroundColor = cardBgColor,
-        //  contentColor = contentColour,
 
-        /* colors = CardDefaults.cardColors(
-             containerColor = MaterialTheme.colorScheme.primaryContainer,
-         ),*/
         elevation = CardDefaults.cardElevation(
             defaultElevation = 10.dp
         ),
@@ -202,7 +197,6 @@ fun ExpandableVerseCard(
             }
 
 
-            //   MyScreen(visible = expanded)
             ExpandableVerseContent(card.result, visible = expanded)
             //     ExpandableContent( visible = expanded)
         }
@@ -217,16 +211,9 @@ fun ExpandableVerseContent(
 
     card: List<AnnotatedString>,
     visible: Boolean = true,
-//    viewModel: LemmaViewModel = viewModel(),
 
-
-//  viewModel: Any = viewModel<LemmaViewModel>()
 
 ) {
-    // val versemodel= viewModel(modelClass = DuaViewModel::class.java)
-    // val versstate=versemodel.state
-    // val duanames = versstate.duanames
-    //  versemodel.state.duanames.filterbyid()
 
     val enterTransition = remember {
         expandVertically(
@@ -274,24 +261,11 @@ fun ExpandableVerseContent(
 
                 )
 
-                // on below line we are specifying
-                // divider for each list item
                 HorizontalDivider(thickness = 0.5.dp, color = Color.Red)
             }
             HorizontalDivider()
         }
 
-        /*
-        Column(modifier = Modifier.padding(8.dp)) {
-            Spacer(modifier = Modifier.heightIn(100.dp))
-            Text(
-           //  text =card.verseslist.get(0),
-                text=card.get(0),
-             //   text="expan",
-                textAlign = TextAlign.Center
-            )
-
-        }*/
     }
 
 
