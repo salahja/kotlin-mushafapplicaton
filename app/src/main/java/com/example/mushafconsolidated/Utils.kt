@@ -13,6 +13,7 @@ import com.example.mushafconsolidated.Entities.CorpusExpandWbwPOJO
 import com.example.mushafconsolidated.Entities.CorpusNounWbwOccurance
 import com.example.mushafconsolidated.Entities.CorpusVerbWbwOccurance
 import com.example.mushafconsolidated.Entities.GrammarRules
+import com.example.mushafconsolidated.Entities.PastTenceNegatonEnt
 import com.example.mushafconsolidated.Entities.NasbListingPojo
 import com.example.mushafconsolidated.Entities.NewKanaEntity
 import com.example.mushafconsolidated.Entities.NewMudhafEntity
@@ -20,6 +21,7 @@ import com.example.mushafconsolidated.Entities.NewNasbEntity
 import com.example.mushafconsolidated.Entities.NewShartEntity
 import com.example.mushafconsolidated.Entities.NounCorpus
 import com.example.mushafconsolidated.Entities.NounCorpusBreakup
+import com.example.mushafconsolidated.Entities.PresentTenceNegatonEnt
 import com.example.mushafconsolidated.Entities.Qari
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.RootVerbDetails
@@ -40,7 +42,6 @@ import com.example.mushafconsolidated.Entities.wbwentity
 import com.example.mushafconsolidated.model.Juz
 import com.example.mushafconsolidated.model.QuranCorpusWbw
 import com.example.mushafconsolidated.model.QuranEntityCorpusEntityWbwEntity
-import com.example.mushafconsolidated.model.QuranwithCorpusWbw
 import database.entity.AllahNames
 import mufradat.MufradatEntity
 
@@ -91,7 +92,14 @@ class Utils {
         return database.QuranDao().getQuranCorpusWbw(id, aid, wid)
     }
 
+    fun getLamMudharyNegationFilerSurahAyah(cid: Int, aid: Int, ): List<PastTenceNegatonEnt> {
+        return  database.PastTenceNegatonDao().getLamMudharyNegationFilterSurahAyah(cid, aid)
 
+    }
+    fun getPresentTenceNegatonFilerSurahAyah(cid: Int, aid: Int, ): List<PresentTenceNegatonEnt> {
+        return  database.PresentTenceNegationDao().getPresentTenceNegationFilterSurahAyah(cid, aid)
+
+    }
     fun getMudhafSurahAyahNew(id: Int, aid: Int): List<NewMudhafEntity>? {
         return database.NewMudhafDao().getMudhafSurahAyah(id, aid)
     }

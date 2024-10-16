@@ -87,9 +87,10 @@ class FlowAyahWordAdapterNoMafoolat(
 ) : RecyclerView.Adapter<FlowAyahWordAdapterNoMafoolat.ItemViewAdapter>() //implements OnItemClickListenerOnLong {
 {
     private var spannableverse: SpannableString? = null
+
     //private var absoluteNegationData: List<AbsoluteNegationEnt>
-    private lateinit var sifaDta : List<SifaEntity>
-    private lateinit var mudhafData : List<NewMudhafEntity>
+    private lateinit var sifaDta: List<SifaEntity>
+    private lateinit var mudhafData: List<NewMudhafEntity>
     private val spannedWordsCache = HashMap<CorpusEntity, SpannableString>()
 
 
@@ -101,6 +102,7 @@ class FlowAyahWordAdapterNoMafoolat(
     lateinit var rootword: TextView
     private var lineSpacing = 0
     private lateinit var quranModel: QuranViewModel
+
     //MaterialTextView arabic;
     private lateinit var arabicChipview: Chip
     private lateinit var arabicTv: MaterialTextView
@@ -113,11 +115,12 @@ class FlowAyahWordAdapterNoMafoolat(
     private lateinit var colorwordfont: Typeface
 
     private val absoluteNegationCache = HashMap<Pair<Int, Int>, List<Int>>() //
-   // private val sifaCache = LinkedHashMap<Pair<Int, Int>, List<Int>>()
+    // private val sifaCache = LinkedHashMap<Pair<Int, Int>, List<Int>>()
 
     private var sifaCache = HashMap<Pair<Int, Int>, MutableList<List<Int>>>()//
 
     private val mudhafCache = HashMap<Pair<Int, Int>, MutableList<List<Int>>>()//
+
     //   private lateinit var  ayahWord: CorpusAyahWord
     //  private  var ayahWord: QuranCorpusWbw? = null
     private val isaudio: Boolean
@@ -128,14 +131,14 @@ class FlowAyahWordAdapterNoMafoolat(
             context
         )
 
-       this.quranModel=mainViewModel
+        this.quranModel = mainViewModel
         QuranViewUtils.initialize(mainViewModel)
         // Assuming you have a QuranModel instance and caches like before
         val surah = allofQuran[0].surah
 
 // Call utility functions to cache the data
-           QuranViewUtils.cacheAbsoluteNegationData(quranModel, surah, absoluteNegationCache)
-         QuranViewUtils.cacheSifaData(quranModel, surah, sifaCache)
+        QuranViewUtils.cacheAbsoluteNegationData(quranModel, surah, absoluteNegationCache)
+        QuranViewUtils.cacheSifaData(quranModel, surah, sifaCache)
         QuranViewUtils.cacheMudhafData(quranModel, surah, mudhafCache)
 
 
@@ -291,7 +294,7 @@ class FlowAyahWordAdapterNoMafoolat(
         showWordByword: Boolean,
         whichtranslation: String?,
 
-    ) {
+        ) {
         var entity: QuranEntity? = null
         val wbw = sharedPreferences.getString("wbw", "en")
 
@@ -321,7 +324,13 @@ class FlowAyahWordAdapterNoMafoolat(
 
         setAyahGrammaticalPhrases(
 
-            holder, spannableverse,absoluteNegationIndexes,sifaIndexList,mudhafIndexList,entity.surah,entity.ayah
+            holder,
+            spannableverse,
+            absoluteNegationIndexes,
+            sifaIndexList,
+            mudhafIndexList,
+            entity.surah,
+            entity.ayah
         )
 
         holder.base_cardview.visibility = View.GONE
@@ -456,13 +465,13 @@ class FlowAyahWordAdapterNoMafoolat(
         ) {
         if (spannableverse != null) {
 
-             CorpusUtilityorig.setAyahGrammaticalPhrases(spannableverse, surah, ayah)
+            CorpusUtilityorig.setAyahGrammaticalPhrases(spannableverse, surah, ayah)
             CorpusUtilityorig.setMausoofSifaFromCache(spannableverse, sifaIndexList)
             CorpusUtilityorig.setMudhafFromCache(spannableverse, mudhafIndexList)
             CorpusUtilityorig.setAbsoluteNegationFromCache(spannableverse, absoluteNegationIndexes)
-         //  CorpusUtilityorig.  setAbsoluteNegation(ayahWord,spannableverse)
+            //  CorpusUtilityorig.  setAbsoluteNegation(ayahWord,spannableverse)
             holder.quran_textView.text = spannableverse
-         //   lateinit var quran_textView: MaterialTextView
+            //   lateinit var quran_textView: MaterialTextView
         }
 
     }
@@ -560,7 +569,7 @@ class FlowAyahWordAdapterNoMafoolat(
             arabicChipview.typeface = colorwordfont
 
             if (showWbwTranslation) {
-                QuranViewUtils.setWordTranslation(translationTextView, word, wbw )
+                QuranViewUtils.setWordTranslation(translationTextView, word, wbw)
 
 
             }
@@ -676,7 +685,7 @@ class FlowAyahWordAdapterNoMafoolat(
 
         lateinit var mafoolbihi: TextView
         private lateinit var erab_notes: TextView
-     lateinit var quran_textView: MaterialTextView
+        lateinit var quran_textView: MaterialTextView
         private lateinit var quran_transliterationnote: TextView
         lateinit var quran_jalalaynnote: TextView
         lateinit var erab_textViewnote: TextView
@@ -1071,7 +1080,6 @@ class FlowAyahWordAdapterNoMafoolat(
         private const val TYPE_ITEM = 1
     }
 }
-
 
 
 enum class RevalationCity {

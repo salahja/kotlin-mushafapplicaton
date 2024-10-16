@@ -8,6 +8,7 @@ import com.example.mushafconsolidated.DAO.BookMarkDao
 import com.example.mushafconsolidated.DAO.CorpusExpandedDao
 import com.example.mushafconsolidated.DAO.HaliyaDao
 import com.example.mushafconsolidated.DAO.HansDao
+import com.example.mushafconsolidated.DAO.PastTenceNegatonDao
 
 import com.example.mushafconsolidated.DAO.LaneDao
 import com.example.mushafconsolidated.DAO.LaneRootDao
@@ -19,6 +20,7 @@ import com.example.mushafconsolidated.DAO.NewMudhafDao
 import com.example.mushafconsolidated.DAO.NewNasbDao
 import com.example.mushafconsolidated.DAO.NewShartDAO
 import com.example.mushafconsolidated.DAO.NounCorpusDao
+import com.example.mushafconsolidated.DAO.PresentTenceNegationDao
 import com.example.mushafconsolidated.DAO.QariDao
 import com.example.mushafconsolidated.DAO.QuranDao
 import com.example.mushafconsolidated.DAO.QuranExplorerDao
@@ -65,6 +67,24 @@ object AppModule {
 
         return appDB.AbsoluteNegationDao()
     }
+
+    @Singleton
+    @Provides
+    fun getPastTenceNegationDao(appDB: QuranAppDatabase): PastTenceNegatonDao {
+
+        return appDB.PastTenceNegatonDao()
+    }
+
+
+    @Singleton
+    @Provides
+    fun getPresentTenceNegationDao(appDB: QuranAppDatabase): PresentTenceNegationDao {
+
+        return appDB.PresentTenceNegationDao()
+    }
+
+
+
 
     @Singleton
     @Provides

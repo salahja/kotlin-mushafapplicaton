@@ -12,6 +12,7 @@ import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
 import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.GrammarRules
 import com.example.mushafconsolidated.Entities.HalEnt
+import com.example.mushafconsolidated.Entities.PastTenceNegatonEnt
 import com.example.mushafconsolidated.Entities.LiajlihiEnt
 import com.example.mushafconsolidated.Entities.MafoolBihi
 import com.example.mushafconsolidated.Entities.MafoolMutlaqEnt
@@ -204,7 +205,18 @@ class QuranViewModel @Inject constructor(
     }
 
 
+    fun getLamMudharyNegationFilerSurahAyah(cid: Int, aid: Int, ): List<PastTenceNegatonEnt> {
+        return  this.quranRepository.getLamMudharyNegationFilerSurahAyah(cid, aid)
 
+    }
+    fun getLamMudharyNegationFilterSurah(cid: Int ): List<PastTenceNegatonEnt> {
+        return  this.quranRepository.getLamMudharyNegationFilterSurah(cid)
+
+    }
+    fun getLamMudharyNegationAll(): List<PastTenceNegatonEnt> {
+        return  this.quranRepository.getLamMudharyNegationAll()
+
+    }
 
     fun getCorpusEntityFilterSurah(cid: Int ): MutableLiveData<List<CorpusEntity>> {
         corpusentity.value = this.quranRepository.getCorpusEntityFilterSurah(cid)

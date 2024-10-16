@@ -9,6 +9,7 @@ import com.example.mushafconsolidated.DAO.BookMarkDao
 import com.example.mushafconsolidated.DAO.CorpusExpandedDao
 import com.example.mushafconsolidated.DAO.HaliyaDao
 import com.example.mushafconsolidated.DAO.HansDao
+import com.example.mushafconsolidated.DAO.PastTenceNegatonDao
 
 import com.example.mushafconsolidated.DAO.LaneRootDao
 import com.example.mushafconsolidated.DAO.LughatDao
@@ -19,6 +20,7 @@ import com.example.mushafconsolidated.DAO.NewMudhafDao
 import com.example.mushafconsolidated.DAO.NewNasbDao
 import com.example.mushafconsolidated.DAO.NewShartDAO
 import com.example.mushafconsolidated.DAO.NounCorpusDao
+import com.example.mushafconsolidated.DAO.PresentTenceNegationDao
 import com.example.mushafconsolidated.DAO.QuranDao
 import com.example.mushafconsolidated.DAO.SifaDao
 import com.example.mushafconsolidated.DAO.VerbCorpusDao
@@ -34,6 +36,7 @@ import com.example.mushafconsolidated.Entities.BookMarks
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
 import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.HalEnt
+import com.example.mushafconsolidated.Entities.PastTenceNegatonEnt
 import com.example.mushafconsolidated.Entities.LiajlihiEnt
 import com.example.mushafconsolidated.Entities.MafoolBihi
 import com.example.mushafconsolidated.Entities.MafoolMutlaqEnt
@@ -42,6 +45,7 @@ import com.example.mushafconsolidated.Entities.NewMudhafEntity
 import com.example.mushafconsolidated.Entities.NewNasbEntity
 import com.example.mushafconsolidated.Entities.NewShartEntity
 import com.example.mushafconsolidated.Entities.NounCorpus
+import com.example.mushafconsolidated.Entities.PresentTenceNegatonEnt
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.SifaEntity
 import com.example.mushafconsolidated.Entities.TameezEnt
@@ -56,6 +60,8 @@ import javax.inject.Inject
 
 
  class QuranRepository @Inject constructor(
+     var presentTenceNegationDao: PresentTenceNegationDao,
+     var pastTenceNegationDao:PastTenceNegatonDao,
      var absoluteNegationDao:AbsoluteNegationDao,
      var wbwdao:wbwDao,
      var corpusDao: CorpusExpandedDao,
@@ -145,6 +151,28 @@ import javax.inject.Inject
 
      fun getAbsoluteNegationFilterSurah(surah: Int): List<AbsoluteNegationEnt> =
          absoluteNegationDao.getAbsoluteNegationFilterSurah(surah)
+
+     fun getLamMudharyNegationFilerSurahAyah(surah: Int, ayah: Int): List<PastTenceNegatonEnt> =
+         pastTenceNegationDao.getLamMudharyNegationFilterSurahAyah(surah, ayah)
+
+     fun getLamMudharyNegationAll(): List<PastTenceNegatonEnt> =
+         pastTenceNegationDao.getLamMudharyNegationAll()
+
+     fun getLamMudharyNegationFilterSurah(surah: Int): List<PastTenceNegatonEnt> =
+         pastTenceNegationDao.getLamMudharyNegationFilterSurah(surah)
+
+
+     fun getPresentNegationFilerSurahAyah(surah: Int, ayah: Int): List<PresentTenceNegatonEnt> =
+         presentTenceNegationDao.getPresentTenceNegationFilterSurahAyah(surah, ayah)
+
+     fun getPresentNegationAll(): List<PresentTenceNegatonEnt> =
+         presentTenceNegationDao.getPresentTenceNegationAll()
+
+     fun getPresentNegationFilterSurah(surah: Int): List<PresentTenceNegatonEnt> =
+         presentTenceNegationDao.getPresentTenceNegationFilterSurah(surah)
+
+
+
 
      fun getCorpusEntityFilterSurah(surah: Int, ): List<CorpusEntity> =
          corpusDao.getVersesBySurahLive(surah)

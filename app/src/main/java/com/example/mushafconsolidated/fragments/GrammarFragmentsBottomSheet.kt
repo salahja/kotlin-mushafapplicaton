@@ -30,15 +30,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
+import com.example.Constant
 
 import com.example.Constant.BCYAN
 import com.example.Constant.CYANLIGHTEST
 import com.example.Constant.FORESTGREEN
 import com.example.Constant.GOLD
 import com.example.Constant.GREENDARK
-import com.example.Constant.GREENYELLOW
 import com.example.Constant.KASHMIRIGREEN
-import com.example.Constant.MIDNIGHTBLUE
 import com.example.Constant.ORANGE400
 import com.example.Constant.WBURNTUMBER
 import com.example.Constant.WHOTPINK
@@ -48,14 +47,15 @@ import com.example.Constant.harfismspanDark
 import com.example.Constant.harfkhabarspanDark
 import com.example.Constant.harfshartspanDark
 import com.example.Constant.jawabshartspanDark
-import com.example.Constant.mudhafspansDark
 import com.example.Constant.prussianblue
 import com.example.Constant.shartspanDark
 import com.example.Constant.sifaspansDark
 import com.example.mushafconsolidated.Entities.CorpusEntity
+import com.example.mushafconsolidated.Entities.PastTenceNegatonEnt
 import com.example.mushafconsolidated.Entities.NewMudhafEntity
 import com.example.mushafconsolidated.Entities.NewNasbEntity
 import com.example.mushafconsolidated.Entities.NewShartEntity
+import com.example.mushafconsolidated.Entities.PresentTenceNegatonEnt
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.SifaEntity
 import com.example.mushafconsolidated.Entities.wbwentity
@@ -65,6 +65,7 @@ import com.example.mushafconsolidated.model.SarfSagheerPOJO
 import com.example.mushafconsolidated.model.Word
 import com.example.mushafconsolidated.quranrepo.QuranRepository
 import com.example.mushafconsolidated.quranrepo.QuranViewModel
+import com.example.utility.CorpusUtilityorig
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.Executors
@@ -222,14 +223,180 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
         setMudhaf(mudhafarray)
         val kanaarray: MutableList<SpannableString> = ArrayList()
         newsetKana(kanaarray)
+        val PastTenceNegationArray:MutableList<SpannableString> = ArrayList()
+        setPastTenceNegation(PastTenceNegationArray)
+
+        val presentTenceNegationArray:MutableList<SpannableString> = ArrayList()
+        setPresentTenceNegation(presentTenceNegationArray)
+
+
+
+
+                val note1 = String.format(
+            "harf (لَمْ) only occurs with an imperfect/mudhary verb and it can push the meaning to the past tense "
+
+        )
+        val note2 = String.format(
+                    " and harf (%s) only occurs with a perfect/mudhary verb and is used for refutation or in the context of debate",
+            "\u202Bمَا\u202C"
+        )
+
+        if(PastTenceNegationArray.isNotEmpty()){
+            PastTenceNegationArray.add(SpannableString.valueOf(note1))
+            PastTenceNegationArray.add(SpannableString.valueOf(note2))
+        }
+
         expandableListDetail["Verse"] = verse
         expandableListDetail["Translation"] = translation
+        expandableListDetail["Verb sentence-Past Tence Negation- Stences(لَا/مَا)"] = PastTenceNegationArray
+        expandableListDetail["Verb sentence-Present Tence Negation- Stences(لَمْ/مَا)"] = presentTenceNegationArray
         expandableListDetail["Conditional/جملة شرطية\""] = shartarray
         expandableListDetail["Accusative/ "] = harfnasbarray
         expandableListDetail["Verb kāna/كان واخواتها"] = kanaarray
         expandableListDetail["Adjectival Phrases/مرکب توصیفی"] = mausoofsifaarray
         expandableListDetail["Possessive/إضافَة"] = mudhafarray
+
         return expandableListDetail
+    }
+
+    private fun setPresentTenceNegation(presentTenceNegationArray: MutableList<SpannableString>) {
+
+        val utils = Utils(requireContext())
+        //   ArrayList<MudhafEntity> mudhafSurahAyah = utils.getMudhafSurahAyah(chapterid, ayanumber);
+        val mudhafSurahAyah: List<PresentTenceNegatonEnt>? =
+            utils.getPresentTenceNegatonFilerSurahAyah(chapterid, ayanumber)
+        if (mudhafSurahAyah != null) {
+            for (mudhafEntity in mudhafSurahAyah) {
+                val colorSpan = if (CorpusUtilityorig.dark) {
+                    Constant.mudhafspanDarks
+                } else {
+                    Constant.mudhafspanLight
+                }
+
+                val quranverses: String = quran!![0].qurantext
+                val spannable = SpannableString(quranverses)
+                spannable.setSpan(
+                    colorSpan,
+                    mudhafEntity.startindex,
+                    mudhafEntity.endindex,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                val sequence =
+                    spannable.subSequence(mudhafEntity.startindex, mudhafEntity.endindex)
+                presentTenceNegationArray.add(sequence as SpannableString)
+                val sb = StringBuilder()
+                val wordfrom = mudhafEntity.wordfrom
+                val wordto = mudhafEntity.wordnoto
+                val strings =
+                    sequence.toString().split("\\s".toRegex()).dropLastWhile { it.isEmpty() }
+                        .toTypedArray()
+                val mudhafTranslation = StringBuilder()
+                if (strings.size >= 2) {
+                    val list: List<wbwentity>? = utils.getwbwQuranbTranslation(
+                        corpusSurahWord!![0].surah,
+                        corpusSurahWord!![0].ayah,
+                        wordfrom,
+                        wordto
+                    )
+                    if (list != null) {
+                        for (w in list) {
+                            StringBuilder()
+                            val temp: StringBuilder = getSelectedTranslation(w)
+                            mudhafTranslation.append(temp).append(" ")
+                        }
+                    }
+
+                    presentTenceNegationArray.add(SpannableString.valueOf(mudhafTranslation.toString()))
+                    presentTenceNegationArray.add(SpannableString.valueOf("\n"))
+
+                } else {
+                    val list = model.getwbwQuranTranslationRange(
+                        corpusSurahWord!![0].surah,
+                        corpusSurahWord!![0].ayah,
+                        wordto,
+                        wordto
+                    )
+                    getWordTranslation(sb, list)
+
+                    presentTenceNegationArray.add(SpannableString.valueOf(sb))
+
+
+
+                }
+
+            }
+        }
+
+
+
+    }
+
+    private fun setPastTenceNegation(lamPastTenceNegationArray: MutableList<SpannableString>) {
+        val utils = Utils(requireContext())
+        //   ArrayList<MudhafEntity> mudhafSurahAyah = utils.getMudhafSurahAyah(chapterid, ayanumber);
+        val mudhafSurahAyah: List<PastTenceNegatonEnt>? =
+            utils.getLamMudharyNegationFilerSurahAyah(chapterid, ayanumber)
+        if (mudhafSurahAyah != null) {
+            for (mudhafEntity in mudhafSurahAyah) {
+                val colorSpan = if (CorpusUtilityorig.dark) {
+                    Constant.mudhafspanDarks
+                } else {
+                    Constant.mudhafspanLight
+                }
+
+                val quranverses: String = quran!![0].qurantext
+                val spannable = SpannableString(quranverses)
+                spannable.setSpan(
+                    colorSpan,
+                    mudhafEntity.startindex,
+                    mudhafEntity.endindex,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                val sequence =
+                    spannable.subSequence(mudhafEntity.startindex, mudhafEntity.endindex)
+                lamPastTenceNegationArray.add(sequence as SpannableString)
+                val sb = StringBuilder()
+                val wordfrom = mudhafEntity.wordfrom
+                val wordto = mudhafEntity.wordnoto
+                val strings =
+                    sequence.toString().split("\\s".toRegex()).dropLastWhile { it.isEmpty() }
+                        .toTypedArray()
+                val mudhafTranslation = StringBuilder()
+                if (strings.size >= 2) {
+                    val list: List<wbwentity>? = utils.getwbwQuranbTranslation(
+                        corpusSurahWord!![0].surah,
+                        corpusSurahWord!![0].ayah,
+                        wordfrom,
+                        wordto
+                    )
+                    if (list != null) {
+                        for (w in list) {
+                            StringBuilder()
+                            val temp: StringBuilder = getSelectedTranslation(w)
+                            mudhafTranslation.append(temp).append(" ")
+                        }
+                    }
+
+                    lamPastTenceNegationArray.add(SpannableString.valueOf(mudhafTranslation.toString()))
+                    lamPastTenceNegationArray.add(SpannableString.valueOf("\n"))
+
+                } else {
+                    val list = model.getwbwQuranTranslationRange(
+                        corpusSurahWord!![0].surah,
+                        corpusSurahWord!![0].ayah,
+                        wordto,
+                        wordto
+                    )
+                    getWordTranslation(sb, list)
+
+                    lamPastTenceNegationArray.add(SpannableString.valueOf(sb))
+
+
+
+                }
+
+            }
+        }
     }
 
     private fun setNewNasb(hasbarray: MutableList<SpannableString>) {
@@ -420,6 +587,19 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
     ) {
         if (wordByWordEntities != null) {
             for (w in wordByWordEntities) {
+                /*
+                val temp: StringBuilder 
+if (w != null) {
+    val translation = getSelectedTranslation(w)
+    temp = if (translation != null) {
+        translation
+    } else {
+        StringBuilder()
+    }
+} else {
+    temp = StringBuilder()
+}
+                 */
                 val temp = w?.let { getSelectedTranslation(it) }
                     ?: StringBuilder() // Handle null wbwentity
                 if (w != null) {
@@ -780,8 +960,268 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
         // sb.append(" ") // Uncomment if you need to add a space after the translation
         return sb
     }
-
     private fun newsetKana(kanaarray: MutableList<SpannableString>) {
+        val kanaSurahAyahnew = model.getkana(chapterid, ayanumber).value
+        val (harfkana, kanaism, kanakhbar) = if (dark) {
+            Triple(ForegroundColorSpan(GOLD), ForegroundColorSpan(ORANGE400), ForegroundColorSpan(Color.CYAN))
+        } else {
+            Triple(ForegroundColorSpan(FORESTGREEN), ForegroundColorSpan(KASHMIRIGREEN), ForegroundColorSpan(WHOTPINK))
+        }
+
+        kanaSurahAyahnew?.forEach { kana ->
+            val quranverses = quran!![0].qurantext
+            val harfofverse = quranverses.substring(kana.indexstart, kana.indexend)
+            val ismofverse = if (kana.ismkanaend > kana.ismkanastart) quranverses.substring(kana.ismkanastart, kana.ismkanaend) else ""
+            val khabarofverse = quranverses.substring(kana.khabarstart, kana.khabarend)
+
+            val isharfb = kana.indexstart >= 0 && kana.indexend > 0
+            val isism = kana.ismkanastart >= 0 && kana.ismkanaend > 0
+            val isjawab = kana.khabarstart >= 0 && kana.khabarend > 0
+
+            val harfspannble = SpannableString(harfofverse).apply { setSpan(harfkana, 0, harfofverse.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE) }
+            val harfismspannable = SpannableString(ismofverse).apply { setSpan(kanaism, 0, ismofverse.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE) }
+            val khabarofversespannable = SpannableString(khabarofverse).apply { setSpan(kanakhbar, 0, khabarofverse.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE) }
+            val harfword = kana.harfwordno
+            val ismSword = kana.ismwordo
+            val ismEword = kana.ismendword
+            val khabarSword = kana.khabarstartwordno
+            val khabarEword = kana.khabarendwordno
+            when {
+                isharfb && isism && isjawab -> {
+
+                    harfspannble.setSpan(
+                        harfkana,
+                        0,
+                        harfofverse.length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                    harfismspannable.setSpan(
+                        kanaism,
+                        0,
+                        ismofverse.length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                    khabarofversespannable.setSpan(
+                        kanakhbar,
+                        0,
+                        khabarofverse.length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                    if (kana.ismkanastart > kana.khabarstart) {
+                        val charSequence = TextUtils.concat(
+                            harfspannble,
+                            " ",
+                            khabarofversespannable,
+                            " ",
+                            harfismspannable
+                        )
+                        kanaarray.add(SpannableString.valueOf(charSequence))
+                    } else {
+                        val charSequence = TextUtils.concat(
+                            harfspannble,
+                            " ",
+                            harfismspannable,
+                            " ",
+                            khabarofversespannable
+                        )
+                        kanaarray.add(SpannableString.valueOf(charSequence))
+                    }
+                    val sb = StringBuilder()
+                    val ismorkhabarsb = StringBuilder()
+                    val utils = Utils(requireContext())
+                    val wbwayah: List<wbwentity?>? = utils.getwbwQuranBySurahAyah(
+                        corpusSurahWord!![0].surah,
+                        corpusSurahWord!![0].ayah
+                    )
+                    if (wbwayah != null) {
+                        for (w in wbwayah) {
+                            StringBuilder()
+                            val temp: StringBuilder = getSelectedTranslation(w!!)
+                            if (w.wordno == harfword) {
+                                sb.append(temp.append(" "))
+                            } else if (w.wordno in ismSword..ismEword) {
+                                sb.append(temp).append(" ")
+                            } else if (w.wordno in khabarSword..khabarEword) {
+                                ismorkhabarsb.append(temp).append(" ")
+                            }
+                        }
+                    }
+                    sb.append("... ")
+                    sb.append(ismorkhabarsb)
+                    kanaarray.add(SpannableString.valueOf(sb.toString()))
+                }
+                isharfb && isjawab -> {
+                    // ... (Logic for kanaHarfAndJawabOnly)
+
+                    harfspannble.setSpan(
+                        harfkana,
+                        0,
+                        harfofverse.length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                    khabarofversespannable.setSpan(
+                        kanakhbar,
+                        0,
+                        khabarofverse.length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                    val charSequence = TextUtils.concat(harfspannble, " ", khabarofversespannable)
+                    kanaarray.add(SpannableString.valueOf(charSequence))
+                    val sb = StringBuilder()
+                    val wordfrom = kana.harfwordno
+                    var wordto: Int
+                    val split = khabarofverse.split("\\s".toRegex()).dropLastWhile { it.isEmpty() }
+                        .toTypedArray()
+                    wordto = if (split.size == 1) {
+                        kana.khabarstartwordno
+                    } else {
+                        kana.khabarendwordno
+                    }
+                    val isconnected = kana.khabarstartwordno - kana.harfwordno
+                    if (isconnected == 1) {
+                        val utils = Utils(requireContext())
+                        val list: List<wbwentity?>? = utils.getwbwQuranbTranslation(
+                            corpusSurahWord!![0].surah,
+                            corpusSurahWord!![0].ayah,
+                            wordfrom,
+                            wordto
+                        )
+                        if (list != null) {
+                            for (w in list) {
+                                StringBuilder()
+                                val temp: StringBuilder = getSelectedTranslation(w!!)
+                                sb.append(temp).append(" ")
+                            }
+                        }
+                        kanaarray.add(SpannableString.valueOf(sb.toString()))
+                    } else {
+                        val wordfroms = kana.harfwordno
+
+                        val list = model.getwbwQuranTranslationRange(
+                            corpusSurahWord!![0].surah,
+                            corpusSurahWord!![0].ayah,
+                            wordfrom,
+                            wordfroms
+                        )
+                        val from = kana.khabarstartwordno
+                        var to = kana.khabarendwordno
+                        if (to == 0) {
+                            to = from
+                        }
+                        val sbs = getTranslationForLanguage(list)
+
+                        //    sb.append(list).append("----");
+                        val utils = Utils(requireContext())
+                        val lists: List<wbwentity>? = utils.getwbwQuranbTranslation(
+                            corpusSurahWord!![0].surah,
+                            corpusSurahWord!![0].ayah,
+                            from,
+                            to
+                        )
+                        if (lists != null) {
+                            for (w in lists) {
+                                StringBuilder()
+                                val temp: StringBuilder = getSelectedTranslation(w)
+                                sbs.append(temp).append(" ")
+                            }
+                        }
+                        kanaarray.add(SpannableString.valueOf(sb.toString()))
+                    }
+
+
+                }
+                isharfb && isism -> {
+                    // ... (Logic for kanaHarfAndIsmOnly)
+
+                    harfspannble.setSpan(
+                        harfkana,
+                        0,
+                        harfofverse.length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                    harfismspannable.setSpan(
+                        kanaism,
+                        0,
+                        ismofverse.length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                    val charSequences = TextUtils.concat(
+                        harfspannble,
+                        " $harfismspannable"
+                    )
+                    kanaarray.add(SpannableString.valueOf(charSequences))
+                    //    kanaarray.add(SpannableString.valueOf(charSequence));
+                    val sb = StringBuilder()
+                    val ismorkhabarsb = StringBuilder()
+                    val ismconnected = kana.ismkanastart - kana.indexend
+                    val wordfrom = kana.harfwordno
+                    val wordto = kana.ismwordo
+                    if (ismconnected == 1) {
+                        val utils = Utils(requireContext())
+                        val list: List<wbwentity>? = utils.getwbwQuranbTranslation(
+                            corpusSurahWord!![0].surah,
+                            corpusSurahWord!![0].ayah,
+                            wordfrom,
+                            wordto
+                        )
+                        if (list != null) {
+                            for (w in list) {
+                                StringBuilder()
+                                val temp: StringBuilder = getSelectedTranslation(w)
+                                sb.append(temp).append(" ")
+                            }
+                        }
+                        kanaarray.add(SpannableString.valueOf(sb.toString()))
+                    } else {
+                        //  ArrayList<wbwentity> list = utils.getwbwQuranbTranslation(corpusSurahWord!!.get(0).getSurah(), corpusSurahWord!!.get(0).getAyah(), wordfroms, wordfroms);
+                        val utils = Utils(requireContext())
+                        val wbwayah: List<wbwentity>? = utils.getwbwQuranBySurahAyah(
+                            corpusSurahWord!![0].surah,
+                            corpusSurahWord!![0].ayah
+                        )
+                        if (wbwayah != null) {
+                            for (w in wbwayah) {
+                                StringBuilder()
+                                val temp: StringBuilder = getSelectedTranslation(w)
+                                if (w.wordno == harfword) {
+                                    sb.append(temp).append(" ")
+                                } else if (w.wordno in ismSword..ismEword) {
+                                    ismorkhabarsb.append(temp).append(" ")
+                                }
+                            }
+                        }
+                        sb.append(".....")
+                        sb.append(ismorkhabarsb)
+                        kanaarray.add(SpannableString.valueOf(sb.toString()))
+                    }
+                }
+                isharfb -> {
+                    // ... (Logic for isharfb only)
+
+
+                    harfspannble.setSpan(
+                        harfkana,
+                        0,
+                        harfofverse.length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                    val charSequence = TextUtils.concat(harfspannble)
+                    kanaarray.add(SpannableString.valueOf(charSequence))
+                    val wordfroms = kana.harfwordno
+                    val utils = Utils(requireContext())
+                    val list = model.getwbwQuranTranslationRange(
+                        corpusSurahWord!![0].surah,
+                        corpusSurahWord!![0].ayah,
+                        wordfroms,
+                        wordfroms
+                    )
+                    val sb = getTranslationForLanguage(list)
+                    kanaarray.add(SpannableString.valueOf(sb))
+                }
+            }
+        }
+    }
+    private fun newsetKanas(kanaarray: MutableList<SpannableString>) {
         //  val utils = Utils(requireContext())
         //  val kanaSurahAyahnew: List<NewKanaEntity?>? =
         //    utils.getKanaSurahAyahnew(chapterid, ayanumber)
@@ -829,7 +1269,7 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
                 val ismSword = kana.ismwordo
                 val ismEword = kana.ismendword
                 val khabarSword = kana.khabarstartwordno
-                val habarEword = kana.khabarendwordno
+                val khabarEword = kana.khabarendwordno
                 var harfspannble: SpannableString
                 var harfismspannable: SpannableString
                 var khabarofversespannable: SpannableString
@@ -889,7 +1329,7 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
                                 sb.append(temp.append(" "))
                             } else if (w.wordno in ismSword..ismEword) {
                                 sb.append(temp).append(" ")
-                            } else if (w.wordno in khabarSword..habarEword) {
+                            } else if (w.wordno in khabarSword..khabarEword) {
                                 ismorkhabarsb.append(temp).append(" ")
                             }
                         }
@@ -1155,15 +1595,16 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
                 utils.getMudhafSurahAyahNew(chapterid, ayanumber)
             if (mudhafSurahAyah != null) {
                 for (mudhafEntity in mudhafSurahAyah) {
-                    mudhafspansDark = if (dark) {
-                        BackgroundColorSpan(MIDNIGHTBLUE)
+                    val colorSpan = if (CorpusUtilityorig.dark) {
+                        Constant.mudhafspanDarks
                     } else {
-                        BackgroundColorSpan(GREENYELLOW)
+                        Constant.mudhafspanLight
                     }
+
                     val quranverses: String = quran!![0].qurantext
                     val spannable = SpannableString(quranverses)
                     spannable.setSpan(
-                        mudhafspansDark,
+                        colorSpan,
                         mudhafEntity.startindex,
                         mudhafEntity.endindex,
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -1242,8 +1683,8 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
                     val isharfb = indexstart >= 0 && indexend > 0
                     val isshart = shartindexstart >= 0 && shartindexend > 0
                     val isjawab = jawabstart >= 0 && jawabend > 0
-                    val a = isharfb && isshart && isjawab
-                    val b = isharfb && isshart
+                    val allPartofShart = isharfb && isshart && isjawab
+                    val harfAndShartOnly = isharfb && isshart
                     var harfspannble: SpannableString
                     var shartspoannable: SpannableString
                     var jawabshartspannable: SpannableString
@@ -1256,7 +1697,7 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
                         shartspanDark = ForegroundColorSpan(KASHMIRIGREEN)
                         jawabshartspanDark = ForegroundColorSpan(WHOTPINK)
                     }
-                    if (a) {
+                    if (allPartofShart) {
                         harfspannble = SpannableString(harfofverse)
                         shartspoannable = SpannableString(shartofverse)
                         jawabshartspannable = SpannableString(jawabofverrse)
@@ -1332,7 +1773,7 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
                             sb.append(sbjawab)
                             shartarray.add(SpannableString.valueOf(sb.toString()))
                         }
-                    } else if (b) {
+                    } else if (harfAndShartOnly) {
                         harfspannble = SpannableString(harfofverse)
                         shartspoannable = SpannableString(shartofverse)
                         harfspannble.setSpan(

@@ -5,12 +5,14 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.preference.PreferenceManager
 import android.text.SpannableString
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+
 import com.example.mushafconsolidated.R
 import com.example.utility.QuranGrammarApplication
 
@@ -85,6 +87,7 @@ class GrammarFragmentsListAdapter(
         }
         val listTitleTextView = convertView
             ?.findViewById<View>(R.id.listTitle) as TextView
+        listTitleTextView.gravity = Gravity.CENTER
         convertView?.setPadding(50, 0, 50, 0)
         val prefs =
             PreferenceManager.getDefaultSharedPreferences(QuranGrammarApplication.context)
@@ -102,6 +105,12 @@ class GrammarFragmentsListAdapter(
         }
         listTitleTextView.setTypeface(null, Typeface.BOLD)
         listTitleTextView.text = listTitle
+        // Hide group view if child list is empty
+        if (getChildrenCount(listPosition) == 0) {
+            convertView?.visibility = View.GONE
+        } else {
+            convertView?.visibility = View.VISIBLE
+        }
         return convertView
     }
 

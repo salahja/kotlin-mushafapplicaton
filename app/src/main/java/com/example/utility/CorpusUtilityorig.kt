@@ -19,7 +19,7 @@ import android.text.style.UnderlineSpan
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import com.example.Constant
-import com.example.Constant.mudhafspanDarks
+
 import com.example.Constant.mudhafspanLight
 import com.example.justJava.FrameSpan
 import com.example.mushafconsolidated.Entities.CorpusEntity
@@ -246,13 +246,13 @@ class CorpusUtilityorig(private var context: Context?) {
             // spannableString = SpannableString.valueOf(corpusayahWordArrayList.get(mudhafen.getAyah() - 1).getSpannableverse());
             try {
                 if (indexstart == 0 || indexstart > 0) {
-                    if (dark) {
-                        Constant.mudhafspansDark = BackgroundColorSpan(Constant.MIDNIGHTBLUE)
+                    val colorSpan = if (dark) {
+                        Constant.mudhafspanDarks
                     } else {
-                        Constant.mudhafspansDark = BackgroundColorSpan(Constant.GREENYELLOW)
+                        Constant.mudhafspanLight
                     }
                     spannableverse.setSpan(
-                        Constant.mudhafspansDark,
+                        colorSpan,
                         indexstart,
                         indexend,
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -757,13 +757,15 @@ class CorpusUtilityorig(private var context: Context?) {
             // spannableString = SpannableString.valueOf(corpusayahWordArrayList.get(mudhafen.getAyah() - 1).getSpannableverse());
             try {
                 if (indexstart == 0 || indexstart > 0) {
-                    if (dark) {
-                        Constant.mudhafspansDark = BackgroundColorSpan(Constant.MIDNIGHTBLUE)
-                    } else {
-                        Constant.mudhafspansDark = BackgroundColorSpan(Constant.GREENYELLOW)
-                    }
+
+                        val colorSpan = if (dark) {
+                            Constant.mudhafspanDarks
+                        } else {
+                            Constant.mudhafspanLight
+                        }
+
                     spannableverse.setSpan(
-                        Constant.mudhafspansDark,
+                        colorSpan,
                         indexstart,
                         indexend,
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -2657,12 +2659,16 @@ class CorpusUtilityorig(private var context: Context?) {
 
                     try {
                         if (indexstart == 0 || indexstart > 0) {
-                            if (dark) {
-                                Constant.mudhafspansDark = BackgroundColorSpan(Constant.MIDNIGHTBLUE)
-                            } else {
-                                Constant.mudhafspansDark = BackgroundColorSpan(Constant.GREENYELLOW)
-                            }
-                            spannableverse.setSpan(
+
+                            if (spannableverse != null) {
+                                val colorSpan = if (dark) {
+                                    Constant.mudhafspanDarks
+                                } else {
+                                    Constant.mudhafspanLight
+                                }
+                                }
+
+                                spannableverse.setSpan(
                                 Constant.mudhafspansDark,
                                 indexstart,
                                 indexend,
@@ -3138,11 +3144,7 @@ class CorpusUtilityorig(private var context: Context?) {
                 for (indexes in mudhafIndexList) {
                     val startIndex = indexes[0]
                     val endIndex = indexes[1]
-                    if (dark) {
-                        Constant.mudhafspanDarks
-                    } else {
-                        Constant.mudhafspanLight
-                    }
+
                     if (spannableverse != null) {
                         val colorSpan = if (dark) {
                             Constant.mudhafspanDarks

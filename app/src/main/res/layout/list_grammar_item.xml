@@ -15,7 +15,7 @@
 
         android:paddingStart="?android:attr/expandableListPreferredChildPaddingLeft"
         android:paddingEnd="?android:attr/expandableListPreferredChildPaddingLeft"
-        android:textDirection="anyRtl"
+        android:textDirection="rtl"
         android:textSize="23sp"
         android:lineSpacingExtra="-4dp"
         android:includeFontPadding="false"
