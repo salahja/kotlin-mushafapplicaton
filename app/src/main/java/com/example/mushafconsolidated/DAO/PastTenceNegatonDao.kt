@@ -7,11 +7,11 @@ import com.example.mushafconsolidated.Entities.PastTenceNegatonEnt
 @Dao
 interface PastTenceNegatonDao {
     @Query("SELECT * FROM lammudharynegation where surahid=:surah and ayahid=:ayah")
-    fun getLamMudharyNegationFilterSurahAyah(surah: Int, ayah: Int): List<PastTenceNegatonEnt>
+    fun getPastTenceNegationFilterSurahAyah(surah: Int, ayah: Int): List<PastTenceNegatonEnt>
 
     @Query("SELECT * FROM lammudharynegation ")
-    fun getLamMudharyNegationAll(): List<PastTenceNegatonEnt>
+    fun getPastTenceNegationAll(): List<PastTenceNegatonEnt>
 
     @Query("SELECT * FROM lammudharynegation where surahid=:surah ")
-    fun getLamMudharyNegationFilterSurah(surah: Int): List<PastTenceNegatonEnt>
+    fun getPastTenceNegationFilterSurah(surah: Int): List<PastTenceNegatonEnt>
 }

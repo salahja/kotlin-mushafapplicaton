@@ -2,8 +2,132 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "b37e890a901eb9a8aaa6d70a661c2db2",
+    "identityHash": "617b6ea90903273e0d615f5a664584af",
     "entities": [
+      {
+        "tableName": "futuretencenegation",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surahid` INTEGER NOT NULL, `ayahid` INTEGER NOT NULL, `wordfrom` INTEGER NOT NULL, `wordnoto` INTEGER NOT NULL, `startindex` INTEGER NOT NULL, `endindex` INTEGER NOT NULL, `harf` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "surahid",
+            "columnName": "surahid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ayahid",
+            "columnName": "ayahid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wordfrom",
+            "columnName": "wordfrom",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wordnoto",
+            "columnName": "wordnoto",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startindex",
+            "columnName": "startindex",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "endindex",
+            "columnName": "endindex",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "harf",
+            "columnName": "harf",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "inmailla",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surahid` INTEGER NOT NULL, `ayahid` INTEGER NOT NULL, `wordfrom` INTEGER NOT NULL, `wordnoto` INTEGER NOT NULL, `startindex` INTEGER NOT NULL, `endindex` INTEGER NOT NULL, `harf` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "surahid",
+            "columnName": "surahid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ayahid",
+            "columnName": "ayahid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wordfrom",
+            "columnName": "wordfrom",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wordnoto",
+            "columnName": "wordnoto",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startindex",
+            "columnName": "startindex",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "endindex",
+            "columnName": "endindex",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "harf",
+            "columnName": "harf",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
       {
         "tableName": "presenttencenegation",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surahid` INTEGER NOT NULL, `ayahid` INTEGER NOT NULL, `wordfrom` INTEGER NOT NULL, `wordnoto` INTEGER NOT NULL, `startindex` INTEGER NOT NULL, `endindex` INTEGER NOT NULL, `harf` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
@@ -2519,7 +2643,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b37e890a901eb9a8aaa6d70a661c2db2')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '617b6ea90903273e0d615f5a664584af')"
     ]
   }
 }

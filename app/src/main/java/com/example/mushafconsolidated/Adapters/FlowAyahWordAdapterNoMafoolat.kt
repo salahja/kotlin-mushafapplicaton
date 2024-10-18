@@ -343,7 +343,7 @@ class FlowAyahWordAdapterNoMafoolat(
                 holder,
                 showWordColor,
                 it,
-                ayahWord,
+
                 ayahWordArrayList,
                 showWordByword,
                 position
@@ -493,14 +493,13 @@ class FlowAyahWordAdapterNoMafoolat(
         holder: ItemViewAdapter,
         showWordColor: Boolean,
         wbw: String,
-        ayahWord: ArrayList<CorpusEntity>?,
         ayahWordArrayList: LinkedHashMap<Int, ArrayList<CorpusEntity>>,
         showWbwTranslation: Boolean,
         position: Int,
     ) {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         holder.flow_word_by_word.removeAllViews()
-        val ayahWord1 = ayahWord
+
         val wordarray = ayahWordArrayList[position + 1]
         for (word in wordarray!!) {
             var aindex = 0

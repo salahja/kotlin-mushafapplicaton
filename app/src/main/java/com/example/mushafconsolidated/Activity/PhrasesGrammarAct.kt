@@ -61,7 +61,10 @@ import com.example.mushafconsolidated.BottomOptionDialog
 import com.example.mushafconsolidated.Entities.BadalErabNotesEnt
 import com.example.mushafconsolidated.Entities.BookMarks
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
+import com.example.mushafconsolidated.Entities.CorpusEntity
+import com.example.mushafconsolidated.Entities.FutureTenceListingPojo
 import com.example.mushafconsolidated.Entities.HalEnt
+import com.example.mushafconsolidated.Entities.InMaListingPOJO
 import com.example.mushafconsolidated.Entities.LiajlihiEnt
 import com.example.mushafconsolidated.Entities.MafoolBihi
 import com.example.mushafconsolidated.Entities.MafoolMutlaqEnt
@@ -77,6 +80,8 @@ import com.example.mushafconsolidated.ajroomiya.NewAjroomiyaDetailHostActivity
 import com.example.mushafconsolidated.databinding.PhrasesNewFragmentReadingBinding
 import com.example.mushafconsolidated.fragments.BookMarkCreateFrag
 import com.example.mushafconsolidated.fragments.BookmarkFragment
+import com.example.mushafconsolidated.fragments.FutureTenceNegationFlowAdapter
+import com.example.mushafconsolidated.fragments.InMaPhrasesFlowAdapter
 import com.example.mushafconsolidated.fragments.NewSurahDisplayFrag
 import com.example.mushafconsolidated.fragments.PhrasesDisplayFrag
 import com.example.mushafconsolidated.fragments.PhrasesFlowAdapter
@@ -85,7 +90,7 @@ import com.example.mushafconsolidated.fragments.SifaPhrasesFlowAdapter
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.model.NewQuranCorpusWbw
-import com.example.mushafconsolidated.model.QuranCorpusWbw
+import com.example.mushafconsolidated.quranrepo.QuranRepository
 import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.example.mushafconsolidated.settingsimport.Constants
 import com.example.mushafconsolidatedimport.ParticleColorScheme
@@ -115,22 +120,33 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.Date
+import javax.inject.Inject
 
 //import com.example.mushafconsolidated.Entities.JoinVersesTranslationDataTranslation;
 @AndroidEntryPoint
 class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnClickListener {
+
+
+    private var corpusGroupedByAyah: LinkedHashMap<Int, ArrayList<CorpusEntity>> = LinkedHashMap()
+    private lateinit var    corpusGroupedByAyaht: ArrayList<Pair<Int, CorpusEntity>>
+    @Inject
+    lateinit var quranRepository: QuranRepository
     private lateinit var accusativesSentences: List<NasbListingPojo>
     private lateinit var shartSentences:List<ShartListingPojo>
     private lateinit var sifaSentences:List<SifaListingPojo>
+    private lateinit var inMaNegationSentence:List<InMaListingPOJO>
+    private lateinit var futureTenceNegationSentence:List<FutureTenceListingPojo>
     private var bundle: Intent? = null
     private var bundles: Bundle? = null
     private lateinit var mainViewModel: QuranViewModel
-    private var corpusSurahWord: List<QuranCorpusWbw>? = null
+    private var corpusSurahWord: List<CorpusEntity>? = null
 
     private var newnewadapterlist = LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>>()
     private lateinit var newflowAyahWordAdapter: PhrasesFlowAdapter
     private lateinit var shartFlowAdapter: ShartPhrasesFlowAdapter
     private lateinit var sifFlowAdapter: SifaPhrasesFlowAdapter
+    private lateinit var inMaNegationFlowAdapter: InMaPhrasesFlowAdapter
+    private lateinit var futureTenceNegationFlowAdapter: FutureTenceNegationFlowAdapter
     lateinit var binding: PhrasesNewFragmentReadingBinding
     private lateinit var surahWheelDisplayData: Array<String>
     private lateinit var ayahWheelDisplayData: Array<String>
@@ -898,6 +914,8 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
             shartSentences= emptyList()
             accusativesSentences= emptyList()
             sifaSentences= emptyList()
+            inMaNegationSentence= emptyList()
+            futureTenceNegationSentence= emptyList()
            if(harf == "inna") {
                accusativesSentences = util.getNasb(chapterno)
                for (ac in accusativesSentences) {
@@ -925,15 +943,46 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
                HightLightKeyWord(shartSentences,accusativesSentences,sifaSentences)
 
 
+           } else if(harf=="inmanegative"){
+               inMaNegationSentence = util.getInMaNegationListing(chapterno)
+               for (ac in inMaNegationSentence) {
+                   ac.spannableVerse= SpannableString(ac.qurantext)
+               }
+               corpus.setInMaSpanlisting(inMaNegationSentence)
+
+               //HightLightKeyWord(shartSentences,accusativesSentences,sifaSentences)
+
+           } else if(harf=="Future Negation"){
+               futureTenceNegationSentence=util.getFutureTnegaionListing(chapterno)
+
+               for (ac in futureTenceNegationSentence) {
+                   ac.spannableVerse= SpannableString(ac.qurantext)
+               }
+               corpus.setSpanFutureTenceNegationListing(futureTenceNegationSentence)
+
            }
+
+            val corpusAndQurandata = quranRepository.CorpusAndQuranDataSurah(chapterno)
+
+            allofQuran = corpusAndQurandata.allofQuran
+            corpusSurahWord = corpusAndQurandata.copusExpandSurah
+
+            corpusGroupedByAyah =
+                corpusSurahWord!!.groupBy { it.ayah } as LinkedHashMap<Int, ArrayList<CorpusEntity>>
             allofQuran = mainViewModel.getquranbySUrah(chapterno).value
 
+            corpusGroupedByAyaht = corpusSurahWord!!
+                .groupBy { it.ayah } // Group by ayah
+                .flatMap { (ayah, entities) -> // Flatten the map into a list of pairs
+                    entities.map { entity -> ayah to entity } // Create pairs of (ayah, entity)
+                } as ArrayList<Pair<Int, CorpusEntity>>
 
+            //filterQuranDataNew(corpusGroupedByAyaht, allofQuran, futureTenceNegationSentence)
+            filterQuranDataNewv1(corpusGroupedByAyah,allofQuran,futureTenceNegationSentence)
 
+          //  corpusSurahWord = mainViewModel.getQuranCorpusWbwbysurah(chapterno).value
 
-            corpusSurahWord = mainViewModel.getQuranCorpusWbwbysurah(chapterno).value
-
-            newnewadapterlist = CorpusUtilityorig.composeWBWCollection(allofQuran, corpusSurahWord)
+           // newnewadapterlist = CorpusUtilityorig.composeWBWCollection(allofQuran, corpusSurahWord)
 
 
 
@@ -956,6 +1005,58 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
 
             val viewmodel: QuranViewModel by viewModels()
 
+            if(futureTenceNegationSentence.isNotEmpty()){
+                futureTenceNegationFlowAdapter= FutureTenceNegationFlowAdapter(
+
+                    futureTenceNegationSentence,
+                    false,
+                    Mutlaqent,
+                    Tammezent,
+                    BadalErabNotesEnt,
+                    Liajlihient,
+                    Jumlahaliya,
+                    mafoolbihiwords,
+                    header,
+                    allofQuran,
+                    corpusGroupedByAyah,
+                    this@PhrasesGrammarAct,
+                    surahArabicName,
+                    isMakkiMadani,
+                    listener
+
+                )
+                futureTenceNegationFlowAdapter.addContext(this@PhrasesGrammarAct)
+                parentRecyclerView.setHasFixedSize(true)
+                parentRecyclerView.adapter = futureTenceNegationFlowAdapter
+                //   flowAyahWordAdapter.notifyDataSetChanged()
+                parentRecyclerView.post { parentRecyclerView.scrollToPosition(verseNo) }
+            }else
+            if(inMaNegationSentence.isNotEmpty()){
+                inMaNegationFlowAdapter= InMaPhrasesFlowAdapter(
+
+                    inMaNegationSentence,
+                    false,
+                    Mutlaqent,
+                    Tammezent,
+                    BadalErabNotesEnt,
+                    Liajlihient,
+                    Jumlahaliya,
+                    mafoolbihiwords,
+                    header,
+                    allofQuran,
+                    corpusGroupedByAyah,
+                    this@PhrasesGrammarAct,
+                    surahArabicName,
+                    isMakkiMadani,
+                    listener
+
+                )
+                inMaNegationFlowAdapter.addContext(this@PhrasesGrammarAct)
+                parentRecyclerView.setHasFixedSize(true)
+                parentRecyclerView.adapter = inMaNegationFlowAdapter
+                //   flowAyahWordAdapter.notifyDataSetChanged()
+                parentRecyclerView.post { parentRecyclerView.scrollToPosition(verseNo) }
+            }else
             if(sifaSentences.isNotEmpty()){
                 sifFlowAdapter= SifaPhrasesFlowAdapter(
 
@@ -969,7 +1070,7 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
                     mafoolbihiwords,
                     header,
                     allofQuran,
-                    newnewadapterlist,
+                    corpusGroupedByAyah,
                     this@PhrasesGrammarAct,
                     surahArabicName,
                     isMakkiMadani,
@@ -1045,7 +1146,86 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
         }
 
     }
+    fun filterQuranDataNew(
+        corpusGroupedByAyaht: ArrayList<Pair<Int, CorpusEntity>>,
+        allofQuran: List<QuranEntity>?,
+        futureTenceNegationSentence: List<FutureTenceListingPojo>
+    ) {
+        // Get the relevant ayah IDs from the negation sentence list
+        val relevantAyahIds = futureTenceNegationSentence.map { it.ayahid }
 
+        // Filter corpusGroupedByAyaht to only include pairs where the ayah ID is in relevantAyahIds
+        val filteredCorpusGroupedByAyaht = corpusGroupedByAyaht.filter { (ayahId, _) ->
+            ayahId in relevantAyahIds
+        }
+
+        // Clear and update the corpusGroupedByAyaht with the filtered result
+        corpusGroupedByAyaht.clear()
+        corpusGroupedByAyaht.addAll(filteredCorpusGroupedByAyaht)
+
+        // Preserve duplicates by filtering allofQuran multiple times if needed
+        val filteredAllOfQuran = relevantAyahIds.mapNotNull { ayahId ->
+            allofQuran?.find { it.ayah == ayahId }
+        }
+
+        // Assign the filtered list to allofQuran
+        this@PhrasesGrammarAct.allofQuran = filteredAllOfQuran
+    }
+
+    fun filterQuranDataNewnn(
+        corpusGroupedByAyah: ArrayList<Pair<Int, CorpusEntity>>, // Changed data structure
+        allofQuran: List<QuranEntity>?,
+        futureTenceNegationSentence: List<FutureTenceListingPojo>
+    ) {
+        // Collect the relevant ayah IDs, maintaining duplicates
+        val relevantAyahIds = futureTenceNegationSentence.map { it.ayahid }
+
+        // Filter corpusGroupedByAyah by only those ayah IDs present in relevantAyahIds
+        corpusGroupedByAyah.retainAll { (ayahId, _) -> relevantAyahIds.contains(ayahId) }
+
+        // Preserve duplicates by filtering allofQuran multiple times if needed
+        val filteredAllOfQuran = relevantAyahIds.mapNotNull { ayahId ->
+            allofQuran?.find { it.ayah == ayahId }
+        }
+
+        // Assign the filtered list to allofQuran
+        this@PhrasesGrammarAct.allofQuran = filteredAllOfQuran
+    }
+    fun filterQuranDataNewv1(
+        corpusGroupedByAyah: LinkedHashMap<Int, ArrayList<CorpusEntity>>,
+        allofQuran: List<QuranEntity>?,
+        futureTenceNegationSentence: List<FutureTenceListingPojo>
+    ) {
+        // Collect the relevant ayah IDs, maintaining duplicates
+        val relevantAyahIds = futureTenceNegationSentence.map { it.ayahid }
+
+        // Filter corpusGroupedByAyah by only those ayah IDs present in relevantAyahIds
+        corpusGroupedByAyah.keys.retainAll { ayahId -> relevantAyahIds.contains(ayahId) }
+        // Preserve duplicates by filtering allofQuran multiple times if needed
+        val filteredAllOfQuran = relevantAyahIds.mapNotNull { ayahId ->
+            allofQuran?.find { it.ayah == ayahId }
+        }
+
+        // Filter allofQuran, maintaining the same ayahid multiple times if it appears in relevantAyahIds
+
+        // Assign the filtered list to allofQuran
+        this@PhrasesGrammarAct.allofQuran = filteredAllOfQuran
+    }
+
+    fun filterQuranData(
+        corpusGroupedByAyah: LinkedHashMap<Int, ArrayList<CorpusEntity>>,
+        allofQuran: List<QuranEntity>?,
+        futureTenceNegationSentence: List<FutureTenceListingPojo>
+    ) {
+
+       // val relevantAyahIds = futureTenceNegationSentence.map { it.ayahid }.toSet()
+        val relevantAyahIds = futureTenceNegationSentence.map { it.ayahid }
+        // Filter corpusGroupedByAyah
+        corpusGroupedByAyah.keys.removeAll { it !in relevantAyahIds }
+
+        // Filter allofQuran
+        this@PhrasesGrammarAct.allofQuran = allofQuran?.filter { it.ayah in relevantAyahIds }
+    }
     private fun HightLightKeyWord(
         shartSentences: List<ShartListingPojo>,
         accusativesSentences: List<NasbListingPojo>,
@@ -1495,8 +1675,8 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
             bookMarkSelected(position)
         } else if (tag == "collection") {
             val dataBundle = Bundle()
-            val chapterno = corpusSurahWord!![position - 1].corpus.surah
-            val verse = corpusSurahWord!![position - 1].corpus.ayah
+            val chapterno = corpusSurahWord!![position - 1].surah
+            val verse = corpusSurahWord!![position - 1].ayah
 
 
             dataBundle.putInt(Constant.SURAH_ID, chapterno)
@@ -1579,8 +1759,8 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
                 ReloadActivity(colorsentence)
             }
         } else if (tag == "overflowbottom") {
-            val chapterno = corpusSurahWord!![position - 1].corpus.surah
-            val verse = corpusSurahWord!![position - 1].corpus.ayah
+            val chapterno = corpusSurahWord!![position - 1].surah
+            val verse = corpusSurahWord!![position - 1].ayah
             val name = surahArabicName
             val data = arrayOf(chapterno.toString(), verse.toString(), name)
             BottomOptionDialog.newInstance(data)
@@ -1591,7 +1771,7 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
          //   takeScreenShot(window.decorView)
             ScreenshotUtils.takeScreenshot(window.decorView, this)
         } else if (tag == "helpfb") {
-            val chapterno = corpusSurahWord!![position - 1].corpus.surah
+            val chapterno = corpusSurahWord!![position - 1].surah
             val dataBundle = Bundle()
             dataBundle.putInt(Constant.SURAH_ID, chapterno)
             val item = SurahSummary()
@@ -1610,8 +1790,8 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
                     if (item.itemId == R.id.actionTafsir) { // Handle option1 Click
                         val readingintent =
                             Intent(this@PhrasesGrammarAct, TafsirFullscreenActivity::class.java)
-                        val chapterno = corpusSurahWord!![position - 1].corpus.surah
-                        val verse = corpusSurahWord!![position - 1].corpus.ayah
+                        val chapterno = corpusSurahWord!![position - 1].surah
+                        val verse = corpusSurahWord!![position - 1].ayah
                         readingintent.putExtra(Constant.SURAH_ID, chapterno)
                         readingintent.putExtra(Constant.AYAH_ID, verse)
                         readingintent.putExtra(Constant.SURAH_ARABIC_NAME, surahArabicName)
@@ -1772,8 +1952,8 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
 
     private fun bookMarkSelected(position: Int) {
         //  position = flowAyahWordAdapter.getAdapterposition();
-        val chapterno = corpusSurahWord!![position - 1].corpus.surah
-        val verse = corpusSurahWord!![position - 1].corpus.ayah
+        val chapterno = corpusSurahWord!![position - 1].surah
+        val verse = corpusSurahWord!![position - 1].ayah
         val en = BookMarks()
         en.header = "pins"
         en.chapterno = chapterno.toString()

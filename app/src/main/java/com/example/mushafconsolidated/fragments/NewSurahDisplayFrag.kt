@@ -17,6 +17,8 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.media3.common.util.UnstableApi
@@ -352,9 +354,18 @@ class NewSurahDisplayFrag : Fragment(), SearchView.OnQueryTextListener {
 
             if (item.itemId == R.id.quiz) {
 
-                val settingint = Intent(requireActivity(), ArabicVerbQuizActNew::class.java)
+                /*val settingint = Intent(requireActivity(), ArabicVerbQuizActNew::class.java)
 
-                startActivity(settingint)
+                startActivity(settingint)*/
+                val phrasesDisplayFrag = PhrasesDisplayFrag()
+                //  TameezDisplayFrag bookmarkFragment=new TameezDisplayFrag();
+                val transactions = requireActivity().   supportFragmentManager.beginTransaction()
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                transactions.add(R.id.frame_container_qurangrammar, phrasesDisplayFrag)
+                    .addToBackStack("mujarrad")
+                transactions.commit()
+
+
             }
         }
     }

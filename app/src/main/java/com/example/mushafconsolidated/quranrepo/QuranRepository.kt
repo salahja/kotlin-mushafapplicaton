@@ -153,13 +153,13 @@ import javax.inject.Inject
          absoluteNegationDao.getAbsoluteNegationFilterSurah(surah)
 
      fun getLamMudharyNegationFilerSurahAyah(surah: Int, ayah: Int): List<PastTenceNegatonEnt> =
-         pastTenceNegationDao.getLamMudharyNegationFilterSurahAyah(surah, ayah)
+         pastTenceNegationDao.getPastTenceNegationFilterSurahAyah(surah, ayah)
 
      fun getLamMudharyNegationAll(): List<PastTenceNegatonEnt> =
-         pastTenceNegationDao.getLamMudharyNegationAll()
+         pastTenceNegationDao.getPastTenceNegationAll()
 
      fun getLamMudharyNegationFilterSurah(surah: Int): List<PastTenceNegatonEnt> =
-         pastTenceNegationDao.getLamMudharyNegationFilterSurah(surah)
+         pastTenceNegationDao.getPastTenceNegationFilterSurah(surah)
 
 
      fun getPresentNegationFilerSurahAyah(surah: Int, ayah: Int): List<PresentTenceNegatonEnt> =

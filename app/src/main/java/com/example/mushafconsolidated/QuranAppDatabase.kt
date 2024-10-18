@@ -11,8 +11,10 @@ import com.example.mushafconsolidated.DAO.AnaQuranChapterDao
 import com.example.mushafconsolidated.DAO.BadalErabNotesDao
 import com.example.mushafconsolidated.DAO.BookMarkDao
 import com.example.mushafconsolidated.DAO.CorpusExpandedDao
+import com.example.mushafconsolidated.DAO.FutureTenceNegationDao
 import com.example.mushafconsolidated.DAO.HaliyaDao
 import com.example.mushafconsolidated.DAO.HansDao
+import com.example.mushafconsolidated.DAO.InMaIllaNegationDao
 import com.example.mushafconsolidated.DAO.JasonSurahDao
 import com.example.mushafconsolidated.DAO.PastTenceNegatonDao
 
@@ -45,8 +47,10 @@ import com.example.mushafconsolidated.Entities.BadalErabNotesEnt
 import com.example.mushafconsolidated.Entities.BookMarks
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
 import com.example.mushafconsolidated.Entities.CorpusEntity
+import com.example.mushafconsolidated.Entities.FutureTenceNegatonEnt
 import com.example.mushafconsolidated.Entities.GrammarRules
 import com.example.mushafconsolidated.Entities.HalEnt
+import com.example.mushafconsolidated.Entities.InMaIllaNegationEnt
 import com.example.mushafconsolidated.Entities.PastTenceNegatonEnt
 import com.example.mushafconsolidated.Entities.LiajlihiEnt
 import com.example.mushafconsolidated.Entities.MafoolBihi
@@ -86,7 +90,7 @@ import java.io.File
 /*@Module
 @InstallIn(SingletonComponent::class)*/
 @Database(
-    entities = [PresentTenceNegatonEnt::class,PastTenceNegatonEnt::class,   AbsoluteNegationEnt::class,lysaEnt::class,jsonsurahentity::class,MufradatEntity::class,AllahNamesDetails::class, lanerootdictionary::class, Qari::class, surahsummary::class, quranexplorer::class, AllahNames::class, MafoolMutlaqEnt::class, BadalErabNotesEnt::class, HalEnt::class, MafoolBihi::class, LiajlihiEnt::class, TameezEnt::class, GrammarRules::class, hanslexicon::class, qurandictionary::class, lanelexicon::class, lughat::class, NewNasbEntity::class, NewShartEntity::class, NewKanaEntity::class, NewMudhafEntity::class, SifaEntity::class, wbwentity::class, NounCorpus::class, VerbCorpus::class, QuranEntity::class, CorpusEntity::class, BookMarks::class, ChaptersAnaEntity::class],
+    entities = [FutureTenceNegatonEnt::class,InMaIllaNegationEnt::class,   PresentTenceNegatonEnt::class,PastTenceNegatonEnt::class,   AbsoluteNegationEnt::class,lysaEnt::class,jsonsurahentity::class,MufradatEntity::class,AllahNamesDetails::class, lanerootdictionary::class, Qari::class, surahsummary::class, quranexplorer::class, AllahNames::class, MafoolMutlaqEnt::class, BadalErabNotesEnt::class, HalEnt::class, MafoolBihi::class, LiajlihiEnt::class, TameezEnt::class, GrammarRules::class, hanslexicon::class, qurandictionary::class, lanelexicon::class, lughat::class, NewNasbEntity::class, NewShartEntity::class, NewKanaEntity::class, NewMudhafEntity::class, SifaEntity::class, wbwentity::class, NounCorpus::class, VerbCorpus::class, QuranEntity::class, CorpusEntity::class, BookMarks::class, ChaptersAnaEntity::class],
     version = 1
 )
 abstract class QuranAppDatabase : RoomDatabase() {
@@ -108,6 +112,15 @@ abstract class QuranAppDatabase : RoomDatabase() {
     abstract fun        PastTenceNegatonDao(): PastTenceNegatonDao
 
     abstract fun        PresentTenceNegationDao(): PresentTenceNegationDao
+
+    abstract fun        FutureTenceNegationDao(): FutureTenceNegationDao
+
+    abstract fun        InMaIllaNegationDao(): InMaIllaNegationDao
+
+
+
+
+
     /**
      * Raw dao
      *

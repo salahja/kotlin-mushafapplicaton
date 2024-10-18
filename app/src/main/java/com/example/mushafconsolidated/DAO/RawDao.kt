@@ -8,6 +8,8 @@ import androidx.sqlite.db.SupportSQLiteQuery
 import com.example.mushafconsolidated.Entities.CorpusExpandWbwPOJO
 import com.example.mushafconsolidated.Entities.CorpusNounWbwOccurance
 import com.example.mushafconsolidated.Entities.CorpusVerbWbwOccurance
+import com.example.mushafconsolidated.Entities.FutureTenceListingPojo
+import com.example.mushafconsolidated.Entities.InMaListingPOJO
 import com.example.mushafconsolidated.Entities.KanaPOJO
 import com.example.mushafconsolidated.Entities.MudhafPOJO
 import com.example.mushafconsolidated.Entities.NasbListingPojo
@@ -60,6 +62,12 @@ interface RawDao {
 
     @RawQuery
     fun getSifaListing(query: SupportSQLiteQuery): List<SifaListingPojo>
+
+    @RawQuery
+    fun getInMaisting(query: SupportSQLiteQuery): List<InMaListingPOJO>
+
+    @RawQuery
+    fun getFuturNegationList(query: SupportSQLiteQuery): List<FutureTenceListingPojo>
     @RawQuery
     fun getNasbListing(query: SupportSQLiteQuery): List<NasbListingPojo>
     @RawQuery

@@ -42,6 +42,7 @@ import androidx.transition.TransitionManager
 import com.example.Constant
 import com.example.mushafconsolidated.Activity.TafsirFullscreenActivity
 import com.example.mushafconsolidated.Entities.BadalErabNotesEnt
+import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.HalEnt
 import com.example.mushafconsolidated.Entities.LiajlihiEnt
 import com.example.mushafconsolidated.Entities.MafoolBihi
@@ -88,7 +89,7 @@ class SifaPhrasesFlowAdapter(
     private val mafoolBihis: List<MafoolBihi?>?,
     private val header: ArrayList<String>,
     private val allofQuran: List<QuranEntity?>?,
-    private val ayahWordArrayList: LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>>,
+    private val ayahWordArrayList: LinkedHashMap<Int, ArrayList<CorpusEntity>>,
     var context: Context,
     private val SurahName: String,
     private val isMakkiMadani: Int,
@@ -153,7 +154,7 @@ class SifaPhrasesFlowAdapter(
         val ayahWord =ayahWordArrayList[position+1]
         var itemId: Long = 0
 
-        itemId = ayahWord!![position].corpus!!.ayah.toLong()
+        itemId = ayahWord!![position]!!.ayah.toLong()
 
         return itemId
     }
@@ -1073,7 +1074,7 @@ class SifaPhrasesFlowAdapter(
                             val readingintent =
                                 Intent(context, TafsirFullscreenActivity::class.java)
                             val chapter_no = ayahWord!![0].corpus!!.surah
-                            val verse = ayahWordArrayList[position - 1]!![0].corpus!!.ayah
+                            val verse = ayahWordArrayList[position - 1]!![0].ayah
 
                             readingintent.putExtra(Constant.SURAH_ID, chapter_no)
                             readingintent.putExtra(Constant.AYAH_ID, verse)
@@ -1085,7 +1086,7 @@ class SifaPhrasesFlowAdapter(
                             //  HideFabMenu();
                             val chapter_no = ayahWord!![0].corpus!!.surah
                             //   int verse = ayahWord.getWord().get(0).getVerseId();
-                            val verse = ayahWordArrayList[position - 1]!![0].corpus!!.ayah
+                            val verse = ayahWordArrayList[position - 1]!![0].ayah
                             val dataBundle = Bundle()
                             dataBundle.putInt(Constant.SURAH_ID, chapter_no)
                             val item = SurahSummary()

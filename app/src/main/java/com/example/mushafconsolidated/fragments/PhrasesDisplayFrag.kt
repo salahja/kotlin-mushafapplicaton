@@ -86,6 +86,8 @@ class PhrasesDisplayFrag : Fragment(), SearchView.OnQueryTextListener {
     lateinit var mudhafrd: RadioButton
     lateinit var mousufrd: RadioButton
     lateinit var phraserg:RadioGroup
+    lateinit var inmaNegationrb: RadioButton
+    lateinit var futureNegationrb:RadioButton
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = PhrasesListSurahJuzBinding.inflate(layoutInflater)
@@ -196,6 +198,8 @@ class PhrasesDisplayFrag : Fragment(), SearchView.OnQueryTextListener {
         shartrd=binding.shart
         mudhafrd=binding.mudhaf
         mousufrd=binding.maousuf
+        inmaNegationrb=binding.inmanegative
+        futureNegationrb=binding.futurenegation
 
       //  searchint = view.findViewById(R.id.searchint)
     //    val juz = view.findViewById<MaterialTextView>(R.id.tiJuz)
@@ -269,6 +273,7 @@ class PhrasesDisplayFrag : Fragment(), SearchView.OnQueryTextListener {
         return view
     }
 
+    @SuppressLint("UnsafeOptInUsageError")
     private fun initnavagation(view: View) {
         bottomNavigationView = view.findViewById(R.id.bottomNavView)
         btnBottomSheet = view.findViewById(R.id.fab)
@@ -330,6 +335,8 @@ class PhrasesDisplayFrag : Fragment(), SearchView.OnQueryTextListener {
                     "Mudhaf" -> settingint.putExtra(Constant.HARF, "mudhaf")
                     "Shart" -> settingint.putExtra(Constant.HARF, "shart")
                     "Mausouf" -> settingint.putExtra(Constant.HARF, "mausuf")
+                    "inmanegative" -> settingint.putExtra(Constant.HARF, "inmanegative")
+                    "Future Negation" -> settingint.putExtra(Constant.HARF, "Future Negation")
                 }
 
                 settingint.putExtra(SURAH_ID, item.chapterid)

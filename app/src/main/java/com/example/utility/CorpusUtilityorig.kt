@@ -24,6 +24,8 @@ import com.example.Constant.mudhafspanLight
 import com.example.justJava.FrameSpan
 import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.CorpusExpandWbwPOJO
+import com.example.mushafconsolidated.Entities.FutureTenceListingPojo
+import com.example.mushafconsolidated.Entities.InMaListingPOJO
 import com.example.mushafconsolidated.Entities.NasbListingPojo
 import com.example.mushafconsolidated.Entities.NewMudhafEntity
 import com.example.mushafconsolidated.Entities.NewShartEntity
@@ -541,6 +543,73 @@ class CorpusUtilityorig(private var context: Context?) {
 
 
     }
+
+
+    fun setInMaSpanlisting(
+
+        sifa: List<InMaListingPOJO>,
+
+
+        ) {
+        if (dark) {
+            Constant.sifaspansDark = BackgroundColorSpan(Constant.WBURNTUMBER)
+        } else {
+            Constant.sifaspansDark = BackgroundColorSpan(Constant.CYANLIGHTEST)
+        }
+        var spannableverse: SpannableString
+        for (sif in sifa!!) {
+            val indexstart = sif.startindex
+            val indexend = sif.endindex
+            spannableverse = sif.spannableVerse!!
+            try {
+                spannableverse.setSpan(
+                    Constant.sifaspansDark,
+                    indexstart,
+                    indexend,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            } catch (e: IndexOutOfBoundsException) {
+                //System.out.println(e.getMessage());
+            }
+
+        }
+
+
+    }
+
+    fun setSpanFutureTenceNegationListing(
+
+        sifa: List<FutureTenceListingPojo>,
+
+
+        ) {
+        if (dark) {
+            Constant.sifaspansDark = BackgroundColorSpan(Constant.WBURNTUMBER)
+        } else {
+            Constant.sifaspansDark = BackgroundColorSpan(Constant.CYANLIGHTEST)
+        }
+        var spannableverse: SpannableString
+        for (sif in sifa!!) {
+            val indexstart = sif.startindex
+            val indexend = sif.endindex
+            spannableverse = sif.spannableVerse!!
+            try {
+                spannableverse.setSpan(
+                    Constant.sifaspansDark,
+                    indexstart,
+                    indexend,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            } catch (e: IndexOutOfBoundsException) {
+                //System.out.println(e.getMessage());
+            }
+
+        }
+
+
+    }
+
+
 
     fun HarfNasbDb(
 
@@ -1187,6 +1256,8 @@ class CorpusUtilityorig(private var context: Context?) {
         return newnewadapterlist
 
     }
+
+
 
     companion object {
         var dark = true
