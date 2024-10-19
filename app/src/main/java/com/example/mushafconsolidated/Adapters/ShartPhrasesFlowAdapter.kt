@@ -41,6 +41,7 @@ import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import com.example.Constant
 import com.example.mushafconsolidated.Activity.TafsirFullscreenActivity
+import com.example.mushafconsolidated.Adapters.RevalationCity
 import com.example.mushafconsolidated.Entities.BadalErabNotesEnt
 import com.example.mushafconsolidated.Entities.HalEnt
 import com.example.mushafconsolidated.Entities.LiajlihiEnt
@@ -48,6 +49,7 @@ import com.example.mushafconsolidated.Entities.MafoolBihi
 import com.example.mushafconsolidated.Entities.MafoolMutlaqEnt
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.ShartListingPojo
+import com.example.mushafconsolidated.Entities.SurahHeader
 import com.example.mushafconsolidated.Entities.TameezEnt
 import com.example.mushafconsolidated.Entities.wbwentity
 import com.example.mushafconsolidated.R
@@ -61,6 +63,7 @@ import com.example.utility.AnimationUtility
 import com.example.utility.CorpusUtilityorig
 import com.example.utility.FlowLayout
 import com.example.utility.QuranGrammarApplication
+import com.example.utility.QuranViewUtils
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -86,7 +89,7 @@ class ShartPhrasesFlowAdapter(
     private val liajlihient: List<LiajlihiEnt?>?,
     private val jumlahaliya: List<HalEnt?>?,
     private val mafoolBihis: List<MafoolBihi?>?,
-    private val header: ArrayList<String>,
+    private val header: SurahHeader,
     private val allofQuran: List<QuranEntity?>?,
     private val ayahWordArrayList: LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>>,
     var context: Context,
@@ -252,35 +255,25 @@ class ShartPhrasesFlowAdapter(
             val imgs = context.resources.obtainTypedArray(R.array.sura_imgs)
 
             // You have to set your header items values with the help of model class and you can modify as per your needs
-            holder.tvRukus.text = String.format("Ruku's :%s", header[0])
-            holder.tvVerses.text = String.format("Aya's :%s", header[1])
-            holder.tvSura.text = header[3]
-            val chapterno = header[2]
+            holder.tvRukus.text = String.format("Ruku's :%s", header.rukus)
+            holder.tvVerses.text = String.format("Aya's :%s", header.verses)
+            holder.tvSura.text = header.surahNameAr
+            val chapterno = header.chapterNumber
             val tauba = chapterno.toInt()
-            if (tauba == 9) {
+            if (header.chapterNumber == com.example.mushafconsolidated.Adapters.TAUBA_CHAPTER_NUMBER) {
                 holder.ivBismillah.visibility = View.GONE
             }
-            if (isMakkiMadani == 1) {
-                holder.ivLocationmakki.visibility = View.VISIBLE
-                holder.ivLocationmadani.visibility = View.GONE
-            } else {
-                holder.ivLocationmadani.visibility = View.VISIBLE
-                holder.ivLocationmakki.visibility = View.GONE
-            }
-            val drawable = imgs.getDrawable(chapterno.toInt() - 1)
+
+            val revelationCity =
+                if (isMakkiMadani == 1) RevalationCity.MAKKI else RevalationCity.MADANI
+            QuranViewUtils.setLocationVisibility(
+                holder.ivLocationmakki,
+                holder.ivLocationmadani,
+                revelationCity
+            )
+            val drawable = imgs.getDrawable(header.chapterNumber - 1)
             imgs.recycle()
             holder.ivSurahIcon.setImageDrawable(drawable)
-            if (isNightmode == "dark" || isNightmode == "blue" || isNightmode == "green") {
-                headercolor = Color.YELLOW
-                holder.ivLocationmakki.setColorFilter(Color.CYAN)
-                holder.ivSurahIcon.setColorFilter(Color.CYAN)
-                holder.ivLocationmadani.setColorFilter(Color.CYAN)
-            } else {
-                headercolor = Color.BLUE
-                holder.ivLocationmakki.setColorFilter(Color.BLACK)
-                holder.ivSurahIcon.setColorFilter(Color.BLACK)
-                holder.ivLocationmadani.setColorFilter(Color.BLACK)
-            }
         } else {
             displayAyats(
                 showrootkey,

@@ -228,7 +228,7 @@ class FlowAyahWordAdapterNoMafoolat(
         val showJalalayn = sharedPreferences.getBoolean("showEnglishJalalayn", true)
         val showTranslation = sharedPreferences.getBoolean("showTranslationKey", true)
         val showWordByword = sharedPreferences.getBoolean("wordByWord", false)
-        val showKathir = sharedPreferences.getBoolean("showKathir", false)
+
 
         QuranViewUtils.setBackgroundColor(context, holder.itemView, isNightmode, position % 2 == 1)
 

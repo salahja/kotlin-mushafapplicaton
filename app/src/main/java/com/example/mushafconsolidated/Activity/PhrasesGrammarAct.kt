@@ -72,6 +72,7 @@ import com.example.mushafconsolidated.Entities.NasbListingPojo
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.ShartListingPojo
 import com.example.mushafconsolidated.Entities.SifaListingPojo
+import com.example.mushafconsolidated.Entities.SurahHeader
 import com.example.mushafconsolidated.Entities.TameezEnt
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SurahSummary
@@ -992,12 +993,9 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
             if (jumptostatus) {
                 surahorpart = chapterno
             }
-            val header = ArrayList<String>()
-            header.add(rukucount.toString())
-            header.add(versescount.toString())
-            header.add(chapterno.toString())
-            header.add(surahArabicName)
 
+            val header =
+                SurahHeader(rukucount, versescount, chapterno, surahArabicName, " ")
             runOnUiThread {
                 dialog.dismiss()
             }
@@ -1010,12 +1008,7 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
 
                     futureTenceNegationSentence,
                     false,
-                    Mutlaqent,
-                    Tammezent,
-                    BadalErabNotesEnt,
-                    Liajlihient,
-                    Jumlahaliya,
-                    mafoolbihiwords,
+
                     header,
                     allofQuran,
                     corpusGroupedByAyah,

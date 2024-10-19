@@ -2,30 +2,23 @@ package com.example.mushafconsolidated.fragments
 
 
 import android.annotation.SuppressLint
-import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Environment
 import android.preference.PreferenceManager
 import android.text.Html
 import android.text.SpannableString
-import android.text.SpannableStringBuilder
-import android.text.Spanned
+import android.text.SpannableString.valueOf
 import android.text.format.DateFormat
-import android.text.style.ForegroundColorSpan
-import android.text.style.RelativeSizeSpan
 import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,6 +35,7 @@ import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import com.example.Constant
 import com.example.mushafconsolidated.Activity.TafsirFullscreenActivity
+import com.example.mushafconsolidated.Adapters.RevalationCity
 import com.example.mushafconsolidated.Entities.BadalErabNotesEnt
 import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.FutureTenceListingPojo
@@ -50,10 +44,11 @@ import com.example.mushafconsolidated.Entities.LiajlihiEnt
 import com.example.mushafconsolidated.Entities.MafoolBihi
 import com.example.mushafconsolidated.Entities.MafoolMutlaqEnt
 import com.example.mushafconsolidated.Entities.QuranEntity
+import com.example.mushafconsolidated.Entities.SurahHeader
 import com.example.mushafconsolidated.Entities.TameezEnt
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SurahSummary
-import com.example.mushafconsolidated.Utils
+import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet.Companion.TAG
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidatedimport.Config
 import com.example.mushafconsolidatedimport.ParticleColorScheme
@@ -61,12 +56,11 @@ import com.example.utility.AnimationUtility
 import com.example.utility.CorpusUtilityorig
 import com.example.utility.FlowLayout
 import com.example.utility.QuranGrammarApplication
+import com.example.utility.QuranViewUtils
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textview.MaterialTextView
-import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip
-import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltipUtils
 
 import sj.hisnul.fragments.NamesDetail
 import java.io.File
@@ -80,13 +74,8 @@ class FutureTenceNegationFlowAdapter(
     private var futureTenceListingPojoList: List<FutureTenceListingPojo>,
 
     isaudio: Boolean,
-    private val mutlaqent: List<MafoolMutlaqEnt?>?,
-    private val tameezEnts: List<TameezEnt?>?,
-    private val badalErabNotesEnt: List<BadalErabNotesEnt?>?,
-    private val liajlihient: List<LiajlihiEnt?>?,
-    private val jumlahaliya: List<HalEnt?>?,
-    private val mafoolBihis: List<MafoolBihi?>?,
-    private val header: ArrayList<String>,
+
+    private val header: SurahHeader,
     private val allofQuran: List<QuranEntity?>?,
     private val ayahWordArrayList: LinkedHashMap<Int, ArrayList<CorpusEntity>>,
     var context: Context,
@@ -100,7 +89,8 @@ class FutureTenceNegationFlowAdapter(
     private var isFABOpen = false
     private var issentence: Boolean = false
     lateinit var rootword: TextView
-
+    private val spannedWordsCache = HashMap<CorpusEntity, SpannableString>()
+    private var wordByWordDisplay: Boolean = false
     //MaterialTextView arabic;
     private lateinit var arabicChipview: Chip
     private lateinit var arabicTv: MaterialTextView
@@ -180,8 +170,11 @@ class FutureTenceNegationFlowAdapter(
         val sharedPreferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(
             context
         )
+
+
+
+
         isNightmode = sharedPreferences.getString("themepref", "dark").toString()
-        //  String arabic_font_selection = sharedPreferences.getString("Arabic_Font_Selection", String.valueOf(MODE_PRIVATE));
         val arabic_font_selection =
             sharedPreferences.getString("Arabic_Font_Selection", "quranicfontregular.ttf")
         val custom_font = Typeface.createFromAsset(
@@ -193,7 +186,7 @@ class FutureTenceNegationFlowAdapter(
             QuranGrammarApplication.context!!.assets,
             FONTS_LOCATION_PATH
         )
-
+        wordByWordDisplay = sharedPreferences.getBoolean("wordByWordDisplay", true)
         val showrootkey = sharedPreferences.getBoolean("showrootkey", true)
         val showErab = sharedPreferences.getBoolean("showErabKey", true)
         val showWordColor = sharedPreferences.getBoolean("colortag", true)
@@ -201,88 +194,35 @@ class FutureTenceNegationFlowAdapter(
         val showJalalayn = sharedPreferences.getBoolean("showEnglishJalalayn", true)
         val showTranslation = sharedPreferences.getBoolean("showTranslationKey", true)
         val showWordByword = sharedPreferences.getBoolean("wordByWord", false)
-        val showKathir = sharedPreferences.getBoolean("showKathir", false)
-        //bg_black
-        if (position % 2 == 1) {
-            when (isNightmode) {
-                "brown" -> holder.itemView.setBackgroundColor(
-                    ContextCompat.getColor(
-                        context, R.color.bg_brown
-                    )
-                )
 
-                "dark" -> holder.itemView.setBackgroundColor(
-                    ContextCompat.getColor(
-                        context,
-                        R.color.odd_item_bg_black
-                    )
-                )
 
-                "blue" -> holder.itemView.setBackgroundColor(
-                    ContextCompat.getColor(
-                        context,
-                        R.color.bg_surface_dark_blue
-                    )
-                )
-            }
-            //  holder.imageView.setBackgroundColor(Color.parseColor("#FFFFFF"));
-        } else {
-            when (isNightmode) {
-                "brown" -> holder.itemView.setBackgroundColor(
-                    ContextCompat.getColor(
-                        context, R.color.odd_item_bg_brown
-                    )
-                )
+        QuranViewUtils.setBackgroundColor(context, holder.itemView, isNightmode, position % 2 == 1)
 
-                "dark" -> holder.itemView.setBackgroundColor(
-                    ContextCompat.getColor(
-                        context,
-                        R.color.bg_black
-                    )
-                )
 
-                "blue" -> holder.itemView.setBackgroundColor(
-                    ContextCompat.getColor(
-                        context,
-                        R.color.bg_dark_blue
-                    )
-                )
-            }
-        }
         val whichtranslation = sharedPreferences.getString("selecttranslation", "en_sahih")
         if (getItemViewType(position) == 0) {
             val imgs = context.resources.obtainTypedArray(R.array.sura_imgs)
 
             // You have to set your header items values with the help of model class and you can modify as per your needs
-            holder.tvRukus.text = String.format("Ruku's :%s", header[0])
-            holder.tvVerses.text = String.format("Aya's :%s", header[1])
-            holder.tvSura.text = header[3]
-            val chapterno = header[2]
+            holder.tvRukus.text = String.format("Ruku's :%s", header.rukus)
+            holder.tvVerses.text = String.format("Aya's :%s", header.verses)
+            holder.tvSura.text = header.surahNameAr
+            val chapterno = header.chapterNumber
             val tauba = chapterno.toInt()
-            if (tauba == 9) {
+            if (header.chapterNumber == com.example.mushafconsolidated.Adapters.TAUBA_CHAPTER_NUMBER) {
                 holder.ivBismillah.visibility = View.GONE
             }
-            if (isMakkiMadani == 1) {
-                holder.ivLocationmakki.visibility = View.VISIBLE
-                holder.ivLocationmadani.visibility = View.GONE
-            } else {
-                holder.ivLocationmadani.visibility = View.VISIBLE
-                holder.ivLocationmakki.visibility = View.GONE
-            }
-            val drawable = imgs.getDrawable(chapterno.toInt() - 1)
+
+            val revelationCity =
+                if (isMakkiMadani == 1) RevalationCity.MAKKI else RevalationCity.MADANI
+            QuranViewUtils.setLocationVisibility(
+                holder.ivLocationmakki,
+                holder.ivLocationmadani,
+                revelationCity
+            )
+            val drawable = imgs.getDrawable(header.chapterNumber - 1)
             imgs.recycle()
             holder.ivSurahIcon.setImageDrawable(drawable)
-            if (isNightmode == "dark" || isNightmode == "blue" || isNightmode == "green") {
-                headercolor = Color.YELLOW
-                holder.ivLocationmakki.setColorFilter(Color.CYAN)
-                holder.ivSurahIcon.setColorFilter(Color.CYAN)
-                holder.ivLocationmadani.setColorFilter(Color.CYAN)
-            } else {
-                headercolor = Color.BLUE
-                holder.ivLocationmakki.setColorFilter(Color.BLACK)
-                holder.ivSurahIcon.setColorFilter(Color.BLACK)
-                holder.ivLocationmadani.setColorFilter(Color.BLACK)
-            }
         } else {
             displayAyats(
                 showrootkey,
@@ -318,28 +258,20 @@ class FutureTenceNegationFlowAdapter(
         //   holder.flowwbw.setBackgroundColor(R.style.Theme_DarkBlue);
 
      //   var entity: QuranEntity? = null
+
         val wbw = sharedPreferences.getString("wbw", "en")
         val entity = futureTenceListingPojoList[position]
-
+        val quranEntity= allofQuran?.get(position)
 
         holder.quran_textView.text = entity.spannableVerse
         //   holder.quran_textView.setTextSize(arabicfontSize);
         holder.quran_textView.typeface = custom_font
         holder.base_cardview.visibility = View.GONE
         //  }
-        val mf = SpannableStringBuilder()
-        val halsb = StringBuilder()
-        val tameezsb = StringBuilder()
-        val badalsb = StringBuilder()
-        val ajlihisb = StringBuilder()
-        val mutlaqsb = StringBuilder()
+
         holder.mafoolbihi.visibility = View.GONE
         holder.base_cardview.visibility = View.GONE
-        val spanhash = CorpusUtilityorig.stringForegroundColorSpanMap
-        var mfcharSequence: CharSequence?
-     //
-     //   setChapterInfo(holder, ayahWord)
-        //  setAdapterposition(position);
+        setChapterInfo(holder, quranEntity)
 
         wbw?.let {
             wordBywordWithTranslation(
@@ -372,45 +304,48 @@ class FutureTenceNegationFlowAdapter(
             holder.quran_jalalaynnote.visibility = View.VISIBLE
         }
         if (showTranslation) {
-            if (whichtranslation == "en_arberry") {
-                if (entity != null) {
-                    holder.translate_textView.text = entity.en_arberry
-                }
-                holder.translate_textViewnote.setText(R.string.arberry)
-                holder.translate_textView.visibility = View.VISIBLE
-                holder.translate_textViewnote.visibility = View.VISIBLE
-            }
-            if (whichtranslation == "en_sahih") {
-                if (entity != null) {
-                    holder.translate_textView.text = entity.translation
-                }
-                holder.translate_textViewnote.setText(R.string.ensahih)
-                holder.translate_textView.visibility = View.VISIBLE
-                holder.translate_textViewnote.visibility = View.VISIBLE
-            }
-            if (whichtranslation == "en_jalalayn") {
-                if (entity != null) {
-                    holder.translate_textView.text = entity.en_jalalayn
-                }
-                holder.translate_textViewnote.setText(R.string.enjalalayn)
-                holder.translate_textView.visibility = View.VISIBLE
-                holder.translate_textViewnote.visibility = View.VISIBLE
-            }
-            if (whichtranslation == "ur_jalalayn") {
-                if (entity != null) {
-                    holder.translate_textView.text = entity.ur_jalalayn
-                }
-                holder.translate_textViewnote.setText(R.string.enjalalayn)
-                holder.translate_textView.visibility = View.VISIBLE
-                holder.translate_textViewnote.visibility = View.VISIBLE
-            }
-            if (whichtranslation == "ur_junagarhi") {
-                if (entity != null) {
-                    holder.translate_textView.text = entity.ur_junagarhi
-                }
-                holder.translate_textViewnote.setText(R.string.urjunagadi)
-                holder.translate_textView.visibility = View.VISIBLE
-                holder.translate_textViewnote.visibility = View.VISIBLE
+            when (whichtranslation) {
+                "en_arberry" -> QuranViewUtils.setTranslationText(
+                    holder.translate_textView,
+                    holder.translate_textViewnote,
+                    quranEntity,
+                    whichtranslation,
+                    R.string.arberry
+                )
+
+                "en_sahih" -> QuranViewUtils.setTranslationText(
+                    holder.translate_textView,
+                    holder.translate_textViewnote,
+                    quranEntity,
+                    whichtranslation,
+                    R.string.ensahih
+                )
+
+                "en_jalalayn" -> QuranViewUtils.setTranslationText(
+                    holder.translate_textView,
+                    holder.translate_textViewnote,
+                    quranEntity,
+                    whichtranslation,
+                    R.string.enjalalayn
+                )
+
+                "ur_jalalayn" -> QuranViewUtils.setTranslationText(
+                    holder.translate_textView,
+                    holder.translate_textViewnote,
+                    quranEntity,
+                    whichtranslation,
+                    R.string.enjalalayn
+                )
+
+                "ur_junagarhi" -> QuranViewUtils.setTranslationText(
+                    holder.translate_textView,
+                    holder.translate_textViewnote,
+                    quranEntity,
+                    whichtranslation,
+                    R.string.urjunagadi
+                )
+                // Add more cases as needed
+                // ... other translations
             }
             //
             holder.translate_textView.visibility = View.VISIBLE
@@ -447,37 +382,13 @@ class FutureTenceNegationFlowAdapter(
         }
     }
 
-    private fun setUpMafoolbihistring(mf: SpannableStringBuilder) {
-        mf.append(Constant.BIHIHEADER)
-        val mfspan: SpannableStringBuilder =
-            SpannableStringBuilder.valueOf(SpannableString.valueOf(mf.toString()))
-        val indexOfbihi = mfspan.toString().indexOf(Constant.BIHI)
-        mfspan.setSpan(
-            ForegroundColorSpan(headercolor),
-            indexOfbihi,
-            Constant.BIHI.length,
-            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-        mfspan.setSpan(
-            RelativeSizeSpan(1f),
-            indexOfbihi,
-            Constant.BIHI.length,
-            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-        mfspan.setSpan(
-            Typeface.DEFAULT_BOLD,
-            indexOfbihi,
-            Constant.BIHI.length,
-            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-        mfspan.append("\n")
-    }
+
 
     private fun wordBywordWithTranslation(
         showrootkey: Boolean,
         holder: ItemViewAdapter,
         showWordColor: Boolean,
-        wbw: String?,
+        wbw: String,
         ayahWord: ArrayList<CorpusEntity>?,
         ayahWordArrayList: LinkedHashMap<Int, ArrayList<CorpusEntity>>,
         showWbwTranslation: Boolean,
@@ -504,7 +415,7 @@ class FutureTenceNegationFlowAdapter(
             arabicTv = view.findViewById(R.id.word_arabic_textView)
             rootword = view.findViewById(R.id.root_word)
             //   wordno = view.findViewById(R.id.wordno);
-            val translation = view.findViewById<TextView>(R.id.word_trans_textView)
+            val translationTextView = view.findViewById<TextView>(R.id.word_trans_textView)
             var spannedroot: SpannableString? = null
             val sb = StringBuilder()
 
@@ -515,9 +426,9 @@ class FutureTenceNegationFlowAdapter(
 
             if (showrootkey) {
                 spannedroot = if (rootwords.isNotEmpty()) {
-                    getSpannedRoots(word, rootwords)
+                    QuranViewUtils.NewgetSpannedRoots(word, rootwords)
                 } else {
-                    SpannableString.valueOf(rootwords)
+                    valueOf(rootwords)
                 }
                 rootword.text = spannedroot
                 //
@@ -525,217 +436,82 @@ class FutureTenceNegationFlowAdapter(
             }
 
 
-
-
-
-
-
-
-
-
-
+            //arabicTv
+            var spannedWord = SpannableString(" ")
             if (showWordColor) {
-                //        word.getRootword();
-                val araword =
-                    word.araone + word.aratwo + word.arathree + word.arafour + word.arafive
 
-                val spannedword: SpannableString = getSpannedWords(word)
-                //   arabic.setText(fixArabic(String.valueOf(spannedword)));
-                if (showWbwTranslation) {
-                    arabicTv.text = spannedword
-                    arabicTv.visibility = View.VISIBLE
-                } else {
-                    arabicChipview.text = spannedword
-                    arabicChipview.visibility = View.VISIBLE
+                // Check if the word is already cached
+                spannedWord = spannedWordsCache.getOrPut(word) {
+                    // Log when we're generating a new SpannableString and storing it in the cache
+                    Log.d(TAG, "FROM FILE (generated new SpannableString)")
+                    QuranViewUtils.NewgetSpannedWords(word)
                 }
+
+                // Log when we're fetching the word from cache
+                if (spannedWordsCache.containsKey(word)) {
+                    Log.d(TAG, "FROM CACHE")
+                }
+
+                val arabicView =
+                    if (showWbwTranslation && wordByWordDisplay) arabicChipview else arabicTv
+                arabicView.text = spannedWord
+                arabicView.textSize = arabicfontSize.toFloat()
+                arabicView.visibility = View.VISIBLE
             } else {
-                arabicChipview.text = rootwords
+                if (showWbwTranslation) {
+                    arabicChipview.text =
+                        word.araone + word.aratwo + word.arathree + word.arafour + word.arafive
+                    arabicChipview.visibility = View.VISIBLE
+                } else {
+                    arabicTv.text =
+                        word.araone + word.aratwo + word.arathree + word.arafour + word.arafive
+                    arabicTv.visibility = View.VISIBLE
+
+                }
             }
             rootword.text = spannedroot
             rootword.textSize = arabicfontSize.toFloat()
             arabicTv.typeface = colorwordfont
             arabicChipview.typeface = colorwordfont
+
             if (showWbwTranslation) {
-                when (wbw) {
-                    "en" -> {
-                        translation.text = word.en
-                        translation.paintFlags = translation.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-                    }
+                QuranViewUtils.setWordTranslation(translationTextView, word, wbw)
 
-                    "bn" -> {
-                        translation.text = word.bn
-                        translation.paintFlags = translation.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-                    }
 
-                    "in" -> {
-                        translation.text = word.ind
-                        translation.paintFlags = translation.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-                    }
-
-                    "ur" -> {
-                        translation.text = word.ur
-                        translation.paintFlags = translation.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-                    }
-                }
-                //  translation.setTextColor(ContextCompat.getColor(context,R.color.neutral2));
             }
             if (!defaultfont) {
                 rootword.textSize = arabicfontSize.toFloat()
                 arabicChipview.textSize = arabicfontSize.toFloat()
-                translation.textSize = arabicfontSize.toFloat()
+                translationTextView.textSize = arabicfontSize.toFloat()
             }
             holder.flow_word_by_word.addView(view)
             view.isLongClickable = true
-            if (!showWbwTranslation) {
-                arabicChipview.setOnLongClickListener { v ->
-                    val utils = Utils(QuranGrammarApplication.context!!)
-                    val verbCorpusRootWords =
-                        utils.getQuranRoot(
-                            word.surah,
-                            word.ayah,
-                            word.wordno
-                        )
-                    if (verbCorpusRootWords!!.isNotEmpty() && verbCorpusRootWords[0]!!.tag == "V") {
-                        //    vbdetail = ams.getVerbDetails();
-                        print("check")
-                    }
-                    val corpusNounWord =
-                        utils.getQuranNouns(
-                            word.surah,
-                            word.ayah,
-                            word.wordno
-                        )
-                    val verbCorpusRootWord =
-                        utils.getQuranRoot(
-                            word.surah,
-                            word.ayah,
-                            word.wordno
-                        )
-                    val qm = WordMorphologyDetails(
-                        word,
-                        corpusNounWord!!, verbCorpusRootWord!!
-                    )
-                    val workBreakDown = qm.workBreakDown
-                    var color =
-                        ContextCompat.getColor(context, R.color.background_color_light_brown)
-                    when (isNightmode) {
-                        "dark", "blue", "green" -> color = ContextCompat.getColor(
-                            context, R.color.background_color
-                        )
+            //   if (!showWbwTranslation) {
 
-                        "brown" -> color = ContextCompat.getColor(context, R.color.neutral0)
-                        "light" ->                                 //  case "white":
-                            color = ContextCompat.getColor(
-                                context,
-                                R.color.background_color_light_brown
-                            )
-                    }
-                    SimpleTooltip.Builder(QuranGrammarApplication.context!!)
-                        .anchorView(v)
-                        .text(workBreakDown)
-                        .gravity(Gravity.TOP)
-                        .modal(true)
-                        .arrowDrawable(android.R.drawable.ic_media_previous)
-                        .arrowHeight(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
-                        .arrowWidth(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
-                        .build()
-                        .show()
-                    true
-                }
-                arabicChipview.setOnClickListener /* l = */ {
-                    val dialog = Dialog(context)
-                    dialog.setTitle(word.araone + word.aratwo + word.arathree + word.arafour + word.arafive)
-
-                    val dataBundle = Bundle()
-                    dataBundle.putInt(Constant.SURAH_ID, word.surah)
-                    dataBundle.putInt(
-                        Constant.AYAHNUMBER,
-                        Math.toIntExact(word.ayah.toLong())
-                    )
-                    dataBundle.putInt(
-                        Constant.WORDNUMBER,
-                        Math.toIntExact(word.wordno.toLong())
-                    )
-                    dataBundle.putString(Constant.SURAH_ARABIC_NAME, SurahName)
-                    LoadItemList(dataBundle, word)
-                }
-            } else {
-                view.setOnLongClickListener { v: View? ->
-                    val utils = Utils(QuranGrammarApplication.context!!)
-                    val verbCorpusRootWords =
-                        utils.getQuranRoot(
-                            word.surah,
-                            word.ayah,
-                            word.wordno
-                        )
-                    if (verbCorpusRootWords!!.isNotEmpty() && verbCorpusRootWords[0]!!.tag == "V") {
-                        //    vbdetail = ams.getVerbDetails();
-                        print("check")
-                    }
-                    val corpusNounWord =
-                        utils.getQuranNouns(
-                            word.surah,
-                            word.ayah,
-                            word.wordno
-                        )
-                    val verbCorpusRootWord =
-                        utils.getQuranRoot(
-                            word.surah,
-                            word.ayah,
-                            word.wordno
-                        )
-                    val qm = WordMorphologyDetails(
-                        word,
-                        corpusNounWord!!, verbCorpusRootWord!!
-                    )
-                    val workBreakDown = qm.workBreakDown
-                    var color =
-                        ContextCompat.getColor(context, R.color.background_color_light_brown)
-                    when (isNightmode) {
-                        "dark", "blue", "green" -> color =
-                            ContextCompat.getColor(context, R.color.background_color)
-
-                        "brown" -> color = ContextCompat.getColor(context, R.color.neutral0)
-                        "light" ->                             //  case "white":
-                            color = ContextCompat.getColor(
-                                context,
-                                R.color.background_color_light_brown
-                            )
-                    }
-
-                    SimpleTooltip.Builder(QuranGrammarApplication.context!!)
-                        .anchorView(v)
-                        .text(workBreakDown)
-                        .gravity(Gravity.TOP)
-                        .modal(true)
-                        .arrowDrawable(android.R.drawable.ic_media_previous)
-                        .arrowHeight(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
-                        .arrowWidth(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
-                        .build()
-                        .show()
+            arabicChipview.setOnLongClickListener { v ->
+                // showWordMorphologyTooltip(v, word)
+                QuranViewUtils.NewshowWordMorphologyTooltip(context, v, word, isNightmode)
+                true
+            }
 
 
-                    true
-                }
-                view.setOnClickListener { //pause player when word details is clicked
-                    /*     if (context instanceof WordbywordMushafAct) {
-                                    ((WordbywordMushafAct)context).pauseplay();
-                                }*/
-                    val dialog = Dialog(context)
-                    dialog.setTitle(word.araone + word.aratwo + word.arathree + word.arafour + word.arafive)
-                    val dataBundle = Bundle()
-                    dataBundle.putInt(Constant.SURAH_ID, word.surah)
-                    dataBundle.putInt(
-                        Constant.AYAHNUMBER,
-                        Math.toIntExact(word.ayah.toLong())
-                    )
-                    dataBundle.putInt(
-                        Constant.WORDNUMBER,
-                        Math.toIntExact(word.wordno.toLong())
-                    )
-                    dataBundle.putString(Constant.SURAH_ARABIC_NAME, SurahName)
-                    LoadItemList(dataBundle, word)
-                }
+            //   } else {
+            view.setOnLongClickListener { v ->
+                // showWordMorphologyTooltip(v, word)
+                QuranViewUtils.NewshowWordMorphologyTooltip(context, v, word, isNightmode)
+                true
+            }
+
+            QuranViewUtils.NewsetWordClickListener(
+                arabicChipview,
+                context,
+                word,
+                SurahName
+            ) { bundle, word ->
+                NewLoadItemList(bundle, word)
+            }
+            QuranViewUtils.NewsetWordClickListener(view, context, word, SurahName) { bundle, word ->
+                NewLoadItemList(bundle, word)
             }
 
 
@@ -743,16 +519,15 @@ class FutureTenceNegationFlowAdapter(
         holder.flow_word_by_word.visibility = View.VISIBLE
     }
 
-
-    private fun LoadItemList(dataBundle: Bundle, word: CorpusEntity) {
+    private fun NewLoadItemList(dataBundle: Bundle, word: CorpusEntity) {
         if (issentence) {
             /* val item = SentenceAnalysisBottomSheet()
              item.arguments = dataBundle
              val data = arrayOf(
-                 word.corpus.surah.toString(),
-                 word.corpus.ayah.toString(),
+                 word.surah.toString(),
+                 word.ayah.toString(),
                  word.translateEn,
-                 word.corpus.wordno.toString()
+                 word.wordno.toString()
              )
              SentenceAnalysisBottomSheet.newInstance(data).show(
                  (context as AppCompatActivity).supportFragmentManager,
@@ -792,70 +567,29 @@ class FutureTenceNegationFlowAdapter(
         )!!
     }
 
-    private fun getSpannedWords(tag: CorpusEntity): SpannableString {
-        /*    val b =tag.surah == 20 && (corpus.wordno == 2 ||tag.wordno == 9)
-            if (b) {
-                println("check")
-            }*/
-        return CorpusUtilityorig.NewSetWordSpan(
-            tag.tagone,
-            tag.tagtwo,
-            tag.tagthree,
-            tag.tagfour,
-            tag.tagfive,
-            tag.araone!!,
-            tag.aratwo!!,
-            tag.arathree!!,
-            tag.arafour!!,
-            tag.arafive!!
-        )
-    }
 
-    private fun storepreferences(entity: QuranEntity) {
-        val pref = context.getSharedPreferences("lastread", Context.MODE_PRIVATE)
-        val editor = pref.edit()
-        editor.putInt(Constant.SURAH_ID, entity.surah)
-        editor.putInt(Constant.AYAH_ID, entity.ayah)
-        editor.putString(Constant.SURAH_ARABIC_NAME, SurahName)
-        editor.apply()
-        editor.commit();
-    }
 
-    private fun setChapterInfo(holder: ItemViewAdapter, verse: ArrayList<CorpusEntity>?) {
+
+    private fun setChapterInfo(holder: ItemViewAdapter, quran: QuranEntity?) {
         val surahInfo = java.lang.StringBuilder()
         //        surahInfo.append(surahName+".");
-        surahInfo.append(verse!![0].surah).append(".")
-        surahInfo.append(verse[0].ayah).append("-")
+        surahInfo.append(quran!!.surah).append(".")
+        surahInfo.append(quran!!.ayah).append("-")
         surahInfo.append(SurahName)
         val sharedPreferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(
             context
         )
         val isNightmode = sharedPreferences.getString("theme", "dark")
-        if (isMakkiMadani == 1) {
-            holder.surah_info.setCompoundDrawablesWithIntrinsicBounds(
-                R.drawable.ic_makkah_48,
-                0,
-                0,
-                0
-            )
-        } else {
-            holder.surah_info.setCompoundDrawablesWithIntrinsicBounds(
-                R.drawable.ic_madinah_48,
-                0,
-                0,
-                0
-            )
+
+
+        if (isNightmode != null) {
+            QuranViewUtils.setIconColors(holder.surah_info, isNightmode, isMakkiMadani)
+            holder.surah_info.text = surahInfo
+            holder.surah_info.textSize = 16f
         }
-        if (isNightmode == "dark" || isNightmode == "blue" || isNightmode == "green") {
-//TextViewCompat.setCompoundDrawableTintList()
-            holder.surah_info.compoundDrawableTintList = ColorStateList.valueOf(Color.CYAN)
-        } else {
-            holder.surah_info.compoundDrawableTintList = ColorStateList.valueOf(Color.BLUE)
-        }
-        holder.surah_info.text = surahInfo
-        holder.surah_info.textSize = 16f
-        //  holder.surah_info.setTextColor(ContextCompat.getColor(context,R.color.colorOnPrimary));
+
     }
+
 
     inner class ItemViewAdapter @SuppressLint("CutPasteId") internal constructor(
         view: View,
