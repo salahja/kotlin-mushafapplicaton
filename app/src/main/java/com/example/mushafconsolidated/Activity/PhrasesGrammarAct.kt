@@ -69,6 +69,8 @@ import com.example.mushafconsolidated.Entities.LiajlihiEnt
 import com.example.mushafconsolidated.Entities.MafoolBihi
 import com.example.mushafconsolidated.Entities.MafoolMutlaqEnt
 import com.example.mushafconsolidated.Entities.NasbListingPojo
+import com.example.mushafconsolidated.Entities.PastTencePOJO
+import com.example.mushafconsolidated.Entities.PresentTencePOJO
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.ShartListingPojo
 import com.example.mushafconsolidated.Entities.SifaListingPojo
@@ -84,8 +86,10 @@ import com.example.mushafconsolidated.fragments.BookmarkFragment
 import com.example.mushafconsolidated.fragments.FutureTenceNegationFlowAdapter
 import com.example.mushafconsolidated.fragments.InMaPhrasesFlowAdapter
 import com.example.mushafconsolidated.fragments.NewSurahDisplayFrag
+import com.example.mushafconsolidated.fragments.PastTenceNegationFlowAdapter
 import com.example.mushafconsolidated.fragments.PhrasesDisplayFrag
 import com.example.mushafconsolidated.fragments.PhrasesFlowAdapter
+import com.example.mushafconsolidated.fragments.PresentTenceNegationFlowAdapter
 import com.example.mushafconsolidated.fragments.ShartPhrasesFlowAdapter
 import com.example.mushafconsolidated.fragments.SifaPhrasesFlowAdapter
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
@@ -137,6 +141,8 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
     private lateinit var sifaSentences:List<SifaListingPojo>
     private lateinit var inMaNegationSentence:List<InMaListingPOJO>
     private lateinit var futureTenceNegationSentence:List<FutureTenceListingPojo>
+    private lateinit var presentTenceNegationSentence:List<PresentTencePOJO>
+    private  lateinit var pastTenceNegationSentence:List<PastTencePOJO>
     private var bundle: Intent? = null
     private var bundles: Bundle? = null
     private lateinit var mainViewModel: QuranViewModel
@@ -148,6 +154,10 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
     private lateinit var sifFlowAdapter: SifaPhrasesFlowAdapter
     private lateinit var inMaNegationFlowAdapter: InMaPhrasesFlowAdapter
     private lateinit var futureTenceNegationFlowAdapter: FutureTenceNegationFlowAdapter
+    private lateinit var  presentTenceNegationFlowAdapter: PresentTenceNegationFlowAdapter
+    private lateinit var  pastTenceNegationFlowAdapter: PastTenceNegationFlowAdapter
+
+
     lateinit var binding: PhrasesNewFragmentReadingBinding
     private lateinit var surahWheelDisplayData: Array<String>
     private lateinit var ayahWheelDisplayData: Array<String>
@@ -912,56 +922,6 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
         runOnUiThread { dialog.show() }
         ex.launch {
             val util= Utils(context)
-            shartSentences= emptyList()
-            accusativesSentences= emptyList()
-            sifaSentences= emptyList()
-            inMaNegationSentence= emptyList()
-            futureTenceNegationSentence= emptyList()
-           if(harf == "inna") {
-               accusativesSentences = util.getNasb(chapterno)
-               for (ac in accusativesSentences) {
-                   ac.spannableVerse= SpannableString(ac.qurantext)
-               }
-               corpus.HarfNasbDb(accusativesSentences)
-               HightLightKeyWord(shartSentences, accusativesSentences, sifaSentences)
-
-           } else if(harf == "shart"){
-               shartSentences = util.getShart(chapterno)
-               for (ac in shartSentences) {
-                   ac.spannableVerse= SpannableString(ac.qurantext)
-               }
-               corpus.setShartDisplay(shartSentences)
-
-               HightLightKeyWord(shartSentences, accusativesSentences, sifaSentences)
-
-           }else if(harf == "mausuf"){
-               sifaSentences = util.getSifalisting(chapterno)
-               for (ac in sifaSentences) {
-                   ac.spannableVerse= SpannableString(ac.qurantext)
-               }
-               corpus.SetsifaListing(sifaSentences)
-
-               HightLightKeyWord(shartSentences,accusativesSentences,sifaSentences)
-
-
-           } else if(harf=="inmanegative"){
-               inMaNegationSentence = util.getInMaNegationListing(chapterno)
-               for (ac in inMaNegationSentence) {
-                   ac.spannableVerse= SpannableString(ac.qurantext)
-               }
-               corpus.setInMaSpanlisting(inMaNegationSentence)
-
-               //HightLightKeyWord(shartSentences,accusativesSentences,sifaSentences)
-
-           } else if(harf=="Future Negation"){
-               futureTenceNegationSentence=util.getFutureTnegaionListing(chapterno)
-
-               for (ac in futureTenceNegationSentence) {
-                   ac.spannableVerse= SpannableString(ac.qurantext)
-               }
-               corpus.setSpanFutureTenceNegationListing(futureTenceNegationSentence)
-
-           }
 
             val corpusAndQurandata = quranRepository.CorpusAndQuranDataSurah(chapterno)
 
@@ -977,9 +937,96 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
                 .flatMap { (ayah, entities) -> // Flatten the map into a list of pairs
                     entities.map { entity -> ayah to entity } // Create pairs of (ayah, entity)
                 } as ArrayList<Pair<Int, CorpusEntity>>
+            shartSentences= emptyList()
+            accusativesSentences= emptyList()
+            sifaSentences= emptyList()
+            inMaNegationSentence= emptyList()
+            futureTenceNegationSentence= emptyList()
+            presentTenceNegationSentence= emptyList()
+            pastTenceNegationSentence= emptyList()
+            if(harf == "Present Tence Negation") {
+                pastTenceNegationSentence = util.getPastnegaionListing(chapterno)
+                for (ac in pastTenceNegationSentence) {
+                    ac.spannableVerse = SpannableString(ac.qurantext)
+                }
+                corpus.setPastSpanListing(pastTenceNegationSentence)
+                filterQuranDataNewv1(
+                    corpusGroupedByAyah,
+                    allofQuran,
+                    pastTenceNegationSentence
+                ) { it.ayahid }
+                // HightLightKeyWord(shartSentences, accusativesSentences, sifaSentences)
+
+
+            }else
+
+            if(harf == "Present Tence Negation") {
+                presentTenceNegationSentence = util.getPresentnegaionListing(chapterno)
+                for (ac in presentTenceNegationSentence) {
+                    ac.spannableVerse = SpannableString(ac.qurantext)
+                }
+                corpus.setPresentSpanListing(presentTenceNegationSentence)
+                filterQuranDataNewv1(
+                    corpusGroupedByAyah,
+                    allofQuran,
+                    presentTenceNegationSentence
+                ) { it.ayahid }
+               // HightLightKeyWord(shartSentences, accusativesSentences, sifaSentences)
+
+
+            }else  if(harf == "inna") {
+               accusativesSentences = util.getNasb(chapterno)
+               for (ac in accusativesSentences) {
+                   ac.spannableVerse= SpannableString(ac.qurantext)
+               }
+               corpus.HarfNasbDb(accusativesSentences)
+               filterQuranDataNewv1(corpusGroupedByAyah, allofQuran, accusativesSentences) { it.ayah }
+               HightLightKeyWord(shartSentences, accusativesSentences, sifaSentences)
+
+
+           } else if(harf == "shart"){
+               shartSentences = util.getShart(chapterno)
+               for (ac in shartSentences) {
+                   ac.spannableVerse= SpannableString(ac.qurantext)
+               }
+               corpus.setShartDisplay(shartSentences)
+               filterQuranDataNewv1(corpusGroupedByAyah, allofQuran, shartSentences) { it.ayah }
+               HightLightKeyWord(shartSentences, accusativesSentences, sifaSentences)
+
+           }else if(harf == "mausuf"){
+               sifaSentences = util.getSifalisting(chapterno)
+               for (ac in sifaSentences) {
+                   ac.spannableVerse= SpannableString(ac.qurantext)
+               }
+               corpus.SetsifaListing(sifaSentences)
+               filterQuranDataNewv1(corpusGroupedByAyah, allofQuran, sifaSentences) { it.ayah }
+               HightLightKeyWord(shartSentences,accusativesSentences,sifaSentences)
+
+
+           } else if(harf=="inmanegative"){
+               inMaNegationSentence = util.getInMaNegationListing(chapterno)
+               for (ac in inMaNegationSentence) {
+                   ac.spannableVerse= SpannableString(ac.qurantext)
+               }
+               corpus.setInMaSpanlisting(inMaNegationSentence)
+               filterQuranDataNewv1(corpusGroupedByAyah, allofQuran, inMaNegationSentence) { it.ayahid }
+               //HightLightKeyWord(shartSentences,accusativesSentences,sifaSentences)
+
+           } else if(harf=="Future Negation"){
+               futureTenceNegationSentence=util.getFutureTnegaionListing(chapterno)
+
+               for (ac in futureTenceNegationSentence) {
+                   ac.spannableVerse= SpannableString(ac.qurantext)
+               }
+               corpus.setSpanFutureTenceNegationListing(futureTenceNegationSentence)
+               filterQuranDataNewv1(corpusGroupedByAyah, allofQuran, futureTenceNegationSentence) { it.ayahid }
+
+           }
+
+
 
             //filterQuranDataNew(corpusGroupedByAyaht, allofQuran, futureTenceNegationSentence)
-            filterQuranDataNewv1(corpusGroupedByAyah,allofQuran,futureTenceNegationSentence)
+           // filterQuranDataNewv1(corpusGroupedByAyah,allofQuran,futureTenceNegationSentence)
 
           //  corpusSurahWord = mainViewModel.getQuranCorpusWbwbysurah(chapterno).value
 
@@ -1002,13 +1049,54 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
 
 
             val viewmodel: QuranViewModel by viewModels()
+            if(pastTenceNegationSentence.isNotEmpty()){
+                pastTenceNegationFlowAdapter= PastTenceNegationFlowAdapter(
 
-            if(futureTenceNegationSentence.isNotEmpty()){
-                futureTenceNegationFlowAdapter= FutureTenceNegationFlowAdapter(
-
-                    futureTenceNegationSentence,
+                    pastTenceNegationSentence,
                     false,
 
+                    header,
+                    allofQuran,
+                    corpusGroupedByAyah,
+                    this@PhrasesGrammarAct,
+                    surahArabicName,
+                    isMakkiMadani,
+                    listener
+
+                )
+                presentTenceNegationFlowAdapter.addContext(this@PhrasesGrammarAct)
+                parentRecyclerView.setHasFixedSize(true)
+                parentRecyclerView.adapter = presentTenceNegationFlowAdapter
+                //   flowAyahWordAdapter.notifyDataSetChanged()
+                parentRecyclerView.post { parentRecyclerView.scrollToPosition(verseNo) }
+            } else
+            if(presentTenceNegationSentence.isNotEmpty()){
+                presentTenceNegationFlowAdapter= PresentTenceNegationFlowAdapter(
+
+                    presentTenceNegationSentence,
+                    false,
+
+                    header,
+                    allofQuran,
+                    corpusGroupedByAyah,
+                    this@PhrasesGrammarAct,
+                    surahArabicName,
+                    isMakkiMadani,
+                    listener
+
+                )
+                presentTenceNegationFlowAdapter.addContext(this@PhrasesGrammarAct)
+                parentRecyclerView.setHasFixedSize(true)
+                parentRecyclerView.adapter = presentTenceNegationFlowAdapter
+                //   flowAyahWordAdapter.notifyDataSetChanged()
+                parentRecyclerView.post { parentRecyclerView.scrollToPosition(verseNo) }
+            } else if(futureTenceNegationSentence.isNotEmpty()){
+                futureTenceNegationFlowAdapter= FutureTenceNegationFlowAdapter(
+
+
+                    futureTenceNegationSentence,
+
+                    false,
                     header,
                     allofQuran,
                     corpusGroupedByAyah,
@@ -1023,18 +1111,12 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
                 parentRecyclerView.adapter = futureTenceNegationFlowAdapter
                 //   flowAyahWordAdapter.notifyDataSetChanged()
                 parentRecyclerView.post { parentRecyclerView.scrollToPosition(verseNo) }
-            }else
-            if(inMaNegationSentence.isNotEmpty()){
+            }else if(inMaNegationSentence.isNotEmpty()){
                 inMaNegationFlowAdapter= InMaPhrasesFlowAdapter(
 
                     inMaNegationSentence,
                     false,
-                    Mutlaqent,
-                    Tammezent,
-                    BadalErabNotesEnt,
-                    Liajlihient,
-                    Jumlahaliya,
-                    mafoolbihiwords,
+
                     header,
                     allofQuran,
                     corpusGroupedByAyah,
@@ -1055,12 +1137,7 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
 
                     sifaSentences,
                     false,
-                    Mutlaqent,
-                    Tammezent,
-                    BadalErabNotesEnt,
-                    Liajlihient,
-                    Jumlahaliya,
-                    mafoolbihiwords,
+
                     header,
                     allofQuran,
                     corpusGroupedByAyah,
@@ -1083,15 +1160,10 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
 
                     accusativesSentences,
                     false,
-                    Mutlaqent,
-                    Tammezent,
-                    BadalErabNotesEnt,
-                    Liajlihient,
-                    Jumlahaliya,
-                    mafoolbihiwords,
+
                     header,
                     allofQuran,
-                    newnewadapterlist,
+                    corpusGroupedByAyah,
                     this@PhrasesGrammarAct,
                     surahArabicName,
                     isMakkiMadani,
@@ -1109,15 +1181,10 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
 
                     shartSentences,
                     false,
-                    Mutlaqent,
-                    Tammezent,
-                    BadalErabNotesEnt,
-                    Liajlihient,
-                    Jumlahaliya,
-                    mafoolbihiwords,
+
                     header,
                     allofQuran,
-                    newnewadapterlist,
+                    corpusGroupedByAyah,
                     this@PhrasesGrammarAct,
                     surahArabicName,
                     isMakkiMadani,
@@ -1139,86 +1206,32 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
         }
 
     }
-    fun filterQuranDataNew(
-        corpusGroupedByAyaht: ArrayList<Pair<Int, CorpusEntity>>,
-        allofQuran: List<QuranEntity>?,
-        futureTenceNegationSentence: List<FutureTenceListingPojo>
-    ) {
-        // Get the relevant ayah IDs from the negation sentence list
-        val relevantAyahIds = futureTenceNegationSentence.map { it.ayahid }
 
-        // Filter corpusGroupedByAyaht to only include pairs where the ayah ID is in relevantAyahIds
-        val filteredCorpusGroupedByAyaht = corpusGroupedByAyaht.filter { (ayahId, _) ->
-            ayahId in relevantAyahIds
-        }
 
-        // Clear and update the corpusGroupedByAyaht with the filtered result
-        corpusGroupedByAyaht.clear()
-        corpusGroupedByAyaht.addAll(filteredCorpusGroupedByAyaht)
-
-        // Preserve duplicates by filtering allofQuran multiple times if needed
-        val filteredAllOfQuran = relevantAyahIds.mapNotNull { ayahId ->
-            allofQuran?.find { it.ayah == ayahId }
-        }
-
-        // Assign the filtered list to allofQuran
-        this@PhrasesGrammarAct.allofQuran = filteredAllOfQuran
-    }
-
-    fun filterQuranDataNewnn(
-        corpusGroupedByAyah: ArrayList<Pair<Int, CorpusEntity>>, // Changed data structure
-        allofQuran: List<QuranEntity>?,
-        futureTenceNegationSentence: List<FutureTenceListingPojo>
-    ) {
-        // Collect the relevant ayah IDs, maintaining duplicates
-        val relevantAyahIds = futureTenceNegationSentence.map { it.ayahid }
-
-        // Filter corpusGroupedByAyah by only those ayah IDs present in relevantAyahIds
-        corpusGroupedByAyah.retainAll { (ayahId, _) -> relevantAyahIds.contains(ayahId) }
-
-        // Preserve duplicates by filtering allofQuran multiple times if needed
-        val filteredAllOfQuran = relevantAyahIds.mapNotNull { ayahId ->
-            allofQuran?.find { it.ayah == ayahId }
-        }
-
-        // Assign the filtered list to allofQuran
-        this@PhrasesGrammarAct.allofQuran = filteredAllOfQuran
-    }
-    fun filterQuranDataNewv1(
+    fun <T> filterQuranDataNewv1(
         corpusGroupedByAyah: LinkedHashMap<Int, ArrayList<CorpusEntity>>,
         allofQuran: List<QuranEntity>?,
-        futureTenceNegationSentence: List<FutureTenceListingPojo>
+        data: List<T>,
+        getAyahId: (T) -> Int // Function to extract ayahid from T
     ) {
         // Collect the relevant ayah IDs, maintaining duplicates
-        val relevantAyahIds = futureTenceNegationSentence.map { it.ayahid }
+        val relevantAyahIds = data.map { getAyahId(it) }
 
         // Filter corpusGroupedByAyah by only those ayah IDs present in relevantAyahIds
         corpusGroupedByAyah.keys.retainAll { ayahId -> relevantAyahIds.contains(ayahId) }
+
         // Preserve duplicates by filtering allofQuran multiple times if needed
         val filteredAllOfQuran = relevantAyahIds.mapNotNull { ayahId ->
             allofQuran?.find { it.ayah == ayahId }
         }
 
-        // Filter allofQuran, maintaining the same ayahid multiple times if it appears in relevantAyahIds
-
         // Assign the filtered list to allofQuran
         this@PhrasesGrammarAct.allofQuran = filteredAllOfQuran
     }
 
-    fun filterQuranData(
-        corpusGroupedByAyah: LinkedHashMap<Int, ArrayList<CorpusEntity>>,
-        allofQuran: List<QuranEntity>?,
-        futureTenceNegationSentence: List<FutureTenceListingPojo>
-    ) {
 
-       // val relevantAyahIds = futureTenceNegationSentence.map { it.ayahid }.toSet()
-        val relevantAyahIds = futureTenceNegationSentence.map { it.ayahid }
-        // Filter corpusGroupedByAyah
-        corpusGroupedByAyah.keys.removeAll { it !in relevantAyahIds }
 
-        // Filter allofQuran
-        this@PhrasesGrammarAct.allofQuran = allofQuran?.filter { it.ayah in relevantAyahIds }
-    }
+
     private fun HightLightKeyWord(
         shartSentences: List<ShartListingPojo>,
         accusativesSentences: List<NasbListingPojo>,

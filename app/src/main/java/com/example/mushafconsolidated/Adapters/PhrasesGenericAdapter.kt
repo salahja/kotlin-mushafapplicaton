@@ -37,8 +37,8 @@ import com.example.mushafconsolidated.Activity.TafsirFullscreenActivity
 import com.example.mushafconsolidated.Adapters.RevalationCity
 import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.FutureTenceListingPojo
-import com.example.mushafconsolidated.Entities.PresentTencePOJO
 import com.example.mushafconsolidated.Entities.QuranEntity
+import com.example.mushafconsolidated.Entities.ShartListingPojo
 import com.example.mushafconsolidated.Entities.SurahHeader
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SurahSummary
@@ -64,12 +64,11 @@ import java.util.Date
 
 //import com.example.mushafconsolidated.Entities.JoinVersesTranslationDataTranslation;
 //public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnItemClickListenerOnLong {
-class FutureTenceNegationFlowAdapter(
+class PhrasesGenericAdapter<T>(
 
-
-    private var futureTenceListingPojoList: List<FutureTenceListingPojo>,
-
+    private var dataList: List<T>,
     isaudio: Boolean,
+
     private val header: SurahHeader,
     private val allofQuran: List<QuranEntity?>?,
     private val ayahWordArrayList: LinkedHashMap<Int, ArrayList<CorpusEntity>>,
@@ -77,8 +76,7 @@ class FutureTenceNegationFlowAdapter(
     private val SurahName: String,
     private val isMakkiMadani: Int,
     listener: OnItemClickListenerOnLong?,
-) : RecyclerView.Adapter<FutureTenceNegationFlowAdapter.ItemViewAdapter>() //implements OnItemClickListenerOnLong {
-{
+) : RecyclerView.Adapter<PhrasesGenericAdapter<T>.ItemViewAdapter>() {
     private var ayahWord: ArrayList<CorpusEntity>? = null
     private var defaultfont: Boolean = false
     private var isFABOpen = false
@@ -252,17 +250,13 @@ class FutureTenceNegationFlowAdapter(
     ) {
         //   holder.flowwbw.setBackgroundColor(R.style.Theme_DarkBlue);
 
-     //   var entity: QuranEntity? = null
+        //   var entity: QuranEntity? = null
 
         val wbw = sharedPreferences.getString("wbw", "en")
-
-        if(futureTenceListingPojoList.isNotEmpty()){
-
-        }
-        val sentenceEntity = futureTenceListingPojoList[position]
+        val entity = dataList[position]
         val quranEntity= allofQuran?.get(position)
 
-        holder.quran_textView.text = sentenceEntity.spannableVerse
+        holder.quran_textView.text = (entity as FutureTenceListingPojo).spannableVerse
         //   holder.quran_textView.setTextSize(arabicfontSize);
         holder.quran_textView.typeface = custom_font
         holder.base_cardview.visibility = View.GONE
@@ -287,16 +281,16 @@ class FutureTenceNegationFlowAdapter(
 
 
         if (showTransliteration) {
-            if (sentenceEntity != null) {
+            if (entity != null) {
                 holder.quran_transliteration.text =
-                    Html.fromHtml(sentenceEntity.en_transliteration, Html.FROM_HTML_MODE_LEGACY)
+                    Html.fromHtml(entity.en_transliteration, Html.FROM_HTML_MODE_LEGACY)
             }
             holder.quran_transliteration.visibility = View.VISIBLE
         }
         if (showJalalayn) {
             //   holder.quran_jalalaynnote.setText(enjalalayn.getAuthor_name());
-            if (sentenceEntity != null) {
-                holder.quran_jalalayn.text = sentenceEntity.en_jalalayn
+            if (entity != null) {
+                holder.quran_jalalayn.text = entity.en_jalalayn
             }
             //
             holder.quran_jalalayn.visibility = View.VISIBLE
@@ -352,13 +346,13 @@ class FutureTenceNegationFlowAdapter(
         }
         if (showErab) {
             holder.erabexpand.visibility = View.VISIBLE
-            if (sentenceEntity != null) {
-                if (sentenceEntity.ar_irab_two.isNullOrBlank()) {
-                    holder.erab_textView.text = sentenceEntity.erabspnabble
+            if (entity != null) {
+                if (entity.ar_irab_two.isNullOrBlank()) {
+                    holder.erab_textView.text = entity.erabspnabble
 
 
                 } else {
-                    holder.erab_textView.text = sentenceEntity.erabspnabble
+                    holder.erab_textView.text = entity.erabspnabble
                 }
             }
             //

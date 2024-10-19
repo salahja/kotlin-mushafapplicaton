@@ -25,7 +25,9 @@ import com.example.mushafconsolidated.Entities.NewNasbEntity
 import com.example.mushafconsolidated.Entities.NewShartEntity
 import com.example.mushafconsolidated.Entities.NounCorpus
 import com.example.mushafconsolidated.Entities.NounCorpusBreakup
+import com.example.mushafconsolidated.Entities.PastTencePOJO
 import com.example.mushafconsolidated.Entities.PresentTenceNegatonEnt
+import com.example.mushafconsolidated.Entities.PresentTencePOJO
 import com.example.mushafconsolidated.Entities.Qari
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.RootVerbDetails
@@ -294,6 +296,32 @@ class Utils {
         val query: SimpleSQLiteQuery = SimpleSQLiteQuery(sqlshart)
         //  List<Book> result = booksDao.getBooks(query);
         return database.RawDao().getFuturNegationList(query)
+
+
+    }
+
+    fun getPresentnegaionListing(tid:Int):List<PresentTencePOJO>{
+        val sqlshart:String=("select presenttencenegation.surahid,presenttencenegation.ayahid,presenttencenegation.startindex,presenttencenegation.endindex,presenttencenegation.wordfrom,presenttencenegation.wordnoto,qurans.page,qurans.passage_no,qurans.qurantext,qurans.has_prostration,qurans.translation,\n" +
+                "qurans.en_transliteration,qurans.en_arberry,qurans.en_jalalayn,qurans.ur_jalalayn,qurans.tafsir_kathir,qurans.ur_junagarhi,qurans.ar_irab_two\n" +
+                " from presenttencenegation,qurans where presenttencenegation.surahid=qurans.surah and presenttencenegation.ayahid=qurans.ayah and presenttencenegation.surahid ==  \""
+                + tid + "\"")
+
+        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(sqlshart)
+        //  List<Book> result = booksDao.getBooks(query);
+        return database.RawDao().getPresentTenceListing(query)
+
+
+    }
+
+    fun getPastnegaionListing(tid:Int):List<PastTencePOJO>{
+        val sqlshart:String=("select lammudharynegation.surahid,lammudharynegation.ayahid,lammudharynegation.startindex,lammudharynegation.endindex,lammudharynegation.wordfrom,lammudharynegation.wordnoto,qurans.page,qurans.passage_no,qurans.qurantext,qurans.has_prostration,qurans.translation,\n" +
+                "qurans.en_transliteration,qurans.en_arberry,qurans.en_jalalayn,qurans.ur_jalalayn,qurans.tafsir_kathir,qurans.ur_junagarhi,qurans.ar_irab_two\n" +
+                " from lammudharynegation,qurans where lammudharynegation.surahid=qurans.surah and lammudharynegation.ayahid=qurans.ayah and lammudharynegation.surahid ==  \""
+                + tid + "\"")
+
+        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(sqlshart)
+        //  List<Book> result = booksDao.getBooks(query);
+        return database.RawDao().getPastTenceListing(query)
 
 
     }

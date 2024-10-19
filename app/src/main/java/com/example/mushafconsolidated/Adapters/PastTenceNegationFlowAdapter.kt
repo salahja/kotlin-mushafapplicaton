@@ -36,8 +36,7 @@ import com.example.Constant
 import com.example.mushafconsolidated.Activity.TafsirFullscreenActivity
 import com.example.mushafconsolidated.Adapters.RevalationCity
 import com.example.mushafconsolidated.Entities.CorpusEntity
-import com.example.mushafconsolidated.Entities.FutureTenceListingPojo
-import com.example.mushafconsolidated.Entities.PresentTencePOJO
+import com.example.mushafconsolidated.Entities.PastTencePOJO
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.SurahHeader
 import com.example.mushafconsolidated.R
@@ -64,10 +63,10 @@ import java.util.Date
 
 //import com.example.mushafconsolidated.Entities.JoinVersesTranslationDataTranslation;
 //public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnItemClickListenerOnLong {
-class FutureTenceNegationFlowAdapter(
+class PastTenceNegationFlowAdapter(
 
 
-    private var futureTenceListingPojoList: List<FutureTenceListingPojo>,
+    private var pastTenceList: List<PastTencePOJO>,
 
     isaudio: Boolean,
     private val header: SurahHeader,
@@ -77,7 +76,7 @@ class FutureTenceNegationFlowAdapter(
     private val SurahName: String,
     private val isMakkiMadani: Int,
     listener: OnItemClickListenerOnLong?,
-) : RecyclerView.Adapter<FutureTenceNegationFlowAdapter.ItemViewAdapter>() //implements OnItemClickListenerOnLong {
+) : RecyclerView.Adapter<PastTenceNegationFlowAdapter.ItemViewAdapter>() //implements OnItemClickListenerOnLong {
 {
     private var ayahWord: ArrayList<CorpusEntity>? = null
     private var defaultfont: Boolean = false
@@ -256,10 +255,10 @@ class FutureTenceNegationFlowAdapter(
 
         val wbw = sharedPreferences.getString("wbw", "en")
 
-        if(futureTenceListingPojoList.isNotEmpty()){
+        if(pastTenceList.isNotEmpty()){
 
         }
-        val sentenceEntity = futureTenceListingPojoList[position]
+        val sentenceEntity = pastTenceList[position]
         val quranEntity= allofQuran?.get(position)
 
         holder.quran_textView.text = sentenceEntity.spannableVerse

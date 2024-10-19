@@ -64,10 +64,10 @@ import java.util.Date
 
 //import com.example.mushafconsolidated.Entities.JoinVersesTranslationDataTranslation;
 //public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnItemClickListenerOnLong {
-class FutureTenceNegationFlowAdapter(
+class PresentTenceNegationFlowAdapter(
 
 
-    private var futureTenceListingPojoList: List<FutureTenceListingPojo>,
+    private var presentTenceNegtionList: List<PresentTencePOJO>,
 
     isaudio: Boolean,
     private val header: SurahHeader,
@@ -77,7 +77,7 @@ class FutureTenceNegationFlowAdapter(
     private val SurahName: String,
     private val isMakkiMadani: Int,
     listener: OnItemClickListenerOnLong?,
-) : RecyclerView.Adapter<FutureTenceNegationFlowAdapter.ItemViewAdapter>() //implements OnItemClickListenerOnLong {
+) : RecyclerView.Adapter<PresentTenceNegationFlowAdapter.ItemViewAdapter>() //implements OnItemClickListenerOnLong {
 {
     private var ayahWord: ArrayList<CorpusEntity>? = null
     private var defaultfont: Boolean = false
@@ -256,10 +256,10 @@ class FutureTenceNegationFlowAdapter(
 
         val wbw = sharedPreferences.getString("wbw", "en")
 
-        if(futureTenceListingPojoList.isNotEmpty()){
+        if(presentTenceNegtionList.isNotEmpty()){
 
         }
-        val sentenceEntity = futureTenceListingPojoList[position]
+        val sentenceEntity = presentTenceNegtionList[position]
         val quranEntity= allofQuran?.get(position)
 
         holder.quran_textView.text = sentenceEntity.spannableVerse

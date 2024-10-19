@@ -16,6 +16,8 @@ import com.example.mushafconsolidated.Entities.NasbListingPojo
 import com.example.mushafconsolidated.Entities.NasbPOJO
 import com.example.mushafconsolidated.Entities.NewCorpusExpandWbwPOJO
 import com.example.mushafconsolidated.Entities.NounCorpusBreakup
+import com.example.mushafconsolidated.Entities.PastTencePOJO
+import com.example.mushafconsolidated.Entities.PresentTencePOJO
 import com.example.mushafconsolidated.Entities.RootVerbDetails
 import com.example.mushafconsolidated.Entities.RootWordDetails
 import com.example.mushafconsolidated.Entities.ShartListingPojo
@@ -70,6 +72,15 @@ interface RawDao {
     fun getFuturNegationList(query: SupportSQLiteQuery): List<FutureTenceListingPojo>
     @RawQuery
     fun getNasbListing(query: SupportSQLiteQuery): List<NasbListingPojo>
+
+    @RawQuery
+    fun getPastTenceListing(query: SupportSQLiteQuery): List<PastTencePOJO>
+
+
+
+    @RawQuery
+    fun getPresentTenceListing(query: SupportSQLiteQuery): List<PresentTencePOJO>
+
     @RawQuery
     fun getSifaIndexes(query: SupportSQLiteQuery): List<SifaEntityPojo?>?
 

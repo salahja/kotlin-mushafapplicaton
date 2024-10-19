@@ -337,6 +337,8 @@ class PhrasesDisplayFrag : Fragment(), SearchView.OnQueryTextListener {
                     "Mausouf" -> settingint.putExtra(Constant.HARF, "mausuf")
                     "inmanegative" -> settingint.putExtra(Constant.HARF, "inmanegative")
                     "Future Negation" -> settingint.putExtra(Constant.HARF, "Future Negation")
+                   "Present Tence Negation"-> settingint.putExtra(Constant.HARF, "Present Tence Negation")
+                    "Past Tence Negation"-> settingint.putExtra(Constant.HARF, "Past Tence Negation")
                 }
 
                 settingint.putExtra(SURAH_ID, item.chapterid)

@@ -29,6 +29,8 @@ import com.example.mushafconsolidated.Entities.InMaListingPOJO
 import com.example.mushafconsolidated.Entities.NasbListingPojo
 import com.example.mushafconsolidated.Entities.NewMudhafEntity
 import com.example.mushafconsolidated.Entities.NewShartEntity
+import com.example.mushafconsolidated.Entities.PastTencePOJO
+import com.example.mushafconsolidated.Entities.PresentTencePOJO
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.ShartListingPojo
 import com.example.mushafconsolidated.Entities.SifaEntity
@@ -544,6 +546,69 @@ class CorpusUtilityorig(private var context: Context?) {
 
     }
 
+    fun setPresentSpanListing(
+
+        sifa: List<PresentTencePOJO>,
+
+
+        ) {
+        if (dark) {
+            Constant.sifaspansDark = BackgroundColorSpan(Constant.WBURNTUMBER)
+        } else {
+            Constant.sifaspansDark = BackgroundColorSpan(Constant.CYANLIGHTEST)
+        }
+        var spannableverse: SpannableString
+        for (sif in sifa!!) {
+            val indexstart = sif.startindex
+            val indexend = sif.endindex
+            spannableverse = sif.spannableVerse!!
+            try {
+                spannableverse.setSpan(
+                    Constant.sifaspansDark,
+                    indexstart,
+                    indexend,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            } catch (e: IndexOutOfBoundsException) {
+                //System.out.println(e.getMessage());
+            }
+
+        }
+
+
+    }
+
+    fun setPastSpanListing(
+
+        sifa: List<PastTencePOJO>,
+
+
+        ) {
+        if (dark) {
+            Constant.sifaspansDark = BackgroundColorSpan(Constant.WBURNTUMBER)
+        } else {
+            Constant.sifaspansDark = BackgroundColorSpan(Constant.CYANLIGHTEST)
+        }
+        var spannableverse: SpannableString
+        for (sif in sifa!!) {
+            val indexstart = sif.startindex
+            val indexend = sif.endindex
+            spannableverse = sif.spannableVerse!!
+            try {
+                spannableverse.setSpan(
+                    Constant.sifaspansDark,
+                    indexstart,
+                    indexend,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            } catch (e: IndexOutOfBoundsException) {
+                //System.out.println(e.getMessage());
+            }
+
+        }
+
+
+    }
 
     fun setInMaSpanlisting(
 

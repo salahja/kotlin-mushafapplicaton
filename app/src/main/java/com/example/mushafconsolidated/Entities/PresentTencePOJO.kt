@@ -7,7 +7,7 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 
-class InMaListingPOJO constructor(){
+class PresentTencePOJO constructor(){
     var surahid: Int=0
     var ayahid: Int=0
     var startindex: Int=0
