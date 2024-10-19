@@ -2,12 +2,14 @@ package com.example.mushafconsolidated.quranrepo
 
 
 import androidx.lifecycle.LiveData
+import com.example.mushafconsolidated.DAO.AbsoluteNegationDao
 import com.example.mushafconsolidated.DAO.AnaQuranChapterDao
 import com.example.mushafconsolidated.DAO.BadalErabNotesDao
 import com.example.mushafconsolidated.DAO.BookMarkDao
 import com.example.mushafconsolidated.DAO.CorpusExpandedDao
 import com.example.mushafconsolidated.DAO.HaliyaDao
 import com.example.mushafconsolidated.DAO.HansDao
+import com.example.mushafconsolidated.DAO.PastTenceNegatonDao
 
 import com.example.mushafconsolidated.DAO.LaneRootDao
 import com.example.mushafconsolidated.DAO.LughatDao
@@ -18,6 +20,7 @@ import com.example.mushafconsolidated.DAO.NewMudhafDao
 import com.example.mushafconsolidated.DAO.NewNasbDao
 import com.example.mushafconsolidated.DAO.NewShartDAO
 import com.example.mushafconsolidated.DAO.NounCorpusDao
+import com.example.mushafconsolidated.DAO.PresentTenceNegationDao
 import com.example.mushafconsolidated.DAO.QuranDao
 import com.example.mushafconsolidated.DAO.SifaDao
 import com.example.mushafconsolidated.DAO.VerbCorpusDao
@@ -26,12 +29,14 @@ import com.example.mushafconsolidated.DAO.liajlihiDao
 import com.example.mushafconsolidated.DAO.surahsummaryDao
 import com.example.mushafconsolidated.DAO.tameezDao
 import com.example.mushafconsolidated.DAO.wbwDao
+import com.example.mushafconsolidated.Entities.AbsoluteNegationEnt
 
 import com.example.mushafconsolidated.Entities.BadalErabNotesEnt
 import com.example.mushafconsolidated.Entities.BookMarks
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
 import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.HalEnt
+import com.example.mushafconsolidated.Entities.PastTenceNegatonEnt
 import com.example.mushafconsolidated.Entities.LiajlihiEnt
 import com.example.mushafconsolidated.Entities.MafoolBihi
 import com.example.mushafconsolidated.Entities.MafoolMutlaqEnt
@@ -40,6 +45,7 @@ import com.example.mushafconsolidated.Entities.NewMudhafEntity
 import com.example.mushafconsolidated.Entities.NewNasbEntity
 import com.example.mushafconsolidated.Entities.NewShartEntity
 import com.example.mushafconsolidated.Entities.NounCorpus
+import com.example.mushafconsolidated.Entities.PresentTenceNegatonEnt
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.SifaEntity
 import com.example.mushafconsolidated.Entities.TameezEnt
@@ -54,6 +60,9 @@ import javax.inject.Inject
 
 
  class QuranRepository @Inject constructor(
+     var presentTenceNegationDao: PresentTenceNegationDao,
+     var pastTenceNegationDao:PastTenceNegatonDao,
+     var absoluteNegationDao:AbsoluteNegationDao,
      var wbwdao:wbwDao,
      var corpusDao: CorpusExpandedDao,
      var qurandao: QuranDao,
@@ -104,9 +113,12 @@ import javax.inject.Inject
     fun getmudhaf(surah: Int, ayah: Int): List<NewMudhafEntity> =
         mudhafDao.getMudhafSurahAyah(surah, ayah)
 
+
+
     fun getsifa(surah: Int, ayah: Int): List<SifaEntity> =
         mousufSifa.getSifaindexesBySurahAyah(surah, ayah)
-
+     fun getsifaFilterSurah(surah: Int, ): List<SifaEntity> =
+         mousufSifa.getSifaindexesBySurah(surah)
     fun getkanasurah(surah: Int): List<NewKanaEntity> = kanaDao.getkanabysurah(surah)
 
     fun getshartsurah(surah: Int): List<NewShartEntity> = shartDAO.getShartBySurah(surah)
@@ -130,6 +142,38 @@ import javax.inject.Inject
 
      fun getCorpusEntityFilterSurahAya(surah: Int, ayah: Int): List<CorpusEntity> =
          corpusDao.getCorpusWordSurahAya(surah, ayah)
+
+     fun getAbsoluteNegationFilerSurahAyah(surah: Int, ayah: Int): List<AbsoluteNegationEnt> =
+         absoluteNegationDao.getAbsoluteNegationFilterSurahAyah(surah, ayah)
+
+     fun getAbsoluteNegationAll(): List<AbsoluteNegationEnt> =
+         absoluteNegationDao.getAbsoluteNegationAll()
+
+     fun getAbsoluteNegationFilterSurah(surah: Int): List<AbsoluteNegationEnt> =
+         absoluteNegationDao.getAbsoluteNegationFilterSurah(surah)
+
+     fun getLamMudharyNegationFilerSurahAyah(surah: Int, ayah: Int): List<PastTenceNegatonEnt> =
+         pastTenceNegationDao.getPastTenceNegationFilterSurahAyah(surah, ayah)
+
+     fun getLamMudharyNegationAll(): List<PastTenceNegatonEnt> =
+         pastTenceNegationDao.getPastTenceNegationAll()
+
+     fun getLamMudharyNegationFilterSurah(surah: Int): List<PastTenceNegatonEnt> =
+         pastTenceNegationDao.getPastTenceNegationFilterSurah(surah)
+
+
+     fun getPresentNegationFilerSurahAyah(surah: Int, ayah: Int): List<PresentTenceNegatonEnt> =
+         presentTenceNegationDao.getPresentTenceNegationFilterSurahAyah(surah, ayah)
+
+     fun getPresentNegationAll(): List<PresentTenceNegatonEnt> =
+         presentTenceNegationDao.getPresentTenceNegationAll()
+
+     fun getPresentNegationFilterSurah(surah: Int): List<PresentTenceNegatonEnt> =
+         presentTenceNegationDao.getPresentTenceNegationFilterSurah(surah)
+
+
+
+
      fun getCorpusEntityFilterSurah(surah: Int, ): List<CorpusEntity> =
          corpusDao.getVersesBySurahLive(surah)
 

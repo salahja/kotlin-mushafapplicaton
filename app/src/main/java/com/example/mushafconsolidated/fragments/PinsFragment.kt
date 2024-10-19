@@ -21,7 +21,7 @@ import com.example.mushafconsolidated.Entities.BookMarks
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListener
-import com.example.mushafconsolidated.quranrepo.QuranVIewModel
+import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.example.utility.QuranGrammarApplication
 import com.example.utility.SwipeToDeleteCallback
 import com.google.android.material.snackbar.Snackbar
@@ -37,7 +37,7 @@ class PinsFragment constructor() : Fragment() {
     var layoutManager: RecyclerView.LayoutManager? = null
     private var bookmarksShowAdapter: BookmarksShowAdapter? = null
     private lateinit var mRecview: RecyclerView
-    val vmodel: QuranVIewModel by viewModels()
+    val vmodel: QuranViewModel by viewModels()
     public override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -47,7 +47,7 @@ class PinsFragment constructor() : Fragment() {
         val view: View = inflater.inflate(R.layout.fragment_bookmark, container, false)
         val utils: Utils = Utils(activity)
 
-        val vmodel: QuranVIewModel by viewModels()
+        val vmodel: QuranViewModel by viewModels()
         bookmarksShowAdapter = BookmarksShowAdapter(activity)
         vmodel.getBookmarks().observe(viewLifecycleOwner, Observer {
 

@@ -436,6 +436,7 @@
     <item name="answer_button12" type="id" />
     <item name="answer_button13" type="id" />
     <item name="answer_button14" type="id" />
+    <item name="pasttencenegation" type="id" />
 
 
 </resources>

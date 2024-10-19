@@ -41,7 +41,7 @@ import com.example.mushafconsolidated.databinding.PhrasesListSurahJuzBinding
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListener
 import com.example.mushafconsolidated.intrfaceimport.PassdataInterface
 import com.example.mushafconsolidated.model.Juz
-import com.example.mushafconsolidated.quranrepo.QuranVIewModel
+import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationBarView
 import dagger.hilt.android.AndroidEntryPoint
@@ -86,6 +86,8 @@ class PhrasesDisplayFrag : Fragment(), SearchView.OnQueryTextListener {
     lateinit var mudhafrd: RadioButton
     lateinit var mousufrd: RadioButton
     lateinit var phraserg:RadioGroup
+    lateinit var inmaNegationrb: RadioButton
+    lateinit var futureNegationrb:RadioButton
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = PhrasesListSurahJuzBinding.inflate(layoutInflater)
@@ -196,6 +198,8 @@ class PhrasesDisplayFrag : Fragment(), SearchView.OnQueryTextListener {
         shartrd=binding.shart
         mudhafrd=binding.mudhaf
         mousufrd=binding.maousuf
+        inmaNegationrb=binding.inmanegative
+        futureNegationrb=binding.futurenegation
 
       //  searchint = view.findViewById(R.id.searchint)
     //    val juz = view.findViewById<MaterialTextView>(R.id.tiJuz)
@@ -251,7 +255,7 @@ class PhrasesDisplayFrag : Fragment(), SearchView.OnQueryTextListener {
         mousufrd.setOnClickListener { v: View? ->
 
         }
-        val viewmodel: QuranVIewModel by viewModels()
+        val viewmodel: QuranViewModel by viewModels()
         ParentAdapter = NewSurahDisplayAdapter(context)
         viewmodel.getAllChapters().observe(viewLifecycleOwner) {
             parentRecyclerView.layoutManager = mLayoutManager
@@ -269,6 +273,7 @@ class PhrasesDisplayFrag : Fragment(), SearchView.OnQueryTextListener {
         return view
     }
 
+    @SuppressLint("UnsafeOptInUsageError")
     private fun initnavagation(view: View) {
         bottomNavigationView = view.findViewById(R.id.bottomNavView)
         btnBottomSheet = view.findViewById(R.id.fab)
@@ -330,6 +335,10 @@ class PhrasesDisplayFrag : Fragment(), SearchView.OnQueryTextListener {
                     "Mudhaf" -> settingint.putExtra(Constant.HARF, "mudhaf")
                     "Shart" -> settingint.putExtra(Constant.HARF, "shart")
                     "Mausouf" -> settingint.putExtra(Constant.HARF, "mausuf")
+                    "inmanegative" -> settingint.putExtra(Constant.HARF, "inmanegative")
+                    "Future Negation" -> settingint.putExtra(Constant.HARF, "Future Negation")
+                   "Present Tence Negation"-> settingint.putExtra(Constant.HARF, "Present Tence Negation")
+                    "Past Tence Negation"-> settingint.putExtra(Constant.HARF, "Past Tence Negation")
                 }
 
                 settingint.putExtra(SURAH_ID, item.chapterid)

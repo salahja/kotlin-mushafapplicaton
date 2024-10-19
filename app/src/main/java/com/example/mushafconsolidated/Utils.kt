@@ -12,7 +12,12 @@ import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
 import com.example.mushafconsolidated.Entities.CorpusExpandWbwPOJO
 import com.example.mushafconsolidated.Entities.CorpusNounWbwOccurance
 import com.example.mushafconsolidated.Entities.CorpusVerbWbwOccurance
+import com.example.mushafconsolidated.Entities.FutureTenceListingPojo
+import com.example.mushafconsolidated.Entities.FutureTenceNegatonEnt
 import com.example.mushafconsolidated.Entities.GrammarRules
+import com.example.mushafconsolidated.Entities.InMaIllaNegationEnt
+import com.example.mushafconsolidated.Entities.InMaListingPOJO
+import com.example.mushafconsolidated.Entities.PastTenceNegatonEnt
 import com.example.mushafconsolidated.Entities.NasbListingPojo
 import com.example.mushafconsolidated.Entities.NewKanaEntity
 import com.example.mushafconsolidated.Entities.NewMudhafEntity
@@ -20,6 +25,9 @@ import com.example.mushafconsolidated.Entities.NewNasbEntity
 import com.example.mushafconsolidated.Entities.NewShartEntity
 import com.example.mushafconsolidated.Entities.NounCorpus
 import com.example.mushafconsolidated.Entities.NounCorpusBreakup
+import com.example.mushafconsolidated.Entities.PastTencePOJO
+import com.example.mushafconsolidated.Entities.PresentTenceNegatonEnt
+import com.example.mushafconsolidated.Entities.PresentTencePOJO
 import com.example.mushafconsolidated.Entities.Qari
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.RootVerbDetails
@@ -40,7 +48,6 @@ import com.example.mushafconsolidated.Entities.wbwentity
 import com.example.mushafconsolidated.model.Juz
 import com.example.mushafconsolidated.model.QuranCorpusWbw
 import com.example.mushafconsolidated.model.QuranEntityCorpusEntityWbwEntity
-import com.example.mushafconsolidated.model.QuranwithCorpusWbw
 import database.entity.AllahNames
 import mufradat.MufradatEntity
 
@@ -91,6 +98,45 @@ class Utils {
         return database.QuranDao().getQuranCorpusWbw(id, aid, wid)
     }
 
+    fun getPastTenceNegationFilterSurahAyah(cid: Int, aid: Int, ): List<PastTenceNegatonEnt> {
+        return  database.PastTenceNegatonDao().getPastTenceNegationFilterSurahAyah(cid, aid)
+
+    }
+    fun getPastTenceNegationFilterSurah(cid: Int,   ): List<PastTenceNegatonEnt> {
+        return  database.PastTenceNegatonDao().getPastTenceNegationFilterSurah(cid)
+
+    }
+
+    fun getFuturetTenceNegatonFilerSurahAyah(cid: Int, aid: Int, ): List<FutureTenceNegatonEnt> {
+        return  database.FutureTenceNegationDao().getFuturTenceNegationFilterSurahAyah(cid, aid)
+
+    }
+    fun getFuturTenceNegationFilterSurah(cid: Int,   ): List<FutureTenceNegatonEnt> {
+        return  database.FutureTenceNegationDao().getFuturTenceNegationFilterSurah(cid)
+
+    }
+
+    fun getInMaIllaNegationFilterSurahAyah(cid: Int, aid: Int, ): List<InMaIllaNegationEnt> {
+        return  database.InMaIllaNegationDao().getInMaIllaNegationFilterSurahAyah(cid, aid)
+
+    }
+
+    fun getInMaIllaNegationFilterSurah(cid: Int,  ): List<InMaIllaNegationEnt> {
+        return  database.InMaIllaNegationDao().getInMaIllaNegationFilterSurah(cid)
+
+    }
+
+
+    fun getPresentTenceNegatonFilerSurahAyah(cid: Int, aid: Int, ): List<PresentTenceNegatonEnt> {
+        return  database.PresentTenceNegationDao().getPresentTenceNegationFilterSurahAyah(cid, aid)
+
+    }
+
+
+    fun getPresentTenceNegationFilterSurah(cid: Int, aid: Int, ): List<PresentTenceNegatonEnt> {
+        return  database.PresentTenceNegationDao().getPresentTenceNegationFilterSurah(cid)
+
+    }
 
     fun getMudhafSurahAyahNew(id: Int, aid: Int): List<NewMudhafEntity>? {
         return database.NewMudhafDao().getMudhafSurahAyah(id, aid)
@@ -224,6 +270,58 @@ class Utils {
         val query: SimpleSQLiteQuery = SimpleSQLiteQuery(sqlshart)
         //  List<Book> result = booksDao.getBooks(query);
         return database.RawDao().getSifaListing(query)
+
+
+    }
+
+    fun getInMaNegationListing(tid:Int):List<InMaListingPOJO>{
+        val sqlshart:String=("select inmailla.surahid,inmailla.ayahid,inmailla.startindex,inmailla.endindex,inmailla.wordfrom,inmailla.wordnoto,qurans.page,qurans.passage_no,qurans.qurantext,qurans.has_prostration,qurans.translation,\n" +
+                "qurans.en_transliteration,qurans.en_arberry,qurans.en_jalalayn,qurans.ur_jalalayn,qurans.tafsir_kathir,qurans.ur_junagarhi,qurans.ar_irab_two\n" +
+                " from inmailla,qurans where inmailla.surahid=qurans.surah and inmailla.ayahid=qurans.ayah and inmailla.surahid ==  \""
+                + tid + "\"")
+
+        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(sqlshart)
+        //  List<Book> result = booksDao.getBooks(query);
+        return database.RawDao().getInMaisting(query)
+
+
+    }
+
+    fun getFutureTnegaionListing(tid:Int):List<FutureTenceListingPojo>{
+        val sqlshart:String=("select futuretencenegation.surahid,futuretencenegation.ayahid,futuretencenegation.startindex,futuretencenegation.endindex,futuretencenegation.wordfrom,futuretencenegation.wordnoto,qurans.page,qurans.passage_no,qurans.qurantext,qurans.has_prostration,qurans.translation,\n" +
+                "qurans.en_transliteration,qurans.en_arberry,qurans.en_jalalayn,qurans.ur_jalalayn,qurans.tafsir_kathir,qurans.ur_junagarhi,qurans.ar_irab_two\n" +
+                " from futuretencenegation,qurans where futuretencenegation.surahid=qurans.surah and futuretencenegation.ayahid=qurans.ayah and futuretencenegation.surahid ==  \""
+                + tid + "\"")
+
+        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(sqlshart)
+        //  List<Book> result = booksDao.getBooks(query);
+        return database.RawDao().getFuturNegationList(query)
+
+
+    }
+
+    fun getPresentnegaionListing(tid:Int):List<PresentTencePOJO>{
+        val sqlshart:String=("select presenttencenegation.surahid,presenttencenegation.ayahid,presenttencenegation.startindex,presenttencenegation.endindex,presenttencenegation.wordfrom,presenttencenegation.wordnoto,qurans.page,qurans.passage_no,qurans.qurantext,qurans.has_prostration,qurans.translation,\n" +
+                "qurans.en_transliteration,qurans.en_arberry,qurans.en_jalalayn,qurans.ur_jalalayn,qurans.tafsir_kathir,qurans.ur_junagarhi,qurans.ar_irab_two\n" +
+                " from presenttencenegation,qurans where presenttencenegation.surahid=qurans.surah and presenttencenegation.ayahid=qurans.ayah and presenttencenegation.surahid ==  \""
+                + tid + "\"")
+
+        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(sqlshart)
+        //  List<Book> result = booksDao.getBooks(query);
+        return database.RawDao().getPresentTenceListing(query)
+
+
+    }
+
+    fun getPastnegaionListing(tid:Int):List<PastTencePOJO>{
+        val sqlshart:String=("select lammudharynegation.surahid,lammudharynegation.ayahid,lammudharynegation.startindex,lammudharynegation.endindex,lammudharynegation.wordfrom,lammudharynegation.wordnoto,qurans.page,qurans.passage_no,qurans.qurantext,qurans.has_prostration,qurans.translation,\n" +
+                "qurans.en_transliteration,qurans.en_arberry,qurans.en_jalalayn,qurans.ur_jalalayn,qurans.tafsir_kathir,qurans.ur_junagarhi,qurans.ar_irab_two\n" +
+                " from lammudharynegation,qurans where lammudharynegation.surahid=qurans.surah and lammudharynegation.ayahid=qurans.ayah and lammudharynegation.surahid ==  \""
+                + tid + "\"")
+
+        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(sqlshart)
+        //  List<Book> result = booksDao.getBooks(query);
+        return database.RawDao().getPastTenceListing(query)
 
 
     }

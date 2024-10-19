@@ -4,24 +4,33 @@ import FileUtility
 import android.app.Activity
 import android.content.Context
 import android.graphics.Color
+import android.graphics.Typeface
 import android.preference.PreferenceManager
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
+import android.text.TextPaint
 import android.text.TextUtils
 import android.text.style.BackgroundColorSpan
 import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import com.example.Constant
+
+import com.example.Constant.mudhafspanLight
 import com.example.justJava.FrameSpan
 import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.CorpusExpandWbwPOJO
+import com.example.mushafconsolidated.Entities.FutureTenceListingPojo
+import com.example.mushafconsolidated.Entities.InMaListingPOJO
 import com.example.mushafconsolidated.Entities.NasbListingPojo
 import com.example.mushafconsolidated.Entities.NewMudhafEntity
 import com.example.mushafconsolidated.Entities.NewShartEntity
+import com.example.mushafconsolidated.Entities.PastTencePOJO
+import com.example.mushafconsolidated.Entities.PresentTencePOJO
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.ShartListingPojo
 import com.example.mushafconsolidated.Entities.SifaEntity
@@ -241,13 +250,13 @@ class CorpusUtilityorig(private var context: Context?) {
             // spannableString = SpannableString.valueOf(corpusayahWordArrayList.get(mudhafen.getAyah() - 1).getSpannableverse());
             try {
                 if (indexstart == 0 || indexstart > 0) {
-                    if (dark) {
-                        Constant.mudhafspansDark = BackgroundColorSpan(Constant.MIDNIGHTBLUE)
+                    val colorSpan = if (dark) {
+                        Constant.mudhafspanDarks
                     } else {
-                        Constant.mudhafspansDark = BackgroundColorSpan(Constant.GREENYELLOW)
+                        Constant.mudhafspanLight
                     }
                     spannableverse.setSpan(
-                        Constant.mudhafspansDark,
+                        colorSpan,
                         indexstart,
                         indexend,
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -537,6 +546,136 @@ class CorpusUtilityorig(private var context: Context?) {
 
     }
 
+    fun setPresentSpanListing(
+
+        sifa: List<PresentTencePOJO>,
+
+
+        ) {
+        if (dark) {
+            Constant.sifaspansDark = BackgroundColorSpan(Constant.WBURNTUMBER)
+        } else {
+            Constant.sifaspansDark = BackgroundColorSpan(Constant.CYANLIGHTEST)
+        }
+        var spannableverse: SpannableString
+        for (sif in sifa!!) {
+            val indexstart = sif.startindex
+            val indexend = sif.endindex
+            spannableverse = sif.spannableVerse!!
+            try {
+                spannableverse.setSpan(
+                    Constant.sifaspansDark,
+                    indexstart,
+                    indexend,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            } catch (e: IndexOutOfBoundsException) {
+                //System.out.println(e.getMessage());
+            }
+
+        }
+
+
+    }
+
+    fun setPastSpanListing(
+
+        sifa: List<PastTencePOJO>,
+
+
+        ) {
+        if (dark) {
+            Constant.sifaspansDark = BackgroundColorSpan(Constant.WBURNTUMBER)
+        } else {
+            Constant.sifaspansDark = BackgroundColorSpan(Constant.CYANLIGHTEST)
+        }
+        var spannableverse: SpannableString
+        for (sif in sifa!!) {
+            val indexstart = sif.startindex
+            val indexend = sif.endindex
+            spannableverse = sif.spannableVerse!!
+            try {
+                spannableverse.setSpan(
+                    Constant.sifaspansDark,
+                    indexstart,
+                    indexend,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            } catch (e: IndexOutOfBoundsException) {
+                //System.out.println(e.getMessage());
+            }
+
+        }
+
+
+    }
+
+    fun setInMaSpanlisting(
+
+        sifa: List<InMaListingPOJO>,
+
+
+        ) {
+        if (dark) {
+            Constant.sifaspansDark = BackgroundColorSpan(Constant.WBURNTUMBER)
+        } else {
+            Constant.sifaspansDark = BackgroundColorSpan(Constant.CYANLIGHTEST)
+        }
+        var spannableverse: SpannableString
+        for (sif in sifa!!) {
+            val indexstart = sif.startindex
+            val indexend = sif.endindex
+            spannableverse = sif.spannableVerse!!
+            try {
+                spannableverse.setSpan(
+                    Constant.sifaspansDark,
+                    indexstart,
+                    indexend,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            } catch (e: IndexOutOfBoundsException) {
+                //System.out.println(e.getMessage());
+            }
+
+        }
+
+
+    }
+
+    fun setSpanFutureTenceNegationListing(
+
+        sifa: List<FutureTenceListingPojo>,
+
+
+        ) {
+        if (dark) {
+            Constant.sifaspansDark = BackgroundColorSpan(Constant.WBURNTUMBER)
+        } else {
+            Constant.sifaspansDark = BackgroundColorSpan(Constant.CYANLIGHTEST)
+        }
+        var spannableverse: SpannableString
+        for (sif in sifa!!) {
+            val indexstart = sif.startindex
+            val indexend = sif.endindex
+            spannableverse = sif.spannableVerse!!
+            try {
+                spannableverse.setSpan(
+                    Constant.sifaspansDark,
+                    indexstart,
+                    indexend,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            } catch (e: IndexOutOfBoundsException) {
+                //System.out.println(e.getMessage());
+            }
+
+        }
+
+
+    }
+
+
+
     fun HarfNasbDb(
 
 
@@ -752,13 +891,15 @@ class CorpusUtilityorig(private var context: Context?) {
             // spannableString = SpannableString.valueOf(corpusayahWordArrayList.get(mudhafen.getAyah() - 1).getSpannableverse());
             try {
                 if (indexstart == 0 || indexstart > 0) {
-                    if (dark) {
-                        Constant.mudhafspansDark = BackgroundColorSpan(Constant.MIDNIGHTBLUE)
-                    } else {
-                        Constant.mudhafspansDark = BackgroundColorSpan(Constant.GREENYELLOW)
-                    }
+
+                        val colorSpan = if (dark) {
+                            Constant.mudhafspanDarks
+                        } else {
+                            Constant.mudhafspanLight
+                        }
+
                     spannableverse.setSpan(
-                        Constant.mudhafspansDark,
+                        colorSpan,
                         indexstart,
                         indexend,
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -1180,6 +1321,8 @@ class CorpusUtilityorig(private var context: Context?) {
         return newnewadapterlist
 
     }
+
+
 
     companion object {
         var dark = true
@@ -2387,8 +2530,8 @@ class CorpusUtilityorig(private var context: Context?) {
 
             if (spannableverse != null) {
 
-                setMudhafFromDBforAyah(spannableverse, surah, ayah)
-                setMausoofforayah(spannableverse, surah, ayah)
+           //     setMudhafFromDBforAyah(spannableverse, surah, ayah)
+              //  setMausoofforayah(spannableverse, surah, ayah)
                 setShartSurahAyah(spannableverse, surah, ayah)
                 setInnahIsmSurahAyah(spannableverse,surah,ayah)
                 setKanaSurahAyah(spannableverse,surah,ayah)
@@ -2652,12 +2795,16 @@ class CorpusUtilityorig(private var context: Context?) {
 
                     try {
                         if (indexstart == 0 || indexstart > 0) {
-                            if (dark) {
-                                Constant.mudhafspansDark = BackgroundColorSpan(Constant.MIDNIGHTBLUE)
-                            } else {
-                                Constant.mudhafspansDark = BackgroundColorSpan(Constant.GREENYELLOW)
-                            }
-                            spannableverse.setSpan(
+
+                            if (spannableverse != null) {
+                                val colorSpan = if (dark) {
+                                    Constant.mudhafspanDarks
+                                } else {
+                                    Constant.mudhafspanLight
+                                }
+                                }
+
+                                spannableverse.setSpan(
                                 Constant.mudhafspansDark,
                                 indexstart,
                                 indexend,
@@ -3103,6 +3250,87 @@ class CorpusUtilityorig(private var context: Context?) {
 
               }
           }
+        }
+
+        fun setMausoofSifaFromCache(spannableverse: SpannableString, sifaIndexList: MutableList<List<Int>>?) {
+            if (sifaIndexList != null) {
+                for (indexes in sifaIndexList) {
+                    val startIndex = indexes[0]
+                    val endIndex = indexes[1]
+                    if (dark) {
+                        Constant.sifaspansDark = BackgroundColorSpan(Constant.WBURNTUMBER)
+                    } else {
+                        Constant.sifaspansDark = BackgroundColorSpan(Constant.CYANLIGHTEST)
+                    }
+
+                    if (spannableverse != null) {
+                        spannableverse.setSpan(
+                            Constant.sifaspansDark,
+                            startIndex  ,
+                            endIndex  ,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+                    }
+                }
+            }
+        }
+
+        fun setMudhafFromCache(spannableverse: SpannableString, mudhafIndexList: MutableList<List<Int>>?) {
+            if (mudhafIndexList != null) {
+                for (indexes in mudhafIndexList) {
+                    val startIndex = indexes[0]
+                    val endIndex = indexes[1]
+
+                    if (spannableverse != null) {
+                        val colorSpan = if (dark) {
+                            Constant.mudhafspanDarks
+                        } else {
+                            Constant.mudhafspanLight
+                        }
+
+                        spannableverse.setSpan(
+                            colorSpan,
+                            startIndex,
+                            endIndex,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+                    }
+                }
+            }
+
+        }
+
+        fun setAbsoluteNegationFromCache(spannableverse: SpannableString, absoluteNegationIndexes: List<Any>) {
+            val underlineSpan = UnderlineSpan()
+            val offsetUnderlineSpan = object : UnderlineSpan() {
+                override fun updateDrawState(ds: TextPaint) {
+                    ds.baselineShift += ds.ascent().toInt() / 2 // Adjust offset as needed
+                    super.updateDrawState(ds)
+                }
+            }
+
+            if(absoluteNegationIndexes.isNotEmpty()){
+
+                spannableverse.setSpan(
+                    underlineSpan,
+                    absoluteNegationIndexes[0] as Int,
+                    absoluteNegationIndexes[1] as Int,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                spannableverse.setSpan(
+                    offsetUnderlineSpan,
+                    absoluteNegationIndexes[0] as Int,
+                    absoluteNegationIndexes[1] as Int,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                val boldSpan = StyleSpan(Typeface.BOLD)
+                spannableverse.setSpan(boldSpan,
+                    absoluteNegationIndexes[0] as Int,
+                    absoluteNegationIndexes[1] as Int,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+            }
+
         }
 
 

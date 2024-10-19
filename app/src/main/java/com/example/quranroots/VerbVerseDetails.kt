@@ -39,7 +39,7 @@ import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.model.CorpusAyahWord
 import com.example.mushafconsolidated.model.QuranCorpusWbw
 import com.example.mushafconsolidated.quranrepo.QuranRepository
-import com.example.mushafconsolidated.quranrepo.QuranVIewModel
+import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.example.utility.CorpusUtilityorig
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,7 +55,7 @@ class VerbVerseDetails : BaseActivity(), OnItemClickListenerOnLong {
     private var corpusSurahWord: List<CorpusEntity>? = null
     private var newnewadapterlist = LinkedHashMap<Int, ArrayList<CorpusEntity>>()
     private var allofQuran: ArrayList<QuranEntity>? = null
-    private lateinit var mainViewModel: QuranVIewModel
+    private lateinit var mainViewModel: QuranViewModel
 
     private  var corpusGroupedByAyah:LinkedHashMap<Int, ArrayList<CorpusEntity>> =
         LinkedHashMap()
@@ -99,7 +99,7 @@ class VerbVerseDetails : BaseActivity(), OnItemClickListenerOnLong {
         android.preference.PreferenceManager.setDefaultValues(this, R.xml.preferences, false)
         arrayofadapterlist = ArrayList()
         allofQuran = ArrayList()
-        mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
+        mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
         val bundle: Intent = intent
         if (bundle.extras != null) {
             val bundles: Bundle = intent.extras!!
@@ -317,7 +317,7 @@ class VerbVerseDetails : BaseActivity(), OnItemClickListenerOnLong {
         en.surahname = surahname
         //     Utils utils = new Utils(ReadingSurahPartActivity.this);
         //  val utils = Utils(this)
-        val vm: QuranVIewModel by viewModels()
+        val vm: QuranViewModel by viewModels()
         vm.Insertbookmark(en)
         // utils.insertBookMark(en)
         val snackbar = Snackbar

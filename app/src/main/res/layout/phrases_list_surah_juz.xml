@@ -65,6 +65,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="Mausouf" />
+                <RadioButton
+                    android:id="@+id/inmanegative"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="inmanegative" />
+                <RadioButton
+                    android:id="@+id/futurenegation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Future Negation" />
+
 
 
             </RadioGroup>

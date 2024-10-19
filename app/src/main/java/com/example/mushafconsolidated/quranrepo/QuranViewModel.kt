@@ -5,12 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.mushafconsolidated.Entities.AbsoluteNegationEnt
 import com.example.mushafconsolidated.Entities.BadalErabNotesEnt
 import com.example.mushafconsolidated.Entities.BookMarks
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
 import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.GrammarRules
 import com.example.mushafconsolidated.Entities.HalEnt
+import com.example.mushafconsolidated.Entities.PastTenceNegatonEnt
 import com.example.mushafconsolidated.Entities.LiajlihiEnt
 import com.example.mushafconsolidated.Entities.MafoolBihi
 import com.example.mushafconsolidated.Entities.MafoolMutlaqEnt
@@ -40,7 +42,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class QuranVIewModel @Inject constructor(
+class QuranViewModel @Inject constructor(
 
 
     private val quranRepository: QuranRepository,
@@ -84,7 +86,7 @@ class QuranVIewModel @Inject constructor(
     var mudhaf: MutableLiveData<List<NewMudhafEntity>> = MutableLiveData()
     private var sifa: MutableLiveData<List<SifaEntity>> = MutableLiveData()
 
-
+    private var absolutNegation: MutableLiveData<List<AbsoluteNegationEnt>> = MutableLiveData()
     var lughat: MutableLiveData<List<lughat>> = MutableLiveData()
     private var grammarules: MutableLiveData<List<GrammarRules>> = MutableLiveData()
 
@@ -133,15 +135,27 @@ class QuranVIewModel @Inject constructor(
         return nasab
     }
 
-    fun getmudhaf(surah: Int, ayah: Int): LiveData<List<NewMudhafEntity>> {
-        mudhaf.value = this.quranRepository.getmudhaf(surah, ayah)
-        return mudhaf
+    fun getmudhafFilterSurahAyah(surah: Int, ayah: Int): List<NewMudhafEntity> {
+   return this.quranRepository.getmudhaf(surah, ayah)
+
+    }
+    fun getmudhafFilterSurah(surah: Int): List<NewMudhafEntity> {
+        return this.quranRepository.getmudhafsurah(surah)
+
     }
 
-    fun getsifa(surah: Int, ayah: Int): LiveData<List<SifaEntity>> {
-        sifa.value = this.quranRepository.getsifa(surah, ayah)
-        return sifa
+
+
+    fun getsifaFileterSurahAyah(surah: Int, ayah: Int): List<SifaEntity> {
+        return  this.quranRepository.getsifa(surah, ayah)
+
     }
+    fun getsifaFileterSurah(surah: Int): List<SifaEntity> {
+        return  this.quranRepository.getsifaFilterSurah(surah)
+
+    }
+
+
 
 
     fun getVerbRootBySurahAyahWord(
@@ -174,6 +188,33 @@ class QuranVIewModel @Inject constructor(
 
     fun getCorpusEntityFilterSurahAya(cid: Int, aid: Int, ): List<CorpusEntity> {
       return  this.quranRepository.getCorpusEntityFilterSurahAya(cid, aid)
+
+    }
+
+    fun getAbsoluteNegationFilerSurahAyah(cid: Int, aid: Int, ): List<AbsoluteNegationEnt> {
+        return  this.quranRepository.getAbsoluteNegationFilerSurahAyah(cid, aid)
+
+    }
+    fun getAbsoluteNegationFilterSurah(cid: Int ): List<AbsoluteNegationEnt> {
+        return  this.quranRepository.getAbsoluteNegationFilterSurah(cid)
+
+    }
+    fun getAbsoluteNegationAll(cid: Int ): List<AbsoluteNegationEnt> {
+        return  this.quranRepository.getAbsoluteNegationFilterSurah(cid)
+
+    }
+
+
+    fun getLamMudharyNegationFilerSurahAyah(cid: Int, aid: Int, ): List<PastTenceNegatonEnt> {
+        return  this.quranRepository.getLamMudharyNegationFilerSurahAyah(cid, aid)
+
+    }
+    fun getLamMudharyNegationFilterSurah(cid: Int ): List<PastTenceNegatonEnt> {
+        return  this.quranRepository.getLamMudharyNegationFilterSurah(cid)
+
+    }
+    fun getLamMudharyNegationAll(): List<PastTenceNegatonEnt> {
+        return  this.quranRepository.getLamMudharyNegationAll()
 
     }
 

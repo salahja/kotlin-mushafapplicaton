@@ -17,19 +17,15 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.example.Constant.QURAN_VERB_ROOT
 import com.example.Constant.QURAN_VERB_WAZAN
 import com.example.Constant.VERBMOOD
 import com.example.Constant.VERBTYPE
-import com.example.mushafconsolidated.BottomOptionDialog
 import com.example.mushafconsolidated.Entities.QuranEntity
-import com.example.mushafconsolidated.Entities.RootVerbDetails
 import com.example.mushafconsolidated.Entities.VerbCorpus
 import com.example.mushafconsolidated.Entities.VerbWazan
 import com.example.mushafconsolidated.R
@@ -38,20 +34,18 @@ import com.example.mushafconsolidated.databinding.FragmentArabicVerbQuizBinding
 import com.example.mushafconsolidated.fragments.QuranMorphologyDetails
 
 import com.example.mushafconsolidated.model.QuranCorpusWbw
-import com.example.mushafconsolidated.quranrepo.QuranVIewModel
+import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.example.utility.CorpusUtilityorig.Companion.NewSetWordSpan
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
 import com.google.android.material.color.DynamicColors
 import com.google.android.material.textview.MaterialTextView
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.sj.conjugator.activity.BaseActivity
 import org.sj.conjugator.activity.ConjugatorTabsActivity
-import shark.AndroidObjectInspectors
 
 @AndroidEntryPoint
 class ArabicVerbQuizActNew : BaseActivity(), View.OnClickListener {
@@ -63,7 +57,7 @@ class ArabicVerbQuizActNew : BaseActivity(), View.OnClickListener {
     private var qurans: List<QuranEntity>? = null
     //private lateinit var cverb: wbwentity
     private lateinit var cverb: VerbCorpus
-    private lateinit var mainViewModel: QuranVIewModel
+    private lateinit var mainViewModel: QuranViewModel
     // private var _binding: FragmentArabicVerbQuizBinding? = null
     lateinit var binding: FragmentArabicVerbQuizBinding
 
@@ -284,7 +278,7 @@ class ArabicVerbQuizActNew : BaseActivity(), View.OnClickListener {
                 majzoomnotes.text=TextUtils.concat(majzoomitem0001,"\n",majzoomitem001, "\n", majzoomitem2,"\n",majzoomitem3,"\n",majzoomitem4,
                     "\n",majzoomitem5,"\n",majzoomitem6,"\n",majzoomitem7,"\n",majzoomitem8,"\n",majzoomitem9)
             }
-            val mainViewModel: QuranVIewModel by viewModels()
+            val mainViewModel: QuranViewModel by viewModels()
          //   mainViewModel = ViewModelProvider(this@ArabicVerbQuizActNew)[QuranVIewModel::class.java]
            val allverbs = withContext(Dispatchers.IO) { utils.getAllverbs() }
           //  val allRootVerbDetails = withContext(Dispatchers.IO) { utils.getAllRootVerbDetails() }

@@ -8,12 +8,16 @@ import androidx.sqlite.db.SupportSQLiteQuery
 import com.example.mushafconsolidated.Entities.CorpusExpandWbwPOJO
 import com.example.mushafconsolidated.Entities.CorpusNounWbwOccurance
 import com.example.mushafconsolidated.Entities.CorpusVerbWbwOccurance
+import com.example.mushafconsolidated.Entities.FutureTenceListingPojo
+import com.example.mushafconsolidated.Entities.InMaListingPOJO
 import com.example.mushafconsolidated.Entities.KanaPOJO
 import com.example.mushafconsolidated.Entities.MudhafPOJO
 import com.example.mushafconsolidated.Entities.NasbListingPojo
 import com.example.mushafconsolidated.Entities.NasbPOJO
 import com.example.mushafconsolidated.Entities.NewCorpusExpandWbwPOJO
 import com.example.mushafconsolidated.Entities.NounCorpusBreakup
+import com.example.mushafconsolidated.Entities.PastTencePOJO
+import com.example.mushafconsolidated.Entities.PresentTencePOJO
 import com.example.mushafconsolidated.Entities.RootVerbDetails
 import com.example.mushafconsolidated.Entities.RootWordDetails
 import com.example.mushafconsolidated.Entities.ShartListingPojo
@@ -60,8 +64,23 @@ interface RawDao {
 
     @RawQuery
     fun getSifaListing(query: SupportSQLiteQuery): List<SifaListingPojo>
+
+    @RawQuery
+    fun getInMaisting(query: SupportSQLiteQuery): List<InMaListingPOJO>
+
+    @RawQuery
+    fun getFuturNegationList(query: SupportSQLiteQuery): List<FutureTenceListingPojo>
     @RawQuery
     fun getNasbListing(query: SupportSQLiteQuery): List<NasbListingPojo>
+
+    @RawQuery
+    fun getPastTenceListing(query: SupportSQLiteQuery): List<PastTencePOJO>
+
+
+
+    @RawQuery
+    fun getPresentTenceListing(query: SupportSQLiteQuery): List<PresentTencePOJO>
+
     @RawQuery
     fun getSifaIndexes(query: SupportSQLiteQuery): List<SifaEntityPojo?>?
 

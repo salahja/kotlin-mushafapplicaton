@@ -11,7 +11,7 @@ import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListener
-import com.example.mushafconsolidated.quranrepo.QuranVIewModel
+import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -94,7 +94,7 @@ class SurahSummary : BottomSheetDialogFragment() {
         assert(bundle != null)
         val item_count: Int = bundle!!.getInt("item_count")
         val utils: Utils = Utils(activity)
-        val viewmodel: QuranVIewModel by viewModels()
+        val viewmodel: QuranViewModel by viewModels()
         viewmodel.getSurahSummary(item_count).observe(this) {
             //  val surahSummary: ArrayList<surahsummary> = utils.getSurahSummary(item_count) as ArrayList<surahsummary>
             //   String  ayah = getVersesDetails(item_count, surahSummary);

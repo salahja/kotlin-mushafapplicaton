@@ -22,7 +22,7 @@ import com.example.mushafconsolidated.Entities.BookMarks
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListener
-import com.example.mushafconsolidated.quranrepo.QuranVIewModel
+import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
@@ -184,7 +184,7 @@ class BookMarkCreateFrag : BottomSheetDialogFragment(), OnItemClickListener,
         en.surahname = (suraname)
         //     Utils utils = new Utils(ReadingSurahPartActivity.this);
         //     Utils utils = new Utils(ReadingSurahPartActivity.this);
-        val vm: QuranVIewModel by viewModels()
+        val vm: QuranViewModel by viewModels()
         // val utils = Utils(context)
         // utils.insertBookMark(en)
         vm.Insertbookmark(en)

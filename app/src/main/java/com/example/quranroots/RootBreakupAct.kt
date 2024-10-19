@@ -16,9 +16,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Constant
@@ -54,13 +52,11 @@ import com.example.mushafconsolidated.databinding.ActivityRootBreakupBinding
 import com.example.mushafconsolidated.fragments.QuranMorphologyDetails
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
 import com.example.mushafconsolidated.model.QuranCorpusWbw
-import com.example.mushafconsolidated.quranrepo.QuranVIewModel
-import com.example.utility.CorpusUtilityorig
+import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.example.utility.CorpusUtilityorig.Companion.getSpannableVerses
 import com.example.utility.QuranGrammarApplication
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
-import database.verbrepo.VerbModel
 import org.sj.conjugator.activity.BaseActivity
 import org.sj.conjugator.activity.ConjugatorTabsActivity
 import org.sj.conjugator.interfaces.OnItemClickListener
@@ -102,7 +98,7 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
 
     private var corpusSurahWord: List<QuranCorpusWbw>? = null
     private var allofQuran: List<QuranEntity>? = null
-    private lateinit var mainViewModel: QuranVIewModel
+    private lateinit var mainViewModel: QuranViewModel
     private var isverb = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -156,7 +152,7 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
             root = bundles!!.getString(QURAN_VERB_ROOT)!!
             wordorverb = bundles.getString(WORDDETAILS)!!
         }
-        val mainViewModel: QuranVIewModel by viewModels()
+        val mainViewModel: QuranViewModel by viewModels()
      //    mainViewModel= QuranVIewModel by viewModels()
 
         utils = Utils(this)

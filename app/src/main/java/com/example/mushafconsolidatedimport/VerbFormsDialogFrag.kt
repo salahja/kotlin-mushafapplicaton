@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import androidx.lifecycle.ViewModelProvider
 import com.example.mushafconsolidated.R
-import com.example.mushafconsolidated.quranrepo.QuranVIewModel
+import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -42,7 +42,7 @@ class VerbFormsDialogFrag : BottomSheetDialogFragment() {
         } else {
             form
         }
-        val mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
+        val mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
         val list = mainViewModel.getGramarRulesbyHarf(formstr!!).value
 
         if (list != null) {

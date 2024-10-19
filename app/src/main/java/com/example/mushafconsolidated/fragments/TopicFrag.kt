@@ -32,7 +32,7 @@ import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.model.CorpusAyahWord
 import com.example.mushafconsolidated.model.QuranCorpusWbw
 import com.example.mushafconsolidated.quranrepo.QuranRepository
-import com.example.mushafconsolidated.quranrepo.QuranVIewModel
+import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.example.sentenceanalysis.SentenceGrammarAnalysis
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -66,7 +66,7 @@ class TopicFrag : DialogFragment(), OnItemClickListenerOnLong {
     private var corpusSurahWord: List<CorpusEntity>? = null
     private var newnewadapterlist = LinkedHashMap<Int, ArrayList<CorpusEntity>>()
     private var allofQuran: List<QuranEntity>? = null
-    private lateinit var mainViewModel: QuranVIewModel
+    private lateinit var mainViewModel: QuranViewModel
     private lateinit var newcorpusayahWordArrayList: ArrayList<QuranCorpusWbw>
     private lateinit var arrayofquran: ArrayList<ArrayList<QuranEntity>>
     private lateinit var arrayofadapterlist: ArrayList<LinkedHashMap<Int, ArrayList<CorpusEntity>>>
@@ -91,7 +91,7 @@ class TopicFrag : DialogFragment(), OnItemClickListenerOnLong {
         val bundle: Bundle? = arguments
         // layoutBottomSheet = view.findViewById(R.id.bottom_sheet)
         //  sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet)
-        mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
+        mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
         if (maps.isNotEmpty()) {
 
             val surahname = ""
@@ -132,7 +132,7 @@ class TopicFrag : DialogFragment(), OnItemClickListenerOnLong {
             //  surahname = bundle.extras!!.getString(Constant.SURAH_ARABIC_NAME)!!
             corpusayahWordArrayList = ArrayList()
 
-            mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
+            mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
             val surahArrays = mainViewModel.loadListschapter().value
        /*     allofQuran =
                 mainViewModel.getsurahayahVerses(surah, ayah).value as ArrayList<QuranEntity>?
@@ -141,7 +141,7 @@ class TopicFrag : DialogFragment(), OnItemClickListenerOnLong {
             newnewadapterlist = CorpusUtilityorig.NotcomposeWBWCollection(allofQuran, corpusSurahWord)
             allofQuran?.let { arrayofquran.add(it) }*/
 
-            mainViewModel = ViewModelProvider(this)[QuranVIewModel::class.java]
+            mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
            // allofQuran =                mainViewModel.getsurahayahVerses(surah, ayah).value as ArrayList<QuranEntity>?
             corpusSurahWord = mainViewModel.getCorpusEntityFilterSurahAya(surah, ayah)
 
@@ -454,7 +454,7 @@ class TopicFrag : DialogFragment(), OnItemClickListenerOnLong {
         en.surahname = surahname
         //     Utils utils = new Utils(ReadingSurahPartActivity.this);
         //  val utils = Utils(this)
-        val vm: QuranVIewModel by viewModels()
+        val vm: QuranViewModel by viewModels()
         vm.Insertbookmark(en)
         // utils.insertBookMark(en)
         val snackbar = Snackbar
