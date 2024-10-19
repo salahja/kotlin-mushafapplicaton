@@ -944,7 +944,7 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
             futureTenceNegationSentence= emptyList()
             presentTenceNegationSentence= emptyList()
             pastTenceNegationSentence= emptyList()
-            if(harf == "Present Tence Negation") {
+            if(harf == "Past Tence Negation") {
                 pastTenceNegationSentence = util.getPastnegaionListing(chapterno)
                 for (ac in pastTenceNegationSentence) {
                     ac.spannableVerse = SpannableString(ac.qurantext)
@@ -1064,9 +1064,9 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
                     listener
 
                 )
-                presentTenceNegationFlowAdapter.addContext(this@PhrasesGrammarAct)
+                pastTenceNegationFlowAdapter.addContext(this@PhrasesGrammarAct)
                 parentRecyclerView.setHasFixedSize(true)
-                parentRecyclerView.adapter = presentTenceNegationFlowAdapter
+                parentRecyclerView.adapter = pastTenceNegationFlowAdapter
                 //   flowAyahWordAdapter.notifyDataSetChanged()
                 parentRecyclerView.post { parentRecyclerView.scrollToPosition(verseNo) }
             } else
