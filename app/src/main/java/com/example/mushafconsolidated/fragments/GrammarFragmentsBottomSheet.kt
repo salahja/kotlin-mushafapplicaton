@@ -68,6 +68,7 @@ import com.example.mushafconsolidated.model.Word
 import com.example.mushafconsolidated.quranrepo.QuranRepository
 import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.example.utility.CorpusUtilityorig
+import com.example.utility.CorpusUtilityorig.Companion
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.Executors
@@ -254,10 +255,10 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
 
         expandableListDetail["Verse"] = verse
         expandableListDetail["Translation"] = translation
-        expandableListDetail["Verb sentence-Past Tence Negation- Stences(لَا/مَا)"] = PastTenceNegationArray
-        expandableListDetail["Verb sentence-Present Tence Negation- Stences(لَمْ/مَا)"] = presentTenceNegationArray
+        expandableListDetail["Verb sentence-Past Tence Negation- Stences(لَمْ/مَا))"] = PastTenceNegationArray
+        expandableListDetail["Verb sentence-Present Tence Negation- Stences(مَا/لَا)"] = presentTenceNegationArray
         expandableListDetail["Verb sentence-Future Tence Negation- Stences(لَّن)"] = futureTenceNegationArray
-        expandableListDetail["Verb sentence-Future Tence Negation- Stences(لَّن)"] = futureTenceNegationArray
+        expandableListDetail["Exceptive Sentences with (إلاّ-(أداة الاستْثناء)) & Restriction/Exclusive (الحَصْر) "] = InMaIllaNegationArray
         expandableListDetail["Conditional/جملة شرطية\""] = shartarray
         expandableListDetail["Accusative/ "] = harfnasbarray
         expandableListDetail["Verb kāna/كان واخواتها"] = kanaarray
@@ -276,16 +277,13 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
             utils.getInMaIllaNegationFilterSurahAyah(chapterid, ayanumber)
         if (mudhafSurahAyah != null) {
             for (mudhafEntity in mudhafSurahAyah) {
-                val colorSpan = if (CorpusUtilityorig.dark) {
-                    Constant.mudhafspanDarks
-                } else {
-                    Constant.mudhafspanLight
-                }
+
+                val negationForegroundColorSpan = if (CorpusUtilityorig.dark) Constant.GOLD else Constant.FORESTGREEN
 
                 val quranverses: String = quran!![0].qurantext
                 val spannable = SpannableString(quranverses)
                 spannable.setSpan(
-                    colorSpan,
+                    negationForegroundColorSpan,
                     mudhafEntity.startindex,
                     mudhafEntity.endindex,
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
