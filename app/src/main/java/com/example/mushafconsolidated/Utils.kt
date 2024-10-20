@@ -9,6 +9,7 @@ import com.example.mushafconsolidated.DAO.BookMarkDao
 import com.example.mushafconsolidated.DAO.BookMarksPojo
 import com.example.mushafconsolidated.Entities.BookMarks
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
+import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.CorpusExpandWbwPOJO
 import com.example.mushafconsolidated.Entities.CorpusNounWbwOccurance
 import com.example.mushafconsolidated.Entities.CorpusVerbWbwOccurance
@@ -92,6 +93,10 @@ class Utils {
 
     fun getQuranCorpusWbwbysurah(id: Int): List<QuranCorpusWbw> {
         return database.QuranDao().getQuranCorpusWbwbysurah(id)
+    }
+
+    fun getexp(exp: String,rslt:String): List<CorpusEntity> {
+        return database.getCorpusExpandDao().getExplistbytag(exp,rslt)
     }
 
     fun getQuranCorpusWord(id: Int, aid: Int, wid: Int): List<QuranCorpusWbw> {
