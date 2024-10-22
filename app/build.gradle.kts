@@ -78,6 +78,7 @@ android {
 
 dependencies {
     //implementation("androidx.paging:paging-runtime-ktx:3.x.x")
+   // implementation ("com.thoughtbot:expandablerecyclerview:1.4")
     implementation("androidx.paging:paging-common-android:3.3.2")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.7.2")
     implementation(platform("androidx.compose:compose-bom:2024.09.02"))

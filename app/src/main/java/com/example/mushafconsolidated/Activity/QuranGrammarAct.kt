@@ -38,7 +38,6 @@ import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
-import androidx.compose.foundation.layout.add
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
@@ -77,6 +76,7 @@ import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
 import com.example.mushafconsolidated.fragments.FlowAyahWordAdapter
 import com.example.mushafconsolidated.Adapters.FlowAyahWordAdapterNoMafoolat
 import com.example.mushafconsolidated.Entities.CorpusEntity
+import com.example.mushafconsolidated.Entities.InMaIllaNegationEnt
 import com.example.mushafconsolidated.Entities.SurahHeader
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.fragments.GrammerFragmentsBottomSheet
@@ -89,7 +89,6 @@ import com.example.mushafconsolidatedimport.ParticleColorScheme
 import com.example.sentenceanalysis.SentenceGrammarAnalysis
 import com.example.utility.CorpusUtilityorig
 import com.example.utility.CorpusUtilityorig.Companion.findWordOccurrencesArabic
-import com.example.utility.QuranGrammarApplication
 import com.example.utility.QuranGrammarApplication.Companion.context
 import com.example.utility.ScreenshotUtils
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -117,10 +116,8 @@ import java.io.File
 import javax.inject.Inject
 
 import com.google.gson.Gson
-import com.quiz.ArabicVerbQuizActNew
 import java.io.OutputStreamWriter
 import kotlin.collections.List
-import kotlin.math.exp
 import kotlin.collections.List as CollectionsList
 
 //import com.example.mushafconsolidated.Entities.JoinVersesTranslationDataTranslation;
@@ -310,8 +307,9 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         val utils = Utils(this)
         //  extractLaNafiyaJinsone()
         // extractLaNafiya()
-        //extractExpNegationSentences()
-
+     //   extractExpNegationSentences()
+       // extractNegativeSentences()
+    //    mainLoopFromIndexExtraction()
 
 
         supportFragmentManager.commit {
@@ -321,6 +319,89 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             setCustomAnimations(R.anim.slide_down, R.anim.slide_up)
             supportFragmentManager.saveBackStack("replacement")
         }
+    }
+
+
+    fun extractSentencesFromIndexdata(
+        corpus: List<CorpusEntity>,
+        info: InMaIllaNegationEnt,
+        quranText: String
+
+    ): List<String> {
+        val result = mutableListOf<String>()
+
+
+            // Extract Arabic sentence based on startindex and endindex
+            val extractedSentence = if (info.startindex >= 0 && info.endindex <= quranText.length) {
+                quranText.substring(info.startindex, info.endindex).trim()
+            } else {
+                "Invalid index range"
+            }
+
+            // Extract translation using wordfrom and wordnoto
+            val translationBuilder = StringBuilder()
+            for (entry in corpus) {
+                if (entry.wordno in info.wordfrom..info.wordnoto) {
+                    // Assuming we're extracting the English translation (you can replace 'en' with another language field if needed)
+                    translationBuilder.append("${entry.en} ").append(" ")
+                }
+            }
+            val extractedTranslation = translationBuilder.toString().trim()
+
+            // Format the result string
+            val dataString = "${info.surahid}|${info.ayahid}|${info.wordfrom}|${info.wordnoto}|${info.startindex}|${info.endindex}|$extractedSentence|$extractedTranslation"
+            result.add(dataString)
+
+
+        return result
+    }
+
+    private fun mainLoopFromIndexExtraction() {
+        mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
+
+        val allLamNegativeSenteces = ArrayList<List<String>>()
+
+
+
+          //  val corpus = mainViewModel.getCorpusEntityFilterSurah(1)
+         //   val quran = mainViewModel.getquranbySUrah(i)
+        val utils=Utils(this)
+      val wordino=  utils.getExpInMaIllaNegationall()
+          //   val wordino=  utils.getfutureall()
+     //  val wordino= utils.getpresentall()
+         //   val wordino=mainViewModel.getLamMudharyNegationAll()
+            for (s in wordino.indices) {
+                 val ss=wordino[s]
+                val corpusEntity = mainViewModel.getCorpusEntityFilterSurahAya(
+                    ss.surahid, ss.ayahid)
+                 as ArrayList<CorpusEntity>
+                val quran = mainViewModel.getsurahayahVerses(ss.surahid,ss.ayahid)
+
+
+                  val lamNegationDataList =              extractSentencesFromIndexdata(corpusEntity,ss, quran.value!![0].qurantext)
+               // val lamNegationDataList=         maaPastTenceNegation(corpusEntity, quran.value!![s].qurantext)
+                //   val lamNegationDataList=         setPresentTenceNegation(corpusEntity, quran.value!![s].qurantext)
+                //    val lamNegationDataList=         setMaaNegationPresent(corpusEntity, quran.value!![s].qurantext)
+                // val lamNegationDataList=         setLunNegation(corpusEntity, quran.value!![s].qurantext)
+                //    val lamNegationDataList=         setLaaNegationPresent(corpusEntity, quran.value!![s].qurantext)
+
+                // val lamNegationDataList=         setJumlaIsmiyaNegationMaaLaysa(corpusEntity, quran.value!![s].qurantext)
+                // val lamNegationDataList =                extractInMaIllaSentences(corpusEntity, quran.value!![s].qurantext)
+
+
+
+
+
+                if (lamNegationDataList.isNotEmpty()) {
+                    allLamNegativeSenteces.add(lamNegationDataList)
+                    //  allLamNegativeSenteces.add(ExtractedSentence)
+                }
+                println(quran.value!![0].ayah)
+            }
+
+
+        val fileName = "v2inilla.csv"
+        writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
     }
     private fun extractExpNegationSentences() {
         mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
@@ -337,10 +418,10 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         val quran=    mainViewModel.getsurahayahVerseslist(exp.surah,exp.ayah)
 
 
-            val lamNegationDataList =                extractInMaIllaSentences(corpusEntity, quran.value!!.get(0).qurantext)
+           // val lamNegationDataList =                extractInMaIllaPositiveSentences(corpusEntity, quran.value!!.get(0).qurantext)
 
 
-
+            val lamNegationDataList =                extractInMaIllaNegativeSentences(corpusEntity, quran.value!!.get(0).qurantext)
 
 
             if (lamNegationDataList.isNotEmpty()) {
@@ -351,7 +432,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         }
 
 
-        val fileName = "newlunnegation.csv"
+        val fileName = "illanegativesentence.csv"
         writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
     }
     private fun extractNegativeSentences() {
@@ -370,12 +451,12 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                 ) as ArrayList<CorpusEntity>
 
 
-                //     val lamNegationDataList =      setLamNegation(corpusEntity, quran.value!![s].qurantext)
-                //   val lamNegationDataList=         maaPastTenceNegation(corpusEntity, quran.value!![s].qurantext)
+                   // val lamNegationDataList =      setLamNegation(corpusEntity, quran.value!![s].qurantext)
+                    val lamNegationDataList=         maaPastTenceNegation(corpusEntity, quran.value!![s].qurantext)
                 //   val lamNegationDataList=         setPresentTenceNegation(corpusEntity, quran.value!![s].qurantext)
-                //   val lamNegationDataList=         setLamNegationPresent(corpusEntity, quran.value!![s].qurantext)
-                val lamNegationDataList=         setLunNegation(corpusEntity, quran.value!![s].qurantext)
-                //   val lamNegationDataList=         setLaaNegationPresent(corpusEntity, quran.value!![s].qurantext)
+           //    val lamNegationDataList=         setMaaNegationPresent(corpusEntity, quran.value!![s].qurantext)
+               // val lamNegationDataList=         setLunNegation(corpusEntity, quran.value!![s].qurantext)
+              //    val lamNegationDataList=         setLaaNegationPresent(corpusEntity, quran.value!![s].qurantext)
 
                 // val lamNegationDataList=         setJumlaIsmiyaNegationMaaLaysa(corpusEntity, quran.value!![s].qurantext)
                // val lamNegationDataList =                extractInMaIllaSentences(corpusEntity, quran.value!![s].qurantext)
@@ -392,7 +473,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             }
 
         }
-        val fileName = "newlunnegation.csv"
+        val fileName = "MAAPASTTENCENEGATION.csv"
         writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
     }
 
@@ -544,10 +625,10 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                             phraseEndIndex,
                             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                         )*/
-
+                   val sentece=spannableVerse.subSequence(startIndex,phraseEndIndex)
                     // Add data to the list
                     val dataString =
-                        "${entry.surah}|${entry.ayah}|${entry.wordno}| ${nextword}|$startIndex|$phraseEndIndex|$lamcombination"
+                        "${entry.surah}|${entry.ayah}|${entry.wordno}| ${nextword}|$startIndex|$phraseEndIndex|$sentece"
                     negativeSentences.add(dataString)
                 }
             }
@@ -556,7 +637,168 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         return negativeSentences // Return the list of data strings
     }
 
-    fun extractInMaIllaSentences(corpus: List<CorpusEntity>, spannableVerse: String): List<String> {
+
+    fun extractInMaIllaPositiveSentences(corpus: List<CorpusEntity>, spannableVerse: String): List<String> {
+        val extractedSentences = mutableListOf<String>()
+        val uniqueSentences = mutableSetOf<String>() // Set to track unique sentences
+
+        for (i in corpus.indices) {
+            val entry = corpus[i]
+
+            // Check for "إِلَّا" with tagone == "EXP" or "RES"
+            if ((entry.tagone == "EXP" || entry.tagone == "RES") && (entry.araone == "إِلَّا" || entry.araone == "إِلَّآ")) {
+                var negationFound = false
+                var negationStartIndex = -1
+
+                // Loop backwards to find if any negation condition is present
+                for (j in i - 1 downTo 0) {
+                    val previousEntry = corpus[j]
+
+                    // Check if any negation tag or word is found, and break if true (skip extraction)
+                    if ((previousEntry.tagtwo == "NEG" && (previousEntry.aratwo == "إِنْ" || previousEntry.aratwo == "مَا" || previousEntry.aratwo == "مَآ" || previousEntry.aratwo == "مَّا")) ||
+                        (previousEntry.tagone == "NEG" && (previousEntry.araone == "إِنْ" || previousEntry.araone == "مَا" || previousEntry.araone == "مَآ" || previousEntry.araone == "مَّا")) ||
+                        (previousEntry.tagtwo == "NEG" && (previousEntry.aratwo == "لَآ" || previousEntry.aratwo == "لَا" || previousEntry.aratwo == "لَّا")) ||
+                        (previousEntry.tagone == "NEG" && (previousEntry.araone == "لَآ" || previousEntry.araone == "لَا" || previousEntry.araone == "لَّا")) ||
+                        (previousEntry.tagtwo == "NEG" && (previousEntry.aratwo == "لَنْ" || previousEntry.aratwo == "لَن" || previousEntry.aratwo == "لَّن")) ||
+                        (previousEntry.tagone == "NEG" && (previousEntry.araone == "لَنْ" || previousEntry.araone == "لَن" || previousEntry.araone == "لَّن"))
+                    ) {
+                        // Negation condition found, skip this case
+                        negationFound = true
+                        break
+                    }
+                }
+
+                // If no negation was found in the previous entries, proceed with extraction
+                if (!negationFound) {
+                    val sentenceBuilder = StringBuilder()
+
+                    // Capture 3 words before "إِلَّا"
+                    val startWordNo = corpus[maxOf(0, i - 3)].wordno // Get up to 3 words before "إِلَّا"
+                    for (k in maxOf(0, i - 3) until i) {
+                        val word = "${corpus[k].araone}${corpus[k].aratwo}${corpus[k].arathree}${corpus[k].arafour}${corpus[k].arafive}".trim()
+                        sentenceBuilder.append(word).append(" ")
+                    }
+
+                    // Capture "إِلَّا" and 2 words after "إِلَّا"
+                    var endWordNo = startWordNo
+                    for (k in i until minOf(i + 3, corpus.size)) { // i is where "إِلَّا" is, capture 2 more after it
+                        val word = "${corpus[k].araone}${corpus[k].aratwo}${corpus[k].arathree}${corpus[k].arafour}${corpus[k].arafive}".trim()
+                        sentenceBuilder.append(word).append(" ")
+
+                        endWordNo = corpus[k].wordno // Update the end word number
+                    }
+
+                    val fullSentenceStr = sentenceBuilder.toString().trim()
+
+                    // Now find the combined sentence in the spannableVerse
+                    val sentenceStartIndex = spannableVerse.indexOf(fullSentenceStr)
+                    val sentenceEndIndex = if (sentenceStartIndex != -1) sentenceStartIndex + fullSentenceStr.length else -1
+
+                    // Check if this sentence is already added to avoid duplicates
+                    if (sentenceStartIndex != -1 && !uniqueSentences.contains(fullSentenceStr)) {
+                        val dataString = "${entry.surah}|${entry.ayah}|$startWordNo|$endWordNo|$sentenceStartIndex|$sentenceEndIndex|$fullSentenceStr"
+                        println("Searching for: $fullSentenceStr")
+
+                        // Add the sentence to the set for uniqueness
+                        uniqueSentences.add(fullSentenceStr)
+
+                        // Add the unique sentence with word numbers and string indices
+                        extractedSentences.add(dataString)
+                    }
+                }
+            }
+        }
+
+        return extractedSentences
+    }
+
+
+    fun extractInMaIllaPositiveSentencesv1(corpus: List<CorpusEntity>, spannableVerse: String): List<String> {
+        val extractedSentences = mutableListOf<String>()
+        val uniqueSentences = mutableSetOf<String>() // Set to track unique sentences
+        var eligibleNegationCount = 0 // To track valid "إِن" occurrences
+
+        for (i in corpus.indices) {
+            val entry = corpus[i]
+
+            if (entry.surah == 74 && entry.ayah == 31) {
+                println(spannableVerse)
+            }
+
+            // Check for "إِلَّا" with tagone == "EXP" or "RES"
+            if ((entry.tagone == "EXP" || entry.tagone == "RES") && (entry.araone == "إِلَّا" || entry.araone == "إِلَّآ")) {
+                var negationFound = false
+                var negationStartIndex = -1
+
+                // Loop backwards to find valid words before "إِلَّا" where the condition is not met
+                for (j in i - 1 downTo 0) {
+                    val previousEntry = corpus[j]
+
+                    // Continue if the negation conditions are NOT met
+                    if (!((previousEntry.tagtwo == "NEG" && (previousEntry.aratwo == "إِنْ" || previousEntry.aratwo == "مَا" || previousEntry.aratwo == "مَآ" || previousEntry.aratwo == "مَّا")) ||
+                                (previousEntry.tagone == "NEG" && (previousEntry.araone == "إِنْ" || previousEntry.araone == "مَا" || previousEntry.araone == "مَآ" || previousEntry.araone == "مَّا")) ||
+                                (previousEntry.tagtwo == "NEG" && (previousEntry.aratwo == "لَآ" || previousEntry.aratwo == "لَا" || previousEntry.aratwo == "لَّا")) ||
+                                (previousEntry.tagone == "NEG" && (previousEntry.araone == "لَآ" || previousEntry.araone == "لَا" || previousEntry.araone == "لَّا")) ||
+                                (previousEntry.tagtwo == "NEG" && (previousEntry.aratwo == "لَنْ" || previousEntry.aratwo == "لَن" || previousEntry.aratwo == "لَّن")) ||
+                                (previousEntry.tagone == "NEG" && (previousEntry.araone == "لَنْ" || previousEntry.araone == "لَن" || previousEntry.araone == "لَّن")))
+                    ) {
+                        eligibleNegationCount += 1 // Increment valid occurrences
+
+                        if (eligibleNegationCount >= 1) { // Allow extraction
+                            negationFound = true
+                            negationStartIndex = j // Capture the index where this valid negation was found
+                            break
+                        }
+                    }
+                }
+
+                // If a valid negation was not found in the excluded condition
+                if (negationFound && negationStartIndex != -1) {
+                    val sentenceBuilder = StringBuilder()
+
+                    // Capture 3 words before "إِلَّا"
+                    val startWordNo = corpus[maxOf(0, negationStartIndex - 2)].wordno // Go up to 3 words back
+                    for (k in maxOf(0, negationStartIndex - 2)..negationStartIndex) {
+                        val word = "${corpus[k].araone}${corpus[k].aratwo}${corpus[k].arathree}${corpus[k].arafour}${corpus[k].arafive}".trim()
+                        sentenceBuilder.append(word).append(" ")
+                    }
+
+                    // Capture "إِلَّا" and 2 words after "إِلَّا"
+                    var endWordNo = startWordNo
+                    for (k in i until minOf(i + 3, corpus.size)) { // "i" is where "إِلَّا" is, capture 2 more after it
+                        val word = "${corpus[k].araone}${corpus[k].aratwo}${corpus[k].arathree}${corpus[k].arafour}${corpus[k].arafive}".trim()
+                        sentenceBuilder.append(word).append(" ")
+
+                        endWordNo = corpus[k].wordno // Update the end word number
+                    }
+
+                    val fullSentenceStr = sentenceBuilder.toString().trim()
+
+                    // Now find the combined sentence in the spannableVerse
+                    val sentenceStartIndex = spannableVerse.indexOf(fullSentenceStr)
+                    val sentenceEndIndex = if (sentenceStartIndex != -1) sentenceStartIndex + fullSentenceStr.length else -1
+
+                    // Check if this sentence is already added to avoid duplicates
+                    if (sentenceStartIndex != -1 && !uniqueSentences.contains(fullSentenceStr)) {
+                        // Remove `val harf = "إِنْ/إِلَّ/"` as per your request
+
+                        val dataString = "${entry.surah}|${entry.ayah}|$startWordNo|$endWordNo|$sentenceStartIndex|$sentenceEndIndex|$fullSentenceStr"
+                        println("Searching for: $fullSentenceStr")
+
+                        // Add the sentence to the set for uniqueness
+                        uniqueSentences.add(fullSentenceStr)
+
+                        // Add the unique sentence with word numbers and string indices
+                        extractedSentences.add(dataString)
+                    }
+                }
+            }
+        }
+
+        return extractedSentences
+    }
+
+    fun extractInMaIllaNegativeSentences(corpus: List<CorpusEntity>, spannableVerse: String): List<String> {
         val extractedSentences = mutableListOf<String>()
         val uniqueSentences = mutableSetOf<String>() // Set to track unique sentences
         var eligibleNegationCount = 0 // To track valid "إِن" occurrences
@@ -571,16 +813,19 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             if ((entry.tagone == "EXP" || entry.tagone == "RES") && (entry.araone == "إِلَّا" || entry.araone == "إِلَّآ")) {
                 var negationFound = false
                 var startIndex = -1
-
+//   listOf("لَّن", "لَن", "لَنْ", "وَلَن", "أَلَّن", "فَلَن", "وَلَنْ", "فَلَنْ")
                 // Loop backwards to find valid "إِن" before "إِلَّا"
                 for (j in i - 1 downTo 0) {
                     val previousEntry = corpus[j]
 
                     // Check if "إِن" or "مَا" qualifies as a valid negation for extraction
-                    if ((previousEntry.tagtwo == "NEG" && (previousEntry.aratwo == "إِنْ" || previousEntry.aratwo == "مَا")) ||
-                        (previousEntry.tagone == "NEG" && (previousEntry.araone == "إِنْ" || previousEntry.araone == "مَا"))||
-                         (previousEntry.tagone == "NEG" && (previousEntry.araone == "لَا" || previousEntry.araone == "لَا"))||
-                             (previousEntry.tagone == "NEG" && (previousEntry.araone == "لَّا" || previousEntry.araone == "لَّا"))
+                    if ((previousEntry.tagtwo == "NEG" && (previousEntry.aratwo == "إِنْ" || previousEntry.aratwo == "مَا")|| previousEntry.aratwo=="مَآ" || previousEntry.aratwo=="مَّا") ||
+                        (previousEntry.tagone == "NEG" && (previousEntry.araone == "إِنْ" || previousEntry.araone == "مَا" || previousEntry.araone=="مَآ"|| previousEntry.araone=="مَّا"))||
+                        (previousEntry.tagtwo == "NEG" && (previousEntry.aratwo == "لَآ" || previousEntry.aratwo == "لَا" || previousEntry.aratwo=="لَّا"))||
+                        (previousEntry.tagone == "NEG" && (previousEntry.araone == "لَآ" || previousEntry.araone == "لَا" || previousEntry.araone=="لَّا"))||
+                         (previousEntry.tagtwo == "NEG" && (previousEntry.aratwo == "لَنْ" || previousEntry.aratwo == "لَن" ||previousEntry.aratwo=="لَّن"))||
+                        (previousEntry.tagone == "NEG" && (previousEntry.araone == "لَنْ" || previousEntry.araone == "لَن" || previousEntry.araone=="لَّن"))
+
 
                         ) {
 
@@ -619,8 +864,9 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
                     // Check if this sentence is already added to avoid duplicates
                     if (sentenceStartIndex != -1 && !uniqueSentences.contains(fullSentenceStr)) {
+                      val extracted=spannableVerse.subSequence(sentenceStartIndex,sentenceEndIndex)
                         val dataString =
-                            "${entry.surah}|${entry.ayah}|${startWordNo}| ${endWordNo}|$sentenceStartIndex|$sentenceEndIndex"
+                            "${entry.surah}|${entry.ayah}|${startWordNo}| ${endWordNo}|$sentenceStartIndex|$sentenceEndIndex|$extracted|$spannableVerse"
                         println("Searching for: $fullSentenceStr")
 
                         // Add the sentence to the set for uniqueness
@@ -637,474 +883,6 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     }
 
 
-    fun extractInMaIllaSentencesv9(corpus: List<CorpusEntity>, spannableVerse: String): List<String> {
-   val extractedSentences = mutableListOf<String>()
-        var eligibleNegationCount = 0 // To track valid "إِن" occurrences
-
-        for (i in corpus.indices) {
-            val entry = corpus[i]
-            if(entry.surah==74 && entry.ayah==31){
-                println(spannableVerse)
-            }
-
-            // Check for "إِلَّا" with tagone == "EXP" or "RES"
-            if ((entry.tagone == "EXP" || entry.tagone == "RES") && (entry.araone == "إِلَّا" || entry.araone == "إِلَّآ")) {
-                var negationFound = false
-                var startIndex = -1
-
-                // Loop backwards to find valid "إِن" before "إِلَّا"
-                for (j in i - 1 downTo 0) {
-                    val previousEntry = corpus[j]
-
-                    // Check if "إِن" qualifies as a valid negation for extraction
-                    if ((previousEntry.tagtwo == "NEG" && previousEntry.aratwo == "إِن") ||
-                        (previousEntry.tagone == "NEG" && previousEntry.araone == "إِن") ||
-                        (previousEntry.tagtwo == "NEG" && previousEntry.aratwo == "مَا") ||
-                        (previousEntry.tagone == "NEG" && previousEntry.araone == "مَا")) {
-                        eligibleNegationCount += 1 // Increment the valid "إِن" occurrence count
-
-                        // Allow extraction for all valid occurrences (not just second or third)
-                        if (eligibleNegationCount >= 1) { // Change condition as per the extraction logic
-                            negationFound = true
-                            startIndex = j // Capture the index where this valid negation was found
-                            break
-                        }
-                    }
-                }
-
-                // If a valid negation "إِن" is found, start capturing words from that point
-                if (negationFound && startIndex != -1) {
-                    val sb = StringBuilder()
-                    val startWordNo = corpus[startIndex].wordno // Capture starting word number
-                    var endWordNo = startWordNo
-
-                    // Build the full sentence to search for in the spannableVerse
-                    val fullSentence = StringBuilder()
-                    for (k in startIndex until minOf(i + 2, corpus.size)) { // Capture up to 3 words after "إِلَّا"
-                        val completeWord = "${corpus[k].araone}${corpus[k].aratwo}${corpus[k].arathree}${corpus[k].arafour}${corpus[k].arafive}".trim()
-                        fullSentence.append(completeWord).append(" ")
-
-                        // Update the end word number as we progress
-                        endWordNo = corpus[k].wordno
-                    }
-
-                    val fullSentenceStr = fullSentence.toString().trim()
-
-                    // Now find the combined sentence in the spannableVerse
-                    val sentenceStartIndex = spannableVerse.indexOf(fullSentenceStr)
-                    val sentenceEndIndex = if (sentenceStartIndex != -1) sentenceStartIndex + fullSentenceStr.length else -1
-
-                    // Add the extracted sentence with word numbers and string indices
-                    if (sentenceStartIndex != -1) {
-                        val dataString =
-                            "${entry.surah}|${entry.ayah}|${startWordNo}| ${endWordNo}|$sentenceStartIndex|$sentenceEndIndex"
-                        // Add the extracted sentence with word numbers and string indices
-                        //  extractedSentences.add(Triple(sb.toString().trim(), Pair(startWordNo, endWordNo), Pair(sentenceStartIndex, sentenceEndIndex)))
-                        println("Searching for: $fullSentenceStr")
-                        extractedSentences.add(dataString)
-                    }
-                }
-            }
-        }
-
-        return extractedSentences
-    }
-
-    fun extractInMaIllaSentencesok(corpus: List<CorpusEntity>, spannableVerse: String): List<String> {
-        val extractedSentences = mutableListOf<String>()
-        var eligibleNegationCount = 0 // To track valid "إِن" occurrences
-
-        for (i in corpus.indices) {
-            val entry = corpus[i]
-
-            // Check for "إِلَّا" with tagone == "EXP" or "RES"
-            if ((entry.tagone == "EXP" || entry.tagone == "RES") && (entry.araone == "إِلَّا" || entry.araone == "إِلَّآ")) {
-                var negationFound = false
-                var startIndex = -1
-
-                // Loop backwards to find valid "إِن" before "إِلَّا"
-                for (j in i - 1 downTo 0) {
-                    val previousEntry = corpus[j]
-
-                    // Check if "إِن" qualifies as a valid negation for extraction
-                    if ((previousEntry.tagtwo == "NEG" && previousEntry.aratwo == "إِن") ||
-                        (previousEntry.tagone == "NEG" && previousEntry.araone == "إِن") ||
-                        (previousEntry.tagtwo == "NEG" && previousEntry.aratwo == "مَا") ||
-                        (previousEntry.tagone == "NEG" && previousEntry.araone == "مَا")) {
-                        eligibleNegationCount += 1 // Increment the valid "إِن" occurrence count
-
-                        // If it's the 2nd or 3rd occurrence (or any qualifying occurrence), capture it
-                        if (eligibleNegationCount >= 2) {
-                            negationFound = true
-                            startIndex = j // Capture the index where this valid negation was found
-                            break
-                        }
-                    }
-                }
-
-                // If a valid negation "إِن" is found, start capturing words from that point
-                if (negationFound && startIndex != -1) {
-                    val sb = StringBuilder()
-                    val startWordNo = corpus[startIndex].wordno // Capture starting word number
-                    var endWordNo = startWordNo
-
-                    // Build the full sentence to search for
-                    val fullSentence = StringBuilder()
-                    for (k in startIndex until minOf(i + 2, corpus.size)) { // Capture up to 3 words after "إِلَّا"
-                        val completeWord = "${corpus[k].araone}${corpus[k].aratwo}${corpus[k].arathree}${corpus[k].arafour}${corpus[k].arafive}".trim()
-                        fullSentence.append(completeWord).append(" ")
-
-                        // Update the end word number as we progress
-                        endWordNo = corpus[k].wordno
-                    }
-
-                    val fullSentenceStr = fullSentence.toString().trim()
-
-                    // Now find the combined sentence in the spannableVerse
-                    val sentenceStartIndex = spannableVerse.indexOf(fullSentenceStr)
-                    val sentenceEndIndex = if (sentenceStartIndex != -1) sentenceStartIndex + fullSentenceStr.length else -1
-
-                    // Add the extracted sentence with word numbers and string indices
-                    if (sentenceStartIndex != -1) {
-                        val dataString =
-                            "${entry.surah}|${entry.ayah}|${startWordNo}| ${endWordNo}|$sentenceStartIndex|$sentenceEndIndex"
-                        // Add the extracted sentence with word numbers and string indices
-                        //  extractedSentences.add(Triple(sb.toString().trim(), Pair(startWordNo, endWordNo), Pair(sentenceStartIndex, sentenceEndIndex)))
-
-                        extractedSentences.add(dataString)
-                    }
-                }
-            }
-        }
-
-        return extractedSentences
-    }
-
-    fun extractInMaIllaSentencesv8(corpus: List<CorpusEntity>, spannableVerse: String): List<String> {
-        val extractedSentences = mutableListOf<String>()
-        var eligibleNegationCount = 0 // To keep track of valid "إِن" occurrences
-
-        for (i in corpus.indices) {
-            val entry = corpus[i]
-
-            // Check for "إِلَّا" with tagone == "EXP" or "RES"
-            if ((entry.tagone == "EXP" || entry.tagone == "RES") && (entry.araone == "إِلَّا" || entry.araone == "إِلَّآ")) {
-                var negationFound = false
-                var startIndex = -1
-
-                // Loop backwards to find valid "إِن" before "إِلَّا"
-                for (j in i - 1 downTo 0) {
-                    val previousEntry = corpus[j]
-
-                    // Check if "إِن" qualifies as a valid negation for extraction
-                    if ((previousEntry.tagtwo == "NEG" && previousEntry.aratwo == "إِن") ||
-                        (previousEntry.tagone == "NEG" && previousEntry.araone == "إِن")) {
-                        eligibleNegationCount += 1 // Increment the valid "إِن" occurrence count
-
-                        // If it's the 2nd or 3rd occurrence (or any qualifying occurrence), capture it
-                        if (eligibleNegationCount >= 2) {
-                            negationFound = true
-                            startIndex = j // Capture the index where this valid negation was found
-                            break
-                        }
-                    }
-                }
-
-                // If a qualifying "إِن" negation was found, start capturing words from that point
-                if (negationFound && startIndex != -1) {
-                    val sb = StringBuilder()
-                    val startWordNo = corpus[startIndex].wordno // Capture starting word number
-
-                    var endWordNo = startWordNo
-                    var sentenceStartIndex = -1 // Initialize start index
-                    var sentenceEndIndex = -1 // Initialize end index
-
-                    // Search from a specific point in the verse
-                    var currentSearchStartIndex = 0
-
-                    // Start capturing from the negation found at startIndex and continue after "إِلَّا"
-                    for (k in startIndex until minOf(i + 2, corpus.size)) { // Capture up to 3 words after "إِلَّا"
-                        val completeWord = "${corpus[k].araone}${corpus[k].aratwo}${corpus[k].arathree}${corpus[k].arafour}${corpus[k].arafive}".trim()
-
-                        // Append the full word to the sentence string builder
-                        sb.append(completeWord).append(" ")
-
-                        // Get the correct start index of this word within the spannableVerse string
-                        sentenceStartIndex = spannableVerse.indexOf(completeWord, currentSearchStartIndex)
-                        if (sentenceStartIndex != -1) {
-                            // Adjust the search starting point for the next search
-                            currentSearchStartIndex = sentenceStartIndex + completeWord.length
-                        }
-
-                        endWordNo = corpus[k].wordno // Update the ending word number
-                        sentenceEndIndex = currentSearchStartIndex
-                    }
-
-                    // Add the extracted sentence with word numbers and string indices
-                    if (sentenceStartIndex != -1) {
-                        val dataString =
-                            "${entry.surah}|${entry.ayah}|${startWordNo}| ${endWordNo}|$sentenceStartIndex|$sentenceEndIndex"
-                        // Add the extracted sentence with word numbers and string indices
-                        //  extractedSentences.add(Triple(sb.toString().trim(), Pair(startWordNo, endWordNo), Pair(sentenceStartIndex, sentenceEndIndex)))
-
-                        extractedSentences.add(dataString)
-                    }
-                }
-            }
-        }
-
-        return extractedSentences
-    }
-
-    fun extractInMaIllaSentencesv5(corpus: List<CorpusEntity>, spannableVerse: String): List<String> {
-        val extractedSentences = mutableListOf<String>()
-        var eligibleNegationCount = 0 // To keep track of valid "إِن" occurrences
-
-        for (i in corpus.indices) {
-            val entry = corpus[i]
-
-            // Check for "إِلَّا" with tagone == "EXP" or "RES"
-            if ((entry.tagone == "EXP" || entry.tagone == "RES") && (entry.araone == "إِلَّا" || entry.araone == "إِلَّآ")) {
-                var negationFound = false
-                var startIndex = -1
-
-                // Loop backwards to find valid "إِن" before "إِلَّا"
-                for (j in i - 1 downTo 0) {
-                    val previousEntry = corpus[j]
-
-                    // Check if "إِن" qualifies as a valid negation for extraction
-                    if ((previousEntry.tagtwo == "NEG" && previousEntry.aratwo == "إِن") ||
-                        (previousEntry.tagone == "NEG" && previousEntry.araone == "إِن")) {
-                        eligibleNegationCount += 1 // Increment the valid "إِن" occurrence count
-
-                        // If it's the 2nd or 3rd occurrence (or any qualifying occurrence), capture it
-                        if (eligibleNegationCount >= 2) {
-                            negationFound = true
-                            startIndex = j // Capture the index where this valid negation was found
-                            break
-                        }
-                    }
-                }
-
-                // If a qualifying "إِن" negation was found, start capturing words from that point
-                if (negationFound && startIndex != -1) {
-                    val sb = StringBuilder()
-                    val startWordNo = corpus[startIndex].wordno // Capture starting word number
-
-                    var endWordNo = startWordNo
-                    var sentenceStartIndex = spannableVerse.indexOf(corpus[startIndex].araone!!+corpus[startIndex].aratwo!!+corpus[startIndex].arathree!!+corpus[startIndex].arafour!!+corpus[startIndex].arafive!!)
-              //    var sentenceStartIndex = spannableVerse.indexOf(corpus[startIndex].araone) // Capture start index in the string
-                    var sentenceEndIndex = sentenceStartIndex
-
-                    // Start capturing from the negation found at startIndex and continue after "إِلَّا"
-                    for (k in startIndex until minOf(i + 2, corpus.size)) { // Capture up to 3 words after "إِلَّا"
-                        val completeWord = "${corpus[k].araone}${corpus[k].aratwo}${corpus[k].arathree}${corpus[k].arafour}${corpus[k].arafive}".trim()
-                        sb.append(completeWord).append(" ")
-
-                        endWordNo = corpus[k].wordno // Update the ending word number
-                        sentenceEndIndex = spannableVerse.indexOf(completeWord, sentenceEndIndex) + completeWord.length
-                    }
-
-                    val dataString =
-                        "${entry.surah}|${entry.ayah}|${startWordNo}| ${endWordNo}|$sentenceStartIndex|$sentenceEndIndex"
-                    // Add the extracted sentence with word numbers and string indices
-                    //  extractedSentences.add(Triple(sb.toString().trim(), Pair(startWordNo, endWordNo), Pair(sentenceStartIndex, sentenceEndIndex)))
-                    extractedSentences.add(dataString)
-                }
-            }
-        }
-
-        return extractedSentences
-    }
-
-    fun extractInMaIllaSentencesv4(corpus: List<CorpusEntity>, spannableVerse: String): List<String>{
-        val extractedSentences = mutableListOf<String>()
-
-        for (i in corpus.indices) {
-            val entry = corpus[i]
-
-            // Check for "إِلَّا" with tagone == "EXP" or "RES"
-            if ((entry.tagone == "EXP" || entry.tagone == "RES") && (entry.araone == "إِلَّا" || entry.araone == "إِلَّآ")) {
-                var negationFound = false
-                var startIndex = -1
-
-                // Loop backwards to find the negation "إِن" before "إِلَّا"
-                for (j in i - 1 downTo 0) {
-                    val previousEntry = corpus[j]
-
-                    if ((previousEntry.tagtwo == "NEG" && previousEntry.aratwo == "إِن") ||
-                        (previousEntry.tagone == "NEG" && previousEntry.araone == "إِن")) {
-                        negationFound = true
-                        startIndex = j // Capture the index where negation was found
-                        break
-                    }
-                }
-
-                // If negation was found, start capturing from the negation point up to after "إِلَّا"
-                if (negationFound && startIndex != -1) {
-                    val sb = StringBuilder()
-                    val startWordNo = corpus[startIndex].wordno // Capture starting word number
-
-                    var endWordNo = startWordNo
-                    var sentenceStartIndex = spannableVerse.indexOf(corpus[startIndex].araone!!+corpus[startIndex].aratwo!!+corpus[startIndex].arathree!!+corpus[startIndex].arafour!!+corpus[startIndex].arafive!!) // Capture start index in the string
-                    var sentenceEndIndex = sentenceStartIndex
-
-                    // Start capturing from the negation found at startIndex and continue after "إِلَّا"
-                    for (k in startIndex until minOf(i + 2, corpus.size)) { // Capture up to 3 words after "إِلَّا"
-                        val completeWord = "${corpus[k].araone}${corpus[k].aratwo}${corpus[k].arathree}${corpus[k].arafour}${corpus[k].arafive}".trim()
-                        sb.append(completeWord).append(" ")
-
-                        endWordNo = corpus[k].wordno // Update the ending word number
-                        sentenceEndIndex = spannableVerse.indexOf(completeWord, sentenceEndIndex) + completeWord.length
-                    }
-                    val dataString =
-                        "${entry.surah}|${entry.ayah}|${startWordNo}| ${endWordNo}|$sentenceStartIndex|$sentenceEndIndex"
-                    // Add the extracted sentence with word numbers and string indices
-                  //  extractedSentences.add(Triple(sb.toString().trim(), Pair(startWordNo, endWordNo), Pair(sentenceStartIndex, sentenceEndIndex)))
-                    extractedSentences.add(dataString)
-                }
-            }
-        }
-
-        return extractedSentences
-    }
-
-    fun extractInMaIllaSentencesv3(corpus: List<CorpusEntity>, spannableVerse: String): List<Triple<String, Pair<Int, Int>, Pair<Int, Int>>> {
-        val extractedSentences = mutableListOf<Triple<String, Pair<Int, Int>, Pair<Int, Int>>>()
-
-        for (i in corpus.indices) {
-            val entry = corpus[i]
-
-            // Check for "إِلَّا" with tagone == "EXP" or "RES"
-            if ((entry.tagone == "EXP" || entry.tagone == "RES") && (entry.araone == "إِلَّا" || entry.araone == "إِلَّآ")) {
-                var negationFound = false
-                var startIndex = -1
-
-                // Loop backwards to find the negation "إِن" before "إِلَّا"
-                for (j in i - 1 downTo 0) {
-                    val previousEntry = corpus[j]
-
-                    if ((previousEntry.tagtwo == "NEG" && previousEntry.aratwo == "إِن") ||
-                        (previousEntry.tagone == "NEG" && previousEntry.araone == "إِن")) {
-                        negationFound = true
-                        startIndex = j // Capture the index where negation was found
-                        break
-                    }
-                }
-
-                // If negation was found, start capturing from the negation point up to after "إِلَّا"
-                if (negationFound && startIndex != -1) {
-                    val sb = StringBuilder()
-                    val startWordNo = corpus[startIndex].wordno // Capture starting word number
-
-                    var endWordNo = startWordNo
-                    var sentenceStartIndex = spannableVerse.indexOf(corpus[startIndex].araone!!+corpus[startIndex].aratwo!!+corpus[startIndex].arathree!!+corpus[startIndex].arafour!!+corpus[startIndex].arafive!!)// Capture start index in the string
-                    var sentenceEndIndex = sentenceStartIndex
-
-                    // Start capturing from the negation found at startIndex and continue after "إِلَّا"
-                    for (k in startIndex until minOf(i + 3, corpus.size)) { // Capture up to 3 words after "إِلَّا"
-                        sb.append(corpus[k].araone)
-                        sb.append(corpus[k].aratwo)
-                        sb.append(corpus[k].arathree)
-                        sb.append(corpus[k].arafour)
-                        sb.append(corpus[k].arafive).append(" ")
-
-                        endWordNo = corpus[k].wordno // Update the ending word number
-                        sentenceEndIndex = spannableVerse.indexOf(corpus[k].araone!!, sentenceEndIndex) + corpus[k].araone!!.length
-                    }
-
-                    // Add the extracted sentence with word numbers and string indices
-                    extractedSentences.add(Triple(sb.toString().trim(), Pair(startWordNo, endWordNo), Pair(sentenceStartIndex, sentenceEndIndex)))
-                }
-            }
-        }
-
-        return extractedSentences
-    }
-
-    fun extractInMaIllaSentencesv2(corpus: List<CorpusEntity>, spannableVerse: String): List<String> {
-        val extractedSentences = mutableListOf<String>()
-
-        for (i in corpus.indices) {
-            val entry = corpus[i]
-
-            // Check for "إِلَّا" with tagone == "EXP"
-            if ((entry.tagone == "EXP" || entry.tagone=="RES") && (entry.araone == "إِلَّا" || entry.araone == "إِلَّآ")) {
-                var negationFound = false
-                var startIndex = -1
-
-                // Loop backwards to find the negation "إِن" before "إِلَّا"
-                for (j in i - 1 downTo 0) {
-                    val previousEntry = corpus[j]
-
-                    if ((previousEntry.tagtwo == "NEG" && previousEntry.aratwo == "إِن") ||
-                        (previousEntry.tagone == "NEG" && previousEntry.araone == "إِن")) {
-                        negationFound = true
-                        startIndex = j // Capture the index where negation was found
-                        break
-                    }
-                }
-
-                // If negation was found, start capturing from the negation point up to after "إِلَّا"
-                if (negationFound && startIndex != -1) {
-                    val sb = StringBuilder()
-
-                    // Start capturing from the negation found at startIndex and continue after "إِلَّا"
-                    for (k in startIndex until minOf(i + 2, corpus.size)) {
-                        sb.append(corpus[k].araone)
-                        sb.append(corpus[k].aratwo)
-                        sb.append(corpus[k].arathree)
-                        sb.append(corpus[k].arafour)
-                        sb.append(corpus[k].arafive).append(" ")
-                    }
-
-                    // Add the extracted sentence to the result list
-                    extractedSentences.add(sb.toString().trim())
-                }
-            }
-        }
-
-        return extractedSentences
-    }
-
-    fun extractInMaIllaSentencesv1(corpus: List<CorpusEntity>, spannableVerse: String): List<String> {
-        val extractedSentences = mutableListOf<String>()
-
-        for (i in corpus.indices) {
-            val entry = corpus[i]
-            // Check for "إِلَّا" with tagone == "EXP"
-            if (entry.tagone == "EXP" && (entry.araone == "إِلَّا" || entry.araone == "إِلَّآ")) {
-                // Now check preceding words for "إِن" with tagtwo or tagone as "NEG"
-                var negationFound = false
-
-                // Loop backwards to check previous entries
-                for (j in i - 1 downTo 0) {
-                    val previousEntry = corpus[j]
-
-                    if ((previousEntry.tagtwo == "NEG" && previousEntry.aratwo == "إِن") ||
-                        (previousEntry.tagone == "NEG" && previousEntry.araone == "إِن")) {
-                        negationFound = true
-                        break
-                    }
-                }
-
-                // If negation was found, capture the next few words after the exception "إِلَّا"
-                if (negationFound) {
-                    val sb = StringBuilder()
-
-                    // Start capturing from the "إِلَّا" index and continue for a few words (e.g., 3 words)
-                    for (k in i until minOf(i + 3, corpus.size)) {
-                        sb.append(corpus[k].araone).append(corpus[k].aratwo).append(corpus[k].arathree).append(corpus[k].arafour).append(corpus[k].arafive)
-                    }
-
-                    // Add the extracted words as a sentence to the result list
-                    extractedSentences.add(sb.toString().trim())
-                }
-            }
-        }
-
-        return extractedSentences
-    }
 
     @OptIn(UnstableApi::class)
     fun extractInMaIllaSentencess(corpus: List<CorpusEntity>, spannableVerse: String): List<String> {
@@ -1418,8 +1196,9 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                         )*/
 
                     // Add data to the list
+                    val sentence=spannableVerse.subSequence(startIndex,phraseEndIndex)
                     val dataString =
-                        "${entry.surah}|${entry.ayah}|${entry.wordno}| ${nextword}|$startIndex|$phraseEndIndex|$lamcombination"
+                        "${entry.surah}|${entry.ayah}|${entry.wordno}| ${nextword}|$startIndex|$phraseEndIndex|$sentence"
                     negativeSentences.add(dataString)
                 }
             }
@@ -1518,8 +1297,8 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                         )*/
 
                     // Add data to the list
-
-                        val dataString =                       "${entry.surah}|${entry.ayah}|${entry.wordno}| ${nextword}|$startIndex|$phraseEndIndex|$lamcombination"
+                       val sentence=spannableVerse.subSequence(startIndex,phraseEndIndex).toString()
+                        val dataString =                       "${entry.surah}|${entry.ayah}|${entry.wordno}| ${nextword}|$startIndex|$phraseEndIndex|$sentence"
                         negativeSentences.add(dataString)
                         Log.d("check",
                             spannableVerse.subSequence(startIndex,phraseEndIndex).toString()
@@ -1594,7 +1373,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                 if (i + 2 < corpus.size) {
                     nextWordDetail =
                         corpus[i + 2].araone + corpus[i + 2].aratwo + corpus[i + 2].arathree + corpus[i + 2].arafour + corpus[i + 2].arafive
-                    corpus[i + 3].araone + corpus[i + 3].aratwo + corpus[i + 3].arathree + corpus[i + 3].arafour + corpus[i + 3].arafive
+
                 } else if (i + 3 < corpus.size) {
 
                     nextWordDetail =
@@ -1612,8 +1391,9 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                         )*/
 
                     // Add data to the list
+                    val sentence=spannableVerse.subSequence(startIndex,phraseEndIndex)
                     val dataString =
-                        "${entry.surah}|${entry.ayah}|${entry.wordno}| ${nextword}|$startIndex|$phraseEndIndex|$lamcombination"
+                        "${entry.surah}|${entry.ayah}|${entry.wordno}| ${nextword}|$startIndex|$phraseEndIndex|$sentence"
                     negativeSentences.add(dataString)
                 }
             }
@@ -1711,9 +1491,8 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                         )*/
 
-                    // Add data to the list
-                    val dataString =
-                        "${entry.surah}|${entry.ayah}|${entry.wordno}| ${nextword}|$startIndex|$phraseEndIndex|$lamcombination"
+                  val sentence=spannableVerse.subSequence(startIndex,phraseEndIndex)
+                    val dataString ="${entry.surah}|${entry.ayah}|${entry.wordno}| ${nextword}|$startIndex|$phraseEndIndex|$sentence"
                     negativeSentences.add(dataString)
                 }
             }

@@ -6,6 +6,7 @@ import com.example.mushafconsolidated.DAO.AnaQuranChapterDao
 import com.example.mushafconsolidated.DAO.BadalErabNotesDao
 import com.example.mushafconsolidated.DAO.BookMarkDao
 import com.example.mushafconsolidated.DAO.CorpusExpandedDao
+import com.example.mushafconsolidated.DAO.FutureTenceNegationDao
 import com.example.mushafconsolidated.DAO.HaliyaDao
 import com.example.mushafconsolidated.DAO.HansDao
 import com.example.mushafconsolidated.DAO.PastTenceNegatonDao
@@ -83,6 +84,12 @@ object AppModule {
         return appDB.PresentTenceNegationDao()
     }
 
+    @Singleton
+    @Provides
+    fun getFutureTenceNegationDao(appDB: QuranAppDatabase): FutureTenceNegationDao {
+
+        return appDB.FutureTenceNegationDao()
+    }
 
 
 

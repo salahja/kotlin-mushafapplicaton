@@ -7,6 +7,7 @@ import com.example.mushafconsolidated.DAO.AnaQuranChapterDao
 import com.example.mushafconsolidated.DAO.BadalErabNotesDao
 import com.example.mushafconsolidated.DAO.BookMarkDao
 import com.example.mushafconsolidated.DAO.CorpusExpandedDao
+import com.example.mushafconsolidated.DAO.FutureTenceNegationDao
 import com.example.mushafconsolidated.DAO.HaliyaDao
 import com.example.mushafconsolidated.DAO.HansDao
 import com.example.mushafconsolidated.DAO.PastTenceNegatonDao
@@ -35,6 +36,7 @@ import com.example.mushafconsolidated.Entities.BadalErabNotesEnt
 import com.example.mushafconsolidated.Entities.BookMarks
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
 import com.example.mushafconsolidated.Entities.CorpusEntity
+import com.example.mushafconsolidated.Entities.FutureTenceNegatonEnt
 import com.example.mushafconsolidated.Entities.HalEnt
 import com.example.mushafconsolidated.Entities.PastTenceNegatonEnt
 import com.example.mushafconsolidated.Entities.LiajlihiEnt
@@ -62,6 +64,7 @@ import javax.inject.Inject
  class QuranRepository @Inject constructor(
      var presentTenceNegationDao: PresentTenceNegationDao,
      var pastTenceNegationDao:PastTenceNegatonDao,
+     var futureTenceNegationDao: FutureTenceNegationDao,
      var absoluteNegationDao:AbsoluteNegationDao,
      var wbwdao:wbwDao,
      var corpusDao: CorpusExpandedDao,
@@ -155,11 +158,20 @@ import javax.inject.Inject
      fun getLamMudharyNegationFilerSurahAyah(surah: Int, ayah: Int): List<PastTenceNegatonEnt> =
          pastTenceNegationDao.getPastTenceNegationFilterSurahAyah(surah, ayah)
 
+
+
+
+
+
      fun getLamMudharyNegationAll(): List<PastTenceNegatonEnt> =
          pastTenceNegationDao.getPastTenceNegationAll()
 
-     fun getLamMudharyNegationFilterSurah(surah: Int): List<PastTenceNegatonEnt> =
+     fun getPastTencefilterSurah(surah: Int): List<PastTenceNegatonEnt> =
          pastTenceNegationDao.getPastTenceNegationFilterSurah(surah)
+
+     fun getFutureTencefilterSurah(surah: Int): List<FutureTenceNegatonEnt> =
+         futureTenceNegationDao.getFuturTenceNegationFilterSurah(surah)
+
 
 
      fun getPresentNegationFilerSurahAyah(surah: Int, ayah: Int): List<PresentTenceNegatonEnt> =

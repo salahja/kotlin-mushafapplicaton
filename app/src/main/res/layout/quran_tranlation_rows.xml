@@ -195,7 +195,7 @@
 
         <TextView
             android:id="@+id/erab_textView"
-
+           android:text="@string/_text_arabic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/erab_textViewnote"
@@ -215,46 +215,20 @@
 
 
         <ImageView
-            android:id="@+id/erabexpanden"
-            android:layout_width="30dp"
-            android:layout_height="20dp"
-            android:layout_alignParentEnd="true"
-
-            android:layout_centerInParent="false"
-            android:layout_marginEnd="5dp"
-            android:adjustViewBounds="true"
-            android:contentDescription="@null"
-            android:rotation="0.0"
-
-            android:scaleType="fitCenter"
-            android:tooltipText="@string/Alert"
-            app:srcCompat="@drawable/ic_baseline_double_arrow_24" />
-
-        <TextView
-            android:id="@+id/erab_textViewnoteen"
-            android:layout_width="match_parent"
+            android:id="@+id/phraseListIndicator"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/erabexpanden"
-            android:fontFamily="cursive"
-            android:lineSpacingExtra="@dimen/lineSpacingExtra"
-            android:padding="@dimen/textViewPadding"
-            android:text="Erab"
-            style="@android:style/TextAppearance.DeviceDefault.Medium"
-
             android:visibility="gone"
-            app:srcCompat="@drawable/ic_baseline_double_arrow_24" />
+            android:src="@drawable/ic_baseline_double_arrow_24" />
 
-        <TextView
-            android:id="@+id/erab_textViewen"
 
+        <ListView
+            android:id="@+id/phrasesRecyclerViewtwo"
+            style="@style/AppTheme.materialdarkblue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/erab_textViewnoteen"
+              />
 
-            style="@android:style/TextAppearance.DeviceDefault.Medium"
-            android:lineSpacingExtra="@dimen/lineSpacingExtra"
-            android:padding="@dimen/textViewPadding"
-            android:visibility="gone" />
 
 
     </RelativeLayout>

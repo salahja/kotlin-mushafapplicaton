@@ -15,7 +15,8 @@ CREATE TABLE lammudharynegation (
     harf       TEXT    NOT NULL,
     id         INTEGER PRIMARY KEY AUTOINCREMENT
                        NOT NULL
-);
+);    arabictext  TEXT    NOT NULL,
+    englishtext TEXT    NOT NULL,
 
  */
 @Entity(tableName = "inmailla")
@@ -26,7 +27,8 @@ class InMaIllaNegationEnt constructor(
     var wordnoto:Int,
     var startindex: Int,
     var endindex: Int,
-    var harf: String,
+    var arabictext: String,
+    var englishtext:String,
 
     @field:PrimaryKey(
         autoGenerate = true

@@ -18,7 +18,7 @@ CREATE TABLE lammudharynegation (
 );
 
  */
-@Entity(tableName = "lammudharynegation")
+@Entity(tableName = "pasttencenegation")
 class PastTenceNegatonEnt constructor(
     var surahid: Int,
     var ayahid: Int,
@@ -26,7 +26,8 @@ class PastTenceNegatonEnt constructor(
     var wordnoto:Int,
     var startindex: Int,
     var endindex: Int,
-    var harf: String,
+    var arabictext: String,
+    var englishtext:String,
 
     @field:PrimaryKey(
         autoGenerate = true

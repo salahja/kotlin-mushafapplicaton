@@ -3374,7 +3374,28 @@ class CorpusUtilityorig(private var context: Context?) {
               }
           }
         }
+        fun setPresentFromCache(spannableverse: SpannableString, presentIndexList: MutableList<List<Int>>?) {
+            if (presentIndexList != null) {
+                for (indexes in presentIndexList) {
+                    val startIndex = indexes[0]
+                    val endIndex = indexes[1]
+                    if (dark) {
+                        Constant.sifaspansDark = BackgroundColorSpan(Constant.WBURNTUMBER)
+                    } else {
+                        Constant.sifaspansDark = BackgroundColorSpan(Constant.CYANLIGHTEST)
+                    }
 
+                    if (spannableverse != null) {
+                        spannableverse.setSpan(
+                            Constant.sifaspansDark,
+                            startIndex  ,
+                            endIndex  ,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+                    }
+                }
+            }
+        }
         fun setMausoofSifaFromCache(spannableverse: SpannableString, sifaIndexList: MutableList<List<Int>>?) {
             if (sifaIndexList != null) {
                 for (indexes in sifaIndexList) {

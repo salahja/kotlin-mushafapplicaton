@@ -14,6 +14,8 @@ class FutureTenceListingPojo constructor(){
     var endindex: Int=0
     var wordfrom: Int=0
     var wordnoto: Int=0
+    var arabictext: String? = null
+    var englishtext: String? = null
     var has_prostration: Int=0
     var qurantext: String? = null
     var translation: String? = null

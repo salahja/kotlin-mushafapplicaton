@@ -107,8 +107,18 @@ class Utils {
         return  database.PastTenceNegatonDao().getPastTenceNegationFilterSurahAyah(cid, aid)
 
     }
+
+    fun getPastTenceAll(): List<PastTenceNegatonEnt> {
+        return  database.PastTenceNegatonDao().getPastTenceNegationAll()
+
+    }
     fun getPastTenceNegationFilterSurah(cid: Int,   ): List<PastTenceNegatonEnt> {
         return  database.PastTenceNegatonDao().getPastTenceNegationFilterSurah(cid)
+
+    }
+
+    fun getfutureall(): List<FutureTenceNegatonEnt> {
+        return  database.FutureTenceNegationDao().getFuturTenceNegationAll()
 
     }
 
@@ -131,11 +141,23 @@ class Utils {
 
     }
 
+    fun getExpInMaIllaNegationall(  ): List<InMaIllaNegationEnt> {
+        return  database.InMaIllaNegationDao().getInMaIllaNegationAll()
+
+    }
+
+
 
     fun getPresentTenceNegatonFilerSurahAyah(cid: Int, aid: Int, ): List<PresentTenceNegatonEnt> {
         return  database.PresentTenceNegationDao().getPresentTenceNegationFilterSurahAyah(cid, aid)
 
     }
+
+    fun getpresentall(): List<PresentTenceNegatonEnt> {
+        return  database.PresentTenceNegationDao().getPresentTenceNegationAll()
+
+    }
+
 
 
     fun getPresentTenceNegationFilterSurah(cid: Int, aid: Int, ): List<PresentTenceNegatonEnt> {
@@ -280,7 +302,7 @@ class Utils {
     }
 
     fun getInMaNegationListing(tid:Int):List<InMaListingPOJO>{
-        val sqlshart:String=("select inmailla.surahid,inmailla.ayahid,inmailla.startindex,inmailla.endindex,inmailla.wordfrom,inmailla.wordnoto,qurans.page,qurans.passage_no,qurans.qurantext,qurans.has_prostration,qurans.translation,\n" +
+        val sqlshart:String=("select inmailla.surahid,inmailla.ayahid,inmailla.startindex,inmailla.endindex,inmailla.wordfrom,inmailla.wordnoto,inmailla.arabictext,inmailla.englishtext,qurans.page,qurans.passage_no,qurans.qurantext,qurans.has_prostration,qurans.translation,\n" +
                 "qurans.en_transliteration,qurans.en_arberry,qurans.en_jalalayn,qurans.ur_jalalayn,qurans.tafsir_kathir,qurans.ur_junagarhi,qurans.ar_irab_two\n" +
                 " from inmailla,qurans where inmailla.surahid=qurans.surah and inmailla.ayahid=qurans.ayah and inmailla.surahid ==  \""
                 + tid + "\"")
@@ -293,7 +315,7 @@ class Utils {
     }
 
     fun getFutureTnegaionListing(tid:Int):List<FutureTenceListingPojo>{
-        val sqlshart:String=("select futuretencenegation.surahid,futuretencenegation.ayahid,futuretencenegation.startindex,futuretencenegation.endindex,futuretencenegation.wordfrom,futuretencenegation.wordnoto,qurans.page,qurans.passage_no,qurans.qurantext,qurans.has_prostration,qurans.translation,\n" +
+        val sqlshart:String=("select futuretencenegation.surahid,futuretencenegation.ayahid,futuretencenegation.startindex,futuretencenegation.endindex,futuretencenegation.wordfrom,futuretencenegation.wordnoto,futuretencenegation.arabictext,futuretencenegation.englishtext,qurans.page,qurans.passage_no,qurans.qurantext,qurans.has_prostration,qurans.translation,\n" +
                 "qurans.en_transliteration,qurans.en_arberry,qurans.en_jalalayn,qurans.ur_jalalayn,qurans.tafsir_kathir,qurans.ur_junagarhi,qurans.ar_irab_two\n" +
                 " from futuretencenegation,qurans where futuretencenegation.surahid=qurans.surah and futuretencenegation.ayahid=qurans.ayah and futuretencenegation.surahid ==  \""
                 + tid + "\"")
@@ -306,7 +328,7 @@ class Utils {
     }
 
     fun getPresentnegaionListing(tid:Int):List<PresentTencePOJO>{
-        val sqlshart:String=("select presenttencenegation.surahid,presenttencenegation.ayahid,presenttencenegation.startindex,presenttencenegation.endindex,presenttencenegation.wordfrom,presenttencenegation.wordnoto,qurans.page,qurans.passage_no,qurans.qurantext,qurans.has_prostration,qurans.translation,\n" +
+        val sqlshart:String=("select presenttencenegation.surahid,presenttencenegation.ayahid,presenttencenegation.startindex,presenttencenegation.endindex,presenttencenegation.wordfrom,presenttencenegation.wordnoto,presenttencenegation.arabictext,presenttencenegation.englishtext,qurans.page,qurans.passage_no,qurans.qurantext,qurans.has_prostration,qurans.translation,\n" +
                 "qurans.en_transliteration,qurans.en_arberry,qurans.en_jalalayn,qurans.ur_jalalayn,qurans.tafsir_kathir,qurans.ur_junagarhi,qurans.ar_irab_two\n" +
                 " from presenttencenegation,qurans where presenttencenegation.surahid=qurans.surah and presenttencenegation.ayahid=qurans.ayah and presenttencenegation.surahid ==  \""
                 + tid + "\"")
@@ -319,7 +341,7 @@ class Utils {
     }
 
     fun getPastnegaionListing(tid:Int):List<PastTencePOJO>{
-        val sqlshart:String=("select lammudharynegation.surahid,lammudharynegation.ayahid,lammudharynegation.startindex,lammudharynegation.endindex,lammudharynegation.wordfrom,lammudharynegation.wordnoto,qurans.page,qurans.passage_no,qurans.qurantext,qurans.has_prostration,qurans.translation,\n" +
+        val sqlshart:String=("select pasttencenegation.surahid,pasttencenegation.ayahid,pasttencenegation.startindex,pasttencenegation.endindex,pasttencenegation.wordfrom,pasttencenegation.wordnoto,pasttencenegation.arabictext,pasttencenegation.englishtext,qurans.page,qurans.passage_no,qurans.qurantext,qurans.has_prostration,qurans.translation,\n" +
                 "qurans.en_transliteration,qurans.en_arberry,qurans.en_jalalayn,qurans.ur_jalalayn,qurans.tafsir_kathir,qurans.ur_junagarhi,qurans.ar_irab_two\n" +
                 " from lammudharynegation,qurans where lammudharynegation.surahid=qurans.surah and lammudharynegation.ayahid=qurans.ayah and lammudharynegation.surahid ==  \""
                 + tid + "\"")

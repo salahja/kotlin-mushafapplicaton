@@ -26,7 +26,8 @@ class FutureTenceNegatonEnt constructor(
     var wordnoto:Int,
     var startindex: Int,
     var endindex: Int,
-    var harf: String,
+    var arabictext: String,
+    var englishtext:String,
 
     @field:PrimaryKey(
         autoGenerate = true
