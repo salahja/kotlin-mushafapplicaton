@@ -10,10 +10,10 @@ import com.example.mushafconsolidated.Entities.BadalErabNotesEnt
 import com.example.mushafconsolidated.Entities.BookMarks
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
 import com.example.mushafconsolidated.Entities.CorpusEntity
-import com.example.mushafconsolidated.Entities.FutureTenceNegatonEnt
+
 import com.example.mushafconsolidated.Entities.GrammarRules
 import com.example.mushafconsolidated.Entities.HalEnt
-import com.example.mushafconsolidated.Entities.PastTenceNegatonEnt
+
 import com.example.mushafconsolidated.Entities.LiajlihiEnt
 import com.example.mushafconsolidated.Entities.MafoolBihi
 import com.example.mushafconsolidated.Entities.MafoolMutlaqEnt
@@ -23,7 +23,7 @@ import com.example.mushafconsolidated.Entities.NewMudhafEntity
 import com.example.mushafconsolidated.Entities.NewNasbEntity
 import com.example.mushafconsolidated.Entities.NewShartEntity
 import com.example.mushafconsolidated.Entities.NounCorpus
-import com.example.mushafconsolidated.Entities.PresentTenceNegatonEnt
+
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.SifaEntity
 import com.example.mushafconsolidated.Entities.TameezEnt
@@ -208,24 +208,26 @@ class QuranViewModel @Inject constructor(
     }
 
 
-    fun getLamMudharyNegationFilerSurahAyah(cid: Int, aid: Int, ): List<PastTenceNegatonEnt> {
-        return  this.quranRepository.getLamMudharyNegationFilerSurahAyah(cid, aid)
 
-    }
-    fun getPastTencefilterSurah(cid: Int ): List<PastTenceNegatonEnt> {
-        return  this.quranRepository.getPastTencefilterSurah(cid)
 
-    }
 
-    fun getPresentNegationFilterSurah(cid: Int ): List<PresentTenceNegatonEnt> {
-        return  this.quranRepository.getPresentNegationFilterSurah(cid)
+
+
+    fun getNegationFilerSurahAyaType(surah: Int, ayah: Int, type:String): List<NegationEnt> {
+        return quranRepository.getNegationFilerSurahAyaType(surah, ayah, type)
 
     }
 
-    fun getFutureTencefilterSurah(cid: Int ): List<FutureTenceNegatonEnt> {
-        return  this.quranRepository.getFutureTencefilterSurah(cid)
+
+
+
+    fun getNegationfilterSurahType(cid: Int, type:String, ): List<NegationEnt> {
+        return  this.quranRepository.getNegationfilterSurahType(cid, type)
 
     }
+
+
+
 
 
     fun geNegationFilerSurahAyah(cid: Int,aid: Int, ): List<NegationEnt> {
@@ -250,10 +252,6 @@ class QuranViewModel @Inject constructor(
 
 
 
-    fun getLamMudharyNegationAll(): List<PastTenceNegatonEnt> {
-        return  this.quranRepository.getLamMudharyNegationAll()
-
-    }
 
     fun getCorpusEntityFilterSurah(cid: Int ): MutableLiveData<List<CorpusEntity>> {
         corpusentity.value = this.quranRepository.getCorpusEntityFilterSurah(cid)

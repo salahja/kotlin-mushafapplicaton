@@ -945,7 +945,7 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
             presentTenceNegationSentence= emptyList()
             pastTenceNegationSentence= emptyList()
             if(harf == "Past Tence Negation") {
-                pastTenceNegationSentence = util.getPastnegaionListing(chapterno)
+                pastTenceNegationSentence = util.getPastnegaionListing(chapterno,"past")
                 for (ac in pastTenceNegationSentence) {
                     ac.spannableVerse = SpannableString(ac.qurantext)
                 }
@@ -961,7 +961,7 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
             }else
 
             if(harf == "Present Tence Negation") {
-                presentTenceNegationSentence = util.getPresentnegaionListing(chapterno)
+                presentTenceNegationSentence = util.getPresentnegaionListing(chapterno,"present")
                 for (ac in presentTenceNegationSentence) {
                     ac.spannableVerse = SpannableString(ac.qurantext)
                 }
@@ -1004,7 +1004,7 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
 
 
            } else if(harf=="inmanegative"){
-               inMaNegationSentence = util.getInMaNegationListing(chapterno)
+               inMaNegationSentence = util.getInMaNegationListing(chapterno,"exp")
                for (ac in inMaNegationSentence) {
                    ac.spannableVerse= SpannableString(ac.qurantext)
                }
@@ -1013,7 +1013,7 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
                //HightLightKeyWord(shartSentences,accusativesSentences,sifaSentences)
 
            } else if(harf=="Future Negation"){
-               futureTenceNegationSentence=util.getFutureTnegaionListing(chapterno)
+               futureTenceNegationSentence=util.getFutureTnegaionListing(chapterno,"future")
 
                for (ac in futureTenceNegationSentence) {
                    ac.spannableVerse= SpannableString(ac.qurantext)

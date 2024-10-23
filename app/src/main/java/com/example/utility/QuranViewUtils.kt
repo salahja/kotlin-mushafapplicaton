@@ -297,56 +297,9 @@ object QuranViewUtils {
             }
         }
 
-    fun cachePastTenceData(quranModel: QuranViewModel, surah: Int, pastTenceCache: MutableMap<Int, MutableMap<Int, Pair<SpannableString, String>>>) {
-        val mudhafData = quranModel.getPastTencefilterSurah(surah)
-        for (data in mudhafData) {
-            val surahid = data.surahid
-            val ayahid = data.ayahid
-            val arabicString = data.arabictext
-            val englishString = data.englishtext
-            val spannableString = SpannableString(arabicString)
-            spannableString.setSpan(ForegroundColorSpan(Color.RED), 0, arabicString.length, 0)
 
-            pastTenceCache.getOrPut(surahid) { mutableMapOf() }
-                .put(ayahid, Pair(spannableString, englishString))
-        }
-    }
-    fun cachePresentTenceData(quranModel: QuranViewModel, surah: Int, presentTenceCache: MutableMap<Int, MutableMap<Int, Pair<SpannableString, String>>>) {
-        val mudhafData = quranModel.getPresentNegationFilterSurah(surah)
-        for (data in mudhafData) {
-            val surahid = data.surahid
-            val ayahid = data.ayahid
-            val arabicString = data.arabictext
-            val englishString = data.englishtext
-            val spannableString = SpannableString(arabicString)
-            spannableString.setSpan(ForegroundColorSpan(Color.RED), 0, arabicString.length, 0)
 
-            presentTenceCache.getOrPut(surahid) { mutableMapOf() }
-                .put(ayahid, Pair(spannableString, englishString))
-        }
-    }
-    fun cacheFutureTenceData(quranModel: QuranViewModel, surah: Int, futureTenceCache: MutableMap<Int, MutableMap<Int, Pair<SpannableString, String>>>) {
-        val mudhafData = quranModel.getFutureTencefilterSurah(surah)
-        for (data in mudhafData) {
-            val surahid = data.surahid
-            val ayahid = data.ayahid
-            val arabicString = data.arabictext
-            val englishString = data.englishtext
-            val spannableString = SpannableString(arabicString)
-            spannableString.setSpan(ForegroundColorSpan(Color.RED), 0, arabicString.length, 0)
 
-            futureTenceCache.getOrPut(surahid) { mutableMapOf() }
-                .put(ayahid, Pair(spannableString, englishString))
-        }
-    }
-    fun cacheInMaIllaDta(quranModel: QuranViewModel, surah: Int, mudhafCache: MutableMap<Pair<Int, Int>, MutableList<List<Int>>>) {
-        val mudhafData = quranModel.getmudhafFilterSurah(surah)
-        for (data in mudhafData) {
-            val key = Pair(data.surah, data.ayah)
-            val indexes = listOf(data.startindex, data.endindex)
-            mudhafCache.getOrPut(key) { mutableListOf() }.add(indexes)
-        }
-    }
     fun cacheNegationData(quranModel: QuranViewModel, surah: Int, negationCache: MutableMap<Int, MutableMap<Int, MutableList<SpannableString>>>) {
         val negantionData = quranModel.getNegationFilterSurah(surah)
         for (data in negantionData) {

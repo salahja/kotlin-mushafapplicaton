@@ -145,7 +145,7 @@ class FlowAyahWordAdapterNoMafoolat(
         QuranViewUtils.cacheAbsoluteNegationData(quranModel, surah, absoluteNegationCache)
         QuranViewUtils.cacheSifaData(quranModel, surah, sifaCache)
         QuranViewUtils.cacheMudhafData(quranModel, surah, mudhafCache)
-        QuranViewUtils.cachePresentTenceData(quranModel, surah, presentTenceCache)
+
     //    QuranViewUtils.cachePastTenceData(quranModel, surah, pastTenceCache)
      //   QuranViewUtils.cacheFutureTenceData(quranModel, surah, futureTenceCache)
         QuranViewUtils.cacheNegationData(quranModel, surah, negationCache)

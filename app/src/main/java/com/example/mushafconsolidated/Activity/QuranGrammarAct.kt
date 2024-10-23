@@ -76,7 +76,7 @@ import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
 import com.example.mushafconsolidated.fragments.FlowAyahWordAdapter
 import com.example.mushafconsolidated.Adapters.FlowAyahWordAdapterNoMafoolat
 import com.example.mushafconsolidated.Entities.CorpusEntity
-import com.example.mushafconsolidated.Entities.InMaIllaNegationEnt
+
 import com.example.mushafconsolidated.Entities.NegationEnt
 import com.example.mushafconsolidated.Entities.SurahHeader
 import com.example.mushafconsolidated.Utils
@@ -387,7 +387,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
     fun extractSentencesFromIndexdata(
         corpus: List<CorpusEntity>,
-        info: InMaIllaNegationEnt,
+        info: NegationEnt,
         quranText: String
 
     ): List<String> {
@@ -404,7 +404,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         // Extract translation using wordfrom and wordnoto
         val translationBuilder = StringBuilder()
         for (entry in corpus) {
-            if (entry.wordno in info.wordfrom..info.wordnoto) {
+            if (entry.wordno in info.wordfrom..info.wordto) {
                 // Assuming we're extracting the English translation (you can replace 'en' with another language field if needed)
                 translationBuilder.append("${entry.en} ").append(" ")
             }
@@ -413,11 +413,124 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
         // Format the result string
         val dataString =
-            "${info.surahid}|${info.ayahid}|${info.wordfrom}|${info.wordnoto}|${info.startindex}|${info.endindex}|$extractedSentence|$extractedTranslation"
+            "${info.surahid}|${info.ayahid}|${info.wordfrom}|${info.wordto}|${info.startindex}|${info.endindex}|$extractedSentence|$extractedTranslation"
         result.add(dataString)
 
 
         return result
+    }
+    /*
+    1. فُعُولٌ
+
+    Example: كِتَابٌ (book) → كُتُبٌ (books)
+    Example: رَجُلٌ (man) → رِجَالٌ (men)
+
+2. أَفْعَالٌ
+
+    Example: بَيْتٌ (house) → بُيُوتٌ (houses)
+    Example: جَمَلٌ (camel) → جِمَالٌ (camels)
+
+3. فِعَالٌ
+
+    Example: وَلَدٌ (boy) → أَوْلَادٌ (boys)
+    Example: صَفٌّ (row) → صُفُوفٌ (rows)
+
+4. فُعُلٌ
+
+    Example: قَلْبٌ (heart) → قُلُوبٌ (hearts)
+    Example: أَسَدٌ (lion) → أُسُودٌ (lions)
+
+5. فُعَلٌ
+
+    Example: طَرِيقٌ (road) → طُرُقٌ (roads)
+    Example: سَبِيلٌ (way) → سُبُلٌ (ways)
+
+6. فِعْلَةٌ
+
+    Example: صَحِيفَةٌ (newspaper) → صُحُفٌ (newspapers)
+    Example: سَفِينَةٌ (ship) → سُفُنٌ (ships)
+
+7. فِعْلٌ
+
+    Example: قِطٌّ (cat) → قِطَطٌ (cats)
+    Example: طِفْلٌ (child) → أَطْفَالٌ (children)
+
+8. فُعُولَةٌ
+
+    Example: كَفِيفٌ (blind) → كُفُوفٌ (blind people)
+    Example: سَرِيرٌ (bed) → سُرُرٌ (beds)
+
+9. فَعَالِلُ
+
+    Example: مِفْتَاحٌ (key) → مَفَاتِيحٌ (keys)
+    Example: مَسْجِدٌ (mosque) → مَسَاجِدٌ (mosques)
+
+10. فَعَائِلُ
+
+    Example: عَجُوزٌ (old woman) → عَجَائِزُ (old women)
+    Example: طَائِرَةٌ (airplane) → طَائِرَاتٌ (airplanes)
+
+11. فَعَالِيلُ
+
+    Example: طَالِبٌ (student) → طُلَّابٌ (students)
+    Example: تَاجِرٌ (merchant) → تُجَّارٌ (merchants)
+
+12. فَعَالٌ
+
+    Example: كَاتِبٌ (writer) → كُتَّابٌ (writers)
+    Example: سَالِمٌ (safe) → سُلَامٌ (safe ones)
+
+13. أَفْعِلَةٌ
+
+    Example: طَرِيقَةٌ (method) → طَرَائِقُ (methods)
+    Example: قَصِيدَةٌ (poem) → قَصَائِدُ (poems)
+
+14. فَعَائِلَةٌ
+
+    Example: قَرِيبٌ (relative) → أَقَارِبُ (relatives)
+    Example: حَفِيدٌ (grandchild) → أَحْفَادٌ (grandchildren)
+
+15. مَفَاعِيلُ
+
+    Example: مَلْجَأٌ (shelter) → مَلَاجِئُ (shelters)
+    Example: مَكْتَبٌ (office) → مَكَاتِبٌ (offices)
+
+16. فَعَلَةٌ
+
+    Example: طَرِيقٌ (path) → طُرُقَةٌ (paths)
+    Example: مَلَكٌ (angel) → مَلَائِكَةٌ (angels)
+
+17. أَفْعُلٌ
+
+    Example: شَيْءٌ (thing) → أَشْيَاءٌ (things)
+    Example: نَبِيٌّ (prophet) → أَنْبِيَاءٌ (prophets)
+
+18. أَفْعِيلَةٌ
+
+    Example: جَدِيدٌ (new) → جُدُدٌ (new ones)
+    Example: سَرِيعٌ (fast) → سُرْعَانٌ (fast ones)
+
+19. فَعْلَانُ
+
+    Example: غَضْبَانُ (angry) → غُضْبَانُ (angry people)
+    Example: عَطْشَانُ (thirsty) → عُطْشَانُ (thirsty people)
+
+20. فِعْلَانٌ
+
+    Example: سَبَاقٌ (race) → سِبَاقٌ (races)
+    Example: نَحْلٌ (bee) → نَحْلَانٌ (bees)
+     */
+    fun identifyBrokenPlurals(corpus: List<CorpusEntity>): List<String> {
+        val brokenPluralPatterns = listOf("فُعُوْلٌ", "أَفْعَالٌ", "فِعَالٌ", "فُعُلٌ","فِعْلَانٌ","فَعْلَانُ","") // Add all patterns
+        val identifiedPlurals = mutableListOf<String>()
+
+        for (entry in corpus) {
+            val word = entry.araone + entry.aratwo + entry.arathree + entry.arafour + entry.arafive
+            if (brokenPluralPatterns.any { pattern -> word.matches(Regex(pattern)) }) {
+                identifiedPlurals.add(word)
+            }
+        }
+        return identifiedPlurals
     }
 
     private fun mainLoopFromIndexExtraction() {

@@ -51,13 +51,12 @@ import com.example.Constant.prussianblue
 import com.example.Constant.shartspanDark
 import com.example.Constant.sifaspansDark
 import com.example.mushafconsolidated.Entities.CorpusEntity
-import com.example.mushafconsolidated.Entities.FutureTenceNegatonEnt
-import com.example.mushafconsolidated.Entities.InMaIllaNegationEnt
-import com.example.mushafconsolidated.Entities.PastTenceNegatonEnt
+import com.example.mushafconsolidated.Entities.NegationEnt
+
 import com.example.mushafconsolidated.Entities.NewMudhafEntity
 import com.example.mushafconsolidated.Entities.NewNasbEntity
 import com.example.mushafconsolidated.Entities.NewShartEntity
-import com.example.mushafconsolidated.Entities.PresentTenceNegatonEnt
+
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.SifaEntity
 import com.example.mushafconsolidated.Entities.wbwentity
@@ -273,8 +272,8 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
 
         val utils = Utils(requireContext())
         //   ArrayList<MudhafEntity> mudhafSurahAyah = utils.getMudhafSurahAyah(chapterid, ayanumber);
-        val mudhafSurahAyah: List<InMaIllaNegationEnt>? =
-            utils.getInMaIllaNegationFilterSurahAyah(chapterid, ayanumber)
+        val mudhafSurahAyah: List<NegationEnt>? =
+            utils.getNegationFilterSurahAyahType(chapterid, ayanumber,"exp")
         if (mudhafSurahAyah != null) {
             for (mudhafEntity in mudhafSurahAyah) {
 
@@ -293,7 +292,7 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
                 inMaIllaNegationArray.add(sequence as SpannableString)
                 val sb = StringBuilder()
                 val wordfrom = mudhafEntity.wordfrom
-                val wordto = mudhafEntity.wordnoto
+                val wordto = mudhafEntity.wordto
                 val strings =
                     sequence.toString().split("\\s".toRegex()).dropLastWhile { it.isEmpty() }
                         .toTypedArray()
@@ -341,8 +340,8 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
     private fun setFutureTenceNegation(futureTenceNegationArray: MutableList<SpannableString>) {
         val utils = Utils(requireContext())
         //   ArrayList<MudhafEntity> mudhafSurahAyah = utils.getMudhafSurahAyah(chapterid, ayanumber);
-        val mudhafSurahAyah: List<FutureTenceNegatonEnt>? =
-            utils.getFuturetTenceNegatonFilerSurahAyah(chapterid, ayanumber)
+        val mudhafSurahAyah: List<NegationEnt>? =
+            utils.getNegationFilterSurahAyahType(chapterid, ayanumber,"future")
         if (mudhafSurahAyah != null) {
             for (mudhafEntity in mudhafSurahAyah) {
                 val colorSpan = if (CorpusUtilityorig.dark) {
@@ -415,8 +414,8 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
 
         val utils = Utils(requireContext())
         //   ArrayList<MudhafEntity> mudhafSurahAyah = utils.getMudhafSurahAyah(chapterid, ayanumber);
-        val mudhafSurahAyah: List<PresentTenceNegatonEnt>? =
-            utils.getPresentTenceNegatonFilerSurahAyah(chapterid, ayanumber)
+        val mudhafSurahAyah: List<NegationEnt>? =
+            utils.getNegationFilterSurahAyahType(chapterid, ayanumber,"present")
         if (mudhafSurahAyah != null) {
             for (mudhafEntity in mudhafSurahAyah) {
                 val colorSpan = if (CorpusUtilityorig.dark) {
@@ -438,7 +437,7 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
                 presentTenceNegationArray.add(sequence as SpannableString)
                 val sb = StringBuilder()
                 val wordfrom = mudhafEntity.wordfrom
-                val wordto = mudhafEntity.wordnoto
+                val wordto = mudhafEntity.wordto
                 val strings =
                     sequence.toString().split("\\s".toRegex()).dropLastWhile { it.isEmpty() }
                         .toTypedArray()
@@ -486,8 +485,8 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
     private fun setPastTenceNegation(lamPastTenceNegationArray: MutableList<SpannableString>) {
         val utils = Utils(requireContext())
         //   ArrayList<MudhafEntity> mudhafSurahAyah = utils.getMudhafSurahAyah(chapterid, ayanumber);
-        val mudhafSurahAyah: List<PastTenceNegatonEnt>? =
-            utils.getPastTenceNegationFilterSurahAyah(chapterid, ayanumber)
+        val mudhafSurahAyah: List<NegationEnt>? =
+            utils.getNegationFilterSurahAyahType(chapterid, ayanumber,"past")
         if (mudhafSurahAyah != null) {
             for (mudhafEntity in mudhafSurahAyah) {
                 val colorSpan = if (CorpusUtilityorig.dark) {
@@ -509,7 +508,7 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
                 lamPastTenceNegationArray.add(sequence as SpannableString)
                 val sb = StringBuilder()
                 val wordfrom = mudhafEntity.wordfrom
-                val wordto = mudhafEntity.wordnoto
+                val wordto = mudhafEntity.wordto
                 val strings =
                     sequence.toString().split("\\s".toRegex()).dropLastWhile { it.isEmpty() }
                         .toTypedArray()

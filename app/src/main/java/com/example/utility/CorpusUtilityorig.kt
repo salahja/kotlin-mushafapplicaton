@@ -2786,7 +2786,7 @@ class CorpusUtilityorig(private var context: Context?) {
             ayah_id: Int
         ) {
             val utils = Utils(QuranGrammarApplication.context!!)
-            val surah = utils.getPresentTenceNegatonFilerSurahAyah(surah_id, ayah_id)
+            val surah = utils.getNegationFilterSurahAyahType(surah_id, ayah_id,"present")
 //todo 2 188 iza ahudu
             //todo 9;92 UNCERTAIN
             //TODO 9:94 JAWABHARMAHDOOF 9 95 JAWABHSARMAHODFF
@@ -2828,7 +2828,7 @@ class CorpusUtilityorig(private var context: Context?) {
             ayah_id: Int
         ) {
             val utils = Utils(QuranGrammarApplication.context!!)
-            val surah = utils.getPastTenceNegationFilterSurahAyah(surah_id, ayah_id)
+            val surah = utils.getNegationFilterSurahAyahType(surah_id, ayah_id,"past")
 //todo 2 188 iza ahudu
             //todo 9;92 UNCERTAIN
             //TODO 9:94 JAWABHARMAHDOOF 9 95 JAWABHSARMAHODFF
@@ -2866,7 +2866,7 @@ class CorpusUtilityorig(private var context: Context?) {
             ayah_id: Int
         ) {
             val utils = Utils(QuranGrammarApplication.context!!)
-            val surah = utils.getFuturetTenceNegatonFilerSurahAyah(surah_id, ayah_id)
+            val surah = utils.getNegationFilterSurahAyahType(surah_id, ayah_id,"future")
 //todo 2 188 iza ahudu
             //todo 9;92 UNCERTAIN
             //TODO 9:94 JAWABHARMAHDOOF 9 95 JAWABHSARMAHODFF
