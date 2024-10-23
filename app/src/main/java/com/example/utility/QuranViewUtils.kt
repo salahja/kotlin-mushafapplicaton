@@ -347,7 +347,38 @@ object QuranViewUtils {
             mudhafCache.getOrPut(key) { mutableListOf() }.add(indexes)
         }
     }
+    fun cacheNegationData(quranModel: QuranViewModel, surah: Int, negationCache: MutableMap<Int, MutableMap<Int, MutableList<SpannableString>>>) {
+        val negantionData = quranModel.getNegationFilterSurah(surah)
+        for (data in negantionData) {
+            val surahid = data.surahid
+            val ayahid = data.ayahid
+            val arabicString = data.arabictext
+            val englishString = data.englishtext
+            val combinedString = "$arabicString\n$englishString"
+            val spannableString = SpannableString(combinedString)
 
+
+
+
+
+            spannableString.setSpan(ForegroundColorSpan(Color.RED), 0, arabicString.length, 0) // Span for Arabic
+            spannableString.setSpan(ForegroundColorSpan(Color.BLUE), arabicString.length + 1, combinedString.length, 0)
+
+
+            negationCache[surahid]?.get(ayahid)?.add(spannableString) ?: run {
+                negationCache[surahid]?.set(
+                    ayahid,
+                    mutableListOf(spannableString)
+                ) ?: run {
+                    negationCache[surahid] =
+                        mutableMapOf(ayahid to mutableListOf(spannableString))
+                }
+            }
+            /*
+            negationCache.getOrPut(surahid) { mutableMapOf() }
+                .put(ayahid, Pair(spannableString, englishString))*/
+        }
+    }
 
 
 

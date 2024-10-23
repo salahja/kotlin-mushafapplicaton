@@ -219,12 +219,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
+
             android:src="@drawable/ic_baseline_double_arrow_24" />
 
 
         <ListView
             android:id="@+id/phrasesRecyclerViewtwo"
             style="@style/AppTheme.materialdarkblue"
+            android:visibility="visible"
+            android:textDirection="rtl"
+            android:divider="@android:color/darker_gray"
+            android:dividerHeight="1dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
               />

@@ -27,8 +27,8 @@ class InMaIllaNegationEnt constructor(
     var wordnoto:Int,
     var startindex: Int,
     var endindex: Int,
-    var arabictext: String,
-    var englishtext:String,
+    var harf: String,
+
 
     @field:PrimaryKey(
         autoGenerate = true

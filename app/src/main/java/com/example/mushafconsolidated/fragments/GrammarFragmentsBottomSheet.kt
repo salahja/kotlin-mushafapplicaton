@@ -364,7 +364,7 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
                 futureTenceNegationArray.add(sequence as SpannableString)
                 val sb = StringBuilder()
                 val wordfrom = mudhafEntity.wordfrom
-                val wordto = mudhafEntity.wordnoto
+                val wordto = mudhafEntity.wordto
                 val strings =
                     sequence.toString().split("\\s".toRegex()).dropLastWhile { it.isEmpty() }
                         .toTypedArray()

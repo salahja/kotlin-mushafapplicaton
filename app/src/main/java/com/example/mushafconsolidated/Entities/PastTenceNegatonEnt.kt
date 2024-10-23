@@ -29,6 +29,7 @@ class PastTenceNegatonEnt constructor(
     var arabictext: String,
     var englishtext:String,
 
+
     @field:PrimaryKey(
         autoGenerate = true
     ) var id: Int

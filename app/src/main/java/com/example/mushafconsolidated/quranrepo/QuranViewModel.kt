@@ -17,6 +17,7 @@ import com.example.mushafconsolidated.Entities.PastTenceNegatonEnt
 import com.example.mushafconsolidated.Entities.LiajlihiEnt
 import com.example.mushafconsolidated.Entities.MafoolBihi
 import com.example.mushafconsolidated.Entities.MafoolMutlaqEnt
+import com.example.mushafconsolidated.Entities.NegationEnt
 import com.example.mushafconsolidated.Entities.NewKanaEntity
 import com.example.mushafconsolidated.Entities.NewMudhafEntity
 import com.example.mushafconsolidated.Entities.NewNasbEntity
@@ -225,6 +226,26 @@ class QuranViewModel @Inject constructor(
         return  this.quranRepository.getFutureTencefilterSurah(cid)
 
     }
+
+
+    fun geNegationFilerSurahAyah(cid: Int,aid: Int, ): List<NegationEnt> {
+        return  this.quranRepository.geNegationFilerSurahAyah(cid,aid)
+
+    }
+
+    fun getNegationAll(): List<NegationEnt> {
+        return  this.quranRepository.getNegationAll()
+
+    }
+
+    fun getNegationFilterSurah(cid: Int ): List<NegationEnt> {
+        return  this.quranRepository.getNegationFilterSurah(cid)
+
+    }
+
+
+
+
 
 
 

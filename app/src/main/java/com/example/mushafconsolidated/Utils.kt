@@ -20,6 +20,7 @@ import com.example.mushafconsolidated.Entities.InMaIllaNegationEnt
 import com.example.mushafconsolidated.Entities.InMaListingPOJO
 import com.example.mushafconsolidated.Entities.PastTenceNegatonEnt
 import com.example.mushafconsolidated.Entities.NasbListingPojo
+import com.example.mushafconsolidated.Entities.NegationEnt
 import com.example.mushafconsolidated.Entities.NewKanaEntity
 import com.example.mushafconsolidated.Entities.NewMudhafEntity
 import com.example.mushafconsolidated.Entities.NewNasbEntity
@@ -164,6 +165,26 @@ class Utils {
         return  database.PresentTenceNegationDao().getPresentTenceNegationFilterSurah(cid)
 
     }
+
+    fun geTNegatonFilerSurahAyah(cid: Int, aid: Int, ): List<NegationEnt> {
+        return  database.NegationDao().getNegationFilterSurahAyah(cid, aid)
+
+    }
+
+    fun getNegationall(): List<NegationEnt> {
+        return  database.NegationDao().getNegationAll()
+
+    }
+
+
+
+    fun getNegationFilterSurah(cid: Int, aid: Int, ): List<NegationEnt> {
+        return  database.NegationDao().getINegationFilterSurah(cid)
+
+    }
+
+
+
 
     fun getMudhafSurahAyahNew(id: Int, aid: Int): List<NewMudhafEntity>? {
         return database.NewMudhafDao().getMudhafSurahAyah(id, aid)

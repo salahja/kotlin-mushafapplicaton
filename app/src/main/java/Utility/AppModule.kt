@@ -16,6 +16,7 @@ import com.example.mushafconsolidated.DAO.LaneRootDao
 import com.example.mushafconsolidated.DAO.LughatDao
 import com.example.mushafconsolidated.DAO.MafoolBihiDao
 import com.example.mushafconsolidated.DAO.MafoolMutlaqEntDao
+import com.example.mushafconsolidated.DAO.NegationDao
 import com.example.mushafconsolidated.DAO.NewKanaDao
 import com.example.mushafconsolidated.DAO.NewMudhafDao
 import com.example.mushafconsolidated.DAO.NewNasbDao
@@ -89,6 +90,12 @@ object AppModule {
     fun getFutureTenceNegationDao(appDB: QuranAppDatabase): FutureTenceNegationDao {
 
         return appDB.FutureTenceNegationDao()
+    }
+    @Singleton
+    @Provides
+    fun getNegationDao(appDB: QuranAppDatabase): NegationDao {
+
+        return appDB.NegationDao()
     }
 
 

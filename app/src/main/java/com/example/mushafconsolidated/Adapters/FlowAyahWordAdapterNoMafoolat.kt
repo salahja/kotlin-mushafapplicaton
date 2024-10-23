@@ -122,9 +122,10 @@ class FlowAyahWordAdapterNoMafoolat(
 
     private val pastTenceCache: MutableMap<Int, MutableMap<Int, Pair<SpannableString, String>>> =
         mutableMapOf()
-    private val futureTenceCache: MutableMap<Int, MutableMap<Int, Pair<SpannableString, String>>> =
-        mutableMapOf()
-
+    private val futureTenceCache: MutableMap<Int, MutableMap<Int, Pair<SpannableString, String>>> =        mutableMapOf()
+   // private val negationCache: MutableMap<Int, MutableMap<Int, Pair<SpannableString, String>>> =        mutableMapOf()
+   // private val negationCache: MutableMap<Int, MutableMap<Int, MutableList<Pair<SpannableString, String>>>> = mutableMapOf()
+    private val negationCache: MutableMap<Int, MutableMap<Int, MutableList<SpannableString>>> = mutableMapOf()
     //   private lateinit var  ayahWord: CorpusAyahWord
     //  private  var ayahWord: QuranCorpusWbw? = null
     private val isaudio: Boolean
@@ -145,9 +146,9 @@ class FlowAyahWordAdapterNoMafoolat(
         QuranViewUtils.cacheSifaData(quranModel, surah, sifaCache)
         QuranViewUtils.cacheMudhafData(quranModel, surah, mudhafCache)
         QuranViewUtils.cachePresentTenceData(quranModel, surah, presentTenceCache)
-        QuranViewUtils.cachePastTenceData(quranModel, surah, pastTenceCache)
-        QuranViewUtils.cacheFutureTenceData(quranModel, surah, futureTenceCache)
-
+    //    QuranViewUtils.cachePastTenceData(quranModel, surah, pastTenceCache)
+     //   QuranViewUtils.cacheFutureTenceData(quranModel, surah, futureTenceCache)
+        QuranViewUtils.cacheNegationData(quranModel, surah, negationCache)
 
 
 
@@ -230,13 +231,15 @@ class FlowAyahWordAdapterNoMafoolat(
         val entity = allofQuran[position]
         val key = Pair(entity!!.surah, entity!!.ayah)
       //  holder.itemView.post {
-            updatePhraseGroups(key, phraseGroups) // Pass phraseGroups to updatePhraseGroups
+            updatePhraseGroups(key, phraseGroups,key) // Pass phraseGroups to updatePhraseGroups
 
             // Check if the adapter is already created
             if (phraseListAdapter == null) {
                 // Create a new adapter using the item-specific phraseGroups
                 phraseListAdapter = PhraseListAdapter(holder.itemView.context, phraseGroups)
                 holder.phrasesListView.adapter = phraseListAdapter
+                holder.phrasesListView.setListViewHeightBasedOnChildren()
+
             } else {
                 // Update the existing adapter's data
                 phraseListAdapter?.clear()
@@ -244,6 +247,22 @@ class FlowAyahWordAdapterNoMafoolat(
                 phraseListAdapter?.notifyDataSetChanged()
             }
        // }
+    }
+    fun ListView.setListViewHeightBasedOnChildren() {
+        val listAdapter = adapter ?: return
+        var totalHeight = 0
+        for (i in 0 until listAdapter.count) {
+            val listItem = listAdapter.getView(i, null, this)
+            listItem.measure(
+                View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+            )
+            totalHeight += listItem.measuredHeight
+        }
+        val params = layoutParams
+        params.height = totalHeight + (dividerHeight * (listAdapter.count - 1))
+        layoutParams = params
+        requestLayout()
     }
 
     private fun displayAyah(holder: FlowAyahWordAdapterNoMafoolat.ItemViewAdapter, position: Int) {
@@ -596,28 +615,19 @@ class FlowAyahWordAdapterNoMafoolat(
 
     private fun updatePhraseGroups(
         key: Pair<Int, Int>,
-        phraseGroups: MutableList<SpannableString>
+        phraseGroups: MutableList<SpannableString>,
+        key1: Pair<Int, Int>
     ) {
 
-        val presentcache = presentTenceCache[key.first]?.get(key.second)
-        val pastcache = pastTenceCache[key.first]?.get(key.second)
-        val futureCache = futureTenceCache[key.first]?.get(key.second)
-        if (presentcache != null) {
-            val arabicString = presentcache.first
-            val englishString = presentcache.second
-            phraseGroups.add(arabicString)
+
+        val spannableStringsList = negationCache[key.first]?.get(key.second) ?: emptyList()
+
+        for (spannableString in spannableStringsList) {
+            phraseGroups.add(spannableString)
+            println("check")
         }
 
-        if (pastcache != null) {
-            val arabicString = pastcache.first
-            val englishString = pastcache.second
-            phraseGroups.add(arabicString)
-        }
-        if (futureCache != null) {
-            val arabicString = futureCache.first
-            val englishString = futureCache.second
-            phraseGroups.add(arabicString)
-        }
+
     }
 
     class PhraseListAdapter(context: Context, phrases: List<SpannableString?>) :

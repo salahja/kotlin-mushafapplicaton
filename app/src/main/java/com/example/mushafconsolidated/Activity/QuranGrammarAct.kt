@@ -77,6 +77,7 @@ import com.example.mushafconsolidated.fragments.FlowAyahWordAdapter
 import com.example.mushafconsolidated.Adapters.FlowAyahWordAdapterNoMafoolat
 import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.InMaIllaNegationEnt
+import com.example.mushafconsolidated.Entities.NegationEnt
 import com.example.mushafconsolidated.Entities.SurahHeader
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.fragments.GrammerFragmentsBottomSheet
@@ -309,8 +310,11 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         // extractLaNafiya()
         //   extractExpNegationSentences()
         // extractNegativeSentences()
-          //mainLoopFromIndexExtraction()
-        mainLoopforIndexEXTRACTION()
+        val start=false
+        if(start) {
+            mainLoopFromIndexExtraction()
+            //mainLoopforIndexEXTRACTION()
+        }
 
         supportFragmentManager.commit {
             replace<NewSurahDisplayFrag>(R.id.frame_container_qurangrammar, SURAHFRAGTAG)
@@ -321,6 +325,65 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         }
     }
 
+    fun extractSentenceAndTranslationFromIndices(
+        corpus: List<CorpusEntity>,
+        wordInfo: NegationEnt,
+        quranText: String
+
+    ): List<String> {
+        val result = mutableListOf<String>()
+
+        for (info in corpus) {
+            var startIndex = -1
+            var endIndex = -1
+            var currentWordIndex = 0
+            val wordsInVerse =
+                quranText.split("\\s+".toRegex()) // Split Arabic verse by whitespace to get individual words
+
+            // Find the start and end index for the words based on wordfrom and wordto
+            for ((i, word) in wordsInVerse.withIndex()) {
+                if (currentWordIndex + 1 == wordInfo.wordfrom) {
+                    startIndex = quranText.indexOf(word)
+                }
+                if (currentWordIndex + 1 == wordInfo.wordto) {
+                    endIndex = quranText.indexOf(word) + word.length
+                    break
+                }
+                currentWordIndex++
+            }
+           var extractedSentence=""
+            if (startIndex != -1 && endIndex != -1) {
+                // Extract the Arabic sentence between the start and end indexes
+                try {
+                      extractedSentence = quranText.substring(startIndex, endIndex).trim()
+                } catch (e:StringIndexOutOfBoundsException){
+                    e.printStackTrace()
+                    println(wordInfo.surahid +wordInfo.ayahid)
+                    println(quranText)
+                }
+
+
+                // Extract translation using wordfrom and wordnoto
+                val translationBuilder = StringBuilder()
+                for (entry in corpus) {
+                    if (entry.wordno in wordInfo.wordfrom..wordInfo.wordto) {
+                        translationBuilder.append("${entry.en} ").append(" ")
+                    }
+                }
+                val extractedTranslation = translationBuilder.toString().trim()
+
+                // Format the result string
+                val dataString =
+                    "${wordInfo.surahid}|${wordInfo.ayahid}|${wordInfo.wordfrom}|${wordInfo.wordto}|$startIndex|$endIndex|$extractedSentence|$extractedTranslation|${wordInfo.type}"
+                result.add(dataString)
+            } else {
+                // Handle the case when startIndex or endIndex is not found
+                result.add("Error: Couldn't find indices for Surah ${wordInfo.surahid}, Ayah ${wordInfo.ayahid}, Words ${wordInfo.wordfrom} to ${wordInfo.wordto}")
+            }
+        }
+
+        return result
+    }
 
     fun extractSentencesFromIndexdata(
         corpus: List<CorpusEntity>,
@@ -366,7 +429,8 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         //  val corpus = mainViewModel.getCorpusEntityFilterSurah(1)
         //   val quran = mainViewModel.getquranbySUrah(i)
         val utils = Utils(this)
-        val wordino = utils.getExpInMaIllaNegationall()
+        // val wordino = utils.getExpInMaIllaNegationall()
+        val wordino = utils.getNegationall()
         //   val wordino=  utils.getfutureall()
         //  val wordino= utils.getpresentall()
         //   val wordino=mainViewModel.getLamMudharyNegationAll()
@@ -378,10 +442,14 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                     as ArrayList<CorpusEntity>
             val quran = mainViewModel.getsurahayahVerses(ss.surahid, ss.ayahid)
 
-
-            //  val lamNegationDataList =              extractSentencesFromIndexdata(corpusEntity,ss, quran.value!![0].qurantext)
+            val lamNegationDataList = extractSentenceAndTranslationFromIndices(
+                corpusEntity,
+                ss,
+                quran.value!![0].qurantext
+            )
+            //    val lamNegationDataList =              extractSentencesFromIndexdata(corpusEntity,ss, quran.value!![0].qurantext)
             // val lamNegationDataList=         maaPastTenceNegation(corpusEntity, quran.value!![s].qurantext)
-            val lamNegationDataList =                setPresentTenceNegationwithLA(corpusEntity, quran.value!![s].qurantext)
+            //    val lamNegationDataList =                setPresentTenceNegationwithLA(corpusEntity, quran.value!![s].qurantext)
             //    val lamNegationDataList=         setMaaNegationPresent(corpusEntity, quran.value!![s].qurantext)
             // val lamNegationDataList=         setLunNegation(corpusEntity, quran.value!![s].qurantext)
             //    val lamNegationDataList=         setLaaNegationPresent(corpusEntity, quran.value!![s].qurantext)
@@ -398,7 +466,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         }
 
 
-        val fileName = "velanegation.csv"
+        val fileName = "negationdata.csv"
         writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
     }
 
@@ -451,17 +519,16 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                     i, quran.value!![s].ayah
                 ) as ArrayList<CorpusEntity>
 
-               // val lamNegationDataList =             setPresentTenceNegationwithLA(corpusEntity, quran.value!![s].qurantext)//GOOD
+                // val lamNegationDataList =             setPresentTenceNegationwithLA(corpusEntity, quran.value!![s].qurantext)//GOOD
 
 
                 //    val lamNegationDataList=         setMaaNegationPresent(corpusEntity, quran.value!![s].qurantext)//good
                 // val lamNegationDataList=         setLunNegation(corpusEntity, quran.value!![s].qurantext)//good
 
 
-
-
-           //  val lamNegationDataList =      setLamNegation(corpusEntity, quran.value!![s].qurantext)good
-       val lamNegationDataList=         maaPastTenceNegation(corpusEntity, quran.value!![s].qurantext)
+                //  val lamNegationDataList =      setLamNegation(corpusEntity, quran.value!![s].qurantext)good
+                val lamNegationDataList =
+                    maaPastTenceNegation(corpusEntity, quran.value!![s].qurantext)
 
 
                 // val lamNegationDataList=         setJumlaIsmiyaNegationMaaLaysa(corpusEntity, quran.value!![s].qurantext)
@@ -557,7 +624,6 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             Log.e("FileIO", "Error writing to file: ${e.message}")
         }
     }
-
 
 
     fun extractInMaIllaPositiveSentences(
@@ -1098,17 +1164,17 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             var lamcombination = ""
 
             val maafound2 =
-                 (entry.aratwo == "مَا" || entry.aratwo == "مَّا" || entry.aratwo == "مَآ")
+                (entry.aratwo == "مَا" || entry.aratwo == "مَّا" || entry.aratwo == "مَآ")
             val maafound3 =
-             (entry.arathree == "مَا" || entry.arathree == "مَّا" || entry.arathree == "مَآ")
+                (entry.arathree == "مَا" || entry.arathree == "مَّا" || entry.arathree == "مَآ")
             var isIndictiveVerb = false
-var isImperfect=false
-            var containsmood=false
-            var onlyimperfect=false
+            var isImperfect = false
+            var containsmood = false
+            var onlyimperfect = false
             if (i + 1 < corpus.size) {
-                 isImperfect = corpus[i + 1].detailsone!!.contains("IMPF")
-                 containsmood = corpus[i + 1].detailsone!!.contains("MOOD")
-                 onlyimperfect = false
+                isImperfect = corpus[i + 1].detailsone!!.contains("IMPF")
+                containsmood = corpus[i + 1].detailsone!!.contains("MOOD")
+                onlyimperfect = false
                 if (containsmood) {
                     onlyimperfect =
                         !(corpus[i + 1].detailsone?.contains("MOOD:JUS") == true || entry.detailsone?.contains(
@@ -1118,14 +1184,16 @@ var isImperfect=false
             }
             if (i + 1 < corpus.size) {
 
-                isIndictiveVerb =corpus[i + 1].detailsone?.contains("IMPF") == true && !(corpus[i + 1].detailsone?.contains("MOOD:JUS"
+                isIndictiveVerb =
+                    corpus[i + 1].detailsone?.contains("IMPF") == true && !(corpus[i + 1].detailsone?.contains(
+                        "MOOD:JUS"
                     ) == true || corpus[i + 1].detailsone?.contains("MOOD:SUBJ") == true)
                 lamcombination = "مَا"
             }
 
-            if (maaFound || maafound2 || maafound3){
-                    println("check")
-                }
+            if (maaFound || maafound2 || maafound3) {
+                println("check")
+            }
 
 
             if ((maaFound || maafound2 || maafound3) && (isImperfect && !onlyimperfect)) {
@@ -1159,7 +1227,7 @@ var isImperfect=false
                     phraseStartIndex + completeverb.length + nextWordDetail.length
                 val translationBuilder = StringBuilder()
                 //      if (entry.wordno in info.wordfrom..info.wordnoto) {
-                val startword=entry.wordno
+                val startword = entry.wordno
                 for (entry in corpus) {
                     if (entry.wordno in startword..nextword) {
                         // Assuming we're extracting the English translation (you can replace 'en' with another language field if needed)
@@ -1167,7 +1235,7 @@ var isImperfect=false
                     }
                 }
                 val extractedTranslation = translationBuilder.toString().trim()
-val type="present"
+                val type = "present"
                 // Apply underline span
                 if (startIndex != -1 && phraseStartIndex != -1) {
                     spannableVerse.subSequence(startIndex, phraseEndIndex)/*    spannableVerse.setSpan(
@@ -1306,7 +1374,8 @@ val type="present"
 
         for (i in corpus.indices) {
             val entry = corpus[i]
-            val lamFound = (entry.tagone == "NEG") && (entry.araone == "لَمْ" || entry.araone=="لَّمْ" || entry.araone=="لَمَّا")
+            val lamFound =
+                (entry.tagone == "NEG") && (entry.araone == "لَمْ" || entry.araone == "لَّمْ" || entry.araone == "لَمَّا")
             val maaFound = entry.tagone == "NEG" && entry.araone == "مَا"
             var lamcombination = ""
 
@@ -1338,7 +1407,7 @@ val type="present"
 
 
             if (lamFound || jussinvVerbfound || jussinvVerbfound) {
-                val targetWords = listOf("لَمْ", "أَلَمْ", "وَلَمْ", "فَلَمْ", "أَوَلَمْ",)
+                val targetWords = listOf("لَمْ", "أَلَمْ", "وَلَمْ", "فَلَمْ", "أَوَلَمْ")
                 val occurrences = findWordOccurrencesArabic(spannableVerse.toString(), targetWords)
 
                 // Find the start index of the NEG word
@@ -1359,15 +1428,15 @@ val type="present"
                         corpus[i + 2].araone + corpus[i + 2].aratwo + corpus[i + 2].arathree + corpus[i + 2].arafour + corpus[i + 2].arafive
                 }
 
-              /*  } else if (i + 3 < corpus.size) {
+                /*  } else if (i + 3 < corpus.size) {
 
-                    nextWordDetail =
-                        corpus[i + 3].araone + corpus[i + 3].aratwo + corpus[i + 3].arathree + corpus[i + 3].arafour + corpus[i + 3].arafive
-                }*/
+                      nextWordDetail =
+                          corpus[i + 3].araone + corpus[i + 3].aratwo + corpus[i + 3].arathree + corpus[i + 3].arafour + corpus[i + 3].arafive
+                  }*/
                 val phraseEndIndex =
                     phraseStartIndex + completeverb.length + nextWordDetail.length
-                val translationBuilder=StringBuilder()
-                val firstword=entry.wordno
+                val translationBuilder = StringBuilder()
+                val firstword = entry.wordno
                 for (entry in corpus) {
                     if (entry.wordno in firstword..nextword) {
                         // Assuming we're extracting the English translation (you can replace 'en' with another language field if needed)
@@ -1376,7 +1445,7 @@ val type="present"
                 }
                 val extractedTranslation = translationBuilder.toString().trim()
 
-               val type="past"
+                val type = "past"
                 // Apply underline span
                 if (startIndex != -1 && phraseStartIndex != -1) {/*    spannableVerse.setSpan(
                             UnderlineSpan(),
@@ -1474,8 +1543,8 @@ val type="present"
                 val phraseEndIndex =
                     phraseStartIndex + completeverb.length + nextWordDetail.length
 
-                val translationBuilder=StringBuilder()
-                val firstword=corpus[i].wordno
+                val translationBuilder = StringBuilder()
+                val firstword = corpus[i].wordno
                 for (entry in corpus) {
                     if (entry.wordno in firstword..nextword) {
                         // Assuming we're extracting the English translation (you can replace 'en' with another language field if needed)
@@ -1484,7 +1553,7 @@ val type="present"
                 }
                 val extractedTranslation = translationBuilder.toString().trim()
 
- val type="past"
+                val type = "past"
                 // Apply underline span
                 if (startIndex != -1 && phraseStartIndex != -1) {/*    spannableVerse.setSpan(
                             UnderlineSpan(),
@@ -1567,13 +1636,13 @@ val type="present"
                     corpus[i].araone + corpus[i].aratwo + corpus[i].arathree + corpus[i].arafour + corpus[i].arafive
                 //    }
 
-               val currentword=corpus[i].wordno
-                val firstword=corpus[i-1].wordno
+                val currentword = corpus[i].wordno
+                val firstword = corpus[i - 1].wordno
                 // Find the indices for the prepositional phrase
                 val phraseStartIndex =
                     spannableVerse.indexOf(prepositionalPhrase.toString(), startIndex)
                 val phraseEndIndex = phraseStartIndex + prepositionalPhrase.length
-                val translationBuilder=StringBuilder()
+                val translationBuilder = StringBuilder()
                 for (entry in corpus) {
                     if (entry.wordno in firstword..currentword) {
                         // Assuming we're extracting the English translation (you can replace 'en' with another language field if needed)
@@ -1581,7 +1650,6 @@ val type="present"
                     }
                 }
                 val extractedTranslation = translationBuilder.toString().trim()
-
 
 
                 // Apply underline span
@@ -1635,15 +1703,15 @@ val type="present"
                     corpus[i].araone + corpus[i].aratwo + corpus[i].arathree + corpus[i].arafour + corpus[i].arafive
                 //    }
 
-                val currentword=corpus[i].wordno
-                val firstword=corpus[i-2].wordno
+                val currentword = corpus[i].wordno
+                val firstword = corpus[i - 2].wordno
 
 
                 // Find the indices for the prepositional phrase
                 val phraseStartIndex =
                     spannableVerse.indexOf(prepositionalPhrase.toString(), startIndex)
                 val phraseEndIndex = phraseStartIndex + prepositionalPhrase.length
-                val translationBuilder=StringBuilder()
+                val translationBuilder = StringBuilder()
                 for (entry in corpus) {
                     if (entry.wordno in firstword..currentword) {
                         // Assuming we're extracting the English translation (you can replace 'en' with another language field if needed)

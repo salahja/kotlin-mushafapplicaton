@@ -23,11 +23,12 @@ class FutureTenceNegatonEnt constructor(
     var surahid: Int,
     var ayahid: Int,
     var wordfrom: Int,
-    var wordnoto:Int,
+    var wordto:Int,
     var startindex: Int,
     var endindex: Int,
     var arabictext: String,
     var englishtext:String,
+    var type:String,
 
     @field:PrimaryKey(
         autoGenerate = true
