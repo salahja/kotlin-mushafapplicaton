@@ -381,8 +381,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
             //  val lamNegationDataList =              extractSentencesFromIndexdata(corpusEntity,ss, quran.value!![0].qurantext)
             // val lamNegationDataList=         maaPastTenceNegation(corpusEntity, quran.value!![s].qurantext)
-            val lamNegationDataList =
-                setPresentTenceNegationwithLA(corpusEntity, quran.value!![s].qurantext)
+            val lamNegationDataList =                setPresentTenceNegationwithLA(corpusEntity, quran.value!![s].qurantext)
             //    val lamNegationDataList=         setMaaNegationPresent(corpusEntity, quran.value!![s].qurantext)
             // val lamNegationDataList=         setLunNegation(corpusEntity, quran.value!![s].qurantext)
             //    val lamNegationDataList=         setLaaNegationPresent(corpusEntity, quran.value!![s].qurantext)
@@ -452,15 +451,18 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                     i, quran.value!![s].ayah
                 ) as ArrayList<CorpusEntity>
 
+               // val lamNegationDataList =             setPresentTenceNegationwithLA(corpusEntity, quran.value!![s].qurantext)//GOOD
 
-                // val lamNegationDataList =      setLamNegation(corpusEntity, quran.value!![s].qurantext)
-                // val lamNegationDataList=         maaPastTenceNegation(corpusEntity, quran.value!![s].qurantext)
-                val lamNegationDataList =             setPresentTenceNegationwithLA(corpusEntity, quran.value!![s].qurantext)//GOOD
-                //val lamNegationDataList =             setPresentTenceNegationwithMA(corpusEntity, quran.value!![s].qurantext)
 
                 //    val lamNegationDataList=         setMaaNegationPresent(corpusEntity, quran.value!![s].qurantext)//good
-                // val lamNegationDataList=         setLunNegation(corpusEntity, quran.value!![s].qurantext)
-                //    val lamNegationDataList=         setLaaNegationPresent(corpusEntity, quran.value!![s].qurantext)
+                // val lamNegationDataList=         setLunNegation(corpusEntity, quran.value!![s].qurantext)//good
+
+
+
+
+           //  val lamNegationDataList =      setLamNegation(corpusEntity, quran.value!![s].qurantext)good
+       val lamNegationDataList=         maaPastTenceNegation(corpusEntity, quran.value!![s].qurantext)
+
 
                 // val lamNegationDataList=         setJumlaIsmiyaNegationMaaLaysa(corpusEntity, quran.value!![s].qurantext)
                 // val lamNegationDataList =                extractInMaIllaSentences(corpusEntity, quran.value!![s].qurantext)
@@ -474,7 +476,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             }
 
         }
-        val fileName = "v2-lanegationtranslation.csv"
+        val fileName = "v2-maapasttranslation.csv"
         writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
     }
 
@@ -556,87 +558,6 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         }
     }
 
-    fun setLaaNegationPresent(
-        corpus: java.util.ArrayList<CorpusEntity>?, spannableVerse: String
-    ): List<String> {
-        val negativeSentences = mutableListOf<String>() // List to store the data
-        var currentSentence = mutableListOf<CorpusEntity>()
-
-        if (corpus == null) return negativeSentences // Handle null corpus
-
-        for (i in corpus.indices) {
-            val entry = corpus[i]
-            val lamFound =
-                entry.tagone == "NEG" && entry.araone == "لَّا" || entry.araone == "لَا" || entry.araone == "لَآ"
-            // val maaFound=entry.tagone=="NEG" && (entry.araone=="مَا" || entry.araone=="مَّا" || entry.araone=="مَآ")
-            var lamcombination = ""
-
-            val lamfound2 =
-                ((entry.tagone == "ACC" || entry.tagone == "SUB" || entry.tagone == "RSLT" || entry.tagone == "INTG" || entry.tagone == "CONJ" || entry.tagone == "REM" || entry.tagone == "CIRC") && (entry.aratwo == "لَّا" || entry.aratwo == "لَا" || entry.aratwo == "لَآ"))
-            val lamfound3 =
-                ((entry.tagone == "SUBJ" || entry.tagone == "INTG" || entry.tagtwo == "SUP" || entry.tagtwo == "CONJ") && (entry.arathree == "لَّا" || entry.arathree == "لَا" || entry.arathree == "لَآ"))
-            var isIndictiveVerb = false
-            if (i + 1 < corpus.size) {
-
-                isIndictiveVerb =
-                    corpus[i + 1].detailsone?.contains("IMPF") == true && !(corpus[i + 1].detailsone?.contains(
-                        "MOOD:JUS"
-                    ) == true || corpus[i + 1].detailsone?.contains("MOOD:SUBJ") == true)
-                lamcombination = "مَا"
-            }
-
-
-
-
-            if ((lamFound || lamfound2 || lamfound3) && isIndictiveVerb) {
-                val targetWords = listOf("لَآ", "لَا", "لَّا", "وَلَا", "فَلَا", "أَلَا")
-                //    val targetWords= listOf("مَا","مَّا","مَآ","وَمَا","فَمَا","وَلَمَّا")
-                val occurrences = findWordOccurrencesArabic(spannableVerse.toString(), targetWords)
-
-                // Find the start index of the NEG word
-                val startIndex =
-                    occurrences.firstOrNull { (wordNo, _) -> corpus[i].wordno == wordNo }?.second
-                        ?: -1
-
-                // Build the compeleteverb
-                val completeverb =
-                    corpus[i + 1].araone + corpus[i + 1].aratwo + corpus[i + 1].arathree + corpus[i + 1].arafour
-
-                val nextword = corpus[i + 1].wordno
-                // Find the indices for the prepositional phrase
-                val phraseStartIndex = spannableVerse.indexOf(completeverb.toString(), startIndex)
-                var nextWordDetail = ""
-                if (i + 2 < corpus.size) {
-                    nextWordDetail =
-                        corpus[i + 2].araone + corpus[i + 2].aratwo + corpus[i + 2].arathree + corpus[i + 2].arafour + corpus[i + 2].arafive
-
-                } else if (i + 3 < corpus.size) {
-
-                    nextWordDetail =
-                        corpus[i + 3].araone + corpus[i + 3].aratwo + corpus[i + 3].arathree + corpus[i + 3].arafour + corpus[i + 3].arafive
-                }
-                val phraseEndIndex =
-                    phraseStartIndex + completeverb.length + nextWordDetail.length
-
-                // Apply underline span
-                if (startIndex != -1 && phraseStartIndex != -1) {
-                    spannableVerse.subSequence(startIndex, phraseEndIndex)/*    spannableVerse.setSpan(
-                            UnderlineSpan(),
-                            startIndex,
-                            phraseEndIndex,
-                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                        )*/
-                    val sentece = spannableVerse.subSequence(startIndex, phraseEndIndex)
-                    // Add data to the list
-                    val dataString =
-                        "${entry.surah}|${entry.ayah}|${entry.wordno}| ${nextword}|$startIndex|$phraseEndIndex|$sentece"
-                    negativeSentences.add(dataString)
-                }
-            }
-        }
-
-        return negativeSentences // Return the list of data strings
-    }
 
 
     fun extractInMaIllaPositiveSentences(
@@ -1385,7 +1306,7 @@ val type="present"
 
         for (i in corpus.indices) {
             val entry = corpus[i]
-            val lamFound = entry.tagone == "NEG" && entry.araone == "لَمْ"
+            val lamFound = (entry.tagone == "NEG") && (entry.araone == "لَمْ" || entry.araone=="لَّمْ" || entry.araone=="لَمَّا")
             val maaFound = entry.tagone == "NEG" && entry.araone == "مَا"
             var lamcombination = ""
 
@@ -1417,7 +1338,7 @@ val type="present"
 
 
             if (lamFound || jussinvVerbfound || jussinvVerbfound) {
-                val targetWords = listOf("لَمْ", "أَلَمْ", "وَلَمْ", "فَلَمْ", "أَوَلَمْ", "أَفَلَ")
+                val targetWords = listOf("لَمْ", "أَلَمْ", "وَلَمْ", "فَلَمْ", "أَوَلَمْ",)
                 val occurrences = findWordOccurrencesArabic(spannableVerse.toString(), targetWords)
 
                 // Find the start index of the NEG word
@@ -1436,15 +1357,26 @@ val type="present"
                 if (i + 2 < corpus.size) {
                     nextWordDetail =
                         corpus[i + 2].araone + corpus[i + 2].aratwo + corpus[i + 2].arathree + corpus[i + 2].arafour + corpus[i + 2].arafive
+                }
 
-                } else if (i + 3 < corpus.size) {
+              /*  } else if (i + 3 < corpus.size) {
 
                     nextWordDetail =
                         corpus[i + 3].araone + corpus[i + 3].aratwo + corpus[i + 3].arathree + corpus[i + 3].arafour + corpus[i + 3].arafive
-                }
+                }*/
                 val phraseEndIndex =
                     phraseStartIndex + completeverb.length + nextWordDetail.length
+                val translationBuilder=StringBuilder()
+                val firstword=entry.wordno
+                for (entry in corpus) {
+                    if (entry.wordno in firstword..nextword) {
+                        // Assuming we're extracting the English translation (you can replace 'en' with another language field if needed)
+                        translationBuilder.append("${entry.en} ").append(" ")
+                    }
+                }
+                val extractedTranslation = translationBuilder.toString().trim()
 
+               val type="past"
                 // Apply underline span
                 if (startIndex != -1 && phraseStartIndex != -1) {/*    spannableVerse.setSpan(
                             UnderlineSpan(),
@@ -1456,7 +1388,7 @@ val type="present"
                     // Add data to the list
                     val sentence = spannableVerse.subSequence(startIndex, phraseEndIndex)
                     val dataString =
-                        "${entry.surah}|${entry.ayah}|${entry.wordno}| ${nextword}|$startIndex|$phraseEndIndex|$sentence"
+                        "${entry.surah}|${entry.ayah}|${firstword}| ${nextword}|$startIndex|$phraseEndIndex|$sentence|$extractedTranslation|$type"
                     negativeSentences.add(dataString)
                 }
             }
@@ -1538,14 +1470,21 @@ val type="present"
                         corpus[i + 2].araone + corpus[i + 2].aratwo + corpus[i + 2].arathree + corpus[i + 2].arafour + corpus[i + 2].arafive
 
 
-                } else if (i + 3 < corpus.size) {
-
-                    nextWordDetail =
-                        corpus[i + 3].araone + corpus[i + 3].aratwo + corpus[i + 3].arathree + corpus[i + 3].arafour + corpus[i + 3].arafive
                 }
                 val phraseEndIndex =
                     phraseStartIndex + completeverb.length + nextWordDetail.length
 
+                val translationBuilder=StringBuilder()
+                val firstword=corpus[i].wordno
+                for (entry in corpus) {
+                    if (entry.wordno in firstword..nextword) {
+                        // Assuming we're extracting the English translation (you can replace 'en' with another language field if needed)
+                        translationBuilder.append("${entry.en} ").append(" ")
+                    }
+                }
+                val extractedTranslation = translationBuilder.toString().trim()
+
+ val type="past"
                 // Apply underline span
                 if (startIndex != -1 && phraseStartIndex != -1) {/*    spannableVerse.setSpan(
                             UnderlineSpan(),
@@ -1556,7 +1495,7 @@ val type="present"
 
                     val sentence = spannableVerse.subSequence(startIndex, phraseEndIndex)
                     val dataString =
-                        "${entry.surah}|${entry.ayah}|${entry.wordno}| ${nextword}|$startIndex|$phraseEndIndex|$sentence"
+                        "${entry.surah}|${entry.ayah}|${firstword}| ${nextword}|$startIndex|$phraseEndIndex|$sentence|$extractedTranslation|$type"
                     negativeSentences.add(dataString)
                 }
             }
@@ -1565,158 +1504,7 @@ val type="present"
         return negativeSentences // Return the list of data strings
     }
 
-    fun setPresentTenceNegationwithMA(
-        corpus: java.util.ArrayList<CorpusEntity>?, spannableVerse: String
-    ): List<String> {
-        val absoluteNegationData = mutableListOf<String>() // List to store the data
 
-        if (corpus == null) return absoluteNegationData // Handle null corpus
-        val targetWordss = listOf("مَا", "مَّا", "مَآ", "وَمَا", "فَمَا", "وَلَمَّا")
-        for (i in corpus.indices) {
-            val word = corpus[i]
-            var startIndex = 0
-            if (word.surah == 2 && word.ayah == 123) {
-                println(corpus[i].araone)
-            }
-            // Check for the scenario: Noun (ACC), preceding NEG, following P + PRON
-
-            val isImperfect = word.detailsone!!.contains("IMPF")
-            val containsmood = word.detailsone!!.contains("MOOD")
-            var onlyimperfect = false
-            if (containsmood) {
-                onlyimperfect =
-                    !(word.detailsone?.contains("MOOD:JUS") == true || word.detailsone?.contains("MOOD:SUBJ") == true)
-            }
-            val isIndictiveVerb =
-                word.detailsone?.contains("IMPF") == true && !(word.detailsone?.contains("MOOD:JUS") == true || word.detailsone?.contains(
-                    "MOOD:SUBJ"
-                ) == true)
-            if (word.wordno == 10) {
-                println("check")
-            }
-            if (word.wordno == 14) {
-                println("check")
-            }
-
-            if ((isImperfect && !onlyimperfect) && i > 0 &&
-                ((corpus[i - 1].tagone.equals(
-                    "NEG",
-                    ignoreCase = true
-                ) && (corpus[i - 1].araone == "مَا" || corpus[i - 1].araone == "مَّا" || corpus[i - 1].araone == "مَآ")) ||
-                        (corpus[i - 1].tagtwo.equals(
-                            "neg",
-                            ignoreCase = true
-                        ) && (corpus[i - 1].aratwo == "مَا" || corpus[i - 1].aratwo == "مَّا" || corpus[i - 1].aratwo == "مَآ")))
-            ) {
-
-                val targetWords = listOf("مَا", "مَّا", "مَآ", "وَمَا", "فَمَا", "وَلَمَّا")
-                val occurrences = findWordOccurrencesArabic(spannableVerse.toString(), targetWords)
-                for ((wordNo, index) in occurrences) {
-                    if (corpus[i - 1].wordno == wordNo) {
-
-                        startIndex = index
-                        break
-                    }
-
-                }
-                // Build the prepositional phrase
-                var prepositionalPhrase = ""
-                // if (i+1 < corpus.size) {
-
-                prepositionalPhrase =
-                    corpus[i].araone + corpus[i].aratwo + corpus[i].arathree + corpus[i].arafour + corpus[i].arafive
-                //    }
-
-                val currentword=corpus[i].wordno
-                val firstword=corpus[i-1].wordno
-                // Find the indices for the prepositional phrase
-                val phraseStartIndex =
-                    spannableVerse.indexOf(prepositionalPhrase.toString(), startIndex)
-                val phraseEndIndex = phraseStartIndex + prepositionalPhrase.length
-
-                // Apply underline span
-                if (startIndex != -1 && phraseStartIndex != -1) {
-//                    println("spannable"+spannableVerse.subSequence(startIndex,phraseEndIndex))
-                    /*    spannableVerse.setSpan(
-                            UnderlineSpan(),
-                            startIndex,
-                            phraseEndIndex,
-                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                        )*/
-                    val sentence = spannableVerse.subSequence(startIndex, phraseEndIndex)
-                    val type = "present"
-                    // Add data to the list
-                    val dataString =
-                        "${word.surah}|${word.ayah}|${firstword}|${currentword}|$startIndex|$phraseEndIndex|$sentence|$type"
-                    absoluteNegationData.add(dataString)
-                }
-            }
-
-
-
-
-            if ((isImperfect && !onlyimperfect) && i > 1 &&
-                ((corpus[i - 1].tagone.equals(
-                    "PRON",
-                    ignoreCase = true
-                ) && (corpus[i - 2].araone == "مَا" || corpus[i - 2].araone == "مَّا" || corpus[i - 2].araone == "وَمَا")) ||
-                        (corpus[i - 2].tagtwo.equals(
-                            "neg",
-                            ignoreCase = true
-                        ) && (corpus[i - 2].aratwo == "مَا" || corpus[i - 2].aratwo == "مَّا" || corpus[i - 2].aratwo == "وَمَا")))
-            ) {
-
-                val targetWords = listOf("مَا", "مَّا", "مَآ", "وَمَا", "فَمَا", "وَلَمَّا")
-                val occurrences = findWordOccurrencesArabic(spannableVerse.toString(), targetWords)
-                for ((wordNo, index) in occurrences) {
-                    if (corpus[i - 2].wordno == wordNo) {
-
-                        startIndex = index
-                        break
-                    }
-
-                }
-                // Build the prepositional phrase
-                var prepositionalPhrase = ""
-                // if (i+1 < corpus.size) {
-
-                prepositionalPhrase =
-                    corpus[i].araone + corpus[i].aratwo + corpus[i].arathree + corpus[i].arafour + corpus[i].arafive
-                //    }
-
-                val currentword=corpus[i].wordno
-                val firstword=corpus[i-2].wordno
-
-
-                // Find the indices for the prepositional phrase
-                val phraseStartIndex =
-                    spannableVerse.indexOf(prepositionalPhrase.toString(), startIndex)
-                val phraseEndIndex = phraseStartIndex + prepositionalPhrase.length
-
-                // Apply underline span
-                if (startIndex != -1 && phraseStartIndex != -1) {
-//                    println("spannable"+spannableVerse.subSequence(startIndex,phraseEndIndex))
-                    /*    spannableVerse.setSpan(
-                            UnderlineSpan(),
-                            startIndex,
-                            phraseEndIndex,
-                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                        )*/
-                    val sentence = spannableVerse.subSequence(startIndex, phraseEndIndex)
-                    val type = "present"
-                    // Add data to the list
-                    val dataString =
-                        "${word.surah}|${word.ayah}|${firstword}|${currentword}|$startIndex|$phraseEndIndex|$sentence|$type"
-                    absoluteNegationData.add(dataString)
-                }
-            }
-        }
-        if (absoluteNegationData.size > 0) {
-            println(absoluteNegationData)
-
-        }
-        return absoluteNegationData // Return the list of data strings
-    }
     fun setPresentTenceNegationwithLA(
         corpus: java.util.ArrayList<CorpusEntity>?, spannableVerse: String
     ): List<String> {
