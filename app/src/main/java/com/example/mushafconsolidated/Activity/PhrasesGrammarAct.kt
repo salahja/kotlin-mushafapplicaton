@@ -995,6 +995,7 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
 
            }else if(harf == "mausuf"){
                sifaSentences = util.getSifalisting(chapterno)
+                               util.getSifalistingType(chapterno,"nountype")
                for (ac in sifaSentences) {
                    ac.spannableVerse= SpannableString(ac.qurantext)
                }

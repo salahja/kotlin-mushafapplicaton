@@ -264,10 +264,22 @@ class Utils {
 
     }
     fun getSifalisting(tid:Int):List<SifaListingPojo>{
-        val sqlshart:String=("select sifa.surah,sifa.ayah,sifa.startindex,sifa.endindex,sifa.wordno,qurans.page,qurans.passage_no,qurans.qurantext,qurans.has_prostration,qurans.translation,\n" +
+        val sqlshart:String=("select sifa.surah,sifa.ayah,sifa.startindex,sifa.endindex,sifa.wordfrom,qurans.page,qurans.passage_no,qurans.qurantext,qurans.has_prostration,qurans.translation,\n" +
                 "qurans.en_transliteration,qurans.en_arberry,qurans.en_jalalayn,qurans.ur_jalalayn,qurans.tafsir_kathir,qurans.ur_junagarhi,qurans.ar_irab_two\n" +
                 " from sifa,qurans where sifa.surah=qurans.surah and sifa.ayah=qurans.ayah and sifa.surah ==  \""
                 + tid + "\"")
+
+        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(sqlshart)
+        //  List<Book> result = booksDao.getBooks(query);
+        return database.RawDao().getSifaListing(query)
+
+
+    }
+    fun getSifalistingType(tid:Int,type: String):List<SifaListingPojo>{
+        val sqlshart:String=("select sifa.surah,sifa.ayah,sifa.startindex,sifa.endindex,sifa.wordfrom,sifa.comment,qurans.page,qurans.passage_no,qurans.qurantext,qurans.has_prostration,qurans.translation,\n" +
+                "qurans.en_transliteration,qurans.en_arberry,qurans.en_jalalayn,qurans.ur_jalalayn,qurans.tafsir_kathir,qurans.ur_junagarhi,qurans.ar_irab_two\n" +
+                " from sifa,qurans where sifa.surah=qurans.surah and sifa.ayah=qurans.ayah and sifa.surah ==  \""
+                + tid + "\""       +" and sifa.comment ==  \""+type+"\"")
 
         val query: SimpleSQLiteQuery = SimpleSQLiteQuery(sqlshart)
         //  List<Book> result = booksDao.getBooks(query);
@@ -348,7 +360,7 @@ class Utils {
     }
 
     fun getSIfa(tid:Int):List<SifaListingPojo>{
-        val sqlshart:String=("select  sifa.surah,sifa.ayah,sifa.startindex,sifa.endindex,sifa.wordno,qurans.en_arberry,qurans.en_jalalayn,qurans.ur_jalalayn,qurans.tafsir_kathir,qurans.ur_junagarhi,qurans.ar_irab_two\n" +
+        val sqlshart:String=("select  sifa.surah,sifa.ayah,sifa.startindex,sifa.endindex,sifa.wordfrom,qurans.en_arberry,qurans.en_jalalayn,qurans.ur_jalalayn,qurans.tafsir_kathir,qurans.ur_junagarhi,qurans.ar_irab_two\n" +
                 " from newnasb,qurans where newnasb.surah=qurans.surah and newnasb.ayah=qurans.ayah and " +
                 "newnasb.surah ==  \""
                 + tid + "\"")
@@ -721,6 +733,10 @@ class Utils {
 
     fun getSifabySurah(id: Int): List<SifaEntity?>? {
         return database.SifaDao().getSifaindexesBySurah(id)
+    }
+
+    fun getSifaAll(): List<SifaEntity> {
+        return database.SifaDao().getSifaAll()
     }
 
     fun getSifabySurahAyah(id: Int, aid: Int): List<SifaEntity>? {

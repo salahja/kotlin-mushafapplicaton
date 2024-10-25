@@ -1718,8 +1718,8 @@ if (w != null) {
                     val sequence =
                         spannable.subSequence(shartEntity.startindex, shartEntity.endindex)
                     mausoofsifaarray.add(sequence as SpannableString)
-                    val wordfrom = shartEntity.wordno - 1
-                    val wordto = shartEntity.wordno
+                    val wordfrom = shartEntity.wordfrom - 1
+                    val wordto = shartEntity.wordfrom
                     val ssb = StringBuilder()
                     val list: List<wbwentity>? = utils.getwbwQuranbTranslation(
                         corpusSurahWord!![0].surah,

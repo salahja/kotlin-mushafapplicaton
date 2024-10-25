@@ -680,8 +680,9 @@ class FlowAyahWordAdapterNoMafoolat(
 
     private fun setTextSizes(holder: ItemViewAdapter) {
         if (!defaultfont) {
+            val erabsize=30f
             holder.quran_transliteration.textSize = translationfontsize.toFloat()
-            holder.erab_textView.textSize = translationfontsize.toFloat()
+            holder.erab_textView.textSize = erabsize
             holder.translate_textView.textSize = translationfontsize.toFloat()
             holder.translate_textViewnote.textSize = translationfontsize.toFloat()
             holder.quran_jalalayn.textSize = translationfontsize.toFloat()

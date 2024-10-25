@@ -856,7 +856,7 @@ class GrammerFragmentsBottomSheetOrig : BottomSheetDialogFragment() {
         val sifabySurahAyah: List<SifaEntity>? =
             utils.getSifabySurahAyah(chapterid, ayanumber)
         if (sifabySurahAyah != null) {
-            for (shartEntity in sifabySurahAyah) {
+            for (sifaEntity in sifabySurahAyah) {
                 sifaspansDark = if (dark) {
                     BackgroundColorSpan(WBURNTUMBER)
                 } else {
@@ -869,17 +869,17 @@ class GrammerFragmentsBottomSheetOrig : BottomSheetDialogFragment() {
                 try {
                     spannable.setSpan(
                         sifaspansDark,
-                        shartEntity.startindex,
-                        shartEntity.endindex,
+                        sifaEntity.startindex,
+                        sifaEntity.endindex,
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                     )
                 } catch (e: IndexOutOfBoundsException) {
-                    println(shartEntity.surah.toString() + "  " + shartEntity.ayah + "  " + quranverses)
+                    println(sifaEntity.surah.toString() + "  " + sifaEntity.ayah + "  " + quranverses)
                 }
-                val sequence = spannable.subSequence(shartEntity.startindex, shartEntity.endindex)
+                val sequence = spannable.subSequence(sifaEntity.startindex, sifaEntity.endindex)
                 mausoofsifaarray.add(sequence as SpannableString)
-                val wordfrom = shartEntity.wordno - 1
-                val wordto = shartEntity.wordno
+                val wordfrom = sifaEntity.wordfrom - 1
+                val wordto = sifaEntity.wordfrom
                 val ssb = StringBuilder()
                 val list: List<wbwentity>? = utils.getwbwQuranbTranslation(
                     corpusSurahWord!![0].corpus.surah,

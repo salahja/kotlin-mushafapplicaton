@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "d4fb924164d10eced2c90053b746e552",
+    "identityHash": "b851e7fcb97e61fef9a1868ad450f947",
     "entities": [
       {
         "tableName": "negationfulldata",
@@ -1546,7 +1546,7 @@
       },
       {
         "tableName": "sifa",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surah` INTEGER NOT NULL, `ayah` INTEGER NOT NULL, `wordno` INTEGER NOT NULL, `startindex` INTEGER NOT NULL, `endindex` INTEGER NOT NULL, `phrasetype` TEXT NOT NULL, `ismousufconnected` INTEGER NOT NULL, `comment` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surah` INTEGER NOT NULL, `ayah` INTEGER NOT NULL, `wordfrom` INTEGER NOT NULL, `wordto` INTEGER NOT NULL, `startindex` INTEGER NOT NULL, `endindex` INTEGER NOT NULL, `arabictext` TEXT NOT NULL, `englishtext` TEXT NOT NULL, `comment` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
           {
             "fieldPath": "surah",
@@ -1561,8 +1561,14 @@
             "notNull": true
           },
           {
-            "fieldPath": "wordno",
-            "columnName": "wordno",
+            "fieldPath": "wordfrom",
+            "columnName": "wordfrom",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wordto",
+            "columnName": "wordto",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -1579,22 +1585,22 @@
             "notNull": true
           },
           {
-            "fieldPath": "phrasetype",
-            "columnName": "phrasetype",
+            "fieldPath": "arabictext",
+            "columnName": "arabictext",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "ismousufconnected",
-            "columnName": "ismousufconnected",
-            "affinity": "INTEGER",
+            "fieldPath": "englishtext",
+            "columnName": "englishtext",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
             "fieldPath": "comment",
             "columnName": "comment",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "id",
@@ -2469,7 +2475,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd4fb924164d10eced2c90053b746e552')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b851e7fcb97e61fef9a1868ad450f947')"
     ]
   }
 }
