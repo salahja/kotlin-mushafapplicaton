@@ -16,6 +16,7 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
+import androidx.compose.ui.semantics.text
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -42,6 +43,8 @@ import com.example.mushafconsolidated.intrfaceimport.OnItemClickListener
 import com.example.mushafconsolidated.intrfaceimport.PassdataInterface
 import com.example.mushafconsolidated.model.Juz
 import com.example.mushafconsolidated.quranrepo.QuranViewModel
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationBarView
 import dagger.hilt.android.AndroidEntryPoint
@@ -80,14 +83,15 @@ class PhrasesDisplayFrag : Fragment(), SearchView.OnQueryTextListener {
     private lateinit var queryTextListener: SearchView.OnQueryTextListener
     private lateinit var searchint: TextView
     private lateinit var bottomNavigationView: NavigationBarView
-    lateinit var innard: RadioButton
-    lateinit var kanard: RadioButton
-    lateinit var shartrd: RadioButton
-    lateinit var mudhafrd: RadioButton
-    lateinit var mousufrd: RadioButton
-    lateinit var phraserg:RadioGroup
-    lateinit var inmaNegationrb: RadioButton
-    lateinit var futureNegationrb:RadioButton
+    lateinit var innard: Chip
+    lateinit var kanard: Chip
+    lateinit var shartrd: Chip
+    lateinit var mudhafrd: Chip
+    lateinit var mousufrd: Chip
+    lateinit var phraserg:ChipGroup
+    lateinit var phrasergtwo:   RadioGroup
+    lateinit var inmaNegationrb: Chip
+    lateinit var futureNegationrb:Chip
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = PhrasesListSurahJuzBinding.inflate(layoutInflater)
@@ -319,8 +323,46 @@ class PhrasesDisplayFrag : Fragment(), SearchView.OnQueryTextListener {
             //    btnBottomSheet.setText("Expand sheet");
         }
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val chipGroup: ChipGroup = view.findViewById(R.id.phrase) // Find the ChipGroup
+
+        ParentAdapter.SetOnItemClickListener(object : OnItemClickListener {
+            override fun onItemClick(v: View?, position: Int) {
+                val item: ChaptersAnaEntity = ParentAdapter.getItem(position) as ChaptersAnaEntity
+
+                val checkedChipId = chipGroup.checkedChipId // Get the ID of the checked chip
+                val selectedChip: Chip? = view.findViewById(checkedChipId) // Find the checked chip
+
+                val selected: String? = selectedChip?.text.toString() // Get the text of the checked chip
+
+                val settingint = Intent(requireActivity(), PhrasesGrammarAct::class.java)
+
+                if (selected != null) { // Check if selected is not null
+                    when (selected) {
+                        "Inna" -> settingint.putExtra(Constant.HARF, "inna")
+                        "Kana" -> settingint.putExtra(Constant.HARF, "kana")
+                        "Mudhaf" -> settingint.putExtra(Constant.HARF, "mudhaf")
+                        "Shart" -> settingint.putExtra(Constant.HARF, "shart")
+                        "Mausouf" -> settingint.putExtra(Constant.HARF, "mausuf")
+                        "inmanegative" -> settingint.putExtra(Constant.HARF, "inmanegative")
+                        "Future Negation" -> settingint.putExtra(Constant.HARF, "Future Negation")
+                        "Present Tence Negation" -> settingint.putExtra(Constant.HARF, "Present Tence Negation")
+                        "Past Tence Negation" -> settingint.putExtra(Constant.HARF, "Past Tence Negation")
+                    }
+                }
+
+                settingint.putExtra(SURAH_ID, item.chapterid)
+                settingint.putExtra(RUKUCOUNT, item.rukucount)
+                settingint.putExtra(ISMAKKI, item.ismakki)
+                settingint.putExtra(VERSESCOUNT, item.versescount)
+                settingint.putExtra(SURAHNAME, item.abjadname)
+                startActivity(settingint)
+            }
+        })
+    }
+/*    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ParentAdapter.SetOnItemClickListener(object : OnItemClickListener {
             override fun onItemClick(v: View?, position: Int) {
@@ -353,7 +395,7 @@ class PhrasesDisplayFrag : Fragment(), SearchView.OnQueryTextListener {
 
         })
 
-    }
+    }*/
 
 
 

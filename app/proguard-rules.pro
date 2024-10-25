@@ -21,7 +21,7 @@
 #-renamesourcefileattribute SourceFile
 # Keep LeakCanary classes to avoid them from being obfuscated or removed
 -keep class leakcanary.** { *; }
-
+-keep class com.ibm.icu.text.Collator { *; }
 # LeakCanary relies on weak references, which ProGuard may strip out
 -keepclassmembers class * extends java.lang.ref.WeakReference {
     <init>(...);

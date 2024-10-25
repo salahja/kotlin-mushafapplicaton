@@ -51,13 +51,12 @@ import com.example.Constant.prussianblue
 import com.example.Constant.shartspanDark
 import com.example.Constant.sifaspansDark
 import com.example.mushafconsolidated.Entities.CorpusEntity
-import com.example.mushafconsolidated.Entities.FutureTenceNegatonEnt
-import com.example.mushafconsolidated.Entities.InMaIllaNegationEnt
-import com.example.mushafconsolidated.Entities.PastTenceNegatonEnt
+import com.example.mushafconsolidated.Entities.NegationEnt
+
 import com.example.mushafconsolidated.Entities.NewMudhafEntity
 import com.example.mushafconsolidated.Entities.NewNasbEntity
 import com.example.mushafconsolidated.Entities.NewShartEntity
-import com.example.mushafconsolidated.Entities.PresentTenceNegatonEnt
+
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.SifaEntity
 import com.example.mushafconsolidated.Entities.wbwentity
@@ -68,6 +67,7 @@ import com.example.mushafconsolidated.model.Word
 import com.example.mushafconsolidated.quranrepo.QuranRepository
 import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.example.utility.CorpusUtilityorig
+import com.example.utility.CorpusUtilityorig.Companion
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.Executors
@@ -254,10 +254,10 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
 
         expandableListDetail["Verse"] = verse
         expandableListDetail["Translation"] = translation
-        expandableListDetail["Verb sentence-Past Tence Negation- Stences(لَا/مَا)"] = PastTenceNegationArray
-        expandableListDetail["Verb sentence-Present Tence Negation- Stences(لَمْ/مَا)"] = presentTenceNegationArray
+        expandableListDetail["Verb sentence-Past Tence Negation- Stences(لَمْ/مَا))"] = PastTenceNegationArray
+        expandableListDetail["Verb sentence-Present Tence Negation- Stences(مَا/لَا)"] = presentTenceNegationArray
         expandableListDetail["Verb sentence-Future Tence Negation- Stences(لَّن)"] = futureTenceNegationArray
-        expandableListDetail["Verb sentence-Future Tence Negation- Stences(لَّن)"] = futureTenceNegationArray
+        expandableListDetail["Exceptive Sentences with (إلاّ-(أداة الاستْثناء)) & Restriction/Exclusive (الحَصْر) "] = InMaIllaNegationArray
         expandableListDetail["Conditional/جملة شرطية\""] = shartarray
         expandableListDetail["Accusative/ "] = harfnasbarray
         expandableListDetail["Verb kāna/كان واخواتها"] = kanaarray
@@ -272,20 +272,17 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
 
         val utils = Utils(requireContext())
         //   ArrayList<MudhafEntity> mudhafSurahAyah = utils.getMudhafSurahAyah(chapterid, ayanumber);
-        val mudhafSurahAyah: List<InMaIllaNegationEnt>? =
-            utils.getInMaIllaNegationFilterSurahAyah(chapterid, ayanumber)
+        val mudhafSurahAyah: List<NegationEnt>? =
+            utils.getNegationFilterSurahAyahType(chapterid, ayanumber,"exp")
         if (mudhafSurahAyah != null) {
             for (mudhafEntity in mudhafSurahAyah) {
-                val colorSpan = if (CorpusUtilityorig.dark) {
-                    Constant.mudhafspanDarks
-                } else {
-                    Constant.mudhafspanLight
-                }
+
+                val negationForegroundColorSpan = if (CorpusUtilityorig.dark) Constant.GOLD else Constant.FORESTGREEN
 
                 val quranverses: String = quran!![0].qurantext
                 val spannable = SpannableString(quranverses)
                 spannable.setSpan(
-                    colorSpan,
+                    negationForegroundColorSpan,
                     mudhafEntity.startindex,
                     mudhafEntity.endindex,
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -295,7 +292,7 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
                 inMaIllaNegationArray.add(sequence as SpannableString)
                 val sb = StringBuilder()
                 val wordfrom = mudhafEntity.wordfrom
-                val wordto = mudhafEntity.wordnoto
+                val wordto = mudhafEntity.wordto
                 val strings =
                     sequence.toString().split("\\s".toRegex()).dropLastWhile { it.isEmpty() }
                         .toTypedArray()
@@ -343,8 +340,8 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
     private fun setFutureTenceNegation(futureTenceNegationArray: MutableList<SpannableString>) {
         val utils = Utils(requireContext())
         //   ArrayList<MudhafEntity> mudhafSurahAyah = utils.getMudhafSurahAyah(chapterid, ayanumber);
-        val mudhafSurahAyah: List<FutureTenceNegatonEnt>? =
-            utils.getFuturetTenceNegatonFilerSurahAyah(chapterid, ayanumber)
+        val mudhafSurahAyah: List<NegationEnt>? =
+            utils.getNegationFilterSurahAyahType(chapterid, ayanumber,"future")
         if (mudhafSurahAyah != null) {
             for (mudhafEntity in mudhafSurahAyah) {
                 val colorSpan = if (CorpusUtilityorig.dark) {
@@ -366,7 +363,7 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
                 futureTenceNegationArray.add(sequence as SpannableString)
                 val sb = StringBuilder()
                 val wordfrom = mudhafEntity.wordfrom
-                val wordto = mudhafEntity.wordnoto
+                val wordto = mudhafEntity.wordto
                 val strings =
                     sequence.toString().split("\\s".toRegex()).dropLastWhile { it.isEmpty() }
                         .toTypedArray()
@@ -417,8 +414,8 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
 
         val utils = Utils(requireContext())
         //   ArrayList<MudhafEntity> mudhafSurahAyah = utils.getMudhafSurahAyah(chapterid, ayanumber);
-        val mudhafSurahAyah: List<PresentTenceNegatonEnt>? =
-            utils.getPresentTenceNegatonFilerSurahAyah(chapterid, ayanumber)
+        val mudhafSurahAyah: List<NegationEnt>? =
+            utils.getNegationFilterSurahAyahType(chapterid, ayanumber,"present")
         if (mudhafSurahAyah != null) {
             for (mudhafEntity in mudhafSurahAyah) {
                 val colorSpan = if (CorpusUtilityorig.dark) {
@@ -440,7 +437,7 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
                 presentTenceNegationArray.add(sequence as SpannableString)
                 val sb = StringBuilder()
                 val wordfrom = mudhafEntity.wordfrom
-                val wordto = mudhafEntity.wordnoto
+                val wordto = mudhafEntity.wordto
                 val strings =
                     sequence.toString().split("\\s".toRegex()).dropLastWhile { it.isEmpty() }
                         .toTypedArray()
@@ -488,8 +485,8 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
     private fun setPastTenceNegation(lamPastTenceNegationArray: MutableList<SpannableString>) {
         val utils = Utils(requireContext())
         //   ArrayList<MudhafEntity> mudhafSurahAyah = utils.getMudhafSurahAyah(chapterid, ayanumber);
-        val mudhafSurahAyah: List<PastTenceNegatonEnt>? =
-            utils.getPastTenceNegationFilterSurahAyah(chapterid, ayanumber)
+        val mudhafSurahAyah: List<NegationEnt>? =
+            utils.getNegationFilterSurahAyahType(chapterid, ayanumber,"past")
         if (mudhafSurahAyah != null) {
             for (mudhafEntity in mudhafSurahAyah) {
                 val colorSpan = if (CorpusUtilityorig.dark) {
@@ -511,7 +508,7 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
                 lamPastTenceNegationArray.add(sequence as SpannableString)
                 val sb = StringBuilder()
                 val wordfrom = mudhafEntity.wordfrom
-                val wordto = mudhafEntity.wordnoto
+                val wordto = mudhafEntity.wordto
                 val strings =
                     sequence.toString().split("\\s".toRegex()).dropLastWhile { it.isEmpty() }
                         .toTypedArray()
@@ -1721,8 +1718,8 @@ if (w != null) {
                     val sequence =
                         spannable.subSequence(shartEntity.startindex, shartEntity.endindex)
                     mausoofsifaarray.add(sequence as SpannableString)
-                    val wordfrom = shartEntity.wordno - 1
-                    val wordto = shartEntity.wordno
+                    val wordfrom = shartEntity.wordfrom - 1
+                    val wordto = shartEntity.wordfrom
                     val ssb = StringBuilder()
                     val list: List<wbwentity>? = utils.getwbwQuranbTranslation(
                         corpusSurahWord!![0].surah,

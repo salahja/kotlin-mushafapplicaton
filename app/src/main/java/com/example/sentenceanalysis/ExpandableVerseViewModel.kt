@@ -964,9 +964,9 @@ class ExpandableVerseViewModel(
         val sifabySurahAyah = utils.getSifabySurahAyah(chapterid, ayanumber)
         val tagColor = if (thememode) ComposeConstant.sifaspansDark else ComposeConstant.sifaspansLight
 
-        sifabySurahAyah?.forEach { shartEntity ->
+        sifabySurahAyah?.forEach { sifaEntity ->
             val quranVerses = quran!![0].qurantext
-            val substr = quranVerses.substring(shartEntity.startindex, shartEntity.endindex)
+            val substr = quranVerses.substring(sifaEntity.startindex, sifaEntity.endindex)
 
             val builder = AnnotatedString.Builder(substr)
             builder.addStyle(
@@ -979,8 +979,8 @@ class ExpandableVerseViewModel(
             val list = utils.getwbwQuranbTranslation(
                 corpusSurahWord!![0].corpus.surah,
                 corpusSurahWord!![0].corpus.ayah,
-                shartEntity.wordno - 1,
-                shartEntity.wordno
+                sifaEntity.wordfrom - 1,
+                sifaEntity.wordfrom
             )
             val sb = StringBuilder()
             list?.forEach { w ->

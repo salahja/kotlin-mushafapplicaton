@@ -19,8 +19,11 @@ import android.text.style.UnderlineSpan
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import com.example.Constant
+import com.example.Constant.harfshartspanDark
+import com.example.Constant.jawabshartspanDark
 
 import com.example.Constant.mudhafspanLight
+import com.example.Constant.shartspanDark
 import com.example.justJava.FrameSpan
 import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.CorpusExpandWbwPOJO
@@ -2530,8 +2533,11 @@ class CorpusUtilityorig(private var context: Context?) {
 
             if (spannableverse != null) {
 
-           //     setMudhafFromDBforAyah(spannableverse, surah, ayah)
+           //  setMudhafFromDBforAyah(spannableverse, surah, ayah)
               //  setMausoofforayah(spannableverse, surah, ayah)
+              //  setPastNegation(spannableverse, surah,ayah)
+               // setPresentNegation(spannableverse, surah,ayah)
+              //  setFutureNegation(spannableverse, surah,ayah)
                 setShartSurahAyah(spannableverse, surah, ayah)
                 setInnahIsmSurahAyah(spannableverse,surah,ayah)
                 setKanaSurahAyah(spannableverse,surah,ayah)
@@ -2714,7 +2720,7 @@ class CorpusUtilityorig(private var context: Context?) {
                         try {
                             if (indexstart == 0 || indexstart > 0) {
                                 spannableverse.setSpan(
-                                    Constant.harfshartspanDark,
+                                    harfshartspanDark,
                                     indexstart,
                                     indexend,
                                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -2728,7 +2734,7 @@ class CorpusUtilityorig(private var context: Context?) {
                             }
                             if (shartsindex == 0 || shartsindex > 0) {
                                 spannableverse.setSpan(
-                                    Constant.shartspanDark,
+                                    shartspanDark,
                                     shartsindex,
                                     sharteindex,
                                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -2750,7 +2756,7 @@ class CorpusUtilityorig(private var context: Context?) {
                                     myDrawable.intrinsicHeight
                                 )
                                 spannableverse.setSpan(
-                                    Constant.jawabshartspanDark,
+                                    jawabshartspanDark,
                                     jawabstartindex,
                                     jawabendindex,
                                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -2774,7 +2780,124 @@ class CorpusUtilityorig(private var context: Context?) {
 
 
 
+        fun setPresentNegation(
+            spannableverse: SpannableString,
+            surah_id: Int,
+            ayah_id: Int
+        ) {
+            val utils = Utils(QuranGrammarApplication.context!!)
+            val surah = utils.getNegationFilterSurahAyahType(surah_id, ayah_id,"present")
+//todo 2 188 iza ahudu
+            //todo 9;92 UNCERTAIN
+            //TODO 9:94 JAWABHARMAHDOOF 9 95 JAWABHSARMAHODFF
+            //TO 9;118 IZA IN THE MEANING OF HEENA AND 9 122 IZA AS HEENA
 
+            val negationForegroundColorSpan = if (dark) Constant.GOLD else Constant.FORESTGREEN
+
+
+            for (mudhafen in surah!!) {
+                val indexstart = mudhafen!!.startindex
+                val indexend = mudhafen.endindex
+                try {
+
+                    try {
+                        if (indexstart == 0 || indexstart > 0) {
+
+
+
+                            spannableverse.setSpan(
+                                negationForegroundColorSpan,
+                                indexstart,
+                                indexend,
+                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                            //   spannableverse.setSpan(new UnderlineSpan(),indexstart, indexend, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        }
+                    } catch (e: IndexOutOfBoundsException) {
+                        //System.out.println(e.getMessage());
+                    }
+                } catch (e: IndexOutOfBoundsException) {
+                    //System.out.println(e.getMessage());
+                }
+            }
+        }
+
+        fun setPastNegation(
+            spannableverse: SpannableString,
+            surah_id: Int,
+            ayah_id: Int
+        ) {
+            val utils = Utils(QuranGrammarApplication.context!!)
+            val surah = utils.getNegationFilterSurahAyahType(surah_id, ayah_id,"past")
+//todo 2 188 iza ahudu
+            //todo 9;92 UNCERTAIN
+            //TODO 9:94 JAWABHARMAHDOOF 9 95 JAWABHSARMAHODFF
+            //TO 9;118 IZA IN THE MEANING OF HEENA AND 9 122 IZA AS HEENA
+            val negationForegroundColorSpan = if (dark) Constant.GOLD else Constant.FORESTGREEN
+            for (mudhafen in surah!!) {
+                val indexstart = mudhafen!!.startindex
+                val indexend = mudhafen.endindex
+                try {
+
+                    try {
+                        if (indexstart == 0 || indexstart > 0) {
+
+
+                            spannableverse.setSpan(
+                                negationForegroundColorSpan,
+                                indexstart,
+                                indexend,
+                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                            //   spannableverse.setSpan(new UnderlineSpan(),indexstart, indexend, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        }
+                    } catch (e: IndexOutOfBoundsException) {
+                        //System.out.println(e.getMessage());
+                    }
+                } catch (e: IndexOutOfBoundsException) {
+                    //System.out.println(e.getMessage());
+                }
+            }
+        }
+
+        fun setFutureNegation(
+            spannableverse: SpannableString,
+            surah_id: Int,
+            ayah_id: Int
+        ) {
+            val utils = Utils(QuranGrammarApplication.context!!)
+            val surah = utils.getNegationFilterSurahAyahType(surah_id, ayah_id,"future")
+//todo 2 188 iza ahudu
+            //todo 9;92 UNCERTAIN
+            //TODO 9:94 JAWABHARMAHDOOF 9 95 JAWABHSARMAHODFF
+            //TO 9;118 IZA IN THE MEANING OF HEENA AND 9 122 IZA AS HEENA
+            val negationForegroundColorSpan = if (dark) Constant.GOLD else Constant.FORESTGREEN
+            for (mudhafen in surah!!) {
+                val indexstart = mudhafen!!.startindex
+                val indexend = mudhafen.endindex
+                try {
+
+                    try {
+                        if (indexstart == 0 || indexstart > 0) {
+
+
+
+                            spannableverse.setSpan(
+                                negationForegroundColorSpan,
+                                indexstart,
+                                indexend,
+                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                            //   spannableverse.setSpan(new UnderlineSpan(),indexstart, indexend, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        }
+                    } catch (e: IndexOutOfBoundsException) {
+                        //System.out.println(e.getMessage());
+                    }
+                } catch (e: IndexOutOfBoundsException) {
+                    //System.out.println(e.getMessage());
+                }
+            }
+        }
 
 
         fun setMudhafFromDBforAyah(
@@ -3251,7 +3374,28 @@ class CorpusUtilityorig(private var context: Context?) {
               }
           }
         }
+        fun setPresentFromCache(spannableverse: SpannableString, presentIndexList: MutableList<List<Int>>?) {
+            if (presentIndexList != null) {
+                for (indexes in presentIndexList) {
+                    val startIndex = indexes[0]
+                    val endIndex = indexes[1]
+                    if (dark) {
+                        Constant.sifaspansDark = BackgroundColorSpan(Constant.WBURNTUMBER)
+                    } else {
+                        Constant.sifaspansDark = BackgroundColorSpan(Constant.CYANLIGHTEST)
+                    }
 
+                    if (spannableverse != null) {
+                        spannableverse.setSpan(
+                            Constant.sifaspansDark,
+                            startIndex  ,
+                            endIndex  ,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+                    }
+                }
+            }
+        }
         fun setMausoofSifaFromCache(spannableverse: SpannableString, sifaIndexList: MutableList<List<Int>>?) {
             if (sifaIndexList != null) {
                 for (indexes in sifaIndexList) {

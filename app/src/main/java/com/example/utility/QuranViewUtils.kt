@@ -7,18 +7,13 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 
-import androidx.compose.ui.semantics.setText
-import androidx.compose.ui.semantics.text
 import androidx.core.content.ContextCompat
-import androidx.core.text.color
 
 import android.os.Bundle
 import android.text.SpannableString
 import android.view.Gravity
 
-import androidx.media3.common.C
 import com.example.Constant
-import com.example.mushafconsolidated.Adapters.FlowAyahWordAdapterNoMafoolat.ItemViewAdapter
 import com.example.mushafconsolidated.Adapters.RevalationCity
 import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.NounCorpus
@@ -29,22 +24,18 @@ import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.fragments.WordMorphologyDetails
 import com.example.mushafconsolidated.model.QuranCorpusWbw
-import com.example.mushafconsolidated.model.Word
 import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip
 import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltipUtils
-import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.Typeface
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
-import androidx.compose.ui.geometry.isEmpty
 import androidx.preference.PreferenceManager
 import com.example.mushafconsolidated.Adapters.ArabicIrabProvider
 import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import org.ahocorasick.trie.Trie
+import kotlin.collections.getOrPut
 
 object QuranViewUtils {
     private val absoluteNegationCache = HashMap<Pair<Int, Int>, List<Int>>()
@@ -297,7 +288,7 @@ object QuranViewUtils {
         }
 
         // Function to load and cache Mudhaf Data
-        fun cacheMudhafData(quranModel: QuranViewModel, surah: Int, mudhafCache: MutableMap<Pair<Int, Int>, MutableList<List<Int>>>) {
+        fun cacheMudhafData(quranModel: QuranViewModel, surah: Int, mudhafCache: HashMap<Pair<Int, Int>, MutableList<List<Int>>>) {
             val mudhafData = quranModel.getmudhafFilterSurah(surah)
             for (data in mudhafData) {
                 val key = Pair(data.surah, data.ayah)
@@ -306,6 +297,41 @@ object QuranViewUtils {
             }
         }
 
+
+
+
+    fun cacheNegationData(quranModel: QuranViewModel, surah: Int, negationCache: MutableMap<Int, MutableMap<Int, MutableList<SpannableString>>>) {
+        val negantionData = quranModel.getNegationFilterSurah(surah)
+        for (data in negantionData) {
+            val surahid = data.surahid
+            val ayahid = data.ayahid
+            val arabicString = data.arabictext
+            val englishString = data.englishtext
+            val combinedString = "$arabicString\n$englishString"
+            val spannableString = SpannableString(combinedString)
+
+
+
+
+
+            spannableString.setSpan(ForegroundColorSpan(Color.RED), 0, arabicString.length, 0) // Span for Arabic
+            spannableString.setSpan(ForegroundColorSpan(Color.BLUE), arabicString.length + 1, combinedString.length, 0)
+
+
+            negationCache[surahid]?.get(ayahid)?.add(spannableString) ?: run {
+                negationCache[surahid]?.set(
+                    ayahid,
+                    mutableListOf(spannableString)
+                ) ?: run {
+                    negationCache[surahid] =
+                        mutableMapOf(ayahid to mutableListOf(spannableString))
+                }
+            }
+            /*
+            negationCache.getOrPut(surahid) { mutableMapOf() }
+                .put(ayahid, Pair(spannableString, englishString))*/
+        }
+    }
 
 
 
