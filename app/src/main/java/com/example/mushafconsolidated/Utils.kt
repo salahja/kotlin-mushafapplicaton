@@ -83,6 +83,10 @@ class Utils {
     fun getMudhafSurahNew(id: Int): List<NewMudhafEntity?>? {
         return database.NewMudhafDao().getMudhafSurah(id)
     }
+
+    fun getMudhafALl(): List<NewMudhafEntity> {
+        return database.NewMudhafDao().mudhafAll()
+    }
     fun getShaikhTafseer(id: Int): List<MufradatEntity> {
         Log.d(TAG, "getShaikhTafseer: started")
         return database.MufradatDao().getShaikTafseer(id)

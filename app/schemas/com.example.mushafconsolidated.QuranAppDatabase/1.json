@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "b851e7fcb97e61fef9a1868ad450f947",
+    "identityHash": "a48ec67308565f268458fec83283abb5",
     "entities": [
       {
         "tableName": "negationfulldata",
@@ -1478,7 +1478,7 @@
       },
       {
         "tableName": "newmudhaf",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surah` INTEGER NOT NULL, `ayah` INTEGER NOT NULL, `startindex` INTEGER NOT NULL, `endindex` INTEGER NOT NULL, `wordfrom` INTEGER NOT NULL, `wordto` INTEGER NOT NULL, `disconnected` INTEGER NOT NULL, `comment` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surah` INTEGER NOT NULL, `ayah` INTEGER NOT NULL, `wordfrom` INTEGER NOT NULL, `wordto` INTEGER NOT NULL, `startindex` INTEGER NOT NULL, `endindex` INTEGER NOT NULL, `arabictext` TEXT NOT NULL, `englishtext` TEXT NOT NULL, `comment` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
           {
             "fieldPath": "surah",
@@ -1489,18 +1489,6 @@
           {
             "fieldPath": "ayah",
             "columnName": "ayah",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "startindex",
-            "columnName": "startindex",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "endindex",
-            "columnName": "endindex",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -1517,16 +1505,34 @@
             "notNull": true
           },
           {
-            "fieldPath": "disconnected",
-            "columnName": "disconnected",
+            "fieldPath": "startindex",
+            "columnName": "startindex",
             "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "endindex",
+            "columnName": "endindex",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "arabictext",
+            "columnName": "arabictext",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "englishtext",
+            "columnName": "englishtext",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
             "fieldPath": "comment",
             "columnName": "comment",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "id",
@@ -2475,7 +2481,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b851e7fcb97e61fef9a1868ad450f947')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a48ec67308565f268458fec83283abb5')"
     ]
   }
 }

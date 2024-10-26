@@ -655,12 +655,14 @@ class FlowAyahWordAdapterNoMafoolat(
 
         ) {
         if (spannableverse != null) {
-
+           if(surah==2 && ayah==19){
+               println("check")
+           }
             CorpusUtilityorig.setAyahGrammaticalPhrases(spannableverse, surah, ayah)
             if (sifaIndexList != null && sifaIndexList.isNotEmpty()) {
                 CorpusUtilityorig.setMausoofSifaFromCache(spannableverse, sifaIndexList)
             }
-            if (mudhafIndexList != null && mudhafIndexList.isNotEmpty()) {
+           if (mudhafIndexList != null && mudhafIndexList.isNotEmpty()) {
                 CorpusUtilityorig.setMudhafFromCache(spannableverse, mudhafIndexList)
             }
             if (absoluteNegationIndexes != null && absoluteNegationIndexes.isNotEmpty()) {
