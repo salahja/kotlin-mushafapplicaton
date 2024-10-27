@@ -310,6 +310,11 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         // extractLaNafiya()
         //   extractExpNegationSentences()
         // extractNegativeSentences()
+
+val verse="وَلَقَدْ مَكَّنَّٰكُمْ فِى ٱلْأَرْضِ وَجَعَلْنَا لَكُمْ فِيهَا مَعَٰيِشَۗ قَلِيلًا مَّا تَشْكُرُونَ  "
+
+        val word="عَهْدَهُۥٓۖ"
+     //   QuranViewUtils.showIndexOfWindow(this,verse,word)
         val start = false
         if (start) {
         //      mainLoopFromIndexExtraction()

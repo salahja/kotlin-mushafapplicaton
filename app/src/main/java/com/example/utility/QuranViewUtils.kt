@@ -31,11 +31,19 @@ import android.graphics.Paint
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
+import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.compose.material3.AlertDialog
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.semantics.text
 import androidx.preference.PreferenceManager
 import com.example.mushafconsolidated.Adapters.ArabicIrabProvider
 import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import org.ahocorasick.trie.Trie
 import kotlin.collections.getOrPut
+import kotlin.text.indexOf
+import kotlin.text.toIntOrNull
 
 object QuranViewUtils {
     private val absoluteNegationCache = HashMap<Pair<Int, Int>, List<Int>>()
@@ -1117,7 +1125,8 @@ object QuranViewUtils {
             // If mudaf conditions met, look for mudaf ilaih in the next entry
             if((entry.tagone=="N" && entry.tagtwo=="PRON") || (entry.tagtwo=="N" && entry.tagthree=="PRON")){
                 val fullword = constructedWord
-                val startindex = qurantext.indexOf(fullword)
+                val trimmedWord=trimWord(fullword)
+                val startindex = qurantext.indexOf(trimmedWord)
                 val endindex = startindex + constructedWord.length
                 var extractedText = ""
                 if (startindex != -1 && endindex != -1) {
@@ -1204,6 +1213,10 @@ object QuranViewUtils {
         return results
     }
 
+    fun trimWord(word: String): String {
+        return word.replace(Regex("[,ٓ]+$"), "")
+    }
+
     // Extract gender (e.g., FS, MS, MP, FP) from the details string
     fun String.extractGender(): String {
         return when {
@@ -1239,4 +1252,32 @@ object QuranViewUtils {
         // Remove diacritics and vowels
         return input.replace(Regex(arabicDiacritics), "").replace(Regex(vowels), "")
     }
+
+    fun showIndexOfWindow(context: Context, text: String, wordToCheck: String) {
+        val dialog = AlertDialog.Builder(context)
+            .setTitle("Check indexOf")
+            .setView(R.layout.index_of_window)
+            .setPositiveButton("Check") { dialog, _ ->
+                val startIndexInput = (dialog as AlertDialog).findViewById<EditText>(R.id.start_index_input)
+                val endIndexInput = dialog.findViewById<EditText>(R.id.end_index_input)
+
+                val startIndex = startIndexInput!!.text.toString().toIntOrNull() ?: 0
+                val endIndex = endIndexInput!!.text.toString().toIntOrNull() ?: text.length
+
+                val index = text.indexOf(wordToCheck, startIndex, ignoreCase = true) //ignoreCase added
+
+                val resultText = if (index != -1 && index in startIndex..endIndex) {
+                    "Word found at index: $index"
+                } else {
+                    "Word not found within the specified range."
+                }
+
+                Toast.makeText(context, resultText, Toast.LENGTH_SHORT).show()
+            }
+            .setNegativeButton("Cancel", null)
+            .create()
+
+        dialog.show()
+    }
+
 }
