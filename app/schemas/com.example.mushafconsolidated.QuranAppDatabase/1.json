@@ -2,8 +2,82 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "a48ec67308565f268458fec83283abb5",
+    "identityHash": "274da7f05ba331fed32b73bf9dd8125a",
     "entities": [
+      {
+        "tableName": "illapositive",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surahid` INTEGER NOT NULL, `ayahid` INTEGER NOT NULL, `wordfrom` INTEGER NOT NULL, `wordto` INTEGER NOT NULL, `startindex` INTEGER NOT NULL, `endindex` INTEGER NOT NULL, `arabictext` TEXT NOT NULL, `englishtext` TEXT NOT NULL, `type` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "surahid",
+            "columnName": "surahid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ayahid",
+            "columnName": "ayahid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wordfrom",
+            "columnName": "wordfrom",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wordto",
+            "columnName": "wordto",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startindex",
+            "columnName": "startindex",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "endindex",
+            "columnName": "endindex",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "arabictext",
+            "columnName": "arabictext",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "englishtext",
+            "columnName": "englishtext",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
       {
         "tableName": "negationfulldata",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surahid` INTEGER NOT NULL, `ayahid` INTEGER NOT NULL, `wordfrom` INTEGER NOT NULL, `wordto` INTEGER NOT NULL, `startindex` INTEGER NOT NULL, `endindex` INTEGER NOT NULL, `arabictext` TEXT NOT NULL, `englishtext` TEXT NOT NULL, `type` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
@@ -2481,7 +2555,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a48ec67308565f268458fec83283abb5')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '274da7f05ba331fed32b73bf9dd8125a')"
     ]
   }
 }

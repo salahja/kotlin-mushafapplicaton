@@ -82,7 +82,14 @@ class FlowAyahWordAdapterNoMafoolat(
 ) : RecyclerView.Adapter<FlowAyahWordAdapterNoMafoolat.ItemViewAdapter>() //implements OnItemClickListenerOnLong {
 {
     //private lateinit var phraseGroups: List<SpannableString?>
+    data class PhraseItem(val phrase: String, val grammaticalGroup: String)
 
+
+
+    private val phrases =  arrayOf(
+        PhraseItem("Lane Lexicon", "lanes"),
+        PhraseItem("Hans Weir", "hans")
+    )
     private var spannableverse: SpannableString? = null
 
     //private var absoluteNegationData: List<AbsoluteNegationEnt>
@@ -231,7 +238,7 @@ class FlowAyahWordAdapterNoMafoolat(
         val entity = allofQuran[position]
         val key = Pair(entity!!.surah, entity!!.ayah)
       //  holder.itemView.post {
-            updatePhraseGroups(key, phraseGroups,key) // Pass phraseGroups to updatePhraseGroups
+            updatePhraseGroups(key, phraseGroups) // Pass phraseGroups to updatePhraseGroups
 
             // Check if the adapter is already created
             if (phraseListAdapter == null) {
@@ -291,9 +298,7 @@ class FlowAyahWordAdapterNoMafoolat(
         QuranViewUtils.setBackgroundColor(context, holder.itemView, isNightmode, position % 2 == 1)
       
 
-        if (entity!!.ayah == 6) {
-            println("check")
-        }
+
         val key = Pair(entity!!.surah, entity!!.ayah)
 
         val absoluteNegationIndexes = absoluteNegationCache[key] // Check cache first
@@ -347,7 +352,7 @@ class FlowAyahWordAdapterNoMafoolat(
 
 
 
-
+        setTextSizes(holder)
 
 
 
@@ -373,7 +378,7 @@ class FlowAyahWordAdapterNoMafoolat(
 
 
 
-        setTextSizes(holder)
+
 
     }
 
@@ -429,15 +434,15 @@ class FlowAyahWordAdapterNoMafoolat(
                 // Check if the word is already cached
                 spannedWord = spannedWordsCache.getOrPut(word) {
                     // Log when we're generating a new SpannableString and storing it in the cache
-                    Log.d(TAG, "FROM FILE (generated new SpannableString)")
+                //    Log.d(TAG, "FROM FILE (generated new SpannableString)")
                     QuranViewUtils.NewgetSpannedWords(word)
                 }
 
                 // Log when we're fetching the word from cache
-                if (spannedWordsCache.containsKey(word)) {
+          /*      if (spannedWordsCache.containsKey(word)) {
                     Log.d(TAG, "FROM CACHE")
                 }
-
+*/
                 val arabicView =
                     if (showWbwTranslation && wordByWordDisplay) arabicChipview else arabicTv
                 arabicView.text = spannedWord
@@ -611,12 +616,11 @@ class FlowAyahWordAdapterNoMafoolat(
         holder.ivSurahIcon.setImageDrawable(drawable)
     }
 
- 
 
     private fun updatePhraseGroups(
         key: Pair<Int, Int>,
-        phraseGroups: MutableList<SpannableString>,
-        key1: Pair<Int, Int>
+        phraseGroups: MutableList<SpannableString>
+
     ) {
 
 
@@ -624,7 +628,7 @@ class FlowAyahWordAdapterNoMafoolat(
 
         for (spannableString in spannableStringsList) {
             phraseGroups.add(spannableString)
-            println("check")
+          //  println("check")
         }
 
 
@@ -654,10 +658,11 @@ class FlowAyahWordAdapterNoMafoolat(
         ayah: Int,
 
         ) {
+
+        val futureTenceCache: MutableMap<String,  List<List<SpannableString>>> = mutableMapOf()
+          //<SpannableString, String>>> =        mutableMapOf()
         if (spannableverse != null) {
-           if(surah==2 && ayah==19){
-               println("check")
-           }
+
             CorpusUtilityorig.setAyahGrammaticalPhrases(spannableverse, surah, ayah)
             if (sifaIndexList != null && sifaIndexList.isNotEmpty()) {
                 CorpusUtilityorig.setMausoofSifaFromCache(spannableverse, sifaIndexList)
@@ -684,7 +689,7 @@ class FlowAyahWordAdapterNoMafoolat(
         if (!defaultfont) {
             val erabsize=30f
             holder.quran_transliteration.textSize = translationfontsize.toFloat()
-            holder.erab_textView.textSize = erabsize
+            holder.erab_textView.textSize = translationfontsize.toFloat()
             holder.translate_textView.textSize = translationfontsize.toFloat()
             holder.translate_textViewnote.textSize = translationfontsize.toFloat()
             holder.quran_jalalayn.textSize = translationfontsize.toFloat()

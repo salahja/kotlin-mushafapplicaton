@@ -10,6 +10,7 @@ import com.example.mushafconsolidated.DAO.CorpusExpandedDao
 
 import com.example.mushafconsolidated.DAO.HaliyaDao
 import com.example.mushafconsolidated.DAO.HansDao
+import com.example.mushafconsolidated.DAO.IllaPositiveDao
 
 
 import com.example.mushafconsolidated.DAO.LaneRootDao
@@ -39,6 +40,7 @@ import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
 import com.example.mushafconsolidated.Entities.CorpusEntity
 
 import com.example.mushafconsolidated.Entities.HalEnt
+import com.example.mushafconsolidated.Entities.IllaPositive
 
 import com.example.mushafconsolidated.Entities.LiajlihiEnt
 import com.example.mushafconsolidated.Entities.MafoolBihi
@@ -64,6 +66,7 @@ import javax.inject.Inject
 
 
  class QuranRepository @Inject constructor(
+     var illaPositiveDao: IllaPositiveDao,
      var negationsDao: NegationDao,
 
      var absoluteNegationDao:AbsoluteNegationDao,
@@ -164,6 +167,22 @@ import javax.inject.Inject
 
 
 
+
+     fun getIllaPositiveFilterSurah(surah: Int): List<IllaPositive> =
+         illaPositiveDao.getIllaPositiveFilterSurah(surah)
+
+
+
+
+     fun getIllaPositiveAll(): List<IllaPositive> =
+         illaPositiveDao.getIllaPositiveAll()
+
+
+
+
+
+
+
      fun getNegationfilterSurahType(surah: Int,type:String): List<NegationEnt> =
          negationsDao.getINegationFilterSurahAndType(surah,type)
 
@@ -209,6 +228,9 @@ import javax.inject.Inject
 
     fun getNouncorpus(surah: Int, ayah: Int, wordno: Int): List<NounCorpus> =
         nouncorpusdao.getQuranNounsBysurahayahword(surah, ayah, wordno)
+
+     fun getNouncorpusFilterSurahAyah(surah: Int, ayah: Int): List<NounCorpus> =
+         nouncorpusdao.getQuranNounAyah(surah, ayah)
 
     val chapters: LiveData<List<ChaptersAnaEntity>> = chaptersdao.chaptersl()
 

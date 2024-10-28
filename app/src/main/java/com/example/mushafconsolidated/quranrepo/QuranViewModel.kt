@@ -13,6 +13,7 @@ import com.example.mushafconsolidated.Entities.CorpusEntity
 
 import com.example.mushafconsolidated.Entities.GrammarRules
 import com.example.mushafconsolidated.Entities.HalEnt
+import com.example.mushafconsolidated.Entities.IllaPositive
 
 import com.example.mushafconsolidated.Entities.LiajlihiEnt
 import com.example.mushafconsolidated.Entities.MafoolBihi
@@ -226,7 +227,10 @@ class QuranViewModel @Inject constructor(
 
     }
 
+    fun getIllaPositiveAll(): List<IllaPositive> {
+        return  this.quranRepository.getIllaPositiveAll()
 
+    }
 
 
 
@@ -252,11 +256,6 @@ class QuranViewModel @Inject constructor(
 
 
 
-
-    fun getCorpusEntityFilterSurah(cid: Int ): MutableLiveData<List<CorpusEntity>> {
-        corpusentity.value = this.quranRepository.getCorpusEntityFilterSurah(cid)
-        return corpusentity
-    }
 
 
 
@@ -482,7 +481,16 @@ class QuranViewModel @Inject constructor(
         return nounbywordno
     }
 
+    fun getNouncorpusFilterSurahAyah(surah: Int, ayah: Int, ): List<NounCorpus> {
 
+        return this.quranRepository.getNouncorpusFilterSurahAyah(surah, ayah)
+
+    }
+
+    fun getCorpusEntityFilterSurah(cid: Int ): MutableLiveData<List<CorpusEntity>> {
+        corpusentity.value = this.quranRepository.getCorpusEntityFilterSurah(cid)
+        return corpusentity
+    }
 
 
     fun getSurahSummary(cid: Int): LiveData<List<surahsummary>> {

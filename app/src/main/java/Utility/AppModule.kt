@@ -9,6 +9,7 @@ import com.example.mushafconsolidated.DAO.CorpusExpandedDao
 
 import com.example.mushafconsolidated.DAO.HaliyaDao
 import com.example.mushafconsolidated.DAO.HansDao
+import com.example.mushafconsolidated.DAO.IllaPositiveDao
 
 
 import com.example.mushafconsolidated.DAO.LaneDao
@@ -82,6 +83,12 @@ object AppModule {
         return appDB.NegationDao()
     }
 
+    @Singleton
+    @Provides
+    fun getIllaPositiveDao(appDB: QuranAppDatabase): IllaPositiveDao {
+
+        return appDB.IllaPositiveDao()
+    }
 
 
     @Singleton

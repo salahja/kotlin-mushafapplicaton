@@ -165,7 +165,7 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
                         )
                     expandableListView.setAdapter(grammarFragmentsListAdapter)
                     for (i in 0 until grammarFragmentsListAdapter.groupCount) {
-                        expandableListView.expandGroup(i)
+                        expandableListView.collapseGroup(i)
                     }
                 }
             }

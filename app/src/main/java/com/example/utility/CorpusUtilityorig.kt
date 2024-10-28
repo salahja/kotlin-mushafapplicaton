@@ -3473,12 +3473,19 @@ class CorpusUtilityorig(private var context: Context?) {
                     } else {
                         BackgroundColorSpan(Constant.GREENYELLOW) // Create a new BackgroundColorSpan instance
                     }
+                    try {
                         spannableverse.setSpan(
                             colorSpan,
                             startIndex,
                             endIndex,
                             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                         )
+                    } catch (e:IndexOutOfBoundsException){
+                 println(startIndex)
+                        println(endIndex)
+                        println(e.localizedMessage)
+                    }
+
 
                 }
             }

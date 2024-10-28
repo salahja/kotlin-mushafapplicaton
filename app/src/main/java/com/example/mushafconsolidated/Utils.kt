@@ -16,6 +16,7 @@ import com.example.mushafconsolidated.Entities.CorpusVerbWbwOccurance
 import com.example.mushafconsolidated.Entities.FutureTenceListingPojo
 
 import com.example.mushafconsolidated.Entities.GrammarRules
+import com.example.mushafconsolidated.Entities.IllaPositive
 
 import com.example.mushafconsolidated.Entities.InMaListingPOJO
 
@@ -87,6 +88,11 @@ class Utils {
     fun getMudhafALl(): List<NewMudhafEntity> {
         return database.NewMudhafDao().mudhafAll()
     }
+
+    fun getIllaPositiveAll(): List<IllaPositive> {
+        return database.IllaPositiveDao().getIllaPositiveAll()
+    }
+
     fun getShaikhTafseer(id: Int): List<MufradatEntity> {
         Log.d(TAG, "getShaikhTafseer: started")
         return database.MufradatDao().getShaikTafseer(id)
