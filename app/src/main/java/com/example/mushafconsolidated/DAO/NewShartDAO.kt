@@ -10,8 +10,8 @@ import com.example.mushafconsolidated.Entities.NewShartEntity
 
 @Dao
 interface NewShartDAO {
-    @get:Query("SELECT * FROM newshart ORDER BY surah,ayah")
-    val shartAll: List<NewShartEntity>
+    @Query("SELECT * FROM newshart ORDER BY surah,ayah")
+    fun shartAll(): List<NewShartEntity>
 
     @Query("SELECT * FROM newshart where surah=:id")
     fun getShartBySurah(id: Int): List<NewShartEntity>

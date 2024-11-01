@@ -13,10 +13,12 @@ import com.example.mushafconsolidated.Entities.CorpusEntity
 
 import com.example.mushafconsolidated.Entities.GrammarRules
 import com.example.mushafconsolidated.Entities.HalEnt
+import com.example.mushafconsolidated.Entities.IllaPositive
 
 import com.example.mushafconsolidated.Entities.LiajlihiEnt
 import com.example.mushafconsolidated.Entities.MafoolBihi
 import com.example.mushafconsolidated.Entities.MafoolMutlaqEnt
+import com.example.mushafconsolidated.Entities.MutlaqBadalaAlihiTameezEnt
 import com.example.mushafconsolidated.Entities.NegationEnt
 import com.example.mushafconsolidated.Entities.NewKanaEntity
 import com.example.mushafconsolidated.Entities.NewMudhafEntity
@@ -226,7 +228,10 @@ class QuranViewModel @Inject constructor(
 
     }
 
+    fun getIllaPositiveAll(): List<IllaPositive> {
+        return  this.quranRepository.getIllaPositiveAll()
 
+    }
 
 
 
@@ -252,11 +257,22 @@ class QuranViewModel @Inject constructor(
 
 
 
+    fun getIMBATFilterSurahAyahAndType(surah: Int, ayah: Int, type:String): List<MutlaqBadalaAlihiTameezEnt> {
+        return  this.quranRepository.getIMBATFilterSurahAyahAndType(surah,ayah,type)
 
-    fun getCorpusEntityFilterSurah(cid: Int ): MutableLiveData<List<CorpusEntity>> {
-        corpusentity.value = this.quranRepository.getCorpusEntityFilterSurah(cid)
-        return corpusentity
     }
+
+    fun getIMBATFilterSurah(cid: Int ): List<MutlaqBadalaAlihiTameezEnt> {
+        return  this.quranRepository.getIMBATFilterSurah(cid)
+
+    }
+
+
+    fun getIMBATFilterSurahAndType(cid: Int,type: String ): List<MutlaqBadalaAlihiTameezEnt> {
+        return  this.quranRepository.getIMBATFilterSurahAndType(cid,type)
+
+    }
+
 
 
 
@@ -482,7 +498,16 @@ class QuranViewModel @Inject constructor(
         return nounbywordno
     }
 
+    fun getNouncorpusFilterSurahAyah(surah: Int, ayah: Int, ): List<NounCorpus> {
 
+        return this.quranRepository.getNouncorpusFilterSurahAyah(surah, ayah)
+
+    }
+
+    fun getCorpusEntityFilterSurah(cid: Int ): MutableLiveData<List<CorpusEntity>> {
+        corpusentity.value = this.quranRepository.getCorpusEntityFilterSurah(cid)
+        return corpusentity
+    }
 
 
     fun getSurahSummary(cid: Int): LiveData<List<surahsummary>> {

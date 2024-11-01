@@ -630,7 +630,20 @@ class FlowAyahWordAdapter(
         } else {
             holder.erabexpand.visibility = View.GONE
         }
+        holder.mafoolatarow.visibility = View.VISIBLE
+        if (entity != null) {
+            if (entity.erabspnabble.isNullOrBlank()) {
+                holder.erab_textView.text = entity.ar_irab_two
 
+
+            } else {
+                holder.erab_textView.text = entity.erabspnabble
+            }
+        }
+        //
+        holder.erab_textView.typeface = custom_font
+        //     holder.erab_textView.setVisibility(View.VISIBLE);
+        holder.erab_textViewnote.visibility = View.VISIBLE
 
 
         setTextSizes(holder)
@@ -648,7 +661,9 @@ class FlowAyahWordAdapter(
 
         ) {
         if (spannableverse != null) {
-
+            if(surah==2 && ayah==80){
+                println("check")
+            }
             CorpusUtilityorig.setAyahGrammaticalPhrases(spannableverse, surah, ayah)
             CorpusUtilityorig.setMausoofSifaFromCache(spannableverse, sifaIndexList)
             CorpusUtilityorig.setMudhafFromCache(spannableverse, mudhafIndexList)
@@ -947,7 +962,7 @@ class FlowAyahWordAdapter(
 
         //   RelativeLayout colllayout;
         lateinit var erabnotescardView: CardView
-        private lateinit var mafoolatarow: ImageView
+        lateinit var mafoolatarow: ImageView
         private lateinit var hiddenGroup: Group
         lateinit var base_cardview: MaterialCardView
         lateinit var tafsir: FloatingActionButton

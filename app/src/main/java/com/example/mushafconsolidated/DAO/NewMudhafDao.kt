@@ -10,8 +10,8 @@ import com.example.mushafconsolidated.Entities.NewMudhafEntity
 
 @Dao
 interface NewMudhafDao {
-    @get:Query("SELECT * FROM newmudhaf ORDER BY surah,ayah")
-    val mudhafAll: List<NewMudhafEntity>
+    @Query("SELECT * FROM newmudhaf ORDER BY surah,ayah")
+    fun mudhafAll(): List<NewMudhafEntity>
 
     @Query("SELECT * FROM newmudhaf where surah=:id ORDER BY surah,ayah")
     fun getMudhafSurah(id: Int): List<NewMudhafEntity>

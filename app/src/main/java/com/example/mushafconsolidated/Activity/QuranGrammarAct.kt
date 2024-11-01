@@ -1,7 +1,5 @@
 package com.example.mushafconsolidated.Activity
 
-import com.ibm.icu.util.ULocale
-import com.ibm.icu.text.Collator
 
 import ArabicrootListFragment
 import Utility.WordDetailContract
@@ -16,7 +14,6 @@ import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
-
 import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
@@ -42,7 +39,6 @@ import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
-
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
@@ -55,39 +51,37 @@ import androidx.media3.common.util.UnstableApi
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
 import com.example.Constant
 import com.example.Constant.SURAHFRAGTAG
+import com.example.mushafconsolidated.Adapters.FlowAyahWordAdapterNoMafoolat
 import com.example.mushafconsolidated.BottomOptionDialog
 import com.example.mushafconsolidated.Entities.BadalErabNotesEnt
 import com.example.mushafconsolidated.Entities.BookMarks
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
+import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.HalEnt
+import com.example.mushafconsolidated.Entities.IllaPositive
 import com.example.mushafconsolidated.Entities.LiajlihiEnt
 import com.example.mushafconsolidated.Entities.MafoolBihi
 import com.example.mushafconsolidated.Entities.MafoolMutlaqEnt
+import com.example.mushafconsolidated.Entities.NegationEnt
+import com.example.mushafconsolidated.Entities.NewNasbEntity
 import com.example.mushafconsolidated.Entities.QuranEntity
+import com.example.mushafconsolidated.Entities.SurahHeader
 import com.example.mushafconsolidated.Entities.TameezEnt
-
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SurahSummary
+import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.ajroomiya.NewAjroomiyaDetailHostActivity
 import com.example.mushafconsolidated.databinding.NewFragmentReadingBinding
 import com.example.mushafconsolidated.fragments.BookMarkCreateFrag
 import com.example.mushafconsolidated.fragments.BookmarkFragment
+import com.example.mushafconsolidated.fragments.FlowAyahWordAdapter
+import com.example.mushafconsolidated.fragments.GrammerFragmentsBottomSheet
 import com.example.mushafconsolidated.fragments.NewSurahDisplayFrag
+import com.example.mushafconsolidated.fragments.PhrasesDisplayFrag
 import com.example.mushafconsolidated.fragments.ScrollingFragment
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
-import com.example.mushafconsolidated.fragments.FlowAyahWordAdapter
-import com.example.mushafconsolidated.Adapters.FlowAyahWordAdapterNoMafoolat
-import com.example.mushafconsolidated.Entities.CorpusEntity
-
-import com.example.mushafconsolidated.Entities.NegationEnt
-import com.example.mushafconsolidated.Entities.SifaEntity
-import com.example.mushafconsolidated.Entities.SurahHeader
-import com.example.mushafconsolidated.Utils
-import com.example.mushafconsolidated.fragments.GrammerFragmentsBottomSheet
-import com.example.mushafconsolidated.fragments.PhrasesDisplayFrag
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.quranrepo.QuranRepository
 import com.example.mushafconsolidated.quranrepo.QuranViewModel
@@ -95,8 +89,16 @@ import com.example.mushafconsolidated.settingsimport.Constants
 import com.example.mushafconsolidatedimport.ParticleColorScheme
 import com.example.sentenceanalysis.SentenceGrammarAnalysis
 import com.example.utility.CorpusUtilityorig
+
 import com.example.utility.CorpusUtilityorig.Companion.findWordOccurrencesArabic
+import com.example.utility.CorpusUtilityorig.Companion.highlightKeywords
+import com.example.utility.CorpusUtilityorig.Companion.searchForTameez
 import com.example.utility.QuranGrammarApplication.Companion.context
+
+import com.example.utility.QuranViewUtils.extractCase
+import com.example.utility.QuranViewUtils.extractInMaIllaNegativeSentences
+import com.example.utility.QuranViewUtils.extractSentenceAndTranslationFromWordIndices
+import com.example.utility.QuranViewUtils.extractVerbType
 import com.example.utility.ScreenshotUtils
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.color.DynamicColors
@@ -104,7 +106,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.common.reflect.TypeToken
-
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import database.NamesGridImageAct
 import kotlinx.coroutines.CoroutineScope
@@ -114,22 +116,20 @@ import kotlinx.coroutines.withContext
 import mufradat.MufradatPagerActivity
 import org.sj.conjugator.activity.BaseActivity
 import org.sj.conjugator.activity.ConjugatorAct
-
-
 import sj.hisnul.fragments.NamesDetail
 import wheel.OnWheelChangedListener
 import wheel.WheelView
 import java.io.File
-import javax.inject.Inject
-
-import com.google.gson.Gson
 import java.io.OutputStreamWriter
+import javax.inject.Inject
 import kotlin.collections.List
 import kotlin.collections.List as CollectionsList
+
 
 //import com.example.mushafconsolidated.Entities.JoinVersesTranslationDataTranslation;
 @AndroidEntryPoint
 class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
+
 
     private lateinit var extractedSentencesWithIndices: CollectionsList<Pair<String, Pair<Int, Int>>>
     private val wordDetailLauncher = registerForActivityResult(WordDetailContract()) { wordFound ->
@@ -316,13 +316,20 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         // extractLaNafiya()
         //   extractExpNegationSentences()
         // extractNegativeSentences()
+
+        val verse =
+            "وَلَقَدْ مَكَّنَّٰكُمْ فِى ٱلْأَرْضِ وَجَعَلْنَا لَكُمْ فِيهَا مَعَٰيِشَۗ قَلِيلًا مَّا تَشْكُرُونَ  "
+
+        val word = "عَهْدَهُۥٓۖ"
+        //   QuranViewUtils.showIndexOfWindow(this,verse,word)
         val start = false
         if (start) {
-            //  mainLoopFromIndexExtraction()
-            mainLoopforIndexEXTRACTION()
+          mainLoopFromIndexExtraction()
+        //   mainLoopforIndexEXTRACTION()
+            //extractExpNegationSentences()
         }
-        val broken = "حُمُرٌ"
-        val isBrokenPlural = isBrokenPluralPattern(broken)
+
+
         supportFragmentManager.commit {
             replace<NewSurahDisplayFrag>(R.id.frame_container_qurangrammar, SURAHFRAGTAG)
             setReorderingAllowed(true)
@@ -332,10 +339,40 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         }
     }
 
+    fun extractSentenceAndTranslationFromSavedWordIndexes(
+        corpus: List<CorpusEntity>,
+        wordInfo: IllaPositive,
+        quranText: String
+    ): List<String> {
+        val result = mutableListOf<String>()
+
+        var extractedSentence = ""
+        // Find the start and end indices based on wordfrom and wordto
+        val startIndex = corpus.indexOfFirst { it.wordno == wordInfo.wordfrom }
+        val endIndex = corpus.indexOfLast { it.wordno == wordInfo.wordto }
+
+        if (startIndex != -1 && endIndex != -1) {
+            // Extract the Arabic sentence using the found indices
+            val sentenceBuilder = StringBuilder()
+            for (i in startIndex..endIndex) {
+                val word =
+                    "${corpus[i].araone}${corpus[i].aratwo}${corpus[i].arathree}${corpus[i].arafour}${corpus[i].arafive}".trim()
+                sentenceBuilder.append(word).append(" ")
+            }
+            extractedSentence = sentenceBuilder.toString().trim()
+
+            // ... (rest of the code remains the same)
+        } else {
+            // Handle the case when wordfrom or wordto is not found
+            result.add("Error: Couldn't find words ${wordInfo.wordfrom} to ${wordInfo.wordto} in the corpus")
+        }
+
+        return result
+    }
 
     fun extractSentenceAndTranslationFromSavedIndexes(
         corpus: List<CorpusEntity>,
-        wordInfo: SifaEntity,
+        wordInfo: IllaPositive,
         quranText: String
 
     ): List<String> {
@@ -350,7 +387,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                     quranText.substring(wordInfo.startindex, wordInfo.endindex).trim()
             } catch (e: StringIndexOutOfBoundsException) {
                 e.printStackTrace()
-                println(wordInfo.surah + wordInfo.ayah)
+                println(wordInfo.surahid + wordInfo.ayahid)
                 println(quranText)
             }
 
@@ -370,76 +407,17 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             val nextword = wordInfo.wordfrom + 1
             // Format the result string
             val dataString =
-                "${wordInfo.surah}|${wordInfo.ayah}|${wordInfo.wordfrom}|$start|$end|$extractedSentence"
+                "${wordInfo.surahid}|${wordInfo.ayahid}|${wordInfo.wordfrom}|${wordInfo.wordto}|$start|$end|$extractedSentence"
             result.add(dataString)
         } else {
             // Handle the case when startIndex or endIndex is not found
-            result.add("Error: Couldn't find indices for Surah ${wordInfo.surah}, Ayah ${wordInfo.ayah}, Words ${wordInfo.wordfrom} to ${wordInfo.wordfrom}")
+            result.add("Error: Couldn't find indices for Surah ${wordInfo.surahid}, Ayah ${wordInfo.ayahid}, Words ${wordInfo.wordfrom} to ${wordInfo.wordfrom}")
 
         }
 
         return result
     }
 
-    fun extractSentenceAndTranslationFromIndices(
-        corpus: List<CorpusEntity>,
-        wordInfo: NegationEnt,
-        quranText: String
-
-    ): List<String> {
-        val result = mutableListOf<String>()
-
-
-        var startIndex = -1
-        var endIndex = -1
-        var currentWordIndex = 0
-        val wordsInVerse =
-            quranText.split("\\s+".toRegex()) // Split Arabic verse by whitespace to get individual words
-
-        // Find the start and end index for the words based on wordfrom and wordto
-        for ((i, word) in wordsInVerse.withIndex()) {
-            if (currentWordIndex + 1 == wordInfo.wordfrom) {
-                startIndex = quranText.indexOf(word)
-            }
-            if (currentWordIndex + 1 == wordInfo.wordto) {
-                endIndex = quranText.indexOf(word) + word.length
-                break
-            }
-            currentWordIndex++
-        }
-        var extractedSentence = ""
-        if (startIndex != -1 && endIndex != -1) {
-            // Extract the Arabic sentence between the start and end indexes
-            try {
-                extractedSentence = quranText.substring(startIndex, endIndex).trim()
-            } catch (e: StringIndexOutOfBoundsException) {
-                e.printStackTrace()
-                println(wordInfo.surahid + wordInfo.ayahid)
-                println(quranText)
-            }
-
-
-            // Extract translation using wordfrom and wordnoto
-            val translationBuilder = StringBuilder()
-            for (entry in corpus) {
-                if (entry.wordno in wordInfo.wordfrom..wordInfo.wordto) {
-                    translationBuilder.append("${entry.en} ").append(" ")
-                }
-            }
-            val extractedTranslation = translationBuilder.toString().trim()
-
-            // Format the result string
-            val dataString =
-                "${wordInfo.surahid}|${wordInfo.ayahid}|${wordInfo.wordfrom}|${wordInfo.wordto}|$startIndex|$endIndex|$extractedSentence|$extractedTranslation|${wordInfo.type}"
-            result.add(dataString)
-        } else {
-            // Handle the case when startIndex or endIndex is not found
-            result.add("Error: Couldn't find indices for Surah ${wordInfo.surahid}, Ayah ${wordInfo.ayahid}, Words ${wordInfo.wordfrom} to ${wordInfo.wordto}")
-        }
-
-
-        return result
-    }
 
     fun extractSentencesFromIndexdata(
         corpus: List<CorpusEntity>,
@@ -476,202 +454,39 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         return result
     }
 
-    /*
-
-
-
-
-5. فُعَ
-
-6. فِعْلَةٌ
-
-    Example: صَحِيفَةٌ (newspaper) → صُحُفٌ (newspapers)
-    Example: سَفِينَةٌ (ship) → سُفُنٌ (ships)
-
-7. فِعْلٌ
-
-    Example: قِطٌّ (cat) → قِطَطٌ (cats)
-    Example: طِفْلٌ (child) → أَطْفَالٌ (children)
-
-8. فُعُولَةٌ
-
-    Example: كَفِيفٌ (blind) → كُفُوفٌ (blind people)
-    Example: سَرِيرٌ (bed) → سُرُرٌ (beds)
-
-9. فَعَالِلُ
-
-    Example: مِفْتَاحٌ (key) → مَفَاتِيحٌ (keys)
-    Example: مَسْجِدٌ (mosque) → مَسَاجِدٌ (mosques)
-
-10. فَعَائِلُ
-
-    Example: عَجُوزٌ (old woman) → عَجَائِزُ (old women)
-    Example: طَائِرَةٌ (airplane) → طَائِرَاتٌ (airplanes)
-
-11. فَعَالِيلُ
-
-    Example: طَالِبٌ (student) → طُلَّابٌ (students)
-    Example: تَاجِرٌ (merchant) → تُجَّارٌ (merchants)
-
-12. فَعَالٌ
-
-    Example: كَاتِبٌ (writer) → كُتَّابٌ (writers)
-    Example: سَالِمٌ (safe) → سُلَامٌ (safe ones)
-
-13. أَفْعِلَةٌ
-
-    Example: طَرِيقَةٌ (method) → طَرَائِقُ (methods)
-    Example: قَصِيدَةٌ (poem) → قَصَائِدُ (poems)
-
-14. فَعَائِلَةٌ
-
-    Example: قَرِيبٌ (relative) → أَقَارِبُ (relatives)
-    Example: حَفِيدٌ (grandchild) → أَحْفَادٌ (grandchildren)
-
-15. مَفَاعِيلُ
-
-    Example: مَلْجَأٌ (shelter) → مَلَاجِئُ (shelters)
-    Example: مَكْتَبٌ (office) → مَكَاتِبٌ (offices)
-
-16. فَعَلَةٌ
-
-    Example: طَرِيقٌ (path) → طُرُقَةٌ (paths)
-    Example: مَلَكٌ (angel) → مَلَائِكَةٌ (angels)
-
-17. أَفْعُلٌ
-
-    Example: شَيْءٌ (thing) → أَشْيَاءٌ (things)
-    Example: نَبِيٌّ (prophet) → أَنْبِيَاءٌ (prophets)
-
-18. أَفْعِيلَةٌ
-
-    Example: جَدِيدٌ (new) → جُدُدٌ (new ones)
-    Example: سَرِيعٌ (fast) → سُرْعَانٌ (fast ones)
-
-19. فَعْلَانُ
-
-    Example: غَضْبَانُ (angry) → غُضْبَانُ (angry people)
-    Example: عَطْشَانُ (thirsty) → عُطْشَانُ (thirsty people)
-
-20. فِعْلَانٌ
-
-    Example: سَبَاقٌ (race) → سِبَاقٌ (races)
-    Example: نَحْلٌ (bee) → نَحْلَانٌ (bees)
-     */
-    fun collectBrokenPlurals(corpus: List<CorpusEntity>): List<String> {
-        val brokenPluralPatterns = listOf(
-            "فُعُوْلٌ",
-            "أَفْعَالٌ",
-            "فِعَالٌ",
-            "فُعُلٌ",
-            "فِعْلَانٌ",
-            "فَعْلَانُ",
-            "فُعَلٌ",
-            "فُعُولٌ",
-            "فُعَلَاءُ",
-            "فُعْلَانٌ",
-            "فَعَالِيلُ",
-            "فُعُولَاتٌ",
-            "مَفَاعِلُ",
-            "فَوَاعِلُ",
-            "مَفَاعِيلُ",
-            "فُعْلَةٌ",
-            "أَفَاعِيلُ",
-            "أَفْعِلَةٌ",
-            "فَعَالٍ",
-            "فِعْلَةٌ",
-            "فِعَالَاتٌ",
-            "فِعْلَانٌ",
-            "فِعَالِين",
-            "أَفْعُلَةٌ",
-            "فُعَلٌ",
-            "أَفْعَالَ",
-            "فُعُولَ",
-            "فِعَالَ",
-            "فُعَلَاءَ",
-            "فُعْلَانَ",
-            "فَعَالِيلَ",
-            "فُعُولَاتَ",
-            "مَفَاعِلَ",
-            "فَوَاعِلَ",
-            "مَفَاعِيلَ",
-            "فُعْلَةَ",
-            "أَفَاعِيلَ",
-            "أَفْعِلَةَ",
-            "فَعَالِيَ",
-            "فِعْلَةَ",
-            "فِعَالَاتَ",
-            "فِعْلَانَ",
-            "فِعَالِين",
-            "أَفْعُلَةَ",
-            "فُعَلَ"
-        )
-
-        val identifiedPlurals = mutableListOf<String>()
-
-        for (entry in corpus) {
-            val currentWord =
-                entry.araone + entry.aratwo + entry.arathree + entry.arafour + entry.arafive
-            val wordConsonants = extractConsonants(currentWord)
-            val currentmeaning = entry.en
-            for (pattern in brokenPluralPatterns) {
-                val patternConsonants = extractConsonants(pattern)
-
-                // Ensure both word and pattern have at least 3 consonants
-                if (wordConsonants.length >= 3 && patternConsonants.length >= 3) {
-                    try {
-                        // Replace consonants in the pattern with those of the current word
-                        val replacedPattern =
-                            pattern.replaceFirst(patternConsonants[0], wordConsonants[0])
-                                .replaceFirst(patternConsonants[1], wordConsonants[1])
-                                .replaceFirst(patternConsonants[2], wordConsonants[2])
-
-                        // Compare the modified pattern with the current word
-                        if (replacedPattern == currentWord) {
-                            val dataString =
-                                "${entry.surah}|${entry.ayah}|${entry.wordno}|${entry.wordno}|$pattern|$currentWord|$currentmeaning"
-                            identifiedPlurals.add(dataString)
-                        }
-                    } catch (e: StringIndexOutOfBoundsException) {
-                        // Handle case where replaceFirst fails
-                        println("Error processing word: $currentWord with pattern: $pattern")
-                    }
-                }
-            }
-        }
-
-        return identifiedPlurals
-    }
-
 
     private fun mainLoopFromIndexExtraction() {
         mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
 
         val allLamNegativeSenteces = ArrayList<List<String>>()
 
-
+        var lamNegationDataList: List<String> = emptyList()
         //  val corpus = mainViewModel.getCorpusEntityFilterSurah(1)
         //   val quran = mainViewModel.getquranbySUrah(i)
         val utils = Utils(this)
         // val wordino = utils.getExpInMaIllaNegationall()
-        val wordino = utils.getSifaAll()
+        //   val wordino = utils.getIllaPositiveAll()
+        val wordInfo: List<IllaPositive> =
+            utils.getIllaPositiveAll()
         //   val wordino=  utils.getfutureall()
         //  val wordino= utils.getpresentall()
         //   val wordino=mainViewModel.getLamMudharyNegationAll()
-        for (s in wordino.indices) {
-            val ss = wordino[s]
+        for (s in wordInfo!!.indices) {
+            val ss = wordInfo!![s]
             val corpusEntity = mainViewModel.getCorpusEntityFilterSurahAya(
-                ss.surah, ss.ayah
+                ss.surahid, ss.ayahid
             )
                     as ArrayList<CorpusEntity>
-            val quran = mainViewModel.getsurahayahVerses(ss.surah, ss.ayah)
+            val quran = mainViewModel.getsurahayahVerses(ss.surahid, ss.ayahid)
 
-            val lamNegationDataList = extractSentenceAndTranslationFromSavedIndexes(
-                corpusEntity,
-                ss,
-                quran.value!![0].qurantext
-            )
-            //    val lamNegationDataList =              extractSentencesFromIndexdata(corpusEntity,ss, quran.value!![0].qurantext)
+      lamNegationDataList =    extractSentenceAndTranslationFromWordIndices(
+                   corpusEntity,
+                   ss,
+                   quran.value!![0].qurantext
+               )
+
+
+           //    val lamNegationDataList =              extractSentencesFromIndexdata(corpusEntity,ss, quran.value!![0].qurantext)
             // val lamNegationDataList=         maaPastTenceNegation(corpusEntity, quran.value!![s].qurantext)
             //    val lamNegationDataList =                setPresentTenceNegationwithLA(corpusEntity, quran.value!![s].qurantext)
             //    val lamNegationDataList=         setMaaNegationPresent(corpusEntity, quran.value!![s].qurantext)
@@ -686,11 +501,11 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                 allLamNegativeSenteces.add(lamNegationDataList)
                 //  allLamNegativeSenteces.add(ExtractedSentence)
             }
-            println(quran.value!![0].ayah)
+
         }
 
 
-        val fileName = "negationdata.csv"
+        val fileName = "remaininexcept.csv"
         writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
     }
 
@@ -728,22 +543,39 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
     }
 
-    private fun mainLoopforIndexEXTRACTION() {
+    private fun mainLoopforErabStringEXTRACTION() {
         mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
-
+        val utils = Utils(this)
         val allLamNegativeSenteces = ArrayList<List<String>>()
         // val allLamNegativeSenteces =                             ArrayList<List<Pair<String, String>>>()
+        var allofQuran: List<QuranEntity>? = null
+        val text =
+            "(مِنْ آيَةٍ) جار ومجرور متعلقان بمحذوف صفة من ما والمعنى أي شيء ننسخ من الآيات وقيل متعلقان بمحذوف حال من ما، وقال بعضهم من زائدة وآية تمييز"
+        val regex = "\\(([^)]+)\\)(?:\\s+\\w+)*\\s+(تمييز|تمييز\\.|التمييز)".toRegex()
 
+        val match = regex.find(text)
+        if (match != null) {
+            val wordInParentheses = match.groupValues[1]
+            val keyword = match.groupValues[2]
+            println("Word in parentheses: $wordInParentheses")
+            println("Keyword: $keyword")
+        }
 
         for (i in 1..114) {
-            val corpus = mainViewModel.getCorpusEntityFilterSurah(1)
-            val quran = mainViewModel.getquranbySUrah(i)
-            for (s in quran.value!!.indices) {
+            val quran = utils.getQuranbySurah(i)
+            //     val quran = mainViewModel.getquranbySUrah(i)
 
-                val corpusEntity = mainViewModel.getCorpusEntityFilterSurahAya(
-                    i, quran.value!![s].ayah
-                ) as ArrayList<CorpusEntity>
-                // val lamNegationDataList = collectBrokenPlurals(corpusEntity)
+
+                /*    val corpusEntity = mainViewModel.getCorpusEntityFilterSurahAya(
+                        i, quran.value!![s].ayah
+                    ) as ArrayList<CorpusEntity>*/
+
+                val lamNegationDataList = searchForTameez(quran)
+
+                //test with surah 11 ayah 81
+
+
+                //     val lamNegationDataList = QuranViewUtils.collectBrokenPlurals(corpusEntity,quran.value!![s].qurantext)
                 // val lamNegationDataList =             setPresentTenceNegationwithLA(corpusEntity, quran.value!![s].qurantext)//GOOD
 
 
@@ -756,742 +588,104 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
 
                 // val lamNegationDataList=         setJumlaIsmiyaNegationMaaLaysa(corpusEntity, quran.value!![s].qurantext)
-                // val lamNegationDataList =                extractInMaIllaSentences(corpusEntity, quran.value!![s].qurantext)
-                val list = extractMousufSifa(corpusEntity,quran.value!![s].qurantext)//working
+
+                //   val lamNegationDataList =             extractInMaIllaNegativeSentences(corpusEntity, quran.value!![s].qurantext)
+
+                //   val lamNegationDataList =           extractInMaIllaPositiveSentences(corpusEntity, quran.value!![s].qurantext)
+
+                //  val lamNegationDataList =        extractProhibitiveSentences(corpusEntity, quran.value!![s].qurantext)
+                //  val lamNegationDataList =  QuranViewUtils.extractMudafMudafIlaih(corpusEntity, quran.value!![s].qurantext)
+                /*    val list = extractMousufSifa(corpusEntity,quran.value!![s].qurantext)//working
+
+                    if (list.isNotEmpty()) {
+                        allLamNegativeSenteces.add(list)
+                    }*/
+                if (lamNegationDataList.isNotEmpty()) {
+                    allLamNegativeSenteces.add(lamNegationDataList)
+                    //  allLamNegativeSenteces.add(ExtractedSentence)
+                }
+
+
+
+
+        }
+        val fileName = "sifatr.csv"
+        writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
+    }
+    private fun mainLoopforIndexEXTRACTION() {
+        mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
+        val utils = Utils(this)
+        val allLamNegativeSenteces = ArrayList<List<String>>()
+        // val allLamNegativeSenteces =                             ArrayList<List<Pair<String, String>>>()
+        var allofQuran: List<QuranEntity>? = null
+        val text =
+            "(مِنْ آيَةٍ) جار ومجرور متعلقان بمحذوف صفة من ما والمعنى أي شيء ننسخ من الآيات وقيل متعلقان بمحذوف حال من ما، وقال بعضهم من زائدة وآية تمييز"
+        val regex = "\\(([^)]+)\\)(?:\\s+\\w+)*\\s+(تمييز|تمييز\\.|التمييز)".toRegex()
+
+        val match = regex.find(text)
+        if (match != null) {
+            val wordInParentheses = match.groupValues[1]
+            val keyword = match.groupValues[2]
+            println("Word in parentheses: $wordInParentheses")
+            println("Keyword: $keyword")
+        }
+
+        for (i in 1..114) {
+            val quran = utils.getQuranbySurah(i)
+            //     val quran = mainViewModel.getquranbySUrah(i)
+
+
+            /*    val corpusEntity = mainViewModel.getCorpusEntityFilterSurahAya(
+                    i, quran.value!![s].ayah
+                ) as ArrayList<CorpusEntity>*/
+
+            val lamNegationDataList = searchForTameez(quran)
+
+            //test with surah 11 ayah 81
+
+
+            //     val lamNegationDataList = QuranViewUtils.collectBrokenPlurals(corpusEntity,quran.value!![s].qurantext)
+            // val lamNegationDataList =             setPresentTenceNegationwithLA(corpusEntity, quran.value!![s].qurantext)//GOOD
+
+
+            //    val lamNegationDataList=         setMaaNegationPresent(corpusEntity, quran.value!![s].qurantext)//good
+            // val lamNegationDataList=         setLunNegation(corpusEntity, quran.value!![s].qurantext)//good
+
+
+            //  val lamNegationDataList =      setLamNegation(corpusEntity, quran.value!![s].qurantext)good
+            //   val lamNegationDataList =     maaPastTenceNegation(corpusEntity, quran.value!![s].qurantext)
+
+
+            // val lamNegationDataList=         setJumlaIsmiyaNegationMaaLaysa(corpusEntity, quran.value!![s].qurantext)
+
+            //   val lamNegationDataList =             extractInMaIllaNegativeSentences(corpusEntity, quran.value!![s].qurantext)
+
+            //   val lamNegationDataList =           extractInMaIllaPositiveSentences(corpusEntity, quran.value!![s].qurantext)
+
+            //  val lamNegationDataList =        extractProhibitiveSentences(corpusEntity, quran.value!![s].qurantext)
+            //  val lamNegationDataList =  QuranViewUtils.extractMudafMudafIlaih(corpusEntity, quran.value!![s].qurantext)
+            /*    val list = extractMousufSifa(corpusEntity,quran.value!![s].qurantext)//working
 
                 if (list.isNotEmpty()) {
                     allLamNegativeSenteces.add(list)
-                }
-                /*  if (lamNegationDataList.isNotEmpty()) {
-                       allLamNegativeSenteces.add(lamNegationDataList)
-                       //  allLamNegativeSenteces.add(ExtractedSentence)
-                   }*/
-
-                println(quran.value!![s].ayah)
+                }*/
+            if (lamNegationDataList.isNotEmpty()) {
+                allLamNegativeSenteces.add(lamNegationDataList)
+                //  allLamNegativeSenteces.add(ExtractedSentence)
             }
 
+
+
+
         }
-        val fileName = "twosinfa.csv"
+        val fileName = "sifatr.csv"
         writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
     }
 
-    fun extractMousufSifa(corpusList: List<CorpusEntity>, qurantext: String): List<String> {
-        val mousufSifaPairs = mutableListOf<Pair<String, String>>()
-        val extractedSentences = mutableListOf<String>()
-
-        for (i in corpusList.indices) {
-            val currentWord = corpusList[i]
-            if (currentWord.surah == 27 && currentWord.ayah == 44 && currentWord.wordno == 15) {
-                println("check")
-            }
-            // Check if the current word is a noun (N) or proper noun (PN)
-            /*  val isIndefiniteNoun = (currentWord.tagone=="N" || currentWord.tagone=="PN")
-                      || (currentWord.tagtwo=="N" || currentWord.tagtwo=="PN" && currentWord.tagone!="DET")
-                      || (currentWord.tagthree=="N" || currentWord.tagthree=="PN" && currentWord.aratwo!="DET")
-                      || (currentWord.tagfour=="N" || currentWord.tagfour=="PN" && currentWord.tagthree!="DET")*/
-            val isIndefiniteNoun = (currentWord.tagone == "N" || currentWord.tagone == "PN") ||
-                    (currentWord.tagtwo == "N" || currentWord.tagtwo == "PN") && currentWord.tagone != "DET" ||
-                    (currentWord.tagthree == "N" || currentWord.tagthree == "PN") && currentWord.aratwo != "DET" ||
-                    (currentWord.tagfour == "N" || currentWord.tagfour == "PN") && currentWord.tagthree != "DET"
-
-
-            val isDefinitNounTagone =
-                currentWord.tagone == "DET" && (currentWord.tagtwo!!.contains("N") || currentWord.tagtwo!!.contains(
-                    "PN"
-                ))
-            val isDefinitNounTagtwo =
-                currentWord.tagtwo!!.contains("DET") && (currentWord.tagthree!!.contains("N") || currentWord.tagthree!!.contains(
-                    "PN"
-                ))
-            val isDefinitNounTagthree =
-                currentWord.tagthree!!.contains("DET") && (currentWord.tagfour!!.contains("N") || currentWord.tagfour!!.contains(
-                    "PN"
-                ))
-            val isDefinitNoun =
-                (currentWord.tagone == "DET" && (currentWord.tagtwo!!.contains("N") || currentWord.tagtwo!!.contains(
-                    "PN"
-                )
-                        || currentWord.tagtwo!!.contains("DET") && (currentWord.tagthree!!.contains(
-                    "N"
-                ) || currentWord.tagthree!!.contains("PN")
-                        || currentWord.tagthree!!.contains("DET") && (currentWord.tagfour!!.contains(
-                    "N"
-                ) || currentWord.tagfour!!.contains("PN")
-                        ))))
-            var nounDef = false
-            if (isIndefiniteNoun || isDefinitNounTagone || isDefinitNounTagtwo || isDefinitNounTagthree) {
-                var nounDetails = ""
-                var currentWords = ""
-                var isBrokenPlural = false
-
-                if (isIndefiniteNoun) {
-                    nounDetails = currentWord.detailsone ?: ""
-
-                } else if (isDefinitNounTagone) {
-                    nounDetails = currentWord.detailstwo ?: ""
-                    nounDef = currentWord.tagone == "DET"
-                } else if (isDefinitNounTagtwo) {
-                    nounDetails = currentWord.detailsthree ?: ""
-                    nounDef = currentWord.tagtwo == "DET"
-                } else if (isDefinitNounTagthree) {
-                    nounDetails = currentWord.detailsfour ?: ""
-                    nounDef = currentWord.tagthree == "DET"
-                }
-
-
-                // Check for broken plural or gender number agreement
-                currentWords =
-                    currentWord.araone + currentWord.aratwo + currentWord.arathree + currentWord.arafour + currentWord.arafive
-                isBrokenPlural =
-                    isBrokenPluralPattern(currentWord.araone + currentWord.aratwo + currentWord.arathree + currentWord.arafour + currentWord.arafive)
-
-                // Handle broken plural: treat as FS (feminine singular)
-                var nounGender = if (isBrokenPlural) "FS" else nounDetails.extractGender()
-                val nounCase = nounDetails.extractCase()
-                // Check definiteness
-
-                // Look ahead to find the adjective (ADJ)
-                if (i + 1 < corpusList.size) {
-                    val nextWord = corpusList[i + 1]
-                    var isAdjective = false
-                    var isNoun = false
-                    var adjDetails = ""
-                    var nounDetails=""
-                    if (nextWord.tagone == "ADJ") {
-                        isAdjective = true
-                        adjDetails = nextWord.detailsone ?: ""
-                    } else if (nextWord.tagone == "DET") {
-                        isAdjective =
-                            nextWord.tagtwo == "ADJ"
-                        adjDetails = nextWord.detailstwo ?: ""
-                    } else if (nextWord.tagtwo == "DET") {
-                        isAdjective =
-                            nextWord.tagthree == "ADJ"
-                        adjDetails = nextWord.detailsthree ?: ""
-                    } else if (nextWord.tagthree == "DET") {
-                        isAdjective = nextWord.tagfour == "ADJ"
-                        adjDetails = nextWord.detailsfour ?: ""
-                    }
-                    //check noun and noun
-                    if (nextWord.tagone == "N") {
-                        isNoun = true
-                        nounDetails = nextWord.detailsone ?: ""
-                    } else if (nextWord.tagone == "N") {
-                        isAdjective =
-                            nextWord.tagtwo == "N"
-                        nounDetails = nextWord.detailstwo ?: ""
-                    } else if (nextWord.tagtwo == "DET") {
-                        isNoun =
-                            nextWord.tagthree == "N"
-                        nounDetails = nextWord.detailsthree ?: ""
-                    } else if (nextWord.tagthree == "DET") {
-                        isNoun = nextWord.tagfour == "N"
-                        nounDetails = nextWord.detailsfour ?: ""
-                    }
-                    if(isNoun) {
-                        val currentNounGender = nounDetails.extractGender()
-                        val currentNounCase = nounDetails.extractCase()
-                        val currnetNounDef = nextWord.tagone == "DET"
-                        if (nounCase == currentNounCase && nounDef == currnetNounDef && nounGender == currentNounGender) {
-
-                            val mousuf =
-                                currentWord.araone + currentWord.aratwo + currentWord.arathree + currentWord.arafour + currentWord.arafive
-                            var sifa =
-                                nextWord.araone + nextWord.aratwo + nextWord.arathree + nextWord.arafour + nextWord.arafive
-                            var adjword=nextWord.wordno
-                            if (i + 2 < corpusList.size) {
-
-                                val nextSecondAdjective = corpusList[i + 2]
-                                if (nextSecondAdjective.tagone == "ADJ" || nextSecondAdjective.tagtwo == "ADJ" || nextSecondAdjective.tagthree == "ADJ" || nextSecondAdjective.tagfour == "ADJ") {
-                                    nextSecondAdjective.araone + nextSecondAdjective.aratwo + nextSecondAdjective.arathree + nextSecondAdjective.arafour + nextSecondAdjective.arafive
-                                    sifa += " " + nextSecondAdjective.araone + nextSecondAdjective.aratwo + nextSecondAdjective.arathree + nextSecondAdjective.arafour + nextSecondAdjective.arafive
-                               adjword=nextSecondAdjective.wordno
-                                }
-                            }
-
-                            val translationBuilder = StringBuilder()
-                            translationBuilder.append(nextWord.en).append(" ")
-                                .append(currentWord.en)
-                            val extractedSentence = "$mousuf $sifa"
-                            val startindex=   qurantext.indexOf(extractedSentence)
-                            val endindex=startindex+extractedSentence.length
-                            val nountype="nountype"
-                            val dataString =
-                                "${nextWord.surah}|${nextWord.ayah}|${currentWord.wordno}|$adjword|$startindex|$endindex|$extractedSentence|$translationBuilder|$nountype"
-                            extractedSentences.add(dataString)
-                            mousufSifaPairs.add(Pair(mousuf, sifa))
-                        }
-                    }
-
-                    if (isAdjective) {
-                        val adjGender = adjDetails.extractGender()
-                        val adjCase = adjDetails.extractCase()
-                        val adjDef = nextWord.tagone == "DET"
-                        if (nounCase == adjCase && nounDef == adjDef) {
-                            val mousuf =
-                                currentWord.araone + currentWord.aratwo + currentWord.arathree + currentWord.arafour + currentWord.arafive
-                            var sifa =
-                                nextWord.araone + nextWord.aratwo + nextWord.arathree + nextWord.arafour + nextWord.arafive
-                            var adjword=nextWord.wordno
-                            if (i + 2 < corpusList.size) {
-
-                                val nextSecondAdjective = corpusList[i + 2]
-                                if (nextSecondAdjective.tagone == "ADJ" || nextSecondAdjective.tagtwo == "ADJ" || nextSecondAdjective.tagthree == "ADJ" || nextSecondAdjective.tagfour == "ADJ") {
-                                    nextSecondAdjective.araone + nextSecondAdjective.aratwo + nextSecondAdjective.arathree + nextSecondAdjective.arafour + nextSecondAdjective.arafive
-                                    sifa += " " + nextSecondAdjective.araone + nextSecondAdjective.aratwo + nextSecondAdjective.arathree + nextSecondAdjective.arafour + nextSecondAdjective.arafive
-                                    adjword=nextSecondAdjective.wordno
-                                }
-                            }
-
-                            val translationBuilder = StringBuilder()
-                            translationBuilder.append(nextWord.en).append(" ")
-                                .append(currentWord.en)
-                            val extractedSentence = "$mousuf $sifa"
-                         val startindex=   qurantext.indexOf(extractedSentence)
-                            val endindex=startindex+extractedSentence.length
-                            val dataString =
-                                "${nextWord.surah}|${nextWord.ayah}|${currentWord.wordno}|$adjword|$startindex|$endindex|$extractedSentence|$translationBuilder"
-                            extractedSentences.add(dataString)
-                            mousufSifaPairs.add(Pair(mousuf, sifa))
-
-                        } else if(nounCase==adjCase && adjDef && !nounDef){
-                            var adjword=nextWord.wordno
-                            val mousuf =
-                                currentWord.araone + currentWord.aratwo + currentWord.arathree + currentWord.arafour + currentWord.arafive
-                            var sifa =
-                                nextWord.araone + nextWord.aratwo + nextWord.arathree + nextWord.arafour + nextWord.arafive
-                            if (i + 2 < corpusList.size) {
-
-                                val nextSecondAdjective = corpusList[i + 2]
-                                if (nextSecondAdjective.tagone == "ADJ" || nextSecondAdjective.tagtwo == "ADJ" || nextSecondAdjective.tagthree == "ADJ" || nextSecondAdjective.tagfour == "ADJ") {
-                                    nextSecondAdjective.araone + nextSecondAdjective.aratwo + nextSecondAdjective.arathree + nextSecondAdjective.arafour + nextSecondAdjective.arafive
-                                    sifa += " " + nextSecondAdjective.araone + nextSecondAdjective.aratwo + nextSecondAdjective.arathree + nextSecondAdjective.arafour + nextSecondAdjective.arafive
-                                    adjword=nextSecondAdjective.wordno
-                                }
-                            }
-                           val check="check"
-                            val translationBuilder = StringBuilder()
-                            translationBuilder.append(nextWord.en).append(" ")
-                                .append(currentWord.en)
-                            val extractedSentence = "$mousuf $sifa"
-                            val startindex=   qurantext.indexOf(extractedSentence)
-                            val endindex=startindex+extractedSentence.length
-                            val dataString =
-                                "${nextWord.surah}|${nextWord.ayah}|${currentWord.wordno}|$adjword|$startindex|$endindex|$extractedSentence|$translationBuilder|$check"
-                            extractedSentences.add(dataString)
-                            mousufSifaPairs.add(Pair(mousuf, sifa))
-                        }
-                    } else if (isAdjective) {//1073
-                            val adjGender = adjDetails.extractGender()
-                            val adjCase = adjDetails.extractCase()
-                            val adjDef = nextWord.tagone == "DET"
-                            if ((adjGender == "FS" && nounGender == "MP" || (adjGender == "FS") && nounGender == "F") && (nounCase == adjCase && nounDef == adjDef)) {
-                                val mousuf =
-                                    currentWord.araone + currentWord.aratwo + currentWord.arathree + currentWord.arafour + currentWord.arafive
-                                val sifa =
-                                    nextWord.araone + nextWord.aratwo + nextWord.arathree + nextWord.arafour + nextWord.arafive
-                                val translationBuilder = StringBuilder()
-                                translationBuilder.append(nextWord.en).append(" ")
-                                    .append(currentWord.en)
-                                val extractedSentence = "$mousuf $sifa"
-                                val startindex=   qurantext.indexOf(extractedSentence)
-                                val endindex=startindex+extractedSentence.length
-                                val dataString =
-                                    "${nextWord.surah}|${nextWord.ayah}|${currentWord.wordno}|${nextWord.wordno}|$startindex|$endindex|$extractedSentence|$translationBuilder"
-                                extractedSentences.add(dataString)
-                                mousufSifaPairs.add(Pair(mousuf, sifa))
-
-                            } else
-                                if (adjGender == "F" && nounCase == adjCase && nounDef == adjDef) {
-                                    val mousuf =
-                                        currentWord.araone + currentWord.aratwo + currentWord.arathree + currentWord.arafour + currentWord.arafive
-                                    val sifa =
-                                        nextWord.araone + nextWord.aratwo + nextWord.arathree + nextWord.arafour + nextWord.arafive
-                                    val translationBuilder = StringBuilder()
-                                    translationBuilder.append(nextWord.en).append(" ")
-                                        .append(currentWord.en)
-                                    val extractedSentence = "$mousuf $sifa"
-                                    val startindex=   qurantext.indexOf(extractedSentence)
-                                    val endindex=startindex+extractedSentence.length
-                                    val dataString =
-                                        "${nextWord.surah}|${nextWord.ayah}|${currentWord.wordno}|${nextWord.wordno}|$startindex|$endindex|$extractedSentence|$translationBuilder"
-                                    extractedSentences.add(dataString)
-                                    mousufSifaPairs.add(Pair(mousuf, sifa) as Pair<String, String>)
-
-
-                                } else {
-
-                                    //    val adjDetails = nextWord.detailstwo ?: ""
-                                    val adjGender = adjDetails.extractGender()
-                                    val adjCase = adjDetails.extractCase()
-                                    val adjDef = nextWord.tagone == "DET" // Check definiteness
-                                    if ((nounGender == "unknown" || nounGender == "M") && (adjGender == "MS" || adjGender == "FS")) {
-                                        nounGender = adjGender
-                                    }
-                                    // Check for gender, case, and definiteness agreement
-                                    if (nounGender == adjGender && nounCase == adjCase && nounDef == adjDef) {
-                                        // Found a mousuf-sifa pair
-                                        val mousuf =
-                                            currentWord.araone + currentWord.aratwo + currentWord.arathree + currentWord.arafour + currentWord.arafive
-                                        val sifa =
-                                            nextWord.araone + nextWord.aratwo + nextWord.arathree + nextWord.arafour + nextWord.arafive
-                                        val translationBuilder = StringBuilder()
-                                        translationBuilder.append(nextWord.en).append(" ")
-                                            .append(currentWord.en)
-                                        val extractedSentence = "$mousuf $sifa"
-                                        val startindex=   qurantext.indexOf(extractedSentence)
-                                        val endindex=startindex+extractedSentence.length
-                                        val dataString =
-                                            "${nextWord.surah}|${nextWord.ayah}|${currentWord.wordno}|${nextWord.wordno}|$startindex|$endindex|$extractedSentence|$translationBuilder"
-                                        extractedSentences.add(dataString)
-                                        mousufSifaPairs.add(
-                                            Pair(
-                                                mousuf,
-                                                sifa
-                                            ) as Pair<String, String>
-                                        )
-                                    }
-                                }
-                        }
-
-
-                }
-            }
-        }
-        return extractedSentences
-    }
-
     // Function to remove Arabic vowels and diacritics, leaving only consonants
-    fun extractConsonants(input: String): String {
-        val arabicDiacritics =
-            "[\\u064B-\\u065F\\u0670\\u06D6-\\u06DC\\u06DF-\\u06E8\\u06EA-\\u06ED]" // Arabic diacritic Unicode range
-        val vowels = "[ًٌٍَُِْ]" // Short vowels (fatha, kasra, damma, etc.)
-
-        // Remove diacritics and vowels
-        return input.replace(Regex(arabicDiacritics), "").replace(Regex(vowels), "")
-    }
-
-
-    fun BrokenPluralPattern(currentWord: String?): Boolean {
-        if (currentWord == null) return false
-
-
-        val brokenPluralPatterns = listOf(
-            "فُعُوْلٌ",
-            "أَفْعَالٌ",
-            "فِعَالٌ",
-            "فُعُلٌ",
-            "فِعْلَانٌ",
-            "فَعْلَانُ",
-            "فُعَلٌ",
-            "فُعُولٌ",
-            "فُعَلَاءُ",
-            "فُعْلَانٌ",
-            "فَعَالِيلُ",
-            "فُعُولَاتٌ",
-            "مَفَاعِلُ",
-            "فَوَاعِلُ",
-            "مَفَاعِيلُ",
-            "فُعْلَةٌ",
-            "أَفَاعِيلُ",
-            "أَفْعِلَةٌ",
-            "فَعَالٍ",
-            "فِعْلَةٌ",
-            "فِعَالَاتٌ",
-            "فِعْلَانٌ",
-            "فِعَالِين",
-            "أَفْعُلَةٌ",
-            "فُعَلٌ",
-            // Add accusative/genitive cases
-            "أَفْعَالَ",
-            "فُعُولَ",
-            "فِعَالَ",
-            "فُعَلَاءَ",
-            "فُعْلَانَ",
-            "فَعَالِيلَ",
-            "فُعُولَاتَ",
-            "مَفَاعِلَ",
-            "فَوَاعِلَ",
-            "مَفَاعِيلَ",
-            "فُعْلَةَ",
-            "أَفَاعِيلَ",
-            "أَفْعِلَةَ",
-            "فَعَالِيَ",
-            "فِعْلَةَ",
-            "فِعَالَاتَ",
-            "فِعْلَانَ",
-            "فِعَالِين",
-            "أَفْعُلَةَ",
-            "فُعَلَ"
-        )
-        // Extract consonants from the current word
-        val wordConsonants = extractConsonants(currentWord)
-        if (wordConsonants.length != 3) return false // Assuming broken plurals have 3 root consonants
-
-        // Loop through each broken plural pattern
-        for (pattern in brokenPluralPatterns) {
-            // Extract consonants from the pattern (should be 3 root letters in most cases)
-            val patternConsonants = extractConsonants(pattern)
-
-            // If both have the same number of consonants (usually 3), replace pattern consonants with word consonants
-            if (patternConsonants.length == 3) {
-                // Replace consonants in the pattern with those of the current word
-                val replacedPattern = pattern.replaceFirst(patternConsonants[0], wordConsonants[0])
-                    .replaceFirst(patternConsonants[1], wordConsonants[1])
-                    .replaceFirst(patternConsonants[2], wordConsonants[2])
-
-                // Compare the modified pattern with the current word
-                if (replacedPattern == currentWord) {
-                    return true // Match found
-                }
-            }
-        }
-        return false // No match found
-    }
 
     // Function to check for broken plural pattern by replacing consonants
-    fun isBrokenPluralPattern(currentWord: String?): Boolean {
-        if (currentWord == null) return false
 
-
-        val brokenPluralPatterns = listOf(
-            "فُعُوْلٌ",
-            "أَفْعَالٌ",
-            "فِعَالٌ",
-            "فُعُلٌ",
-            "فِعْلَانٌ",
-            "فَعْلَانُ",
-            "فُعَلٌ",
-            "فُعُولٌ",
-            "فُعَلَاءُ",
-            "فُعْلَانٌ",
-            "فَعَالِيلُ",
-            "فُعُولَاتٌ",
-            "مَفَاعِلُ",
-            "فَوَاعِلُ",
-            "مَفَاعِيلُ",
-            "فُعْلَةٌ",
-            "أَفَاعِيلُ",
-            "أَفْعِلَةٌ",
-            "فَعَالٍ",
-            "فِعْلَةٌ",
-            "فِعَالَاتٌ",
-            "فِعْلَانٌ",
-            "فِعَالِين",
-            "أَفْعُلَةٌ",
-            "فُعَلٌ",
-            // Add accusative/genitive cases
-            "أَفْعَالَ",
-            "فُعُولَ",
-            "فِعَالَ",
-            "فُعَلَاءَ",
-            "فُعْلَانَ",
-            "فَعَالِيلَ",
-            "فُعُولَاتَ",
-            "مَفَاعِلَ",
-            "فَوَاعِلَ",
-            "مَفَاعِيلَ",
-            "فُعْلَةَ",
-            "أَفَاعِيلَ",
-            "أَفْعِلَةَ",
-            "فَعَالِيَ",
-            "فِعْلَةَ",
-            "فِعَالَاتَ",
-            "فِعْلَانَ",
-            "فِعَالِين",
-            "أَفْعُلَةَ",
-            "فُعَلَ"
-        )
-        // Extract consonants from the current word
-        val wordConsonants = extractConsonants(currentWord)
-        if (wordConsonants.length != 3) return false // Assuming broken plurals have 3 root consonants
-
-        // Loop through each broken plural pattern
-        for (pattern in brokenPluralPatterns) {
-            // Extract consonants from the pattern (should be 3 root letters in most cases)
-            val patternConsonants = extractConsonants(pattern)
-
-            // If both have the same number of consonants (usually 3), replace pattern consonants with word consonants
-            if (patternConsonants.length == 3) {
-                // Replace consonants in the pattern with those of the current word
-                val replacedPattern = pattern.replaceFirst(patternConsonants[0], wordConsonants[0])
-                    .replaceFirst(patternConsonants[1], wordConsonants[1])
-                    .replaceFirst(patternConsonants[2], wordConsonants[2])
-
-                // Compare the modified pattern with the current word
-                if (replacedPattern == currentWord) {
-                    return true // Match found
-                }
-            }
-        }
-        return false // No match found
-    }
-
-
-    fun isBrokenPluralPatternsss(currentWord: String?): Boolean {
-        if (currentWord == null) return false
-
-        val brokenPluralPatterns = listOf(
-            "فُعُوْلٌ",
-            "أَفْعَالٌ",
-            "فِعَالٌ",
-            "فُعُلٌ",
-            "فِعْلَانٌ",
-            "فَعْلَانُ",
-            "فُعَلٌ",
-            "فُعُولٌ",
-            "فُعَلَاءُ",
-            "فُعْلَانٌ",
-            "فَعَالِيلُ",
-            "فُعُولَاتٌ",
-            "مَفَاعِلُ",
-            "فَوَاعِلُ",
-            "مَفَاعِيلُ",
-            "فُعْلَةٌ",
-            "أَفَاعِيلُ",
-            "أَفْعِلَةٌ",
-            "فَعَالٍ",
-            "فِعْلَةٌ",
-            "فِعَالَاتٌ",
-            "فِعْلَانٌ",
-            "فِعَالِين",
-            "أَفْعُلَةٌ",
-            "فُعَلٌ",
-            // Add accusative/genitive cases
-            "أَفْعَالَ",
-            "فُعُولَ",
-            "فِعَالَ",
-            "فُعَلَاءَ",
-            "فُعْلَانَ",
-            "فَعَالِيلَ",
-            "فُعُولَاتَ",
-            "مَفَاعِلَ",
-            "فَوَاعِلَ",
-            "مَفَاعِيلَ",
-            "فُعْلَةَ",
-            "أَفَاعِيلَ",
-            "أَفْعِلَةَ",
-            "فَعَالِيَ",
-            "فِعْلَةَ",
-            "فِعَالَاتَ",
-            "فِعْلَانَ",
-            "فِعَالِين",
-            "أَفْعُلَةَ",
-            "فُعَلَ"
-        )
-        val normalizedWord = removeDiacritics(currentWord)
-        // Construct regex pattern that matches any of the patterns
-        return brokenPluralPatterns.any { pattern ->
-            val normalizedPattern = removeDiacritics(pattern)
-            normalizedWord == normalizedPattern
-        }
-
-    }
-
-
-    fun removeDiacritics(input: String?): String {
-        return input?.replace(Regex("[\\p{M}]"), "") ?: ""
-    }
-
-
-    fun isBrokenPluralPatternss(currentWord: String?): Boolean {
-        val brokenPluralPatterns = listOf(
-            "فُعُوْلٌ",
-            "أَفْعَالٌ",
-            "فِعَالٌ",
-            "فُعُلٌ",
-            "فِعْلَانٌ",
-            "فَعْلَانُ",
-            "فُعَلٌ",
-            "أَفْعَالٌ",  // af‘āl
-            "فُعُولٌ",    // fu‘ūl
-            "فِعَالٌ",    // fi‘āl
-            "فُعَلَاءُ",  // fu‘alā’
-            "فُعْلَانٌ",  // fu‘lān
-            "فَعَالِيلُ", // fa‘ālīl
-            "فُعُولَاتٌ", // fu‘ūlāt
-            "مَفَاعِلُ",  // mafā‘il
-            "فَوَاعِلُ",  // fawā‘il
-            "مَفَاعِيلُ", // mafā‘īl
-            "فُعْلَةٌ",   // fu‘la
-            "أَفَاعِيلُ", // afā‘īl
-            "أَفْعِلَةٌ", // af‘ila
-            "فَعَالٍ",    // fa‘ālīn (used in some cases)
-            "فِعْلَةٌ",   // fi‘la
-            "فِعَالَاتٌ", // fi‘ālāt
-            "فِعْلَانٌ",  // fi‘lān
-            "فِعَالِين",  // fi‘ālīn (variation)
-            "أَفْعُلَةٌ", // af‘ula
-            "فُعَلٌ",    // fu‘al
-            "أَفْعَالَ",   // af‘āla (accusative/genitive form of أَفْعَالٌ)
-            "فُعُولَ",     // fu‘ūla (accusative/genitive form of فُعُولٌ)
-            "فِعَالَ",     // fi‘āla (accusative/genitive form of فِعَالٌ)
-            "فُعَلَاءَ",   // fu‘alā’a (accusative/genitive form of فُعَلَاءُ)
-            "فُعْلَانَ",   // fu‘lāna (accusative/genitive form of فُعْلَانٌ)
-            "فَعَالِيلَ",  // fa‘ālīla (accusative/genitive form of فَعَالِيلُ)
-            "فُعُولَاتَ",  // fu‘ūlāta (accusative/genitive form of فُعُولَاتٌ)
-            "مَفَاعِلَ",   // mafā‘ila (accusative/genitive form of مَفَاعِلُ)
-            "فَوَاعِلَ",   // fawā‘ila (accusative/genitive form of فَوَاعِلُ)
-            "مَفَاعِيلَ",  // mafā‘īla (accusative/genitive form of مَفَاعِيلُ)
-            "فُعْلَةَ",    // fu‘lata (accusative/genitive form of فُعْلَةٌ)
-            "أَفَاعِيلَ",  // afā‘īla (accusative/genitive form of أَفَاعِيلُ)
-            "أَفْعِلَةَ",  // af‘ilata (accusative/genitive form of أَفْعِلَةٌ)
-            "فَعَالِيَ",   // fa‘āliyya (accusative/genitive form of فَعَالٍ)
-            "فِعْلَةَ",    // fi‘lata (accusative/genitive form of فِعْلَةٌ)
-            "فِعَالَاتَ",  // fi‘ālāta (accusative/genitive form of فِعَالَاتٌ)
-            "فِعْلَانَ",   // fi‘lāna (accusative/genitive form of فِعْلَانٌ)
-            "فِعَالِين",   // fi‘ālīn (common form, used similarly in accusative/genitive)
-            "أَفْعُلَةَ",  // af‘ulata (accusative/genitive form of أَفْعُلَةٌ)
-            "فُعَلَ"       // fu‘ala (accusative/genitive form of فُعَلٌ)
-        )
-
-        val normalizedWord = currentWord // Use original word with diacritics
-        val uLocale = ULocale.forLanguageTag("ar")
-        val collator = Collator.getInstance(uLocale)
-        collator.strength = Collator.PRIMARY
-
-        var brokenPluralIndexes = false
-        for (pattern in brokenPluralPatterns) {
-            if (collator.compare(normalizedWord, pattern) == 0) {
-                brokenPluralIndexes = true
-                break
-            }
-        }
-        return brokenPluralIndexes
-    }
-
-    // Helper function to detect broken plural patterns (example for demonstration)
-    fun isBrokenPluralPatternold(currentWord: String?): Boolean {
-
-        val brokenPluralPatterns = listOf(
-            "فُعُوْلٌ",
-            "أَفْعَالٌ",
-            "فِعَالٌ",
-            "فُعُلٌ",
-            "فِعْلَانٌ",
-            "فَعْلَانُ",
-            "فُعَلٌ",
-            "أَفْعَالٌ",  // af‘āl
-            "فُعُولٌ",    // fu‘ūl
-            "فِعَالٌ",    // fi‘āl
-            "فُعَلَاءُ",  // fu‘alā’
-            "فُعْلَانٌ",  // fu‘lān
-            "فَعَالِيلُ", // fa‘ālīl
-            "فُعُولَاتٌ", // fu‘ūlāt
-            "مَفَاعِلُ",  // mafā‘il
-            "فَوَاعِلُ",  // fawā‘il
-            "مَفَاعِيلُ", // mafā‘īl
-            "فُعْلَةٌ",   // fu‘la
-            "أَفَاعِيلُ", // afā‘īl
-            "أَفْعِلَةٌ", // af‘ila
-            "فَعَالٍ",    // fa‘ālīn (used in some cases)
-            "فِعْلَةٌ",   // fi‘la
-            "فِعَالَاتٌ", // fi‘ālāt
-            "فِعْلَانٌ",  // fi‘lān
-            "فِعَالِين",  // fi‘ālīn (variation)
-            "أَفْعُلَةٌ", // af‘ula
-            "فُعَلٌ",    // fu‘al
-            "أَفْعَالَ",   // af‘āla (accusative/genitive form of أَفْعَالٌ)
-            "فُعُولَ",     // fu‘ūla (accusative/genitive form of فُعُولٌ)
-            "فِعَالَ",     // fi‘āla (accusative/genitive form of فِعَالٌ)
-            "فُعَلَاءَ",   // fu‘alā’a (accusative/genitive form of فُعَلَاءُ)
-            "فُعْلَانَ",   // fu‘lāna (accusative/genitive form of فُعْلَانٌ)
-            "فَعَالِيلَ",  // fa‘ālīla (accusative/genitive form of فَعَالِيلُ)
-            "فُعُولَاتَ",  // fu‘ūlāta (accusative/genitive form of فُعُولَاتٌ)
-            "مَفَاعِلَ",   // mafā‘ila (accusative/genitive form of مَفَاعِلُ)
-            "فَوَاعِلَ",   // fawā‘ila (accusative/genitive form of فَوَاعِلُ)
-            "مَفَاعِيلَ",  // mafā‘īla (accusative/genitive form of مَفَاعِيلُ)
-            "فُعْلَةَ",    // fu‘lata (accusative/genitive form of فُعْلَةٌ)
-            "أَفَاعِيلَ",  // afā‘īla (accusative/genitive form of أَفَاعِيلُ)
-            "أَفْعِلَةَ",  // af‘ilata (accusative/genitive form of أَفْعِلَةٌ)
-            "فَعَالِيَ",   // fa‘āliyya (accusative/genitive form of فَعَالٍ)
-            "فِعْلَةَ",    // fi‘lata (accusative/genitive form of فِعْلَةٌ)
-            "فِعَالَاتَ",  // fi‘ālāta (accusative/genitive form of فِعَالَاتٌ)
-            "فِعْلَانَ",   // fi‘lāna (accusative/genitive form of فِعْلَانٌ)
-            "فِعَالِين",   // fi‘ālīn (common form, used similarly in accusative/genitive)
-            "أَفْعُلَةَ",  // af‘ulata (accusative/genitive form of أَفْعُلَةٌ)
-            "فُعَلَ"       // fu‘ala (accusative/genitive form of فُعَلٌ)
-        )
-
-        var brokenPluralIndexes = false// Add more patterns
-        for (pattern in brokenPluralPatterns) {
-            if (currentWord!!.matches(Regex(pattern))) {
-                // If broken plural is found, add to the result
-                brokenPluralIndexes = true
-                break
-            }
-        }
-        return brokenPluralIndexes
-    }
-
-    fun checkForBrokenPlural(corpus: List<CorpusEntity>): List<Pair<Int, Int>> {
-        val brokenPluralIndexes = mutableListOf<Pair<Int, Int>>()
-
-        for (i in corpus.indices) {
-            val entry = corpus[i]
-
-            // Check if next word has ta marboot or alif maksura indicating feminine plural
-            val isNextFemininePlural = if (i + 1 < corpus.size) {
-                val nextEntry = corpus[i + 1]
-                nextEntry.araone!!.contains("ة") || nextEntry.araone!!.contains("ى")
-            } else false
-
-            // If the next word is feminine plural, proceed to check for broken plural patterns
-            if (isNextFemininePlural) {
-                // Define your broken plural patterns
-                val brokenPluralPatterns = listOf(
-                    "فُعُوْلٌ",
-                    "فَعَالِي",
-                    "أَفْعَالٌ",
-                    "فِعْلَةٌ", /*...other patterns...*/
-                )
-
-                // Check current word for broken plural patterns
-                val currentWord =
-                    entry.araone + entry.aratwo + entry.arathree + entry.arafour + entry.arafive
-                for (pattern in brokenPluralPatterns) {
-                    if (currentWord.matches(Regex(pattern))) {
-                        // If broken plural is found, add to the result
-                        brokenPluralIndexes.add(Pair(entry.surah, entry.ayah))
-                        break
-                    }
-                }
-            }
-        }
-
-        return brokenPluralIndexes
-    }
-
-
-    // Extract gender (e.g., FS, MS, MP, FP) from the details string
-    fun String.extractGender(): String {
-        return when {
-            contains("MS") -> "MS"
-            contains("FS") -> "FS"
-            contains("MP") -> "MP"
-            contains("FP") -> "FP"
-            contains("|M|") -> "M"
-            contains("|F|") -> "F"
-
-            else -> "unknown"
-        }
-    }
-
-    // Extract case (e.g., NOM, ACC, GEN) from the details string
-    fun String.extractCase(): String {
-        return when {
-            contains("NOM") -> "NOM"
-            contains("ACC") -> "ACC"
-            contains("GEN") -> "GEN"
-            else -> "unknown"
-        }
-    }
-
-    // Extension function to match Arabic pattern (for broken plurals)
-    fun String?.matchesPattern(pattern: String): Boolean {
-        // Implement the logic to match against a broken plural pattern
-        return this != null && this.contains(pattern)
-    }
 
     private fun extractLaNafiya() {
         mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
@@ -1572,94 +766,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     }
 
 
-    fun extractInMaIllaPositiveSentences(
-        corpus: List<CorpusEntity>,
-        spannableVerse: String
-    ): List<String> {
-        val extractedSentences = mutableListOf<String>()
-
-        val uniqueSentences = mutableSetOf<String>() // Set to track unique sentences
-
-        for (i in corpus.indices) {
-            val entry = corpus[i]
-
-            // Check for "إِلَّا" with tagone == "EXP" or "RES"
-            if ((entry.tagone == "EXP" || entry.tagone == "RES") && (entry.araone == "إِلَّا" || entry.araone == "إِلَّآ")) {
-                var negationFound = false
-                var negationStartIndex = -1
-
-                // Loop backwards to find if any negation condition is present
-                for (j in i - 1 downTo 0) {
-                    val previousEntry = corpus[j]
-
-                    // Check if any negation tag or word is found, and break if true (skip extraction)
-                    if ((previousEntry.tagtwo == "NEG" && (previousEntry.aratwo == "إِنْ" || previousEntry.aratwo == "مَا" || previousEntry.aratwo == "مَآ" || previousEntry.aratwo == "مَّا")) ||
-                        (previousEntry.tagone == "NEG" && (previousEntry.araone == "إِنْ" || previousEntry.araone == "مَا" || previousEntry.araone == "مَآ" || previousEntry.araone == "مَّا")) ||
-                        (previousEntry.tagtwo == "NEG" && (previousEntry.aratwo == "لَآ" || previousEntry.aratwo == "لَا" || previousEntry.aratwo == "لَّا")) ||
-                        (previousEntry.tagone == "NEG" && (previousEntry.araone == "لَآ" || previousEntry.araone == "لَا" || previousEntry.araone == "لَّا")) ||
-                        (previousEntry.tagtwo == "NEG" && (previousEntry.aratwo == "لَنْ" || previousEntry.aratwo == "لَن" || previousEntry.aratwo == "لَّن")) ||
-                        (previousEntry.tagone == "NEG" && (previousEntry.araone == "لَنْ" || previousEntry.araone == "لَن" || previousEntry.araone == "لَّن"))
-                    ) {
-                        // Negation condition found, skip this case
-                        negationFound = true
-                        break
-                    }
-                }
-
-                // If no negation was found in the previous entries, proceed with extraction
-                if (!negationFound) {
-                    val sentenceBuilder = StringBuilder()
-
-                    // Capture 3 words before "إِلَّا"
-                    val startWordNo =
-                        corpus[maxOf(0, i - 3)].wordno // Get up to 3 words before "إِلَّا"
-                    for (k in maxOf(0, i - 3) until i) {
-                        val word =
-                            "${corpus[k].araone}${corpus[k].aratwo}${corpus[k].arathree}${corpus[k].arafour}${corpus[k].arafive}".trim()
-                        sentenceBuilder.append(word).append(" ")
-                    }
-
-                    // Capture "إِلَّا" and 2 words after "إِلَّا"
-                    var endWordNo = startWordNo
-                    for (k in i until minOf(
-                        i + 3,
-                        corpus.size
-                    )) { // i is where "إِلَّا" is, capture 2 more after it
-                        val word =
-                            "${corpus[k].araone}${corpus[k].aratwo}${corpus[k].arathree}${corpus[k].arafour}${corpus[k].arafive}".trim()
-                        sentenceBuilder.append(word).append(" ")
-
-                        endWordNo = corpus[k].wordno // Update the end word number
-                    }
-
-                    val fullSentenceStr = sentenceBuilder.toString().trim()
-
-                    // Now find the combined sentence in the spannableVerse
-                    val sentenceStartIndex = spannableVerse.indexOf(fullSentenceStr)
-                    val sentenceEndIndex =
-                        if (sentenceStartIndex != -1) sentenceStartIndex + fullSentenceStr.length else -1
-
-                    // Check if this sentence is already added to avoid duplicates
-                    if (sentenceStartIndex != -1 && !uniqueSentences.contains(fullSentenceStr)) {
-                        val dataString =
-                            "${entry.surah}|${entry.ayah}|$startWordNo|$endWordNo|$sentenceStartIndex|$sentenceEndIndex|$fullSentenceStr"
-                        println("Searching for: $fullSentenceStr")
-
-                        // Add the sentence to the set for uniqueness
-                        uniqueSentences.add(fullSentenceStr)
-
-                        // Add the unique sentence with word numbers and string indices
-                        extractedSentences.add(dataString)
-                    }
-                }
-            }
-        }
-
-        return extractedSentences
-    }
-
-
-    fun extractInMaIllaPositiveSentencesv1(
+    fun extractInMaIllaProhibitiveSentences(
         corpus: List<CorpusEntity>,
         spannableVerse: String
     ): List<String> {
@@ -1669,104 +776,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
         for (i in corpus.indices) {
             val entry = corpus[i]
-
-            if (entry.surah == 74 && entry.ayah == 31) {
-                println(spannableVerse)
-            }
-
-            // Check for "إِلَّا" with tagone == "EXP" or "RES"
-            if ((entry.tagone == "EXP" || entry.tagone == "RES") && (entry.araone == "إِلَّا" || entry.araone == "إِلَّآ")) {
-                var negationFound = false
-                var negationStartIndex = -1
-
-                // Loop backwards to find valid words before "إِلَّا" where the condition is not met
-                for (j in i - 1 downTo 0) {
-                    val previousEntry = corpus[j]
-
-                    // Continue if the negation conditions are NOT met
-                    if (!((previousEntry.tagtwo == "NEG" && (previousEntry.aratwo == "إِنْ" || previousEntry.aratwo == "مَا" || previousEntry.aratwo == "مَآ" || previousEntry.aratwo == "مَّا")) ||
-                                (previousEntry.tagone == "NEG" && (previousEntry.araone == "إِنْ" || previousEntry.araone == "مَا" || previousEntry.araone == "مَآ" || previousEntry.araone == "مَّا")) ||
-                                (previousEntry.tagtwo == "NEG" && (previousEntry.aratwo == "لَآ" || previousEntry.aratwo == "لَا" || previousEntry.aratwo == "لَّا")) ||
-                                (previousEntry.tagone == "NEG" && (previousEntry.araone == "لَآ" || previousEntry.araone == "لَا" || previousEntry.araone == "لَّا")) ||
-                                (previousEntry.tagtwo == "NEG" && (previousEntry.aratwo == "لَنْ" || previousEntry.aratwo == "لَن" || previousEntry.aratwo == "لَّن")) ||
-                                (previousEntry.tagone == "NEG" && (previousEntry.araone == "لَنْ" || previousEntry.araone == "لَن" || previousEntry.araone == "لَّن")))
-                    ) {
-                        eligibleNegationCount += 1 // Increment valid occurrences
-
-                        if (eligibleNegationCount >= 1) { // Allow extraction
-                            negationFound = true
-                            negationStartIndex =
-                                j // Capture the index where this valid negation was found
-                            break
-                        }
-                    }
-                }
-
-                // If a valid negation was not found in the excluded condition
-                if (negationFound && negationStartIndex != -1) {
-                    val sentenceBuilder = StringBuilder()
-
-                    // Capture 3 words before "إِلَّا"
-                    val startWordNo =
-                        corpus[maxOf(0, negationStartIndex - 2)].wordno // Go up to 3 words back
-                    for (k in maxOf(0, negationStartIndex - 2)..negationStartIndex) {
-                        val word =
-                            "${corpus[k].araone}${corpus[k].aratwo}${corpus[k].arathree}${corpus[k].arafour}${corpus[k].arafive}".trim()
-                        sentenceBuilder.append(word).append(" ")
-                    }
-
-                    // Capture "إِلَّا" and 2 words after "إِلَّا"
-                    var endWordNo = startWordNo
-                    for (k in i until minOf(
-                        i + 3,
-                        corpus.size
-                    )) { // "i" is where "إِلَّا" is, capture 2 more after it
-                        val word =
-                            "${corpus[k].araone}${corpus[k].aratwo}${corpus[k].arathree}${corpus[k].arafour}${corpus[k].arafive}".trim()
-                        sentenceBuilder.append(word).append(" ")
-
-                        endWordNo = corpus[k].wordno // Update the end word number
-                    }
-
-                    val fullSentenceStr = sentenceBuilder.toString().trim()
-
-                    // Now find the combined sentence in the spannableVerse
-                    val sentenceStartIndex = spannableVerse.indexOf(fullSentenceStr)
-                    val sentenceEndIndex =
-                        if (sentenceStartIndex != -1) sentenceStartIndex + fullSentenceStr.length else -1
-
-                    // Check if this sentence is already added to avoid duplicates
-                    if (sentenceStartIndex != -1 && !uniqueSentences.contains(fullSentenceStr)) {
-                        // Remove `val harf = "إِنْ/إِلَّ/"` as per your request
-
-                        val dataString =
-                            "${entry.surah}|${entry.ayah}|$startWordNo|$endWordNo|$sentenceStartIndex|$sentenceEndIndex|$fullSentenceStr"
-                        println("Searching for: $fullSentenceStr")
-
-                        // Add the sentence to the set for uniqueness
-                        uniqueSentences.add(fullSentenceStr)
-
-                        // Add the unique sentence with word numbers and string indices
-                        extractedSentences.add(dataString)
-                    }
-                }
-            }
-        }
-
-        return extractedSentences
-    }
-
-    fun extractInMaIllaNegativeSentences(
-        corpus: List<CorpusEntity>,
-        spannableVerse: String
-    ): List<String> {
-        val extractedSentences = mutableListOf<String>()
-        val uniqueSentences = mutableSetOf<String>() // Set to track unique sentences
-        var eligibleNegationCount = 0 // To track valid "إِن" occurrences
-
-        for (i in corpus.indices) {
-            val entry = corpus[i]
-            if (entry.surah == 74 && entry.ayah == 31) {
+            if (entry.surah == 11 && entry.ayah == 81) {
                 println(spannableVerse)
             }
 
@@ -1774,75 +784,198 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             if ((entry.tagone == "EXP" || entry.tagone == "RES") && (entry.araone == "إِلَّا" || entry.araone == "إِلَّآ")) {
                 var negationFound = false
                 var startIndex = -1
+                var startWordno = 0
+                var endWordNo = 0
+                //check if next word is noun in accusative cae
+                if (i + 1 < corpus.size) {
+
+                    val nextFirstNoun = corpus[i + 1]
+                    val isNextWordNoun =
+                        nextFirstNoun.tagone == "N" || nextFirstNoun.tagtwo == "N" || nextFirstNoun.tagthree == "N" || nextFirstNoun.tagfour == "N"
+                    var currentWord = ""
+                    var nounDetails = ""
+                    //     entry.araone + entry.aratwo + entry.arathree + entry.arafour + entry.arafive
+                    if (nextFirstNoun.tagone == "N") {
+                        currentWord = nextFirstNoun.araone!!
+                        nounDetails = nextFirstNoun.detailsone!!
+                    } else if (nextFirstNoun.tagtwo == "N") {
+                        currentWord = nextFirstNoun.aratwo!!
+                        nounDetails = nextFirstNoun.detailstwo!!
+                    } else if (nextFirstNoun.tagthree == "N") {
+                        currentWord = nextFirstNoun.arathree!!
+                        nounDetails = nextFirstNoun.detailsthree!!
+                    } else if (nextFirstNoun.tagfour == "N") {
+                        currentWord = nextFirstNoun.arafour!!
+                        nounDetails = nextFirstNoun.detailsfour!!
+                    } else if (nextFirstNoun.tagfive == "N") {
+                        currentWord = nextFirstNoun.arafive!!
+                        nounDetails = nextFirstNoun.detailsfive!!
+                    }
+                    var targetWordno = 0
+                    var verbType = ""
+                    var nounCase = nounDetails.extractCase()
+                    var previousNegationCounter = 0
+                    if (nounCase != "ACC")
+                        break
+                    else {
+                        endWordNo = entry.wordno
+                        for (j in i - 1 downTo 0) {
+                            val previousEntry = corpus[j]
+
+                            // Check if "إِن" or "مَا" qualifies as a valid negation for extraction
+                            if ((previousEntry.tagtwo == "NEG" && (previousEntry.aratwo == "إِنْ" || previousEntry.aratwo == "مَا") || previousEntry.aratwo == "مَآ" || previousEntry.aratwo == "مَّا") ||
+                                (previousEntry.tagone == "NEG" && (previousEntry.araone == "إِنْ" || previousEntry.araone == "مَا" || previousEntry.araone == "مَآ" || previousEntry.araone == "مَّا")) ||
+                                (previousEntry.tagtwo == "NEG" && (previousEntry.aratwo == "لَآ" || previousEntry.aratwo == "لَا" || previousEntry.aratwo == "لَّا")) ||
+                                (previousEntry.tagone == "NEG" && (previousEntry.araone == "لَآ" || previousEntry.araone == "لَا" || previousEntry.araone == "لَّا")) ||
+                                (previousEntry.tagtwo == "NEG" && (previousEntry.aratwo == "لَنْ" || previousEntry.aratwo == "لَن" || previousEntry.aratwo == "لَّن")) ||
+                                (previousEntry.tagone == "NEG" && (previousEntry.araone == "لَنْ" || previousEntry.araone == "لَن" || previousEntry.araone == "لَّن")) ||
+
+                                (previousEntry.tagthree == "NEG" && (previousEntry.arathree == "إِنْ" || previousEntry.arathree == "مَا" || previousEntry.arathree == "مَآ" || previousEntry.arathree == "مَّا")) ||
+                                (previousEntry.tagthree == "NEG" && (previousEntry.arathree == "لَآ" || previousEntry.arathree == "لَا" || previousEntry.arathree == "لَّا")) ||
+                                (previousEntry.tagfour == "NEG" && (previousEntry.arafour == "لَآ" || previousEntry.arafour == "لَا" || previousEntry.arafour == "لَّا")) ||
+                                (previousEntry.tagfour == "NEG" && (previousEntry.arafour == "لَنْ" || previousEntry.arafour == "لَن" || previousEntry.arafour == "لَّن"))
+
+
+                            ) {
+
+                                // eligibleNegationCount += 1 // Increment the valid "إِن" or "مَا" occurrence count
+
+                                // Allow extraction for all valid occurrences (not just second or third)
+                                //  if (eligibleNegationCount >= 1) {
+                                negationFound = true
+                                previousNegationCounter = j
+                                startIndex =
+                                    j // Capture the index where this valid negation was found
+                                startWordno = previousEntry.wordno
+                                break
+                                // }
+                            }
+                        }
+                        if (!negationFound) {
+                            val arabicString = StringBuilder()
+                            for (iter in 2..endWordNo) {
+                                arabicString.append(corpus[iter].araone)
+                                    .append(corpus[iter].aratwo)
+                                    .append(corpus[iter].arathree)
+                                    .append(corpus[iter].arafour)
+                                    .append(corpus[iter].arafive).append(" ")
+
+                            }
+                            val sentenceStartIndex =
+                                spannableVerse.indexOf(arabicString.toString().trim())
+                            val sentenceEndIndex = sentenceStartIndex + arabicString.length
+                            val dataString =
+                                "${entry.surah}|${entry.ayah}|$startWordno| $endWordNo|$$sentenceStartIndex|$sentenceEndIndex|$arabicString|$spannableVerse"
+                            //  println("Searching for: $fullSentenceStr")
+
+                            // Add the sentence to the set for uniqueness
+                            //   uniqueSentences.add(fullSentenceStr)
+
+                            // Add the unique sentence with word numbers and string indices
+                            extractedSentences.add(dataString)
+
+                            break
+
+                        }
+
+
+                    }
+
+                }
 //   listOf("لَّن", "لَن", "لَنْ", "وَلَن", "أَلَّن", "فَلَن", "وَلَنْ", "فَلَنْ")
                 // Loop backwards to find valid "إِن" before "إِلَّا"
-                for (j in i - 1 downTo 0) {
-                    val previousEntry = corpus[j]
 
-                    // Check if "إِن" or "مَا" qualifies as a valid negation for extraction
-                    if ((previousEntry.tagtwo == "NEG" && (previousEntry.aratwo == "إِنْ" || previousEntry.aratwo == "مَا") || previousEntry.aratwo == "مَآ" || previousEntry.aratwo == "مَّا") ||
-                        (previousEntry.tagone == "NEG" && (previousEntry.araone == "إِنْ" || previousEntry.araone == "مَا" || previousEntry.araone == "مَآ" || previousEntry.araone == "مَّا")) ||
-                        (previousEntry.tagtwo == "NEG" && (previousEntry.aratwo == "لَآ" || previousEntry.aratwo == "لَا" || previousEntry.aratwo == "لَّا")) ||
-                        (previousEntry.tagone == "NEG" && (previousEntry.araone == "لَآ" || previousEntry.araone == "لَا" || previousEntry.araone == "لَّا")) ||
-                        (previousEntry.tagtwo == "NEG" && (previousEntry.aratwo == "لَنْ" || previousEntry.aratwo == "لَن" || previousEntry.aratwo == "لَّن")) ||
-                        (previousEntry.tagone == "NEG" && (previousEntry.araone == "لَنْ" || previousEntry.araone == "لَن" || previousEntry.araone == "لَّن"))
+                //if a valid negation not found than check for next sentence to be noun and scan backward to catch a prohibtion which
+                //      would have a LA and the verb in majzum/jussive
+                if (!negationFound) {
+                    println("check")
+                }
 
 
-                    ) {
+            }
+        }
 
-                        eligibleNegationCount += 1 // Increment the valid "إِن" or "مَا" occurrence count
+        return extractedSentences
+    }
 
-                        // Allow extraction for all valid occurrences (not just second or third)
-                        if (eligibleNegationCount >= 1) {
-                            negationFound = true
-                            startIndex = j // Capture the index where this valid negation was found
+    fun extractProhibitiveSentences(
+        corpus: List<CorpusEntity>,
+        spannableVerse: String
+    ): List<String> {
+        val extractedSentences = mutableListOf<String>()
+        val uniqueSentences = mutableSetOf<String>() // Set to track unique sentences
+        var eligibleNegationCount = 0 // To track valid "إِن" occurrences
+
+        for (i in corpus.indices) {
+            val entry = corpus[i]
+            if (entry.surah == 3 && entry.ayah == 161) {
+                println(spannableVerse)
+            }
+            val currentNegWOrd =
+                entry.araone + entry.aratwo + entry.arathree + entry.arafour + entry.arafive
+            // Check for "إِلَّا" with tagone == "EXP" or "RES"
+            if ((entry.tagtwo == "NEG" && (entry.aratwo == "لَآ" || entry.aratwo == "لَا" || entry.aratwo == "لَّا")) ||
+                (entry.tagone == "NEG" && (entry.araone == "لَآ" || entry.araone == "لَا" || entry.araone == "لَّا")) ||
+                (entry.tagthree == "NEG" && (entry.arathree == "لَآ" || entry.arathree == "لَا" || entry.arathree == "لَّا")) ||
+                (entry.tagfour == "NEG" && (entry.arafour == "لَآ" || entry.arafour == "لَا" || entry.arafive == "لَّا"))
+            ) {
+                var negationFound = false
+                var startIndex = -1
+                var startWordno = 0
+                var endWordNo = 0
+                //check if next word is noun in accusative cae
+                if (i + 1 < corpus.size) {
+                    var verbDetails = ""
+                    val isNextWordVerb = corpus[i + 1]
+                    val verbWord =
+                        isNextWordVerb.araone + isNextWordVerb.aratwo + isNextWordVerb.arathree + isNextWordVerb.arafour + isNextWordVerb.arafive
+                    var verbType = isNextWordVerb.detailsone!!.extractVerbType()
+                    if (isNextWordVerb.tagone == "V") {
+
+                        verbDetails = isNextWordVerb.detailsone!!
+                    } else if (isNextWordVerb.tagtwo == "V") {
+
+                        verbDetails = isNextWordVerb.detailstwo!!
+                    } else if (isNextWordVerb.tagthree == "V") {
+
+                        verbDetails = isNextWordVerb.detailsthree!!
+                    } else if (isNextWordVerb.tagfour == "V") {
+
+                        verbDetails = isNextWordVerb.detailsfour!!
+                    } else if (isNextWordVerb.tagfive == "V") {
+
+                        verbDetails = isNextWordVerb.detailsfive!!
+                    }
+                    verbType = verbDetails.extractVerbType()
+                    if ((isNextWordVerb.tagone == "V") || (isNextWordVerb.tagtwo == "V") || isNextWordVerb.tagthree == "V" || isNextWordVerb.tagfour == "V" || isNextWordVerb.tagfive == "V") {
+                        if (verbType == "JUS") {
+                            val arabicString = currentNegWOrd + " " + verbWord
+
+                            val sentenceStartIndex =
+                                spannableVerse.indexOf(arabicString.toString().trim())
+                            val sentenceEndIndex = sentenceStartIndex + arabicString.length
+                            val dataString =
+                                "${entry.surah}|${entry.ayah}|$startWordno| $endWordNo|$$sentenceStartIndex|$sentenceEndIndex|$arabicString|$spannableVerse"
+                            //  println("Searching for: $fullSentenceStr")
+
+                            // Add the sentence to the set for uniqueness
+                            //   uniqueSentences.add(fullSentenceStr)
+
+                            // Add the unique sentence with word numbers and string indices
+                            extractedSentences.add(dataString)
+
                             break
                         }
                     }
+
+
                 }
 
-                // If a valid negation "إِن" or "مَا" is found, start capturing words from that point
-                if (negationFound && startIndex != -1) {
-                    val sb = StringBuilder()
-                    val startWordNo = corpus[startIndex].wordno // Capture starting word number
-                    var endWordNo = startWordNo
-
-                    // Build the full sentence to search for in the spannableVerse
-                    val fullSentence = StringBuilder()
-                    for (k in startIndex until minOf(
-                        i + 3,
-                        corpus.size
-                    )) { // Capture up to 3 words after "إِلَّا"
-                        val completeWord =
-                            "${corpus[k].araone}${corpus[k].aratwo}${corpus[k].arathree}${corpus[k].arafour}${corpus[k].arafive}".trim()
-                        fullSentence.append(completeWord).append(" ")
-
-                        // Update the end word number as we progress
-                        endWordNo = corpus[k].wordno
-                    }
-
-                    val fullSentenceStr = fullSentence.toString().trim()
-
-                    // Now find the combined sentence in the spannableVerse
-                    val sentenceStartIndex = spannableVerse.indexOf(fullSentenceStr)
-                    val sentenceEndIndex =
-                        if (sentenceStartIndex != -1) sentenceStartIndex + fullSentenceStr.length else -1
-
-                    // Check if this sentence is already added to avoid duplicates
-                    if (sentenceStartIndex != -1 && !uniqueSentences.contains(fullSentenceStr)) {
-                        val extracted =
-                            spannableVerse.subSequence(sentenceStartIndex, sentenceEndIndex)
-                        val dataString =
-                            "${entry.surah}|${entry.ayah}|${startWordNo}| ${endWordNo}|$sentenceStartIndex|$sentenceEndIndex|$extracted|$spannableVerse"
-                        println("Searching for: $fullSentenceStr")
-
-                        // Add the sentence to the set for uniqueness
-                        uniqueSentences.add(fullSentenceStr)
-
-                        // Add the unique sentence with word numbers and string indices
-                        extractedSentences.add(dataString)
-                    }
+                if (!negationFound) {
+                    println("check")
                 }
+
+
             }
         }
 
@@ -3324,7 +2457,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                     val header =
                         SurahHeader(rukucount, versescount, chapterno, surahArabicName, " ")
 
-                    //   HightLightKeyWord(allofQuran)
+                    highlightKeywords(allofQuran)
 
                     val adapter = if (!mushafview && mafoolat) {
                         FlowAyahWordAdapter(

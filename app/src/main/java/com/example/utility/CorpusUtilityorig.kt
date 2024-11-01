@@ -18,11 +18,11 @@ import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LiveData
 import com.example.Constant
 import com.example.Constant.harfshartspanDark
 import com.example.Constant.jawabshartspanDark
 
-import com.example.Constant.mudhafspanLight
 import com.example.Constant.shartspanDark
 import com.example.justJava.FrameSpan
 import com.example.mushafconsolidated.Entities.CorpusEntity
@@ -64,6 +64,7 @@ class CorpusUtilityorig(private var context: Context?) {
         preferences = prefs.getString("theme", "dark")
         val preferences = prefs.getString("theme", "dark")
         dark = preferences == "dark" || preferences == "blue" || preferences == "green"
+
     }
 
     fun SetMousufSifaDB(
@@ -678,7 +679,6 @@ class CorpusUtilityorig(private var context: Context?) {
     }
 
 
-
     fun HarfNasbDb(
 
 
@@ -895,11 +895,11 @@ class CorpusUtilityorig(private var context: Context?) {
             try {
                 if (indexstart == 0 || indexstart > 0) {
 
-                        val colorSpan = if (dark) {
-                            Constant.mudhafspanDarks
-                        } else {
-                            Constant.mudhafspanLight
-                        }
+                    val colorSpan = if (dark) {
+                        Constant.mudhafspanDarks
+                    } else {
+                        Constant.mudhafspanLight
+                    }
 
                     spannableverse.setSpan(
                         colorSpan,
@@ -1326,7 +1326,6 @@ class CorpusUtilityorig(private var context: Context?) {
     }
 
 
-
     companion object {
         var dark = true
 
@@ -1626,7 +1625,190 @@ class CorpusUtilityorig(private var context: Context?) {
         }
 
         @JvmStatic
-        fun HightLightKeyWord(allofQuran: List<QuranEntity>?) {
+        fun searchForTameez(allofQuran: List<QuranEntity>?)  :List<String> {
+            var mudhafColoragainstBlack = 0
+            var mausofColoragainstBlack = 0
+            var sifatColoragainstBlack = 0
+            var brokenPlurarColoragainstBlack = 0
+            var shartagainstback = 0
+
+            val inshartiastr = "«إِنْ» شرطية"
+            val izazarfshartsrt = "وإذا ظرف يتضمن معنى الشرط"
+            val izashartiastr = "«إِذا» ظرف يتضمن معنى الشرط"
+            val jawabshartstr = "جواب شرط"
+            val jawabsharttwostr = "لجواب الشرط"
+            val jawabalshart = "جواب الشرط"
+            val jawab = "جواب"
+            val shart = ArrayList<String>()
+            val mutlaq = ArrayList<String>()
+
+            mutlaq.add("")
+            shart.add(inshartiastr)
+            shart.add(izazarfshartsrt)
+            shart.add(izashartiastr)
+            shart.add(jawabshartstr)
+            shart.add(jawabsharttwostr)
+            shart.add(jawabalshart)
+            shart.add(jawab)
+            shart.add("شرطية")
+            shart.add("شرطية.")
+            shart.add("ظرف متضمن معنى الشرط")
+            shart.add("وإذا ظرف زمان يتضمن معنى الشرط")
+            shart.add("ظرف زمان يتضمن معنى الشرط")
+            shart.add("ولو حرف شرط غير جازم")
+            shart.add("حرف شرط غير جازم")
+            shart.add("اللام واقعة في جواب لو")
+            shart.add("حرف شرط جازم")
+            shart.add("الشرطية")
+            val mudhafilahistr = "مضاف إليه"
+            val sifastr = "صفة"
+            val mudhaflenght = mudhafilahistr.length
+            val sifalength = sifastr.length
+            val hal = ArrayList<String>()
+            hal.add("في محل نصب حال")
+            hal.add("في محل نصب حال.")
+            hal.add("والجملة حالية")
+            hal.add("والجملة حالية.")
+            hal.add("حالية")
+            hal.add("حالية.")
+            hal.add("حالية:")
+            hal.add("حال")
+            hal.add("حال:")
+            hal.add("حال.")
+            hal.add("الواو حالية")
+
+            val badal = ArrayList<String>()
+            badal.add("بدل")
+            badal.add("بدل.")
+
+            val mafoolbihi = ArrayList<String>()
+            mafoolbihi.add("مفعول به")
+            mafoolbihi.add("مفعول به.")
+            mafoolbihi.add("مفعول به.(")
+            mafoolbihi.add("في محل نصب مفعول")
+            mafoolbihi.add("مفعول")
+            val tameez = ArrayList<String>()
+            tameez.add("تمييز")
+            tameez.add("تمييز.")
+            tameez.add("التمييز")
+
+            val result = mutableListOf<String>()
+            var capturelist: List<String> = emptyList()
+
+            mutlaq.add("مطلق")
+            mutlaq.add("مفعولا مطلقا")
+            mutlaq.add("مفعولا مطلقا،")
+            mutlaq.add("مطلق.")
+            val ajilihi = ArrayList<String>()
+            ajilihi.add("مفعول لأجله")
+            ajilihi.add("لأجله")
+            ajilihi.add("لأجله.")
+        //   val regex = "\\(([^)]+)\\)(?:\\s+\\w+)*\\s+(?=تمييز|تمييز\\.|التمييز)"//good one
+             val regex = "\\(([^)]+)\\)(?:\\s+\\w+)*\\s+(تمييز|تمييز\\.|التمييز)" //for capture keyword also
+            val regexm = "\\(([^)]+)\\)(?:\\s+\\w+)*\\s+(مطلق|مفعولا\\s+مطلقا|مفعولا\\s+مطلقا،|مطلق\\.)"
+            val regexajlihi = "\\(([^)]+)\\)(?:\\s+\\w+)*\\s+(لأجله.|لأجله\\.|مفعول لأجله)" //
+
+           // val regexsifa="\\(([^)]+)\\)(?:\\s+\\w+)*\\s+(صفة.|صفة\\.| الصفة)"
+            val regexsifa = "\\(([^)]+)\\)(?:\\s+\\w+)*\\s+(?:صفة\\.|صفة|الصفة)\\s+(\\w+)"
+
+
+            val regexbadal = "\\(([^)]+)\\)(?:\\s+\\w+)*\\s+(بدل.|بدل\\.|بدل)"
+            val pattern = Pattern.compile(regexsifa)
+
+
+            for (pojo in allofQuran!!) {
+                //  String ar_irab_two = pojo.getAr_irab_two();
+
+                val cleanedString = pojo.ar_irab_two.replace(Regex("[\n\r\r]"), "")
+
+               // val ar_irab_two = pojo.ar_irab_two.replace("\n", "");
+              //  val ar_irab_twos = pojo.ar_irab_two.replace("\r", "");
+                val str = SpannableStringBuilder(cleanedString)
+                val matcher = pattern.matcher(cleanedString)
+                var dataString =""
+
+                while (matcher.find()) {
+                    val start = matcher.start()
+                    val end = matcher.end()
+                    val extracted=str.subSequence(start,end)
+                     dataString =
+                        "${pojo.surah}|${pojo.ayah}|$extracted|"
+                    result.add(dataString)
+
+                }
+
+
+
+            }
+           return result
+        }
+
+        @JvmStatic
+        fun highlightKeywords(allofQuran: List<QuranEntity>?) {
+            val prefs = PreferenceManager.getDefaultSharedPreferences(QuranGrammarApplication.context)
+            val theme = prefs.getString("themepref", "dark")
+
+            val colorMap = when (theme) {
+                "dark", "blue", "green" -> mapOf(
+                    "shart" to prefs.getInt("shartback", Color.GREEN),
+                    "mausof" to prefs.getInt("mausoofblack", Color.RED),
+                    "mudhaf" to prefs.getInt("mudhafblack", Color.CYAN),
+                    "sifat" to prefs.getInt("sifatblack", Color.YELLOW),
+                    "broken" to prefs.getInt("brokenblack", Color.GREEN)
+                )
+                else -> mapOf(
+                    "shart" to prefs.getInt("shartback", Constant.INDIGO),
+                    "mausof" to prefs.getInt("mausoofwhite", Color.GREEN),
+                    "mudhaf" to prefs.getInt("mudhafwhite", Constant.MIDNIGHTBLUE),
+                    "sifat" to prefs.getInt("sifatwhite", Constant.ORANGE400),
+                    "broken" to prefs.getInt("brokenwhite", Constant.DARKMAGENTA)
+                )
+            }
+
+            val keywordGroups = mapOf(
+                "shart" to listOf(
+                    "«إِنْ» شرطية", "وإذا ظرف يتضمن معنى الشرط", "«إِذا» ظرف يتضمن معنى الشرط",
+                    "جواب شرط", "لجواب الشرط", "جواب الشرط", "جواب", "شرطية", "شرطية.",
+                    "ظرف متضمن معنى الشرط", "وإذا ظرف زمان يتضمن معنى الشرط", "ظرف زمان يتضمن معنى الشرط",
+                    "ولو حرف شرط غير جازم", "حرف شرط غير جازم", "اللام واقعة في جواب لو", "حرف شرط جازم", "الشرطية"
+                ),
+                "mutlaq" to listOf("مطلق", "مفعولا مطلقا", "مفعولا مطلقا،", "مطلق."),
+                "hal" to listOf(
+                    "في محل نصب حال", "في محل نصب حال.", "والجملة حالية", "والجملة حالية.",
+                    "حالية", "حالية.", "حالية:", "حال", "حال:", "حال.", "الواو حالية"
+                ),
+                "tameez" to listOf("تمييز", "تمييز.", "التمييز"),
+                "badal" to listOf("بدل", "بدل."),
+                "ajilihi" to listOf("مفعول لأجله", "لأجله", "لأجله."),
+                "mafoolbihi" to listOf(
+                    "مفعول به", "مفعول به.", "مفعول به.(", "في محل نصب مفعول", "مفعول"
+                )
+            )
+
+            for (pojo in allofQuran!!) {
+                val ar_irab_two = pojo.ar_irab_two.replace("\n", "")
+                val str = SpannableStringBuilder(ar_irab_two)
+
+                for ((key, keywords) in keywordGroups) {
+                    val trie = Trie.builder().onlyWholeWordsWhiteSpaceSeparated().addKeywords(keywords).build()
+                    val emits = trie.parseText(ar_irab_two)
+
+                    for (emit in emits) {
+                        str.setSpan(
+                            ForegroundColorSpan(colorMap[key] ?: Color.BLACK), // Default to black if color not found
+                            emit.start,
+                            emit.start + emit.keyword.length,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+                    }
+                }
+
+                pojo.erabspnabble = str
+            }
+        }
+
+        @JvmStatic
+        fun HightLightKeyWordold(allofQuran: List<QuranEntity>?) {
             var mudhafColoragainstBlack = 0
             var mausofColoragainstBlack = 0
             var sifatColoragainstBlack = 0
@@ -1824,7 +2006,6 @@ class CorpusUtilityorig(private var context: Context?) {
                 pojo.erabspnabble = str
             }
         }
-
         ////
         @JvmStatic
         fun NewSetWordSpan(
@@ -2335,6 +2516,7 @@ class CorpusUtilityorig(private var context: Context?) {
             }
             return str
         }
+
         fun newcomposeWBWCollectiondd(
             quranandCorpusandWbwbySurah: List<QuranEntityCorpusEntityWbwEntity>?,
             size: Int
@@ -2375,11 +2557,41 @@ class CorpusUtilityorig(private var context: Context?) {
                     val item = quranandCorpusandWbwbySurah[i]
                     if (quranandCorpusandWbwbySurah[j].ayah == i) {
                         val ayahWord = NewNewQuranCorpusWbw()
-                        ayahWord.spannableverse = SpannableString.valueOf(quranandCorpusandWbwbySurah[i].qurantext)
-                        ayahWord.corpus=QuranEntityCorpusEntityWbwEntity(item.surah,item.ayah,item.wordno,item.wordcount,item.qurantext,
-                            item.translation,item.en_arberry,item.ar_irab_two,item.araone,item.aratwo,item.arathree,item.arafour,item.arafive,
-                            item.tagone,item.tagtwo,item.tagthree,item.tagfour,item.tagfive,item.detailsone,item.detailstwo,item.detailsthree,item.detailsfour,item.detailsfive,
-                            item.en,item.bn,item.`in`,item.rootaraone,item.rootaratwo,item.rootarathree,item.rootarafour,item.rootarafive)
+                        ayahWord.spannableverse =
+                            SpannableString.valueOf(quranandCorpusandWbwbySurah[i].qurantext)
+                        ayahWord.corpus = QuranEntityCorpusEntityWbwEntity(
+                            item.surah,
+                            item.ayah,
+                            item.wordno,
+                            item.wordcount,
+                            item.qurantext,
+                            item.translation,
+                            item.en_arberry,
+                            item.ar_irab_two,
+                            item.araone,
+                            item.aratwo,
+                            item.arathree,
+                            item.arafour,
+                            item.arafive,
+                            item.tagone,
+                            item.tagtwo,
+                            item.tagthree,
+                            item.tagfour,
+                            item.tagfive,
+                            item.detailsone,
+                            item.detailstwo,
+                            item.detailsthree,
+                            item.detailsfour,
+                            item.detailsfive,
+                            item.en,
+                            item.bn,
+                            item.`in`,
+                            item.rootaraone,
+                            item.rootaratwo,
+                            item.rootarathree,
+                            item.rootarafour,
+                            item.rootarafive
+                        )
                         qurancorpusarray.add(ayahWord)
                     } else if (quranandCorpusandWbwbySurah[j].ayah > i) {
                         break
@@ -2395,7 +2607,7 @@ class CorpusUtilityorig(private var context: Context?) {
             return newnewadapterlist
         }
 
-           fun composeWBWCollection(
+        fun composeWBWCollection(
             allofQuran: List<QuranEntity>?,
             corpusSurahWord: List<QuranCorpusWbw>?
         ): LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>> {
@@ -2425,7 +2637,7 @@ class CorpusUtilityorig(private var context: Context?) {
             return newnewadapterlist
         }
 
-          fun NotcomposeWBWCollection(
+        fun NotcomposeWBWCollection(
             allofQuran: List<QuranEntity>?,
             corpusSurahWord: List<QuranCorpusWbw>?
         ): LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>> {
@@ -2483,6 +2695,7 @@ class CorpusUtilityorig(private var context: Context?) {
 
             return newnewadapterlist
         }
+
         fun composeWBWCollectionorig(
             allofQuran: List<QuranEntity>?,
             corpusSurahWord: List<QuranCorpusWbw>?
@@ -2533,14 +2746,14 @@ class CorpusUtilityorig(private var context: Context?) {
 
             if (spannableverse != null) {
 
-           //  setMudhafFromDBforAyah(spannableverse, surah, ayah)
-              //  setMausoofforayah(spannableverse, surah, ayah)
-              //  setPastNegation(spannableverse, surah,ayah)
-               // setPresentNegation(spannableverse, surah,ayah)
-              //  setFutureNegation(spannableverse, surah,ayah)
+                setMudhafFromDBforAyah(spannableverse, surah, ayah)
+                //  setMausoofforayah(spannableverse, surah, ayah)
+                //  setPastNegation(spannableverse, surah,ayah)
+                // setPresentNegation(spannableverse, surah,ayah)
+                //  setFutureNegation(spannableverse, surah,ayah)
                 setShartSurahAyah(spannableverse, surah, ayah)
-                setInnahIsmSurahAyah(spannableverse,surah,ayah)
-                setKanaSurahAyah(spannableverse,surah,ayah)
+                setInnahIsmSurahAyah(spannableverse, surah, ayah)
+                setKanaSurahAyah(spannableverse, surah, ayah)
 
             }
 
@@ -2550,7 +2763,7 @@ class CorpusUtilityorig(private var context: Context?) {
 
         private fun setKanaSurahAyah(spannableverse: SpannableString, surah_id: Int, ayah: Int) {
             val utils = Utils(QuranGrammarApplication.context!!)
-            val kanalist = utils.getKananewSurahAyah(surah_id,ayah)
+            val kanalist = utils.getKananewSurahAyah(surah_id, ayah)
             val harfkana: ForegroundColorSpan
             val kanaism: ForegroundColorSpan
             val kanakhbar: ForegroundColorSpan
@@ -2603,18 +2816,15 @@ class CorpusUtilityorig(private var context: Context?) {
         }
 
 
-
-
-
-
-
-
-
-        private fun setInnahIsmSurahAyah(spannableverse: SpannableString, surah_id: Int, ayah: Int) {
+        private fun setInnahIsmSurahAyah(
+            spannableverse: SpannableString,
+            surah_id: Int,
+            ayah: Int
+        ) {
             val utils = Utils(QuranGrammarApplication.context!!)
-            val harfnasb = utils.getHarfNasbIndicesSurahAyah(surah_id,ayah)
+            val harfnasb = utils.getHarfNasbIndicesSurahAyah(surah_id, ayah)
             //TODO SURA10 7 INNA ISM INNALIZINA(0,5,6,9 AND KHABR IN 10;8 oolika(0,12,len33)
-            if (surah_id in 2..10 || surah_id in 59..114)  {
+            if (surah_id in 2..10 || surah_id in 59..114) {
 
                 val err = ArrayList<String>()
                 for (nasb in harfnasb!!) {
@@ -2664,7 +2874,8 @@ class CorpusUtilityorig(private var context: Context?) {
                         if (dark) {
                             Constant.harfkhabarspanDark = ForegroundColorSpan(Color.YELLOW)
                         } else {
-                            Constant.harfkhabarspanDark = ForegroundColorSpan(Constant.deepburnsienna)
+                            Constant.harfkhabarspanDark =
+                                ForegroundColorSpan(Constant.deepburnsienna)
                         }
                         spannableverse.setSpan(
                             Constant.harfkhabarspanDark,
@@ -2681,14 +2892,9 @@ class CorpusUtilityorig(private var context: Context?) {
         }
 
 
-
-
-
-
-
         private fun setShartSurahAyah(spannableverse: SpannableString, surah_id: Int, ayah: Int) {
             val utils = Utils(QuranGrammarApplication.context!!)
-            val surah = utils.getShartSurahAyahNew(surah_id,ayah)
+            val surah = utils.getShartSurahAyahNew(surah_id, ayah)
             val counter = 0
             //  final ArrayList<ShartEntity> surah = utils.getShartSurah(surah_id);
             //TO 9;118 IZA IN THE MEANING OF HEENA AND 9 122 IZA AS HEENA
@@ -2748,7 +2954,10 @@ class CorpusUtilityorig(private var context: Context?) {
                             }
                             if (jawabstartindex == 0 || jawabstartindex > 0) {
                                 val myDrawable =
-                                    AppCompatResources.getDrawable(QuranGrammarApplication.context!!, R.drawable.oval_circle)!!
+                                    AppCompatResources.getDrawable(
+                                        QuranGrammarApplication.context!!,
+                                        R.drawable.oval_circle
+                                    )!!
                                 myDrawable.setBounds(
                                     0,
                                     0,
@@ -2779,14 +2988,13 @@ class CorpusUtilityorig(private var context: Context?) {
         }
 
 
-
         fun setPresentNegation(
             spannableverse: SpannableString,
             surah_id: Int,
             ayah_id: Int
         ) {
             val utils = Utils(QuranGrammarApplication.context!!)
-            val surah = utils.getNegationFilterSurahAyahType(surah_id, ayah_id,"present")
+            val surah = utils.getNegationFilterSurahAyahType(surah_id, ayah_id, "present")
 //todo 2 188 iza ahudu
             //todo 9;92 UNCERTAIN
             //TODO 9:94 JAWABHARMAHDOOF 9 95 JAWABHSARMAHODFF
@@ -2802,7 +3010,6 @@ class CorpusUtilityorig(private var context: Context?) {
 
                     try {
                         if (indexstart == 0 || indexstart > 0) {
-
 
 
                             spannableverse.setSpan(
@@ -2828,7 +3035,7 @@ class CorpusUtilityorig(private var context: Context?) {
             ayah_id: Int
         ) {
             val utils = Utils(QuranGrammarApplication.context!!)
-            val surah = utils.getNegationFilterSurahAyahType(surah_id, ayah_id,"past")
+            val surah = utils.getNegationFilterSurahAyahType(surah_id, ayah_id, "past")
 //todo 2 188 iza ahudu
             //todo 9;92 UNCERTAIN
             //TODO 9:94 JAWABHARMAHDOOF 9 95 JAWABHSARMAHODFF
@@ -2866,7 +3073,7 @@ class CorpusUtilityorig(private var context: Context?) {
             ayah_id: Int
         ) {
             val utils = Utils(QuranGrammarApplication.context!!)
-            val surah = utils.getNegationFilterSurahAyahType(surah_id, ayah_id,"future")
+            val surah = utils.getNegationFilterSurahAyahType(surah_id, ayah_id, "future")
 //todo 2 188 iza ahudu
             //todo 9;92 UNCERTAIN
             //TODO 9:94 JAWABHARMAHDOOF 9 95 JAWABHSARMAHODFF
@@ -2879,7 +3086,6 @@ class CorpusUtilityorig(private var context: Context?) {
 
                     try {
                         if (indexstart == 0 || indexstart > 0) {
-
 
 
                             spannableverse.setSpan(
@@ -2918,16 +3124,14 @@ class CorpusUtilityorig(private var context: Context?) {
 
                     try {
                         if (indexstart == 0 || indexstart > 0) {
+                            if (dark) {
+                                Constant.mudhafspansDark =
+                                    BackgroundColorSpan(Constant.MIDNIGHTBLUE)
+                            } else {
+                                Constant.mudhafspansDark = BackgroundColorSpan(Constant.GREENYELLOW)
+                            }
 
-                            if (spannableverse != null) {
-                                val colorSpan = if (dark) {
-                                    Constant.mudhafspanDarks
-                                } else {
-                                    Constant.mudhafspanLight
-                                }
-                                }
-
-                                spannableverse.setSpan(
+                            spannableverse.setSpan(
                                 Constant.mudhafspansDark,
                                 indexstart,
                                 indexend,
@@ -2946,40 +3150,34 @@ class CorpusUtilityorig(private var context: Context?) {
 
         private fun setMausoofforayah(spannableverse: SpannableString, surah: Int, ayah: Int) {
 
-                val utils = Utils(QuranGrammarApplication.context!!)
-                val surah = utils.getSifabySurahAyah(surah, ayah)
+            val utils = Utils(QuranGrammarApplication.context!!)
+            val surah = utils.getSifabySurahAyah(surah, ayah)
 
-                for (sifaEntity in surah!!) {
-                    val indexstart = sifaEntity!!.startindex
-                    val indexend = sifaEntity.endindex
-                    //  sifaspans = new BackgroundColorSpan(WBURNTUMBER);
+            for (sifaEntity in surah!!) {
+                val indexstart = sifaEntity!!.startindex
+                val indexend = sifaEntity.endindex
+                //  sifaspans = new BackgroundColorSpan(WBURNTUMBER);
 
-                    try {
-                        if (indexstart == 0 || indexstart > 0) {
-                            //   sifaspansDark = getSpancolor(preferences, false);
-                            if (dark) {
-                                Constant.sifaspansDark = BackgroundColorSpan(Constant.WBURNTUMBER)
-                            } else {
-                                Constant.sifaspansDark = BackgroundColorSpan(Constant.CYANLIGHTEST)
-                            }
-                            spannableverse.setSpan(
-                                Constant.sifaspansDark,
-                                indexstart,
-                                indexend,
-                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                            )
-                            //   spannableverse.setSpan(new UnderlineSpan(),indexstart, indexend, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                try {
+                    if (indexstart == 0 || indexstart > 0) {
+                        //   sifaspansDark = getSpancolor(preferences, false);
+                        if (dark) {
+                            Constant.sifaspansDark = BackgroundColorSpan(Constant.WBURNTUMBER)
+                        } else {
+                            Constant.sifaspansDark = BackgroundColorSpan(Constant.CYANLIGHTEST)
                         }
-                    } catch (e: IndexOutOfBoundsException) {
-                        //System.out.println(e.getMessage());
+                        spannableverse.setSpan(
+                            Constant.sifaspansDark,
+                            indexstart,
+                            indexend,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+                        //   spannableverse.setSpan(new UnderlineSpan(),indexstart, indexend, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     }
+                } catch (e: IndexOutOfBoundsException) {
+                    //System.out.println(e.getMessage());
                 }
-
-
-
-
-
-
+            }
 
 
         }
@@ -3019,11 +3217,13 @@ class CorpusUtilityorig(private var context: Context?) {
         }
 
 
-
-
-        fun setAbsoluteNegationlatest(corpus: java.util.ArrayList<CorpusEntity>?, spannableVerse: SpannableString) {
+        fun setAbsoluteNegationlatest(
+            corpus: java.util.ArrayList<CorpusEntity>?,
+            spannableVerse: SpannableString
+        ) {
             var validNegFound = false
-            var negOccurrences = mutableListOf<Pair<Int, Int>>()  // Stores wordno and index of each "NEG" occurrence
+            var negOccurrences =
+                mutableListOf<Pair<Int, Int>>()  // Stores wordno and index of each "NEG" occurrence
 
             // Loop through the corpus to find all occurrences of "NEG"
             for (i in corpus?.indices!!) {
@@ -3050,7 +3250,8 @@ class CorpusUtilityorig(private var context: Context?) {
                     (corpus[i + 1].tagtwo == "PRON") // Following PRON tag
                 ) {
                     // Get the valid NEG occurrence (assuming the last one should be used if there are multiple)
-                    val validNegIndex = negOccurrences.lastOrNull { it.first == corpus[i - 1].wordno }?.second
+                    val validNegIndex =
+                        negOccurrences.lastOrNull { it.first == corpus[i - 1].wordno }?.second
 
                     // If valid NEG index is found, continue
                     if (validNegIndex != null && !validNegFound) {
@@ -3086,7 +3287,7 @@ class CorpusUtilityorig(private var context: Context?) {
         ) {
             for (i in corpus?.indices!!) {
                 val word = corpus[i]
-                if(corpus[0].ayah==256){
+                if (corpus[0].ayah == 256) {
                     println("check")
                 }
                 val targetWords = listOf("لَآ", "لَا", "لَّا")
@@ -3098,37 +3299,39 @@ class CorpusUtilityorig(private var context: Context?) {
                     corpus[i].tagone == "N" && // Current word is N
                     i < corpus.size - 2 && // Ensure enough following words
                     ((corpus[i + 1].tagone == "P") && (corpus[i + 1].tagtwo!!.contains("PRON")) || (corpus[i + 1].tagone == "P")) // Following word is P with or without PRON
-                ){
+                ) {
 
 
-                  var startIndex=0
+                    var startIndex = 0
                     // Find the start index of the NEG word
 
-                /*    for ((wordNo, index) in occurrences) {
-                        if(corpus[i-1].wordno == wordNo) {
+                    /*    for ((wordNo, index) in occurrences) {
+                            if(corpus[i-1].wordno == wordNo) {
 
-                            startIndex = index
-                            break
-                        }
+                                startIndex = index
+                                break
+                            }
 
-                    } */
+                        } */
 
-                     startIndex = occurrences.firstOrNull { (wordNo, _) -> corpus[i - 1].wordno == wordNo }?.second ?: -1
+                    startIndex =
+                        occurrences.firstOrNull { (wordNo, _) -> corpus[i - 1].wordno == wordNo }?.second
+                            ?: -1
                     // Find the start index of the NEG word
-                    var prepositionalPhrase=""
-                    if (corpus[i + 1].tagone == "P" && (corpus[i + 1].tagtwo!!.contains("PRON"))){
-                        prepositionalPhrase=corpus[i + 1].araone!!+corpus[i + 1].aratwo!!
-                    }else if(corpus[i + 1].tagone == "P"){
-                        prepositionalPhrase=corpus[i + 1].araone!!
+                    var prepositionalPhrase = ""
+                    if (corpus[i + 1].tagone == "P" && (corpus[i + 1].tagtwo!!.contains("PRON"))) {
+                        prepositionalPhrase = corpus[i + 1].araone!! + corpus[i + 1].aratwo!!
+                    } else if (corpus[i + 1].tagone == "P") {
+                        prepositionalPhrase = corpus[i + 1].araone!!
                     }
 
                     // Find the indices for the prepositional phrase
                     val phraseStartIndex = spannableVerse.indexOf(prepositionalPhrase, startIndex)
                     val phraseEndIndex = phraseStartIndex + prepositionalPhrase.length
-                    val fileu=FileUtility(QuranGrammarApplication.context!!)
-                    val chapterno=corpus[0].surah
-                  //  val fileName = "surah$chapterno.csv"
-                  //  fileu.writetofile(fileName,corpus[0].surah,corpus[0].ayah,corpus[0].wordno,startIndex,phraseEndIndex)
+                    val fileu = FileUtility(QuranGrammarApplication.context!!)
+                    val chapterno = corpus[0].surah
+                    //  val fileName = "surah$chapterno.csv"
+                    //  fileu.writetofile(fileName,corpus[0].surah,corpus[0].ayah,corpus[0].wordno,startIndex,phraseEndIndex)
                     // Apply underline span for the absolute negation phrase
                     if (startIndex != -1 && phraseStartIndex != -1) {
                         spannableVerse.setSpan(
@@ -3142,14 +3345,22 @@ class CorpusUtilityorig(private var context: Context?) {
             }
         }
 
-        fun findWordOccurrencesArabic(text: String, targetWords: List<String>): List<Pair<Int, Int>> {
+        fun findWordOccurrencesArabic(
+            text: String,
+            targetWords: List<String>
+        ): List<Pair<Int, Int>> {
             val occurrences = mutableListOf<Pair<Int, Int>>()
             val words = text.split(Regex("\\s+")) // Split the text into words
             var wordIndex = 0
             var wordNo = 1
 
             for (word in words) {
-                if (targetWords.any { it.equals(word, ignoreCase = true) }) { // Check against all flavors
+                if (targetWords.any {
+                        it.equals(
+                            word,
+                            ignoreCase = true
+                        )
+                    }) { // Check against all flavors
                     occurrences.add(Pair(wordNo, wordIndex))
                 }
                 wordIndex += word.length + 1 // Add 1 for the space
@@ -3158,6 +3369,7 @@ class CorpusUtilityorig(private var context: Context?) {
 
             return occurrences
         }
+
         fun setAbsoluteNegationthree(
             corpus: java.util.ArrayList<CorpusEntity>?,
 
@@ -3183,8 +3395,8 @@ class CorpusUtilityorig(private var context: Context?) {
 
                     // Find end index using wordno of the last part of the pattern (PRON word)
                     val pronWordEndIndex = findWordIndexByWordNo(quranWords, corpus[i + 1])
-                   // + (corpus[i + 1].araone?.length ?: 0) +(corpus[i + 1].aratwo?.length ?: 0)
-                    println(spannableverse.subSequence(negWordStartIndex,pronWordEndIndex))
+                    // + (corpus[i + 1].araone?.length ?: 0) +(corpus[i + 1].aratwo?.length ?: 0)
+                    println(spannableverse.subSequence(negWordStartIndex, pronWordEndIndex))
                     // Apply span (underline) to the sentence between start and end index
                     spannableverse.setSpan(
                         UnderlineSpan(),
@@ -3206,7 +3418,7 @@ class CorpusUtilityorig(private var context: Context?) {
                 // Match based on the wordno in CorpusEntity
                 if (i == corpusWord.wordno) {
                     // Get the index of the word in the entire Quran text
-                    println(quranWords.take(i).joinToString (" "))
+                    println(quranWords.take(i).joinToString(" "))
                     currentIndex = quranWords.take(i).joinToString(" ").length
                     break
                 }
@@ -3217,7 +3429,7 @@ class CorpusUtilityorig(private var context: Context?) {
 
         fun twosetAbsoluteNegation(
             corpus: java.util.ArrayList<CorpusEntity>?,
-          // Assuming this has the verse text
+            // Assuming this has the verse text
             spannableverse: SpannableString
         ) {
             // Split the Quran text into individual words
@@ -3272,10 +3484,6 @@ class CorpusUtilityorig(private var context: Context?) {
         }
 
 
-
-
-
-
         fun setAbsoluteNegationtwo(
             corpus: java.util.ArrayList<CorpusEntity>?,
             spannableverse: SpannableString
@@ -3301,16 +3509,17 @@ class CorpusUtilityorig(private var context: Context?) {
                     // Calculate the length of the following phrase (P + PRON)
                     val firstCharLength = corpus[i + 1].araone?.length ?: 0
                     val secondCharLength = corpus[i + 1].aratwo?.length ?: 0
-                    val nounLength= corpus[i].araone?.length ?: 0
+                    val nounLength = corpus[i].araone?.length ?: 0
 
 
-                    var endIndex = currentSentence.indexOf(corpus[i +1].araone+corpus[i+1].aratwo!!)
-                    endIndex+=firstCharLength+secondCharLength
+                    var endIndex =
+                        currentSentence.indexOf(corpus[i + 1].araone + corpus[i + 1].aratwo!!)
+                    endIndex += firstCharLength + secondCharLength
                     // Apply span (underline) to the sentence between startIndex and endIndex
                     spannableverse.setSpan(
                         UnderlineSpan(),
                         startIndex,
-                        endIndex ,
+                        endIndex,
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                     )
                 }
@@ -3341,40 +3550,48 @@ class CorpusUtilityorig(private var context: Context?) {
         }
 
 
-
-
         fun setAbsoluteNegations(
             corpus: java.util.ArrayList<CorpusEntity>?,
             spannableverse: SpannableString
         ) {
             var startIndex = 0
-         var currentSentence=""
-          for( i in corpus?.indices!!){
-              val word = corpus.get(i)
+            var currentSentence = ""
+            for (i in corpus?.indices!!) {
+                val word = corpus.get(i)
 
 
-              // Check for the scenario: Noun (ACC), preceding NEG, following P + PRON
-               currentSentence = spannableverse.toString()
-              val isAcc = word?.detailsone?.contains("ACC")
-              if ((isAcc == true)
-                  && // Noun is ACC
-                  (i > 0) && (corpus[i - 1].tagone == "NEG") && // Preceding tag is NEG
-                  (i < (corpus.size - 2)) && // Check for enough following words
-                  (corpus[i + 1].tagone == "P") && // Following tag is P
-                  (corpus[i + 1].tagtwo == "PRON") // Following tag is PRON
-              )  {
-                  startIndex = currentSentence.indexOf(corpus[i - 1].araone!!)
-                  val firstChar = corpus[i + 1].araone?.length
-                  val secondCHar= corpus[i+1].aratwo?.length!!
-                  val endIndex = currentSentence.indexOf(corpus[i +1].araone+corpus[i+1].aratwo!!)
+                // Check for the scenario: Noun (ACC), preceding NEG, following P + PRON
+                currentSentence = spannableverse.toString()
+                val isAcc = word?.detailsone?.contains("ACC")
+                if ((isAcc == true)
+                    && // Noun is ACC
+                    (i > 0) && (corpus[i - 1].tagone == "NEG") && // Preceding tag is NEG
+                    (i < (corpus.size - 2)) && // Check for enough following words
+                    (corpus[i + 1].tagone == "P") && // Following tag is P
+                    (corpus[i + 1].tagtwo == "PRON") // Following tag is PRON
+                ) {
+                    startIndex = currentSentence.indexOf(corpus[i - 1].araone!!)
+                    val firstChar = corpus[i + 1].araone?.length
+                    val secondCHar = corpus[i + 1].aratwo?.length!!
+                    val endIndex =
+                        currentSentence.indexOf(corpus[i + 1].araone + corpus[i + 1].aratwo!!)
 
-                  spannableverse.setSpan( UnderlineSpan(),startIndex, endIndex+ firstChar!! +secondCHar!!, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    spannableverse.setSpan(
+                        UnderlineSpan(),
+                        startIndex,
+                        endIndex + firstChar!! + secondCHar!!,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    );
 
 
-              }
-          }
+                }
+            }
         }
-        fun setPresentFromCache(spannableverse: SpannableString, presentIndexList: MutableList<List<Int>>?) {
+
+        fun setPresentFromCache(
+            spannableverse: SpannableString,
+            presentIndexList: MutableList<List<Int>>?
+        ) {
             if (presentIndexList != null) {
                 for (indexes in presentIndexList) {
                     val startIndex = indexes[0]
@@ -3388,15 +3605,19 @@ class CorpusUtilityorig(private var context: Context?) {
                     if (spannableverse != null) {
                         spannableverse.setSpan(
                             Constant.sifaspansDark,
-                            startIndex  ,
-                            endIndex  ,
+                            startIndex,
+                            endIndex,
                             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                         )
                     }
                 }
             }
         }
-        fun setMausoofSifaFromCache(spannableverse: SpannableString, sifaIndexList: MutableList<List<Int>>?) {
+
+        fun setMausoofSifaFromCache(
+            spannableverse: SpannableString,
+            sifaIndexList: MutableList<List<Int>>?
+        ) {
             if (sifaIndexList != null) {
                 for (indexes in sifaIndexList) {
                     val startIndex = indexes[0]
@@ -3408,43 +3629,61 @@ class CorpusUtilityorig(private var context: Context?) {
                     }
 
                     if (spannableverse != null) {
-                        spannableverse.setSpan(
-                            Constant.sifaspansDark,
-                            startIndex  ,
-                            endIndex  ,
-                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                        )
+                        try {
+                            spannableverse.setSpan(
+                                Constant.sifaspansDark,
+                                startIndex,
+                                endIndex,
+                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                        } catch (e:IndexOutOfBoundsException){
+                            println("ch")
+                        }
+
+
                     }
                 }
             }
         }
 
-        fun setMudhafFromCache(spannableverse: SpannableString, mudhafIndexList: MutableList<List<Int>>?) {
+        fun setMudhafFromCache(
+            spannableverse: SpannableString,
+            mudhafIndexList: MutableList<List<Int>>?
+        ) {
             if (mudhafIndexList != null) {
                 for (indexes in mudhafIndexList) {
                     val startIndex = indexes[0]
                     val endIndex = indexes[1]
 
-                    if (spannableverse != null) {
-                        val colorSpan = if (dark) {
-                            Constant.mudhafspanDarks
-                        } else {
-                            Constant.mudhafspanLight
-                        }
 
+                    val colorSpan = if (dark) {
+                        BackgroundColorSpan(Constant.MIDNIGHTBLUE) // Create a new BackgroundColorSpan instance
+                    } else {
+                        BackgroundColorSpan(Constant.GREENYELLOW) // Create a new BackgroundColorSpan instance
+                    }
+                    try {
                         spannableverse.setSpan(
                             colorSpan,
                             startIndex,
                             endIndex,
                             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                         )
+                    } catch (e:IndexOutOfBoundsException){
+                 println(startIndex)
+                        println(endIndex)
+                        println(e.localizedMessage)
                     }
+
+
                 }
             }
 
         }
 
-        fun setAbsoluteNegationFromCache(spannableverse: SpannableString, absoluteNegationIndexes: List<Any>) {
+        fun setAbsoluteNegationFromCache(
+            spannableverse: SpannableString,
+            absoluteNegationIndexes: List<Any>
+        ) {
             val underlineSpan = UnderlineSpan()
             val offsetUnderlineSpan = object : UnderlineSpan() {
                 override fun updateDrawState(ds: TextPaint) {
@@ -3453,7 +3692,7 @@ class CorpusUtilityorig(private var context: Context?) {
                 }
             }
 
-            if(absoluteNegationIndexes.isNotEmpty()){
+            if (absoluteNegationIndexes.isNotEmpty()) {
 
                 spannableverse.setSpan(
                     underlineSpan,
@@ -3468,10 +3707,12 @@ class CorpusUtilityorig(private var context: Context?) {
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                 )
                 val boldSpan = StyleSpan(Typeface.BOLD)
-                spannableverse.setSpan(boldSpan,
+                spannableverse.setSpan(
+                    boldSpan,
                     absoluteNegationIndexes[0] as Int,
                     absoluteNegationIndexes[1] as Int,
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
 
             }
 

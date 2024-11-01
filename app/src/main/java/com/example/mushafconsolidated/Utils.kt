@@ -16,6 +16,7 @@ import com.example.mushafconsolidated.Entities.CorpusVerbWbwOccurance
 import com.example.mushafconsolidated.Entities.FutureTenceListingPojo
 
 import com.example.mushafconsolidated.Entities.GrammarRules
+import com.example.mushafconsolidated.Entities.IllaPositive
 
 import com.example.mushafconsolidated.Entities.InMaListingPOJO
 
@@ -83,6 +84,15 @@ class Utils {
     fun getMudhafSurahNew(id: Int): List<NewMudhafEntity?>? {
         return database.NewMudhafDao().getMudhafSurah(id)
     }
+
+    fun getMudhafALl(): List<NewMudhafEntity> {
+        return database.NewMudhafDao().mudhafAll()
+    }
+
+    fun getIllaPositiveAll(): List<IllaPositive> {
+        return database.IllaPositiveDao().getIllaPositiveAll()
+    }
+
     fun getShaikhTafseer(id: Int): List<MufradatEntity> {
         Log.d(TAG, "getShaikhTafseer: started")
         return database.MufradatDao().getShaikTafseer(id)
@@ -140,7 +150,7 @@ class Utils {
 
 
 
-    fun getMudhafSurahAyahNew(id: Int, aid: Int): List<NewMudhafEntity>? {
+    fun getMudhafSurahAyahNew(id: Int, aid: Int): List<NewMudhafEntity> {
         return database.NewMudhafDao().getMudhafSurahAyah(id, aid)
     }
     fun getSurahJson(sid:    Int): List<jsonsurahentity?>? {
@@ -789,6 +799,18 @@ class Utils {
         return database.NewShartDAO().getShartBySurahAyah(id, ayah)
     }
 
+    fun getShartALL(): List<NewShartEntity>? {
+        return database.NewShartDAO().shartAll()
+    }
+    fun getNasbAall(): List<NewNasbEntity> {
+        return database.NewNasbDao().harfNasbIndAll()
+    }
+    fun getwbwQuranbTranslationbyrange(id: Int, ayah: Int,wordfrom: Int, wordto:Int): List<wbwentity> {
+        return database.wbwDao().getwbwQuranbTranslationbyrange(id,ayah,wordfrom,wordto)
+    }
+
+
+
     fun getwbwQuranBySurahAyah(id: Int, aid: Int): List<wbwentity>? {
         return database.wbwDao().getwbwQuranBySurahAyah(id, aid)
     }
@@ -833,7 +855,7 @@ class Utils {
             return database.grammarRulesDao().grammarRules
         }
 
-    fun getQuranbySurah(id: Int): List<QuranEntity>? {
+    fun getQuranbySurah(id: Int): List<QuranEntity> {
         return database.QuranDao().getQuranVersesBySurah(id)
     }
 

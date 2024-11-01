@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
+import android.widget.ExpandableListView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 
@@ -50,7 +51,10 @@ class GrammarFragmentsListAdapter(
 
             expandedListTextView.text = expandedListText as CharSequence?
         //    expandedListTextView.setLineSpacing(0f, 0f)
-
+        // Hide group indicator (arrow)
+        val expandableListView = parent as ExpandableListView // Cast parent to ExpandableListView
+        expandableListView.expandGroup(listPosition) // Expand the group initially
+        expandableListView.setGroupIndicator(null)
 
         //    expandedListTextView.setTypeface(mequran);
         return convertView
