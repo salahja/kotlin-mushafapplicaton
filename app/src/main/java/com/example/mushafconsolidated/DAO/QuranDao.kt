@@ -143,7 +143,7 @@ interface QuranDao {
 where CorpusExpand.surah=1 and CorpusExpand.ayah=1 and CorpusExpand.wordno=2
      */
     @Query("SELECT * FROM qurans where surah=:surahid")
-    fun getQuranVersesBySurah(surahid: Int): List<QuranEntity>?
+    fun getQuranVersesBySurah(surahid: Int): List<QuranEntity>
 
     @Query("SELECT * FROM qurans order by surah,ayah")
     fun allQuran(): List<QuranEntity>

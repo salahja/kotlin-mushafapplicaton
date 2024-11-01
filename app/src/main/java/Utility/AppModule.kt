@@ -17,6 +17,7 @@ import com.example.mushafconsolidated.DAO.LaneRootDao
 import com.example.mushafconsolidated.DAO.LughatDao
 import com.example.mushafconsolidated.DAO.MafoolBihiDao
 import com.example.mushafconsolidated.DAO.MafoolMutlaqEntDao
+import com.example.mushafconsolidated.DAO.MutlaqBadalaAlihiTameezDao
 import com.example.mushafconsolidated.DAO.NegationDao
 import com.example.mushafconsolidated.DAO.NewKanaDao
 import com.example.mushafconsolidated.DAO.NewMudhafDao
@@ -82,6 +83,13 @@ object AppModule {
 
         return appDB.NegationDao()
     }
+    @Singleton
+    @Provides
+    fun getMansubatDao(appDB: QuranAppDatabase): MutlaqBadalaAlihiTameezDao {
+
+        return appDB.MutlaqBadalaAlihiTameezDao()
+    }
+
 
     @Singleton
     @Provides

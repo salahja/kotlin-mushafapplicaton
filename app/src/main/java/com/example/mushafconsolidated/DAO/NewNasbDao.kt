@@ -16,6 +16,6 @@ interface NewNasbDao {
     @Query("SELECT * FROM newnasb where surah=:id and ayah=:aid order by surah,ayah ")
     fun getHarfNasbIndicesSurahAyah(id: Int, aid: Int): List<NewNasbEntity>?
 
-    @get:Query("SELECT * FROM newnasb   order by surah,ayah ")
-    val harfNasbIndAll: List<NewNasbEntity>
+    @Query("SELECT * FROM newnasb   order by surah,ayah ")
+    fun harfNasbIndAll(): List<NewNasbEntity>
 }

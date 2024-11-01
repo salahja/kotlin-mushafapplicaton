@@ -18,6 +18,7 @@ import com.example.mushafconsolidated.Entities.IllaPositive
 import com.example.mushafconsolidated.Entities.LiajlihiEnt
 import com.example.mushafconsolidated.Entities.MafoolBihi
 import com.example.mushafconsolidated.Entities.MafoolMutlaqEnt
+import com.example.mushafconsolidated.Entities.MutlaqBadalaAlihiTameezEnt
 import com.example.mushafconsolidated.Entities.NegationEnt
 import com.example.mushafconsolidated.Entities.NewKanaEntity
 import com.example.mushafconsolidated.Entities.NewMudhafEntity
@@ -255,6 +256,22 @@ class QuranViewModel @Inject constructor(
 
 
 
+
+    fun getIMBATFilterSurahAyahAndType(surah: Int, ayah: Int, type:String): List<MutlaqBadalaAlihiTameezEnt> {
+        return  this.quranRepository.getIMBATFilterSurahAyahAndType(surah,ayah,type)
+
+    }
+
+    fun getIMBATFilterSurah(cid: Int ): List<MutlaqBadalaAlihiTameezEnt> {
+        return  this.quranRepository.getIMBATFilterSurah(cid)
+
+    }
+
+
+    fun getIMBATFilterSurahAndType(cid: Int,type: String ): List<MutlaqBadalaAlihiTameezEnt> {
+        return  this.quranRepository.getIMBATFilterSurahAndType(cid,type)
+
+    }
 
 
 

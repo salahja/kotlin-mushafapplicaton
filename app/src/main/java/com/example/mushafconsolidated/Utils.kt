@@ -150,7 +150,7 @@ class Utils {
 
 
 
-    fun getMudhafSurahAyahNew(id: Int, aid: Int): List<NewMudhafEntity>? {
+    fun getMudhafSurahAyahNew(id: Int, aid: Int): List<NewMudhafEntity> {
         return database.NewMudhafDao().getMudhafSurahAyah(id, aid)
     }
     fun getSurahJson(sid:    Int): List<jsonsurahentity?>? {
@@ -799,6 +799,18 @@ class Utils {
         return database.NewShartDAO().getShartBySurahAyah(id, ayah)
     }
 
+    fun getShartALL(): List<NewShartEntity>? {
+        return database.NewShartDAO().shartAll()
+    }
+    fun getNasbAall(): List<NewNasbEntity> {
+        return database.NewNasbDao().harfNasbIndAll()
+    }
+    fun getwbwQuranbTranslationbyrange(id: Int, ayah: Int,wordfrom: Int, wordto:Int): List<wbwentity> {
+        return database.wbwDao().getwbwQuranbTranslationbyrange(id,ayah,wordfrom,wordto)
+    }
+
+
+
     fun getwbwQuranBySurahAyah(id: Int, aid: Int): List<wbwentity>? {
         return database.wbwDao().getwbwQuranBySurahAyah(id, aid)
     }
@@ -843,7 +855,7 @@ class Utils {
             return database.grammarRulesDao().grammarRules
         }
 
-    fun getQuranbySurah(id: Int): List<QuranEntity>? {
+    fun getQuranbySurah(id: Int): List<QuranEntity> {
         return database.QuranDao().getQuranVersesBySurah(id)
     }
 

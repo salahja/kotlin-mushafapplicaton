@@ -18,12 +18,11 @@ import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LiveData
 import com.example.Constant
 import com.example.Constant.harfshartspanDark
 import com.example.Constant.jawabshartspanDark
 
-import com.example.Constant.mudhafspanLight
-import com.example.Constant.mudhafspansDark
 import com.example.Constant.shartspanDark
 import com.example.justJava.FrameSpan
 import com.example.mushafconsolidated.Entities.CorpusEntity
@@ -65,6 +64,7 @@ class CorpusUtilityorig(private var context: Context?) {
         preferences = prefs.getString("theme", "dark")
         val preferences = prefs.getString("theme", "dark")
         dark = preferences == "dark" || preferences == "blue" || preferences == "green"
+
     }
 
     fun SetMousufSifaDB(
@@ -1625,6 +1625,127 @@ class CorpusUtilityorig(private var context: Context?) {
         }
 
         @JvmStatic
+        fun searchForTameez(allofQuran: List<QuranEntity>?)  :List<String> {
+            var mudhafColoragainstBlack = 0
+            var mausofColoragainstBlack = 0
+            var sifatColoragainstBlack = 0
+            var brokenPlurarColoragainstBlack = 0
+            var shartagainstback = 0
+
+            val inshartiastr = "«إِنْ» شرطية"
+            val izazarfshartsrt = "وإذا ظرف يتضمن معنى الشرط"
+            val izashartiastr = "«إِذا» ظرف يتضمن معنى الشرط"
+            val jawabshartstr = "جواب شرط"
+            val jawabsharttwostr = "لجواب الشرط"
+            val jawabalshart = "جواب الشرط"
+            val jawab = "جواب"
+            val shart = ArrayList<String>()
+            val mutlaq = ArrayList<String>()
+
+            mutlaq.add("")
+            shart.add(inshartiastr)
+            shart.add(izazarfshartsrt)
+            shart.add(izashartiastr)
+            shart.add(jawabshartstr)
+            shart.add(jawabsharttwostr)
+            shart.add(jawabalshart)
+            shart.add(jawab)
+            shart.add("شرطية")
+            shart.add("شرطية.")
+            shart.add("ظرف متضمن معنى الشرط")
+            shart.add("وإذا ظرف زمان يتضمن معنى الشرط")
+            shart.add("ظرف زمان يتضمن معنى الشرط")
+            shart.add("ولو حرف شرط غير جازم")
+            shart.add("حرف شرط غير جازم")
+            shart.add("اللام واقعة في جواب لو")
+            shart.add("حرف شرط جازم")
+            shart.add("الشرطية")
+            val mudhafilahistr = "مضاف إليه"
+            val sifastr = "صفة"
+            val mudhaflenght = mudhafilahistr.length
+            val sifalength = sifastr.length
+            val hal = ArrayList<String>()
+            hal.add("في محل نصب حال")
+            hal.add("في محل نصب حال.")
+            hal.add("والجملة حالية")
+            hal.add("والجملة حالية.")
+            hal.add("حالية")
+            hal.add("حالية.")
+            hal.add("حالية:")
+            hal.add("حال")
+            hal.add("حال:")
+            hal.add("حال.")
+            hal.add("الواو حالية")
+
+            val badal = ArrayList<String>()
+            badal.add("بدل")
+            badal.add("بدل.")
+
+            val mafoolbihi = ArrayList<String>()
+            mafoolbihi.add("مفعول به")
+            mafoolbihi.add("مفعول به.")
+            mafoolbihi.add("مفعول به.(")
+            mafoolbihi.add("في محل نصب مفعول")
+            mafoolbihi.add("مفعول")
+            val tameez = ArrayList<String>()
+            tameez.add("تمييز")
+            tameez.add("تمييز.")
+            tameez.add("التمييز")
+
+            val result = mutableListOf<String>()
+            var capturelist: List<String> = emptyList()
+
+            mutlaq.add("مطلق")
+            mutlaq.add("مفعولا مطلقا")
+            mutlaq.add("مفعولا مطلقا،")
+            mutlaq.add("مطلق.")
+            val ajilihi = ArrayList<String>()
+            ajilihi.add("مفعول لأجله")
+            ajilihi.add("لأجله")
+            ajilihi.add("لأجله.")
+        //   val regex = "\\(([^)]+)\\)(?:\\s+\\w+)*\\s+(?=تمييز|تمييز\\.|التمييز)"//good one
+             val regex = "\\(([^)]+)\\)(?:\\s+\\w+)*\\s+(تمييز|تمييز\\.|التمييز)" //for capture keyword also
+            val regexm = "\\(([^)]+)\\)(?:\\s+\\w+)*\\s+(مطلق|مفعولا\\s+مطلقا|مفعولا\\s+مطلقا،|مطلق\\.)"
+            val regexajlihi = "\\(([^)]+)\\)(?:\\s+\\w+)*\\s+(لأجله.|لأجله\\.|مفعول لأجله)" //
+
+           // val regexsifa="\\(([^)]+)\\)(?:\\s+\\w+)*\\s+(صفة.|صفة\\.| الصفة)"
+            val regexsifa = "\\(([^)]+)\\)(?:\\s+\\w+)*\\s+(?:صفة\\.|صفة|الصفة)\\s+(\\w+)"
+
+
+            val regexbadal = "\\(([^)]+)\\)(?:\\s+\\w+)*\\s+(بدل.|بدل\\.|بدل)"
+            val pattern = Pattern.compile(regexsifa)
+
+
+            for (pojo in allofQuran!!) {
+                //  String ar_irab_two = pojo.getAr_irab_two();
+
+                val cleanedString = pojo.ar_irab_two.replace(Regex("[\n\r\r]"), "")
+
+               // val ar_irab_two = pojo.ar_irab_two.replace("\n", "");
+              //  val ar_irab_twos = pojo.ar_irab_two.replace("\r", "");
+                val str = SpannableStringBuilder(cleanedString)
+                val matcher = pattern.matcher(cleanedString)
+                var dataString =""
+
+                while (matcher.find()) {
+                    val start = matcher.start()
+                    val end = matcher.end()
+                    val extracted=str.subSequence(start,end)
+                     dataString =
+                        "${pojo.surah}|${pojo.ayah}|$extracted|"
+                    result.add(dataString)
+
+                }
+
+
+
+            }
+           return result
+        }
+
+
+
+        @JvmStatic
         fun HightLightKeyWord(allofQuran: List<QuranEntity>?) {
             var mudhafColoragainstBlack = 0
             var mausofColoragainstBlack = 0
@@ -1823,7 +1944,6 @@ class CorpusUtilityorig(private var context: Context?) {
                 pojo.erabspnabble = str
             }
         }
-
         ////
         @JvmStatic
         fun NewSetWordSpan(

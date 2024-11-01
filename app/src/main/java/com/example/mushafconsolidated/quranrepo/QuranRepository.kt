@@ -17,6 +17,7 @@ import com.example.mushafconsolidated.DAO.LaneRootDao
 import com.example.mushafconsolidated.DAO.LughatDao
 import com.example.mushafconsolidated.DAO.MafoolBihiDao
 import com.example.mushafconsolidated.DAO.MafoolMutlaqEntDao
+import com.example.mushafconsolidated.DAO.MutlaqBadalaAlihiTameezDao
 import com.example.mushafconsolidated.DAO.NegationDao
 import com.example.mushafconsolidated.DAO.NewKanaDao
 import com.example.mushafconsolidated.DAO.NewMudhafDao
@@ -45,6 +46,7 @@ import com.example.mushafconsolidated.Entities.IllaPositive
 import com.example.mushafconsolidated.Entities.LiajlihiEnt
 import com.example.mushafconsolidated.Entities.MafoolBihi
 import com.example.mushafconsolidated.Entities.MafoolMutlaqEnt
+import com.example.mushafconsolidated.Entities.MutlaqBadalaAlihiTameezEnt
 import com.example.mushafconsolidated.Entities.NegationEnt
 import com.example.mushafconsolidated.Entities.NewKanaEntity
 import com.example.mushafconsolidated.Entities.NewMudhafEntity
@@ -66,6 +68,7 @@ import javax.inject.Inject
 
 
  class QuranRepository @Inject constructor(
+     var mutlaqbadalaalihiTameezDao: MutlaqBadalaAlihiTameezDao,
      var illaPositiveDao: IllaPositiveDao,
      var negationsDao: NegationDao,
 
@@ -186,16 +189,8 @@ import javax.inject.Inject
      fun getNegationfilterSurahType(surah: Int,type:String): List<NegationEnt> =
          negationsDao.getINegationFilterSurahAndType(surah,type)
 
-
-
-
-
      fun getNegationFilerSurahAyaType(surah: Int, ayah: Int, type:String): List<NegationEnt> =
          negationsDao.getNegationFilterSurahAyahType(surah, ayah,type)
-
-
-
-
 
 
      fun geNegationFilerSurahAyah(surah: Int, ayah: Int): List<NegationEnt> =
@@ -209,6 +204,25 @@ import javax.inject.Inject
 
 
 
+
+
+
+
+     fun getIMBATFilterSurahAndType(surah: Int,type:String): List<MutlaqBadalaAlihiTameezEnt> =
+         mutlaqbadalaalihiTameezDao.getIMBATFilterSurahAndType(surah,type)
+
+     fun getIMBATFilterSurahAyahAndType(surah: Int, ayah: Int, type:String): List<MutlaqBadalaAlihiTameezEnt> =
+         mutlaqbadalaalihiTameezDao.getMBATFilterSurahAyahType(surah, ayah,type)
+
+
+     fun getMBATFilterSurahAyah(surah: Int, ayah: Int): List<MutlaqBadalaAlihiTameezEnt> =
+         mutlaqbadalaalihiTameezDao.getMBATFilterSurahAyah(surah, ayah)
+
+     fun getMBATAll(): List<MutlaqBadalaAlihiTameezEnt> =
+         mutlaqbadalaalihiTameezDao.getMBATAll()
+
+     fun getIMBATFilterSurah(surah: Int): List<MutlaqBadalaAlihiTameezEnt> =
+         mutlaqbadalaalihiTameezDao.getIMBATFilterSurah(surah)
 
      fun getCorpusEntityFilterSurah(surah: Int, ): List<CorpusEntity> =
          corpusDao.getVersesBySurahLive(surah)

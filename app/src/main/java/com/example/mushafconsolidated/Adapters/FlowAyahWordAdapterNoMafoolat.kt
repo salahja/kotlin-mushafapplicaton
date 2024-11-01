@@ -18,11 +18,11 @@ import android.text.Html
 import android.text.SpannableString
 import android.text.SpannableString.valueOf
 import android.text.format.DateFormat
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
@@ -44,7 +44,6 @@ import com.example.mushafconsolidated.Entities.SurahHeader
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SurahSummary
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
-import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet.Companion.TAG
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.quranrepo.QuranViewModel
 
@@ -124,15 +123,11 @@ class FlowAyahWordAdapterNoMafoolat(
     private var sifaCache = HashMap<Pair<Int, Int>, MutableList<List<Int>>>()//
 
     private val mudhafCache = HashMap<Pair<Int, Int>, MutableList<List<Int>>>()//
-    private var presentTenceCache: MutableMap<Int, MutableMap<Int, Pair<SpannableString, String>>> =
-        mutableMapOf()
 
-    private val pastTenceCache: MutableMap<Int, MutableMap<Int, Pair<SpannableString, String>>> =
-        mutableMapOf()
-    private val futureTenceCache: MutableMap<Int, MutableMap<Int, Pair<SpannableString, String>>> =        mutableMapOf()
    // private val negationCache: MutableMap<Int, MutableMap<Int, Pair<SpannableString, String>>> =        mutableMapOf()
    // private val negationCache: MutableMap<Int, MutableMap<Int, MutableList<Pair<SpannableString, String>>>> = mutableMapOf()
     private val negationCache: MutableMap<Int, MutableMap<Int, MutableList<SpannableString>>> = mutableMapOf()
+    private val mansoobatCache: MutableMap<Int, MutableMap<Int, MutableList<SpannableString>>> = mutableMapOf()
     //   private lateinit var  ayahWord: CorpusAyahWord
     //  private  var ayahWord: QuranCorpusWbw? = null
     private val isaudio: Boolean
@@ -147,7 +142,7 @@ class FlowAyahWordAdapterNoMafoolat(
         QuranViewUtils.initialize(mainViewModel)
         // Assuming you have a QuranModel instance and caches like before
         val surah = allofQuran[0].surah
-
+        isNightmode = sharedPreferences.getString("themepref", "dark").toString()
 // Call utility functions to cache the data
         QuranViewUtils.cacheAbsoluteNegationData(quranModel, surah, absoluteNegationCache)
         QuranViewUtils.cacheSifaData(quranModel, surah, sifaCache)
@@ -155,8 +150,8 @@ class FlowAyahWordAdapterNoMafoolat(
 
     //    QuranViewUtils.cachePastTenceData(quranModel, surah, pastTenceCache)
      //   QuranViewUtils.cacheFutureTenceData(quranModel, surah, futureTenceCache)
-        QuranViewUtils.cacheNegationData(quranModel, surah, negationCache)
-
+        QuranViewUtils.cacheNegationData(quranModel, surah, negationCache,isNightmode)
+        QuranViewUtils.cacheMansubat(quranModel, surah, mansoobatCache,isNightmode)
 
 
 
@@ -228,8 +223,45 @@ class FlowAyahWordAdapterNoMafoolat(
             displayPhrases(position-1, holder)
         }
     }
-
     private fun displayPhrases(
+        position: Int,
+        holder: ItemViewAdapter
+    ) {
+        val phraseGroups: MutableList<SpannableString> = mutableListOf()
+        var phraseListAdapter: PhraseListAdapter? = null
+        val entity = allofQuran[position]
+        val key = Pair(entity!!.surah, entity!!.ayah)
+
+        // Update phraseGroups and truncate phrases if necessary
+        updatePhraseGroups(key, phraseGroups)
+
+        // Define maximum length for each phrase
+        val maxLength = 800 // adjust this value as needed
+
+        // Truncate long phrases with ellipsis
+        val truncatedPhraseGroups = phraseGroups.map { phrase ->
+            if (phrase.length > maxLength) {
+                SpannableString(phrase.substring(0, maxLength) + "...")
+            } else {
+                phrase
+            }
+        }.toMutableList()
+
+        // Check if the adapter is already created
+        if (phraseListAdapter == null) {
+            // Create a new adapter using the truncated list
+            phraseListAdapter = PhraseListAdapter(holder.itemView.context, truncatedPhraseGroups)
+            holder.phrasesListView.adapter = phraseListAdapter
+            holder.phrasesListView.setListViewHeightBasedOnChildren()
+        } else {
+            // Update the existing adapter's data
+            phraseListAdapter.clear()
+            phraseListAdapter.addAll(truncatedPhraseGroups)
+            phraseListAdapter.notifyDataSetChanged()
+        }
+    }
+
+    private fun displayPhrasess(
         position: Int,
         holder: ItemViewAdapter
     ) {
@@ -280,7 +312,7 @@ class FlowAyahWordAdapterNoMafoolat(
         val phraseGroups: MutableList<SpannableString> = mutableListOf()
 
 
-        isNightmode = sharedPreferences.getString("themepref", "dark").toString()
+
         val arabic_font_selection =
             sharedPreferences.getString("Arabic_Font_Selection", "quranicfontregular.ttf")
         val custom_font = Typeface.createFromAsset(
@@ -630,8 +662,11 @@ class FlowAyahWordAdapterNoMafoolat(
             phraseGroups.add(spannableString)
           //  println("check")
         }
-
-
+        val spannableStringsLists = mansoobatCache[key.first]?.get(key.second) ?: emptyList()
+        for (spannableString in spannableStringsLists) {
+            phraseGroups.add(spannableString)
+            //  println("check")
+        }
     }
 
     class PhraseListAdapter(context: Context, phrases: List<SpannableString?>) :
@@ -640,10 +675,14 @@ class FlowAyahWordAdapterNoMafoolat(
             val view = convertView ?: LayoutInflater.from(context)
                 .inflate(android.R.layout.simple_list_item_1, parent, false)
             val textView = view.findViewById<TextView>(android.R.id.text1)
+            textView.textSize = 20f
             textView.text = getItem(position)
             return view
         }
     }
+
+
+
 
 
     private fun setAyahGrammaticalPhrases(

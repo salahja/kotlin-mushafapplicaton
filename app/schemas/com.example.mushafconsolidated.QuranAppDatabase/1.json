@@ -2,8 +2,58 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "274da7f05ba331fed32b73bf9dd8125a",
+    "identityHash": "1bfe1ebb11b2412e3dca64e409c2de76",
     "entities": [
+      {
+        "tableName": "mutlaqbadalajlihitameez",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surahid` INTEGER NOT NULL, `ayahid` INTEGER NOT NULL, `wordno` INTEGER NOT NULL, `word` TEXT NOT NULL, `type` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "surahid",
+            "columnName": "surahid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ayahid",
+            "columnName": "ayahid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wordno",
+            "columnName": "wordno",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "word",
+            "columnName": "word",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
       {
         "tableName": "illapositive",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surahid` INTEGER NOT NULL, `ayahid` INTEGER NOT NULL, `wordfrom` INTEGER NOT NULL, `wordto` INTEGER NOT NULL, `startindex` INTEGER NOT NULL, `endindex` INTEGER NOT NULL, `arabictext` TEXT NOT NULL, `englishtext` TEXT NOT NULL, `type` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
@@ -1228,7 +1278,7 @@
       },
       {
         "tableName": "newnasb",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surah` INTEGER NOT NULL, `ayah` INTEGER NOT NULL, `indexstart` INTEGER NOT NULL, `indexend` INTEGER NOT NULL, `ismstart` INTEGER NOT NULL, `ismend` INTEGER NOT NULL, `khabarstart` INTEGER NOT NULL, `khabarend` INTEGER NOT NULL, `harfwordno` INTEGER NOT NULL, `ismstartwordno` INTEGER NOT NULL, `ismendwordno` INTEGER NOT NULL, `khabarstartwordno` INTEGER NOT NULL, `khabarendwordno` INTEGER NOT NULL, `mahdoof` INTEGER NOT NULL, `comment` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surah` INTEGER NOT NULL, `ayah` INTEGER NOT NULL, `indexstart` INTEGER NOT NULL, `indexend` INTEGER NOT NULL, `ismstart` INTEGER NOT NULL, `ismend` INTEGER NOT NULL, `khabarstart` INTEGER NOT NULL, `khabarend` INTEGER NOT NULL, `harfwordno` INTEGER NOT NULL, `ismstartwordno` INTEGER NOT NULL, `ismendwordno` INTEGER NOT NULL, `khabarstartwordno` INTEGER NOT NULL, `khabarendwordno` INTEGER NOT NULL, `mahdoof` INTEGER NOT NULL, `englishtext` TEXT NOT NULL, `comment` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
           {
             "fieldPath": "surah",
@@ -1315,10 +1365,16 @@
             "notNull": true
           },
           {
+            "fieldPath": "englishtext",
+            "columnName": "englishtext",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
             "fieldPath": "comment",
             "columnName": "comment",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "id",
@@ -1338,7 +1394,7 @@
       },
       {
         "tableName": "newshart",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surah` INTEGER NOT NULL, `ayah` INTEGER NOT NULL, `indexstart` INTEGER NOT NULL, `indexend` INTEGER NOT NULL, `shartindexstart` INTEGER NOT NULL, `shartindexend` INTEGER NOT NULL, `jawabshartindexstart` INTEGER NOT NULL, `jawabshartindexend` INTEGER NOT NULL, `harfwordno` INTEGER NOT NULL, `shartstatwordno` INTEGER NOT NULL, `shartendwordno` INTEGER NOT NULL, `jawabstartwordno` INTEGER NOT NULL, `jawabendwordno` INTEGER NOT NULL, `comment` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surah` INTEGER NOT NULL, `ayah` INTEGER NOT NULL, `indexstart` INTEGER NOT NULL, `indexend` INTEGER NOT NULL, `shartindexstart` INTEGER NOT NULL, `shartindexend` INTEGER NOT NULL, `jawabshartindexstart` INTEGER NOT NULL, `jawabshartindexend` INTEGER NOT NULL, `harfwordno` INTEGER NOT NULL, `shartstatwordno` INTEGER NOT NULL, `shartendwordno` INTEGER NOT NULL, `jawabstartwordno` INTEGER NOT NULL, `jawabendwordno` INTEGER NOT NULL, `englishtext` TEXT NOT NULL, `comment` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
           {
             "fieldPath": "surah",
@@ -1416,6 +1472,12 @@
             "fieldPath": "jawabendwordno",
             "columnName": "jawabendwordno",
             "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "englishtext",
+            "columnName": "englishtext",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -2555,7 +2617,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '274da7f05ba331fed32b73bf9dd8125a')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1bfe1ebb11b2412e3dca64e409c2de76')"
     ]
   }
 }
