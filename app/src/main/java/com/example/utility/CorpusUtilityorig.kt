@@ -1743,10 +1743,72 @@ class CorpusUtilityorig(private var context: Context?) {
            return result
         }
 
+        @JvmStatic
+        fun highlightKeywords(allofQuran: List<QuranEntity>?) {
+            val prefs = PreferenceManager.getDefaultSharedPreferences(QuranGrammarApplication.context)
+            val theme = prefs.getString("themepref", "dark")
 
+            val colorMap = when (theme) {
+                "dark", "blue", "green" -> mapOf(
+                    "shart" to prefs.getInt("shartback", Color.GREEN),
+                    "mausof" to prefs.getInt("mausoofblack", Color.RED),
+                    "mudhaf" to prefs.getInt("mudhafblack", Color.CYAN),
+                    "sifat" to prefs.getInt("sifatblack", Color.YELLOW),
+                    "broken" to prefs.getInt("brokenblack", Color.GREEN)
+                )
+                else -> mapOf(
+                    "shart" to prefs.getInt("shartback", Constant.INDIGO),
+                    "mausof" to prefs.getInt("mausoofwhite", Color.GREEN),
+                    "mudhaf" to prefs.getInt("mudhafwhite", Constant.MIDNIGHTBLUE),
+                    "sifat" to prefs.getInt("sifatwhite", Constant.ORANGE400),
+                    "broken" to prefs.getInt("brokenwhite", Constant.DARKMAGENTA)
+                )
+            }
+
+            val keywordGroups = mapOf(
+                "shart" to listOf(
+                    "«إِنْ» شرطية", "وإذا ظرف يتضمن معنى الشرط", "«إِذا» ظرف يتضمن معنى الشرط",
+                    "جواب شرط", "لجواب الشرط", "جواب الشرط", "جواب", "شرطية", "شرطية.",
+                    "ظرف متضمن معنى الشرط", "وإذا ظرف زمان يتضمن معنى الشرط", "ظرف زمان يتضمن معنى الشرط",
+                    "ولو حرف شرط غير جازم", "حرف شرط غير جازم", "اللام واقعة في جواب لو", "حرف شرط جازم", "الشرطية"
+                ),
+                "mutlaq" to listOf("مطلق", "مفعولا مطلقا", "مفعولا مطلقا،", "مطلق."),
+                "hal" to listOf(
+                    "في محل نصب حال", "في محل نصب حال.", "والجملة حالية", "والجملة حالية.",
+                    "حالية", "حالية.", "حالية:", "حال", "حال:", "حال.", "الواو حالية"
+                ),
+                "tameez" to listOf("تمييز", "تمييز.", "التمييز"),
+                "badal" to listOf("بدل", "بدل."),
+                "ajilihi" to listOf("مفعول لأجله", "لأجله", "لأجله."),
+                "mafoolbihi" to listOf(
+                    "مفعول به", "مفعول به.", "مفعول به.(", "في محل نصب مفعول", "مفعول"
+                )
+            )
+
+            for (pojo in allofQuran!!) {
+                val ar_irab_two = pojo.ar_irab_two.replace("\n", "")
+                val str = SpannableStringBuilder(ar_irab_two)
+
+                for ((key, keywords) in keywordGroups) {
+                    val trie = Trie.builder().onlyWholeWordsWhiteSpaceSeparated().addKeywords(keywords).build()
+                    val emits = trie.parseText(ar_irab_two)
+
+                    for (emit in emits) {
+                        str.setSpan(
+                            ForegroundColorSpan(colorMap[key] ?: Color.BLACK), // Default to black if color not found
+                            emit.start,
+                            emit.start + emit.keyword.length,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+                    }
+                }
+
+                pojo.erabspnabble = str
+            }
+        }
 
         @JvmStatic
-        fun HightLightKeyWord(allofQuran: List<QuranEntity>?) {
+        fun HightLightKeyWordold(allofQuran: List<QuranEntity>?) {
             var mudhafColoragainstBlack = 0
             var mausofColoragainstBlack = 0
             var sifatColoragainstBlack = 0
@@ -3567,12 +3629,18 @@ class CorpusUtilityorig(private var context: Context?) {
                     }
 
                     if (spannableverse != null) {
-                        spannableverse.setSpan(
-                            Constant.sifaspansDark,
-                            startIndex,
-                            endIndex,
-                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                        )
+                        try {
+                            spannableverse.setSpan(
+                                Constant.sifaspansDark,
+                                startIndex,
+                                endIndex,
+                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                        } catch (e:IndexOutOfBoundsException){
+                            println("ch")
+                        }
+
+
                     }
                 }
             }

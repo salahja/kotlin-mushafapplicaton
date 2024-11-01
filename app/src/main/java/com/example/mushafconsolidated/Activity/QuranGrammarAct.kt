@@ -89,12 +89,15 @@ import com.example.mushafconsolidated.settingsimport.Constants
 import com.example.mushafconsolidatedimport.ParticleColorScheme
 import com.example.sentenceanalysis.SentenceGrammarAnalysis
 import com.example.utility.CorpusUtilityorig
-import com.example.utility.CorpusUtilityorig.Companion.HightLightKeyWord
+
 import com.example.utility.CorpusUtilityorig.Companion.findWordOccurrencesArabic
+import com.example.utility.CorpusUtilityorig.Companion.highlightKeywords
 import com.example.utility.CorpusUtilityorig.Companion.searchForTameez
 import com.example.utility.QuranGrammarApplication.Companion.context
+
 import com.example.utility.QuranViewUtils.extractCase
 import com.example.utility.QuranViewUtils.extractInMaIllaNegativeSentences
+import com.example.utility.QuranViewUtils.extractSentenceAndTranslationFromWordIndices
 import com.example.utility.QuranViewUtils.extractVerbType
 import com.example.utility.ScreenshotUtils
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -319,10 +322,10 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
         val word = "عَهْدَهُۥٓۖ"
         //   QuranViewUtils.showIndexOfWindow(this,verse,word)
-        val start = true
+        val start = false
         if (start) {
-            //   mainLoopFromIndexExtraction()
-           mainLoopforIndexEXTRACTION()
+          mainLoopFromIndexExtraction()
+        //   mainLoopforIndexEXTRACTION()
             //extractExpNegationSentences()
         }
 
@@ -463,27 +466,27 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         val utils = Utils(this)
         // val wordino = utils.getExpInMaIllaNegationall()
         //   val wordino = utils.getIllaPositiveAll()
-        val wordInfo: List<NewNasbEntity> =
-            utils.getNasbAall()
+        val wordInfo: List<IllaPositive> =
+            utils.getIllaPositiveAll()
         //   val wordino=  utils.getfutureall()
         //  val wordino= utils.getpresentall()
         //   val wordino=mainViewModel.getLamMudharyNegationAll()
         for (s in wordInfo!!.indices) {
             val ss = wordInfo!![s]
             val corpusEntity = mainViewModel.getCorpusEntityFilterSurahAya(
-                ss.surah, ss.ayah
+                ss.surahid, ss.ayahid
             )
                     as ArrayList<CorpusEntity>
-            val quran = mainViewModel.getsurahayahVerses(ss.surah, ss.ayah)
+            val quran = mainViewModel.getsurahayahVerses(ss.surahid, ss.ayahid)
 
-            /*    lamNegationDataList =    extractSentenceAndTranslationFromNasabIndices(
+      lamNegationDataList =    extractSentenceAndTranslationFromWordIndices(
                    corpusEntity,
                    ss,
                    quran.value!![0].qurantext
-               )*/
+               )
 
 
-            //    val lamNegationDataList =              extractSentencesFromIndexdata(corpusEntity,ss, quran.value!![0].qurantext)
+           //    val lamNegationDataList =              extractSentencesFromIndexdata(corpusEntity,ss, quran.value!![0].qurantext)
             // val lamNegationDataList=         maaPastTenceNegation(corpusEntity, quran.value!![s].qurantext)
             //    val lamNegationDataList =                setPresentTenceNegationwithLA(corpusEntity, quran.value!![s].qurantext)
             //    val lamNegationDataList=         setMaaNegationPresent(corpusEntity, quran.value!![s].qurantext)
@@ -502,7 +505,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         }
 
 
-        val fileName = "nasabwithtranslation.csv"
+        val fileName = "remaininexcept.csv"
         writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
     }
 
@@ -540,7 +543,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
     }
 
-    private fun mainLoopforIndexEXTRACTION() {
+    private fun mainLoopforErabStringEXTRACTION() {
         mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
         val utils = Utils(this)
         val allLamNegativeSenteces = ArrayList<List<String>>()
@@ -609,7 +612,75 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         val fileName = "sifatr.csv"
         writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
     }
+    private fun mainLoopforIndexEXTRACTION() {
+        mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
+        val utils = Utils(this)
+        val allLamNegativeSenteces = ArrayList<List<String>>()
+        // val allLamNegativeSenteces =                             ArrayList<List<Pair<String, String>>>()
+        var allofQuran: List<QuranEntity>? = null
+        val text =
+            "(مِنْ آيَةٍ) جار ومجرور متعلقان بمحذوف صفة من ما والمعنى أي شيء ننسخ من الآيات وقيل متعلقان بمحذوف حال من ما، وقال بعضهم من زائدة وآية تمييز"
+        val regex = "\\(([^)]+)\\)(?:\\s+\\w+)*\\s+(تمييز|تمييز\\.|التمييز)".toRegex()
 
+        val match = regex.find(text)
+        if (match != null) {
+            val wordInParentheses = match.groupValues[1]
+            val keyword = match.groupValues[2]
+            println("Word in parentheses: $wordInParentheses")
+            println("Keyword: $keyword")
+        }
+
+        for (i in 1..114) {
+            val quran = utils.getQuranbySurah(i)
+            //     val quran = mainViewModel.getquranbySUrah(i)
+
+
+            /*    val corpusEntity = mainViewModel.getCorpusEntityFilterSurahAya(
+                    i, quran.value!![s].ayah
+                ) as ArrayList<CorpusEntity>*/
+
+            val lamNegationDataList = searchForTameez(quran)
+
+            //test with surah 11 ayah 81
+
+
+            //     val lamNegationDataList = QuranViewUtils.collectBrokenPlurals(corpusEntity,quran.value!![s].qurantext)
+            // val lamNegationDataList =             setPresentTenceNegationwithLA(corpusEntity, quran.value!![s].qurantext)//GOOD
+
+
+            //    val lamNegationDataList=         setMaaNegationPresent(corpusEntity, quran.value!![s].qurantext)//good
+            // val lamNegationDataList=         setLunNegation(corpusEntity, quran.value!![s].qurantext)//good
+
+
+            //  val lamNegationDataList =      setLamNegation(corpusEntity, quran.value!![s].qurantext)good
+            //   val lamNegationDataList =     maaPastTenceNegation(corpusEntity, quran.value!![s].qurantext)
+
+
+            // val lamNegationDataList=         setJumlaIsmiyaNegationMaaLaysa(corpusEntity, quran.value!![s].qurantext)
+
+            //   val lamNegationDataList =             extractInMaIllaNegativeSentences(corpusEntity, quran.value!![s].qurantext)
+
+            //   val lamNegationDataList =           extractInMaIllaPositiveSentences(corpusEntity, quran.value!![s].qurantext)
+
+            //  val lamNegationDataList =        extractProhibitiveSentences(corpusEntity, quran.value!![s].qurantext)
+            //  val lamNegationDataList =  QuranViewUtils.extractMudafMudafIlaih(corpusEntity, quran.value!![s].qurantext)
+            /*    val list = extractMousufSifa(corpusEntity,quran.value!![s].qurantext)//working
+
+                if (list.isNotEmpty()) {
+                    allLamNegativeSenteces.add(list)
+                }*/
+            if (lamNegationDataList.isNotEmpty()) {
+                allLamNegativeSenteces.add(lamNegationDataList)
+                //  allLamNegativeSenteces.add(ExtractedSentence)
+            }
+
+
+
+
+        }
+        val fileName = "sifatr.csv"
+        writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
+    }
 
     // Function to remove Arabic vowels and diacritics, leaving only consonants
 
@@ -2386,7 +2457,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                     val header =
                         SurahHeader(rukucount, versescount, chapterno, surahArabicName, " ")
 
-                    HightLightKeyWord(allofQuran)
+                    highlightKeywords(allofQuran)
 
                     val adapter = if (!mushafview && mafoolat) {
                         FlowAyahWordAdapter(

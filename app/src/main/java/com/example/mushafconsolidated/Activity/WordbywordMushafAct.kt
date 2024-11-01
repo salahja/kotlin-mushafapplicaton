@@ -88,7 +88,7 @@ import com.example.mushafconsolidated.settingsimport.Constants
 import com.example.mushafconsolidatedimport.ParticleColorScheme
 import com.example.sentenceanalysis.SentenceGrammarAnalysis
 import com.example.utility.CorpusUtilityorig
-import com.example.utility.CorpusUtilityorig.Companion.HightLightKeyWord
+
 import com.example.utility.MovableFloatingActionButton
 import com.example.utility.ScreenshotUtils
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -1258,7 +1258,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
                 manager.orientation = LinearLayoutManager.VERTICAL
                 recyclerView.setHasFixedSize(true)
                 manager.orientation = LinearLayoutManager.VERTICAL
-                HightLightKeyWord(allofQuran)
+              //  hightLightKeyWord(allofQuran)
 
 
                 recyclerView.layoutManager = manager
