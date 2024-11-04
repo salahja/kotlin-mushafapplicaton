@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.sqlite.db.SimpleSQLiteQuery
 import com.example.mushafconsolidated.DAO.BookMarkDao
 import com.example.mushafconsolidated.DAO.BookMarksPojo
+import com.example.mushafconsolidated.Entities.AccusativePojo
 import com.example.mushafconsolidated.Entities.BookMarks
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
 import com.example.mushafconsolidated.Entities.CorpusEntity
@@ -38,6 +39,7 @@ import com.example.mushafconsolidated.Entities.RootWordDetails
 import com.example.mushafconsolidated.Entities.ShartListingPojo
 import com.example.mushafconsolidated.Entities.SifaEntity
 import com.example.mushafconsolidated.Entities.SifaListingPojo
+import com.example.mushafconsolidated.Entities.SifaMudhafEnt
 import com.example.mushafconsolidated.Entities.VerbCorpus
 import com.example.mushafconsolidated.Entities.VerbCorpusBreakup
 import com.example.mushafconsolidated.Entities.hanslexicon
@@ -116,6 +118,10 @@ class Utils {
 
     fun getNegationFilterSurahAyahType(cid: Int, aid: Int,type: String ): List<NegationEnt> {
         return  database.NegationDao().getNegationFilterSurahAyahType(cid, aid,type)
+
+    }
+    fun getFilterSurahAyahType(cid: Int, aid: Int,type: String ): List<SifaMudhafEnt> {
+        return  database.SifaMudhafDao().getSIfaMudhaafFilterSurahAyahType(cid, aid,type)
 
     }
 
@@ -273,6 +279,25 @@ class Utils {
 
 
     }
+    fun getNASAB():List<AccusativePojo>{
+        val accusative:String=("SELECT \n" +
+                "    corpusexpand.surah,\n" +
+                "    corpusexpand.ayah\n" +
+                "    \n" +
+                "FROM \n" +
+                "    corpusexpand, qurans\n" +
+                "WHERE \n" +
+                "    (corpusexpand.tagone = \"ACC\" OR corpusexpand.tagtwo = \"ACC\" OR corpusexpand.tagthree = \"ACC\" OR corpusexpand.tagfour = \"ACC\" OR corpusexpand.tagfive = \"ACC\")\n" +
+                " \n" +
+                "    AND corpusexpand.surah = qurans.surah \n" +
+                "    AND corpusexpand.ayah = qurans.ayah")
+        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(accusative)
+        //  List<Book> result = booksDao.getBooks(query);
+        return database.RawDao().getAccusativeListing(query)
+
+    }
+
+
     fun getSifalisting(tid:Int):List<SifaListingPojo>{
         val sqlshart:String=("select sifa.surah,sifa.ayah,sifa.startindex,sifa.endindex,sifa.wordfrom,qurans.page,qurans.passage_no,qurans.qurantext,qurans.has_prostration,qurans.translation,\n" +
                 "qurans.en_transliteration,qurans.en_arberry,qurans.en_jalalayn,qurans.ur_jalalayn,qurans.tafsir_kathir,qurans.ur_junagarhi,qurans.ar_irab_two\n" +

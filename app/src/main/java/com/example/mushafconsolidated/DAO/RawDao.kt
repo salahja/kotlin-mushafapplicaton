@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.RawQuery
 import androidx.sqlite.db.SimpleSQLiteQuery
 import androidx.sqlite.db.SupportSQLiteQuery
+import com.example.mushafconsolidated.Entities.AccusativePojo
 import com.example.mushafconsolidated.Entities.CorpusExpandWbwPOJO
 import com.example.mushafconsolidated.Entities.CorpusNounWbwOccurance
 import com.example.mushafconsolidated.Entities.CorpusVerbWbwOccurance
@@ -60,7 +61,8 @@ interface RawDao {
 
     @RawQuery
     fun getShartListing(query: SupportSQLiteQuery): List<ShartListingPojo>
-
+    @RawQuery
+    fun getAccusativeListing(query: SupportSQLiteQuery): List<AccusativePojo>
 
     @RawQuery
     fun getSifaListing(query: SupportSQLiteQuery): List<SifaListingPojo>

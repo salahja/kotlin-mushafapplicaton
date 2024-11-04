@@ -65,7 +65,6 @@ import com.example.mushafconsolidated.Entities.LiajlihiEnt
 import com.example.mushafconsolidated.Entities.MafoolBihi
 import com.example.mushafconsolidated.Entities.MafoolMutlaqEnt
 import com.example.mushafconsolidated.Entities.NegationEnt
-import com.example.mushafconsolidated.Entities.NewNasbEntity
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.SurahHeader
 import com.example.mushafconsolidated.Entities.TameezEnt
@@ -89,9 +88,9 @@ import com.example.mushafconsolidated.settingsimport.Constants
 import com.example.mushafconsolidatedimport.ParticleColorScheme
 import com.example.sentenceanalysis.SentenceGrammarAnalysis
 import com.example.utility.CorpusUtilityorig
+import com.example.utility.CorpusUtilityorig.Companion.HightLightKeyWordold
 
 import com.example.utility.CorpusUtilityorig.Companion.findWordOccurrencesArabic
-import com.example.utility.CorpusUtilityorig.Companion.highlightKeywords
 import com.example.utility.CorpusUtilityorig.Companion.searchForTameez
 import com.example.utility.QuranGrammarApplication.Companion.context
 
@@ -324,8 +323,8 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         //   QuranViewUtils.showIndexOfWindow(this,verse,word)
         val start = false
         if (start) {
-          mainLoopFromIndexExtraction()
-        //   mainLoopforIndexEXTRACTION()
+            mainLoopFromIndexExtraction()
+            //   mainLoopforIndexEXTRACTION()
             //extractExpNegationSentences()
         }
 
@@ -459,34 +458,37 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
 
         val allLamNegativeSenteces = ArrayList<List<String>>()
-
-        var lamNegationDataList: List<String> = emptyList()
+        val accsentece = ArrayList<Map<String, Any>>()
+        val accusativeSentencesCollection = mutableListOf<Map<String, Any>>()
+        var lamNeationDataList: List<String> = emptyList()
         //  val corpus = mainViewModel.getCorpusEntityFilterSurah(1)
         //   val quran = mainViewModel.getquranbySUrah(i)
         val utils = Utils(this)
         // val wordino = utils.getExpInMaIllaNegationall()
         //   val wordino = utils.getIllaPositiveAll()
-        val wordInfo: List<IllaPositive> =
-            utils.getIllaPositiveAll()
+        //   val wordInfo: List<IllaPositive> =         utils.getIllaPositiveAll()
         //   val wordino=  utils.getfutureall()
         //  val wordino= utils.getpresentall()
         //   val wordino=mainViewModel.getLamMudharyNegationAll()
+
+        val wordInfo = utils.getNASAB()
         for (s in wordInfo!!.indices) {
             val ss = wordInfo!![s]
             val corpusEntity = mainViewModel.getCorpusEntityFilterSurahAya(
-                ss.surahid, ss.ayahid
+                ss.surah, ss.ayah
             )
                     as ArrayList<CorpusEntity>
-            val quran = mainViewModel.getsurahayahVerses(ss.surahid, ss.ayahid)
+            val quran = mainViewModel.getsurahayahVerses(ss.surah, ss.ayah)
+            val extractedSentences = extractAccusativeSentences(corpusEntity)
 
-      lamNegationDataList =    extractSentenceAndTranslationFromWordIndices(
-                   corpusEntity,
-                   ss,
-                   quran.value!![0].qurantext
-               )
+            /*     lamNegationDataList = extractSentenceAndTranslationFromWordIndices(
+                     corpusEntity,
+                     ss,
+                     quran.value!![0].qurantext
+                 )
+     */
 
-
-           //    val lamNegationDataList =              extractSentencesFromIndexdata(corpusEntity,ss, quran.value!![0].qurantext)
+            //    val lamNegationDataList =              extractSentencesFromIndexdata(corpusEntity,ss, quran.value!![0].qurantext)
             // val lamNegationDataList=         maaPastTenceNegation(corpusEntity, quran.value!![s].qurantext)
             //    val lamNegationDataList =                setPresentTenceNegationwithLA(corpusEntity, quran.value!![s].qurantext)
             //    val lamNegationDataList=         setMaaNegationPresent(corpusEntity, quran.value!![s].qurantext)
@@ -497,16 +499,48 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             // val lamNegationDataList =                extractInMaIllaSentences(corpusEntity, quran.value!![s].qurantext)
 
 
-            if (lamNegationDataList.isNotEmpty()) {
-                allLamNegativeSenteces.add(lamNegationDataList)
+            if (extractedSentences.isNotEmpty()) {
+                //   allLamNegativeSenteces.add(lamNegationDataList)
+                accusativeSentencesCollection.addAll(extractedSentences)
                 //  allLamNegativeSenteces.add(ExtractedSentence)
             }
 
         }
+        val setenceCollection = ArrayList<List<String>>()
+        val Sentences = ArrayList<String>()
+        for (sentenceMap in accusativeSentencesCollection) {
+            val type = sentenceMap["type"] as String
+            val accWordNo = sentenceMap["accWordNo"] as Int
 
+            val sequence = if (type == "Scenario 1") {
+                sentenceMap["predicateSequence"] as List<CorpusRow>
+            } else {
+                sentenceMap["accSequence"] as List<CorpusRow>
+            }
 
-        val fileName = "remaininexcept.csv"
-        writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
+            val surah = sequence[0].surah
+            val ayah = sequence[0].ayah
+            val firstWordNo = sequence[0].wordno
+            val wordNos = sequence.map { it.wordno }.joinToString(",")
+            val arabicText = sequence.joinToString(" ") { it.arabicText }
+            val englishText = sequence.joinToString(" ") { it.englishText }
+            val lastword = sequence.last().wordno
+
+            // Create the pipe-delimited string
+            val delimitedString = "$type|$surah|$ayah|$wordNos|$firstWordNo|$lastword|$arabicText|$englishText"
+
+            // Add the delimited string as a list of strings to Sentences
+            Sentences.add(delimitedString)
+            setenceCollection.add(Sentences)
+        }
+
+// Now you can access the Sentences ArrayList
+        for (sentence in Sentences) {
+            println(sentence)
+        }
+
+        val fileName = "accu.csv"
+        writeNegationDataToFile(context!!, setenceCollection, fileName)
     }
 
     private fun extractExpNegationSentences() {
@@ -544,75 +578,6 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     }
 
     private fun mainLoopforErabStringEXTRACTION() {
-        mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
-        val utils = Utils(this)
-        val allLamNegativeSenteces = ArrayList<List<String>>()
-        // val allLamNegativeSenteces =                             ArrayList<List<Pair<String, String>>>()
-        var allofQuran: List<QuranEntity>? = null
-        val text =
-            "(مِنْ آيَةٍ) جار ومجرور متعلقان بمحذوف صفة من ما والمعنى أي شيء ننسخ من الآيات وقيل متعلقان بمحذوف حال من ما، وقال بعضهم من زائدة وآية تمييز"
-        val regex = "\\(([^)]+)\\)(?:\\s+\\w+)*\\s+(تمييز|تمييز\\.|التمييز)".toRegex()
-
-        val match = regex.find(text)
-        if (match != null) {
-            val wordInParentheses = match.groupValues[1]
-            val keyword = match.groupValues[2]
-            println("Word in parentheses: $wordInParentheses")
-            println("Keyword: $keyword")
-        }
-
-        for (i in 1..114) {
-            val quran = utils.getQuranbySurah(i)
-            //     val quran = mainViewModel.getquranbySUrah(i)
-
-
-                /*    val corpusEntity = mainViewModel.getCorpusEntityFilterSurahAya(
-                        i, quran.value!![s].ayah
-                    ) as ArrayList<CorpusEntity>*/
-
-                val lamNegationDataList = searchForTameez(quran)
-
-                //test with surah 11 ayah 81
-
-
-                //     val lamNegationDataList = QuranViewUtils.collectBrokenPlurals(corpusEntity,quran.value!![s].qurantext)
-                // val lamNegationDataList =             setPresentTenceNegationwithLA(corpusEntity, quran.value!![s].qurantext)//GOOD
-
-
-                //    val lamNegationDataList=         setMaaNegationPresent(corpusEntity, quran.value!![s].qurantext)//good
-                // val lamNegationDataList=         setLunNegation(corpusEntity, quran.value!![s].qurantext)//good
-
-
-                //  val lamNegationDataList =      setLamNegation(corpusEntity, quran.value!![s].qurantext)good
-                //   val lamNegationDataList =     maaPastTenceNegation(corpusEntity, quran.value!![s].qurantext)
-
-
-                // val lamNegationDataList=         setJumlaIsmiyaNegationMaaLaysa(corpusEntity, quran.value!![s].qurantext)
-
-                //   val lamNegationDataList =             extractInMaIllaNegativeSentences(corpusEntity, quran.value!![s].qurantext)
-
-                //   val lamNegationDataList =           extractInMaIllaPositiveSentences(corpusEntity, quran.value!![s].qurantext)
-
-                //  val lamNegationDataList =        extractProhibitiveSentences(corpusEntity, quran.value!![s].qurantext)
-                //  val lamNegationDataList =  QuranViewUtils.extractMudafMudafIlaih(corpusEntity, quran.value!![s].qurantext)
-                /*    val list = extractMousufSifa(corpusEntity,quran.value!![s].qurantext)//working
-
-                    if (list.isNotEmpty()) {
-                        allLamNegativeSenteces.add(list)
-                    }*/
-                if (lamNegationDataList.isNotEmpty()) {
-                    allLamNegativeSenteces.add(lamNegationDataList)
-                    //  allLamNegativeSenteces.add(ExtractedSentence)
-                }
-
-
-
-
-        }
-        val fileName = "sifatr.csv"
-        writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
-    }
-    private fun mainLoopforIndexEXTRACTION() {
         mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
         val utils = Utils(this)
         val allLamNegativeSenteces = ArrayList<List<String>>()
@@ -675,16 +640,444 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             }
 
 
+        }
+        val fileName = "sifatr.csv"
+        writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
+    }
+
+    data class CorpusRow(
+        val surah: Int,
+        val ayah: Int,
+        val wordno: Int,
+        val tags: List<String?>,  // Represents tagone to tagfive
+        val details: List<String?>,
+        val arabicText: String,
+        val englishText: String  // Represents concatenated araone to arafive
+    )
+
+    private fun mainLoopforIndexEXTRACTION() {
+        mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
+        val utils = Utils(this)
+        val allLamNegativeSenteces = ArrayList<List<String>>()
+        // val allLamNegativeSenteces =                             ArrayList<List<Pair<String, String>>>()
+        var allofQuran: List<QuranEntity>? = null
+        /*
+                val text =
+                    "(مِنْ آيَةٍ) جار ومجرور متعلقان بمحذوف صفة من ما والمعنى أي شيء ننسخ من الآيات وقيل متعلقان بمحذوف حال من ما، وقال بعضهم من زائدة وآية تمييز"
+                val regex = "\\(([^)]+)\\)(?:\\s+\\w+)*\\s+(تمييز|تمييز\\.|التمييز)".toRegex()
+
+                val match = regex.find(text)
+                if (match != null) {
+                    val wordInParentheses = match.groupValues[1]
+                    val keyword = match.groupValues[2]
+                    println("Word in parentheses: $wordInParentheses")
+                    println("Keyword: $keyword")
+                }
+        */
+
+        for (i in 11..114) {
+            //   val quran = utils.getQuranbySurah(i)
+            val quran = mainViewModel.getquranbySUrah(i)
+
+
+            val corpusEntity = mainViewModel.getCorpusEntityFilterSurahAya(
+                i, quran.value!![1].ayah
+            ) as ArrayList<CorpusEntity>
+            val extractAccusativeSentences = extractAccusativeSentences(corpusEntity)
+            println("check")
+            //     val lamNegationDataList = searchForTameez(quran)
+
+            //test with surah 11 ayah 81
+
+
+            //     val lamNegationDataList = QuranViewUtils.collectBrokenPlurals(corpusEntity,quran.value!![s].qurantext)
+            // val lamNegationDataList =             setPresentTenceNegationwithLA(corpusEntity, quran.value!![s].qurantext)//GOOD
+
+
+            //    val lamNegationDataList=         setMaaNegationPresent(corpusEntity, quran.value!![s].qurantext)//good
+            // val lamNegationDataList=         setLunNegation(corpusEntity, quran.value!![s].qurantext)//good
+
+
+            //  val lamNegationDataList =      setLamNegation(corpusEntity, quran.value!![s].qurantext)good
+            //   val lamNegationDataList =     maaPastTenceNegation(corpusEntity, quran.value!![s].qurantext)
+
+
+            // val lamNegationDataList=         setJumlaIsmiyaNegationMaaLaysa(corpusEntity, quran.value!![s].qurantext)
+
+            //   val lamNegationDataList =             extractInMaIllaNegativeSentences(corpusEntity, quran.value!![s].qurantext)
+
+            //   val lamNegationDataList =           extractInMaIllaPositiveSentences(corpusEntity, quran.value!![s].qurantext)
+
+            //  val lamNegationDataList =        extractProhibitiveSentences(corpusEntity, quran.value!![s].qurantext)
+            //  val lamNegationDataList =  QuranViewUtils.extractMudafMudafIlaih(corpusEntity, quran.value!![s].qurantext)
+            /*    val list = extractMousufSifa(corpusEntity,quran.value!![s].qurantext)//working
+
+                if (list.isNotEmpty()) {
+                    allLamNegativeSenteces.add(list)
+                }*/
+            /*     if (lamNegationDataList.isNotEmpty()) {
+                     allLamNegativeSenteces.add(lamNegationDataList)
+
+                 }
+     */
 
 
         }
-        val fileName = "sifatr.csv"
+        val fileName = "mudhaftr.csv"
         writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
     }
 
     // Function to remove Arabic vowels and diacritics, leaving only consonants
 
     // Function to check for broken plural pattern by replacing consonants
+
+    fun extractAccusativeSentences(corpusData: List<CorpusEntity>): List<Map<String, Any>> {
+        val accusativeSentences = mutableListOf<Map<String, Any>>()
+
+        for (i in corpusData.indices) {
+            val row = corpusData[i]
+            val tags = listOf(
+                row.tagone,
+                row.tagtwo,
+                row.tagthree,
+                row.tagfour,
+                row.tagfive
+            ) // Create tags list
+            val detailstag = listOf(
+                row.detailsone,
+                row.detailstwo,
+                row.detailsthree,
+                row.detailsfour,
+                row.detailsfive
+            )
+
+            if ("ACC" in tags && "PRON" in tags) {
+                val accWordNo = row.wordno
+                //     val predicateSequence = findSequenceEndingInNom(corpusData, startIndex = i)
+                val predicateSequence = findSequenceEndingInNomold(corpusData, startIndex = i)
+                if (predicateSequence != null) {
+                    accusativeSentences.add(
+                        mapOf(
+                            "type" to "Scenario 1",
+                            "accWordNo" to accWordNo,
+                            "predicateSequence" to predicateSequence
+                        )
+                    )
+                } /*else {
+                    // Capture surah and ayah if no sequence found
+
+                    accusativeSentences.add(
+                        mapOf(
+                            "type" to "No sequence found for Scenario 1",
+                            "accWordNo" to 0,
+                            "surah" to row.surah,
+                            "ayah" to row.ayah
+                        )
+                    )
+                }*/
+            } else if ("ACC" in tags) {
+                val accWordNo = row.wordno
+                //   val accSequence = findAccNounSequenceEndingInNom(corpusData, startIndex = i)
+                val accSequence = findAccNounSequenceEndingInNomold(corpusData, startIndex = i)
+                if (accSequence != null) {
+                    accusativeSentences.add(
+                        mapOf(
+                            "type" to "Scenario 2",
+                            "accWordNo" to accWordNo,
+                            "accSequence" to accSequence
+                        )
+                    )
+                }/* else {
+                    // Capture surah and ayah if no sequence found
+                    accusativeSentences.add(
+                        mapOf(
+                            "type" to "No sequence found for Scenario 2",
+                            "surah" to row.surah,
+                            "ayah" to row.ayah
+                        )
+                    )
+                }*/
+            }
+
+        }
+
+        return accusativeSentences
+    }
+
+
+    /*  fun findSequenceEndingInNom(data: List<CorpusEntity>, startIndex: Int): List<CorpusRow>? {
+          val sequence = mutableListOf<CorpusRow>()
+          var nomCount = 0
+          var emptyrow: QuranGrammarAct.CorpusRow
+          for (row in data.drop(startIndex)) {
+              val corpusRow = CorpusRow(
+                  surah = row.surah,
+                  ayah = row.ayah,
+                  wordno = row.wordno,
+                  tags = listOf(row.tagone, row.tagtwo, row.tagthree, row.tagfour, row.tagfive),
+                  details = listOf(
+                      row.detailsone,
+                      row.detailstwo,
+                      row.detailsthree,
+                      row.detailsfour,
+                      row.detailsfive
+                  ),
+                  arabicText = row.araone + row.aratwo + row.arathree + row.arafour + row.arafive
+
+              )
+
+              sequence.add(corpusRow)
+
+              // Check if current row has NOM case in any of the details fields
+              if (corpusRow.details.any { it?.contains("NOM") == true }) {
+                  nomCount++
+                  if (nomCount == 1) {
+                      continue // Check for another NOM if it’s there
+                  } else if (nomCount == 2) {
+                      return sequence // Return if two NOMs are found in sequence
+                  }
+              } else if (nomCount == 1) {
+                  // If only one NOM is found and sequence continues with non-NOM, return sequence
+                  return sequence
+              } else {
+                  nomCount = 0 // Reset nomCount if no NOM tag is found
+                  emptyrow = CorpusRow(
+                      surah = row.surah,
+                      ayah = row.ayah,
+                      wordno = 0,
+                      tags = emptyList(),
+                      details = emptyList(),
+                      arabicText = "",
+                              englishText = ""
+                  )
+              }
+          }
+          return null
+      }
+
+      fun findAccNounSequenceEndingInNom(
+          data: List<CorpusEntity>,
+          startIndex: Int
+      ): List<CorpusRow>? {
+          val sequence = mutableListOf<CorpusRow>()
+          var nomCount = 0
+
+          for (row in data.drop(startIndex)) {
+              val corpusRow = CorpusRow(
+                  surah = row.surah,
+                  ayah = row.ayah,
+                  wordno = row.wordno,
+                  tags = listOf(row.tagone, row.tagtwo, row.tagthree, row.tagfour, row.tagfive),
+                  details = listOf(
+                      row.detailsone,
+                      row.detailstwo,
+                      row.detailsthree,
+                      row.detailsfour,
+                      row.detailsfive
+                  ),
+                  arabicText = row.araone + row.aratwo + row.arathree + row.arafour + row.arafive
+              )
+
+              sequence.add(corpusRow)
+
+              // Check if current row has NOM case in any of the details fields
+              if (corpusRow.details.any { it?.contains("NOM") == true }) {
+                  nomCount++
+
+
+                  if (nomCount == 1) {
+                      continue // Check for another NOM if it’s there
+                  } else if (nomCount == 2) {
+                      return sequence // Return if two NOMs are found in sequence
+                  }
+              } else if (nomCount == 1) {
+                  // If only one NOM is found and sequence continues with non-NOM, return sequence
+                  return sequence
+              } else {
+                  nomCount = 0 // Reset nomCount if no NOM tag is found
+              }
+          }
+          return null
+      }*/
+    fun findSequenceEndingInNomold(
+        data: List<CorpusEntity>,
+        startIndex: Int,
+    ): List<CorpusRow>? {
+        val sequence = mutableListOf<CorpusRow>()
+
+        for (i in startIndex until data.size) {
+            val entity = data[i]
+            val row = CorpusRow(
+                surah = entity.surah,
+                ayah = entity.ayah,
+                wordno = entity.wordno,
+                tags = listOf(
+                    entity.tagone,
+                    entity.tagtwo,
+                    entity.tagthree,
+                    entity.tagfour,
+                    entity.tagfive
+                ),
+                details = listOf(
+                    entity.detailsone,
+                    entity.detailstwo,
+                    entity.detailsthree,
+                    entity.detailsfour,
+                    entity.detailsfive
+                ),
+                arabicText = entity.araone + entity.aratwo + entity.arathree + entity.arafour + entity.arafive,
+                englishText = entity.en
+            )
+
+            sequence.add(row)
+
+            if (row.details.any { it!!.contains("NOM") }) {
+                // Check if the next element exists and meets the conditions
+                if (i + 1 < data.size) {
+                    val nextEntity = data[i + 1]
+                    if (nextEntity.tagone == "N" || nextEntity.tagtwo == "N" || nextEntity.tagthree == "N" || nextEntity.tagfour == "N") {
+                        if (nextEntity.detailsone?.contains("NOM") == true || nextEntity.detailstwo?.contains(
+                                "NOM"
+                            ) == true ||
+                            nextEntity.detailsthree?.contains("NOM") == true || nextEntity.detailsfour?.contains(
+                                "NOM"
+                            ) == true
+                        ) {
+                            val nextRow = CorpusRow(
+                                surah = nextEntity.surah,
+                                ayah = nextEntity.ayah,
+                                wordno = nextEntity.wordno,
+                                tags = listOf(
+                                    nextEntity.tagone,
+                                    nextEntity.tagtwo,
+                                    nextEntity.tagthree,
+                                    nextEntity.tagfour,
+                                    nextEntity.tagfive
+                                ),
+                                details = listOf(
+                                    nextEntity.detailsone,
+                                    nextEntity.detailstwo,
+                                    nextEntity.detailsthree,
+                                    nextEntity.detailsfour,
+                                    nextEntity.detailsfive
+                                ),
+                                arabicText = nextEntity.araone + nextEntity.aratwo + nextEntity.arathree + nextEntity.arafour + nextEntity.arafive,
+                                englishText = nextEntity.en
+                            )
+                            sequence.add(nextRow)
+                        }
+                    }
+                }
+                return sequence
+            }
+        }
+
+        return sequence
+    }
+    /*
+        fun findSequenceEndingInNomold(
+            data: List<CorpusEntity>,
+            startIndex: Int,
+
+            ): List<CorpusRow>? {
+            val sequence = mutableListOf<CorpusRow>()
+            val sequenceString = ""
+            val detailstag = ""
+
+            for (row in data.drop(startIndex)) {
+
+                val row = CorpusRow(
+                    surah = row.surah,
+                    ayah = row.ayah,
+                    wordno = row.wordno,
+                    tags = listOf(row.tagone, row.tagtwo, row.tagthree, row.tagfour, row.tagfive),
+                    details = listOf(
+                        row.detailsone,
+                        row.detailstwo,
+                        row.detailsthree,
+                        row.detailsfour,
+                        row.detailsfive
+                    ),
+                    arabicText = row.araone + row.aratwo + row.arathree + row.arafour + row.arafive
+                )
+
+                sequence.add(row)
+
+                val nom = row.details.any() { it!!.contains("NOM") }
+                if (nom) {
+
+
+                    if(data[startIndex+sequence.size] < data.size){
+                        val corpusEntity = data[startIndex + sequence.size]
+                        val row = data[startIndex + sequence.size]
+                        if(corpusEntity.tagone=="N"||corpusEntity.tagtwo=="N"||corpusEntity.tagthree=="N"||corpusEntity.tagfour=="N"){
+                            if(row.detailsone!!.contains("NOM")||row.detailstwo!!.contains("NOM")
+                                ||row.detailsthree!!.contains("NOM")||row.detailsfour!!.contains("NOM")){
+                                val row = CorpusRow(
+                                    surah = row.surah,
+                                    ayah = row.ayah,
+                                    wordno = row.wordno,
+                                    tags = listOf(row.tagone, row.tagtwo, row.tagthree, row.tagfour, row.tagfive),
+                                    details = listOf(
+                                        row.detailsone,
+                                        row.detailstwo,
+                                        row.detailsthree,
+                                        row.detailsfour,
+                                        row.detailsfive
+                                    ),
+                                    arabicText = row.araone + row.aratwo + row.arathree + row.arafour + row.arafive
+                                )
+
+                                sequence.add(row)
+
+                            }
+                        }
+
+                    }
+
+
+                    return sequence
+                }
+            }
+
+            return sequence
+        }*/
+
+    fun findAccNounSequenceEndingInNomold(
+        data: List<CorpusEntity>,
+        startIndex: Int
+    ): List<CorpusRow>? {
+
+        val sequence = mutableListOf<CorpusRow>()
+        for (row in data.drop(startIndex)) {
+            val row = CorpusRow(
+                surah = row.surah,
+                ayah = row.ayah,
+                wordno = row.wordno,
+                tags = listOf(row.tagone, row.tagtwo, row.tagthree, row.tagfour, row.tagfive),
+                details = listOf(
+                    row.detailsone,
+                    row.detailstwo,
+                    row.detailsthree,
+                    row.detailsfour,
+                    row.detailsfive
+                ),
+                arabicText = row.araone + row.aratwo + row.arathree + row.arafour + row.arafive,
+                englishText = row.en
+            )
+
+            sequence.add(row)
+
+
+
+            val nom = row.details.any() { it!!.contains("NOM") }
+
+            if (nom) { // End on NOM
+                return sequence
+            }
+        }
+        return null
+    }
 
 
     private fun extractLaNafiya() {
@@ -2457,7 +2850,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                     val header =
                         SurahHeader(rukucount, versescount, chapterno, surahArabicName, " ")
 
-                    highlightKeywords(allofQuran)
+                    HightLightKeyWordold(allofQuran)
 
                     val adapter = if (!mushafview && mafoolat) {
                         FlowAyahWordAdapter(
@@ -3064,3 +3457,73 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     companion object
 }
 
+/*    fun extractAccusativeSentences(corpusData: List<CorpusRow>): List<Map<String, Any>> {
+        val accusativeSentences = mutableListOf<Map<String, Any>>()
+
+        for (i in corpusData.indices) {
+            val row = corpusData[i]
+
+            // Scenario 1: ACC tag followed by PRON, ending in NOM (in details)
+            if ("ACC" in row.tags && "PRON" in row.tags) {
+                val accWordNo = row.wordno
+
+                // Find sequence ending with a nominative case (NOM) in details fields
+                val predicateSequence = findSequenceEndingInNom(corpusData, startIndex = i + 1)
+                if (predicateSequence != null) {
+                    accusativeSentences.add(
+                        mapOf(
+                            "type" to "Scenario 1",
+                            "accWordNo" to accWordNo,
+                            "predicateSequence" to predicateSequence
+                        )
+                    )
+                }
+            }
+
+            // Scenario 2: ACC tag, noun sequence, ending in NOM (in details)
+            else if ("ACC" in row.tags) {
+                val accWordNo = row.wordno
+
+                val accSequence = findAccNounSequenceEndingInNom(corpusData, startIndex = i + 1)
+                if (accSequence != null) {
+                    accusativeSentences.add(
+                        mapOf(
+                            "type" to "Scenario 2",
+                            "accWordNo" to accWordNo,
+                            "accSequence" to accSequence
+                        )
+                    )
+                }
+            }
+        }
+
+        return accusativeSentences
+    }
+
+    fun findSequenceEndingInNom(data: List<CorpusRow>, startIndex: Int): List<CorpusRow>? {
+        val sequence = mutableListOf<CorpusRow>()
+        for (row in data.drop(startIndex)) {
+            sequence.add(row)
+            if (isNominative(row.details)) {
+                return sequence
+            }
+        }
+        return null
+    }
+
+    fun findAccNounSequenceEndingInNom(data: List<CorpusRow>, startIndex: Int): List<CorpusRow>? {
+        val sequence = mutableListOf<CorpusRow>()
+        for (row in data.drop(startIndex)) {
+            if ("ACC" in row.tags || "N" in row.tags) { // Continue with ACC and nouns
+                sequence.add(row)
+            }
+            if (isNominative(row.details)) { // End on NOM in details fields
+                return sequence
+            }
+        }
+        return null
+    }
+
+    fun isNominative(details: List<String>): Boolean {
+        return details.any { it == "NOM" }
+    }*/

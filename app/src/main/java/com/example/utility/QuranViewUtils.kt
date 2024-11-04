@@ -1027,7 +1027,7 @@ if (w != null) {
         surah: Int,
         sifaCache: MutableMap<Pair<Int, Int>, MutableList<List<Int>>>
     ) {
-        val sifaData = quranModel.getsifaFileterSurah(surah)
+        val sifaData = quranModel.getSifaMousoofFileterSurahType(surah,"sifa")
         for (data in sifaData) {
             val key = Pair(data.surah, data.ayah)
             val indexes = listOf(data.startindex, data.endindex)
@@ -1041,7 +1041,7 @@ if (w != null) {
         surah: Int,
         mudhafCache: HashMap<Pair<Int, Int>, MutableList<List<Int>>>
     ) {
-        val mudhafData = quranModel.getmudhafFilterSurah(surah)
+        val mudhafData = quranModel.getSifaMousoofFileterSurahType(surah,"mudhaf")
         for (data in mudhafData) {
 
             val key = Pair(data.surah, data.ayah)

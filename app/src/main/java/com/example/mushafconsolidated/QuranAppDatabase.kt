@@ -38,6 +38,7 @@ import com.example.mushafconsolidated.DAO.QuranDao
 import com.example.mushafconsolidated.DAO.QuranExplorerDao
 import com.example.mushafconsolidated.DAO.RawDao
 import com.example.mushafconsolidated.DAO.SifaDao
+import com.example.mushafconsolidated.DAO.SifaMudhafDao
 import com.example.mushafconsolidated.DAO.VerbCorpusDao
 import com.example.mushafconsolidated.DAO.grammarRulesDao
 import com.example.mushafconsolidated.DAO.liajlihiDao
@@ -131,7 +132,7 @@ abstract class QuranAppDatabase : RoomDatabase() {
     abstract fun LysaDao(): LysaDao
 
     abstract fun RawDao(): RawDao
-
+    abstract fun SifaMudhafDao(): SifaMudhafDao
     abstract fun IllaPositiveDao(): IllaPositiveDao
 
     /**

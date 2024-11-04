@@ -1710,10 +1710,10 @@ class CorpusUtilityorig(private var context: Context?) {
 
            // val regexsifa="\\(([^)]+)\\)(?:\\s+\\w+)*\\s+(صفة.|صفة\\.| الصفة)"
             val regexsifa = "\\(([^)]+)\\)(?:\\s+\\w+)*\\s+(?:صفة\\.|صفة|الصفة)\\s+(\\w+)"
-
+            val regexmudhaf = "\\(([^)]+)\\)(?:\\s+\\w+)*\\s+(?:مضاف إليه.\\.|مضاف إليه|مضاف إليه.)\\s+(\\w+)"
 
             val regexbadal = "\\(([^)]+)\\)(?:\\s+\\w+)*\\s+(بدل.|بدل\\.|بدل)"
-            val pattern = Pattern.compile(regexsifa)
+            val pattern = Pattern.compile(regexmudhaf)
 
 
             for (pojo in allofQuran!!) {
@@ -1778,6 +1778,7 @@ class CorpusUtilityorig(private var context: Context?) {
                     "حالية", "حالية.", "حالية:", "حال", "حال:", "حال.", "الواو حالية"
                 ),
                 "tameez" to listOf("تمييز", "تمييز.", "التمييز"),
+                "mudhaf" to listOf("مضاف إليه.","مضاف إليه" ,"مضاف"),
                 "badal" to listOf("بدل", "بدل."),
                 "ajilihi" to listOf("مفعول لأجله", "لأجله", "لأجله."),
                 "mafoolbihi" to listOf(
@@ -1841,6 +1842,7 @@ class CorpusUtilityorig(private var context: Context?) {
             val jawab = "جواب"
             val shart = ArrayList<String>()
             val mutlaq = ArrayList<String>()
+            val mudhaf=ArrayList<String>()
             mutlaq.add("مطلق")
             mutlaq.add("مفعولا مطلقا")
             mutlaq.add("مفعولا مطلقا،")
@@ -1863,9 +1865,13 @@ class CorpusUtilityorig(private var context: Context?) {
             shart.add("اللام واقعة في جواب لو")
             shart.add("حرف شرط جازم")
             shart.add("الشرطية")
-            val mudhafilahistr = "مضاف إليه"
+            val mudhafilahistr=ArrayList<String>()
+            mudhafilahistr.add("مضاف")
+            mudhafilahistr.add("مضاف إليه")
+            mudhafilahistr.add("مضاف إليه.")
+         //   val mudhafilahistr = "مضاف إليه"
             val sifastr = "صفة"
-            val mudhaflenght = mudhafilahistr.length
+            val mudhaflenght = mudhafilahistr[0].length
             val sifalength = sifastr.length
             val hal = ArrayList<String>()
             hal.add("في محل نصب حال")
@@ -2747,7 +2753,7 @@ class CorpusUtilityorig(private var context: Context?) {
             if (spannableverse != null) {
 
                 setMudhafFromDBforAyah(spannableverse, surah, ayah)
-                //  setMausoofforayah(spannableverse, surah, ayah)
+                setMausoofforayah(spannableverse, surah, ayah)
                 //  setPastNegation(spannableverse, surah,ayah)
                 // setPresentNegation(spannableverse, surah,ayah)
                 //  setFutureNegation(spannableverse, surah,ayah)
@@ -3112,7 +3118,7 @@ class CorpusUtilityorig(private var context: Context?) {
             ayah_id: Int
         ) {
             val utils = Utils(QuranGrammarApplication.context!!)
-            val surah = utils.getMudhafSurahAyahNew(surah_id, ayah_id)
+            val surah = utils.getFilterSurahAyahType(surah_id, ayah_id,"mudhaf")
 //todo 2 188 iza ahudu
             //todo 9;92 UNCERTAIN
             //TODO 9:94 JAWABHARMAHDOOF 9 95 JAWABHSARMAHODFF
@@ -3151,7 +3157,7 @@ class CorpusUtilityorig(private var context: Context?) {
         private fun setMausoofforayah(spannableverse: SpannableString, surah: Int, ayah: Int) {
 
             val utils = Utils(QuranGrammarApplication.context!!)
-            val surah = utils.getSifabySurahAyah(surah, ayah)
+            val surah =  utils.getFilterSurahAyahType(surah, ayah,"sifa")
 
             for (sifaEntity in surah!!) {
                 val indexstart = sifaEntity!!.startindex
