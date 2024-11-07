@@ -21,4 +21,9 @@ interface NegationDao {
 
     @Query("SELECT * FROM negationfulldata where surahid=:surah  and type=:type")
     fun getINegationFilterSurahAndType(surah: Int, type: String): List<NegationEnt>
+
+    @Query("SELECT * FROM negationfulldata where surahid=:surah  and type=:type")
+    fun getINasabFilterSurahAndType(surah: Int, type: String): List<NegationEnt>
+    @Query("SELECT * FROM negationfulldata where surahid=:surah and ayahid=:ayah  and type=:type")
+    fun getNasabFilterSurahAyahType(surah: Int, ayah: Int,type: String): List<NegationEnt>
 }

@@ -96,7 +96,9 @@ import com.example.utility.QuranGrammarApplication.Companion.context
 
 import com.example.utility.QuranViewUtils.extractCase
 import com.example.utility.QuranViewUtils.extractInMaIllaNegativeSentences
+import com.example.utility.QuranViewUtils.extractSentenceAndTranslationFromNasabIndices
 import com.example.utility.QuranViewUtils.extractSentenceAndTranslationFromWordIndices
+import com.example.utility.QuranViewUtils.extractSentenceAndTranslationFromWordIndicesNewNasab
 import com.example.utility.QuranViewUtils.extractVerbType
 import com.example.utility.ScreenshotUtils
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -321,7 +323,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
         val word = "عَهْدَهُۥٓۖ"
         //   QuranViewUtils.showIndexOfWindow(this,verse,word)
-        val start = false
+        val start = true
         if (start) {
             mainLoopFromIndexExtraction()
             //   mainLoopforIndexEXTRACTION()
@@ -471,7 +473,9 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         //  val wordino= utils.getpresentall()
         //   val wordino=mainViewModel.getLamMudharyNegationAll()
 
-        val wordInfo = utils.getNASAB()
+
+       // val wordInfo = utils.getNASAB()
+        val wordInfo=       utils.getNasbAall()
         for (s in wordInfo!!.indices) {
             val ss = wordInfo!![s]
             val corpusEntity = mainViewModel.getCorpusEntityFilterSurahAya(
@@ -479,7 +483,11 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             )
                     as ArrayList<CorpusEntity>
             val quran = mainViewModel.getsurahayahVerses(ss.surah, ss.ayah)
-            val extractedSentences = extractAccusativeSentences(corpusEntity)
+
+
+         //   val lamNegationDataList =             extractSentenceAndTranslationFromWordIndicesNewNasab(corpusEntity,ss, quran.value!![0].qurantext)
+            val lamNegationDataList =        extractSentenceAndTranslationFromNasabIndices(corpusEntity,ss, quran.value!![0].qurantext)
+         //   val extractedSentences = extractAccusativeSentences(corpusEntity)
 
             /*     lamNegationDataList = extractSentenceAndTranslationFromWordIndices(
                      corpusEntity,
@@ -498,14 +506,30 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             // val lamNegationDataList=         setJumlaIsmiyaNegationMaaLaysa(corpusEntity, quran.value!![s].qurantext)
             // val lamNegationDataList =                extractInMaIllaSentences(corpusEntity, quran.value!![s].qurantext)
 
-
+/*
             if (extractedSentences.isNotEmpty()) {
                 //   allLamNegativeSenteces.add(lamNegationDataList)
                 accusativeSentencesCollection.addAll(extractedSentences)
                 //  allLamNegativeSenteces.add(ExtractedSentence)
+            }*/
+            if (lamNegationDataList.isNotEmpty()) {
+            allLamNegativeSenteces.add(lamNegationDataList)
+
+                //  allLamNegativeSenteces.add(ExtractedSentence)
             }
 
         }
+      /*  val (setenceCollection, Sentences) = nasab(accusativeSentencesCollection)
+
+        for (sentence in Sentences) {
+            println(sentence)
+        }*/
+
+        val fileName = "newnasabconverstoin.csv"
+        writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
+    }
+
+    private fun nasab(accusativeSentencesCollection: MutableList<Map<String, Any>>): Pair<ArrayList<List<String>>, ArrayList<String>> {
         val setenceCollection = ArrayList<List<String>>()
         val Sentences = ArrayList<String>()
         for (sentenceMap in accusativeSentencesCollection) {
@@ -527,20 +551,14 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             val lastword = sequence.last().wordno
 
             // Create the pipe-delimited string
-            val delimitedString = "$type|$surah|$ayah|$wordNos|$firstWordNo|$lastword|$arabicText|$englishText"
+            val delimitedString =
+                "$type|$surah|$ayah|$wordNos|$firstWordNo|$lastword|$arabicText|$englishText"
 
             // Add the delimited string as a list of strings to Sentences
             Sentences.add(delimitedString)
             setenceCollection.add(Sentences)
         }
-
-// Now you can access the Sentences ArrayList
-        for (sentence in Sentences) {
-            println(sentence)
-        }
-
-        val fileName = "accu.csv"
-        writeNegationDataToFile(context!!, setenceCollection, fileName)
+        return Pair(setenceCollection, Sentences)
     }
 
     private fun extractExpNegationSentences() {
@@ -763,22 +781,15 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                             "predicateSequence" to predicateSequence
                         )
                     )
-                } /*else {
-                    // Capture surah and ayah if no sequence found
-
-                    accusativeSentences.add(
-                        mapOf(
-                            "type" to "No sequence found for Scenario 1",
-                            "accWordNo" to 0,
-                            "surah" to row.surah,
-                            "ayah" to row.ayah
-                        )
-                    )
-                }*/
+                }
             } else if ("ACC" in tags) {
                 val accWordNo = row.wordno
                 //   val accSequence = findAccNounSequenceEndingInNom(corpusData, startIndex = i)
-                val accSequence = findAccNounSequenceEndingInNomold(corpusData, startIndex = i)
+               // val accSequence = findAccNounSequenceEndingInNomoldnew(corpusData, startIndex = i)
+                if(row.surah==11 && row.ayah==90) {
+                    println("check")
+                }
+                val accSequence=   findAccNounSequenceEndingInNomLatest(corpusData, startIndex = i)
                 if (accSequence != null) {
                     accusativeSentences.add(
                         mapOf(
@@ -1042,6 +1053,182 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
             return sequence
         }*/
+
+    fun findAccNounSequenceEndingInNomLatest(
+        data: List<CorpusEntity>,
+        startIndex: Int
+    ): List<CorpusRow>? {
+        val sequence = mutableListOf<CorpusRow>()
+
+        for (i in startIndex until data.size) {
+            val currentRow = data[i]
+            val corpusRow = CorpusRow(
+                surah = currentRow.surah,
+                ayah = currentRow.ayah,
+                wordno = currentRow.wordno,
+                tags = listOf(currentRow.tagone, currentRow.tagtwo, currentRow.tagthree, currentRow.tagfour, currentRow.tagfive),
+                details = listOf(
+                    currentRow.detailsone,
+                    currentRow.detailstwo,
+                    currentRow.detailsthree,
+                    currentRow.detailsfour,
+                    currentRow.detailsfive
+                ),
+                arabicText = currentRow.araone + currentRow.aratwo + currentRow.arathree + currentRow.arafour + currentRow.arafive,
+                englishText = currentRow.en
+            )
+
+
+            // Add the current row to the sequence
+            sequence.add(corpusRow)
+            if(currentRow.surah==11 && currentRow.ayah==90) {
+                println("check")
+            }
+
+            // Check if the current row is nominative (NOM)
+            val hasNominative = corpusRow.details.any { it?.contains("NOM") == true }
+
+
+
+
+
+             if (hasNominative && i + 2 < data.size) {
+                // Create CorpusRow objects for the next row and the one after it
+                val nextRow = CorpusRow(
+                    surah = data[i + 1].surah,
+                    ayah = data[i + 1].ayah,
+                    wordno = data[i + 1].wordno,
+                    tags = listOf(data[i + 1].tagone, data[i + 1].tagtwo, data[i + 1].tagthree, data[i + 1].tagfour, data[i + 1].tagfive),
+                    details = listOf(
+                        data[i + 1].detailsone,
+                        data[i + 1].detailstwo,
+                        data[i + 1].detailsthree,
+                        data[i + 1].detailsfour,
+                        data[i + 1].detailsfive
+                    ),
+                    arabicText = data[i + 1].araone + data[i + 1].aratwo + data[i + 1].arathree + data[i + 1].arafour + data[i + 1].arafive,
+                    englishText = data[i + 1].en
+                )
+                 var hasNextRowNom = nextRow.details.any { it?.contains("NOM") == true }
+                 if(hasNextRowNom)
+                  sequence.add(nextRow)
+                val nextNextRow = CorpusRow(
+                    surah = data[i + 2].surah,
+                    ayah = data[i + 2].ayah,
+                    wordno = data[i + 2].wordno,
+                    tags = listOf(data[i + 2].tagone, data[i + 2].tagtwo, data[i + 2].tagthree, data[i + 2].tagfour, data[i + 2].tagfive),
+                    details = listOf(
+                        data[i + 2].detailsone,
+                        data[i + 2].detailstwo,
+                        data[i + 2].detailsthree,
+                        data[i + 2].detailsfour,
+                        data[i + 2].detailsfive
+                    ),
+                    arabicText = data[i + 2].araone + data[i + 2].aratwo + data[i + 2].arathree + data[i + 2].arafour + data[i + 2].arafive,
+                    englishText = data[i + 2].en
+                )
+                 val hasNextNextRowNom = nextNextRow.details.any { it?.contains("NOM") == true }
+                 if(hasNextNextRowNom) {
+                     sequence.add(nextNextRow)
+                     return sequence
+                 }
+                 /*       // Check if the next word is a preposition (P)
+                        if (nextRow.tags.contains("P")) {
+                            // Add the preposition row to the sequence
+                            sequence.add(nextRow)
+
+                            // Check if the following word is genitive (GEN)
+                            if (nextNextRow.details.any { it?.contains("GEN") == true }) {
+                                sequence.add(nextNextRow)
+                                return sequence // Return the sequence with NOM, P, and GEN
+                            }
+                        }*/
+            }else    if (hasNominative && i + 1 < data.size) {
+                val nextRow = CorpusRow(
+                    surah = data[i + 1].surah,
+                    ayah = data[i + 1].ayah,
+                    wordno = data[i + 1].wordno,
+                    tags = listOf(data[i + 1].tagone, data[i + 1].tagtwo, data[i + 1].tagthree, data[i + 1].tagfour, data[i + 1].tagfive),
+                    details = listOf(
+                        data[i + 1].detailsone,
+                        data[i + 1].detailstwo,
+                        data[i + 1].detailsthree,
+                        data[i + 1].detailsfour,
+                        data[i + 1].detailsfive
+                    ),
+                    arabicText = data[i + 1].araone + data[i + 1].aratwo + data[i + 1].arathree + data[i + 1].arafour + data[i + 1].arafive,
+                    englishText = data[i + 1].en
+                )
+
+                if (nextRow.details.any { it?.contains("NOM") == true }) {
+                    sequence.add(nextRow)
+                    return sequence // Return the sequence with NOM, P, and GEN
+                }
+
+            }
+
+            // Check if the current row ends with NOM; if so, return the sequence
+            if (hasNominative) {
+                return sequence
+            }
+        }
+
+        return sequence // Return the full sequence if no NOM or GEN after "P" is found
+    }
+
+
+    fun findAccNounSequenceEndingInNomoldnew(
+        data: List<CorpusEntity>,
+        startIndex: Int
+    ): List<CorpusRow>? {
+
+        val sequence = mutableListOf<CorpusRow>()
+        var expectGenitiveAfterPreposition = false // Flag to expect GEN after "P" tag
+        for (i in startIndex until data.size) {
+            val entity = data[i]
+    //    for (row in data.drop(startIndex)) {
+            val corpusRow = CorpusRow(
+                surah = entity.surah,
+                ayah = entity.ayah,
+                wordno = entity.wordno,
+                tags = listOf(entity.tagone, entity.tagtwo, entity.tagthree, entity.tagfour, entity.tagfive),
+                details = listOf(
+                    entity.detailsone,
+                    entity.detailstwo,
+                    entity.detailsthree,
+                    entity.detailsfour,
+                    entity.detailsfive
+                ),
+                arabicText = entity.araone + entity.aratwo + entity.arathree + entity.arafour + entity.arafive,
+                englishText = entity.en
+            )
+
+            // Add the current entity to the sequence
+            sequence.add(corpusRow)
+            if(entity.surah==11 && entity.ayah==56) {
+                println("check")
+            }
+
+            // If current entity has a preposition ("P") tag, set flag to expect GEN case next
+            if (corpusRow.tags.contains("P")) {
+                expectGenitiveAfterPreposition = true
+                continue
+            }
+
+            // Check if the current entity has either NOM case or GEN case following a "P"
+            val hasNominative = corpusRow.details.any { it?.contains("NOM") == true }
+            val hasGenitiveAfterPreposition = expectGenitiveAfterPreposition && corpusRow.details.any { it?.contains("GEN") == true }
+
+            if (hasNominative || hasGenitiveAfterPreposition) {
+                return sequence // End sequence if NOM or valid GEN case is found
+            }
+
+            // Reset flag if no GEN case follows the preposition
+            expectGenitiveAfterPreposition = false
+        }
+
+        return sequence // Return the full sequence if no NOM or GEN after "P" is found
+    }
 
     fun findAccNounSequenceEndingInNomold(
         data: List<CorpusEntity>,
