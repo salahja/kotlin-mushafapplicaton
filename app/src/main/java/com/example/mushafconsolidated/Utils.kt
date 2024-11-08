@@ -296,6 +296,27 @@ class Utils {
         return database.RawDao().getAccusativeListing(query)
 
     }
+    fun getKanaAll():List<AccusativePojo>{
+        val kana:String=("select \n" +
+                "*\n" +
+                "    \n" +
+                "FROM \n" +
+                "    corpusexpand, qurans\n" +
+                "WHERE \n" +
+                "    (corpusexpand.lemaraone = \"كَانَ\" OR corpusexpand.lemaratwo = \"كَانَ\" OR corpusexpand.lemarathree = \"كَانَ\" OR \n" +
+                "    corpusexpand.lemarafour = \"كَانَ\" OR corpusexpand.lemarafive = \"كَانَ\")\n" +
+                " \n" +
+                "    AND corpusexpand.surah = qurans.surah \n" +
+                "    AND corpusexpand.ayah = qurans.ayah")
+
+        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(kana)
+        //  List<Book> result = booksDao.getBooks(query);
+        return database.RawDao().getAccusativeListing(query)
+
+    }
+
+
+
 
 
     fun getSifalisting(tid:Int):List<SifaListingPojo>{
