@@ -1691,10 +1691,10 @@ if (w != null) {
 
         val backgroundColor = when (isNightmode) {
             "dark", "blue", "green" -> R.color.background_color
-            "brown", "light" -> R.color.background_color
+            "brown", "light" -> R.color.bg_black
             else -> R.color.background_color_light_brown
         }
-
+     if(isNightmode=="dark" || isNightmode=="blue" ||isNightmode == "green"){
         SimpleTooltip.Builder(context)
             .anchorView(view)
             .text(workBreakDown)
@@ -1706,8 +1706,22 @@ if (w != null) {
             .arrowWidth(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
             .build()
             .show()
-    }
+    }else{
+         SimpleTooltip.Builder(context)
+             .anchorView(view)
+             .text(workBreakDown)
+           //  .backgroundColor(backgroundColor)
+             .gravity(Gravity.TOP)
+             .modal(true)
+             .arrowDrawable(android.R.drawable.ic_media_previous)
+             .arrowHeight(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
+             .arrowWidth(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
+             .build()
+             .show()
 
+
+     }
+}
     fun setIconColors(surahInfoTextView: TextView, isNightMode: String, isMakkiMadani: Int) {
         val icon = if (isMakkiMadani == 1) {
             R.drawable.ic_makkah_48
