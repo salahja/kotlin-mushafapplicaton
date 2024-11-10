@@ -315,7 +315,24 @@ class Utils {
 
     }
 
+    fun getLauAll():List<AccusativePojo>{
+        val kana:String=("SELECT *\n" +
+                "FROM corpusexpand, qurans\n" +
+                "WHERE (\n" +
+                "    (corpusexpand.araone = \"لَوْ\" OR corpusexpand.aratwo = \"لَوْ\" OR corpusexpand.arathree = \"لَوْ\" OR \n" +
+                "     corpusexpand.arafour = \"لَوْ\" OR corpusexpand.arafive = \"لَوْ\")\n" +
+                "    OR \n" +
+                "    (corpusexpand.araone = \"لَوْلَا\" OR corpusexpand.aratwo = \"لَوْلَا\" OR corpusexpand.arathree = \"لَوْلَا\" OR \n" +
+                "     corpusexpand.arafour = \"لَوْلَا\" OR corpusexpand.arafive = \"لَوْلَا\")\n" +
+                ")\n" +
+                "AND corpusexpand.surah = qurans.surah \n" +
+                "AND corpusexpand.ayah = qurans.ayah")
 
+        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(kana)
+        //  List<Book> result = booksDao.getBooks(query);
+        return database.RawDao().getAccusativeListing(query)
+
+    }
 
 
 

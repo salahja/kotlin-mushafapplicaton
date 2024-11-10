@@ -200,7 +200,7 @@ import javax.inject.Inject
          negationsDao.getINegationFilterSurahAndType(surah,type)
 
      fun getNegationFilerSurahAyaType(surah: Int, ayah: Int, type:String): List<NegationEnt> =
-         negationsDao.getNegationFilterSurahAyahType(surah, ayah,type)
+         negationsDao.getNasabFilterSurahAyahTypeSubType(surah, ayah,type)
 
 
      fun geNegationFilerSurahAyah(surah: Int, ayah: Int): List<NegationEnt> =

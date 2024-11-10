@@ -68,6 +68,7 @@ import com.example.mushafconsolidated.model.Word
 import com.example.mushafconsolidated.quranrepo.QuranRepository
 import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.example.utility.CorpusUtilityorig
+import com.example.utility.CorpusUtilityorig.Companion
 import com.example.utility.QuranGrammarApplication
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -226,6 +227,7 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
         newSetShart(shartarray)
         val harfnasbarray: MutableList<SpannableString> = ArrayList()
         setNewNasb(harfnasbarray)
+
         val mausoofsifaarray: MutableList<SpannableString> = ArrayList()
         setMausoof(mausoofsifaarray,mudhafSifaList)
 
@@ -458,9 +460,11 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
         }
     }
 
-    private fun setNewNasb(hasbarray: MutableList<SpannableString>) {
+    private fun setNewNasbss(hasbarray: MutableList<SpannableString>) {
         val utils = Utils(requireContext())
         val nasabarray = model.getnasab(chapterid, ayanumber).value
+        val nasabarray2 = model.getNegationFilerSurahAyaType(chapterid,ayanumber,"nasab")
+
         if (nasabarray != null) {
             for (nasbEntity in nasabarray) {
                 val harfComponent = createNasbComponent(nasbEntity, NasbPart.HARF)
@@ -480,6 +484,226 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
 
                 }
             }
+        }
+    }
+
+    private fun setNewNasb(hasbarray: MutableList<SpannableString>) {
+        val utils = Utils(requireContext())
+        val nasabarray = model.getnasab(chapterid, ayanumber).value
+        val nasabarray2 = model.getNegationFilerSurahAyaType(chapterid,ayanumber,"nasab")
+
+        for (data in nasabarray2) {
+            val surahid = data.surahid
+            val ayahid = data.ayahid
+
+            val arabicString = data.arabictext
+            val englishString = data.englishtext
+            var type = data.type
+            //  type += " "
+            val combinedString = "$arabicString\n$englishString"
+            val spannableString = SpannableString(combinedString)
+
+
+
+            if (CorpusUtilityorig.dark) {
+                Constant.harfinnaspanDark = ForegroundColorSpan(Color.GREEN)
+                Constant.harfismspanDark = ForegroundColorSpan(Constant.BCYAN)
+                Constant.harfkhabarspanDark = ForegroundColorSpan(Color.YELLOW)
+            } else {
+                Constant.harfinnaspanDark = ForegroundColorSpan(Constant.KASHMIRIGREEN)
+                Constant.harfismspanDark = ForegroundColorSpan(Constant.prussianblue)
+                Constant.harfkhabarspanDark =
+                    ForegroundColorSpan(Constant.deepburnsienna)
+
+
+            }
+
+
+            if (type == "nasabone") {
+
+                val (firstWord, restOfString) = arabicString.split(" ", limit = 2)
+                spannableString.setSpan(
+                    Constant.harfinnaspanDark,
+                    0,
+                    firstWord.length,
+                    0
+                )
+
+                spannableString.setSpan(
+                    Constant.harfkhabarspanDark,
+                    firstWord.length,
+                    arabicString.length,
+                    0
+
+
+                )
+                hasbarray.add(SpannableString.valueOf(spannableString))
+
+            } else if (type == "nasabtwo") {
+                try {
+                    val words = arabicString.split(
+                        " ",
+                        limit = 3
+                    ) // Split with limit to avoid more than needed
+                    val firstWord = words.getOrNull(0) ?: ""
+                    val secondWord = words.getOrNull(1) ?: ""
+
+                    val restOfString = words.drop(2).joinToString(" ")
+                    val totalLength = firstWord.length + secondWord.length + restOfString.length
+
+                    //    val (firstWord, secondWord, thirdWord, restOfString) = arabicString.split(" ", limit = 3)
+                    spannableString.setSpan(
+                        Constant.harfinnaspanDark,
+                        0,
+                        firstWord.length,
+                        0
+                    )
+                    spannableString.setSpan(
+                        Constant.harfismspanDark,
+                        firstWord.length,
+                        firstWord.length + secondWord.length,
+                        0
+                    )
+                    spannableString.setSpan(
+                        harfkhabarspanDark,
+                        firstWord.length + secondWord.length,
+                        totalLength + 2, // Use totalLength as the end index
+                        0
+                    )
+                } catch (e: IndexOutOfBoundsException) {
+
+                    println("check")
+                }
+
+                hasbarray.add(SpannableString.valueOf(spannableString))
+            } else if(type=="nasabtwoharfism-one"){
+                val words = arabicString.split(
+                    " ",
+                    limit = 3
+                ) // Split with limit to avoid more than needed
+                val firstWord = words.getOrNull(0) ?: ""
+                val secondWord = words.getOrNull(1) ?: ""
+
+                val restOfString = words.drop(2).joinToString(" ")
+                val totalLength = firstWord.length + secondWord.length + restOfString.length
+
+                spannableString.setSpan(
+                    Constant.harfinnaspanDark,
+                    0,
+                    firstWord.length,
+                    0
+                )
+                spannableString.setSpan(
+                    Constant.harfkhabarspanDark,
+                    firstWord.length,
+                    firstWord.length+secondWord.length,
+                    0
+
+
+                )
+                spannableString.setSpan(
+                    Constant.harfismspanDark,
+                    firstWord.length+secondWord.length,
+                    secondWord.length+totalLength+2,
+                    0
+                )
+
+
+                hasbarray.add(SpannableString.valueOf(spannableString))
+            }
+
+
+
+
+            else if(type=="nasabtwoharfism-two"){
+                val parts = arabicString.split(" ", limit = 4)
+
+
+                // Get the first word and the rest of the string
+                val firstWord = parts.getOrNull(0) ?: ""
+                val secondWord = parts.getOrNull(1) ?: ""
+                val thirdWord = parts.getOrNull(2) ?: ""
+                val restOfString = parts.getOrNull(3) ?: ""
+                val seconthirdstring=secondWord+" "+thirdWord
+                val totalLength = firstWord.length + seconthirdstring.length+ restOfString.length
+
+                spannableString.setSpan(
+                    Constant.harfinnaspanDark,
+                    0,
+                    firstWord.length,
+                    0
+                )
+                spannableString.setSpan(
+                    Constant.harfismspanDark,
+                    seconthirdstring.length,
+                    firstWord.length+totalLength,
+                    0
+
+
+                )
+                spannableString.setSpan(
+                    Constant.harfkhabarspanDark,
+                    firstWord.length,
+                    seconthirdstring.length+firstWord.length,
+                    0
+                )
+
+                hasbarray.add(SpannableString.valueOf(spannableString))
+
+            }
+
+            else if (type == "nasabtwoharfism") {
+
+                //      val words =  arabicString.split(" ", limit = 3) // Split with limit to avoid more than needed
+                //     val firstWord = words.getOrNull(0) ?: ""
+                //    val secondWord = words.getOrNull(1) ?: ""
+
+                //  val restOfString = words.drop(2).joinToString(" ")
+                //   val totalLength = firstWord.length + secondWord.length + restOfString.length
+                //   val cleanedInput = arabicString.replace("...", "")
+                val parts = arabicString.split(" ", limit = 2)
+
+                // Get the first word and the rest of the string
+                val firstWord = parts.getOrNull(0) ?: ""
+                val restOfString = parts.getOrNull(1) ?: ""
+                val totalLength = firstWord.length + restOfString.length
+
+                spannableString.setSpan(
+                    Constant.harfinnaspanDark,
+                    0,
+                    firstWord.length,
+                    0
+                )
+                spannableString.setSpan(
+                    Constant.harfismspanDark,
+                    firstWord.length,
+                    totalLength,
+                    0
+                )
+                hasbarray.add(SpannableString.valueOf(spannableString))
+
+            } else {
+
+                //     spannableString.setSpan( UnderlineSpan(), 0, type.length, 0)
+                spannableString.setSpan(
+                    harfinnaspanDark,
+                    0,
+                    arabicString.length,
+                    0
+                ) // Span for Arabic
+                spannableString.setSpan(
+                    harfkhabarspanDark,
+                    arabicString.length + 1,
+                    combinedString.length,
+                    0
+                )
+                hasbarray.add(SpannableString.valueOf(spannableString))
+
+            }
+
+            /*
+            negationCache.getOrPut(surahid) { mutableMapOf() }
+                .put(ayahid, Pair(spannableString, englishString))*/
         }
     }
 
