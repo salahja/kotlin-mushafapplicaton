@@ -333,6 +333,46 @@ class Utils {
         return database.RawDao().getAccusativeListing(query)
 
     }
+    fun getInALL():List<AccusativePojo>{
+        val kana:String=("SELECT *\n" +
+                "  FROM corpusexpand,\n" +
+                "       qurans\n" +
+                " WHERE (corpusexpand.araone = \"إِن\" OR \n" +
+                "        corpusexpand.aratwo = \"إِن\" OR \n" +
+                "        corpusexpand.arathree = \"ئِنِ\" OR \n" +
+                "        corpusexpand.arathree = \"إِي۟ن\") AND \n" +
+                "       corpusexpand.surah = qurans.surah AND \n" +
+                "       corpusexpand.ayah = qurans.ayah order by qurans.surah,qurans.ayah")
+
+        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(kana)
+        //  List<Book> result = booksDao.getBooks(query);
+        return database.RawDao().getAccusativeListing(query)
+
+    }
+
+
+
+
+    fun getIzaAll():List<AccusativePojo>{
+        val kana:String=("SELECT *\n" +
+                "  FROM corpusexpand,\n" +
+                "       qurans\n" +
+                " WHERE (corpusexpand.araone = \"إِذَا\" AND \n" +
+                "        tagone == \"T\" OR \n" +
+                "        corpusexpand.aratwo = \"إِذَا\" AND \n" +
+                "        tagtwo == \"T\" OR \n" +
+                "        corpusexpand.arathree = \"إِذَا\" AND \n" +
+                "        tagone == \"T\") AND \n" +
+                "       corpusexpand.surah = qurans.surah AND \n" +
+                "       corpusexpand.ayah = qurans.ayah;")
+
+        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(kana)
+        //  List<Book> result = booksDao.getBooks(query);
+        return database.RawDao().getAccusativeListing(query)
+
+    }
+
+
 
 
 
@@ -868,6 +908,9 @@ class Utils {
     fun getNasbAall(): List<NewNasbEntity> {
         return database.NewNasbDao().harfNasbIndAll()
     }
+
+
+
     fun getwbwQuranbTranslationbyrange(id: Int, ayah: Int,wordfrom: Int, wordto:Int): List<wbwentity> {
         return database.wbwDao().getwbwQuranbTranslationbyrange(id,ayah,wordfrom,wordto)
     }
