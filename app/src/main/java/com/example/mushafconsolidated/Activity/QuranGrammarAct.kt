@@ -519,8 +519,8 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             // val lamNegationDataList =                extractInMaIllaSentences(corpusEntity, quran.value!![s].qurantext)
 
 
-            if (allLamNegativeSenteces.isNotEmpty()) {
-                //   allLamNegativeSenteces.add(lamNegationDataList)
+            if (lamNegationDataList.isNotEmpty()) {
+                allLamNegativeSenteces.add(lamNegationDataList)
              //   accusativeSentencesCollection.addAll(extractedSentences)
                 //  allLamNegativeSenteces.add(ExtractedSentence)
             }
@@ -537,7 +537,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
 
 
-        val fileName = "inmadhisentences.csv"
+        val fileName = "orignalshart.csv"
         writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
     }
 
