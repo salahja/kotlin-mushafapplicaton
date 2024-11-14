@@ -317,16 +317,29 @@ class Utils {
 
     fun getLauAll():List<AccusativePojo>{
         val kana:String=("SELECT *\n" +
-                "FROM corpusexpand, qurans\n" +
-                "WHERE (\n" +
-                "    (corpusexpand.araone = \"لَوْ\" OR corpusexpand.aratwo = \"لَوْ\" OR corpusexpand.arathree = \"لَوْ\" OR \n" +
-                "     corpusexpand.arafour = \"لَوْ\" OR corpusexpand.arafive = \"لَوْ\")\n" +
-                "    OR \n" +
-                "    (corpusexpand.araone = \"لَوْلَا\" OR corpusexpand.aratwo = \"لَوْلَا\" OR corpusexpand.arathree = \"لَوْلَا\" OR \n" +
-                "     corpusexpand.arafour = \"لَوْلَا\" OR corpusexpand.arafive = \"لَوْلَا\")\n" +
-                ")\n" +
-                "AND corpusexpand.surah = qurans.surah \n" +
-                "AND corpusexpand.ayah = qurans.ayah")
+                "  FROM corpusexpand,\n" +
+                "       qurans\n" +
+                " WHERE ( (corpusexpand.araone = \"لَوْ\" AND \n" +
+                "          corpusexpand.tagone = \"COND\" OR \n" +
+                "          corpusexpand.aratwo = \"لَوْ\" AND \n" +
+                "          corpusexpand.tagtwo = \"COND\" OR \n" +
+                "          corpusexpand.arathree = \"لَوْ\" AND \n" +
+                "          corpusexpand.tagthree = \"COND\" OR \n" +
+                "          corpusexpand.arafour = \"لَوْ\" OR \n" +
+                "          corpusexpand.arafive = \"لَوْ\") OR \n" +
+                "         (corpusexpand.araone = \"لَوْلَا\" OR \n" +
+                "          corpusexpand.aratwo = \"لَوْلَا\" AND \n" +
+                "          corpusexpand.tagtwo = \"COND\" OR \n" +
+                "          corpusexpand.arathree = \"لَوْلَا\" AND \n" +
+                "          corpusexpand.tagthree = \"COND\" OR \n" +
+                "          corpusexpand.arafour = \"لَوْلَا\" OR \n" +
+                "          corpusexpand.arafive = \"لَوْلَا\") ) AND \n" +
+                "       corpusexpand.surah = qurans.surah AND \n" +
+                "       corpusexpand.ayah = qurans.ayah AND \n" +
+                "       qurans.surah > 9 AND \n" +
+                "       qurans.surah < 58\n" +
+                " ORDER BY qurans.surah,\n" +
+                "          qurans.ayah;\n")
 
         val query: SimpleSQLiteQuery = SimpleSQLiteQuery(kana)
         //  List<Book> result = booksDao.getBooks(query);
@@ -342,7 +355,7 @@ class Utils {
                 "        corpusexpand.arathree = \"ئِنِ\" OR \n" +
                 "        corpusexpand.arathree = \"إِي۟ن\") AND \n" +
                 "       corpusexpand.surah = qurans.surah AND \n" +
-                "       corpusexpand.ayah = qurans.ayah order by qurans.surah,qurans.ayah")
+                "       corpusexpand.ayah = qurans.ayah AND qurans.surah>9 AND qurans.surah<58 order by qurans.surah,qurans.ayah")
 
         val query: SimpleSQLiteQuery = SimpleSQLiteQuery(kana)
         //  List<Book> result = booksDao.getBooks(query);
@@ -354,17 +367,16 @@ class Utils {
 
 
     fun getIzaAll():List<AccusativePojo>{
-        val kana:String=("SELECT *\n" +
-                "  FROM corpusexpand,\n" +
-                "       qurans\n" +
-                " WHERE (corpusexpand.araone = \"إِذَا\" AND \n" +
-                "        tagone == \"T\" OR \n" +
-                "        corpusexpand.aratwo = \"إِذَا\" AND \n" +
-                "        tagtwo == \"T\" OR \n" +
-                "        corpusexpand.arathree = \"إِذَا\" AND \n" +
-                "        tagone == \"T\") AND \n" +
-                "       corpusexpand.surah = qurans.surah AND \n" +
-                "       corpusexpand.ayah = qurans.ayah;")
+        val kana:String=("select \n" +
+                "*\n" +
+                "    \n" +
+                "FROM \n" +
+                "    corpusexpand, qurans\n" +
+                "WHERE \n" +
+                "    (corpusexpand.araone = \"إِذَا\" AND tagone==\"T\" OR corpusexpand.aratwo = \"إِذَا\"   AND tagtwo==\"T\" OR corpusexpand.arathree = \"إِذَا\"  AND tagone==\"T\" )\n" +
+                " \n" +
+                "    AND corpusexpand.surah = qurans.surah \n" +
+                "    AND corpusexpand.ayah = qurans.ayah and qurans.surah>9 and qurans.surah<58")
 
         val query: SimpleSQLiteQuery = SimpleSQLiteQuery(kana)
         //  List<Book> result = booksDao.getBooks(query);

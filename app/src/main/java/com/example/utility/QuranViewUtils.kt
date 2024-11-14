@@ -590,7 +590,7 @@ if (w != null) {
     ): List<String> {
 
         var arabicstring = ""
-       // val result = mutableListOf<String>()
+        // val result = mutableListOf<String>()
         val result = mutableListOf<String>()
 
         val utils = Utils(QuranGrammarApplication.context)
@@ -672,10 +672,6 @@ if (w != null) {
             shartarray.add(SpannableString.valueOf(charSequence))
 
 
-
-
-
-
             //  htmlString = Html.toHtml(charSequence as Spanned?)
             htmlString = Html.toHtml(SpannableString.valueOf(charSequence))
             if (connected == 1) {
@@ -716,15 +712,17 @@ if (w != null) {
             harfofverse = quranText.substring(indexstart, indexend)
             shartofverse = quranText.substring(shartindexstart, shartindexend)
             jawabofverrse = quranText.substring(jawabstart, jawabend)
-            val versebuilder=StringBuilder()
-            versebuilder.append(harfofverse).append(":").append(shartofverse).append(":").append(jawabofverrse)
+            val versebuilder = StringBuilder()
+            versebuilder.append(harfofverse).append(":").append(shartofverse).append(":")
+                .append(jawabofverrse)
             shartarray.add(SpannableString.valueOf(harfofverse + ' ' + shartofverse + ' ' + jawabofverrse))
             arabicstring = harfofverse + ' ' + shartofverse + ' ' + jawabofverrse
             shartarray.add(SpannableString.valueOf(translationBuilder.toString()))
-            val type="full"
-             val dataString =      "${shartEntity.surah}|${shartEntity.ayah}|$indexstart|$jawabend|${shartEntity.harfwordno}|${shartEntity.jawabstartwordno}" +
-                    "|${shartEntity.jawabendwordno}|$versebuilder|" +
-                    "${translationBuilder.toString()}|$quranText|$type"
+            val type = "full"
+            val dataString =
+                "${shartEntity.surah}|${shartEntity.ayah}|$indexstart|$jawabend|${shartEntity.harfwordno}|${shartEntity.jawabstartwordno}" +
+                        "|${shartEntity.jawabendwordno}|$versebuilder|" +
+                        "${translationBuilder.toString()}|$quranText|$type"
             result.add(dataString)
         } else if (harfAndShartOnly) {
             harfspannble = SpannableString(harfofverse)
@@ -742,7 +740,7 @@ if (w != null) {
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
             )
             val charSequence = TextUtils.concat(harfspannble, " ", shartspoannable)
-            arabicstring= charSequence.toString()
+            arabicstring = charSequence.toString()
             shartarray.add(SpannableString.valueOf(charSequence))
             //    shartarray.add(trstr);
             if (shartindexstart - indexend == 1) {
@@ -779,11 +777,12 @@ if (w != null) {
                 translationBuilder.append(sbjawab)
                 //   shartarray.add(SpannableString.valueOf(sb.toString()));
             }
-            val type="shartonly"
-            val nullnumber=0
-            val dataString =      "${shartEntity.surah}|${shartEntity.ayah}|$indexstart|$shartindexend|${shartEntity.harfwordno}|$nullnumber" +
-                    "|${shartEntity.shartendwordno}|$arabicstring|" +
-                    "${translationBuilder.toString()}|${quranText}|$type"
+            val type = "shartonly"
+            val nullnumber = 0
+            val dataString =
+                "${shartEntity.surah}|${shartEntity.ayah}|$indexstart|$shartindexend|${shartEntity.harfwordno}|$nullnumber" +
+                        "|${shartEntity.shartendwordno}|$arabicstring|" +
+                        "${translationBuilder.toString()}|${quranText}|$type"
             result.add(dataString)
 
 
@@ -800,12 +799,13 @@ if (w != null) {
             val trstr = getFragmentTranslations(quranText, charSequence, shartEntity)
             shartarray.add(SpannableString.valueOf(charSequence))
             shartarray.add(trstr)
-            arabicstring = harfofverse+' '+shartofverse
-            val type="harfonly"
-            val nullnumber=0
-            val dataString =      "${shartEntity.surah}|${shartEntity.ayah}|$indexstart|$shartindexend|${shartEntity.harfwordno-1}|$nullnumber" +
-                    "|$nullnumber|$arabicstring|" +
-                    "${translationBuilder.toString()}|${quranText}|$type"
+            arabicstring = harfofverse + ' ' + shartofverse
+            val type = "harfonly"
+            val nullnumber = 0
+            val dataString =
+                "${shartEntity.surah}|${shartEntity.ayah}|$indexstart|$shartindexend|${shartEntity.harfwordno - 1}|$nullnumber" +
+                        "|$nullnumber|$arabicstring|" +
+                        "${translationBuilder.toString()}|${quranText}|$type"
             result.add(dataString)
         }
 
@@ -822,11 +822,11 @@ if (w != null) {
         //        val jawbSword = shartEntity.jawabstartwordno
         //        val jawabEword = shartEntity.jawabendwordno
         // Format the result string
-   /*     val english = shartarray.get(1)
-        val dataString =
-            "${shartEntity.surah}|${shartEntity.ayah}|$indexstart|$indexend|$shartindexstart|$shartindexend|$jawabstart|$jawabend|" +
-                    "$harfword|$shartSword|$shartEword|$jawbSword|$jawabEword|$english|$comment"
-        result.add(dataString)*/
+        /*     val english = shartarray.get(1)
+             val dataString =
+                 "${shartEntity.surah}|${shartEntity.ayah}|$indexstart|$indexend|$shartindexstart|$shartindexend|$jawabstart|$jawabend|" +
+                         "$harfword|$shartSword|$shartEword|$jawbSword|$jawabEword|$english|$comment"
+             result.add(dataString)*/
 
 
 
@@ -1310,11 +1310,7 @@ if (w != null) {
             val combinedString = "$arabicString\n$englishString"
             val spannableString = SpannableString(combinedString)
             dark = isNightmode == "dark" || isNightmode == "blue" || isNightmode == "green"
-            val colorSpan = if (dark) {
-                Constant.mudhafspanDarks
-            } else {
-                Constant.mudhafspanLight
-            }
+
             if (dark) {
                 Constant.harfshartspanDark = ForegroundColorSpan(Constant.BYELLOW)
                 Constant.shartspanDark = ForegroundColorSpan(Constant.BCYAN)
@@ -1336,18 +1332,82 @@ if (w != null) {
 
 
             }
-            val backgroundColorArabic = when (isNightmode) {
-                "dark", "blue", "green" -> R.color.yellow
-                "brown", "light" -> R.color.rustred
-                else -> R.color.background_color_light_brown
-            }
-            val backgroundColorEnglish = when (isNightmode) {
-                "dark", "blue", "green" -> R.color.kashmirigreen
-                "brown", "light" -> R.color.midnightblue
-                else -> R.color.background_color_light_brown
-            }
+            if(type=="shartnojawab"){
+                val combinedString = "$arabicString\n$englishString"
+                val spannableStrings = SpannableString(combinedString)
+                val regex = Regex(":")
+                val (firstWord, restOfString) = arabicString.split(" ", limit = 2)
 
-            if (type == "nasabone") {
+                spannableString.setSpan(
+                    Constant.harfshartspanDark,
+                    0,
+                    firstWord.length,
+                    0
+                )
+
+                spannableString.setSpan(
+                    Constant.shartspanDark,
+                    firstWord.length,
+                    arabicString.length,
+                    0
+
+
+                )
+
+            }else
+            if (type == "shartonly") {
+                val combinedString = "$arabicString\n$englishString"
+                val spannableStrings = SpannableString(combinedString)
+                val regex = Regex(":")
+                val (firstWord, restOfString) = arabicString.split(" ", limit = 2)
+
+                spannableString.setSpan(
+                    Constant.harfshartspanDark,
+                    0,
+                    firstWord.length,
+                    0
+                )
+
+                spannableString.setSpan(
+                    Constant.shartspanDark,
+                    firstWord.length,
+                    arabicString.length,
+                    0
+
+
+                )
+            } else if (type == "shartall") {
+                val split = arabicString.split(":")
+            //    if (split.size >= 2) {
+
+                    val firstWord = split[0]
+
+                    val seconthirdstring = split[1]
+                    val totalLength = firstWord.length + seconthirdstring.length
+
+                    spannableString.setSpan(
+                        Constant.harfshartspanDark,
+                        0,
+                        firstWord.length,
+                        0
+                    )
+                    spannableString.setSpan(
+                        Constant.jawabshartspanDark,
+                        firstWord.length,
+                        firstWord.length + seconthirdstring.length,
+                        0
+
+
+                    )
+                    spannableString.setSpan(
+                        Constant.harfkhabarspanDark,
+                        firstWord.length + seconthirdstring.length,
+                        seconthirdstring.length + firstWord.length + totalLength,
+                        0
+                    )
+              //  }
+
+            }else if (type == "nasabone") {
 
                 val (firstWord, restOfString) = arabicString.split(" ", limit = 2)
                 spannableString.setSpan(
@@ -1403,7 +1463,7 @@ if (w != null) {
                 }
 
 
-            } else if(type=="nasabtwoharfism-one"){
+            } else if (type == "nasabtwoharfism-one") {
                 val words = arabicString.split(
                     " ",
                     limit = 3
@@ -1423,26 +1483,20 @@ if (w != null) {
                 spannableString.setSpan(
                     Constant.harfkhabarspanDark,
                     firstWord.length,
-                    firstWord.length+secondWord.length,
+                    firstWord.length + secondWord.length,
                     0
 
 
                 )
                 spannableString.setSpan(
                     Constant.harfismspanDark,
-                    firstWord.length+secondWord.length,
-                    secondWord.length+totalLength+2,
+                    firstWord.length + secondWord.length,
+                    secondWord.length + totalLength + 2,
                     0
                 )
 
 
-
-            }
-
-
-
-
-            else if(type=="nasabtwoharfism-two"){
+            } else if (type == "nasabtwoharfism-two") {
                 val parts = arabicString.split(" ", limit = 4)
 
 
@@ -1451,8 +1505,8 @@ if (w != null) {
                 val secondWord = parts.getOrNull(1) ?: ""
                 val thirdWord = parts.getOrNull(2) ?: ""
                 val restOfString = parts.getOrNull(3) ?: ""
-                val seconthirdstring=secondWord+" "+thirdWord
-                val totalLength = firstWord.length + seconthirdstring.length+ restOfString.length
+                val seconthirdstring = secondWord + " " + thirdWord
+                val totalLength = firstWord.length + seconthirdstring.length + restOfString.length
 
                 spannableString.setSpan(
                     Constant.harfinnaspanDark,
@@ -1463,7 +1517,7 @@ if (w != null) {
                 spannableString.setSpan(
                     Constant.harfismspanDark,
                     seconthirdstring.length,
-                    firstWord.length+totalLength,
+                    firstWord.length + totalLength,
                     0
 
 
@@ -1471,23 +1525,13 @@ if (w != null) {
                 spannableString.setSpan(
                     Constant.harfkhabarspanDark,
                     firstWord.length,
-                    seconthirdstring.length+firstWord.length,
+                    seconthirdstring.length + firstWord.length,
                     0
                 )
 
 
+            } else if (type == "nasabtwoharfism") {
 
-            }
-
-            else if (type == "nasabtwoharfism") {
-
-          //      val words =  arabicString.split(" ", limit = 3) // Split with limit to avoid more than needed
-                //     val firstWord = words.getOrNull(0) ?: ""
-            //    val secondWord = words.getOrNull(1) ?: ""
-
-                //  val restOfString = words.drop(2).joinToString(" ")
-                //   val totalLength = firstWord.length + secondWord.length + restOfString.length
-                //   val cleanedInput = arabicString.replace("...", "")
                 val parts = arabicString.split(" ", limit = 2)
 
                 // Get the first word and the rest of the string
@@ -1535,9 +1579,7 @@ if (w != null) {
                         mutableMapOf(ayahid to mutableListOf(spannableString))
                 }
             }
-            /*
-            negationCache.getOrPut(surahid) { mutableMapOf() }
-                .put(ayahid, Pair(spannableString, englishString))*/
+
         }
     }
 
@@ -1732,34 +1774,35 @@ if (w != null) {
             "brown", "light" -> R.color.bg_black
             else -> R.color.background_color_light_brown
         }
-     if(isNightmode=="dark" || isNightmode=="blue" ||isNightmode == "green"){
-        SimpleTooltip.Builder(context)
-            .anchorView(view)
-            .text(workBreakDown)
-            .backgroundColor(backgroundColor)
-            .gravity(Gravity.TOP)
-            .modal(true)
-            .arrowDrawable(android.R.drawable.ic_media_previous)
-            .arrowHeight(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
-            .arrowWidth(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
-            .build()
-            .show()
-    }else{
-         SimpleTooltip.Builder(context)
-             .anchorView(view)
-             .text(workBreakDown)
-           //  .backgroundColor(backgroundColor)
-             .gravity(Gravity.TOP)
-             .modal(true)
-             .arrowDrawable(android.R.drawable.ic_media_previous)
-             .arrowHeight(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
-             .arrowWidth(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
-             .build()
-             .show()
+        if (isNightmode == "dark" || isNightmode == "blue" || isNightmode == "green") {
+            SimpleTooltip.Builder(context)
+                .anchorView(view)
+                .text(workBreakDown)
+                .backgroundColor(backgroundColor)
+                .gravity(Gravity.TOP)
+                .modal(true)
+                .arrowDrawable(android.R.drawable.ic_media_previous)
+                .arrowHeight(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
+                .arrowWidth(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
+                .build()
+                .show()
+        } else {
+            SimpleTooltip.Builder(context)
+                .anchorView(view)
+                .text(workBreakDown)
+                //  .backgroundColor(backgroundColor)
+                .gravity(Gravity.TOP)
+                .modal(true)
+                .arrowDrawable(android.R.drawable.ic_media_previous)
+                .arrowHeight(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
+                .arrowWidth(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
+                .build()
+                .show()
 
 
-     }
-}
+        }
+    }
+
     fun setIconColors(surahInfoTextView: TextView, isNightMode: String, isMakkiMadani: Int) {
         val icon = if (isMakkiMadani == 1) {
             R.drawable.ic_makkah_48
