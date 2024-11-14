@@ -28,6 +28,7 @@ import com.example.mushafconsolidated.Entities.NounCorpus
 
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.SifaEntity
+import com.example.mushafconsolidated.Entities.SifaMudhafEnt
 import com.example.mushafconsolidated.Entities.TameezEnt
 import com.example.mushafconsolidated.Entities.VerbCorpus
 import com.example.mushafconsolidated.Entities.hanslexicon
@@ -160,6 +161,15 @@ class QuranViewModel @Inject constructor(
 
     }
 
+    fun getSifaMousoofFileterSurah(surah: Int): List<SifaMudhafEnt> {
+        return  this.quranRepository.getSifaMousoofFileterSurah(surah)
+
+    }
+
+    fun getSifaMousoofFileterSurahType(surah: Int,type: String): List<SifaMudhafEnt> {
+        return  this.quranRepository.getSifaMousoofFileterSurahType(surah,type)
+
+    }
 
 
 

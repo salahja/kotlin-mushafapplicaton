@@ -51,6 +51,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+
 import com.example.Constant
 import com.example.Constant.SURAHFRAGTAG
 import com.example.mushafconsolidated.Adapters.FlowAyahWordAdapterNoMafoolat
@@ -65,7 +66,6 @@ import com.example.mushafconsolidated.Entities.LiajlihiEnt
 import com.example.mushafconsolidated.Entities.MafoolBihi
 import com.example.mushafconsolidated.Entities.MafoolMutlaqEnt
 import com.example.mushafconsolidated.Entities.NegationEnt
-import com.example.mushafconsolidated.Entities.NewNasbEntity
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.SurahHeader
 import com.example.mushafconsolidated.Entities.TameezEnt
@@ -89,15 +89,17 @@ import com.example.mushafconsolidated.settingsimport.Constants
 import com.example.mushafconsolidatedimport.ParticleColorScheme
 import com.example.sentenceanalysis.SentenceGrammarAnalysis
 import com.example.utility.CorpusUtilityorig
+import com.example.utility.CorpusUtilityorig.Companion.HightLightKeyWordold
 
 import com.example.utility.CorpusUtilityorig.Companion.findWordOccurrencesArabic
-import com.example.utility.CorpusUtilityorig.Companion.highlightKeywords
 import com.example.utility.CorpusUtilityorig.Companion.searchForTameez
 import com.example.utility.QuranGrammarApplication.Companion.context
 
 import com.example.utility.QuranViewUtils.extractCase
 import com.example.utility.QuranViewUtils.extractInMaIllaNegativeSentences
-import com.example.utility.QuranViewUtils.extractSentenceAndTranslationFromWordIndices
+import com.example.utility.QuranViewUtils.extractSentenceAndTranslationFromNasabIndices
+import com.example.utility.QuranViewUtils.extractSentenceAndTranslationFromShartIndices
+import com.example.utility.QuranViewUtils.extractSentenceAndTranslationFromWordIndicesNewNasab
 import com.example.utility.QuranViewUtils.extractVerbType
 import com.example.utility.ScreenshotUtils
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -123,12 +125,14 @@ import java.io.File
 import java.io.OutputStreamWriter
 import javax.inject.Inject
 import kotlin.collections.List
+import kotlin.math.min
 import kotlin.collections.List as CollectionsList
 
 
 //import com.example.mushafconsolidated.Entities.JoinVersesTranslationDataTranslation;
 @AndroidEntryPoint
 class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
+
 
 
     private lateinit var extractedSentencesWithIndices: CollectionsList<Pair<String, Pair<Int, Int>>>
@@ -324,8 +328,8 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         //   QuranViewUtils.showIndexOfWindow(this,verse,word)
         val start = false
         if (start) {
-          mainLoopFromIndexExtraction()
-        //   mainLoopforIndexEXTRACTION()
+            mainLoopFromIndexExtraction()
+            //   mainLoopforIndexEXTRACTION()
             //extractExpNegationSentences()
         }
 
@@ -459,34 +463,55 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
 
         val allLamNegativeSenteces = ArrayList<List<String>>()
-
-        var lamNegationDataList: List<String> = emptyList()
+        val accsentece = ArrayList<Map<String, Any>>()
+        val accusativeSentencesCollection = mutableListOf<Map<String, Any>>()
+        var lamNeationDataList: List<String> = emptyList()
         //  val corpus = mainViewModel.getCorpusEntityFilterSurah(1)
         //   val quran = mainViewModel.getquranbySUrah(i)
         val utils = Utils(this)
         // val wordino = utils.getExpInMaIllaNegationall()
         //   val wordino = utils.getIllaPositiveAll()
-        val wordInfo: List<IllaPositive> =
-            utils.getIllaPositiveAll()
+        //   val wordInfo: List<IllaPositive> =         utils.getIllaPositiveAll()
         //   val wordino=  utils.getfutureall()
         //  val wordino= utils.getpresentall()
         //   val wordino=mainViewModel.getLamMudharyNegationAll()
+
+
+        // val wordInfo = utils.getNASAB()
+        //  val wordInfo=       utils.getNasbAall()
+        //  val wordInfo=utils.getKanaAll()
+   //  val wordInfo = utils.getLauAll()
+      //  val wordInfo = utils.getIzaAll()
+      val wordInfo=utils.getInALL()
+      //  val wordInfo=utils.getShartALL()
         for (s in wordInfo!!.indices) {
             val ss = wordInfo!![s]
             val corpusEntity = mainViewModel.getCorpusEntityFilterSurahAya(
-                ss.surahid, ss.ayahid
+                ss.surah, ss.ayah
             )
                     as ArrayList<CorpusEntity>
-            val quran = mainViewModel.getsurahayahVerses(ss.surahid, ss.ayahid)
-
-      lamNegationDataList =    extractSentenceAndTranslationFromWordIndices(
-                   corpusEntity,
-                   ss,
-                   quran.value!![0].qurantext
-               )
+            val quran = mainViewModel.getsurahayahVerses(ss.surah, ss.ayah)
 
 
-           //    val lamNegationDataList =              extractSentencesFromIndexdata(corpusEntity,ss, quran.value!![0].qurantext)
+          //   val lamNegationDataList =             extractSentenceAndTranslationFromShartIndices(corpusEntity,ss, quran.value!![0].qurantext)
+         //   val extractedSentences=extractConditionalSentencesLau(corpusEntity)
+            //  val lamNegationDataList =        extractSentenceAndTranslationFromNasabIndices(corpusEntity,ss, quran.value!![0].qurantext)
+            //val extractedSentences = extractAccusativeSentences(corpusEntity)
+            //val extractedSentences     = extractKanaSentences(corpusEntity)
+        val extractedSentences = extractConditionalSentencesWhenWithVerbsIN(corpusEntity,quran.value!![0].qurantext,quran.value!![0].translation)
+
+      //   val extractedSentences =    extractConditionalSentencesIZAWITHVERB(corpusEntity)
+     //       val extractedSentences =           extractConditionalSentencesWhenWithIZARSLT(corpusEntity)
+          //  val extractedSentences = extractConditionalSentencesIZAWITHRSLT(corpusEntity)
+
+            /*     lamNegationDataList = extractSentenceAndTranslationFromWordIndices(
+                     corpusEntity,
+                     ss,
+                     quran.value!![0].qurantext
+                 )
+     */
+
+            //    val lamNegationDataList =              extractSentencesFromIndexdata(corpusEntity,ss, quran.value!![0].qurantext)
             // val lamNegationDataList=         maaPastTenceNegation(corpusEntity, quran.value!![s].qurantext)
             //    val lamNegationDataList =                setPresentTenceNegationwithLA(corpusEntity, quran.value!![s].qurantext)
             //    val lamNegationDataList=         setMaaNegationPresent(corpusEntity, quran.value!![s].qurantext)
@@ -497,16 +522,186 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             // val lamNegationDataList =                extractInMaIllaSentences(corpusEntity, quran.value!![s].qurantext)
 
 
-            if (lamNegationDataList.isNotEmpty()) {
+           /* if (lamNegationDataList.isNotEmpty()) {
                 allLamNegativeSenteces.add(lamNegationDataList)
-                //  allLamNegativeSenteces.add(ExtractedSentence)
-            }
+
+            }*/
+            if (extractedSentences.isNotEmpty()) {
+                accusativeSentencesCollection.addAll(extractedSentences)
+
+
+               }
 
         }
+     //      val (setenceCollection, Sentences) = nasab(accusativeSentencesCollection)
+
+        val (setenceCollection, Sentences) = shart(accusativeSentencesCollection)
 
 
-        val fileName = "remaininexcept.csv"
-        writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
+
+        val fileName = "newin.csv"
+        writeNegationDataToFile(context!!, setenceCollection, fileName)
+
+     //   writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
+    }
+
+    private fun shart(accusativeSentencesCollection: MutableList<Map<String, Any>>): Pair<ArrayList<List<String>>, ArrayList<String>> {
+        val setenceCollection = ArrayList<List<String>>()
+        val Sentences = ArrayList<String>()
+
+        for (sentenceMap in accusativeSentencesCollection) {
+            val type = sentenceMap["type"] as String
+            val accWordNo = sentenceMap["accWordNo"] as Int
+
+            val sequence = if (type == "Scenario 1") {
+                sentenceMap["predicateSequence"] as List<CorpusRow>
+            } else {
+                sentenceMap["predicateSequence"] as List<CorpusRow>
+            }
+
+            val shartsequence = if (type == "Scenario 1") {
+                sentenceMap["predicateSequence"] as List<ShartCorpusRow>
+            } else {
+                sentenceMap["predicateSequence"] as List<ShartCorpusRow>
+            }
+            var delimitedString=""
+    delimitedString = shartInCollection(shartsequence, sentenceMap, delimitedString, type)
+
+
+          //   delimitedString = sequenceCollection(sequence, type, sentenceMap, delimitedString)
+
+            // Create the pipe-delimited string
+
+
+            // Add the delimited string as a list of strings to Sentences
+            Sentences.add(delimitedString)
+            setenceCollection.add(Sentences)
+        }
+        return Pair(setenceCollection, Sentences)
+    }
+
+    private fun shartInCollection(
+        shartsequence: List<ShartCorpusRow>,
+        sentenceMap: Map<String, Any>,
+        delimitedString: String,
+        type: String
+    ): String {
+        var delimitedString1 = delimitedString
+        if (shartsequence.isNotEmpty()) {
+
+            val condword =
+                sentenceMap["accWordNo"] as Int // Accessing the value for key "accWordNo"
+            val firstVerbWordno =
+                sentenceMap["firstVerb"] as Int // Accessing the value for key "emphaticVerbWordNo"
+            val secondVerbWordno = sentenceMap["secondVerb"] as Int
+            val endWord = sentenceMap["endword"] as Int
+            val surah = shartsequence[0].surah
+            val ayah = shartsequence[0].ayah
+            val firstWordNo = shartsequence[0].wordno
+            val wordNos = shartsequence.map { it.wordno }.joinToString(",")
+            val arabicText = shartsequence.joinToString(" ") { it.arabicText }
+            val englishText = shartsequence.joinToString(" ") { it.englishText }
+            val quranVerse = shartsequence[0].quranText
+            val translation = shartsequence[0].translation
+            val lastword = shartsequence.last().wordno
+            delimitedString1 =
+                "$type|$surah|$ayah|$wordNos|$condword|$firstVerbWordno|$secondVerbWordno|$endWord|$arabicText|$englishText|$quranVerse|$translation"
+        }
+        return delimitedString1
+    }
+
+    private fun sequenceCollection(
+        sequence: List<CorpusRow>,
+        type: String,
+        sentenceMap: Map<String, Any>,
+        delimitedString: String
+    ): String {
+        var delimitedString1 = delimitedString
+        if (sequence.isNotEmpty()) {
+            if (type == "ScenarioRSLT") {
+                val condword =
+                    sentenceMap["accWordNo"] as Int // Accessing the value for key "accWordNo"
+                val firstVerbWordno =
+                    sentenceMap["verbWordNo"] as Int // Accessing the value for key "emphaticVerbWordNo"
+                val resultWordNo = sentenceMap["resultWordNo"] as Int
+                val endWord = sentenceMap["endword"] as Int
+                val surah = sequence[0].surah
+                val ayah = sequence[0].ayah
+                val firstWordNo = sequence[0].wordno
+                val wordNos = sequence.map { it.wordno }.joinToString(",")
+                val arabicText = sequence.joinToString(" ") { it.arabicText }
+                val englishText = sequence.joinToString(" ") { it.englishText }
+                val lastword = sequence.last().wordno
+                delimitedString1 =
+                    "$type|$surah|$ayah|$wordNos|$condword|$firstVerbWordno|$resultWordNo|$endWord|$arabicText|$englishText"
+            } else
+                if (type == "Scenario 1") {
+                    val condword =
+                        sentenceMap["accWordNo"] as Int // Accessing the value for key "accWordNo"
+                    val emphaticVerbWordNo =
+                        sentenceMap["emphaticVerbWordNo"] as Int // Accessing the value for key "emphaticVerbWordNo"
+                    val endword = sentenceMap["endword"] as Int
+                    val surah = sequence[0].surah
+                    val ayah = sequence[0].ayah
+                    val firstWordNo = sequence[0].wordno
+                    val wordNos = sequence.map { it.wordno }.joinToString(",")
+                    val arabicText = sequence.joinToString(" ") { it.arabicText }
+                    val englishText = sequence.joinToString(" ") { it.englishText }
+                    val lastword = sequence.last().wordno
+                    delimitedString1 =
+                        "$type|$surah|$ayah|$wordNos|$condword|$emphaticVerbWordNo|$endword|$arabicText|$englishText"
+                } else {
+                    val condword =
+                        sentenceMap["accWordNo"] as Int // Accessing the value for key "accWordNo"
+                    val firstVerbWordno =
+                        sentenceMap["firstPerfectVerb"] as Int // Accessing the value for key "emphaticVerbWordNo"
+                    val secondVerbWordno = sentenceMap["secondPerfectVerb"] as Int
+                    val endWord = sentenceMap["endword"] as Int
+                    val surah = sequence[0].surah
+                    val ayah = sequence[0].ayah
+                    val firstWordNo = sequence[0].wordno
+                    val wordNos = sequence.map { it.wordno }.joinToString(",")
+                    val arabicText = sequence.joinToString(" ") { it.arabicText }
+                    val englishText = sequence.joinToString(" ") { it.englishText }
+
+                    val lastword = sequence.last().wordno
+                    delimitedString1 =
+                        "$type|$surah|$ayah|$wordNos|$condword|$firstVerbWordno|$secondVerbWordno|$endWord|$arabicText|$englishText"
+                }
+        }
+        return delimitedString1
+    }
+
+    private fun nasab(accusativeSentencesCollection: MutableList<Map<String, Any>>): Pair<ArrayList<List<String>>, ArrayList<String>> {
+        val setenceCollection = ArrayList<List<String>>()
+        val Sentences = ArrayList<String>()
+        for (sentenceMap in accusativeSentencesCollection) {
+            val type = sentenceMap["type"] as String
+            val accWordNo = sentenceMap["accWordNo"] as Int
+
+            val sequence = if (type == "Scenario 1") {
+                sentenceMap["predicateSequence"] as List<CorpusRow>
+            } else {
+                sentenceMap["accSequence"] as List<CorpusRow>
+            }
+
+            val surah = sequence[0].surah
+            val ayah = sequence[0].ayah
+            val firstWordNo = sequence[0].wordno
+            val wordNos = sequence.map { it.wordno }.joinToString(",")
+            val arabicText = sequence.joinToString(" ") { it.arabicText }
+            val englishText = sequence.joinToString(" ") { it.englishText }
+            val lastword = sequence.last().wordno
+
+            // Create the pipe-delimited string
+            val delimitedString =
+                "$type|$surah|$ayah|$wordNos|$firstWordNo|$lastword|$arabicText|$englishText"
+
+            // Add the delimited string as a list of strings to Sentences
+            Sentences.add(delimitedString)
+            setenceCollection.add(Sentences)
+        }
+        return Pair(setenceCollection, Sentences)
     }
 
     private fun extractExpNegationSentences() {
@@ -544,75 +739,6 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     }
 
     private fun mainLoopforErabStringEXTRACTION() {
-        mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
-        val utils = Utils(this)
-        val allLamNegativeSenteces = ArrayList<List<String>>()
-        // val allLamNegativeSenteces =                             ArrayList<List<Pair<String, String>>>()
-        var allofQuran: List<QuranEntity>? = null
-        val text =
-            "(مِنْ آيَةٍ) جار ومجرور متعلقان بمحذوف صفة من ما والمعنى أي شيء ننسخ من الآيات وقيل متعلقان بمحذوف حال من ما، وقال بعضهم من زائدة وآية تمييز"
-        val regex = "\\(([^)]+)\\)(?:\\s+\\w+)*\\s+(تمييز|تمييز\\.|التمييز)".toRegex()
-
-        val match = regex.find(text)
-        if (match != null) {
-            val wordInParentheses = match.groupValues[1]
-            val keyword = match.groupValues[2]
-            println("Word in parentheses: $wordInParentheses")
-            println("Keyword: $keyword")
-        }
-
-        for (i in 1..114) {
-            val quran = utils.getQuranbySurah(i)
-            //     val quran = mainViewModel.getquranbySUrah(i)
-
-
-                /*    val corpusEntity = mainViewModel.getCorpusEntityFilterSurahAya(
-                        i, quran.value!![s].ayah
-                    ) as ArrayList<CorpusEntity>*/
-
-                val lamNegationDataList = searchForTameez(quran)
-
-                //test with surah 11 ayah 81
-
-
-                //     val lamNegationDataList = QuranViewUtils.collectBrokenPlurals(corpusEntity,quran.value!![s].qurantext)
-                // val lamNegationDataList =             setPresentTenceNegationwithLA(corpusEntity, quran.value!![s].qurantext)//GOOD
-
-
-                //    val lamNegationDataList=         setMaaNegationPresent(corpusEntity, quran.value!![s].qurantext)//good
-                // val lamNegationDataList=         setLunNegation(corpusEntity, quran.value!![s].qurantext)//good
-
-
-                //  val lamNegationDataList =      setLamNegation(corpusEntity, quran.value!![s].qurantext)good
-                //   val lamNegationDataList =     maaPastTenceNegation(corpusEntity, quran.value!![s].qurantext)
-
-
-                // val lamNegationDataList=         setJumlaIsmiyaNegationMaaLaysa(corpusEntity, quran.value!![s].qurantext)
-
-                //   val lamNegationDataList =             extractInMaIllaNegativeSentences(corpusEntity, quran.value!![s].qurantext)
-
-                //   val lamNegationDataList =           extractInMaIllaPositiveSentences(corpusEntity, quran.value!![s].qurantext)
-
-                //  val lamNegationDataList =        extractProhibitiveSentences(corpusEntity, quran.value!![s].qurantext)
-                //  val lamNegationDataList =  QuranViewUtils.extractMudafMudafIlaih(corpusEntity, quran.value!![s].qurantext)
-                /*    val list = extractMousufSifa(corpusEntity,quran.value!![s].qurantext)//working
-
-                    if (list.isNotEmpty()) {
-                        allLamNegativeSenteces.add(list)
-                    }*/
-                if (lamNegationDataList.isNotEmpty()) {
-                    allLamNegativeSenteces.add(lamNegationDataList)
-                    //  allLamNegativeSenteces.add(ExtractedSentence)
-                }
-
-
-
-
-        }
-        val fileName = "sifatr.csv"
-        writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
-    }
-    private fun mainLoopforIndexEXTRACTION() {
         mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
         val utils = Utils(this)
         val allLamNegativeSenteces = ArrayList<List<String>>()
@@ -675,16 +801,2625 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             }
 
 
+        }
+        val fileName = "sifatr.csv"
+        writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
+    }
+
+    data class CorpusRow(
+        val surah: Int,
+        val ayah: Int,
+        val wordno: Int,
+        val tags: List<String?>,  // Represents tagone to tagfive
+        val details: List<String?>,
+        val arabicText: String,
+        val englishText: String  // Represents concatenated araone to arafive
+
+    )
+    data class ShartCorpusRow(
+        val surah: Int,
+        val ayah: Int,
+        val wordno: Int,
+        val tags: List<String?>,  // Represents tagone to tagfive
+        val details: List<String?>,
+        val arabicText: String,
+        val englishText: String,  // Represents concatenated araone to arafive
+        val quranText: String,
+        val translation: String
+    )
+
+
+
+    private fun mainLoopforIndexEXTRACTION() {
+        mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
+        val utils = Utils(this)
+        val allLamNegativeSenteces = ArrayList<List<String>>()
+        // val allLamNegativeSenteces =                             ArrayList<List<Pair<String, String>>>()
+        var allofQuran: List<QuranEntity>? = null
+        /*
+                val text =
+                    "(مِنْ آيَةٍ) جار ومجرور متعلقان بمحذوف صفة من ما والمعنى أي شيء ننسخ من الآيات وقيل متعلقان بمحذوف حال من ما، وقال بعضهم من زائدة وآية تمييز"
+                val regex = "\\(([^)]+)\\)(?:\\s+\\w+)*\\s+(تمييز|تمييز\\.|التمييز)".toRegex()
+
+                val match = regex.find(text)
+                if (match != null) {
+                    val wordInParentheses = match.groupValues[1]
+                    val keyword = match.groupValues[2]
+                    println("Word in parentheses: $wordInParentheses")
+                    println("Keyword: $keyword")
+                }
+        */
+
+        for (i in 11..114) {
+            //   val quran = utils.getQuranbySurah(i)
+            val quran = mainViewModel.getquranbySUrah(i)
+
+
+            val corpusEntity = mainViewModel.getCorpusEntityFilterSurahAya(
+                i, quran.value!![1].ayah
+            ) as ArrayList<CorpusEntity>
+            val extractAccusativeSentences = extractAccusativeSentences(corpusEntity)
+            println("check")
+            //     val lamNegationDataList = searchForTameez(quran)
+
+            //test with surah 11 ayah 81
+
+
+            //     val lamNegationDataList = QuranViewUtils.collectBrokenPlurals(corpusEntity,quran.value!![s].qurantext)
+            // val lamNegationDataList =             setPresentTenceNegationwithLA(corpusEntity, quran.value!![s].qurantext)//GOOD
+
+
+            //    val lamNegationDataList=         setMaaNegationPresent(corpusEntity, quran.value!![s].qurantext)//good
+            // val lamNegationDataList=         setLunNegation(corpusEntity, quran.value!![s].qurantext)//good
+
+
+            //  val lamNegationDataList =      setLamNegation(corpusEntity, quran.value!![s].qurantext)good
+            //   val lamNegationDataList =     maaPastTenceNegation(corpusEntity, quran.value!![s].qurantext)
+
+
+            // val lamNegationDataList=         setJumlaIsmiyaNegationMaaLaysa(corpusEntity, quran.value!![s].qurantext)
+
+            //   val lamNegationDataList =             extractInMaIllaNegativeSentences(corpusEntity, quran.value!![s].qurantext)
+
+            //   val lamNegationDataList =           extractInMaIllaPositiveSentences(corpusEntity, quran.value!![s].qurantext)
+
+            //  val lamNegationDataList =        extractProhibitiveSentences(corpusEntity, quran.value!![s].qurantext)
+            //  val lamNegationDataList =  QuranViewUtils.extractMudafMudafIlaih(corpusEntity, quran.value!![s].qurantext)
+            /*    val list = extractMousufSifa(corpusEntity,quran.value!![s].qurantext)//working
+
+                if (list.isNotEmpty()) {
+                    allLamNegativeSenteces.add(list)
+                }*/
+            /*     if (lamNegationDataList.isNotEmpty()) {
+                     allLamNegativeSenteces.add(lamNegationDataList)
+
+                 }
+     */
 
 
         }
-        val fileName = "sifatr.csv"
+        val fileName = "mudhaftr.csv"
         writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
     }
 
     // Function to remove Arabic vowels and diacritics, leaving only consonants
 
     // Function to check for broken plural pattern by replacing consonants
+
+    fun extractAccusativeSentences(corpusData: List<CorpusEntity>): List<Map<String, Any>> {
+        val accusativeSentences = mutableListOf<Map<String, Any>>()
+
+        for (i in corpusData.indices) {
+            val row = corpusData[i]
+            val tags = listOf(
+                row.tagone,
+                row.tagtwo,
+                row.tagthree,
+                row.tagfour,
+                row.tagfive
+            ) // Create tags list
+            val detailstag = listOf(
+                row.detailsone,
+                row.detailstwo,
+                row.detailsthree,
+                row.detailsfour,
+                row.detailsfive
+            )
+
+            if ("ACC" in tags && "PRON" in tags) {
+                val accWordNo = row.wordno
+                //     val predicateSequence = findSequenceEndingInNom(corpusData, startIndex = i)
+                val predicateSequence = findSequenceEndingInNomold(corpusData, startIndex = i)
+                if (predicateSequence != null) {
+                    accusativeSentences.add(
+                        mapOf(
+                            "type" to "Scenario 1",
+                            "accWordNo" to accWordNo,
+                            "predicateSequence" to predicateSequence
+                        )
+                    )
+                }
+            } else if ("ACC" in tags) {
+                val accWordNo = row.wordno
+                //   val accSequence = findAccNounSequenceEndingInNom(corpusData, startIndex = i)
+                // val accSequence = findAccNounSequenceEndingInNomoldnew(corpusData, startIndex = i)
+                if (row.surah == 11 && row.ayah == 90) {
+                    println("check")
+                }
+                val accSequence = findAccNounSequenceEndingInNomLatest(corpusData, startIndex = i)
+                if (accSequence != null) {
+                    accusativeSentences.add(
+                        mapOf(
+                            "type" to "Scenario 2",
+                            "accWordNo" to accWordNo,
+                            "accSequence" to accSequence
+                        )
+                    )
+                }/* else {
+                    // Capture surah and ayah if no sequence found
+                    accusativeSentences.add(
+                        mapOf(
+                            "type" to "No sequence found for Scenario 2",
+                            "surah" to row.surah,
+                            "ayah" to row.ayah
+                        )
+                    )
+                }*/
+            }
+
+        }
+
+        return accusativeSentences
+    }
+
+    fun extractConditionalSentences(data: List<CorpusEntity>): List<Map<String, Any>> {
+        val conditionalSentences = mutableListOf<Map<String, Any>>()
+
+        for (i in data.indices) {
+            val row = data[i]
+
+            // Check if any tag is "COND" and the corresponding Arabic text is "لَوْ", "أَوَلَوْ", or "وَلَوْ"
+            val tags = listOf(row.tagone, row.tagtwo, row.tagthree, row.tagfour, row.tagfive)
+            val arabicWords =
+                listOf(row.araone + row.aratwo + row.arathree + row.arafour + row.arafive)
+
+            val isConditional = tags.zip(arabicWords).any { (tag, word) ->
+                tag == "COND" && (word == "لَوْ" || word == "أَوَلَوْ" || word == "وَلَوْ")
+            }
+
+            if (isConditional) {
+                val sequence = mutableListOf<CorpusRow>()
+                val accWordNo = row.wordno
+                var foundEmphaticVerb = false
+
+                // Start capturing the sequence from the conditional word
+                for (j in i until data.size) {
+                    val currentRow = data[j]
+                    val currentTags = listOf(
+                        currentRow.tagone, currentRow.tagtwo, currentRow.tagthree,
+                        currentRow.tagfour, currentRow.tagfive
+                    )
+                    val currentArabicWords = listOf(
+                        currentRow.araone, currentRow.aratwo, currentRow.arathree,
+                        currentRow.arafour, currentRow.arafive
+                    )
+
+                    // Create CorpusRow for the current entry
+                    val corpusRow = CorpusRow(
+                        surah = currentRow.surah,
+                        ayah = currentRow.ayah,
+                        wordno = currentRow.wordno,
+                        tags = currentTags,
+                        details = listOf(
+                            currentRow.detailsone, currentRow.detailstwo,
+                            currentRow.detailsthree, currentRow.detailsfour,
+                            currentRow.detailsfive
+                        ),
+                        arabicText = currentArabicWords.joinToString(""),
+                        englishText = currentRow.en
+                    )
+
+                    sequence.add(corpusRow)
+
+                    // Check for an emphatic verb (EMPH followed by a verb starting with "V")
+                    val emphIndex = currentTags.indexOf("EMPH")
+                    foundEmphaticVerb = if (emphIndex != -1 && emphIndex + 1 < currentTags.size) {
+                        currentTags[emphIndex + 1] == "V" && currentArabicWords[emphIndex + 1]!!.startsWith(
+                            "V"
+                        )
+                    } else {
+                        false
+                    }
+
+                    // Capture only the first emphatic verb sequence, if found
+                    if (foundEmphaticVerb) {
+                        break
+                    }
+                }
+
+                // Set the end word number based on where the sequence stopped
+                val endWordNo = sequence.lastOrNull()?.wordno ?: accWordNo
+
+                // Add the captured data to the conditional sentences list
+                conditionalSentences.add(
+                    mapOf(
+                        "type" to "Scenario 1",
+                        "accWordNo" to accWordNo,
+                        "emphaticVerbWordNo" to endWordNo,
+                        "predicateSequence" to sequence
+                    )
+                )
+                /*      conditionalSentences.add(
+                          mapOf(
+                              "type" to "Scenario 1",
+                              "surah" to row.surah,
+                              "ayah" to row.ayah,
+                              "accWordNo" to accWordNo,
+                              "emphaticVerbWordNo" to endWordNo,
+                              "arabicText" to sequence.joinToString(" ") { it.arabicText },
+                              "englishTranslation" to sequence.joinToString(" ") { it.englishText }
+                          )
+                      )*/
+            }
+        }
+
+        return conditionalSentences
+    }
+
+    fun extractConditionalSentencesv2(data: List<CorpusEntity>): List<Map<String, Any>> {
+        val conditionalSentences = mutableListOf<Map<String, Any>>()
+
+        for (i in data.indices) {
+            val row = data[i]
+
+            // Check if any tag is "COND" and the corresponding Arabic text is "لَوْ", "أَوَلَوْ", or "وَلَوْ"
+            val tags = listOf(row.tagone, row.tagtwo, row.tagthree, row.tagfour, row.tagfive)
+            val arabicWords =
+                listOf(row.araone + row.aratwo + row.arathree + row.arafour + row.arafive)
+
+            val isConditional = tags.zip(arabicWords).any { (tag, word) ->
+                tag == "COND" && (word == "لَوْ" || word == "أَوَلَوْ" || word == "وَلَوْ")
+            }
+
+            if (isConditional) {
+                val sequence = mutableListOf<CorpusRow>()
+                val accWordNo = row.wordno
+                var foundEmphaticVerb = false
+
+                // Start capturing the sequence from the conditional word
+                for (j in i until data.size) {
+                    val currentRow = data[j]
+                    val currentTags = listOf(
+                        currentRow.tagone, currentRow.tagtwo, currentRow.tagthree,
+                        currentRow.tagfour, currentRow.tagfive
+                    )
+                    val currentArabicWords = listOf(
+                        currentRow.araone, currentRow.aratwo, currentRow.arathree,
+                        currentRow.arafour, currentRow.arafive
+                    )
+
+                    // Create CorpusRow for the current entry
+                    val corpusRow = CorpusRow(
+                        surah = currentRow.surah,
+                        ayah = currentRow.ayah,
+                        wordno = currentRow.wordno,
+                        tags = currentTags,
+                        details = listOf(
+                            currentRow.detailsone, currentRow.detailstwo,
+                            currentRow.detailsthree, currentRow.detailsfour,
+                            currentRow.detailsfive
+                        ),
+                        arabicText = currentArabicWords.joinToString(""),
+                        englishText = currentRow.en
+                    )
+
+                    sequence.add(corpusRow)
+
+                    // Check for an emphatic verb (EMPH followed by a verb starting with "V")
+                    val emphIndex = currentTags.indexOf("EMPH")
+                    foundEmphaticVerb = if (emphIndex != -1 && emphIndex + 1 < currentTags.size) {
+                        currentTags[emphIndex + 1] == "V" && currentArabicWords[emphIndex + 1]!!.startsWith(
+                            "V"
+                        )
+                    } else {
+                        false
+                    }
+
+                    if (foundEmphaticVerb || sequence.size >= 5) {
+                        //      break
+                    }
+                }
+
+                // Capture sequence up to the emphatic verb if found, otherwise capture the entire sentence
+                val endWordNo =
+                    if (foundEmphaticVerb) sequence.last().wordno else sequence.last().wordno
+
+                // Add the captured data to the conditional sentences list
+                conditionalSentences.add(
+                    mapOf(
+                        "type" to "Scenario 1",
+                        "accWordNo" to accWordNo,
+                        "emphaticVerbWordNo" to endWordNo,
+                        "predicateSequence" to sequence
+                    )
+                )
+            }
+        }
+
+        return conditionalSentences
+    }
+    fun extractConditionalSentencesIZAWITHVERB(data: List<CorpusEntity>): List<Map<String, Any>> {
+        val conditionalSentences = mutableListOf<Map<String, Any>>()
+
+        for (i in data.indices) {
+            val row = data[i]
+            val tags = listOf(row.tagone, row.tagtwo, row.tagthree, row.tagfour, row.tagfive)
+            val arabicWord = row.araone + row.aratwo + row.arathree + row.arafour + row.arafive
+
+            // Check if this row is a conditional word (إِذَا, فَإِذَا, وَإِذَا)
+            val isCondi = tags.any { it?.contains("T") == true }
+            val isWord = arabicWord.contains("إِذَا") || arabicWord.contains("فَإِذَا") || arabicWord.contains("وَإِذَا")
+
+            if (isCondi && isWord) {
+                val sequence = mutableListOf<CorpusRow>()
+                val condWord = row.wordno
+                var firstPerfectVerb: Int? = null
+                var secondPerfectVerb: Int? = null
+                var wordsCapturedAfterSecondVerb = 0
+
+                // Add ":" after the conditional word
+                val initialCorpusRow = CorpusRow(
+                    surah = row.surah,
+                    ayah = row.ayah,
+                    wordno = row.wordno,
+                    tags = tags,
+                    details = listOf(row.detailsone, row.detailstwo, row.detailsthree, row.detailsfour, row.detailsfive),
+                    arabicText = arabicWord + ":",  // Adding delimiter after the conditional word
+                    englishText = row.en
+                )
+                sequence.add(initialCorpusRow)
+
+                // Start capturing from the conditional word
+                for (j in i + 1 until data.size) {
+                    val currentRow = data[j]
+                    val currentTags = listOf(
+                        currentRow.tagone, currentRow.tagtwo, currentRow.tagthree,
+                        currentRow.tagfour, currentRow.tagfive
+                    )
+                    val currentDetails = listOf(
+                        currentRow.detailsone, currentRow.detailstwo, currentRow.detailsthree,
+                        currentRow.detailsfour, currentRow.detailsfive
+                    )
+                    val currentArabicWords = currentRow.araone + currentRow.aratwo + currentRow.arathree +
+                            currentRow.arafour + currentRow.arafive
+
+                    // Check for perfect verbs in details
+                    val isPerfectVerb = currentDetails.any { it?.contains("PERF") == true }
+
+                    // Add ":" before the second perfect verb
+                    val modifiedArabicText = when {
+                        firstPerfectVerb == null && isPerfectVerb -> {
+                            firstPerfectVerb = currentRow.wordno
+                            currentArabicWords // No delimiter for the first perfect verb
+                        }
+                        secondPerfectVerb == null && isPerfectVerb -> {
+                            secondPerfectVerb = currentRow.wordno
+                            ":" + currentArabicWords // Add ":" before the second perfect verb
+                        }
+                        else -> currentArabicWords
+                    }
+
+                    // Create CorpusRow with modified arabicText
+                    val corpusRow = CorpusRow(
+                        surah = currentRow.surah,
+                        ayah = currentRow.ayah,
+                        wordno = currentRow.wordno,
+                        tags = currentTags,
+                        details = currentDetails,
+                        arabicText = modifiedArabicText,
+                        englishText = currentRow.en
+                    )
+                    sequence.add(corpusRow)
+
+                    // Count words after the second perfect verb
+                    if (secondPerfectVerb != null) {
+                        wordsCapturedAfterSecondVerb++
+                    }
+
+                    // Exit condition for capturing up to 4 words after the second perfect verb
+                    if (secondPerfectVerb != null && (wordsCapturedAfterSecondVerb == 4 ||
+                                j == data.size - 1 || currentRow.ayah != row.ayah || currentRow.surah != row.surah)) {
+
+                        conditionalSentences.add(
+                            mapOf(
+                                "type" to "Scenario 2",
+                                "accWordNo" to condWord,
+                                "firstPerfectVerb" to (firstPerfectVerb ?: -1),
+                                "secondPerfectVerb" to (secondPerfectVerb ?: -1),
+                                "endword" to currentRow.wordno,
+                                "predicateSequence" to sequence
+                            )
+                        )
+                        break
+                    }
+                }
+            }
+        }
+        return conditionalSentences
+    }
+
+    fun extractConditionalSentencesIZAWITHVERBprevious(data: List<CorpusEntity>): List<Map<String, Any>> {
+        val conditionalSentences = mutableListOf<Map<String, Any>>()
+
+        for (i in data.indices) {
+            val row = data[i]
+            val tags = listOf(row.tagone, row.tagtwo, row.tagthree, row.tagfour, row.tagfive)
+            val arabicWord = row.araone + row.aratwo + row.arathree + row.arafour + row.arafive
+
+            // Check if this row is a conditional word (إِذَا, فَإِذَا, وَإِذَا)
+            val isCondi = tags.any { it?.contains("T") == true }
+            val isWord = arabicWord.contains("إِذَا") || arabicWord.contains("فَإِذَا") || arabicWord.contains("وَإِذَا")
+            if (isCondi && isWord) {
+                val sequence = mutableListOf<CorpusRow>()
+                val condWord = row.wordno
+                var firstPerfectVerb: Int? = null
+                var secondPerfectVerb: Int? = null
+                var wordsCapturedAfterSecondVerb = 0
+
+                // Start capturing from the conditional word
+                for (j in i until data.size) {
+                    val currentRow = data[j]
+                    val currentDetails = listOf(
+                        currentRow.detailsone, currentRow.detailstwo, currentRow.detailsthree,
+                        currentRow.detailsfour, currentRow.detailsfive
+                    )
+
+                    // Add current row to sequence
+                    val corpusRow = CorpusRow(
+                        surah = currentRow.surah,
+                        ayah = currentRow.ayah,
+                        wordno = currentRow.wordno,
+                        tags = listOf(
+                            currentRow.tagone, currentRow.tagtwo, currentRow.tagthree,
+                            currentRow.tagfour, currentRow.tagfive
+                        ),
+                        details = currentDetails,
+                        arabicText = currentRow.araone + currentRow.aratwo + currentRow.arathree +
+                                currentRow.arafour + currentRow.arafive,
+                        englishText = currentRow.en
+                    )
+                    sequence.add(corpusRow)
+
+                    // Check for perfect verbs in details
+                    if(currentDetails.any { it?.contains("PERF")==true }){
+
+                        when {
+                            firstPerfectVerb == null -> firstPerfectVerb = currentRow.wordno
+                            secondPerfectVerb == null -> secondPerfectVerb = currentRow.wordno
+                        }
+                    } else if (secondPerfectVerb != null) {
+                        // Increment the words captured after second perfect verb
+                        wordsCapturedAfterSecondVerb++
+                    }
+
+                    // Exit condition for capturing up to 4 words after second perfect verb
+                    if (secondPerfectVerb != null && (wordsCapturedAfterSecondVerb == 4 ||
+                                j == data.size - 1 || currentRow.ayah != row.ayah || currentRow.surah != row.surah)) {
+
+                        conditionalSentences.add(
+                            mapOf(
+                                "type" to "Scenario 2",
+                                "accWordNo" to condWord,
+                                "firstPerfectVerb" to (firstPerfectVerb ?: -1),
+                                "secondPerfectVerb" to (secondPerfectVerb ?: -1),
+                                "endword" to currentRow.wordno,
+                                "predicateSequence" to sequence
+                            )
+                        )
+                        break
+                    }
+                }
+            }
+        }
+        return conditionalSentences
+    }
+    fun extractConditionalSentencesWhenWithIZARSLT(data: List<CorpusEntity>): List<Map<String, Any>> {
+        val conditionalSentences = mutableListOf<Map<String, Any>>()
+
+        for (i in data.indices) {
+            val row = data[i]
+            val tags = listOf(row.tagone, row.tagtwo, row.tagthree, row.tagfour, row.tagfive)
+            val arabicWord = row.araone + row.aratwo + row.arathree + row.arafour + row.arafive
+
+            // Check if this row is a conditional word (إِذَا, فَإِذَا, وَإِذَا)
+            val isCondi = tags.any { it?.contains("T") == true }
+            val isWord = arabicWord.contains("إِذَا") || arabicWord.contains("فَإِذَا") || arabicWord.contains("وَإِذَا")
+            var verbWordNo = -1
+            var resultWordNo = -1
+            var wordsCapturedAfterResult = 0
+
+            if (isCondi && isWord) {
+                val sequence = mutableListOf<CorpusRow>()
+                val condWord = row.wordno
+                var verbFound = false
+                var resultFound = false
+
+                // Add ":" after the conditional word
+                val initialCorpusRow = CorpusRow(
+                    surah = row.surah,
+                    ayah = row.ayah,
+                    wordno = row.wordno,
+                    tags = tags,
+                    details = listOf(row.detailsone, row.detailstwo, row.detailsthree, row.detailsfour, row.detailsfive),
+                    arabicText = arabicWord + ":",  // Adding delimiter after the conditional word
+                    englishText = row.en
+                )
+                sequence.add(initialCorpusRow)
+
+                // Start capturing from the conditional word
+                for (j in i + 1 until data.size) {
+                    val currentRow = data[j]
+                    val currentTags = listOf(
+                        currentRow.tagone, currentRow.tagtwo, currentRow.tagthree,
+                        currentRow.tagfour, currentRow.tagfive
+                    )
+                    val currentDetails = listOf(
+                        currentRow.detailsone, currentRow.detailstwo, currentRow.detailsthree,
+                        currentRow.detailsfour, currentRow.detailsfive
+                    )
+                    val currentArabicWords = currentRow.araone + currentRow.aratwo + currentRow.arathree +
+                            currentRow.arafour + currentRow.arafive
+
+                    // Look for the verb first
+                    if (!verbFound && currentTags.any { it?.contains("V") == true }) {
+                        verbFound = true
+                        verbWordNo = currentRow.wordno
+                    }
+                    // After finding a verb, look for the RSLT tag and add ":" before it
+                    else if (verbFound && !resultFound && currentTags.any { it?.contains("RSLT") == true }) {
+                        resultFound = true
+                        resultWordNo = currentRow.wordno
+                    }
+
+                    // Add ":" before the RSLT word
+                    val modifiedArabicText = if (resultFound && resultWordNo == currentRow.wordno) {
+                        ":" + currentArabicWords // Adding ":" before RSLT word
+                    } else {
+                        currentArabicWords
+                    }
+
+                    // Add the modified current row to the sequence
+                    val corpusRow = CorpusRow(
+                        surah = currentRow.surah,
+                        ayah = currentRow.ayah,
+                        wordno = currentRow.wordno,
+                        tags = currentTags,
+                        details = currentDetails,
+                        arabicText = modifiedArabicText,
+                        englishText = currentRow.en
+                    )
+                    sequence.add(corpusRow)
+
+                    // Start counting words after the RSLT tag
+                    if (resultFound) {
+                        wordsCapturedAfterResult++
+                    }
+
+                    // Exit condition for capturing up to 4 words after the RSLT tag
+                    if (resultFound && (wordsCapturedAfterResult == 4 ||
+                                j == data.size - 1 || currentRow.ayah != row.ayah || currentRow.surah != row.surah)) {
+
+                        conditionalSentences.add(
+                            mapOf(
+                                "type" to "ScenarioRSLT",
+                                "accWordNo" to condWord,
+                                "verbWordNo" to verbWordNo,
+                                "resultWordNo" to resultWordNo,
+                                "endword" to currentRow.wordno,
+                                "predicateSequence" to sequence
+                            )
+                        )
+                        break
+                    } else if (j == data.size - 1) {
+                        conditionalSentences.add(
+                            mapOf(
+                                "type" to "ScenarioRSLT",
+                                "accWordNo" to condWord,
+                                "verbWordNo" to verbWordNo,
+                                "resultWordNo" to resultWordNo,
+                                "endword" to currentRow.wordno,
+                                "predicateSequence" to sequence
+                            )
+                        )
+                        return conditionalSentences
+                    }
+                }
+            }
+        }
+        return conditionalSentences
+    }
+
+    fun extractConditionalSentencesWhenWithIZARSLTprevious(data: List<CorpusEntity>): List<Map<String, Any>> {
+        val conditionalSentences = mutableListOf<Map<String, Any>>()
+
+        for (i in data.indices) {
+            val row = data[i]
+            val tags = listOf(row.tagone, row.tagtwo, row.tagthree, row.tagfour, row.tagfive)
+            val arabicWord = row.araone + row.aratwo + row.arathree + row.arafour + row.arafive
+
+            // Check if this row is a conditional word (إِذَا, فَإِذَا, وَإِذَا)
+            val isCondi = tags.any { it?.contains("T") == true }
+            val isWord = arabicWord.contains("إِذَا") || arabicWord.contains("فَإِذَا") || arabicWord.contains("وَإِذَا")
+            var verbWordNo = -1
+            var resultWordNo = -1
+            var endword=-1
+            var wordsCapturedAfterSecondVerb = 0
+            if (isCondi && isWord) {
+                val sequence = mutableListOf<CorpusRow>()
+                val condWord = row.wordno
+                var verbFound = false
+                var resultFound = false
+                var wordsCapturedAfterResult = 0
+
+                // Start capturing from the conditional word
+                for (j in i until data.size) {
+                    val currentRow = data[j]
+                    val currentTags = listOf(
+                        currentRow.tagone, currentRow.tagtwo, currentRow.tagthree,
+                        currentRow.tagfour, currentRow.tagfive
+                    )
+                    val currentDetails = listOf(
+                        currentRow.detailsone, currentRow.detailstwo, currentRow.detailsthree,
+                        currentRow.detailsfour, currentRow.detailsfive
+                    )
+
+                    // Add current row to sequence
+                    val corpusRow = CorpusRow(
+                        surah = currentRow.surah,
+                        ayah = currentRow.ayah,
+                        wordno = currentRow.wordno,
+                        tags = currentTags,
+                        details = currentDetails,
+                        arabicText = currentRow.araone + currentRow.aratwo + currentRow.arathree +
+                                currentRow.arafour + currentRow.arafive,
+                        englishText = currentRow.en
+                    )
+                    sequence.add(corpusRow)
+
+                    // Look for the verb first
+                    if (!verbFound && currentTags.any { it?.contains("V") == true }) {
+                        verbFound = true
+                        verbWordNo=currentRow.wordno
+                    }
+                    // After finding a verb, look for the RSLT tag
+                    else if (verbFound && !resultFound && currentTags.any { it?.contains("RSLT") == true }) {
+                        resultFound = true
+                        resultWordNo=currentRow.wordno
+                    }
+                    // Start counting words after RSLT tag
+                    else if (resultFound) {
+                        wordsCapturedAfterResult++
+                    }
+
+                    // Exit condition for capturing up to 4 words after the RSLT tag
+                    if (resultFound && (wordsCapturedAfterResult == 4 ||
+                                j == data.size - 1 || currentRow.ayah != row.ayah || currentRow.surah != row.surah)) {
+
+                        conditionalSentences.add(
+                            mapOf(
+                                "type" to "ScenarioRSLT",
+                                "accWordNo" to condWord,
+                                "verbWordNo" to  verbWordNo ,
+                                "resultWordNo" to  resultWordNo ,
+                                "endword" to currentRow.wordno,
+                                "predicateSequence" to sequence
+                            )
+                        )
+                        break
+                    }else if(j==data.size-1){
+                        conditionalSentences.add(
+                            mapOf(
+                                "type" to "ScenarioRSLT",
+                                "accWordNo" to condWord,
+                                "verbWordNo" to  verbWordNo ,
+                                "resultWordNo" to  resultWordNo ,
+                                "endword" to currentRow.wordno,
+                                "predicateSequence" to sequence
+                            )
+                        )
+                        return conditionalSentences
+                    }
+                }
+            }
+        }
+        return conditionalSentences
+    }
+    fun extractConditionalSentencesWhenWithVerbsIN(
+        data: List<CorpusEntity>,
+        qurantext: String,
+        translation: String
+    ): List<Map<String, Any>> {
+        val conditionalSentences = mutableListOf<Map<String, Any>>()
+
+        for (i in data.indices) {
+            val row = data[i]
+            val tags = listOf(row.tagone, row.tagtwo, row.tagthree, row.tagfour, row.tagfive)
+            val arabicWord = row.araone + row.aratwo + row.arathree + row.arafour + row.arafive
+
+            // Check if this row is a conditional word
+            val isCondi = tags.any { it?.contains("COND") == true }
+            val isWord = arabicWord.contains("إِن") || arabicWord.contains("وَإِن") ||
+                    arabicWord.contains("فَإِن") || arabicWord.contains("أَفَإِي۟ن") || arabicWord.contains("وَلَئِنِ")
+
+            if (isCondi && isWord) {
+                val sequence = mutableListOf<ShartCorpusRow>()
+                val condWord = row.wordno
+                var firstVerb: Int? = null
+                var secondVerb: Int? = null
+                var wordsCapturedAfterSecondVerb = 0
+                var scenarioType = ""
+
+                // Add initial row with delimiter ":" after the conditional word
+                val initialShartCorpusRow = ShartCorpusRow(
+                    surah = row.surah,
+                    ayah = row.ayah,
+                    wordno = row.wordno,
+                    tags = tags,
+                    details = listOf(row.detailsone, row.detailstwo, row.detailsthree, row.detailsfour, row.detailsfive),
+                    arabicText = arabicWord + ":", // Add ":" after conditional word
+                    englishText = row.en,
+                    quranText = qurantext,
+                    translation = translation
+                )
+                sequence.add(initialShartCorpusRow)
+
+                for (j in i + 1 until data.size) {
+                    val currentRow = data[j]
+                    val currentTags = listOf(
+                        currentRow.tagone, currentRow.tagtwo, currentRow.tagthree,
+                        currentRow.tagfour, currentRow.tagfive
+                    )
+                    val currentDetails = listOf(
+                        currentRow.detailsone, currentRow.detailstwo, currentRow.detailsthree,
+                        currentRow.detailsfour, currentRow.detailsfive
+                    )
+                    val currentArabicText = currentRow.araone + currentRow.aratwo + currentRow.arathree +
+                            currentRow.arafour + currentRow.arafive
+
+                    var modifiedArabicText = currentArabicText
+
+                    // Determine the scenario type and find the first and second verbs
+                    if (scenarioType.isEmpty()) {
+                        if (currentDetails.any { it?.contains("PERF") == true }) {
+                            if (firstVerb == null) {
+                                firstVerb = currentRow.wordno
+                                scenarioType = "Scenario inmadhi"
+                            } else if (secondVerb == null) {
+                                secondVerb = currentRow.wordno
+                                modifiedArabicText = ":" + modifiedArabicText // Add ":" before second verb
+                            }
+                        } else if (currentDetails.any { it?.contains("MOOD:JUS") == true }) {
+                            if (firstVerb == null) {
+                                firstVerb = currentRow.wordno
+                                scenarioType = "Scenario injussive"
+                            } else if (secondVerb == null) {
+                                secondVerb = currentRow.wordno
+                                modifiedArabicText = ":" + modifiedArabicText // Add ":" before second verb
+                            }
+                        } else if (currentDetails.any { it?.contains("RSLT") == true } && scenarioType.isEmpty()) {
+                            scenarioType = "Scenario result"
+                            secondVerb = currentRow.wordno
+                        }
+                    } else {
+                        if ((scenarioType == "Scenario inmadhi" && currentDetails.any { it?.contains("PERF") == true } && secondVerb == null) ||
+                            (scenarioType == "Scenario injussive" && currentDetails.any { it?.contains("MOOD:JUS") == true } && secondVerb == null)) {
+                            secondVerb = currentRow.wordno
+                            modifiedArabicText = ":" + modifiedArabicText // Add ":" before second verb
+                        }
+                    }
+
+                    // Add the modified current row to the sequence
+                    val shartCorpusRow = ShartCorpusRow(
+                        surah = currentRow.surah,
+                        ayah = currentRow.ayah,
+                        wordno = currentRow.wordno,
+                        tags = currentTags,
+                        details = currentDetails,
+                        arabicText = modifiedArabicText,
+                        englishText = currentRow.en,
+                        quranText = qurantext,
+                        translation = translation
+                    )
+                    sequence.add(shartCorpusRow)
+
+                    // Increment the words captured after the second verb
+                    if (secondVerb != null || scenarioType == "Scenario result") {
+                        wordsCapturedAfterSecondVerb++
+                    }
+
+                    // Exit condition based on the scenario
+                    if ((secondVerb != null && wordsCapturedAfterSecondVerb == 4) ||
+                        (scenarioType == "Scenario result" && wordsCapturedAfterSecondVerb == 4) ||
+                        j == data.size - 1 || currentRow.ayah != row.ayah || currentRow.surah != row.surah) {
+
+                        conditionalSentences.add(
+                            mapOf(
+                                "type" to scenarioType,
+                                "accWordNo" to condWord,
+                                "firstVerb" to (firstVerb ?: -1),
+                                "secondVerb" to (secondVerb ?: -1),
+                                "endword" to currentRow.wordno,
+                                "predicateSequence" to sequence
+                            )
+                        )
+                        break
+                    }
+                }
+            }
+        }
+        return conditionalSentences
+    }
+
+    fun extractConditionalSentencesWhenWithVerbsINnodelimi(
+        data: List<CorpusEntity>,
+        qurantext: String,
+        translation: String
+    ): List<Map<String, Any>> {
+        val conditionalSentences = mutableListOf<Map<String, Any>>()
+
+        for (i in data.indices) {
+            val row = data[i]
+            val tags = listOf(row.tagone, row.tagtwo, row.tagthree, row.tagfour, row.tagfive)
+            val arabicWord = row.araone + row.aratwo + row.arathree + row.arafour + row.arafive
+
+            val isCondi = tags.any { it?.contains("COND") == true }
+            val isWord = arabicWord.contains("إِن") || arabicWord.contains("وَإِن") || arabicWord.contains("فَإِن") || arabicWord.contains("أَفَإِي۟ن")
+                    || arabicWord.contains("وَلَئِنِ") || arabicWord.contains("")
+
+            if (isCondi && isWord) {
+                val sequence = mutableListOf<ShartCorpusRow>()
+                val condWord = row.wordno
+                var firstVerb: Int? = null
+                var secondVerb: Int? = null
+                var wordsCapturedAfterSecondVerb = 0
+                var scenarioType = ""
+
+                for (j in i until data.size) {
+                    val currentRow = data[j]
+                    val currentDetails = listOf(
+                        currentRow.detailsone, currentRow.detailstwo, currentRow.detailsthree,
+                        currentRow.detailsfour, currentRow.detailsfive
+                    )
+
+                    // Add current row to sequence
+                    val shartCorpusRow = ShartCorpusRow(
+                        surah = currentRow.surah,
+                        ayah = currentRow.ayah,
+                        wordno = currentRow.wordno,
+                        tags = listOf(
+                            currentRow.tagone, currentRow.tagtwo, currentRow.tagthree,
+                            currentRow.tagfour, currentRow.tagfive
+                        ),
+                        details = currentDetails,
+                        arabicText = currentRow.araone + currentRow.aratwo + currentRow.arathree +
+                                currentRow.arafour + currentRow.arafive,
+                        englishText = currentRow.en,
+                        quranText = qurantext,
+                        translation = translation
+                    )
+                    sequence.add(shartCorpusRow)
+
+                    // Check for verb types in details
+                    if (scenarioType.isEmpty()) {
+                        if (currentDetails.any { it?.contains("PERF") == true }) {
+                            if (firstVerb == null) {
+                                firstVerb = currentRow.wordno
+                                scenarioType = "Scenario inmadhi"
+                            } else if (secondVerb == null) {
+                                secondVerb = currentRow.wordno
+                            }
+                        } else if (currentDetails.any { it?.contains("MOOD:JUS") == true }) {
+                            if (firstVerb == null) {
+                                firstVerb = currentRow.wordno
+                                scenarioType = "Scenario injussive"
+                            } else if (secondVerb == null) {
+                                secondVerb = currentRow.wordno
+                            }
+                        } else if (currentDetails.any { it?.contains("RSLT") == true } && scenarioType.isEmpty()) {
+                            scenarioType = "Scenario result"
+                            secondVerb = currentRow.wordno
+                        }
+                    } else {
+                        if ((scenarioType == "Scenario inmadhi" && currentDetails.any { it?.contains("PERF") == true } && secondVerb == null) ||
+                            (scenarioType == "Scenario injussive" && currentDetails.any { it?.contains("MOOD:JUS") == true } && secondVerb == null)) {
+                            secondVerb = currentRow.wordno
+                        }
+                    }
+
+                    // Increment the words captured after the second verb
+                    if (secondVerb != null || scenarioType == "Scenario result") {
+                        wordsCapturedAfterSecondVerb++
+                    }
+
+                    // Exit condition based on the scenario
+                    if ((secondVerb != null && wordsCapturedAfterSecondVerb == 4) ||
+                        (scenarioType == "Scenario result" && wordsCapturedAfterSecondVerb == 4) ||
+                        j == data.size - 1 || currentRow.ayah != row.ayah || currentRow.surah != row.surah) {
+
+                        conditionalSentences.add(
+                            mapOf(
+                                "type" to scenarioType,
+                                "accWordNo" to condWord,
+                                "firstVerb" to (firstVerb ?: -1),
+                                "secondVerb" to (secondVerb ?: -1),
+                                "endword" to currentRow.wordno,
+                                "predicateSequence" to sequence
+                            )
+                        )
+                        break
+                    }
+                }
+            }
+        }
+        return conditionalSentences
+    }
+
+    fun extractConditionalSentencesWhenWithVerbsINprevious(
+        data: List<CorpusEntity>,
+        qurantext: String,
+        translation: String
+    ): List<Map<String, Any>> {
+        val conditionalSentences = mutableListOf<Map<String, Any>>()
+
+        for (i in data.indices) {
+            val row = data[i]
+            val tags = listOf(row.tagone, row.tagtwo, row.tagthree, row.tagfour, row.tagfive)
+            val arabicWord = row.araone + row.aratwo + row.arathree + row.arafour + row.arafive
+
+            val isCondi = tags.any { it?.contains("COND") == true }
+            val isWord = arabicWord.contains("إِن") || arabicWord.contains("وَإِن") || arabicWord.contains("فَإِن") || arabicWord.contains("أَفَإِي۟ن")
+                    || arabicWord.contains("وَلَئِنِ") || arabicWord.contains("")
+
+            if (isCondi && isWord) {
+                val sequence = mutableListOf<ShartCorpusRow>()
+                val condWord = row.wordno
+                var firstVerb: Int? = null
+                var secondVerb: Int? = null
+                var wordsCapturedAfterSecondVerb = 0
+                var scenarioType = ""
+
+                for (j in i until data.size) {
+                    val currentRow = data[j]
+                    val currentDetails = listOf(
+                        currentRow.detailsone, currentRow.detailstwo, currentRow.detailsthree,
+                        currentRow.detailsfour, currentRow.detailsfive
+                    )
+
+                    // Add current row to sequence
+                    val shartCorpusRow = ShartCorpusRow(
+                        surah = currentRow.surah,
+                        ayah = currentRow.ayah,
+                        wordno = currentRow.wordno,
+                        tags = listOf(
+                            currentRow.tagone, currentRow.tagtwo, currentRow.tagthree,
+                            currentRow.tagfour, currentRow.tagfive
+                        ),
+                        details = currentDetails,
+                        arabicText = currentRow.araone + currentRow.aratwo + currentRow.arathree +
+                                currentRow.arafour + currentRow.arafive,
+                        englishText = currentRow.en,
+                        quranText = qurantext,
+                        translation = translation
+                    )
+                    sequence.add(shartCorpusRow)
+
+                    // Check for verb types in details
+                    if (currentDetails.any { it?.contains("PERF") == true } && scenarioType.isEmpty()) {
+                        if (firstVerb == null) {
+                            firstVerb = currentRow.wordno
+                            scenarioType = "Scenario inmadhi" // First scenario
+                        } else if (secondVerb == null) {
+                            secondVerb = currentRow.wordno
+                        }
+                        //   } else if (currentDetails.any { it?.contains("|MOOD:JUS") == true }) {
+                    } else if (currentDetails.any { it?.contains("|MOOD:JUS") == true } && scenarioType.isEmpty()) {
+                        if (firstVerb == null) {
+                            firstVerb = currentRow.wordno
+                            scenarioType = "Scenario injussive" // Second scenario
+                        } else if (secondVerb == null) {
+                            secondVerb = currentRow.wordno
+                        }
+                    } else if (currentDetails.any { it?.contains("RSLT") == true } && scenarioType.isEmpty()) {
+                        // Third scenario with any verb followed by an RSLT-tagged word
+                        scenarioType = "Scenario result"
+                        secondVerb = currentRow.wordno
+                    }
+
+                    // Increment the words captured after the second verb
+                    if (secondVerb != null || scenarioType == "Scenario result") {
+                        wordsCapturedAfterSecondVerb++
+                    }
+
+                    // Exit condition based on the scenario
+                    if ((secondVerb != null && wordsCapturedAfterSecondVerb == 4) ||
+                        (scenarioType == "Scenario result" && wordsCapturedAfterSecondVerb == 4) ||
+                        j == data.size - 1 || currentRow.ayah != row.ayah || currentRow.surah != row.surah) {
+
+                        conditionalSentences.add(
+                            mapOf(
+                                "type" to scenarioType,
+                                "accWordNo" to condWord,
+                                "firstVerb" to (firstVerb ?: -1),
+                                "secondVerb" to (secondVerb ?: -1),
+                                "endword" to currentRow.wordno,
+                                "predicateSequence" to sequence
+                            )
+                        )
+                        break
+                    }
+                }
+            }
+        }
+        return conditionalSentences
+    }
+
+
+    fun extractConditionalSentencesWhenWithVerbsINv1old(
+        data: List<CorpusEntity>,
+        qurantext: String,
+        translation: String
+    ): List<Map<String, Any>> {
+        val conditionalSentences = mutableListOf<Map<String, Any>>()
+
+        for (i in data.indices) {
+            val row = data[i]
+            val tags = listOf(row.tagone, row.tagtwo, row.tagthree, row.tagfour, row.tagfive)
+            val arabicWord = row.araone + row.aratwo + row.arathree + row.arafour + row.arafive
+
+            // Check if this row is a conditional word (إِذَا, فَإِذَا, وَإِذَا)
+            val isCondi = tags.any { it?.contains("COND") == true }
+            val isWord = arabicWord.contains("إِن") || arabicWord.contains("وَإِن") || arabicWord.contains("فَإِن") || arabicWord.contains("أَفَإِي۟ن")
+                    || arabicWord.contains("وَلَئِنِ") || arabicWord.contains("")
+
+            if (isCondi && isWord) {
+                val sequence = mutableListOf<ShartCorpusRow>()
+                val condWord = row.wordno
+                var firstVerb: Int? = null
+                var secondVerb: Int? = null
+                var wordsCapturedAfterSecondVerb = 0
+                var scenarioType = ""
+                var resultWordNo = -1
+
+
+                for (j in i until data.size) {
+                    val currentRow = data[j]
+                    val currentDetails = listOf(
+                        currentRow.detailsone, currentRow.detailstwo, currentRow.detailsthree,
+                        currentRow.detailsfour, currentRow.detailsfive
+                    )
+
+                    // Add current row to sequence
+                    val shartCorpusRow = ShartCorpusRow(
+                        surah = currentRow.surah,
+                        ayah = currentRow.ayah,
+                        wordno = currentRow.wordno,
+                        tags = listOf(
+                            currentRow.tagone, currentRow.tagtwo, currentRow.tagthree,
+                            currentRow.tagfour, currentRow.tagfive
+                        ),
+                        details = currentDetails,
+                        arabicText = currentRow.araone + currentRow.aratwo + currentRow.arathree +
+                                currentRow.arafour + currentRow.arafive,
+                        englishText = currentRow.en,
+                        quranText = qurantext,
+                        translation = translation
+                    )
+                    sequence.add(shartCorpusRow)
+
+                    // Check for verb types in details
+                    if (currentDetails.any { it?.contains("PERF") == true }) {
+                        if (firstVerb == null) {
+                            firstVerb = currentRow.wordno
+                            scenarioType = "Scenario inmadhi" // First scenario
+                        } else if (secondVerb == null) {
+                            secondVerb = currentRow.wordno
+                        }
+                    } else if (currentDetails.any { it?.contains("|MOOD:JUS") == true }) {
+                        if (firstVerb == null) {
+                            firstVerb = currentRow.wordno
+                            scenarioType = "Scenario injussive" // Second scenario
+                        } else if (secondVerb == null) {
+                            secondVerb = currentRow.wordno
+                        }
+                    } else if (currentDetails.any { it?.contains("RSLT") == true && scenarioType.isEmpty() }) {
+                        // Third scenario with any verb followed by an RSLT-tagged word
+                        scenarioType = "Scenario result"
+                        secondVerb = currentRow.wordno
+                    }
+
+                    // Increment the words captured after the second verb
+                    if (secondVerb != null) {
+                        wordsCapturedAfterSecondVerb++
+                    }
+
+                    // Exit condition based on the scenario
+                    if (secondVerb != null && wordsCapturedAfterSecondVerb == 4 ||
+                        (scenarioType == "Scenario result" && wordsCapturedAfterSecondVerb == 4) ||
+                        j == data.size - 1 || currentRow.ayah != row.ayah || currentRow.surah != row.surah) {
+
+                        conditionalSentences.add(
+                            mapOf(
+                                "type" to scenarioType,
+                                "accWordNo" to condWord,
+                                "firstVerb" to (firstVerb ?: -1),
+                                "secondVerb" to (secondVerb ?: -1),
+                                "endword" to currentRow.wordno,
+                                "predicateSequence" to sequence
+                            )
+                        )
+                        break
+                    }
+                }
+            }
+        }
+        return conditionalSentences
+    }
+
+    fun extractConditionalSentencesWhenWithVerbsINv1(
+        data: List<CorpusEntity>,
+        qurantext: String,
+        translation: String
+    ): List<Map<String, Any>> {
+        val conditionalSentences = mutableListOf<Map<String, Any>>()
+
+        for (i in data.indices) {
+            val row = data[i]
+            val tags = listOf(row.tagone, row.tagtwo, row.tagthree, row.tagfour, row.tagfive)
+            val arabicWord = row.araone + row.aratwo + row.arathree + row.arafour + row.arafive
+
+            // Check if this row is a conditional word (إِذَا, فَإِذَا, وَإِذَا)
+            val isCondi = tags.any { it?.contains("COND") == true }
+            val isWord = arabicWord.contains("إِن") || arabicWord.contains("وَإِن") || arabicWord.contains("فَإِن") || arabicWord.contains("أَفَإِي۟ن")
+                    || arabicWord.contains("وَلَئِنِ") || arabicWord.contains("")
+
+            if (isCondi && isWord) {
+                val sequence = mutableListOf<ShartCorpusRow>()
+                val condWord = row.wordno
+                var firstPerfectVerb: Int? = null
+                var secondPerfectVerb: Int? = null
+                var wordsCapturedAfterSecondVerb = 0
+
+                // Start capturing from the conditional word
+                for (j in i until data.size) {
+                    val currentRow = data[j]
+                    val currentDetails = listOf(
+                        currentRow.detailsone, currentRow.detailstwo, currentRow.detailsthree,
+                        currentRow.detailsfour, currentRow.detailsfive
+                    )
+
+                    // Add current row to sequence
+                    val shartCorpusRow = ShartCorpusRow(
+                        surah = currentRow.surah,
+                        ayah = currentRow.ayah,
+                        wordno = currentRow.wordno,
+                        tags = listOf(
+                            currentRow.tagone, currentRow.tagtwo, currentRow.tagthree,
+                            currentRow.tagfour, currentRow.tagfive
+                        ),
+                        details = currentDetails,
+                        arabicText = currentRow.araone + currentRow.aratwo + currentRow.arathree +
+                                currentRow.arafour + currentRow.arafive,
+                        englishText = currentRow.en,
+                        quranText=qurantext,
+                        translation=translation
+                    )
+                    sequence.add(shartCorpusRow)
+
+                    // Check for perfect verbs in details
+                    if(currentDetails.any { it?.contains("PERF")==true }){
+
+                        when {
+                            firstPerfectVerb == null -> firstPerfectVerb = currentRow.wordno
+                            secondPerfectVerb == null -> secondPerfectVerb = currentRow.wordno
+                        }
+                    } else if (secondPerfectVerb != null) {
+                        // Increment the words captured after second perfect verb
+                        wordsCapturedAfterSecondVerb++
+                    }
+
+                    // Exit condition for capturing up to 4 words after second perfect verb
+                    if (secondPerfectVerb != null && (wordsCapturedAfterSecondVerb == 4 ||
+                                j == data.size - 1 || currentRow.ayah != row.ayah || currentRow.surah != row.surah)) {
+
+                        conditionalSentences.add(
+                            mapOf(
+                                "type" to "Scenario inmadhi",
+                                "accWordNo" to condWord,
+                                "firstPerfectVerb" to (firstPerfectVerb ?: -1),
+                                "secondPerfectVerb" to (secondPerfectVerb ?: -1),
+                                "endword" to currentRow.wordno,
+                                "predicateSequence" to sequence
+                            )
+                        )
+                        break
+                    } else if (j == data.size - 1) { // Check if loop reached the end
+                        conditionalSentences.add(
+                            mapOf(
+                                "type" to "Scenario 2",
+                                "accWordNo" to condWord,
+                                "firstPerfectVerb" to (firstPerfectVerb ?: -1),
+                                "secondPerfectVerb" to (secondPerfectVerb ?: -1),
+                                "endword" to currentRow.wordno,
+                                "predicateSequence" to sequence
+                            )
+                        )
+                        return conditionalSentences // Return the conditionalSentence
+                    }
+                }
+            }
+        }
+        return conditionalSentences
+    }
+    fun extractConditionalSentencesWhenWithVerbsIZA(
+        data: List<CorpusEntity>,
+        qurantext: String,
+        translation: String
+    ): List<Map<String, Any>> {
+        val conditionalSentences = mutableListOf<Map<String, Any>>()
+
+        for (i in data.indices) {
+            val row = data[i]
+            val tags = listOf(row.tagone, row.tagtwo, row.tagthree, row.tagfour, row.tagfive)
+            val arabicWord = row.araone + row.aratwo + row.arathree + row.arafour + row.arafive
+
+            // Check if this row is a conditional word (إِذَا, فَإِذَا, وَإِذَا)
+            val isCondi = tags.any { it?.contains("T") == true }
+            val isWord = arabicWord.contains("إِذَا") || arabicWord.contains("فَإِذَا") || arabicWord.contains("وَإِذَا")
+            if (isCondi && isWord) {
+                val sequence = mutableListOf<ShartCorpusRow>()
+                val condWord = row.wordno
+                var firstPerfectVerb: Int? = null
+                var secondPerfectVerb: Int? = null
+                var wordsCapturedAfterSecondVerb = 0
+
+                // Start capturing from the conditional word
+                for (j in i until data.size) {
+                    val currentRow = data[j]
+                    val currentDetails = listOf(
+                        currentRow.detailsone, currentRow.detailstwo, currentRow.detailsthree,
+                        currentRow.detailsfour, currentRow.detailsfive
+                    )
+
+                    // Add current row to sequence
+                    val shartCorpusRow = ShartCorpusRow(
+                        surah = currentRow.surah,
+                        ayah = currentRow.ayah,
+                        wordno = currentRow.wordno,
+                        tags = listOf(
+                            currentRow.tagone, currentRow.tagtwo, currentRow.tagthree,
+                            currentRow.tagfour, currentRow.tagfive
+                        ),
+                        details = currentDetails,
+                        arabicText = currentRow.araone + currentRow.aratwo + currentRow.arathree +
+                                currentRow.arafour + currentRow.arafive,
+                        englishText = currentRow.en,
+                        quranText=qurantext,
+                        translation=translation
+                    )
+                    sequence.add(shartCorpusRow)
+
+                    // Check for perfect verbs in details
+                    if(currentDetails.any { it?.contains("PERF")==true }){
+
+                        when {
+                            firstPerfectVerb == null -> firstPerfectVerb = currentRow.wordno
+                            secondPerfectVerb == null -> secondPerfectVerb = currentRow.wordno
+                        }
+                    } else if (secondPerfectVerb != null) {
+                        // Increment the words captured after second perfect verb
+                        wordsCapturedAfterSecondVerb++
+                    }
+
+                    // Exit condition for capturing up to 4 words after second perfect verb
+                    if (secondPerfectVerb != null && (wordsCapturedAfterSecondVerb == 4 ||
+                                j == data.size - 1 || currentRow.ayah != row.ayah || currentRow.surah != row.surah)) {
+
+                        conditionalSentences.add(
+                            mapOf(
+                                "type" to "Scenario 2",
+                                "accWordNo" to condWord,
+                                "firstPerfectVerb" to (firstPerfectVerb ?: -1),
+                                "secondPerfectVerb" to (secondPerfectVerb ?: -1),
+                                "endword" to currentRow.wordno,
+                                "predicateSequence" to sequence
+                            )
+                        )
+                        break
+                    } else if (j == data.size - 1) { // Check if loop reached the end
+                        conditionalSentences.add(
+                            mapOf(
+                                "type" to "Scenario 2",
+                                "accWordNo" to condWord,
+                                "firstPerfectVerb" to (firstPerfectVerb ?: -1),
+                                "secondPerfectVerb" to (secondPerfectVerb ?: -1),
+                                "endword" to currentRow.wordno,
+                                "predicateSequence" to sequence
+                            )
+                        )
+                        return conditionalSentences // Return the conditionalSentence
+                    }
+                }
+            }
+        }
+        return conditionalSentences
+    }
+
+    fun extractConditionalSentencesIZAv1(data: List<CorpusEntity>): List<Map<String, Any>> {
+        val conditionalSentences = mutableListOf<Map<String, Any>>()
+
+        for (i in data.indices) {
+            val row = data[i]
+            val tags = listOf(row.tagone, row.tagtwo, row.tagthree, row.tagfour, row.tagfive)
+            val arabicWord = row.araone + row.aratwo + row.arathree + row.arafour + row.arafive
+
+            // Check if this row is a conditional word (إِذَا, فَإِذَا, وَإِذَا)
+            val isCondi = tags.any { it?.contains("T") == true }
+            val isWord = arabicWord.contains("إِذَا") || arabicWord.contains("فَإِذَا") || arabicWord.contains("وَإِذَا")
+            if (isCondi && isWord) {
+                val sequence = mutableListOf<CorpusRow>()
+                val condWord = row.wordno
+                var firstPerfectVerb = -1
+                var secondPerfectVerb = -1
+                var wordsCapturedAfterSecondVerb = 0
+
+                // Start capturing from the conditional word
+                for (j in i until data.size) {
+                    val currentRow = data[j]
+                    val currentTags = listOf(
+                        currentRow.tagone, currentRow.tagtwo, currentRow.tagthree,
+                        currentRow.tagfour, currentRow.tagfive
+                    )
+                    val currentDetails = listOf(
+                        currentRow.detailsone, currentRow.detailstwo, currentRow.detailsthree,
+                        currentRow.detailsfour, currentRow.detailsfive
+                    )
+                    val currentArabicWords = listOf(
+                        currentRow.araone, currentRow.aratwo, currentRow.arathree,
+                        currentRow.arafour, currentRow.arafive
+                    )
+
+                    // Add current row to sequence
+                    val corpusRow = CorpusRow(
+                        surah = currentRow.surah,
+                        ayah = currentRow.ayah,
+                        wordno = currentRow.wordno,
+                        tags = currentTags,
+                        details = currentDetails,
+                        arabicText = currentArabicWords.joinToString(""),
+                        englishText = currentRow.en
+                    )
+                    sequence.add(corpusRow)
+
+                    // Check for perfect verbs in details
+                    if (firstPerfectVerb == -1 && currentDetails.contains("PERF")) {
+                        firstPerfectVerb = currentRow.wordno
+                    } else if (firstPerfectVerb != -1 && secondPerfectVerb == -1 && currentDetails.contains("PERF")) {
+                        secondPerfectVerb = currentRow.wordno
+                    } else if (secondPerfectVerb != -1) {
+                        // After finding the second perfect verb, capture up to 4 more words or until end of sentence
+                        wordsCapturedAfterSecondVerb++
+                        if (wordsCapturedAfterSecondVerb == 4 || j == data.size - 1 || currentRow.ayah != row.ayah || currentRow.surah != row.surah) {
+                            conditionalSentences.add(
+                                mapOf(
+                                    "type" to "Scenario 2",
+                                    "accWordNo" to condWord,
+                                    "firstPerfectVerb" to firstPerfectVerb,
+                                    "secondPerfectVerb" to secondPerfectVerb,
+                                    "endword" to currentRow.wordno,
+                                    "predicateSequence" to sequence
+                                )
+                            )
+                            break
+                        }
+                    }
+                }
+            }
+        }
+        return conditionalSentences
+    }
+    fun extractConditionalSentencesLau(data: List<CorpusEntity>): List<Map<String, Any>> {
+        val conditionalSentences = mutableListOf<Map<String, Any>>()
+        var endWordNo = 0
+        var emphRsltWord = 0
+
+        for (i in data.indices) {
+            val row = data[i]
+            val tags = listOf(row.tagone, row.tagtwo, row.tagthree, row.tagfour, row.tagfive)
+            val arabicWord = row.araone + row.aratwo + row.arathree + row.arafour + row.arafive
+
+            val isCondi = tags.any { it?.contains("COND") == true }
+            val isWord = arabicWord.contains("لَوْ") || arabicWord.contains("أَوَلَوْ") || arabicWord.contains("وَلَوْ")
+                    || arabicWord.contains("وَلَوْلَا") || arabicWord.contains("فَلَوْلَا")
+
+            val isConditional = isWord && isCondi
+            if (isConditional) {
+                val sequence = mutableListOf<CorpusRow>()
+                val condWord = row.wordno
+
+                // Append ":" after the condition word for clarity
+                val initialCorpusRow = CorpusRow(
+                    surah = row.surah,
+                    ayah = row.ayah,
+                    wordno = row.wordno,
+                    tags = tags,
+                    details = listOf(row.detailsone, row.detailstwo, row.detailsthree, row.detailsfour, row.detailsfive),
+                    arabicText = arabicWord + ":",  // Adding delimiter after the condition word
+                    englishText = row.en
+                )
+                sequence.add(initialCorpusRow)
+
+                // Start capturing the sequence from the conditional word
+                for (j in i + 1 until data.size) {
+                    val currentRow = data[j]
+                    val currentTags = listOf(
+                        currentRow.tagone, currentRow.tagtwo, currentRow.tagthree,
+                        currentRow.tagfour, currentRow.tagfive
+                    )
+                    val currentArabicWords = listOf(
+                        currentRow.araone, currentRow.aratwo, currentRow.arathree,
+                        currentRow.arafour, currentRow.arafive
+                    )
+
+                    // Check for an emphatic verb (EMPH + V) or result verb (RSLT + V)
+                    val emphIndex = currentTags.indexOf("EMPH")
+                    val resultIndex = currentTags.indexOf("RSLT")
+                    val isEmphaticVerb = if (emphIndex != -1 && emphIndex + 1 < currentTags.size) {
+                        currentTags[emphIndex + 1] == "V" && currentTags[emphIndex] == "EMPH"
+                    } else false
+
+                    val isResultVerb = if (resultIndex != -1 && resultIndex + 1 < currentTags.size) {
+                        currentTags[resultIndex + 1] == "V" && currentTags[resultIndex] == "RSLT"
+                    } else false
+
+                    // Add ":" delimiter before the emphatic or result verb in arabicText
+                  //  val modifiedArabicText = if (isEmphaticVerb || isResultVerb) {
+                    val modifiedArabicText = if (isEmphaticVerb ) {
+                        ":" + currentArabicWords.joinToString("")
+                    } else {
+                        currentArabicWords.joinToString("")
+                    }
+
+                    // Create CorpusRow with modified arabicText
+                    val corpusRow = CorpusRow(
+                        surah = currentRow.surah,
+                        ayah = currentRow.ayah,
+                        wordno = currentRow.wordno,
+                        tags = currentTags,
+                        details = listOf(
+                            currentRow.detailsone, currentRow.detailstwo,
+                            currentRow.detailsthree, currentRow.detailsfour,
+                            currentRow.detailsfive
+                        ),
+                        arabicText = modifiedArabicText,
+                        englishText = currentRow.en
+                    )
+
+                    sequence.add(corpusRow)
+//if (isEmphaticVerb || isResultVerb) {
+                    if (isEmphaticVerb) {
+                        emphRsltWord = currentRow.wordno
+                        var wordsCaptured = 0
+
+                        // Capture the next 4 unique words after the emphatic or result verb
+                        for (k in j + 1 until min(data.size, j + 5)) {
+                            val nextRow = data[k]
+                            if (nextRow.ayah != currentRow.ayah || nextRow.surah != currentRow.surah) break
+
+                            val nextTags = listOf(
+                                nextRow.tagone, nextRow.tagtwo, nextRow.tagthree,
+                                nextRow.tagfour, nextRow.tagfive
+                            )
+                            val nextArabicWords = listOf(
+                                nextRow.araone, nextRow.aratwo, nextRow.arathree,
+                                nextRow.arafour, nextRow.arafive
+                            )
+
+                            val nextCorpusRow = CorpusRow(
+                                surah = nextRow.surah,
+                                ayah = nextRow.ayah,
+                                wordno = nextRow.wordno,
+                                tags = nextTags,
+                                details = listOf(
+                                    nextRow.detailsone, nextRow.detailstwo,
+                                    nextRow.detailsthree, nextRow.detailsfour,
+                                    nextRow.detailsfive
+                                ),
+                                arabicText = nextArabicWords.joinToString(""),
+                                englishText = nextRow.en
+                            )
+                            sequence.add(nextCorpusRow)
+                            wordsCaptured++
+                            endWordNo = nextRow.wordno
+
+                            if (wordsCaptured == 4) {
+                                conditionalSentences.add(
+                                    mapOf(
+                                        "type" to "Scenario 1",
+                                        "accWordNo" to condWord,
+                                        "emphaticVerbWordNo" to emphRsltWord,
+                                        "endword" to nextRow.wordno,
+                                        "predicateSequence" to sequence
+                                    )
+                                )
+                                return conditionalSentences
+                            }
+                        }
+                    } else if (j == data.size - 1) {
+                        conditionalSentences.add(
+                            mapOf(
+                                "type" to "Scenario 1",
+                                "accWordNo" to condWord,
+                                "emphaticVerbWordNo" to emphRsltWord,
+                                "endword" to currentRow.wordno,
+                                "predicateSequence" to sequence
+                            )
+                        )
+                        return conditionalSentences
+                    }
+                }
+            }
+        }
+        return conditionalSentences
+    }
+
+
+    fun extractConditionalSentencesLauone(data: List<CorpusEntity>): List<Map<String, Any>> {
+        val conditionalSentences = mutableListOf<Map<String, Any>>()
+        var endWordNo = 0
+        var condWord = 0
+        var emphRsltWord = 0
+
+        for (i in data.indices) {
+            val row = data[i]
+
+
+            val tags = listOf(row.tagone, row.tagtwo, row.tagthree, row.tagfour, row.tagfive)
+
+            val arabicWord = row.araone + row.aratwo + row.arathree + row.arafour + row.arafive
+
+            val isCondi = tags.any { it?.contains("COND") == true }
+            val isWord =
+                arabicWord.contains("لَوْ") || arabicWord.contains("أَوَلَوْ") || arabicWord.contains(
+                    "وَلَوْ"
+                ) || arabicWord.contains("وَلَوْلَا") || arabicWord.contains("فَلَوْلَا")
+
+            val isConditional = isWord && isCondi
+            if (row.surah == 2 && row.ayah == 64) {
+
+                println("check")
+            }
+            if (isConditional) {
+                val sequence = mutableListOf<CorpusRow>()
+                val condWord = row.wordno
+
+                // Start capturing the sequence from the conditional word
+                for (j in i until data.size) {
+                    val currentRow = data[j]
+                    val currentTags = listOf(
+                        currentRow.tagone, currentRow.tagtwo, currentRow.tagthree,
+                        currentRow.tagfour, currentRow.tagfive
+                    )
+                    val currentArabicWords = listOf(
+                        currentRow.araone, currentRow.aratwo, currentRow.arathree,
+                        currentRow.arafour, currentRow.arafive
+                    )
+
+                    // Create CorpusRow for the current entry
+                    val corpusRow = CorpusRow(
+                        surah = currentRow.surah,
+                        ayah = currentRow.ayah,
+                        wordno = currentRow.wordno,
+                        tags = currentTags,
+                        details = listOf(
+                            currentRow.detailsone, currentRow.detailstwo,
+                            currentRow.detailsthree, currentRow.detailsfour,
+                            currentRow.detailsfive
+                        ),
+                        arabicText = currentArabicWords.joinToString(""),
+                        englishText = currentRow.en
+                    )
+
+                    sequence.add(corpusRow)
+
+                    // Check for an emphatic verb (EMPH + V)
+                    val emphIndex = currentTags.indexOf("EMPH")
+                    val resultIndex = currentTags.indexOf("RSLT")
+                    val isEmphaticVerb = if (emphIndex != -1 && emphIndex + 1 < currentTags.size) {
+                        currentTags[emphIndex + 1] == "V" && currentTags[emphIndex] == "EMPH"
+
+
+                    } else {
+                        false
+                    }
+
+                    val isResultVerb =
+                        if (resultIndex != -1 && resultIndex + 1 < currentTags.size) {
+                            currentTags[resultIndex + 1] == "V" && currentTags[resultIndex] == "RSLT"
+
+
+                        } else {
+                            false
+                        }
+
+                    if (isEmphaticVerb || isResultVerb) {
+
+                        if(currentRow.surah==25 && currentRow.ayah==77){
+                            println("check")
+                        }
+                        emphRsltWord = currentRow.wordno
+
+                        var wordsCaptured = 0
+
+                        // Capture the next 4 unique words after the emphatic verb
+                        //         for (k in j + 1 until data.size) {
+                        for (k in j + 1 until min(data.size, j + 4)) {
+                            val nextRow = data[k]
+                            if (nextRow.ayah != currentRow.ayah || nextRow.surah != currentRow.surah) break
+                            val nextTags = listOf(
+                                nextRow.tagone, nextRow.tagtwo, nextRow.tagthree,
+                                nextRow.tagfour, nextRow.tagfive
+                            )
+                            val nextArabicWords = listOf(
+                                nextRow.araone, nextRow.aratwo, nextRow.arathree,
+                                nextRow.arafour, nextRow.arafive
+                            )
+
+                            // Create CorpusRow for the next entry
+                            val nextCorpusRow = CorpusRow(
+                                surah = nextRow.surah,
+                                ayah = nextRow.ayah,
+                                wordno = nextRow.wordno,
+                                tags = nextTags,
+                                details = listOf(
+                                    nextRow.detailsone, nextRow.detailstwo,
+                                    nextRow.detailsthree, nextRow.detailsfour,
+                                    nextRow.detailsfive
+                                ),
+                                arabicText = nextArabicWords.joinToString(""),
+                                englishText = nextRow.en
+                            )
+                            sequence.add(nextCorpusRow)
+                            wordsCaptured++
+                            endWordNo=nextRow.wordno
+                            if (wordsCaptured == 4) {
+                                conditionalSentences.add(
+                                    mapOf(
+                                        "type" to "Scenario 1",
+                                        "accWordNo" to condWord,
+                                        "emphaticVerbWordNo" to emphRsltWord,
+                                        "endword" to nextRow.wordno,
+                                        "predicateSequence" to sequence
+                                    )!!
+                                )
+                                return conditionalSentences
+                            }
+
+                        }
+
+
+                    } else if (j==data.size-1){
+
+                        conditionalSentences.add(
+                            mapOf(
+                                "type" to "Scenario 1",
+                                "accWordNo" to condWord,
+                                "emphaticVerbWordNo" to emphRsltWord, // Set to 0 if not found
+                                "endword" to currentRow.wordno, // Set to 0 if not found
+                                "predicateSequence" to sequence
+                            )
+                        )
+                        return conditionalSentences
+                    }
+                }
+            }
+        }
+
+        return conditionalSentences
+    }
+
+    fun extractConditionalSentencesv1orgi(data: List<CorpusEntity>): List<Map<String, Any>> {
+        //   val conditionalSentences = mutableListOf<List<CorpusRow>>()
+        val conditionalSentences = mutableListOf<Map<String, Any>>()
+        var endWordNo: Int? = null
+        for (i in data.indices) {
+            val row = data[i]
+            if (row.surah == 2 && row.ayah == 20 && row.wordno == 14) {
+                println("check")
+            }
+
+            // Check if any tag is "COND" and the corresponding Arabic text is "لَوْ"
+            val tags = listOf(row.tagone, row.tagtwo, row.tagthree, row.tagfour, row.tagfive)
+            val arabicWords =
+                listOf(row.araone + row.aratwo + row.arathree + row.arafour + row.arafive)
+
+            val isConditional = tags.zip(arabicWords).any { (tag, word) ->
+                tag == "COND" && word == "لَوْ" || word == "أَوَلَوْ" || word == "وَلَوْ"
+
+            }
+
+            if (isConditional) {
+                val sequence = mutableListOf<CorpusRow>()
+                val accWordNo = row.wordno
+                // Start capturing the sequence from the conditional word
+                for (j in i until data.size) {
+                    val currentRow = data[j]
+                    val currentTags = listOf(
+                        currentRow.tagone, currentRow.tagtwo, currentRow.tagthree,
+                        currentRow.tagfour, currentRow.tagfive
+                    )
+                    val currentArabicWords = listOf(
+                        currentRow.araone, currentRow.aratwo, currentRow.arathree,
+                        currentRow.arafour, currentRow.arafive
+                    )
+
+                    // Create CorpusRow for the current entry
+                    val corpusRow = CorpusRow(
+                        surah = currentRow.surah,
+                        ayah = currentRow.ayah,
+                        wordno = currentRow.wordno,
+                        tags = currentTags,
+                        details = listOf(
+                            currentRow.detailsone, currentRow.detailstwo,
+                            currentRow.detailsthree, currentRow.detailsfour,
+                            currentRow.detailsfive
+                        ),
+                        arabicText = currentArabicWords.joinToString(""),
+                        englishText = currentRow.en
+                    )
+
+                    sequence.add(corpusRow)
+
+                    val emphIndex = currentTags.indexOf("EMPH")
+                    val isEmphaticVerb = if (emphIndex != -1 && emphIndex + 1 < currentTags.size) {
+                        currentTags[emphIndex + 1] == "V" && currentTags[emphIndex] == ("EMPH")
+                    } else {
+                        false
+                    }
+                    if (isEmphaticVerb) {
+                        endWordNo = currentRow.wordno
+
+                    }
+
+                    if (isEmphaticVerb) {
+                        endWordNo = currentRow.wordno
+                        // Capture 4 more words or until end of sentence
+                        var wordsCaptured = 0
+
+                        for (k in j + 1 until min(data.size, j + 4)) { // Capture up to 4 more words
+                            val nextRow = data[k]
+                            if (nextRow.surah == 2 && nextRow.ayah == 20) {
+                                println("check")
+                            }
+                            val corpusRow = CorpusRow(
+                                surah = nextRow.surah,
+                                ayah = nextRow.ayah,
+                                wordno = nextRow.wordno,
+                                tags = currentTags,
+                                details = listOf(
+                                    nextRow.detailsone, nextRow.detailstwo,
+                                    nextRow.detailsthree, nextRow.detailsfour,
+                                    nextRow.detailsfive
+                                ),
+                                arabicText = currentArabicWords.joinToString(""),
+                                englishText = currentRow.en
+                            )
+                            sequence.add(corpusRow)
+                            wordsCaptured++
+                            if (wordsCaptured == 3) {
+                                conditionalSentences.add(
+                                    mapOf(
+                                        "type" to "Scenario 1",
+                                        "accWordNo" to accWordNo,
+                                        "predicateSequence" to sequence
+                                    )
+                                )
+                                return conditionalSentences// Break when 3 words are captured
+
+                            }
+
+                        }
+                    }
+
+                    // Check if any tag indicates an emphatic verb to end the sequence
+                    //  val isEmphaticVerb = currentTags.any { it == "EMPH" && currentArabicWords[it].startsWith("V") }
+
+
+                }
+
+                // Add the captured sequence to the list of conditional sentences
+                //  conditionalSentences.add(sequence)
+            }
+        }
+
+        return conditionalSentences
+    }
+
+    fun extractKanaSentences(corpusData: List<CorpusEntity>): List<Map<String, Any>> {
+        val accusativeSentences = mutableListOf<Map<String, Any>>()
+
+        for (i in corpusData.indices) {
+            val row = corpusData[i]
+            val tags = listOf(
+                row.rootaraone,
+                row.rootaratwo,
+                row.rootarathree,
+                row.rootarafour,
+                row.rootarafive,
+                row.tagone,
+                row.tagtwo,
+                row.tagthree,
+                row.tagfour,
+                row.tagfive
+            ) // Create tags list
+            val detailstag = listOf(
+                row.detailsone,
+                row.detailstwo,
+                row.detailsthree,
+                row.detailsfour,
+                row.detailsfive
+            )
+            if (row.surah == 2 && row.ayah == 34 && row.wordno == 11) {
+                println("check")
+            }
+            if ("كون" in tags && "PRON" in tags) {
+                val accWordNo = row.wordno
+                //     val predicateSequence = findSequenceEndingInNom(corpusData, startIndex = i)
+                val predicateSequence = findSequenceEndingInAccu(corpusData, startIndex = i)
+                if (predicateSequence != null) {
+                    accusativeSentences.add(
+                        mapOf(
+                            "type" to "Scenario 1",
+                            "accWordNo" to accWordNo,
+                            "predicateSequence" to predicateSequence
+                        )
+                    )
+                }
+            } else if ("كون" in tags) {
+                val accWordNo = row.wordno
+                //   val accSequence = findAccNounSequenceEndingInNom(corpusData, startIndex = i)
+                // val accSequence = findAccNounSequenceEndingInNomoldnew(corpusData, startIndex = i)
+                if (row.surah == 2 && row.ayah == 34 && row.wordno == 11) {
+                    println("check")
+                }
+
+                val accSequence = findAccNounSequenceEndingInACC(corpusData, startIndex = i)
+                if (accSequence != null) {
+                    accusativeSentences.add(
+                        mapOf(
+                            "type" to "Scenario 2",
+                            "accWordNo" to accWordNo,
+                            "accSequence" to accSequence
+                        )
+                    )
+                }/* else {
+                    // Capture surah and ayah if no sequence found
+                    accusativeSentences.add(
+                        mapOf(
+                            "type" to "No sequence found for Scenario 2",
+                            "surah" to row.surah,
+                            "ayah" to row.ayah
+                        )
+                    )
+                }*/
+            }
+
+        }
+
+        return accusativeSentences
+    }
+
+    /*  fun findSequenceEndingInNom(data: List<CorpusEntity>, startIndex: Int): List<CorpusRow>? {
+          val sequence = mutableListOf<CorpusRow>()
+          var nomCount = 0
+          var emptyrow: QuranGrammarAct.CorpusRow
+          for (row in data.drop(startIndex)) {
+              val corpusRow = CorpusRow(
+                  surah = row.surah,
+                  ayah = row.ayah,
+                  wordno = row.wordno,
+                  tags = listOf(row.tagone, row.tagtwo, row.tagthree, row.tagfour, row.tagfive),
+                  details = listOf(
+                      row.detailsone,
+                      row.detailstwo,
+                      row.detailsthree,
+                      row.detailsfour,
+                      row.detailsfive
+                  ),
+                  arabicText = row.araone + row.aratwo + row.arathree + row.arafour + row.arafive
+
+              )
+
+              sequence.add(corpusRow)
+
+              // Check if current row has NOM case in any of the details fields
+              if (corpusRow.details.any { it?.contains("NOM") == true }) {
+                  nomCount++
+                  if (nomCount == 1) {
+                      continue // Check for another NOM if it’s there
+                  } else if (nomCount == 2) {
+                      return sequence // Return if two NOMs are found in sequence
+                  }
+              } else if (nomCount == 1) {
+                  // If only one NOM is found and sequence continues with non-NOM, return sequence
+                  return sequence
+              } else {
+                  nomCount = 0 // Reset nomCount if no NOM tag is found
+                  emptyrow = CorpusRow(
+                      surah = row.surah,
+                      ayah = row.ayah,
+                      wordno = 0,
+                      tags = emptyList(),
+                      details = emptyList(),
+                      arabicText = "",
+                              englishText = ""
+                  )
+              }
+          }
+          return null
+      }
+
+      fun findAccNounSequenceEndingInNom(
+          data: List<CorpusEntity>,
+          startIndex: Int
+      ): List<CorpusRow>? {
+          val sequence = mutableListOf<CorpusRow>()
+          var nomCount = 0
+
+          for (row in data.drop(startIndex)) {
+              val corpusRow = CorpusRow(
+                  surah = row.surah,
+                  ayah = row.ayah,
+                  wordno = row.wordno,
+                  tags = listOf(row.tagone, row.tagtwo, row.tagthree, row.tagfour, row.tagfive),
+                  details = listOf(
+                      row.detailsone,
+                      row.detailstwo,
+                      row.detailsthree,
+                      row.detailsfour,
+                      row.detailsfive
+                  ),
+                  arabicText = row.araone + row.aratwo + row.arathree + row.arafour + row.arafive
+              )
+
+              sequence.add(corpusRow)
+
+              // Check if current row has NOM case in any of the details fields
+              if (corpusRow.details.any { it?.contains("NOM") == true }) {
+                  nomCount++
+
+
+                  if (nomCount == 1) {
+                      continue // Check for another NOM if it’s there
+                  } else if (nomCount == 2) {
+                      return sequence // Return if two NOMs are found in sequence
+                  }
+              } else if (nomCount == 1) {
+                  // If only one NOM is found and sequence continues with non-NOM, return sequence
+                  return sequence
+              } else {
+                  nomCount = 0 // Reset nomCount if no NOM tag is found
+              }
+          }
+          return null
+      }*/
+
+    fun findSequenceEndingInAccu(
+        data: List<CorpusEntity>,
+        startIndex: Int,
+    ): List<CorpusRow>? {
+        val sequence = mutableListOf<CorpusRow>()
+
+        for (i in startIndex until data.size) {
+            val entity = data[i]
+            val row = CorpusRow(
+                surah = entity.surah,
+                ayah = entity.ayah,
+                wordno = entity.wordno,
+                tags = listOf(
+                    entity.tagone,
+                    entity.tagtwo,
+                    entity.tagthree,
+                    entity.tagfour,
+                    entity.tagfive
+                ),
+                details = listOf(
+                    entity.detailsone,
+                    entity.detailstwo,
+                    entity.detailsthree,
+                    entity.detailsfour,
+                    entity.detailsfive
+                ),
+                arabicText = entity.araone + entity.aratwo + entity.arathree + entity.arafour + entity.arafive,
+                englishText = entity.en
+            )
+
+            sequence.add(row)
+
+            if (row.details.any { it!!.contains("ACC") }) {
+                // Check if the next element exists and meets the conditions
+                if (i + 1 < data.size) {
+                    val nextEntity = data[i + 1]
+                    if (nextEntity.tagone == "N" || nextEntity.tagtwo == "N" || nextEntity.tagthree == "N" || nextEntity.tagfour == "N") {
+                        if (nextEntity.detailsone?.contains("ACC") == true || nextEntity.detailstwo?.contains(
+                                "ACC"
+                            ) == true ||
+                            nextEntity.detailsthree?.contains("NOM") == true || nextEntity.detailsfour?.contains(
+                                "ACC"
+                            ) == true
+                        ) {
+                            val nextRow = CorpusRow(
+                                surah = nextEntity.surah,
+                                ayah = nextEntity.ayah,
+                                wordno = nextEntity.wordno,
+                                tags = listOf(
+                                    nextEntity.tagone,
+                                    nextEntity.tagtwo,
+                                    nextEntity.tagthree,
+                                    nextEntity.tagfour,
+                                    nextEntity.tagfive
+                                ),
+                                details = listOf(
+                                    nextEntity.detailsone,
+                                    nextEntity.detailstwo,
+                                    nextEntity.detailsthree,
+                                    nextEntity.detailsfour,
+                                    nextEntity.detailsfive
+                                ),
+                                arabicText = nextEntity.araone + nextEntity.aratwo + nextEntity.arathree + nextEntity.arafour + nextEntity.arafive,
+                                englishText = nextEntity.en
+                            )
+                            sequence.add(nextRow)
+                        }
+                    }
+                }
+                return sequence
+            }
+        }
+
+        return sequence
+    }
+
+    fun findSequenceEndingInNomold(
+        data: List<CorpusEntity>,
+        startIndex: Int,
+    ): List<CorpusRow>? {
+        val sequence = mutableListOf<CorpusRow>()
+
+        for (i in startIndex until data.size) {
+            val entity = data[i]
+            val row = CorpusRow(
+                surah = entity.surah,
+                ayah = entity.ayah,
+                wordno = entity.wordno,
+                tags = listOf(
+                    entity.tagone,
+                    entity.tagtwo,
+                    entity.tagthree,
+                    entity.tagfour,
+                    entity.tagfive
+                ),
+                details = listOf(
+                    entity.detailsone,
+                    entity.detailstwo,
+                    entity.detailsthree,
+                    entity.detailsfour,
+                    entity.detailsfive
+                ),
+                arabicText = entity.araone + entity.aratwo + entity.arathree + entity.arafour + entity.arafive,
+                englishText = entity.en
+            )
+
+            sequence.add(row)
+
+            if (row.details.any { it!!.contains("NOM") }) {
+                // Check if the next element exists and meets the conditions
+                if (i + 1 < data.size) {
+                    val nextEntity = data[i + 1]
+                    if (nextEntity.tagone == "N" || nextEntity.tagtwo == "N" || nextEntity.tagthree == "N" || nextEntity.tagfour == "N") {
+                        if (nextEntity.detailsone?.contains("NOM") == true || nextEntity.detailstwo?.contains(
+                                "NOM"
+                            ) == true ||
+                            nextEntity.detailsthree?.contains("NOM") == true || nextEntity.detailsfour?.contains(
+                                "NOM"
+                            ) == true
+                        ) {
+                            val nextRow = CorpusRow(
+                                surah = nextEntity.surah,
+                                ayah = nextEntity.ayah,
+                                wordno = nextEntity.wordno,
+                                tags = listOf(
+                                    nextEntity.tagone,
+                                    nextEntity.tagtwo,
+                                    nextEntity.tagthree,
+                                    nextEntity.tagfour,
+                                    nextEntity.tagfive
+                                ),
+                                details = listOf(
+                                    nextEntity.detailsone,
+                                    nextEntity.detailstwo,
+                                    nextEntity.detailsthree,
+                                    nextEntity.detailsfour,
+                                    nextEntity.detailsfive
+                                ),
+                                arabicText = nextEntity.araone + nextEntity.aratwo + nextEntity.arathree + nextEntity.arafour + nextEntity.arafive,
+                                englishText = nextEntity.en
+                            )
+                            sequence.add(nextRow)
+                        }
+                    }
+                }
+                return sequence
+            }
+        }
+
+        return sequence
+    }
+
+    /*
+        fun findSequenceEndingInNomold(
+            data: List<CorpusEntity>,
+            startIndex: Int,
+
+            ): List<CorpusRow>? {
+            val sequence = mutableListOf<CorpusRow>()
+            val sequenceString = ""
+            val detailstag = ""
+
+            for (row in data.drop(startIndex)) {
+
+                val row = CorpusRow(
+                    surah = row.surah,
+                    ayah = row.ayah,
+                    wordno = row.wordno,
+                    tags = listOf(row.tagone, row.tagtwo, row.tagthree, row.tagfour, row.tagfive),
+                    details = listOf(
+                        row.detailsone,
+                        row.detailstwo,
+                        row.detailsthree,
+                        row.detailsfour,
+                        row.detailsfive
+                    ),
+                    arabicText = row.araone + row.aratwo + row.arathree + row.arafour + row.arafive
+                )
+
+                sequence.add(row)
+
+                val nom = row.details.any() { it!!.contains("NOM") }
+                if (nom) {
+
+
+                    if(data[startIndex+sequence.size] < data.size){
+                        val corpusEntity = data[startIndex + sequence.size]
+                        val row = data[startIndex + sequence.size]
+                        if(corpusEntity.tagone=="N"||corpusEntity.tagtwo=="N"||corpusEntity.tagthree=="N"||corpusEntity.tagfour=="N"){
+                            if(row.detailsone!!.contains("NOM")||row.detailstwo!!.contains("NOM")
+                                ||row.detailsthree!!.contains("NOM")||row.detailsfour!!.contains("NOM")){
+                                val row = CorpusRow(
+                                    surah = row.surah,
+                                    ayah = row.ayah,
+                                    wordno = row.wordno,
+                                    tags = listOf(row.tagone, row.tagtwo, row.tagthree, row.tagfour, row.tagfive),
+                                    details = listOf(
+                                        row.detailsone,
+                                        row.detailstwo,
+                                        row.detailsthree,
+                                        row.detailsfour,
+                                        row.detailsfive
+                                    ),
+                                    arabicText = row.araone + row.aratwo + row.arathree + row.arafour + row.arafive
+                                )
+
+                                sequence.add(row)
+
+                            }
+                        }
+
+                    }
+
+
+                    return sequence
+                }
+            }
+
+            return sequence
+        }*/
+    fun findAccNounSequenceEndingInACC(
+        data: List<CorpusEntity>,
+        startIndex: Int
+    ): List<CorpusRow>? {
+        val sequence = mutableListOf<CorpusRow>()
+
+        for (i in startIndex until data.size) {
+            val currentRow = data[i]
+            val corpusRow = CorpusRow(
+                surah = currentRow.surah,
+                ayah = currentRow.ayah,
+                wordno = currentRow.wordno,
+                tags = listOf(
+                    currentRow.tagone,
+                    currentRow.tagtwo,
+                    currentRow.tagthree,
+                    currentRow.tagfour,
+                    currentRow.tagfive
+                ),
+                details = listOf(
+                    currentRow.detailsone,
+                    currentRow.detailstwo,
+                    currentRow.detailsthree,
+                    currentRow.detailsfour,
+                    currentRow.detailsfive
+                ),
+                arabicText = currentRow.araone + currentRow.aratwo + currentRow.arathree + currentRow.arafour + currentRow.arafive,
+                englishText = currentRow.en
+            )
+
+
+            // Add the current row to the sequence
+            sequence.add(corpusRow)
+            if (currentRow.surah == 11 && currentRow.ayah == 90) {
+                println("check")
+            }
+
+            // Check if the current row is nominative (NOM)
+            val hasAccusative = corpusRow.details.any { it?.contains("ACC") == true }
+
+
+
+
+
+            if (hasAccusative && i + 2 < data.size) {
+                // Create CorpusRow objects for the next row and the one after it
+                val nextRow = CorpusRow(
+                    surah = data[i + 1].surah,
+                    ayah = data[i + 1].ayah,
+                    wordno = data[i + 1].wordno,
+                    tags = listOf(
+                        data[i + 1].tagone,
+                        data[i + 1].tagtwo,
+                        data[i + 1].tagthree,
+                        data[i + 1].tagfour,
+                        data[i + 1].tagfive
+                    ),
+                    details = listOf(
+                        data[i + 1].detailsone,
+                        data[i + 1].detailstwo,
+                        data[i + 1].detailsthree,
+                        data[i + 1].detailsfour,
+                        data[i + 1].detailsfive
+                    ),
+                    arabicText = data[i + 1].araone + data[i + 1].aratwo + data[i + 1].arathree + data[i + 1].arafour + data[i + 1].arafive,
+                    englishText = data[i + 1].en
+                )
+                var hasNextRowAcc = nextRow.details.any { it?.contains("ACC") == true }
+                if (hasNextRowAcc)
+                    sequence.add(nextRow)
+                val nextNextRow = CorpusRow(
+                    surah = data[i + 2].surah,
+                    ayah = data[i + 2].ayah,
+                    wordno = data[i + 2].wordno,
+                    tags = listOf(
+                        data[i + 2].tagone,
+                        data[i + 2].tagtwo,
+                        data[i + 2].tagthree,
+                        data[i + 2].tagfour,
+                        data[i + 2].tagfive
+                    ),
+                    details = listOf(
+                        data[i + 2].detailsone,
+                        data[i + 2].detailstwo,
+                        data[i + 2].detailsthree,
+                        data[i + 2].detailsfour,
+                        data[i + 2].detailsfive
+                    ),
+                    arabicText = data[i + 2].araone + data[i + 2].aratwo + data[i + 2].arathree + data[i + 2].arafour + data[i + 2].arafive,
+                    englishText = data[i + 2].en
+                )
+                val hasNextNextRowAcc = nextNextRow.details.any { it?.contains("ACC") == true }
+                if (hasNextNextRowAcc) {
+                    sequence.add(nextNextRow)
+                    return sequence
+                }
+                /*       // Check if the next word is a preposition (P)
+                       if (nextRow.tags.contains("P")) {
+                           // Add the preposition row to the sequence
+                           sequence.add(nextRow)
+
+                           // Check if the following word is genitive (GEN)
+                           if (nextNextRow.details.any { it?.contains("GEN") == true }) {
+                               sequence.add(nextNextRow)
+                               return sequence // Return the sequence with NOM, P, and GEN
+                           }
+                       }*/
+            } else if (hasAccusative && i + 1 < data.size) {
+                val nextRow = CorpusRow(
+                    surah = data[i + 1].surah,
+                    ayah = data[i + 1].ayah,
+                    wordno = data[i + 1].wordno,
+                    tags = listOf(
+                        data[i + 1].tagone,
+                        data[i + 1].tagtwo,
+                        data[i + 1].tagthree,
+                        data[i + 1].tagfour,
+                        data[i + 1].tagfive
+                    ),
+                    details = listOf(
+                        data[i + 1].detailsone,
+                        data[i + 1].detailstwo,
+                        data[i + 1].detailsthree,
+                        data[i + 1].detailsfour,
+                        data[i + 1].detailsfive
+                    ),
+                    arabicText = data[i + 1].araone + data[i + 1].aratwo + data[i + 1].arathree + data[i + 1].arafour + data[i + 1].arafive,
+                    englishText = data[i + 1].en
+                )
+
+                if (nextRow.details.any { it?.contains("ACC") == true }) {
+                    sequence.add(nextRow)
+                    return sequence // Return the sequence with NOM, P, and GEN
+                }
+
+            }
+
+            // Check if the current row ends with NOM; if so, return the sequence
+            if (hasAccusative) {
+                return sequence
+            }
+        }
+
+        return sequence // Return the full sequence if no NOM or GEN after "P" is found
+    }
+
+    fun findAccNounSequenceEndingInNomLatest(
+        data: List<CorpusEntity>,
+        startIndex: Int
+    ): List<CorpusRow>? {
+        val sequence = mutableListOf<CorpusRow>()
+
+        for (i in startIndex until data.size) {
+            val currentRow = data[i]
+            val corpusRow = CorpusRow(
+                surah = currentRow.surah,
+                ayah = currentRow.ayah,
+                wordno = currentRow.wordno,
+                tags = listOf(
+                    currentRow.tagone,
+                    currentRow.tagtwo,
+                    currentRow.tagthree,
+                    currentRow.tagfour,
+                    currentRow.tagfive
+                ),
+                details = listOf(
+                    currentRow.detailsone,
+                    currentRow.detailstwo,
+                    currentRow.detailsthree,
+                    currentRow.detailsfour,
+                    currentRow.detailsfive
+                ),
+                arabicText = currentRow.araone + currentRow.aratwo + currentRow.arathree + currentRow.arafour + currentRow.arafive,
+                englishText = currentRow.en
+            )
+
+
+            // Add the current row to the sequence
+            sequence.add(corpusRow)
+            if (currentRow.surah == 11 && currentRow.ayah == 90) {
+                println("check")
+            }
+
+            // Check if the current row is nominative (NOM)
+            val hasNominative = corpusRow.details.any { it?.contains("NOM") == true }
+
+
+
+
+
+            if (hasNominative && i + 2 < data.size) {
+                // Create CorpusRow objects for the next row and the one after it
+                val nextRow = CorpusRow(
+                    surah = data[i + 1].surah,
+                    ayah = data[i + 1].ayah,
+                    wordno = data[i + 1].wordno,
+                    tags = listOf(
+                        data[i + 1].tagone,
+                        data[i + 1].tagtwo,
+                        data[i + 1].tagthree,
+                        data[i + 1].tagfour,
+                        data[i + 1].tagfive
+                    ),
+                    details = listOf(
+                        data[i + 1].detailsone,
+                        data[i + 1].detailstwo,
+                        data[i + 1].detailsthree,
+                        data[i + 1].detailsfour,
+                        data[i + 1].detailsfive
+                    ),
+                    arabicText = data[i + 1].araone + data[i + 1].aratwo + data[i + 1].arathree + data[i + 1].arafour + data[i + 1].arafive,
+                    englishText = data[i + 1].en
+                )
+                var hasNextRowNom = nextRow.details.any { it?.contains("NOM") == true }
+                if (hasNextRowNom)
+                    sequence.add(nextRow)
+                val nextNextRow = CorpusRow(
+                    surah = data[i + 2].surah,
+                    ayah = data[i + 2].ayah,
+                    wordno = data[i + 2].wordno,
+                    tags = listOf(
+                        data[i + 2].tagone,
+                        data[i + 2].tagtwo,
+                        data[i + 2].tagthree,
+                        data[i + 2].tagfour,
+                        data[i + 2].tagfive
+                    ),
+                    details = listOf(
+                        data[i + 2].detailsone,
+                        data[i + 2].detailstwo,
+                        data[i + 2].detailsthree,
+                        data[i + 2].detailsfour,
+                        data[i + 2].detailsfive
+                    ),
+                    arabicText = data[i + 2].araone + data[i + 2].aratwo + data[i + 2].arathree + data[i + 2].arafour + data[i + 2].arafive,
+                    englishText = data[i + 2].en
+                )
+                val hasNextNextRowNom = nextNextRow.details.any { it?.contains("NOM") == true }
+                if (hasNextNextRowNom) {
+                    sequence.add(nextNextRow)
+                    return sequence
+                }
+                /*       // Check if the next word is a preposition (P)
+                       if (nextRow.tags.contains("P")) {
+                           // Add the preposition row to the sequence
+                           sequence.add(nextRow)
+
+                           // Check if the following word is genitive (GEN)
+                           if (nextNextRow.details.any { it?.contains("GEN") == true }) {
+                               sequence.add(nextNextRow)
+                               return sequence // Return the sequence with NOM, P, and GEN
+                           }
+                       }*/
+            } else if (hasNominative && i + 1 < data.size) {
+                val nextRow = CorpusRow(
+                    surah = data[i + 1].surah,
+                    ayah = data[i + 1].ayah,
+                    wordno = data[i + 1].wordno,
+                    tags = listOf(
+                        data[i + 1].tagone,
+                        data[i + 1].tagtwo,
+                        data[i + 1].tagthree,
+                        data[i + 1].tagfour,
+                        data[i + 1].tagfive
+                    ),
+                    details = listOf(
+                        data[i + 1].detailsone,
+                        data[i + 1].detailstwo,
+                        data[i + 1].detailsthree,
+                        data[i + 1].detailsfour,
+                        data[i + 1].detailsfive
+                    ),
+                    arabicText = data[i + 1].araone + data[i + 1].aratwo + data[i + 1].arathree + data[i + 1].arafour + data[i + 1].arafive,
+                    englishText = data[i + 1].en
+                )
+
+                if (nextRow.details.any { it?.contains("NOM") == true }) {
+                    sequence.add(nextRow)
+                    return sequence // Return the sequence with NOM, P, and GEN
+                }
+
+            }
+
+            // Check if the current row ends with NOM; if so, return the sequence
+            if (hasNominative) {
+                return sequence
+            }
+        }
+
+        return sequence // Return the full sequence if no NOM or GEN after "P" is found
+    }
+
+
+    fun findAccNounSequenceEndingInNomoldnew(
+        data: List<CorpusEntity>,
+        startIndex: Int
+    ): List<CorpusRow>? {
+
+        val sequence = mutableListOf<CorpusRow>()
+        var expectGenitiveAfterPreposition = false // Flag to expect GEN after "P" tag
+        for (i in startIndex until data.size) {
+            val entity = data[i]
+            //    for (row in data.drop(startIndex)) {
+            val corpusRow = CorpusRow(
+                surah = entity.surah,
+                ayah = entity.ayah,
+                wordno = entity.wordno,
+                tags = listOf(
+                    entity.tagone,
+                    entity.tagtwo,
+                    entity.tagthree,
+                    entity.tagfour,
+                    entity.tagfive
+                ),
+                details = listOf(
+                    entity.detailsone,
+                    entity.detailstwo,
+                    entity.detailsthree,
+                    entity.detailsfour,
+                    entity.detailsfive
+                ),
+                arabicText = entity.araone + entity.aratwo + entity.arathree + entity.arafour + entity.arafive,
+                englishText = entity.en
+            )
+
+            // Add the current entity to the sequence
+            sequence.add(corpusRow)
+            if (entity.surah == 11 && entity.ayah == 56) {
+                println("check")
+            }
+
+            // If current entity has a preposition ("P") tag, set flag to expect GEN case next
+            if (corpusRow.tags.contains("P")) {
+                expectGenitiveAfterPreposition = true
+                continue
+            }
+
+            // Check if the current entity has either NOM case or GEN case following a "P"
+            val hasNominative = corpusRow.details.any { it?.contains("NOM") == true }
+            val hasGenitiveAfterPreposition =
+                expectGenitiveAfterPreposition && corpusRow.details.any { it?.contains("GEN") == true }
+
+            if (hasNominative || hasGenitiveAfterPreposition) {
+                return sequence // End sequence if NOM or valid GEN case is found
+            }
+
+            // Reset flag if no GEN case follows the preposition
+            expectGenitiveAfterPreposition = false
+        }
+
+        return sequence // Return the full sequence if no NOM or GEN after "P" is found
+    }
+
+    fun findAccNounSequenceEndingInNomold(
+        data: List<CorpusEntity>,
+        startIndex: Int
+    ): List<CorpusRow>? {
+
+        val sequence = mutableListOf<CorpusRow>()
+        for (row in data.drop(startIndex)) {
+            val row = CorpusRow(
+                surah = row.surah,
+                ayah = row.ayah,
+                wordno = row.wordno,
+                tags = listOf(row.tagone, row.tagtwo, row.tagthree, row.tagfour, row.tagfive),
+                details = listOf(
+                    row.detailsone,
+                    row.detailstwo,
+                    row.detailsthree,
+                    row.detailsfour,
+                    row.detailsfive
+                ),
+                arabicText = row.araone + row.aratwo + row.arathree + row.arafour + row.arafive,
+                englishText = row.en
+            )
+
+            sequence.add(row)
+
+
+            val nom = row.details.any() { it!!.contains("NOM") }
+
+            if (nom) { // End on NOM
+                return sequence
+            }
+        }
+        return null
+    }
 
 
     private fun extractLaNafiya() {
@@ -2457,7 +5192,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                     val header =
                         SurahHeader(rukucount, versescount, chapterno, surahArabicName, " ")
 
-                    highlightKeywords(allofQuran)
+                    HightLightKeyWordold(allofQuran)
 
                     val adapter = if (!mushafview && mafoolat) {
                         FlowAyahWordAdapter(
@@ -3064,3 +5799,73 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     companion object
 }
 
+/*    fun extractAccusativeSentences(corpusData: List<CorpusRow>): List<Map<String, Any>> {
+        val accusativeSentences = mutableListOf<Map<String, Any>>()
+
+        for (i in corpusData.indices) {
+            val row = corpusData[i]
+
+            // Scenario 1: ACC tag followed by PRON, ending in NOM (in details)
+            if ("ACC" in row.tags && "PRON" in row.tags) {
+                val accWordNo = row.wordno
+
+                // Find sequence ending with a nominative case (NOM) in details fields
+                val predicateSequence = findSequenceEndingInNom(corpusData, startIndex = i + 1)
+                if (predicateSequence != null) {
+                    accusativeSentences.add(
+                        mapOf(
+                            "type" to "Scenario 1",
+                            "accWordNo" to accWordNo,
+                            "predicateSequence" to predicateSequence
+                        )
+                    )
+                }
+            }
+
+            // Scenario 2: ACC tag, noun sequence, ending in NOM (in details)
+            else if ("ACC" in row.tags) {
+                val accWordNo = row.wordno
+
+                val accSequence = findAccNounSequenceEndingInNom(corpusData, startIndex = i + 1)
+                if (accSequence != null) {
+                    accusativeSentences.add(
+                        mapOf(
+                            "type" to "Scenario 2",
+                            "accWordNo" to accWordNo,
+                            "accSequence" to accSequence
+                        )
+                    )
+                }
+            }
+        }
+
+        return accusativeSentences
+    }
+
+    fun findSequenceEndingInNom(data: List<CorpusRow>, startIndex: Int): List<CorpusRow>? {
+        val sequence = mutableListOf<CorpusRow>()
+        for (row in data.drop(startIndex)) {
+            sequence.add(row)
+            if (isNominative(row.details)) {
+                return sequence
+            }
+        }
+        return null
+    }
+
+    fun findAccNounSequenceEndingInNom(data: List<CorpusRow>, startIndex: Int): List<CorpusRow>? {
+        val sequence = mutableListOf<CorpusRow>()
+        for (row in data.drop(startIndex)) {
+            if ("ACC" in row.tags || "N" in row.tags) { // Continue with ACC and nouns
+                sequence.add(row)
+            }
+            if (isNominative(row.details)) { // End on NOM in details fields
+                return sequence
+            }
+        }
+        return null
+    }
+
+    fun isNominative(details: List<String>): Boolean {
+        return details.any { it == "NOM" }
+    }*/

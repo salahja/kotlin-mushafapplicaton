@@ -254,7 +254,7 @@ class GatherAll {
             madhi = ActivePastConjugator.instance.createVerbList(unaugmentedTrilateralRoot)
             madhimajhool =
                 PassivePastConjugator.instance.createVerbList(unaugmentedTrilateralRoot)
-            when (verbmood) {
+            when (verbmood.lowercase()) {
                 "Indicative" -> {
                     mudharay = ActivePresentConjugator.instance
                         .createNominativeVerbList(unaugmentedTrilateralRoot)
@@ -262,21 +262,21 @@ class GatherAll {
                         .createNominativeVerbList(unaugmentedTrilateralRoot)
                 }
 
-                "Subjunctive" -> {
+                "subjunctive" -> {
                     mudharay = ActivePresentConjugator.instance
                         .createAccusativeVerbList(unaugmentedTrilateralRoot)
                     mudharaymajhool = PassivePresentConjugator.instance
                         .createAccusativeVerbList(unaugmentedTrilateralRoot)
                 }
 
-                "Jussive" -> {
+                "jussive" -> {
                     mudharay = ActivePresentConjugator.instance
                         .createJussiveVerbList(unaugmentedTrilateralRoot)
                     mudharaymajhool = PassivePresentConjugator.instance
                         .createJussiveVerbList(unaugmentedTrilateralRoot)
                 }
 
-                "Emphasized" -> {
+                "emphasized" -> {
                     mudharay = ActivePresentConjugator.instance
                         .createEmphasizedVerbList(unaugmentedTrilateralRoot)
                     mudharaymajhool = PassivePresentConjugator.instance
@@ -544,18 +544,18 @@ class GatherAll {
                 val madhi = ActivePastConjugator.instance.createVerbList(unaugmentedTrilateralRoot)
                 val madhimajhool = PassivePastConjugator.instance.createVerbList(unaugmentedTrilateralRoot)
 
-                val mudharay = when (verbMood) {
+                val mudharay = when (verbMood!!.lowercase()) {
                     "Indicative" -> ActivePresentConjugator.instance.createNominativeVerbList(unaugmentedTrilateralRoot)
-                    "Subjunctive" -> ActivePresentConjugator.instance.createAccusativeVerbList(unaugmentedTrilateralRoot)
-                    "Jussive" -> ActivePresentConjugator.instance.createJussiveVerbList(unaugmentedTrilateralRoot)
-                    "Emphasized" -> ActivePresentConjugator.instance.createEmphasizedVerbList(unaugmentedTrilateralRoot)
+                    "subjunctive" -> ActivePresentConjugator.instance.createAccusativeVerbList(unaugmentedTrilateralRoot)
+                    "jussive" -> ActivePresentConjugator.instance.createJussiveVerbList(unaugmentedTrilateralRoot)
+                    "emphasized" -> ActivePresentConjugator.instance.createEmphasizedVerbList(unaugmentedTrilateralRoot)
                     else -> null
                 }
-                val mudharaymajhool = when (verbMood) {
+                val mudharaymajhool = when (verbMood.lowercase()) {
                     "Indicative" -> PassivePresentConjugator.instance.createNominativeVerbList(unaugmentedTrilateralRoot)
-                    "Subjunctive" -> PassivePresentConjugator.instance.createAccusativeVerbList(unaugmentedTrilateralRoot)
-                    "Jussive" -> PassivePresentConjugator.instance.createJussiveVerbList(unaugmentedTrilateralRoot)
-                    "Emphasized" -> PassivePresentConjugator.instance.createEmphasizedVerbList(unaugmentedTrilateralRoot)
+                    "subjunctive" -> PassivePresentConjugator.instance.createAccusativeVerbList(unaugmentedTrilateralRoot)
+                    "jussive" -> PassivePresentConjugator.instance.createJussiveVerbList(unaugmentedTrilateralRoot)
+                    "emphasized" -> PassivePresentConjugator.instance.createEmphasizedVerbList(unaugmentedTrilateralRoot)
                     else -> null
                 }
 
@@ -710,19 +710,19 @@ class GatherAll {
                 val madhi = ActivePastConjugator.instance.createVerbList(unaugmentedRoot)
                 val madhimajhool = PassivePastConjugator.instance.createVerbList(unaugmentedRoot)
 
-                val mudharay = when (verbMood) {
-                    "Indicative" -> ActivePresentConjugator.instance.createNominativeVerbList(unaugmentedRoot)
-                    "Subjunctive" -> ActivePresentConjugator.instance.createAccusativeVerbList(unaugmentedRoot)
-                    "Jussive" -> ActivePresentConjugator.instance.createJussiveVerbList(unaugmentedRoot)
-                    "Emphasized" -> ActivePresentConjugator.instance.createEmphasizedVerbList(unaugmentedRoot)
-                    else -> null
+                val mudharay = when (verbMood!!.lowercase()) {
+                    "indicative" -> ActivePresentConjugator.instance.createNominativeVerbList(unaugmentedRoot)
+                    "subjunctive" -> ActivePresentConjugator.instance.createAccusativeVerbList(unaugmentedRoot)
+                    "jussive" -> ActivePresentConjugator.instance.createJussiveVerbList(unaugmentedRoot)
+                    "emphasized" -> ActivePresentConjugator.instance.createEmphasizedVerbList(unaugmentedRoot)
+                    else -> emptyList()
                 }
-                val mudharaymajhool = when (verbMood) {
-                    "Indicative" -> PassivePresentConjugator.instance.createNominativeVerbList(unaugmentedRoot)
-                    "Subjunctive" -> PassivePresentConjugator.instance.createAccusativeVerbList(unaugmentedRoot)
-                    "Jussive" -> PassivePresentConjugator.instance.createJussiveVerbList(unaugmentedRoot)
-                    "Emphasized" -> PassivePresentConjugator.instance.createEmphasizedVerbList(unaugmentedRoot)
-                    else -> null
+                val mudharaymajhool = when (verbMood!!.lowercase()) {
+                    "indicative" -> PassivePresentConjugator.instance.createNominativeVerbList(unaugmentedRoot)
+                    "subjunctive" -> PassivePresentConjugator.instance.createAccusativeVerbList(unaugmentedRoot)
+                    "jussive" -> PassivePresentConjugator.instance.createJussiveVerbList(unaugmentedRoot)
+                    "emphasized" -> PassivePresentConjugator.instance.createEmphasizedVerbList(unaugmentedRoot)
+                    else -> emptyList()
                 }
 
                 val amr = UnaugmentedImperativeConjugator.instance.createVerbList(unaugmentedRoot)
@@ -1023,24 +1023,24 @@ class GatherAll {
         augmentedFormula: Int,
         isActive: Boolean
     ): List<AugmentedPresentVerb?>? {
-        return when (verbMood) {
-            "Indicative" -> if (isActive) {
+        return when (verbMood.lowercase()) {
+            "indicative" -> if (isActive) {
                 AugmentedActivePresentConjugator.instance.nominativeConjugator.createVerbList(augmentedRoot,augmentedFormula)
 
             } else {
                 AugmentedPassivePresentConjugator.instance.nominativeConjugator.createVerbList(augmentedRoot, augmentedFormula)
             }
-            "Subjunctive" -> if (isActive) {
+            "subjunctive" -> if (isActive) {
                 AugmentedActivePresentConjugator.instance.accusativeConjugator.createVerbList(augmentedRoot, augmentedFormula)
             } else {
                 AugmentedPassivePresentConjugator.instance.accusativeConjugator.createVerbList(augmentedRoot, augmentedFormula)
             }
-            "Jussive" -> if (isActive) {
+            "jussive" -> if (isActive) {
                 AugmentedActivePresentConjugator.instance.jussiveConjugator.createVerbList(augmentedRoot, augmentedFormula)
             } else {
                 AugmentedPassivePresentConjugator.instance.jussiveConjugator.createVerbList(augmentedRoot, augmentedFormula)
             }
-            "Emphasized" -> if (isActive) {
+            "emphasized" -> if (isActive) {
                 AugmentedActivePresentConjugator.instance.jussiveConjugator.createVerbList(augmentedRoot, augmentedFormula)
             } else {
                 AugmentedPassivePresentConjugator.instance.emphasizedConjugator.createVerbList(augmentedRoot, augmentedFormula)
@@ -1271,22 +1271,22 @@ class GatherAll {
 
     // Helper function to build Mudharay based on verb mood
     private fun getMudharayList(verbMood: String, augmentedRoot: AugmentedTrilateralRoot): List<*>? {
-        return when (verbMood) {
-            "Indicative" -> AugmentedActivePresentConjugator.instance.nominativeConjugator.createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
-            "Subjunctive" -> AugmentedActivePresentConjugator.instance.accusativeConjugator.createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
-            "Jussive" -> AugmentedActivePresentConjugator.instance.jussiveConjugator.createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
-            "Emphasized" -> AugmentedActivePresentConjugator.instance.emphasizedConjugator.createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
+        return when (verbMood.lowercase()) {
+            "indicative" -> AugmentedActivePresentConjugator.instance.nominativeConjugator.createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
+            "subjunctive" -> AugmentedActivePresentConjugator.instance.accusativeConjugator.createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
+            "jussive" -> AugmentedActivePresentConjugator.instance.jussiveConjugator.createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
+            "emphasized" -> AugmentedActivePresentConjugator.instance.emphasizedConjugator.createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
             else -> null
         }
     }
 
     // Helper function to build MudharayMajhool based on verb mood
     private fun getMudharayMajhoolList(verbMood: String, augmentedRoot: AugmentedTrilateralRoot): List<*>? {
-        return when (verbMood) {
-            "Indicative" -> AugmentedPassivePresentConjugator.instance.nominativeConjugator.createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
-            "Subjunctive" -> AugmentedPassivePresentConjugator.instance.accusativeConjugator.createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
-            "Jussive" -> AugmentedPassivePresentConjugator.instance.jussiveConjugator.createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
-            "Emphasized" -> AugmentedPassivePresentConjugator.instance.emphasizedConjugator.createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
+        return when (verbMood.lowercase()) {
+            "indicative" -> AugmentedPassivePresentConjugator.instance.nominativeConjugator.createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
+            "subjunctive" -> AugmentedPassivePresentConjugator.instance.accusativeConjugator.createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
+            "jussive" -> AugmentedPassivePresentConjugator.instance.jussiveConjugator.createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
+            "emphasized" -> AugmentedPassivePresentConjugator.instance.emphasizedConjugator.createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
             else -> null
         }
     }
@@ -1360,28 +1360,28 @@ class GatherAll {
                 PassivePastConjugator.instance.createVerbList(unaugmentedTrilateralRoot)
 
             when (verbmood) {
-                "Indicative" -> {
+                "indicative" -> {
                     mudharay = ActivePresentConjugator.instance
                         .createNominativeVerbList(unaugmentedTrilateralRoot)
                     mudharaymajhool = PassivePresentConjugator.instance
                         .createNominativeVerbList(unaugmentedTrilateralRoot)
                 }
 
-                "Subjunctive" -> {
+                "subjunctive" -> {
                     mudharay = ActivePresentConjugator.instance
                         .createAccusativeVerbList(unaugmentedTrilateralRoot)
                     mudharaymajhool = PassivePresentConjugator.instance
                         .createAccusativeVerbList(unaugmentedTrilateralRoot)
                 }
 
-                "Jussive" -> {
+                "jussive" -> {
                     mudharay = ActivePresentConjugator.instance
                         .createJussiveVerbList(unaugmentedTrilateralRoot)
                     mudharaymajhool = PassivePresentConjugator.instance
                         .createJussiveVerbList(unaugmentedTrilateralRoot)
                 }
 
-                "Emphasized" -> {
+                "emphasized" -> {
                     mudharay = ActivePresentConjugator.instance
                         .createEmphasizedVerbList(unaugmentedTrilateralRoot)
                     mudharaymajhool = PassivePresentConjugator.instance
@@ -1624,7 +1624,7 @@ class GatherAll {
             madhimajhool = AugmentedPassivePastConjugator.instance
                 .createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
             when (verbmood) {
-                "Indicative" -> {
+                "indicative" -> {
                     mudharay =
                         AugmentedActivePresentConjugator.instance.nominativeConjugator.createVerbList(
                             augmentedRoot,
@@ -1637,7 +1637,7 @@ class GatherAll {
                         )
                 }
 
-                "Subjunctive" -> {
+                "subjunctive" -> {
                     mudharay =
                         AugmentedActivePresentConjugator.instance.accusativeConjugator.createVerbList(
                             augmentedRoot,
@@ -1650,7 +1650,7 @@ class GatherAll {
                         )
                 }
 
-                "Jussive" -> {
+                "jussive" -> {
                     mudharay =
                         AugmentedActivePresentConjugator.instance.jussiveConjugator.createVerbList(
                             augmentedRoot,
@@ -1663,7 +1663,7 @@ class GatherAll {
                         )
                 }
 
-                "Emphasized" -> {
+                "emphasized" -> {
                     mudharay =
                         AugmentedActivePresentConjugator.instance.emphasizedConjugator.createVerbList(
                             augmentedRoot,
@@ -1879,7 +1879,7 @@ class GatherAll {
             madhimajhool = AugmentedPassivePastConjugator.instance
                 .createVerbList(augmentedRoot, augmentedRoot.form!!.toInt())
             when (verbmood) {
-                "Indicative" -> {
+                "indicative" -> {
                     mudharay =
                         AugmentedActivePresentConjugator.instance.nominativeConjugator.createVerbList(
                             augmentedRoot,
@@ -1892,7 +1892,7 @@ class GatherAll {
                         )
                 }
 
-                "Subjunctive" -> {
+                "subjunctive" -> {
                     mudharay =
                         AugmentedActivePresentConjugator.instance.accusativeConjugator.createVerbList(
                             augmentedRoot,
@@ -1905,7 +1905,7 @@ class GatherAll {
                         )
                 }
 
-                "Jussive" -> {
+                "jussive" -> {
                     mudharay =
                         AugmentedActivePresentConjugator.instance.jussiveConjugator.createVerbList(
                             augmentedRoot,
@@ -1918,7 +1918,7 @@ class GatherAll {
                         )
                 }
 
-                "Emphasized" -> {
+                "emphasized" -> {
                     mudharay =
                         AugmentedActivePresentConjugator.instance.emphasizedConjugator.createVerbList(
                             augmentedRoot,
@@ -2142,18 +2142,18 @@ private fun buildMazeedListOLD(
 
     // Handle verb mood and retrieve the appropriate conjugations
     val mudharay = when (verbmood) {
-        "Indicative" -> AugmentedActivePresentConjugator.instance.nominativeConjugator
-        "Subjunctive" -> AugmentedActivePresentConjugator.instance.accusativeConjugator
-        "Jussive" -> AugmentedActivePresentConjugator.instance.jussiveConjugator
-        "Emphasized" -> AugmentedActivePresentConjugator.instance.emphasizedConjugator
+        "indicative" -> AugmentedActivePresentConjugator.instance.nominativeConjugator
+        "subjunctive" -> AugmentedActivePresentConjugator.instance.accusativeConjugator
+        "jussive" -> AugmentedActivePresentConjugator.instance.jussiveConjugator
+        "emphasized" -> AugmentedActivePresentConjugator.instance.emphasizedConjugator
         else -> null
     }?.createVerbList(augmentedRoot, augmentedFormula.toInt())
 
     val mudharaymajhool = when (verbmood) {
-        "Indicative" -> AugmentedPassivePresentConjugator.instance.nominativeConjugator
-        "Subjunctive" -> AugmentedPassivePresentConjugator.instance.accusativeConjugator
-        "Jussive" -> AugmentedPassivePresentConjugator.instance.jussiveConjugator
-        "Emphasized" -> AugmentedPassivePresentConjugator.instance.emphasizedConjugator
+        "indicative" -> AugmentedPassivePresentConjugator.instance.nominativeConjugator
+        "subjunctive" -> AugmentedPassivePresentConjugator.instance.accusativeConjugator
+        "jussive" -> AugmentedPassivePresentConjugator.instance.jussiveConjugator
+        "emphasized" -> AugmentedPassivePresentConjugator.instance.emphasizedConjugator
         else -> null
     }?.createVerbList(augmentedRoot, augmentedFormula.toInt())
 

@@ -84,8 +84,7 @@ class FlowAyahWordAdapterNoMafoolat(
     data class PhraseItem(val phrase: String, val grammaticalGroup: String)
 
 
-
-    private val phrases =  arrayOf(
+    private val phrases = arrayOf(
         PhraseItem("Lane Lexicon", "lanes"),
         PhraseItem("Hans Weir", "hans")
     )
@@ -124,10 +123,13 @@ class FlowAyahWordAdapterNoMafoolat(
 
     private val mudhafCache = HashMap<Pair<Int, Int>, MutableList<List<Int>>>()//
 
-   // private val negationCache: MutableMap<Int, MutableMap<Int, Pair<SpannableString, String>>> =        mutableMapOf()
-   // private val negationCache: MutableMap<Int, MutableMap<Int, MutableList<Pair<SpannableString, String>>>> = mutableMapOf()
-    private val negationCache: MutableMap<Int, MutableMap<Int, MutableList<SpannableString>>> = mutableMapOf()
-    private val mansoobatCache: MutableMap<Int, MutableMap<Int, MutableList<SpannableString>>> = mutableMapOf()
+    // private val negationCache: MutableMap<Int, MutableMap<Int, Pair<SpannableString, String>>> =        mutableMapOf()
+    // private val negationCache: MutableMap<Int, MutableMap<Int, MutableList<Pair<SpannableString, String>>>> = mutableMapOf()
+    private val negationCache: MutableMap<Int, MutableMap<Int, MutableList<SpannableString>>> =
+        mutableMapOf()
+    private val mansoobatCache: MutableMap<Int, MutableMap<Int, MutableList<SpannableString>>> =
+        mutableMapOf()
+
     //   private lateinit var  ayahWord: CorpusAyahWord
     //  private  var ayahWord: QuranCorpusWbw? = null
     private val isaudio: Boolean
@@ -148,10 +150,10 @@ class FlowAyahWordAdapterNoMafoolat(
         QuranViewUtils.cacheSifaData(quranModel, surah, sifaCache)
         QuranViewUtils.cacheMudhafData(quranModel, surah, mudhafCache)
 
-    //    QuranViewUtils.cachePastTenceData(quranModel, surah, pastTenceCache)
-     //   QuranViewUtils.cacheFutureTenceData(quranModel, surah, futureTenceCache)
-        QuranViewUtils.cacheNegationData(quranModel, surah, negationCache,isNightmode)
-        QuranViewUtils.cacheMansubat(quranModel, surah, mansoobatCache,isNightmode)
+        //    QuranViewUtils.cachePastTenceData(quranModel, surah, pastTenceCache)
+        //   QuranViewUtils.cacheFutureTenceData(quranModel, surah, futureTenceCache)
+        QuranViewUtils.cacheNegationData(quranModel, surah, negationCache, isNightmode)
+        QuranViewUtils.cacheMansubat(quranModel, surah, mansoobatCache, isNightmode)
 
 
 
@@ -213,16 +215,16 @@ class FlowAyahWordAdapterNoMafoolat(
     override fun onBindViewHolder(holder: ItemViewAdapter, position: Int) {
 
 
-
         if (getItemViewType(position) == TYPE_HEADER) {
             displayHeader(holder)
 
 
         } else {
             displayAyah(holder, position - 1)
-            displayPhrases(position-1, holder)
+            displayPhrases(position - 1, holder)
         }
     }
+
     private fun displayPhrases(
         position: Int,
         holder: ItemViewAdapter
@@ -236,7 +238,7 @@ class FlowAyahWordAdapterNoMafoolat(
         updatePhraseGroups(key, phraseGroups)
 
         // Define maximum length for each phrase
-        val maxLength = 800 // adjust this value as needed
+        val maxLength = 1500 // adjust this value as needed
 
         // Truncate long phrases with ellipsis
         val truncatedPhraseGroups = phraseGroups.map { phrase ->
@@ -269,24 +271,25 @@ class FlowAyahWordAdapterNoMafoolat(
         var phraseListAdapter: PhraseListAdapter? = null
         val entity = allofQuran[position]
         val key = Pair(entity!!.surah, entity!!.ayah)
-      //  holder.itemView.post {
-            updatePhraseGroups(key, phraseGroups) // Pass phraseGroups to updatePhraseGroups
+        //  holder.itemView.post {
+        updatePhraseGroups(key, phraseGroups) // Pass phraseGroups to updatePhraseGroups
 
-            // Check if the adapter is already created
-            if (phraseListAdapter == null) {
-                // Create a new adapter using the item-specific phraseGroups
-                phraseListAdapter = PhraseListAdapter(holder.itemView.context, phraseGroups)
-                holder.phrasesListView.adapter = phraseListAdapter
-                holder.phrasesListView.setListViewHeightBasedOnChildren()
+        // Check if the adapter is already created
+        if (phraseListAdapter == null) {
+            // Create a new adapter using the item-specific phraseGroups
+            phraseListAdapter = PhraseListAdapter(holder.itemView.context, phraseGroups)
+            holder.phrasesListView.adapter = phraseListAdapter
+            holder.phrasesListView.setListViewHeightBasedOnChildren()
 
-            } else {
-                // Update the existing adapter's data
-                phraseListAdapter?.clear()
-                phraseListAdapter?.addAll(phraseGroups)
-                phraseListAdapter?.notifyDataSetChanged()
-            }
-       // }
+        } else {
+            // Update the existing adapter's data
+            phraseListAdapter?.clear()
+            phraseListAdapter?.addAll(phraseGroups)
+            phraseListAdapter?.notifyDataSetChanged()
+        }
+        // }
     }
+
     fun ListView.setListViewHeightBasedOnChildren() {
         val listAdapter = adapter ?: return
         var totalHeight = 0
@@ -308,9 +311,8 @@ class FlowAyahWordAdapterNoMafoolat(
         val sharedPreferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(
             context
         )
-        val   entity = allofQuran[position]
+        val entity = allofQuran[position]
         val phraseGroups: MutableList<SpannableString> = mutableListOf()
-
 
 
         val arabic_font_selection =
@@ -328,7 +330,6 @@ class FlowAyahWordAdapterNoMafoolat(
         wordByWordDisplay = sharedPreferences.getBoolean("wordByWordDisplay", false)
 
         QuranViewUtils.setBackgroundColor(context, holder.itemView, isNightmode, position % 2 == 1)
-      
 
 
         val key = Pair(entity!!.surah, entity!!.ayah)
@@ -370,15 +371,15 @@ class FlowAyahWordAdapterNoMafoolat(
         holder.base_cardview.visibility = View.GONE
 
         setChapterInfo(holder, ayahWord)
-        displayWordByWord(holder, entity,sharedPreferences,position)
+        displayWordByWord(holder, entity, sharedPreferences, position)
         //  setAdapterposition(position);
 
         displayTranslation(
-          
+
             entity,
             holder,
             sharedPreferences
-   
+
         )
 
 
@@ -407,9 +408,6 @@ class FlowAyahWordAdapterNoMafoolat(
         } else {
             holder.erabexpand.visibility = View.GONE
         }
-
-
-
 
 
     }
@@ -466,15 +464,15 @@ class FlowAyahWordAdapterNoMafoolat(
                 // Check if the word is already cached
                 spannedWord = spannedWordsCache.getOrPut(word) {
                     // Log when we're generating a new SpannableString and storing it in the cache
-                //    Log.d(TAG, "FROM FILE (generated new SpannableString)")
+                    //    Log.d(TAG, "FROM FILE (generated new SpannableString)")
                     QuranViewUtils.NewgetSpannedWords(word)
                 }
 
                 // Log when we're fetching the word from cache
-          /*      if (spannedWordsCache.containsKey(word)) {
-                    Log.d(TAG, "FROM CACHE")
-                }
-*/
+                /*      if (spannedWordsCache.containsKey(word)) {
+                          Log.d(TAG, "FROM CACHE")
+                      }
+      */
                 val arabicView =
                     if (showWbwTranslation && wordByWordDisplay) arabicChipview else arabicTv
                 arabicView.text = spannedWord
@@ -660,7 +658,7 @@ class FlowAyahWordAdapterNoMafoolat(
 
         for (spannableString in spannableStringsList) {
             phraseGroups.add(spannableString)
-          //  println("check")
+            //  println("check")
         }
         val spannableStringsLists = mansoobatCache[key.first]?.get(key.second) ?: emptyList()
         for (spannableString in spannableStringsLists) {
@@ -682,9 +680,6 @@ class FlowAyahWordAdapterNoMafoolat(
     }
 
 
-
-
-
     private fun setAyahGrammaticalPhrases(
         holder: ItemViewAdapter,
         spannableverse: SpannableString?,
@@ -698,15 +693,15 @@ class FlowAyahWordAdapterNoMafoolat(
 
         ) {
 
-        val futureTenceCache: MutableMap<String,  List<List<SpannableString>>> = mutableMapOf()
-          //<SpannableString, String>>> =        mutableMapOf()
+        val futureTenceCache: MutableMap<String, List<List<SpannableString>>> = mutableMapOf()
+        //<SpannableString, String>>> =        mutableMapOf()
         if (spannableverse != null) {
 
             CorpusUtilityorig.setAyahGrammaticalPhrases(spannableverse, surah, ayah)
             if (sifaIndexList != null && sifaIndexList.isNotEmpty()) {
                 CorpusUtilityorig.setMausoofSifaFromCache(spannableverse, sifaIndexList)
             }
-           if (mudhafIndexList != null && mudhafIndexList.isNotEmpty()) {
+            if (mudhafIndexList != null && mudhafIndexList.isNotEmpty()) {
                 CorpusUtilityorig.setMudhafFromCache(spannableverse, mudhafIndexList)
             }
             if (absoluteNegationIndexes != null && absoluteNegationIndexes.isNotEmpty()) {
@@ -726,7 +721,7 @@ class FlowAyahWordAdapterNoMafoolat(
 
     private fun setTextSizes(holder: ItemViewAdapter) {
         if (!defaultfont) {
-            val erabsize=30f
+            val erabsize = 30f
             holder.quran_transliteration.textSize = translationfontsize.toFloat()
             holder.erab_textView.textSize = translationfontsize.toFloat()
             holder.translate_textView.textSize = translationfontsize.toFloat()

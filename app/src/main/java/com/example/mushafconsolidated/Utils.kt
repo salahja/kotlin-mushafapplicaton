@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.sqlite.db.SimpleSQLiteQuery
 import com.example.mushafconsolidated.DAO.BookMarkDao
 import com.example.mushafconsolidated.DAO.BookMarksPojo
+import com.example.mushafconsolidated.Entities.AccusativePojo
 import com.example.mushafconsolidated.Entities.BookMarks
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
 import com.example.mushafconsolidated.Entities.CorpusEntity
@@ -38,6 +39,7 @@ import com.example.mushafconsolidated.Entities.RootWordDetails
 import com.example.mushafconsolidated.Entities.ShartListingPojo
 import com.example.mushafconsolidated.Entities.SifaEntity
 import com.example.mushafconsolidated.Entities.SifaListingPojo
+import com.example.mushafconsolidated.Entities.SifaMudhafEnt
 import com.example.mushafconsolidated.Entities.VerbCorpus
 import com.example.mushafconsolidated.Entities.VerbCorpusBreakup
 import com.example.mushafconsolidated.Entities.hanslexicon
@@ -116,6 +118,10 @@ class Utils {
 
     fun getNegationFilterSurahAyahType(cid: Int, aid: Int,type: String ): List<NegationEnt> {
         return  database.NegationDao().getNegationFilterSurahAyahType(cid, aid,type)
+
+    }
+    fun getFilterSurahAyahType(cid: Int, aid: Int,type: String ): List<SifaMudhafEnt> {
+        return  database.SifaMudhafDao().getSIfaMudhaafFilterSurahAyahType(cid, aid,type)
 
     }
 
@@ -273,6 +279,115 @@ class Utils {
 
 
     }
+    fun getNASAB():List<AccusativePojo>{
+        val accusative:String=("SELECT \n" +
+                "    corpusexpand.surah,\n" +
+                "    corpusexpand.ayah\n" +
+                "    \n" +
+                "FROM \n" +
+                "    corpusexpand, qurans\n" +
+                "WHERE \n" +
+                "    (corpusexpand.tagone = \"ACC\" OR corpusexpand.tagtwo = \"ACC\" OR corpusexpand.tagthree = \"ACC\" OR corpusexpand.tagfour = \"ACC\" OR corpusexpand.tagfive = \"ACC\")\n" +
+                " \n" +
+                "    AND corpusexpand.surah = qurans.surah \n" +
+                "    AND corpusexpand.ayah = qurans.ayah")
+        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(accusative)
+        //  List<Book> result = booksDao.getBooks(query);
+        return database.RawDao().getAccusativeListing(query)
+
+    }
+    fun getKanaAll():List<AccusativePojo>{
+        val kana:String=("select \n" +
+                "*\n" +
+                "    \n" +
+                "FROM \n" +
+                "    corpusexpand, qurans\n" +
+                "WHERE \n" +
+                "    (corpusexpand.lemaraone = \"كَانَ\" OR corpusexpand.lemaratwo = \"كَانَ\" OR corpusexpand.lemarathree = \"كَانَ\" OR \n" +
+                "    corpusexpand.lemarafour = \"كَانَ\" OR corpusexpand.lemarafive = \"كَانَ\")\n" +
+                " \n" +
+                "    AND corpusexpand.surah = qurans.surah \n" +
+                "    AND corpusexpand.ayah = qurans.ayah")
+
+        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(kana)
+        //  List<Book> result = booksDao.getBooks(query);
+        return database.RawDao().getAccusativeListing(query)
+
+    }
+
+    fun getLauAll():List<AccusativePojo>{
+        val kana:String=("SELECT *\n" +
+                "  FROM corpusexpand,\n" +
+                "       qurans\n" +
+                " WHERE ( (corpusexpand.araone = \"لَوْ\" AND \n" +
+                "          corpusexpand.tagone = \"COND\" OR \n" +
+                "          corpusexpand.aratwo = \"لَوْ\" AND \n" +
+                "          corpusexpand.tagtwo = \"COND\" OR \n" +
+                "          corpusexpand.arathree = \"لَوْ\" AND \n" +
+                "          corpusexpand.tagthree = \"COND\" OR \n" +
+                "          corpusexpand.arafour = \"لَوْ\" OR \n" +
+                "          corpusexpand.arafive = \"لَوْ\") OR \n" +
+                "         (corpusexpand.araone = \"لَوْلَا\" OR \n" +
+                "          corpusexpand.aratwo = \"لَوْلَا\" AND \n" +
+                "          corpusexpand.tagtwo = \"COND\" OR \n" +
+                "          corpusexpand.arathree = \"لَوْلَا\" AND \n" +
+                "          corpusexpand.tagthree = \"COND\" OR \n" +
+                "          corpusexpand.arafour = \"لَوْلَا\" OR \n" +
+                "          corpusexpand.arafive = \"لَوْلَا\") ) AND \n" +
+                "       corpusexpand.surah = qurans.surah AND \n" +
+                "       corpusexpand.ayah = qurans.ayah AND \n" +
+                "       qurans.surah > 9 AND \n" +
+                "       qurans.surah < 58\n" +
+                " ORDER BY qurans.surah,\n" +
+                "          qurans.ayah;\n")
+
+        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(kana)
+        //  List<Book> result = booksDao.getBooks(query);
+        return database.RawDao().getAccusativeListing(query)
+
+    }
+    fun getInALL():List<AccusativePojo>{
+        val kana:String=("SELECT *\n" +
+                "  FROM corpusexpand,\n" +
+                "       qurans\n" +
+                " WHERE (corpusexpand.araone = \"إِن\" OR \n" +
+                "        corpusexpand.aratwo = \"إِن\" OR \n" +
+                "        corpusexpand.arathree = \"ئِنِ\" OR \n" +
+                "        corpusexpand.arathree = \"إِي۟ن\") AND \n" +
+                "       corpusexpand.surah = qurans.surah AND \n" +
+                "       corpusexpand.ayah = qurans.ayah AND qurans.surah>9 AND qurans.surah<58 order by qurans.surah,qurans.ayah")
+
+        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(kana)
+        //  List<Book> result = booksDao.getBooks(query);
+        return database.RawDao().getAccusativeListing(query)
+
+    }
+
+
+
+
+    fun getIzaAll():List<AccusativePojo>{
+        val kana:String=("select \n" +
+                "*\n" +
+                "    \n" +
+                "FROM \n" +
+                "    corpusexpand, qurans\n" +
+                "WHERE \n" +
+                "    (corpusexpand.araone = \"إِذَا\" AND tagone==\"T\" OR corpusexpand.aratwo = \"إِذَا\"   AND tagtwo==\"T\" OR corpusexpand.arathree = \"إِذَا\"  AND tagone==\"T\" )\n" +
+                " \n" +
+                "    AND corpusexpand.surah = qurans.surah \n" +
+                "    AND corpusexpand.ayah = qurans.ayah and qurans.surah>9 and qurans.surah<58")
+
+        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(kana)
+        //  List<Book> result = booksDao.getBooks(query);
+        return database.RawDao().getAccusativeListing(query)
+
+    }
+
+
+
+
+
     fun getSifalisting(tid:Int):List<SifaListingPojo>{
         val sqlshart:String=("select sifa.surah,sifa.ayah,sifa.startindex,sifa.endindex,sifa.wordfrom,qurans.page,qurans.passage_no,qurans.qurantext,qurans.has_prostration,qurans.translation,\n" +
                 "qurans.en_transliteration,qurans.en_arberry,qurans.en_jalalayn,qurans.ur_jalalayn,qurans.tafsir_kathir,qurans.ur_junagarhi,qurans.ar_irab_two\n" +
@@ -805,6 +920,9 @@ class Utils {
     fun getNasbAall(): List<NewNasbEntity> {
         return database.NewNasbDao().harfNasbIndAll()
     }
+
+
+
     fun getwbwQuranbTranslationbyrange(id: Int, ayah: Int,wordfrom: Int, wordto:Int): List<wbwentity> {
         return database.wbwDao().getwbwQuranbTranslationbyrange(id,ayah,wordfrom,wordto)
     }

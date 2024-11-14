@@ -27,6 +27,7 @@ import com.example.mushafconsolidated.DAO.NounCorpusDao
 
 import com.example.mushafconsolidated.DAO.QuranDao
 import com.example.mushafconsolidated.DAO.SifaDao
+import com.example.mushafconsolidated.DAO.SifaMudhafDao
 import com.example.mushafconsolidated.DAO.VerbCorpusDao
 import com.example.mushafconsolidated.DAO.grammarRulesDao
 import com.example.mushafconsolidated.DAO.liajlihiDao
@@ -56,6 +57,7 @@ import com.example.mushafconsolidated.Entities.NounCorpus
 
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.SifaEntity
+import com.example.mushafconsolidated.Entities.SifaMudhafEnt
 import com.example.mushafconsolidated.Entities.TameezEnt
 import com.example.mushafconsolidated.Entities.VerbCorpus
 import com.example.mushafconsolidated.Entities.hanslexicon
@@ -71,7 +73,7 @@ import javax.inject.Inject
      var mutlaqbadalaalihiTameezDao: MutlaqBadalaAlihiTameezDao,
      var illaPositiveDao: IllaPositiveDao,
      var negationsDao: NegationDao,
-
+     var sifaMudhafDao: SifaMudhafDao,
      var absoluteNegationDao:AbsoluteNegationDao,
      var wbwdao:wbwDao,
      var corpusDao: CorpusExpandedDao,
@@ -129,7 +131,15 @@ import javax.inject.Inject
         mousufSifa.getSifaindexesBySurahAyah(surah, ayah)
      fun getsifaFilterSurah(surah: Int, ): List<SifaEntity> =
          mousufSifa.getSifaindexesBySurah(surah)
-    fun getkanasurah(surah: Int): List<NewKanaEntity> = kanaDao.getkanabysurah(surah)
+
+     fun getSifaMousoofFileterSurah(surah: Int, ): List<SifaMudhafEnt> =
+         sifaMudhafDao.getISIfaMudhaafFilterSurah(surah)
+
+     fun getSifaMousoofFileterSurahType(surah: Int,type: String ): List<SifaMudhafEnt> =
+         sifaMudhafDao.getISIfaMudhaafFilterSurahAndType(surah,type)
+
+
+     fun getkanasurah(surah: Int): List<NewKanaEntity> = kanaDao.getkanabysurah(surah)
 
     fun getshartsurah(surah: Int): List<NewShartEntity> = shartDAO.getShartBySurah(surah)
 
@@ -190,7 +200,7 @@ import javax.inject.Inject
          negationsDao.getINegationFilterSurahAndType(surah,type)
 
      fun getNegationFilerSurahAyaType(surah: Int, ayah: Int, type:String): List<NegationEnt> =
-         negationsDao.getNegationFilterSurahAyahType(surah, ayah,type)
+         negationsDao.getNasabFilterSurahAyahTypeSubType(surah, ayah,type)
 
 
      fun geNegationFilerSurahAyah(surah: Int, ayah: Int): List<NegationEnt> =

@@ -30,6 +30,7 @@ import com.example.mushafconsolidated.DAO.QuranDao
 import com.example.mushafconsolidated.DAO.QuranExplorerDao
 import com.example.mushafconsolidated.DAO.RawDao
 import com.example.mushafconsolidated.DAO.SifaDao
+import com.example.mushafconsolidated.DAO.SifaMudhafDao
 import com.example.mushafconsolidated.DAO.VerbCorpusDao
 import com.example.mushafconsolidated.DAO.grammarRulesDao
 import com.example.mushafconsolidated.DAO.liajlihiDao
@@ -83,6 +84,14 @@ object AppModule {
 
         return appDB.NegationDao()
     }
+    @Singleton
+    @Provides
+    fun getSIfaMudhafnDao(appDB: QuranAppDatabase): SifaMudhafDao {
+
+        return appDB.SifaMudhafDao()
+    }
+
+
     @Singleton
     @Provides
     fun getMansubatDao(appDB: QuranAppDatabase): MutlaqBadalaAlihiTameezDao {
