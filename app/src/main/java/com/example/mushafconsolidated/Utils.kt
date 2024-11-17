@@ -307,7 +307,7 @@ class Utils {
                 "    corpusexpand.lemarafour = \"كَانَ\" OR corpusexpand.lemarafive = \"كَانَ\")\n" +
                 " \n" +
                 "    AND corpusexpand.surah = qurans.surah \n" +
-                "    AND corpusexpand.ayah = qurans.ayah")
+                "    AND corpusexpand.ayah = qurans.ayah and qurans.surah>9 and qurans.surah<58")
 
         val query: SimpleSQLiteQuery = SimpleSQLiteQuery(kana)
         //  List<Book> result = booksDao.getBooks(query);
@@ -362,6 +362,42 @@ class Utils {
         return database.RawDao().getAccusativeListing(query)
 
     }
+    fun getMaMinALL():List<AccusativePojo>{
+        val kana:String=("SELECT *\n" +
+                "  FROM corpusexpand,\n" +
+                "       qurans\n" +
+                " WHERE (corpusexpand.araone = \"مَن\" OR \n" +
+                "        corpusexpand.aratwo = \"مَن\" OR \n" +
+                "        corpusexpand.arathree = \"مَن\" OR \n" +
+                "        corpusexpand.araone=\"مَنْ\" OR\n" +
+                "         corpusexpand.aratwo=\"مَنْ\" OR\n" +
+                "                  corpusexpand.arathree=\"مَنْ\" OR\n" +
+                "        corpusexpand.araone = \"أَمَّا\" OR \n" +
+                "        corpusexpand.araone=\"أَمَّآ\" or\n" +
+                "        \n" +
+                "        corpusexpand.araone = \"مَا\" OR \n" +
+                "        corpusexpand.aratwo = \"أَمَّآ\" OR \n" +
+                "        corpusexpand.aratwo = \"أَمَّا\" OR \n" +
+                "        corpusexpand.arathree = \"مَا\" OR \n" +
+                "        corpusexpand.aratwo = \"مَن\" OR \n" +
+                "        corpusexpand.araone = \"مَآ\" OR \n" +
+                "        corpusexpand.aratwo = \"مَنِ\") AND \n" +
+                "       (corpusexpand.tagone = \"COND\" OR \n" +
+                "        corpusexpand.tagtwo = \"COND\") AND \n" +
+                "       corpusexpand.surah = qurans.surah AND \n" +
+                "       corpusexpand.ayah = qurans.ayah AND \n" +
+                "       qurans.surah > 9 AND \n" +
+                "       qurans.surah < 58\n" +
+                " ORDER BY qurans.surah,\n" +
+                "          qurans.ayah")
+
+        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(kana)
+        //  List<Book> result = booksDao.getBooks(query);
+        return database.RawDao().getAccusativeListing(query)
+
+    }
+
+
 
 
 
@@ -905,6 +941,11 @@ class Utils {
     fun getKananew(id: Int): List<NewKanaEntity>? {
         return database.NewKanaDao().getkanabysurah(id)
     }
+    fun getKanaAlls( ): List<NewKanaEntity> {
+        return database.NewKanaDao().kanaall()
+    }
+
+
 
     fun getKananewSurahAyah(id: Int, aid: Int): List<NewKanaEntity>? {
         return database.NewKanaDao().getkanabysurahAyah(id, aid)

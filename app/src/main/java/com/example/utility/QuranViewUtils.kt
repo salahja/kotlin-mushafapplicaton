@@ -36,8 +36,10 @@ import android.text.style.ForegroundColorSpan
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import com.example.Constant.FORESTGREEN
 import com.example.Constant.GOLD
 import com.example.Constant.GREENDARK
+import com.example.Constant.KASHMIRIGREEN
 import com.example.Constant.ORANGE400
 import com.example.Constant.WHOTPINK
 import com.example.Constant.harfinnaspanDark
@@ -46,6 +48,7 @@ import com.example.Constant.harfshartspanDark
 import com.example.Constant.jawabshartspanDark
 import com.example.Constant.shartspanDark
 import com.example.mushafconsolidated.Entities.IllaPositive
+import com.example.mushafconsolidated.Entities.NewKanaEntity
 import com.example.mushafconsolidated.Entities.NewNasbEntity
 import com.example.mushafconsolidated.Entities.NewShartEntity
 import com.example.mushafconsolidated.fragments.GrammerFragmentsBottomSheet.SplitQuranVerses
@@ -550,7 +553,7 @@ object QuranViewUtils {
     }
 
     private fun appendTranslation(
-        utils: Utils,
+
         sb: StringBuilder,
         wordByWordEntities: List<wbwentity?>?,
         wordRange: IntRange? = null
@@ -581,6 +584,402 @@ if (w != null) {
         }
     }
 
+    fun extractKana(
+        corpus: List<CorpusEntity>,
+        kana: NewKanaEntity,
+        quranText: String,
+        translation: String,
+
+        ): List<String> {
+        //  val utils = Utils(requireContext())
+        //  val kanaSurahAyahnew: List<NewKanaEntity?>? =
+        //    utils.getKanaSurahAyahnew(chapterid, ayanumber)
+        val result = mutableListOf<String>()
+        var arabicString = ""
+        var translationStr = ""
+        val kanaarray: MutableList<SpannableString> = ArrayList()
+        var harfkana: ForegroundColorSpan?
+        var kanaism: ForegroundColorSpan?
+        var ismconnected = 0
+        var kanakhbar: ForegroundColorSpan?
+        if (dark) {
+            harfkana = ForegroundColorSpan(GOLD)
+            kanaism = ForegroundColorSpan(ORANGE400)
+            kanakhbar = ForegroundColorSpan(Color.CYAN)
+        } else {
+            harfkana = ForegroundColorSpan(FORESTGREEN)
+            kanaism = ForegroundColorSpan(KASHMIRIGREEN)
+            kanakhbar = ForegroundColorSpan(WHOTPINK)
+        }
+        if (kana != null) {
+
+            //System.out.println("CHECK");
+            var harfofverse = ""
+            var ismofverse: String
+            var khabarofverse = ""
+            val start = kana.indexstart
+            val end = kana.indexend
+            val isstart = kana.ismkanastart
+            val issend = kana.ismkanaend
+            val khabarstart = kana.khabarstart
+            val khabarend = kana.khabarend
+            try {
+                harfofverse = quranText.substring(start, end)
+            } catch (e: StringIndexOutOfBoundsException) {
+                quranText.substring(end, start)
+            }
+
+            ismofverse = if (issend > isstart) {
+                quranText.substring(isstart, issend)
+            } else {
+                ""
+            }
+            try {
+                khabarofverse = quranText.substring(khabarstart, khabarend)
+            } catch (e: StringIndexOutOfBoundsException) {
+                println("check")
+            }
+
+            val isharfb = start >= 0 && end > 0
+            val isism = isstart >= 0 && issend > 0
+            val isjawab = khabarstart >= 0 && khabarend > 0
+            val allPartofKana = isharfb && isism && isjawab
+            val kanaHarfAndJawabOnly = isharfb && isjawab
+            val kanaHarfAndIsmOnly = isharfb && isism
+            val harfword = kana.harfwordno
+            val ismEword = kana.ismendword
+            val ismSword = kana.ismwordo
+
+            val khabarSword = kana.khabarstartwordno
+            val khabarEword = kana.khabarendwordno
+            var harfspannble: SpannableString
+            var harfismspannable: SpannableString
+            var khabarofversespannable: SpannableString
+            if (allPartofKana) {
+                if (corpus[0].surah == 2 && corpus[0].ayah == 114) {
+                    println("check")
+                }
+                harfspannble = SpannableString(harfofverse)
+                harfismspannable = SpannableString(ismofverse)
+                khabarofversespannable = SpannableString(khabarofverse)
+
+                harfspannble.setSpan(
+                    harfkana,
+                    0,
+                    harfofverse.length,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                harfismspannable.setSpan(
+                    kanaism,
+                    0,
+                    ismofverse.length,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                khabarofversespannable.setSpan(
+                    kanakhbar,
+                    0,
+                    khabarofverse.length,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                if (kana.ismkanastart > kana.khabarstart) {
+                    val charSequence = TextUtils.concat(
+                        harfspannble,
+                        " ",
+                        khabarofversespannable,
+                        " ",
+                        harfismspannable
+                    )
+                    arabicString = harfofverse + ' ' + khabarofverse + ' ' + ismofverse
+                    kanaarray.add(SpannableString.valueOf(charSequence))
+                } else {
+                    val charSequence = TextUtils.concat(
+                        harfspannble,
+                        " ",
+                        harfismspannable,
+                        " ",
+                        khabarofversespannable
+                    )
+                    arabicString = harfofverse + ' ' + ismofverse + ' ' + khabarofverse
+                    kanaarray.add(SpannableString.valueOf(charSequence))
+                }
+                val sb = StringBuilder()
+                val ismorkhabarsb = StringBuilder()
+                val utils = Utils(QuranGrammarApplication.context)
+                val wbwayah: List<wbwentity?>? = utils.getwbwQuranBySurahAyah(
+                    corpus!![0].surah,
+                    corpus!![0].ayah
+                )
+                if (wbwayah != null) {
+                    for (w in wbwayah) {
+                        StringBuilder()
+                        val temp: StringBuilder = getSelectedTranslation(w!!)
+                        if (w.wordno == harfword) {
+                            sb.append(temp.append(" "))
+                        } else if (w.wordno in ismSword..ismEword) {
+                            sb.append(temp).append(" ")
+                        } else if (w.wordno in khabarSword..khabarEword) {
+                            ismorkhabarsb.append(temp).append(" ")
+                        }
+                    }
+                }
+                sb.append("... ")
+                sb.append(ismorkhabarsb)
+                kanaarray.add(SpannableString.valueOf(sb.toString()))
+                var type = ""
+                if (kana.ismkanastart > kana.khabarstart) {
+                    type = "kanaallismlate"
+                } else {
+                    type = "kanallsequence"
+                }
+
+                val dataString =
+                    "${kana.surah}|${kana.ayah}|${kana.indexstart}|${kana.khabarend}|${kana.harfwordno}|${kana.khabarendwordno}" +
+                            "|${arabicString}|${sb.toString()}|$translation" +
+                            "|$quranText|$type"
+                result.add(dataString)
+                return result
+                //  CharSequence first = TextUtils.concat(harfspannble," ",shartofverse);
+            } else if (kanaHarfAndJawabOnly) {
+                if (corpus[0].surah == 2 && corpus[0].ayah == 89) {
+                    println("check")
+                }
+                if (dark) {
+                    harfkana = ForegroundColorSpan(GOLD)
+                    kanaism = ForegroundColorSpan(ORANGE400)
+                    kanakhbar = ForegroundColorSpan(Color.CYAN)
+                } else {
+                    harfkana = ForegroundColorSpan(FORESTGREEN)
+                    kanaism = ForegroundColorSpan(KASHMIRIGREEN)
+                    kanakhbar = ForegroundColorSpan(WHOTPINK)
+                }
+                harfspannble = SpannableString(harfofverse)
+                khabarofversespannable = SpannableString(khabarofverse)
+                harfspannble.setSpan(
+                    harfkana,
+                    0,
+                    harfofverse.length,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                khabarofversespannable.setSpan(
+                    kanakhbar,
+                    0,
+                    khabarofverse.length,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                val charSequence = TextUtils.concat(harfspannble, " ", khabarofversespannable)
+                kanaarray.add(SpannableString.valueOf(charSequence))
+
+                val sb = StringBuilder()
+                val wordfrom = kana.harfwordno
+                var wordto: Int
+                val split = khabarofverse.split("\\s".toRegex()).dropLastWhile { it.isEmpty() }
+                    .toTypedArray()
+                wordto = if (split.size == 1) {
+                    kana.khabarstartwordno
+                } else {
+                    kana.khabarendwordno
+                }
+                val isconnected = kana.khabarstartwordno - kana.harfwordno
+                if (isconnected == 1) {
+                    val utils = Utils(QuranGrammarApplication.context)
+                    val list: List<wbwentity?>? = utils.getwbwQuranbTranslation(
+                        corpus!![0].surah,
+                        corpus!![0].ayah,
+                        wordfrom,
+                        wordto
+                    )
+                    if (list != null) {
+                        for (w in list) {
+                            StringBuilder()
+                            val temp: StringBuilder = getSelectedTranslation(w!!)
+                            sb.append(temp).append(" ")
+                        }
+                    }
+                    arabicString = harfofverse + ' ' + khabarofverse
+                    translationStr = sb.toString()
+                    kanaarray.add(SpannableString.valueOf(sb.toString()))
+                } else {
+                    val wordfroms = kana.harfwordno
+                    val ut = Utils(QuranGrammarApplication.context)
+                    val list = ut.getwbwQuranbTranslationbyrange(
+                        corpus!![0].surah,
+                        corpus!![0].ayah,
+                        wordfrom,
+                        wordfroms
+                    )
+                    val from = kana.khabarstartwordno
+                    var to = kana.khabarendwordno
+                    if (to == 0) {
+                        to = from
+                    }
+                    val sbs = getTranslationForLanguage(list)
+
+                    //    sb.append(list).append("----");
+                    val utils = Utils(QuranGrammarApplication.context)
+                    val lists: List<wbwentity>? = utils.getwbwQuranbTranslation(
+                        corpus!![0].surah,
+                        corpus!![0].ayah,
+                        from,
+                        to
+                    )
+                    if (lists != null) {
+                        for (w in lists) {
+                            StringBuilder()
+                            val temp: StringBuilder = getSelectedTranslation(w)
+                            sbs.append(temp).append(" ")
+                        }
+                    }
+                    translationStr = sbs.toString()
+                    kanaarray.add(SpannableString.valueOf(sb.toString()))
+                    arabicString = harfofverse + "..." + khabarofverse
+                }
+                val type = "kanaandjawabonly"
+                val dataString =
+                    "${kana.surah}|${kana.ayah}|${kana.indexstart}|${kana.khabarend}|${kana.harfwordno}|${kana.khabarstartwordno}" +
+                            "|${arabicString}|${translationStr.toString()}|$translation" +
+                            "|$quranText|$type"
+                result.add(dataString)
+                return result
+            } else if (kanaHarfAndIsmOnly) {
+                if (dark) {
+                    harfkana = ForegroundColorSpan(GOLD)
+                    kanaism = ForegroundColorSpan(ORANGE400)
+                    kanakhbar = ForegroundColorSpan(Color.CYAN)
+                } else {
+                    harfkana = ForegroundColorSpan(FORESTGREEN)
+                    kanaism = ForegroundColorSpan(KASHMIRIGREEN)
+                    kanakhbar = ForegroundColorSpan(WHOTPINK)
+                }
+                harfspannble = SpannableString(harfofverse)
+                harfismspannable = SpannableString(ismofverse)
+                harfspannble.setSpan(
+                    harfkana,
+                    0,
+                    harfofverse.length,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                harfismspannable.setSpan(
+                    kanaism,
+                    0,
+                    ismofverse.length,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                val charSequences = TextUtils.concat(
+                    harfspannble,
+                    " $harfismspannable"
+                )
+                kanaarray.add(SpannableString.valueOf(charSequences))
+                //    kanaarray.add(SpannableString.valueOf(charSequence));
+                val sb = StringBuilder()
+                val ismorkhabarsb = StringBuilder()
+                ismconnected = kana.ismkanastart - kana.indexend
+                val wordfrom = kana.harfwordno
+                val wordto = kana.ismwordo
+                if (ismconnected == 1) {
+                    val utils = Utils(QuranGrammarApplication.context)
+                    val list: List<wbwentity>? = utils.getwbwQuranbTranslation(
+                        corpus!![0].surah,
+                        corpus!![0].ayah,
+                        wordfrom,
+                        wordto
+                    )
+                    if (list != null) {
+                        for (w in list) {
+                            StringBuilder()
+                            val temp: StringBuilder = getSelectedTranslation(w)
+                            sb.append(temp).append(" ")
+                        }
+                    }
+                    arabicString = harfofverse + ' ' + ismofverse
+                    kanaarray.add(SpannableString.valueOf(sb.toString()))
+                } else {
+                    //  ArrayList<wbwentity> list = utils.getwbwQuranbTranslation(corpusSurahWord!!.get(0).getSurah(), corpusSurahWord!!.get(0).getAyah(), wordfroms, wordfroms);
+                    val utils = Utils(QuranGrammarApplication.context)
+                    val wbwayah: List<wbwentity>? = utils.getwbwQuranBySurahAyah(
+                        corpus!![0].surah,
+                        corpus!![0].ayah
+                    )
+                    if (wbwayah != null) {
+                        for (w in wbwayah) {
+                            StringBuilder()
+                            val temp: StringBuilder = getSelectedTranslation(w)
+                            if (w.wordno == harfword) {
+                                sb.append(temp).append(" ")
+                            } else if (w.wordno in ismSword..ismEword) {
+                                ismorkhabarsb.append(temp).append(" ")
+                            }
+                        }
+                    }
+                    sb.append(".....")
+                    sb.append(ismorkhabarsb)
+                    kanaarray.add(SpannableString.valueOf(sb.toString()))
+
+                    arabicString = harfofverse + ".... " + ismofverse
+                }
+
+                val type = "harfismonly"
+                //quranText.substring(kana.indexstart, kana.ismkanaend)
+                //           val harfword = kana.harfwordno
+                //            val ismEword = kana.ismendword
+                val dataString =
+                    "${kana.surah}|${kana.ayah}|${kana.indexstart}|${kana.ismkanaend}|${kana.harfwordno}|${kana.ismendword}" +
+                            "|${arabicString}|${sb.toString()}|$translation" +
+                            "|$quranText|$type"
+                result.add(dataString)
+                return result
+
+
+            } else if (isharfb) {
+                harfspannble = SpannableString(harfofverse)
+                harfspannble.setSpan(
+                    harfkana,
+                    0,
+                    harfofverse.length,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                val charSequence = TextUtils.concat(harfspannble)
+                kanaarray.add(SpannableString.valueOf(charSequence))
+                val wordfroms = kana.harfwordno
+                val utils = Utils(QuranGrammarApplication.context)
+                val list = utils.getwbwQuranbTranslationbyrange(
+                    corpus!![0].surah,
+                    corpus!![0].ayah,
+                    wordfroms,
+                    wordfroms
+                )
+                val sb = getTranslationForLanguage(list)
+                kanaarray.add(SpannableString.valueOf(sb))
+                //quranText.substring(kana.indexstart,kana.indexend)
+                val type = "harfwithismpronoun"
+                val dataString =
+                    "${kana.surah}|${kana.ayah}|${kana.indexstart}|${kana.indexend}|${kana.harfwordno}|${kana.harfwordno}" +
+                            "|${harfofverse}|${sb.toString()}|$translation" +
+                            "|$quranText|$type"
+                result.add(dataString)
+                return result
+
+            }
+            // kanaarray.add(spannable);
+
+        }
+        return result
+    }
+
+    private fun getTranslationForLanguage(list: List<wbwentity>): StringBuffer {
+        val sb = StringBuffer()
+        val whichwbw = "en"
+        when (whichwbw) {
+            "en" -> sb.append(list[0].en).append(".......")
+            "ur" -> sb.append(list[0].ur).append(".......")
+            "bn" -> sb.append(list[0].bn).append(".......")
+            "id" -> sb.append(list[0].id).append(".......")
+            else -> {
+                sb.append(list[0].en).append(".......")
+
+            }
+        }
+        return sb
+    }
 
     fun extractSentenceAndTranslationFromShartIndices(
         corpus: List<CorpusEntity>,
@@ -1332,138 +1731,51 @@ if (w != null) {
 
 
             }
-            if(type=="shartnojawab"){
-                val combinedString = "$arabicString\n$englishString"
-                val spannableStrings = SpannableString(combinedString)
-                val regex = Regex(":")
-                val (firstWord, restOfString) = arabicString.split(" ", limit = 2)
+            var harfkana: ForegroundColorSpan?
+            var kanaism: ForegroundColorSpan?
+            var kanakhbar: ForegroundColorSpan?
+            if (dark) {
+                harfkana = ForegroundColorSpan(GOLD)
+                kanaism = ForegroundColorSpan(ORANGE400)
+                kanakhbar = ForegroundColorSpan(Color.CYAN)
+            } else {
+                harfkana = ForegroundColorSpan(FORESTGREEN)
+                kanaism = ForegroundColorSpan(KASHMIRIGREEN)
+                kanakhbar = ForegroundColorSpan(WHOTPINK)
+            }
+            if (type == "harfismlater" || type == "harfismlate") {
+                val parts = arabicString.split(":")
+                val firstPartWords = parts[0].split(" ")
+                val secondPart = parts[1]
+                val harf = firstPartWords[0]
+                val result = processString(arabicString)
 
+                println("First part: ${result.first}")
+                println("Second part: ${result.second}")
                 spannableString.setSpan(
-                    Constant.harfshartspanDark,
+                    harfkana,
                     0,
-                    firstWord.length,
+                    result.first.length,
                     0
                 )
-
                 spannableString.setSpan(
-                    Constant.shartspanDark,
-                    firstWord.length,
-                    arabicString.length,
+                    kanakhbar,
+                    result.first.length,
+                    result.first.length + result.second.length,
                     0
-
-
                 )
-
-            }else
-            if (type == "shartonly") {
-                val combinedString = "$arabicString\n$englishString"
-                val spannableStrings = SpannableString(combinedString)
-                val regex = Regex(":")
-                val (firstWord, restOfString) = arabicString.split(" ", limit = 2)
-
                 spannableString.setSpan(
-                    Constant.harfshartspanDark,
-                    0,
-                    firstWord.length,
+                    kanaism,
+                    result.first.length + result.second.length,
+                    arabicString.length + 2, // Use totalLength as the end index
                     0
                 )
 
-                spannableString.setSpan(
-                    Constant.shartspanDark,
-                    firstWord.length,
-                    arabicString.length,
-                    0
+
+            } else if (type == "kanatwo") {
+                val parts = arabicString.split(" ", limit = 3)
 
 
-                )
-            } else if (type == "shartall") {
-                val split = arabicString.split(":")
-            //    if (split.size >= 2) {
-
-                    val firstWord = split[0]
-
-                    val seconthirdstring = split[1]
-                    val totalLength = firstWord.length + seconthirdstring.length
-
-                    spannableString.setSpan(
-                        Constant.harfshartspanDark,
-                        0,
-                        firstWord.length,
-                        0
-                    )
-                    spannableString.setSpan(
-                        Constant.jawabshartspanDark,
-                        firstWord.length,
-                        firstWord.length + seconthirdstring.length,
-                        0
-
-
-                    )
-                    spannableString.setSpan(
-                        Constant.harfkhabarspanDark,
-                        firstWord.length + seconthirdstring.length,
-                        seconthirdstring.length + firstWord.length + totalLength,
-                        0
-                    )
-              //  }
-
-            }else if (type == "nasabone") {
-
-                val (firstWord, restOfString) = arabicString.split(" ", limit = 2)
-                spannableString.setSpan(
-                    Constant.harfinnaspanDark,
-                    0,
-                    firstWord.length,
-                    0
-                )
-
-                spannableString.setSpan(
-                    Constant.harfkhabarspanDark,
-                    firstWord.length,
-                    arabicString.length,
-                    0
-
-
-                )
-
-            } else if (type == "nasabtwo") {
-                try {
-                    val words = arabicString.split(
-                        " ",
-                        limit = 3
-                    ) // Split with limit to avoid more than needed
-                    val firstWord = words.getOrNull(0) ?: ""
-                    val secondWord = words.getOrNull(1) ?: ""
-
-                    val restOfString = words.drop(2).joinToString(" ")
-                    val totalLength = firstWord.length + secondWord.length + restOfString.length
-
-                    //    val (firstWord, secondWord, thirdWord, restOfString) = arabicString.split(" ", limit = 3)
-                    spannableString.setSpan(
-                        Constant.harfinnaspanDark,
-                        0,
-                        firstWord.length,
-                        0
-                    )
-                    spannableString.setSpan(
-                        Constant.harfismspanDark,
-                        firstWord.length,
-                        firstWord.length + secondWord.length,
-                        0
-                    )
-                    spannableString.setSpan(
-                        harfkhabarspanDark,
-                        firstWord.length + secondWord.length,
-                        totalLength + 2, // Use totalLength as the end index
-                        0
-                    )
-                } catch (e: IndexOutOfBoundsException) {
-
-                    println("check")
-                }
-
-
-            } else if (type == "nasabtwoharfism-one") {
                 val words = arabicString.split(
                     " ",
                     limit = 3
@@ -1474,102 +1786,319 @@ if (w != null) {
                 val restOfString = words.drop(2).joinToString(" ")
                 val totalLength = firstWord.length + secondWord.length + restOfString.length
 
+                //    val (firstWord, secondWord, thirdWord, restOfString) = arabicString.split(" ", limit = 3)
                 spannableString.setSpan(
-                    Constant.harfinnaspanDark,
+                    harfkana,
                     0,
                     firstWord.length,
                     0
                 )
                 spannableString.setSpan(
-                    Constant.harfkhabarspanDark,
+                    kanaism,
                     firstWord.length,
                     firstWord.length + secondWord.length,
                     0
-
-
                 )
                 spannableString.setSpan(
-                    Constant.harfismspanDark,
+                    kanakhbar,
                     firstWord.length + secondWord.length,
-                    secondWord.length + totalLength + 2,
+                    totalLength + 2, // Use totalLength as the end index
                     0
                 )
 
+            } else
+                if (type == "kanaone") {
 
-            } else if (type == "nasabtwoharfism-two") {
-                val parts = arabicString.split(" ", limit = 4)
-
-
-                // Get the first word and the rest of the string
-                val firstWord = parts.getOrNull(0) ?: ""
-                val secondWord = parts.getOrNull(1) ?: ""
-                val thirdWord = parts.getOrNull(2) ?: ""
-                val restOfString = parts.getOrNull(3) ?: ""
-                val seconthirdstring = secondWord + " " + thirdWord
-                val totalLength = firstWord.length + seconthirdstring.length + restOfString.length
-
-                spannableString.setSpan(
-                    Constant.harfinnaspanDark,
-                    0,
-                    firstWord.length,
-                    0
-                )
-                spannableString.setSpan(
-                    Constant.harfismspanDark,
-                    seconthirdstring.length,
-                    firstWord.length + totalLength,
-                    0
+                    val combinedString = "$arabicString\n$englishString"
+                    val spannableStrings = SpannableString(combinedString)
 
 
-                )
-                spannableString.setSpan(
-                    Constant.harfkhabarspanDark,
-                    firstWord.length,
-                    seconthirdstring.length + firstWord.length,
-                    0
-                )
+                    val (firstWord, restOfString) = arabicString.split(" ", limit = 2)
 
 
-            } else if (type == "nasabtwoharfism") {
 
-                val parts = arabicString.split(" ", limit = 2)
+                    spannableString.setSpan(
+                        harfkana,
+                        0,
+                        firstWord.length,
+                        0
+                    )
 
-                // Get the first word and the rest of the string
-                val firstWord = parts.getOrNull(0) ?: ""
-                val restOfString = parts.getOrNull(1) ?: ""
-                val totalLength = firstWord.length + restOfString.length
-
-                spannableString.setSpan(
-                    Constant.harfinnaspanDark,
-                    0,
-                    firstWord.length,
-                    0
-                )
-                spannableString.setSpan(
-                    Constant.harfismspanDark,
-                    firstWord.length,
-                    totalLength,
-                    0
-                )
+                    spannableString.setSpan(
+                        kanakhbar,
+                        firstWord.length,
+                        arabicString.length,
+                        0
 
 
-            } else {
+                    )
 
-                //     spannableString.setSpan( UnderlineSpan(), 0, type.length, 0)
-                spannableString.setSpan(
-                    harfinnaspanDark,
-                    0,
-                    arabicString.length,
-                    0
-                ) // Span for Arabic
-                spannableString.setSpan(
-                    harfkhabarspanDark,
-                    arabicString.length + 1,
-                    combinedString.length,
-                    0
-                )
+                } else if (type == "harfismonly") {
+                    val combinedString = "$arabicString\n$englishString"
+                    val spannableStrings = SpannableString(combinedString)
+                    val regex = Regex(":")
+                    val (firstWord, restOfString) = arabicString.split(" ", limit = 2)
 
-            }
+                    spannableString.setSpan(
+                        harfkana,
+                        0,
+                        firstWord.length,
+                        0
+                    )
+
+                    spannableString.setSpan(
+                        kanaism,
+                        firstWord.length,
+                        arabicString.length,
+                        0
+
+
+                    )
+
+                } else
+
+
+                    if (type == "shartnojawab") {
+                        val combinedString = "$arabicString\n$englishString"
+                        val spannableStrings = SpannableString(combinedString)
+                        val regex = Regex(":")
+                        val (firstWord, restOfString) = arabicString.split(" ", limit = 2)
+
+                        spannableString.setSpan(
+                            Constant.harfshartspanDark,
+                            0,
+                            firstWord.length,
+                            0
+                        )
+
+                        spannableString.setSpan(
+                            Constant.shartspanDark,
+                            firstWord.length,
+                            arabicString.length,
+                            0
+
+
+                        )
+
+                    } else
+                        if (type == "shartonly") {
+                            val combinedString = "$arabicString\n$englishString"
+                            val spannableStrings = SpannableString(combinedString)
+                            val regex = Regex(":")
+                            val (firstWord, restOfString) = arabicString.split(" ", limit = 2)
+
+                            spannableString.setSpan(
+                                Constant.harfshartspanDark,
+                                0,
+                                firstWord.length,
+                                0
+                            )
+
+                            spannableString.setSpan(
+                                Constant.shartspanDark,
+                                firstWord.length,
+                                arabicString.length,
+                                0
+
+
+                            )
+                        } else if (type == "shartall") {
+                            val split = arabicString.split(":")
+                            //    if (split.size >= 2) {
+
+                            val firstWord = split[0]
+
+                            val seconthirdstring = split[1]
+                            val totalLength = firstWord.length + seconthirdstring.length
+
+                            spannableString.setSpan(
+                                Constant.harfshartspanDark,
+                                0,
+                                firstWord.length,
+                                0
+                            )
+                            spannableString.setSpan(
+                                Constant.jawabshartspanDark,
+                                firstWord.length,
+                                firstWord.length + seconthirdstring.length,
+                                0
+
+
+                            )
+                            spannableString.setSpan(
+                                Constant.harfkhabarspanDark,
+                                firstWord.length + seconthirdstring.length,
+                                seconthirdstring.length + firstWord.length + totalLength,
+                                0
+                            )
+                            //  }
+
+                        } else if (type == "nasabone") {
+
+                            val (firstWord, restOfString) = arabicString.split(" ", limit = 2)
+                            spannableString.setSpan(
+                                Constant.harfinnaspanDark,
+                                0,
+                                firstWord.length,
+                                0
+                            )
+
+                            spannableString.setSpan(
+                                Constant.harfkhabarspanDark,
+                                firstWord.length,
+                                arabicString.length,
+                                0
+
+
+                            )
+
+                        } else if (type == "nasabtwo") {
+                            try {
+                                val words = arabicString.split(
+                                    " ",
+                                    limit = 3
+                                ) // Split with limit to avoid more than needed
+                                val firstWord = words.getOrNull(0) ?: ""
+                                val secondWord = words.getOrNull(1) ?: ""
+
+                                val restOfString = words.drop(2).joinToString(" ")
+                                val totalLength =
+                                    firstWord.length + secondWord.length + restOfString.length
+
+                                //    val (firstWord, secondWord, thirdWord, restOfString) = arabicString.split(" ", limit = 3)
+                                spannableString.setSpan(
+                                    Constant.harfinnaspanDark,
+                                    0,
+                                    firstWord.length,
+                                    0
+                                )
+                                spannableString.setSpan(
+                                    Constant.harfismspanDark,
+                                    firstWord.length,
+                                    firstWord.length + secondWord.length,
+                                    0
+                                )
+                                spannableString.setSpan(
+                                    harfkhabarspanDark,
+                                    firstWord.length + secondWord.length,
+                                    totalLength + 2, // Use totalLength as the end index
+                                    0
+                                )
+                            } catch (e: IndexOutOfBoundsException) {
+
+                                println("check")
+                            }
+
+
+                        } else if (type == "nasabtwoharfism-one") {
+                            val words = arabicString.split(
+                                " ",
+                                limit = 3
+                            ) // Split with limit to avoid more than needed
+                            val firstWord = words.getOrNull(0) ?: ""
+                            val secondWord = words.getOrNull(1) ?: ""
+
+                            val restOfString = words.drop(2).joinToString(" ")
+                            val totalLength =
+                                firstWord.length + secondWord.length + restOfString.length
+
+                            spannableString.setSpan(
+                                Constant.harfinnaspanDark,
+                                0,
+                                firstWord.length,
+                                0
+                            )
+                            spannableString.setSpan(
+                                Constant.harfkhabarspanDark,
+                                firstWord.length,
+                                firstWord.length + secondWord.length,
+                                0
+
+
+                            )
+                            spannableString.setSpan(
+                                Constant.harfismspanDark,
+                                firstWord.length + secondWord.length,
+                                secondWord.length + totalLength + 2,
+                                0
+                            )
+
+
+                        } else if (type == "nasabtwoharfism-two") {
+                            val parts = arabicString.split(" ", limit = 4)
+
+
+                            // Get the first word and the rest of the string
+                            val firstWord = parts.getOrNull(0) ?: ""
+                            val secondWord = parts.getOrNull(1) ?: ""
+                            val thirdWord = parts.getOrNull(2) ?: ""
+                            val restOfString = parts.getOrNull(3) ?: ""
+                            val seconthirdstring = secondWord + " " + thirdWord
+                            val totalLength =
+                                firstWord.length + seconthirdstring.length + restOfString.length
+
+                            spannableString.setSpan(
+                                Constant.harfinnaspanDark,
+                                0,
+                                firstWord.length,
+                                0
+                            )
+                            spannableString.setSpan(
+                                Constant.harfismspanDark,
+                                seconthirdstring.length,
+                                firstWord.length + totalLength,
+                                0
+
+
+                            )
+                            spannableString.setSpan(
+                                Constant.harfkhabarspanDark,
+                                firstWord.length,
+                                seconthirdstring.length + firstWord.length,
+                                0
+                            )
+
+
+                        } else if (type == "nasabtwoharfism") {
+
+                            val parts = arabicString.split(" ", limit = 2)
+
+                            // Get the first word and the rest of the string
+                            val firstWord = parts.getOrNull(0) ?: ""
+                            val restOfString = parts.getOrNull(1) ?: ""
+                            val totalLength = firstWord.length + restOfString.length
+
+                            spannableString.setSpan(
+                                Constant.harfinnaspanDark,
+                                0,
+                                firstWord.length,
+                                0
+                            )
+                            spannableString.setSpan(
+                                Constant.harfismspanDark,
+                                firstWord.length,
+                                totalLength,
+                                0
+                            )
+
+
+                        } else {
+
+                            //     spannableString.setSpan( UnderlineSpan(), 0, type.length, 0)
+                            spannableString.setSpan(
+                                harfinnaspanDark,
+                                0,
+                                arabicString.length,
+                                0
+                            ) // Span for Arabic
+                            spannableString.setSpan(
+                                harfkhabarspanDark,
+                                arabicString.length + 1,
+                                combinedString.length,
+                                0
+                            )
+
+                        }
             negationCache[surahid]?.get(ayahid)?.add(spannableString) ?: run {
                 negationCache[surahid]?.set(
                     ayahid,
@@ -1583,6 +2112,22 @@ if (w != null) {
         }
     }
 
+
+    fun processString(input: String): Triple<String, String, String> {
+        val parts = input.split(":", limit = 2) // Split into two parts using ':' as the delimiter
+        if (parts.size < 2) {
+            throw IllegalArgumentException("Input string must contain ':' as a delimiter.")
+        }
+        val firstPart = parts[0].trim()
+        val secondPart = parts[1].trim()
+
+        // Split the first part into first word and subsequent words
+        val firstPartWords = firstPart.split(" ", limit = 2)
+        val firstWord = firstPartWords[0]
+        val subsequentWords = if (firstPartWords.size > 1) firstPartWords[1] else ""
+
+        return Triple(firstWord, subsequentWords, secondPart)
+    }
 
     fun setWordClickListener(
         view: View,
@@ -1610,8 +2155,8 @@ if (w != null) {
     fun setWordTranslation(translation: TextView, word: CorpusEntity, wbw: String) {
         when (wbw) {
             "en" -> {
-                // translation.text = word.wordno.toString()
-                translation.text = word.en
+                translation.text = word.wordno.toString()
+                //    translation.text = word.en
                 translation.paintFlags = translation.paintFlags or Paint.UNDERLINE_TEXT_FLAG
             }
 
