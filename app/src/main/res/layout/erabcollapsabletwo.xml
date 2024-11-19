@@ -18,7 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:strokeColor="@color/teal900"
+        app:strokeColor="@color/DarkMagenta"
         app:strokeWidth="2dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -69,14 +69,14 @@
                 android:id="@+id/erabnotes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="Erab Notes"
-
-                android:textSize="30sp"
+                android:layout_marginStart="156dp"
+                android:gravity="center_horizontal"
+                android:text="Phrases"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView2"
                 app:layout_constraintStart_toEndOf="@+id/imageView2"
                 app:layout_constraintTop_toTopOf="@+id/imageView2"
-                app:layout_constraintVertical_bias="0.5" />
+                app:layout_constraintVertical_bias="0.259" />
 
             <ImageView
                 android:id="@+id/show"
@@ -89,7 +89,7 @@
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/erabnotes"
                 app:layout_constraintTop_toTopOf="@+id/erabnotes"
-                app:srcCompat="@android:drawable/arrow_down_float"
+                app:srcCompat="@drawable/baseline_collections_24"
                 app:tint="@color/teal900" />
 
             <View
@@ -115,6 +115,7 @@
                 app:srcCompat="@android:drawable/presence_invisible"
                 app:tint="@color/teal900" />
 
+
             <TextView
 
 
@@ -132,18 +133,18 @@
                 android:textSize="12sp"
 
 
-                app:layout_constraintStart_toEndOf="@+id/imageView9"
-                app:layout_constraintTop_toBottomOf="@+id/imageView9"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view3"
                 app:srcCompat="@android:drawable/presence_invisible"
                 app:tint="@color/redhot" />
-
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/card_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="visible"
-                app:constraint_referenced_ids="view3,imageView9,directobject"
+                app:constraint_referenced_ids="view3,directobject"
                 tools:visibility="visible" />
 
 

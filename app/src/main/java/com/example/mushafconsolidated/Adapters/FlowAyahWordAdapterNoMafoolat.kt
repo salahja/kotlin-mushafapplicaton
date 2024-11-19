@@ -10,14 +10,20 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Environment
 import android.preference.PreferenceManager
 import android.text.Html
+import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableString.valueOf
+import android.text.SpannableStringBuilder
+import android.text.TextUtils
 import android.text.format.DateFormat
+import android.text.style.LineBackgroundSpan
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,9 +35,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 
+
 import androidx.constraintlayout.widget.Group
 import androidx.core.content.FileProvider
-
+import androidx.core.text.color
 
 
 import androidx.recyclerview.widget.RecyclerView
@@ -67,6 +74,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.Date
+import kotlin.text.append
 
 const val TAUBA_CHAPTER_NUMBER = 9
 
@@ -231,6 +239,64 @@ class FlowAyahWordAdapterNoMafoolat(
         }
     }
     private fun displayPhrases(position: Int, holder: ItemViewAdapter) {
+        val phraseGroups: MutableList<SpannableString> = mutableListOf()
+        val entity = allofQuran[position]
+        val key = Pair(entity!!.surah, entity!!.ayah)
+
+        // Update phraseGroups
+        updatePhraseGroups(key, phraseGroups)
+        val concatenatedCharSequence = SpannableStringBuilder()
+
+       /* for (phrase in phraseGroups) {
+            concatenatedCharSequence.append(phrase)
+            concatenatedCharSequence.append("\n") // Add newline
+        }*/
+
+        for (phrase in phraseGroups) {
+            val start = concatenatedCharSequence.length
+            concatenatedCharSequence.append(phrase)
+            val end = concatenatedCharSequence.length
+
+            // Find the index of the newline character, which separates Arabic and English text
+            val newlineIndex = phrase.indexOf("\n")
+            if (newlineIndex != -1) {
+                concatenatedCharSequence.setSpan(CustomLineBackgroundSpan(), start + newlineIndex + 1, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+       //     concatenatedCharSequence.setSpan(CustomLineBackgroundSpan(), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            concatenatedCharSequence.append("\n") // Add newline
+        }
+
+        holder.mafoolat.text = concatenatedCharSequence
+        holder.mafoolat.gravity = Gravity.CENTER
+        holder.base_cardview.visibility = View.VISIBLE
+        holder.mafoolat.textSize = (arabicfontSize - 5).toFloat()
+      //  holder.mafoolat.typeface = custom_font
+
+
+
+    }
+
+    class CustomLineBackgroundSpan : LineBackgroundSpan {
+        override fun drawBackground(
+            c: Canvas,
+            p1: android.graphics.Paint,
+            left: Int,
+            right: Int,
+            top: Int,
+            baseline: Int,
+            bottom: Int,
+            text: CharSequence,
+            start: Int,
+            end: Int,
+            lnum: Int
+        ) {
+            val paint = Paint()
+           paint.color = Color.GRAY // Set line color
+            paint.strokeWidth = 2f // Set line thickness
+            c.drawLine(left.toFloat(), bottom.toFloat(), right.toFloat(), bottom.toFloat(), paint)
+        }
+    }
+    private fun displayPhrasesss(position: Int, holder: ItemViewAdapter) {
         val phraseGroups: MutableList<SpannableString> = mutableListOf()
         val entity = allofQuran[position]
         val key = Pair(entity!!.surah, entity!!.ayah)
