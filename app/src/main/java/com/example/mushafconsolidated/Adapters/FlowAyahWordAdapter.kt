@@ -338,7 +338,7 @@ class FlowAyahWordAdapter(
         val badalsb = StringBuilder()
         val ajlihisb = StringBuilder()
         val mutlaqsb = StringBuilder()
-        holder.mafoolbihi.visibility = View.GONE
+        holder.mafoolat.visibility = View.GONE
         holder.base_cardview.visibility = View.GONE
         val spanhash = CorpusUtilityorig.stringForegroundColorSpanMap
         var mfcharSequence: CharSequence?
@@ -559,14 +559,14 @@ class FlowAyahWordAdapter(
             mf, " ", halspan, " ", tameezspan, " ", ajlihispan, " ", badalspan, " ", mutlaqspan
         )
         if (charSequence.toString().length > 15) {
-            holder.mafoolbihi.text = charSequence
-            holder.mafoolbihi.gravity = Gravity.CENTER
+            holder.mafoolat.text = charSequence
+            holder.mafoolat.gravity = Gravity.CENTER
             holder.base_cardview.visibility = View.VISIBLE
-            holder.mafoolbihi.textSize = (arabicfontSize - 5).toFloat()
-            holder.mafoolbihi.typeface = custom_font
+            holder.mafoolat.textSize = (arabicfontSize - 5).toFloat()
+            holder.mafoolat.typeface = custom_font
         } else {
             holder.erabnotescardView.visibility = View.GONE
-            holder.mafoolbihi.visibility = View.GONE
+            holder.mafoolat.visibility = View.GONE
         }
         setChapterInfo(holder, ayahWord)
         //  setAdapterposition(position);
@@ -926,7 +926,7 @@ class FlowAyahWordAdapter(
         lateinit var surah_info: TextView
         lateinit var erab_textViewen: TextView
 
-        lateinit var mafoolbihi: TextView
+        lateinit var mafoolat: TextView
         private lateinit var erab_notes: TextView
         lateinit var quran_textView: MaterialTextView
         private lateinit var quran_transliterationnote: TextView
@@ -964,6 +964,8 @@ class FlowAyahWordAdapter(
         //   RelativeLayout colllayout;
         lateinit var erabnotescardView: CardView
         lateinit var mafoolatarow: ImageView
+
+
         private lateinit var hiddenGroup: Group
         lateinit var base_cardview: MaterialCardView
         lateinit var tafsir: FloatingActionButton
@@ -978,6 +980,7 @@ class FlowAyahWordAdapter(
         init {
             view.tag = this
             itemView.setOnClickListener(this)
+            itemView.tag = "header"
             if (viewType == 0) {
                 ivLocationmakki = view.findViewById(R.id.ivLocationmakki)
                 ivLocationmadani = view.findViewById(R.id.ivLocationmadani)
@@ -1037,7 +1040,7 @@ class FlowAyahWordAdapter(
                 mafoolatarow = view.findViewById(R.id.show)
                 hiddenGroup = view.findViewById(R.id.card_group)
                 mafoolatarow.setOnClickListener(this)
-                mafoolbihi = view.findViewById(R.id.directobject)
+                mafoolat = view.findViewById(R.id.directobject)
                 base_cardview = view.findViewById(R.id.base_cardview)
                 collectionfb = view.findViewById(R.id.collectionfb)
                 collectionfb.setOnClickListener(this)

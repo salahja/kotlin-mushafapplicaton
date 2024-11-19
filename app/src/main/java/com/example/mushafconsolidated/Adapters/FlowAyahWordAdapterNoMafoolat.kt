@@ -22,14 +22,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.compose.ui.semantics.text
 
 import androidx.constraintlayout.widget.Group
 import androidx.core.content.FileProvider
@@ -37,6 +35,8 @@ import androidx.core.content.FileProvider
 
 
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.AutoTransition
+import androidx.transition.TransitionManager
 import com.example.Constant
 import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.NewMudhafEntity
@@ -86,7 +86,7 @@ class FlowAyahWordAdapterNoMafoolat(
 {
     //private lateinit var phraseGroups: List<SpannableString?>
 
-
+    private val expandedPositions = mutableSetOf<Int>()
     private val phrases = arrayOf(
         PhraseItem("Lane Lexicon", "lanes"),
         PhraseItem("Hans Weir", "hans")
@@ -100,7 +100,7 @@ class FlowAyahWordAdapterNoMafoolat(
     private lateinit var sifaDta: List<SifaEntity>
     private lateinit var mudhafData: List<NewMudhafEntity>
     private val spannedWordsCache = HashMap<CorpusEntity, SpannableString>()
-    private var phraseListAdapter: PhraseListAdapter? = null
+
 
     private var wordByWordDisplay: Boolean = false
     private var ayahWord: ArrayList<CorpusEntity>? = null
@@ -230,8 +230,51 @@ class FlowAyahWordAdapterNoMafoolat(
             displayPhrases(position - 1, holder)
         }
     }
+    private fun displayPhrases(position: Int, holder: ItemViewAdapter) {
+        val phraseGroups: MutableList<SpannableString> = mutableListOf()
+        val entity = allofQuran[position]
+        val key = Pair(entity!!.surah, entity!!.ayah)
 
-    private fun displayPhrases(
+        // Update phraseGroups
+        updatePhraseGroups(key, phraseGroups)
+
+        val maxLength = 1500
+        val truncatedPhraseGroups = phraseGroups.map { phrase ->
+            if (phrase.length > maxLength) {
+                SpannableString(phrase.substring(0, maxLength) + "...")
+            } else {
+                phrase
+            }
+        }.toMutableList()
+
+        // Create adapter for the ListView
+        var phraseListAdapter = PhraseListAdapter(holder.itemView.context, truncatedPhraseGroups)
+        holder.phrasesListView.adapter = phraseListAdapter
+        holder.phrasesListView.setListViewHeightBasedOnChildren()
+        // Update the existing adapter's data
+        phraseListAdapter.clear()
+        phraseListAdapter.addAll(truncatedPhraseGroups)
+        phraseListAdapter.notifyDataSetChanged()
+        // Handle expand/collapse state
+        val isExpanded = expandedPositions.contains(position)
+        holder.phrasesListView.visibility = if (isExpanded) View.VISIBLE else View.GONE
+        holder.expandCollapseIcon.setImageResource(
+            if (isExpanded) R.drawable.baseline_arrow_back_36 else R.drawable.ic_baseline_double_arrow_24
+        )
+
+        // Set up click listener to toggle expand/collapse
+        holder.expandCollapseIcon.setOnClickListener {
+            if (isExpanded) {
+                expandedPositions.remove(position)
+            } else {
+                expandedPositions.add(position)
+            }
+            notifyItemChanged(position) // Refresh only the clicked item
+        }
+    }
+
+
+    private fun displayPhrasesv1(
         position: Int,
         holder: ItemViewAdapter
     ) {
@@ -270,17 +313,12 @@ class FlowAyahWordAdapterNoMafoolat(
         }
     }
 
-
-
     fun ListView.setListViewHeightBasedOnChildren() {
         val listAdapter = adapter ?: return
         var totalHeight = 0
         for (i in 0 until listAdapter.count) {
             val listItem = listAdapter.getView(i, null, this)
-            listItem.measure(
-                View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.UNSPECIFIED),
-                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-            )
+            listItem.measure(0, 0)
             totalHeight += listItem.measuredHeight
         }
         val params = layoutParams
@@ -288,6 +326,9 @@ class FlowAyahWordAdapterNoMafoolat(
         layoutParams = params
         requestLayout()
     }
+
+
+
 
     private fun displayAyah(holder: FlowAyahWordAdapterNoMafoolat.ItemViewAdapter, position: Int) {
         val sharedPreferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(
@@ -387,10 +428,11 @@ class FlowAyahWordAdapterNoMafoolat(
             holder.erab_textView.typeface = custom_font
             //     holder.erab_textView.setVisibility(View.VISIBLE);
             holder.erab_textViewnote.visibility = View.VISIBLE
+
         } else {
             holder.erabexpand.visibility = View.GONE
         }
-
+        holder.mafoolatarow.visibility = View.VISIBLE
 
     }
 
@@ -652,15 +694,21 @@ class FlowAyahWordAdapterNoMafoolat(
     class PhraseListAdapter(context: Context, phrases: List<SpannableString?>) :
         ArrayAdapter<SpannableString>(context, 0, phrases) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+            // Inflate the item layout
             val view = convertView ?: LayoutInflater.from(context)
                 .inflate(R.layout.phrases_list_item, parent, false)
+
+            // Find the TextView in the layout
             val textView = view.findViewById<TextView>(R.id.phrasetext)
 
+            // Update the TextView with the current item
             textView.textSize = 20f
             textView.text = getItem(position)
+
             return view
         }
     }
+
 
     private fun setAyahGrammaticalPhrases(
         holder: ItemViewAdapter,
@@ -785,18 +833,19 @@ class FlowAyahWordAdapterNoMafoolat(
         viewType: Int,
     ) : RecyclerView.ViewHolder(view), View.OnClickListener, View.OnLongClickListener {
         lateinit var quran_jalalayn: TextView
-
+        lateinit var phrasesListView: ListView
+        lateinit var expandCollapseIcon: ImageView
         //  lateinit var  kathir_translation: TextView
         lateinit var quran_transliteration: TextView
         lateinit var translate_textView: TextView
-        lateinit var phrasesListView: ListView
+
 
         //   public TextView erab_textView;
         lateinit var erab_textView: TextView
         lateinit var surah_info: TextView
 //        lateinit var erab_textViewen: TextView
 
-        lateinit var mafoolbihi: TextView
+        lateinit var mafoolat: TextView
         private lateinit var erab_notes: TextView
         lateinit var quran_textView: MaterialTextView
         private lateinit var quran_transliterationnote: TextView
@@ -806,6 +855,8 @@ class FlowAyahWordAdapterNoMafoolat(
 
         lateinit var erab_textViewnoteen: TextView
 
+        lateinit var erabnotescardView: CardView
+        lateinit var mafoolatarow: ImageView
 
         lateinit var bookmark: ImageView
         lateinit var jumpto: ImageView
@@ -830,8 +881,6 @@ class FlowAyahWordAdapterNoMafoolat(
 
         lateinit var flow_word_by_word: FlowLayout
 
-        private lateinit var erabnotescardView: CardView
-        private lateinit var mafoolatarow: ImageView
         private lateinit var hiddenGroup: Group
         lateinit var base_cardview: MaterialCardView
         lateinit var tafsir: FloatingActionButton
@@ -858,6 +907,8 @@ class FlowAyahWordAdapterNoMafoolat(
             } else {
                 //     kathir_note = view.findViewById(R.id.kathir_note);
                 //   kathir_translation = view.findViewById(R.id.katheer_textview)
+                 phrasesListView = view.findViewById(R.id.phrasesListView)
+                 expandCollapseIcon = view.findViewById(R.id.expandCollapseIcon)
                 ivSummary = view.findViewById(R.id.ivSumarry)
                 ivSummary.tag = "summary"
                 ivSummary.setOnClickListener(this)
@@ -870,7 +921,7 @@ class FlowAyahWordAdapterNoMafoolat(
                 ivoverflow2 = view.findViewById(R.id.ivActionOverflowtwo)
                 ivoverflow2.setOnClickListener(this)
                 ivoverflow2.tag = "overflowbottom"
-                phrasesListView = view.findViewById(R.id.phrasesRecyclerViewtwo)
+             //   phrasesListView = view.findViewById(R.id.phrasesRecyclerViewtwo)
                 quran_transliterationnote = view.findViewById(R.id.quran_transliterationnote)
                 quran_jalalaynnote = view.findViewById(R.id.quran_jalalaynnote)
                 translate_textViewnote = view.findViewById(R.id.translate_textViewnote)
@@ -901,7 +952,7 @@ class FlowAyahWordAdapterNoMafoolat(
                 mafoolatarow = view.findViewById(R.id.show)
                 hiddenGroup = view.findViewById(R.id.card_group)
                 mafoolatarow.setOnClickListener(this)
-                mafoolbihi = view.findViewById(R.id.directobject)
+                mafoolat = view.findViewById(R.id.directobject)
                 base_cardview = view.findViewById(R.id.base_cardview)
                 collectionfb = view.findViewById(R.id.collectionfb)
                 collectionfb.setOnClickListener(this)
@@ -1137,6 +1188,19 @@ class FlowAyahWordAdapterNoMafoolat(
                         //  collectionfb.animate().rotationBy(360f)
                     }
                 })
+
+
+                mafoolatarow.setOnClickListener { view1: View? ->
+                    TransitionManager.beginDelayedTransition(erabnotescardView, AutoTransition())
+                    if (hiddenGroup.visibility == View.VISIBLE) {
+                        hiddenGroup.visibility = View.GONE
+                        mafoolatarow.setImageResource(android.R.drawable.arrow_down_float)
+                    } else {
+                        //     colllayout.setLayoutParams(params);
+                        hiddenGroup.visibility = View.VISIBLE
+                        mafoolatarow.setImageResource(android.R.drawable.arrow_up_float)
+                    }
+                }
 
                 erabexpand.setOnClickListener { view1: View? ->
                     if (erab_textView.visibility == View.GONE) {
