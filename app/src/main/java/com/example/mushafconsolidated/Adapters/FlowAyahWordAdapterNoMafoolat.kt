@@ -29,9 +29,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.compose.ui.semantics.text
 
 import androidx.constraintlayout.widget.Group
 import androidx.core.content.FileProvider
+
 
 
 import androidx.recyclerview.widget.RecyclerView
@@ -40,9 +42,11 @@ import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.NewMudhafEntity
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.SifaEntity
-import com.example.mushafconsolidated.Entities.SurahHeader
+
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SurahSummary
+import com.example.mushafconsolidated.data.PhraseItem
+import com.example.mushafconsolidated.data.SurahHeader
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.quranrepo.QuranViewModel
@@ -81,7 +85,6 @@ class FlowAyahWordAdapterNoMafoolat(
 ) : RecyclerView.Adapter<FlowAyahWordAdapterNoMafoolat.ItemViewAdapter>() //implements OnItemClickListenerOnLong {
 {
     //private lateinit var phraseGroups: List<SpannableString?>
-    data class PhraseItem(val phrase: String, val grammaticalGroup: String)
 
 
     private val phrases = arrayOf(
@@ -89,6 +92,9 @@ class FlowAyahWordAdapterNoMafoolat(
         PhraseItem("Hans Weir", "hans")
     )
     private var spannableverse: SpannableString? = null
+
+    private var truncatedPhraseGroups: MutableList<SpannableString> = mutableListOf()
+    private var phraseGroups: MutableList<SpannableString> = mutableListOf()
 
     //private var absoluteNegationData: List<AbsoluteNegationEnt>
     private lateinit var sifaDta: List<SifaEntity>
@@ -252,7 +258,8 @@ class FlowAyahWordAdapterNoMafoolat(
         // Check if the adapter is already created
         if (phraseListAdapter == null) {
             // Create a new adapter using the truncated list
-            phraseListAdapter = PhraseListAdapter(holder.itemView.context, truncatedPhraseGroups)
+            phraseListAdapter =
+                PhraseListAdapter(holder.itemView.context, truncatedPhraseGroups)
             holder.phrasesListView.adapter = phraseListAdapter
             holder.phrasesListView.setListViewHeightBasedOnChildren()
         } else {
@@ -263,32 +270,7 @@ class FlowAyahWordAdapterNoMafoolat(
         }
     }
 
-    private fun displayPhrasess(
-        position: Int,
-        holder: ItemViewAdapter
-    ) {
-        val phraseGroups: MutableList<SpannableString> = mutableListOf()
-        var phraseListAdapter: PhraseListAdapter? = null
-        val entity = allofQuran[position]
-        val key = Pair(entity!!.surah, entity!!.ayah)
-        //  holder.itemView.post {
-        updatePhraseGroups(key, phraseGroups) // Pass phraseGroups to updatePhraseGroups
 
-        // Check if the adapter is already created
-        if (phraseListAdapter == null) {
-            // Create a new adapter using the item-specific phraseGroups
-            phraseListAdapter = PhraseListAdapter(holder.itemView.context, phraseGroups)
-            holder.phrasesListView.adapter = phraseListAdapter
-            holder.phrasesListView.setListViewHeightBasedOnChildren()
-
-        } else {
-            // Update the existing adapter's data
-            phraseListAdapter?.clear()
-            phraseListAdapter?.addAll(phraseGroups)
-            phraseListAdapter?.notifyDataSetChanged()
-        }
-        // }
-    }
 
     fun ListView.setListViewHeightBasedOnChildren() {
         val listAdapter = adapter ?: return
@@ -671,14 +653,14 @@ class FlowAyahWordAdapterNoMafoolat(
         ArrayAdapter<SpannableString>(context, 0, phrases) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val view = convertView ?: LayoutInflater.from(context)
-                .inflate(android.R.layout.simple_list_item_1, parent, false)
-            val textView = view.findViewById<TextView>(android.R.id.text1)
+                .inflate(R.layout.phrases_list_item, parent, false)
+            val textView = view.findViewById<TextView>(R.id.phrasetext)
+
             textView.textSize = 20f
             textView.text = getItem(position)
             return view
         }
     }
-
 
     private fun setAyahGrammaticalPhrases(
         holder: ItemViewAdapter,

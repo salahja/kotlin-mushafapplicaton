@@ -262,9 +262,9 @@ object SpannableStringUtils {
                         } else if (type == "shartall") {
                             val split = arabicString.split(":")
                             //    if (split.size >= 2) {
-
-                            val firstWord = split[0]
-
+                            val regex = Regex("\\.\\.+")
+                            val firstWordt = split[0]
+                            val firstWord = regex.replace(firstWordt, "")
                             val seconthirdstring = split[1]
                             val totalLength = firstWord.length + seconthirdstring.length
 
@@ -282,12 +282,18 @@ object SpannableStringUtils {
 
 
                             )
-                            spannableString.setSpan(
-                                Constant.harfkhabarspanDark,
-                                firstWord.length + seconthirdstring.length,
-                                seconthirdstring.length + firstWord.length + totalLength,
-                                0
-                            )
+                            try {
+                                spannableString.setSpan(
+                                    Constant.harfkhabarspanDark,
+                                    firstWord.length + seconthirdstring.length,
+                                    seconthirdstring.length + firstWord.length + totalLength,
+                                    0
+                                )
+                            } catch (e:IndexOutOfBoundsException){
+                                println(ayahid)
+                                println(surahid)
+                            }
+
                             //  }
 
                         } else if (type == "nasabone") {

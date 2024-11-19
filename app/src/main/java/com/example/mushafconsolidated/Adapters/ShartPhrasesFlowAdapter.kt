@@ -38,9 +38,10 @@ import com.example.mushafconsolidated.Adapters.RevalationCity
 import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.ShartListingPojo
-import com.example.mushafconsolidated.Entities.SurahHeader
+
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SurahSummary
+import com.example.mushafconsolidated.data.SurahHeader
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet.Companion.TAG
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidatedimport.Config

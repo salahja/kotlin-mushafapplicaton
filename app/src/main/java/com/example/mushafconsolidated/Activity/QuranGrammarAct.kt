@@ -67,12 +67,15 @@ import com.example.mushafconsolidated.Entities.MafoolBihi
 import com.example.mushafconsolidated.Entities.MafoolMutlaqEnt
 import com.example.mushafconsolidated.Entities.NegationEnt
 import com.example.mushafconsolidated.Entities.QuranEntity
-import com.example.mushafconsolidated.Entities.SurahHeader
+
 import com.example.mushafconsolidated.Entities.TameezEnt
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SurahSummary
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.ajroomiya.NewAjroomiyaDetailHostActivity
+import com.example.mushafconsolidated.data.CorpusRow
+import com.example.mushafconsolidated.data.ShartCorpusRow
+import com.example.mushafconsolidated.data.SurahHeader
 import com.example.mushafconsolidated.databinding.NewFragmentReadingBinding
 import com.example.mushafconsolidated.fragments.BookMarkCreateFrag
 import com.example.mushafconsolidated.fragments.BookmarkFragment
@@ -93,11 +96,11 @@ import com.example.utility.CorpusUtilityorig.Companion.HightLightKeyWordold
 
 import com.example.utility.CorpusUtilityorig.Companion.findWordOccurrencesArabic
 import com.example.utility.CorpusUtilityorig.Companion.searchForTameez
+import com.example.utility.ExtractionUtility.extractInMaIllaNegativeSentences
 import com.example.utility.QuranGrammarApplication.Companion.context
-import com.example.utility.QuranViewUtils
 
 import com.example.utility.QuranViewUtils.extractCase
-import com.example.utility.QuranViewUtils.extractInMaIllaNegativeSentences
+
 import com.example.utility.QuranViewUtils.extractVerbType
 import com.example.utility.ScreenshotUtils
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -476,12 +479,12 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
         // val wordInfo = utils.getNASAB()
         //  val wordInfo=       utils.getNasbAall()
-        //  val wordInfo=utils.getKanaAll()
+          val wordInfo=utils.getKanaAll()
       //  val wordInfo = utils.getLauAll()
         //  val wordInfoss= utils.getIzaAll()
         // val wordInfo=utils.getInALL()
     //   val wordInfo=utils.getShartALL()
-        val wordInfo=    utils.getKanaAlls()
+      //  val wordInfo=    utils.getKanaAlls()
       //  val wordInfo = utils.getMaMinALL()
         for (s in wordInfo!!.indices) {
             val ss = wordInfo!![s]
@@ -491,12 +494,12 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                     as ArrayList<CorpusEntity>
             val quran = mainViewModel.getsurahayahVerses(ss.surah, ss.ayah)
 
-            val lamNegationDataList =             QuranViewUtils.extractKana(corpusEntity,ss, quran.value!![0].qurantext,quran.value!![0].translation)
+           // val lamNegationDataList =             ExtractionUtility.extractKana(corpusEntity,ss, quran.value!![0].qurantext,quran.value!![0].translation)
             //   val lamNegationDataList =             extractSentenceAndTranslationFromShartIndices(corpusEntity,ss, quran.value!![0].qurantext)
       //     val extractedSentences=extractConditionalSentencesLau(corpusEntity)
             //  val lamNegationDataList =        extractSentenceAndTranslationFromNasabIndices(corpusEntity,ss, quran.value!![0].qurantext)
             //val extractedSentences = extractAccusativeSentences(corpusEntity)
-          // val extractedSentences     = extractKanaSentences(corpusEntity)
+          val extractedSentences     = extractKanaSentences(corpusEntity,quran.value!![0].qurantext,quran.value!![0].translation)
             //   val extractedSentences = extractConditionalSentencesWhenWithVerbsIN(corpusEntity,quran.value!![0].qurantext,quran.value!![0].translation)
 
        //     val extractedSentences = extractConditionalSentencesWhenWithVerbsMAMINJUSSIVE(corpusEntity,quran.value!![0].qurantext, quran.value!![0].translation)
@@ -524,26 +527,26 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             // val lamNegationDataList =                extractInMaIllaSentences(corpusEntity, quran.value!![s].qurantext)
 
 
-            if (lamNegationDataList.isNotEmpty()) {
+          /*  if (lamNegationDataList.isNotEmpty()) {
                  allLamNegativeSenteces.add(lamNegationDataList)
 
-             }
-       /*     if (extractedSentences.isNotEmpty()) {
+             }*/
+           if (extractedSentences.isNotEmpty()) {
                 accusativeSentencesCollection.addAll(extractedSentences)
 
 
-            }*/
+            }
 
         }
-    //  val (setenceCollection, Sentences) = nasab(accusativeSentencesCollection)
+      val (setenceCollection, Sentences) = nasab(accusativeSentencesCollection)
 
        // val (setenceCollection, Sentences) = shart(accusativeSentencesCollection)
 
 
-        val fileName = "kanaprevious.csv"
-       // writeNegationDataToFile(context!!, setenceCollection, fileName)
+        val fileName = "kanabalance.csv"
+       writeNegationDataToFile(context!!, setenceCollection, fileName)
 
-        writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
+     //   writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
     }
 
     private fun shart(accusativeSentencesCollection: MutableList<Map<String, Any>>): Pair<ArrayList<List<String>>, ArrayList<String>> {
@@ -679,6 +682,8 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         for (sentenceMap in accusativeSentencesCollection) {
             val type = sentenceMap["type"] as String
             val accWordNo = sentenceMap["accWordNo"] as Int
+            val verse=sentenceMap["quranverse"] as String
+            val translation=sentenceMap["translation"] as String
 
             val sequence = if (type == "Scenario 1") {
                 sentenceMap["predicateSequence"] as List<CorpusRow>
@@ -694,9 +699,10 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             val englishText = sequence.joinToString(" ") { it.englishText }
             val lastword = sequence.last().wordno
 
+
             // Create the pipe-delimited string
             val delimitedString =
-                "$type|$surah|$ayah|$wordNos|$firstWordNo|$lastword|$arabicText|$englishText"
+                "$type|$surah|$ayah|$wordNos|$firstWordNo|$lastword|$arabicText|$englishText|$verse|$translation"
 
             // Add the delimited string as a list of strings to Sentences
             Sentences.add(delimitedString)
@@ -807,28 +813,6 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
     }
 
-    data class CorpusRow(
-        val surah: Int,
-        val ayah: Int,
-        val wordno: Int,
-        val tags: List<String?>,  // Represents tagone to tagfive
-        val details: List<String?>,
-        val arabicText: String,
-        val englishText: String  // Represents concatenated araone to arafive
-
-    )
-
-    data class ShartCorpusRow(
-        val surah: Int,
-        val ayah: Int,
-        val wordno: Int,
-        val tags: List<String?>,  // Represents tagone to tagfive
-        val details: List<String?>,
-        val arabicText: String,
-        val englishText: String,  // Represents concatenated araone to arafive
-        val quranText: String,
-        val translation: String
-    )
 
 
     private fun mainLoopforIndexEXTRACTION() {
@@ -2896,7 +2880,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         return conditionalSentences
     }
 
-    fun extractKanaSentences(corpusData: List<CorpusEntity>): List<Map<String, Any>> {
+    fun extractKanaSentences(corpusData: List<CorpusEntity>, qurantext: String, translation: String): List<Map<String, Any>> {
         val accusativeSentences = mutableListOf<Map<String, Any>>()
 
         for (i in corpusData.indices) {
@@ -2932,6 +2916,8 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                         mapOf(
                             "type" to "Scenario 1",
                             "accWordNo" to accWordNo,
+                            "quranverse" to qurantext,
+                            "translation" to translation,
                             "predicateSequence" to predicateSequence
                         )
                     )
@@ -2950,6 +2936,8 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                         mapOf(
                             "type" to "Scenario 2",
                             "accWordNo" to accWordNo,
+                            "quranverse" to qurantext,
+                            "translation" to translation,
                             "accSequence" to accSequence
                         )
                     )

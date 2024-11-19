@@ -54,13 +54,14 @@ import com.example.mushafconsolidated.Entities.NasbListingPojo
 import com.example.mushafconsolidated.Entities.NounCorpus
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.ShartListingPojo
-import com.example.mushafconsolidated.Entities.SurahHeader
+
 import com.example.mushafconsolidated.Entities.TameezEnt
 import com.example.mushafconsolidated.Entities.VerbCorpus
 import com.example.mushafconsolidated.Entities.wbwentity
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SurahSummary
 import com.example.mushafconsolidated.Utils
+import com.example.mushafconsolidated.data.SurahHeader
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet.Companion.TAG
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.model.NewQuranCorpusWbw

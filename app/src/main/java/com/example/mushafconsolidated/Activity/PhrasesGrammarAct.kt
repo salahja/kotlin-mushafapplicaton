@@ -74,12 +74,13 @@ import com.example.mushafconsolidated.Entities.PresentTencePOJO
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.ShartListingPojo
 import com.example.mushafconsolidated.Entities.SifaListingPojo
-import com.example.mushafconsolidated.Entities.SurahHeader
+
 import com.example.mushafconsolidated.Entities.TameezEnt
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SurahSummary
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.ajroomiya.NewAjroomiyaDetailHostActivity
+import com.example.mushafconsolidated.data.SurahHeader
 import com.example.mushafconsolidated.databinding.PhrasesNewFragmentReadingBinding
 import com.example.mushafconsolidated.fragments.BookMarkCreateFrag
 import com.example.mushafconsolidated.fragments.BookmarkFragment

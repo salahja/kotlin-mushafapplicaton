@@ -307,7 +307,7 @@ class Utils {
                 "    corpusexpand.lemarafour = \"كَانَ\" OR corpusexpand.lemarafive = \"كَانَ\")\n" +
                 " \n" +
                 "    AND corpusexpand.surah = qurans.surah \n" +
-                "    AND corpusexpand.ayah = qurans.ayah and qurans.surah>9 and qurans.surah<58")
+                "    AND corpusexpand.ayah = qurans.ayah and qurans.surah>8 ")
 
         val query: SimpleSQLiteQuery = SimpleSQLiteQuery(kana)
         //  List<Book> result = booksDao.getBooks(query);

@@ -49,11 +49,12 @@ import com.example.mushafconsolidated.Entities.LiajlihiEnt
 import com.example.mushafconsolidated.Entities.MafoolBihi
 import com.example.mushafconsolidated.Entities.MafoolMutlaqEnt
 import com.example.mushafconsolidated.Entities.QuranEntity
-import com.example.mushafconsolidated.Entities.SurahHeader
+
 import com.example.mushafconsolidated.Entities.TameezEnt
 import com.example.mushafconsolidated.Entities.wbwentity
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SurahSummary
+import com.example.mushafconsolidated.data.SurahHeader
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.example.mushafconsolidatedimport.Config
