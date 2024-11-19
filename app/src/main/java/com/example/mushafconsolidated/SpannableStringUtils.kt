@@ -35,9 +35,16 @@ object SpannableStringUtils {
             val arabicString = data.arabictext
             val englishString = data.englishtext
             var type = data.type
+            var combinedString=""
             //  type += " "
-            val combinedString = "$arabicString\n$englishString"
-            spannableString = SpannableString(combinedString)
+            if(type=="badal" || type=="mutlaq" || type=="tameez"|| type=="ajlihi"){
+                spannableString = SpannableString(arabicString)
+            }else{
+                 combinedString = "$arabicString\n$englishString"
+                spannableString = SpannableString(combinedString)
+
+            }
+
             dark = isNightmode == "dark" || isNightmode == "blue" || isNightmode == "green"
 
             if (dark) {
@@ -86,6 +93,16 @@ object SpannableStringUtils {
                 kanaism = ForegroundColorSpan(KASHMIRIGREEN)
                 kanakhbar = ForegroundColorSpan(WHOTPINK)
             }
+
+            if(type=="badal" || type=="mutlaq" || type=="tameez"|| type=="ajlihi"){
+
+                spannableString.setSpan(
+                    Constant.sifaspansDark,
+                    0,
+                    arabicString.length,
+                    0)
+
+            }else
             if(type=="sifa"){
 
                 spannableString.setSpan(
@@ -99,7 +116,7 @@ object SpannableStringUtils {
                     0,
                     arabicString.length,
                     0)
-            }
+            }else
             if (type == "kanaharfismlater" || type == "kanaharfismlate") {
                 val parts = arabicString.split(":")
                 val firstPartWords = parts[0].split(" ")
