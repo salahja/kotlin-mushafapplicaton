@@ -29,28 +29,13 @@ import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip
 import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltipUtils
 import android.graphics.Color
 import android.graphics.Paint
-import android.text.Html
-import android.text.Spanned
-import android.text.TextUtils
-import android.text.style.ForegroundColorSpan
+
+
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import com.example.Constant.FORESTGREEN
-import com.example.Constant.GOLD
-import com.example.Constant.GREENDARK
-import com.example.Constant.KASHMIRIGREEN
-import com.example.Constant.ORANGE400
-import com.example.Constant.WHOTPINK
-import com.example.Constant.harfinnaspanDark
-import com.example.Constant.harfkhabarspanDark
-import com.example.Constant.harfshartspanDark
-import com.example.Constant.jawabshartspanDark
-import com.example.Constant.shartspanDark
-import com.example.mushafconsolidated.Entities.IllaPositive
-import com.example.mushafconsolidated.Entities.NewKanaEntity
-import com.example.mushafconsolidated.Entities.NewNasbEntity
-import com.example.mushafconsolidated.Entities.NewShartEntity
+
+
 import com.example.mushafconsolidated.SpannableStringUtils
 import com.example.mushafconsolidated.model.Word
 
@@ -114,74 +99,6 @@ object QuranViewUtils {
     }
 
 
-    fun cacheMansubat(
-        quranModel: QuranViewModel,
-        surah: Int,
-        mansubatCache: MutableMap<Int, MutableMap<Int, MutableList<SpannableString>>>,
-        isNightmode: String
-    ) {
-        val negantionData = quranModel.getIMBATFilterSurah(surah)
-        val futureTenceCache: MutableMap<String, List<List<SpannableString>>> = mutableMapOf()
-        for (data in negantionData) {
-            val surahid = data.surahid
-            val ayahid = data.ayahid
-            val arabicString = data.word
-            //  val englishString = data.englishtext
-            var type = data.type
-            type += " "
-
-            val spannableString = SpannableString(arabicString)
-            dark = isNightmode == "dark" || isNightmode == "blue" || isNightmode == "green"
-            val colorSpan = if (dark) {
-                Constant.mudhafspanDarks
-            } else {
-                Constant.mudhafspanLight
-            }
-            if (dark) {
-                Constant.harfshartspanDark = ForegroundColorSpan(Constant.BYELLOW)
-                Constant.shartspanDark = ForegroundColorSpan(Constant.BCYAN)
-                Constant.jawabshartspanDark = ForegroundColorSpan(Color.CYAN)
-            } else {
-                Constant.harfshartspanDark = ForegroundColorSpan(Constant.FORESTGREEN)
-                Constant.shartspanDark = ForegroundColorSpan(Constant.WMIDNIHTBLUE)
-                Constant.jawabshartspanDark = ForegroundColorSpan(Constant.WHOTPINK)
-            }
-
-            val backgroundColorArabic = when (isNightmode) {
-                "dark", "blue", "green" -> R.color.yellow
-                "brown", "light" -> R.color.rustred
-                else -> R.color.background_color_light_brown
-            }
-            val backgroundColorEnglish = when (isNightmode) {
-                "dark", "blue", "green" -> R.color.kashmirigreen
-                "brown", "light" -> R.color.midnightblue
-                else -> R.color.background_color_light_brown
-            }
-
-
-            //     spannableString.setSpan( UnderlineSpan(), 0, type.length, 0)
-            spannableString.setSpan(
-                harfshartspanDark,
-                0,
-                arabicString.length,
-                0
-            ) // Span for Arabic
-
-
-            mansubatCache[surahid]?.get(ayahid)?.add(spannableString) ?: run {
-                mansubatCache[surahid]?.set(
-                    ayahid,
-                    mutableListOf(spannableString)
-                ) ?: run {
-                    mansubatCache[surahid] =
-                        mutableMapOf(ayahid to mutableListOf(spannableString))
-                }
-            }
-            /*
-            negationCache.getOrPut(surahid) { mutableMapOf() }
-                .put(ayahid, Pair(spannableString, englishString))*/
-        }
-    }
 
 
     fun cacheNegationData(

@@ -3,21 +3,21 @@ package Utility
 import android.content.Context
 import com.example.mushafconsolidated.DAO.AbsoluteNegationDao
 import com.example.mushafconsolidated.DAO.AnaQuranChapterDao
-import com.example.mushafconsolidated.DAO.BadalErabNotesDao
+
 import com.example.mushafconsolidated.DAO.BookMarkDao
 import com.example.mushafconsolidated.DAO.CorpusExpandedDao
 
-import com.example.mushafconsolidated.DAO.HaliyaDao
+
 import com.example.mushafconsolidated.DAO.HansDao
-import com.example.mushafconsolidated.DAO.IllaPositiveDao
+
 
 
 import com.example.mushafconsolidated.DAO.LaneDao
 import com.example.mushafconsolidated.DAO.LaneRootDao
 import com.example.mushafconsolidated.DAO.LughatDao
-import com.example.mushafconsolidated.DAO.MafoolBihiDao
-import com.example.mushafconsolidated.DAO.MafoolMutlaqEntDao
-import com.example.mushafconsolidated.DAO.MutlaqBadalaAlihiTameezDao
+
+
+
 import com.example.mushafconsolidated.DAO.NegationDao
 import com.example.mushafconsolidated.DAO.NewKanaDao
 import com.example.mushafconsolidated.DAO.NewMudhafDao
@@ -33,10 +33,10 @@ import com.example.mushafconsolidated.DAO.SifaDao
 import com.example.mushafconsolidated.DAO.SifaMudhafDao
 import com.example.mushafconsolidated.DAO.VerbCorpusDao
 import com.example.mushafconsolidated.DAO.grammarRulesDao
-import com.example.mushafconsolidated.DAO.liajlihiDao
+
 import com.example.mushafconsolidated.DAO.qurandictionaryDao
 import com.example.mushafconsolidated.DAO.surahsummaryDao
-import com.example.mushafconsolidated.DAO.tameezDao
+
 import com.example.mushafconsolidated.DAO.wbwDao
 import com.example.mushafconsolidated.Entities.NamesDetailsDao
 import com.example.mushafconsolidated.QuranAppDatabase
@@ -92,20 +92,6 @@ object AppModule {
     }
 
 
-    @Singleton
-    @Provides
-    fun getMansubatDao(appDB: QuranAppDatabase): MutlaqBadalaAlihiTameezDao {
-
-        return appDB.MutlaqBadalaAlihiTameezDao()
-    }
-
-
-    @Singleton
-    @Provides
-    fun getIllaPositiveDao(appDB: QuranAppDatabase): IllaPositiveDao {
-
-        return appDB.IllaPositiveDao()
-    }
 
 
     @Singleton
@@ -248,59 +234,9 @@ object AppModule {
         return appDB.grammarRulesDao()
     }
 
-    @Singleton
-    @Provides
-    fun tameezDao(appDB: QuranAppDatabase): tameezDao {
-
-        return appDB.tameezDao()
-    }
 
 
-    @Singleton
-    @Provides
-    fun liajlihiDao(appDB: QuranAppDatabase): liajlihiDao {
 
-        return appDB.liajlihiDao()
-    }
-
-
-    @Singleton
-    @Provides
-    fun MafoolBihiDao(appDB: QuranAppDatabase): MafoolBihiDao {
-
-        return appDB.MafoolBihiDao()
-    }
-
-    /**
-     * Haliya dao
-     *
-     * @return
-     */
-    @Singleton
-    @Provides
-    fun HaliyaDao(appDB: QuranAppDatabase): HaliyaDao {
-
-        return appDB.HaliyaDao()
-    }
-
-    /**
-     * Badal erab notes dao
-     *
-     * @return
-     */
-    @Singleton
-    @Provides
-    fun BadalErabNotesDao(appDB: QuranAppDatabase): BadalErabNotesDao {
-
-        return appDB.BadalErabNotesDao()
-    }
-
-    @Singleton
-    @Provides
-    fun MafoolMutlaqEntDao(appDB: QuranAppDatabase): MafoolMutlaqEntDao {
-
-        return appDB.MafoolMutlaqEntDao()
-    }
 
 
     @Singleton

@@ -26,8 +26,7 @@ import com.example.mushafconsolidated.Entities.ShartPOJO
 import com.example.mushafconsolidated.Entities.SifaEntityPojo
 import com.example.mushafconsolidated.Entities.SifaListingPojo
 import com.example.mushafconsolidated.Entities.SifaPOJO
-import com.example.mushafconsolidated.Entities.TameezPOJO
-import com.example.mushafconsolidated.Entities.TameezPojoList
+
 import com.example.mushafconsolidated.Entities.VerbCorpusBreakup
 import com.example.mushafconsolidated.Entities.qurandictionary
 import com.example.mushafconsolidated.model.Juz
@@ -92,8 +91,7 @@ interface RawDao {
     @RawQuery
     fun getShart(query: SupportSQLiteQuery): List<ShartPOJO?>?
 
-    @RawQuery
-    fun getTameez(query: SupportSQLiteQuery): List<TameezPojoList?>?
+
 
     @RawQuery
     fun getMudhaf(query: SupportSQLiteQuery): List<MudhafPOJO?>?
@@ -117,8 +115,7 @@ interface RawDao {
     @RawQuery
     fun getVerbOccuranceBreakVerses(query: SupportSQLiteQuery): List<CorpusVerbWbwOccurance?>?
 
-    @RawQuery
-    fun gettameezversescount(query: SupportSQLiteQuery): List<TameezPOJO?>?
+
 
     @RawQuery
     fun getCorpusWbwfortameez(query: SupportSQLiteQuery): List<CorpusExpandWbwPOJO?>?

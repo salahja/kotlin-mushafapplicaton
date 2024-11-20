@@ -70,7 +70,7 @@ import com.example.mushafconsolidated.databinding.ExoplayerBinding
 import com.example.mushafconsolidated.databinding.FbarnormalfooterBinding
 import com.example.mushafconsolidated.databinding.RxfetchProgressBinding
 import com.example.mushafconsolidated.databinding.VfourExpandableNewactivityShowAyahsBinding
-import com.example.mushafconsolidated.Adapters.FlowAyahWordAdapterNoMafoolat
+import com.example.mushafconsolidated.Adapters.QuranDisplayAdapter
 import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.data.SurahHeader
 
@@ -125,7 +125,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
     private lateinit var mainViewModel: QuranViewModel
     private var corpusSurahWord: List<CorpusEntity>? = null
 
-    private lateinit var nomafoolatflowAyahWordAdapter: FlowAyahWordAdapterNoMafoolat
+    private lateinit var nomafoolatflowAyahWordAdapter: QuranDisplayAdapter
 
     private var mausoof = false
     private var mudhaf = false
@@ -1264,7 +1264,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
 
                 recyclerView.layoutManager = manager
 
-                nomafoolatflowAyahWordAdapter = FlowAyahWordAdapterNoMafoolat(
+                nomafoolatflowAyahWordAdapter = QuranDisplayAdapter(
                     true,
 
                     header,

@@ -58,16 +58,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.Constant
 import com.example.Constant.SURAHFRAGTAG
 import com.example.mushafconsolidated.BottomOptionDialog
-import com.example.mushafconsolidated.Entities.BadalErabNotesEnt
+
 import com.example.mushafconsolidated.Entities.BookMarks
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
 import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.FutureTenceListingPojo
-import com.example.mushafconsolidated.Entities.HalEnt
+
 import com.example.mushafconsolidated.Entities.InMaListingPOJO
-import com.example.mushafconsolidated.Entities.LiajlihiEnt
-import com.example.mushafconsolidated.Entities.MafoolBihi
-import com.example.mushafconsolidated.Entities.MafoolMutlaqEnt
+
 import com.example.mushafconsolidated.Entities.NasbListingPojo
 import com.example.mushafconsolidated.Entities.PastTencePOJO
 import com.example.mushafconsolidated.Entities.PresentTencePOJO
@@ -75,7 +73,7 @@ import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.ShartListingPojo
 import com.example.mushafconsolidated.Entities.SifaListingPojo
 
-import com.example.mushafconsolidated.Entities.TameezEnt
+
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SurahSummary
 import com.example.mushafconsolidated.Utils
@@ -209,12 +207,7 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
 
     //  private OnClickListener onClickListener;
     //  private val newadapterlist = LinkedHashMap<Int, ArrayList<NewCorpusAyahWord>>()
-    private var mafoolbihiwords: List<MafoolBihi?>? = null
-    private var Jumlahaliya: List<HalEnt?>? = null
-    private var Tammezent: List<TameezEnt?>? = null
-    private var Mutlaqent: List<MafoolMutlaqEnt?>? = null
-    private var Liajlihient: List<LiajlihiEnt?>? = null
-    private var BadalErabNotesEnt: List<BadalErabNotesEnt?>? = null
+
     private var isMakkiMadani = 0
     var chapterno = 0
     private lateinit var parentRecyclerView: RecyclerView

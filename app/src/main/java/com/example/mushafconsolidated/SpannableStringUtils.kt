@@ -120,8 +120,8 @@ object SpannableStringUtils {
             if (type == "kanaharfismlater" || type == "kanaharfismlate") {
                 val parts = arabicString.split(":")
                 val firstPartWords = parts[0].split(" ")
-                val secondPart = parts[1]
-                val harf = firstPartWords[0]
+
+
                 val result = processString(arabicString)
 
                 println("First part: ${result.first}")

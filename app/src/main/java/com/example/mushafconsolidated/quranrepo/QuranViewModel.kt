@@ -6,19 +6,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mushafconsolidated.Entities.AbsoluteNegationEnt
-import com.example.mushafconsolidated.Entities.BadalErabNotesEnt
+
 import com.example.mushafconsolidated.Entities.BookMarks
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
 import com.example.mushafconsolidated.Entities.CorpusEntity
 
 import com.example.mushafconsolidated.Entities.GrammarRules
-import com.example.mushafconsolidated.Entities.HalEnt
-import com.example.mushafconsolidated.Entities.IllaPositive
 
-import com.example.mushafconsolidated.Entities.LiajlihiEnt
-import com.example.mushafconsolidated.Entities.MafoolBihi
-import com.example.mushafconsolidated.Entities.MafoolMutlaqEnt
-import com.example.mushafconsolidated.Entities.MutlaqBadalaAlihiTameezEnt
+
+
+
 import com.example.mushafconsolidated.Entities.NegationEnt
 import com.example.mushafconsolidated.Entities.NewKanaEntity
 import com.example.mushafconsolidated.Entities.NewMudhafEntity
@@ -29,7 +26,7 @@ import com.example.mushafconsolidated.Entities.NounCorpus
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.SifaEntity
 import com.example.mushafconsolidated.Entities.SifaMudhafEnt
-import com.example.mushafconsolidated.Entities.TameezEnt
+
 import com.example.mushafconsolidated.Entities.VerbCorpus
 import com.example.mushafconsolidated.Entities.hanslexicon
 
@@ -63,21 +60,13 @@ class QuranViewModel @Inject constructor(
     private var chapterslist: MutableLiveData<List<ChaptersAnaEntity>> = MutableLiveData()
     var juz: LiveData<List<Juz>> = MutableLiveData()
     val util = Utils(QuranGrammarApplication.context)
-    private var mafoolb: MutableLiveData<List<MafoolBihi>> = MutableLiveData()
-    private var haliya: MutableLiveData<List<HalEnt>> = MutableLiveData()
-    var tameez: MutableLiveData<List<TameezEnt>> = MutableLiveData()
-    var mutlaq: MutableLiveData<List<MafoolMutlaqEnt>> = MutableLiveData()
-    var liajlihi: MutableLiveData<List<LiajlihiEnt>> = MutableLiveData()
-    var badal: MutableLiveData<List<BadalErabNotesEnt>> = MutableLiveData()
+
+
     private var bokmarks: LiveData<List<BookMarks>> = MutableLiveData()
     var wbw: MutableLiveData<List<wbwentity>> = MutableLiveData()
     private var hanslist: MutableLiveData<List<hanslexicon>> = MutableLiveData()
     private var laneslist: MutableLiveData<List<lanerootdictionary>> = MutableLiveData()
 
-    private var halword: MutableLiveData<List<HalEnt>> = MutableLiveData()
-    private var ajlihiword: MutableLiveData<List<LiajlihiEnt>> = MutableLiveData()
-    private var mutlaqword: MutableLiveData<List<MafoolMutlaqEnt>> = MutableLiveData()
-    private var mafoolBihi: MutableLiveData<List<MafoolBihi>> = MutableLiveData()
     private var nounbywordno: MutableLiveData<List<NounCorpus>> = MutableLiveData()
     private var verbcorpuslist: MutableLiveData<List<VerbCorpus>> = MutableLiveData()
 
@@ -238,10 +227,6 @@ class QuranViewModel @Inject constructor(
 
     }
 
-    fun getIllaPositiveAll(): List<IllaPositive> {
-        return  this.quranRepository.getIllaPositiveAll()
-
-    }
 
 
 
@@ -267,53 +252,12 @@ class QuranViewModel @Inject constructor(
 
 
 
-    fun getIMBATFilterSurahAyahAndType(surah: Int, ayah: Int, type:String): List<MutlaqBadalaAlihiTameezEnt> {
-        return  this.quranRepository.getIMBATFilterSurahAyahAndType(surah,ayah,type)
-
-    }
-
-    fun getIMBATFilterSurah(cid: Int ): List<MutlaqBadalaAlihiTameezEnt> {
-        return  this.quranRepository.getIMBATFilterSurah(cid)
-
-    }
-
-
-    fun getIMBATFilterSurahAndType(cid: Int,type: String ): List<MutlaqBadalaAlihiTameezEnt> {
-        return  this.quranRepository.getIMBATFilterSurahAndType(cid,type)
-
-    }
 
 
 
 
 
-    fun gethalsurahayah(cid: Int, aid: Int): MutableLiveData<List<HalEnt>> {
-        halword.value = this.quranRepository.gethalsurahayah(cid, aid)
-        return halword
-    }
 
-    fun getMafoolbihiword(surah: Int, ayah: Int, wordno: Int): MutableLiveData<List<MafoolBihi>> {
-        mafoolBihi.value = this.quranRepository.getMafoolbihi(surah, ayah, wordno)
-        return mafoolBihi
-    }
-
-
-    fun getAjlihiword(surah: Int, ayah: Int, wordno: Int): MutableLiveData<List<LiajlihiEnt>> {
-        ajlihiword.value = this.quranRepository.getAjlihiword(surah, ayah, wordno)
-        return ajlihiword
-    }
-
-
-    fun getMutlaqWOrd(surah: Int, ayah: Int, wordno: Int): MutableLiveData<List<MafoolMutlaqEnt>> {
-        mutlaqword.value = this.quranRepository.getMutlaqWOrd(surah, ayah, wordno)
-        return mutlaqword
-    }
-
-    fun getTameezword(surah: Int, ayah: Int, wordno: Int): MutableLiveData<List<TameezEnt>> {
-        tameez.value = this.quranRepository.getTameezword(surah, ayah, wordno)
-        return tameez
-
-    }
 
 
 
@@ -347,41 +291,8 @@ class QuranViewModel @Inject constructor(
     }
 
 
-    fun getHalsurah(cid: Int): MutableLiveData<List<HalEnt>> {
-        viewModelScope.launch {
-            haliya.value = quranRepository.gethalsurah(cid)
-        }
-        return haliya
-    }
-
-    fun getTameezsurah(cid: Int): MutableLiveData<List<TameezEnt>> {
-        viewModelScope.launch {
-            tameez.value = quranRepository.gettameezsurah(cid)
-        }
-        return tameez
-    }
-
-    fun getMutlaqSurah(cid: Int): MutableLiveData<List<MafoolMutlaqEnt>> {
-        viewModelScope.launch {
-            mutlaq.value = quranRepository.getmutlaqsura(cid)
-        }
-        return mutlaq
-    }
-
-    fun getLiajlihiSurah(cid: Int): MutableLiveData<List<LiajlihiEnt>> {
-        viewModelScope.launch {
-            liajlihi.value = quranRepository.getliajlihsura(cid)
-        }
-        return liajlihi
-    }
 
 
-    fun getMafoolSurah(cid: Int): MutableLiveData<List<MafoolBihi>> {
-        viewModelScope.launch {
-            mafoolb.value = quranRepository.getMafoolbihiSurah(cid)
-        }
-        return mafoolb
-    }
 
 
     //  private val allUsers: LiveData<List<ChaptersAnaEntity>> get() = allchapters
@@ -417,12 +328,7 @@ class QuranViewModel @Inject constructor(
         return chapters
     }
 
-    fun getbadalSurah(cid: Int): MutableLiveData<List<BadalErabNotesEnt>> {
-        viewModelScope.launch {
-            badal.value = quranRepository.getbadalnotes(cid)
-        }
-        return badal
-    }
+
 
     fun getVersesBySurahLive(cid: Int): MutableLiveData<List<QuranEntity>> {
 

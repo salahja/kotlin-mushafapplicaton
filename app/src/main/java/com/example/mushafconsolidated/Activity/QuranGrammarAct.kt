@@ -54,21 +54,19 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.example.Constant
 import com.example.Constant.SURAHFRAGTAG
-import com.example.mushafconsolidated.Adapters.FlowAyahWordAdapterNoMafoolat
+import com.example.mushafconsolidated.Adapters.QuranDisplayAdapter
 import com.example.mushafconsolidated.BottomOptionDialog
-import com.example.mushafconsolidated.Entities.BadalErabNotesEnt
+
 import com.example.mushafconsolidated.Entities.BookMarks
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
 import com.example.mushafconsolidated.Entities.CorpusEntity
-import com.example.mushafconsolidated.Entities.HalEnt
-import com.example.mushafconsolidated.Entities.IllaPositive
-import com.example.mushafconsolidated.Entities.LiajlihiEnt
-import com.example.mushafconsolidated.Entities.MafoolBihi
-import com.example.mushafconsolidated.Entities.MafoolMutlaqEnt
+
+
+
 import com.example.mushafconsolidated.Entities.NegationEnt
 import com.example.mushafconsolidated.Entities.QuranEntity
 
-import com.example.mushafconsolidated.Entities.TameezEnt
+
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SurahSummary
 import com.example.mushafconsolidated.Utils
@@ -79,7 +77,7 @@ import com.example.mushafconsolidated.data.SurahHeader
 import com.example.mushafconsolidated.databinding.NewFragmentReadingBinding
 import com.example.mushafconsolidated.fragments.BookMarkCreateFrag
 import com.example.mushafconsolidated.fragments.BookmarkFragment
-import com.example.mushafconsolidated.fragments.FlowAyahWordAdapter
+
 import com.example.mushafconsolidated.fragments.GrammerFragmentsBottomSheet
 import com.example.mushafconsolidated.fragments.NewSurahDisplayFrag
 import com.example.mushafconsolidated.fragments.PhrasesDisplayFrag
@@ -198,14 +196,6 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     // @Inject
 
 
-    //  private OnClickListener onClickListener;
-    //  private val newadapterlist = LinkedHashMap<Int, ArrayList<NewCorpusAyahWord>>()
-    private var mafoolbihiwords: CollectionsList<MafoolBihi?> = emptyList()
-    private var liajlihient: CollectionsList<LiajlihiEnt?>? = emptyList()
-    private var mutlaqEntList: CollectionsList<MafoolMutlaqEnt?> = emptyList()
-    private var tameezEntList: CollectionsList<TameezEnt?> = emptyList()
-    private var badalErabNotesEnts: CollectionsList<BadalErabNotesEnt?> = emptyList()
-    private var jumlahaliya: CollectionsList<HalEnt?> = emptyList()
     private var isMakkiMadani = 0
     var chapterno = 0
     private lateinit var parentRecyclerView: RecyclerView
@@ -345,7 +335,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
     fun extractSentenceAndTranslationFromSavedWordIndexes(
         corpus: List<CorpusEntity>,
-        wordInfo: IllaPositive,
+        wordInfo: NegationEnt,
         quranText: String
     ): List<String> {
         val result = mutableListOf<String>()
@@ -376,7 +366,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
     fun extractSentenceAndTranslationFromSavedIndexes(
         corpus: List<CorpusEntity>,
-        wordInfo: IllaPositive,
+        wordInfo: NegationEnt,
         quranText: String
 
     ): List<String> {
@@ -5407,14 +5397,6 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                     corpusGroupedByAyah =
                         corpusSurahWord!!.groupBy { it.ayah } as LinkedHashMap<Int, ArrayList<CorpusEntity>>
 
-                    if (mafoolat) {
-                        val chapterData = quranRepository.getChapterData(chapterno)
-                        mafoolbihiwords = chapterData.mafoolbihiwords
-                        jumlahaliya = chapterData.jumlahaliya
-                        tameezEntList = chapterData.tammezent
-                        mutlaqEntList = chapterData.mutlaqent
-                        badalErabNotesEnts = chapterData.badalErabNotesEnt
-                    }
 
                     val gson = Gson()
                     val json = gson.toJson(corpusGroupedByAyah)
@@ -5434,26 +5416,10 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
                     HightLightKeyWordold(allofQuran)
 
-                    val adapter = if (!mushafview && mafoolat) {
-                        FlowAyahWordAdapter(
-                            false,
-                            mutlaqEntList,
-                            tameezEntList,
-                            badalErabNotesEnts,
-                            liajlihient,
-                            jumlahaliya,
-                            mafoolbihiwords,
-                            header,
-                            allofQuran,
-                            corpusGroupedByAyah,
-                            this@QuranGrammarAct,
-                            surahArabicName,
-                            isMakkiMadani,
-                            listener,
-                            mainViewModel,
-                        )
-                    } else {
-                        FlowAyahWordAdapterNoMafoolat(
+                    val adapter =
+
+
+                        QuranDisplayAdapter(
                             false,
                             header,
                             allofQuran,
@@ -5466,7 +5432,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
 
                             )
-                    }
+
                     //      adapter.addContext(this@QuranGrammarAct)
                     //  adapter.addContext(this@QuranGrammarAct)
                     parentRecyclerView.setHasFixedSize(true)

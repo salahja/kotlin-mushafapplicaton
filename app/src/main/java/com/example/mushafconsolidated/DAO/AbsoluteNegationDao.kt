@@ -3,7 +3,7 @@ package com.example.mushafconsolidated.DAO
 import androidx.room.Dao
 import androidx.room.Query
 import com.example.mushafconsolidated.Entities.AbsoluteNegationEnt
-import com.example.mushafconsolidated.Entities.HalEnt
+
 
 @Dao
 interface AbsoluteNegationDao {

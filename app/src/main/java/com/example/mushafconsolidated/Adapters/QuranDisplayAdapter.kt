@@ -20,7 +20,6 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableString.valueOf
 import android.text.SpannableStringBuilder
-import android.text.TextUtils
 import android.text.format.DateFormat
 import android.text.style.LineBackgroundSpan
 import android.view.Gravity
@@ -38,7 +37,6 @@ import androidx.cardview.widget.CardView
 
 import androidx.constraintlayout.widget.Group
 import androidx.core.content.FileProvider
-import androidx.core.text.color
 
 
 import androidx.recyclerview.widget.RecyclerView
@@ -74,11 +72,10 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.Date
-import kotlin.text.append
 
 const val TAUBA_CHAPTER_NUMBER = 9
 
-class FlowAyahWordAdapterNoMafoolat(
+class QuranDisplayAdapter(
     isaudio: Boolean,
 
     private val header: SurahHeader,
@@ -90,7 +87,7 @@ class FlowAyahWordAdapterNoMafoolat(
     private val isMakkiMadani: Int,
     listener: OnItemClickListenerOnLong?,
     mainViewModel: QuranViewModel,
-) : RecyclerView.Adapter<FlowAyahWordAdapterNoMafoolat.ItemViewAdapter>() //implements OnItemClickListenerOnLong {
+) : RecyclerView.Adapter<QuranDisplayAdapter.ItemViewAdapter>() //implements OnItemClickListenerOnLong {
 {
     //private lateinit var phraseGroups: List<SpannableString?>
 
@@ -141,8 +138,7 @@ class FlowAyahWordAdapterNoMafoolat(
     // private val negationCache: MutableMap<Int, MutableMap<Int, MutableList<Pair<SpannableString, String>>>> = mutableMapOf()
     private val negationCache: MutableMap<Int, MutableMap<Int, MutableList<SpannableString>>> =
         mutableMapOf()
-    private val mansoobatCache: MutableMap<Int, MutableMap<Int, MutableList<SpannableString>>> =
-        mutableMapOf()
+
 
     //   private lateinit var  ayahWord: CorpusAyahWord
     //  private  var ayahWord: QuranCorpusWbw? = null
@@ -167,7 +163,7 @@ class FlowAyahWordAdapterNoMafoolat(
         //    QuranViewUtils.cachePastTenceData(quranModel, surah, pastTenceCache)
         //   QuranViewUtils.cacheFutureTenceData(quranModel, surah, futureTenceCache)
         QuranViewUtils.cacheNegationData(quranModel, surah, negationCache, isNightmode)
-        QuranViewUtils.cacheMansubat(quranModel, surah, mansoobatCache, isNightmode)
+
 
 
 
@@ -269,7 +265,7 @@ class FlowAyahWordAdapterNoMafoolat(
         holder.mafoolat.text = concatenatedCharSequence
         holder.mafoolat.gravity = Gravity.CENTER
         holder.base_cardview.visibility = View.VISIBLE
-        holder.mafoolat.textSize = (arabicfontSize - 5).toFloat()
+        holder.mafoolat.textSize = (arabicfontSize).toFloat()
       //  holder.mafoolat.typeface = custom_font
 
 
@@ -296,48 +292,7 @@ class FlowAyahWordAdapterNoMafoolat(
             c.drawLine(left.toFloat(), bottom.toFloat(), right.toFloat(), bottom.toFloat(), paint)
         }
     }
-    private fun displayPhrasesss(position: Int, holder: ItemViewAdapter) {
-        val phraseGroups: MutableList<SpannableString> = mutableListOf()
-        val entity = allofQuran[position]
-        val key = Pair(entity!!.surah, entity!!.ayah)
 
-        // Update phraseGroups
-        updatePhraseGroups(key, phraseGroups)
-
-        val maxLength = 1500
-        val truncatedPhraseGroups = phraseGroups.map { phrase ->
-            if (phrase.length > maxLength) {
-                SpannableString(phrase.substring(0, maxLength) + "...")
-            } else {
-                phrase
-            }
-        }.toMutableList()
-
-        // Create adapter for the ListView
-        var phraseListAdapter = PhraseListAdapter(holder.itemView.context, truncatedPhraseGroups)
-        holder.phrasesListView.adapter = phraseListAdapter
-        holder.phrasesListView.setListViewHeightBasedOnChildren()
-        // Update the existing adapter's data
-        phraseListAdapter.clear()
-        phraseListAdapter.addAll(truncatedPhraseGroups)
-        phraseListAdapter.notifyDataSetChanged()
-        // Handle expand/collapse state
-        val isExpanded = expandedPositions.contains(position)
-        holder.phrasesListView.visibility = if (isExpanded) View.VISIBLE else View.GONE
-        holder.expandCollapseIcon.setImageResource(
-            if (isExpanded) R.drawable.baseline_arrow_back_36 else R.drawable.ic_baseline_double_arrow_24
-        )
-
-        // Set up click listener to toggle expand/collapse
-        holder.expandCollapseIcon.setOnClickListener {
-            if (isExpanded) {
-                expandedPositions.remove(position)
-            } else {
-                expandedPositions.add(position)
-            }
-            notifyItemChanged(position) // Refresh only the clicked item
-        }
-    }
 
 
     private fun displayPhrasesv1(
@@ -396,7 +351,7 @@ class FlowAyahWordAdapterNoMafoolat(
 
 
 
-    private fun displayAyah(holder: FlowAyahWordAdapterNoMafoolat.ItemViewAdapter, position: Int) {
+    private fun displayAyah(holder: QuranDisplayAdapter.ItemViewAdapter, position: Int) {
         val sharedPreferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(
             context
         )
@@ -750,11 +705,8 @@ class FlowAyahWordAdapterNoMafoolat(
             phraseGroups.add(spannableString)
             //  println("check")
         }
-        val spannableStringsLists = mansoobatCache[key.first]?.get(key.second) ?: emptyList()
-        for (spannableString in spannableStringsLists) {
-            phraseGroups.add(spannableString)
-            //  println("check")
-        }
+
+
     }
 
     class PhraseListAdapter(context: Context, phrases: List<SpannableString?>) :
@@ -789,8 +741,8 @@ class FlowAyahWordAdapterNoMafoolat(
 
         ) {
 
-        val futureTenceCache: MutableMap<String, List<List<SpannableString>>> = mutableMapOf()
-        //<SpannableString, String>>> =        mutableMapOf()
+
+
         if (spannableverse != null) {
 
             CorpusUtilityorig.setAyahGrammaticalPhrases(spannableverse, surah, ayah)
@@ -827,17 +779,6 @@ class FlowAyahWordAdapterNoMafoolat(
     }
 
 
-    private fun wordBywordWithTranslation(
-        showrootkey: Boolean,
-        holder: ItemViewAdapter,
-        showWordColor: Boolean,
-        wbw: String,
-        ayahWordArrayList: LinkedHashMap<Int, ArrayList<CorpusEntity>>,
-        showWbwTranslation: Boolean,
-        position: Int,
-    ) {
-
-    }
 
 
     private fun NewLoadItemList(dataBundle: Bundle, word: CorpusEntity) {
@@ -919,7 +860,7 @@ class FlowAyahWordAdapterNoMafoolat(
         lateinit var erab_textViewnote: TextView
         lateinit var translate_textViewnote: TextView
 
-        lateinit var erab_textViewnoteen: TextView
+
 
         lateinit var erabnotescardView: CardView
         lateinit var mafoolatarow: ImageView
@@ -930,7 +871,7 @@ class FlowAyahWordAdapterNoMafoolat(
         lateinit var ivBismillah: ImageView
         lateinit var erabexpand: ImageView
         lateinit var phraseListIndicator: ImageView
-        lateinit var erabexpanden: ImageView
+
 
         private lateinit var erab_notes_expand: ImageView
         private lateinit var erab_notes_expanden: ImageView
@@ -1258,12 +1199,12 @@ class FlowAyahWordAdapterNoMafoolat(
 
                 mafoolatarow.setOnClickListener { view1: View? ->
                     TransitionManager.beginDelayedTransition(erabnotescardView, AutoTransition())
-                    if (hiddenGroup.visibility == View.VISIBLE) {
-                        hiddenGroup.visibility = View.GONE
+                    if (hiddenGroup.visibility == View.GONE) {
+                        hiddenGroup.visibility = View.VISIBLE
                         mafoolatarow.setImageResource(android.R.drawable.arrow_down_float)
                     } else {
                         //     colllayout.setLayoutParams(params);
-                        hiddenGroup.visibility = View.VISIBLE
+                        hiddenGroup.visibility = View.GONE
                         mafoolatarow.setImageResource(android.R.drawable.arrow_up_float)
                     }
                 }
@@ -1293,6 +1234,13 @@ class FlowAyahWordAdapterNoMafoolat(
                     if (erab_textView.visibility == View.VISIBLE) erab_textView.visibility =
                         View.GONE else erab_textView.visibility = View.VISIBLE
                 }
+
+                mafoolat.setOnClickListener { view1: View? ->
+                    if (mafoolat.visibility == View.VISIBLE) mafoolat.visibility =
+                        View.GONE else erab_textView.visibility = View.VISIBLE
+                }
+
+
             }
         }
 

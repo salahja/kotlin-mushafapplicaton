@@ -17,7 +17,8 @@ import com.example.Constant.harfshartspanDark
 import com.example.Constant.jawabshartspanDark
 import com.example.Constant.shartspanDark
 import com.example.mushafconsolidated.Entities.CorpusEntity
-import com.example.mushafconsolidated.Entities.IllaPositive
+import com.example.mushafconsolidated.Entities.NegationEnt
+
 import com.example.mushafconsolidated.Entities.NewKanaEntity
 import com.example.mushafconsolidated.Entities.NewNasbEntity
 import com.example.mushafconsolidated.Entities.NewShartEntity
@@ -2021,7 +2022,7 @@ if (w != null) {
 
     fun extractSentenceAndTranslationFromWordIndices(
         corpus: List<CorpusEntity>,
-        wordInfo: IllaPositive,
+        wordInfo: NegationEnt,
         quranText: String
 
     ): List<String> {
