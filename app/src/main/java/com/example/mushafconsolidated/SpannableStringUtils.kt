@@ -68,6 +68,9 @@ object SpannableStringUtils {
 
 
             }
+
+
+
             if (dark) {
                 Constant.sifaspansDark = BackgroundColorSpan(Constant.WBURNTUMBER)
             } else {
@@ -116,8 +119,35 @@ object SpannableStringUtils {
                     0,
                     arabicString.length,
                     0)
-            }else
-            if (type == "kanaharfismlater" || type == "kanaharfismlate") {
+            }
+            else if (type == "khabarkanaism" ) {
+                val parts = arabicString.split(":")
+                val firstPartWords = parts[0]
+                var secondPartWords=parts[1]
+                var thirdPartWord=parts[2]
+                val finalString=firstPartWords+secondPartWords
+                spannableString.setSpan(
+                    kanakhbar,
+                    0,
+                    firstPartWords.length,
+                    0
+                )
+                spannableString.setSpan(
+                    harfkana,
+                    firstPartWords.length,
+                    firstPartWords.length + secondPartWords.length,
+                    0
+                )
+                spannableString.setSpan(
+                    kanaism,
+                    firstPartWords.length + secondPartWords.length,
+                    arabicString.length + 2, // Use totalLength as the end index
+                    0
+                )
+
+
+
+            }  else if (type == "kanaharfismlater" || type == "kanaharfismlate") {
                 val parts = arabicString.split(":")
                 val firstPartWords = parts[0].split(" ")
 

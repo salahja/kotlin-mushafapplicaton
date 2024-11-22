@@ -109,7 +109,7 @@ object QuranViewUtils {
     ) {
         val negantionData = quranModel.getNegationFilterSurah(surah)
         val futureTenceCache: MutableMap<String, List<List<SpannableString>>> = mutableMapOf()
-        val spannedStrings=   SpannableStringUtils.applySpans(negantionData,"light")
+        val spannedStrings=   SpannableStringUtils.applySpans(negantionData,isNightmode)
 
 
         for ((surahid,ayahid:Int, type, spannableString) in spannedStrings) {

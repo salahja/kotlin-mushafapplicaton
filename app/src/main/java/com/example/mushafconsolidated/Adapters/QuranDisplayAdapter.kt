@@ -36,6 +36,7 @@ import androidx.cardview.widget.CardView
 
 
 import androidx.constraintlayout.widget.Group
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 
 
@@ -1201,11 +1202,13 @@ class QuranDisplayAdapter(
                     TransitionManager.beginDelayedTransition(erabnotescardView, AutoTransition())
                     if (hiddenGroup.visibility == View.GONE) {
                         hiddenGroup.visibility = View.VISIBLE
-                        mafoolatarow.setImageResource(android.R.drawable.arrow_down_float)
+                        val drawable = ContextCompat.getDrawable(context, R.drawable.double_arrow_up)
+                        mafoolatarow.setImageDrawable(drawable)
                     } else {
                         //     colllayout.setLayoutParams(params);
                         hiddenGroup.visibility = View.GONE
-                        mafoolatarow.setImageResource(android.R.drawable.arrow_up_float)
+                        val drawable = ContextCompat.getDrawable(context, R.drawable.arrow_shape)
+                        mafoolatarow.setImageDrawable(drawable)
                     }
                 }
 
@@ -1239,6 +1242,9 @@ class QuranDisplayAdapter(
                     if (mafoolat.visibility == View.VISIBLE) mafoolat.visibility =
                         View.GONE else erab_textView.visibility = View.VISIBLE
                 }
+
+
+
 
 
             }

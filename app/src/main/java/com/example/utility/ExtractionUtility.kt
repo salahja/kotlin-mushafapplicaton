@@ -24,7 +24,6 @@ import com.example.mushafconsolidated.Entities.NewNasbEntity
 import com.example.mushafconsolidated.Entities.NewShartEntity
 import com.example.mushafconsolidated.Entities.wbwentity
 import com.example.mushafconsolidated.Utils
-import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.example.utility.CorpusUtilityorig.Companion.dark
 import com.example.utility.QuranViewUtils.extractCase
 import com.example.utility.QuranViewUtils.extractConsonants
@@ -143,6 +142,143 @@ object ExtractionUtility {
         }
 
         return identifiedPlurals
+    }
+    fun extractSifat(corpusList: List<CorpusEntity>, qurantext: String): List<String> {
+        val mousufSifaPairs = mutableListOf<Pair<String, String>>()
+        val extractedSentences = mutableListOf<String>()
+
+        for (i in corpusList.indices) {
+            val currentWord = corpusList[i]
+            if (currentWord.surah == 27 && currentWord.ayah == 44 && currentWord.wordno == 15) {
+                println("check")
+            }
+
+            val isAdjective = (currentWord.tagone == "ADJ" || currentWord.tagtwo == "ADJ" ||
+                    currentWord.tagthree == "ADJ" || currentWord.tagfour == "ADJ" && currentWord.tagfive != "ADJ" )
+
+
+
+            var nounDef = false
+            if (isAdjective ) {
+                var nounDetails = ""
+                var currentWords = ""
+
+
+
+
+
+                // Check for broken plural or gender number agreement
+                currentWords =
+                    currentWord.araone + currentWord.aratwo + currentWord.arathree + currentWord.arafour + currentWord.arafive
+
+
+
+
+
+
+
+                            val sifa =
+                                currentWord.araone + currentWord.aratwo + currentWord.arathree + currentWord.arafour + currentWord.arafive
+
+
+                            var sifaword = currentWord.wordno
+                            val translationBuilder = StringBuilder()
+                            translationBuilder.append(currentWord.en)
+
+                            val extractedSentence = "$sifa"
+                            val startindex = qurantext.indexOf(extractedSentence)
+                            val endindex = startindex + extractedSentence.length
+                            val nountype = "sifa"
+                            val dataString =
+                                "${currentWord.surah}|${currentWord.ayah}|$sifaword|$startindex|$endindex|$extractedSentence|$translationBuilder|$nountype"
+                            extractedSentences.add(dataString)
+                           // mousufSifaPairs.add(Pair(mousuf, sifa))
+
+
+
+
+
+
+
+            }
+        }
+        return extractedSentences
+    }
+    fun extractMousufSifanew(corpusList: List<CorpusEntity>, qurantext: String): List<String> {
+        val mousufSifaPairs = mutableListOf<Pair<String, String>>()
+        val extractedSentences = mutableListOf<String>()
+
+        for (i in corpusList.indices) {
+            val currentWord = corpusList[i]
+            if (currentWord.surah == 27 && currentWord.ayah == 44 && currentWord.wordno == 15) {
+                println("check")
+            }
+
+            val isAdjective = (currentWord.tagone == "ADJ" || currentWord.tagtwo == "ADJ" ||
+                    currentWord.tagthree == "ADJ" || currentWord.tagfour == "ADJ" && currentWord.tagfive != "ADJ" )
+
+
+
+            var nounDef = false
+            if (isAdjective ) {
+                var nounDetails = ""
+                var currentWords = ""
+
+
+
+
+
+                // Check for broken plural or gender number agreement
+                currentWords =
+                    currentWord.araone + currentWord.aratwo + currentWord.arathree + currentWord.arafour + currentWord.arafive
+
+
+
+                if (i - 1 < corpusList.size) {
+
+
+                    if (i - 1 >= 0) {
+                        val previousWord = corpusList[i -1]
+                        if (previousWord.tagone == "N" || previousWord.tagtwo == "N" || previousWord.tagthree == "N" || previousWord.tagfour == "N"
+                            || previousWord.tagfive == "N" ||
+                            previousWord.tagone == "T" || previousWord.tagtwo == "T" || previousWord.tagthree == "T" || previousWord.tagfour == "T"
+                            || previousWord.tagfive == "T" ||
+                            previousWord.tagone == "PN" || previousWord.tagtwo == "" || previousWord.tagthree == "" || previousWord.tagfour == ""
+                            || previousWord.tagfive == ""
+
+
+                            ) {
+                            val sifa =
+                                currentWord.araone + currentWord.aratwo + currentWord.arathree + currentWord.arafour + currentWord.arafive
+                            var mousuf =
+                                previousWord.araone + previousWord.aratwo + previousWord.arathree + previousWord.arafour + previousWord.arafive
+                            var mousufword = previousWord.wordno
+                            var sifaword = currentWord.wordno
+                            val translationBuilder = StringBuilder()
+                            translationBuilder.append(previousWord.en).append(" ")
+                                .append(currentWord.en)
+
+                            val extractedSentence = "$mousuf $sifa"
+                            val startindex = qurantext.indexOf(extractedSentence)
+                            val endindex = startindex + extractedSentence.length
+                            val nountype = "sifa"
+                            val dataString =
+                                "${previousWord.surah}|${previousWord.ayah}|$mousufword|$sifaword|$startindex|$endindex|$extractedSentence|$translationBuilder|$nountype"
+                            extractedSentences.add(dataString)
+                            mousufSifaPairs.add(Pair(mousuf, sifa))
+
+                        }
+                    }
+
+
+
+
+
+
+                }
+            }
+        }
+        return extractedSentences
     }
     fun extractMousufSifa(corpusList: List<CorpusEntity>, qurantext: String): List<String> {
         val mousufSifaPairs = mutableListOf<Pair<String, String>>()
