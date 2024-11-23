@@ -97,6 +97,7 @@ import com.example.utility.CorpusUtilityorig.Companion.searchForTameez
 import com.example.utility.ExtractionUtility.extractInMaIllaNegativeSentences
 import com.example.utility.ExtractionUtility.extractMousufSifa
 import com.example.utility.ExtractionUtility.extractMousufSifanew
+import com.example.utility.ExtractionUtility.extractSentenceAndTranslationFromWordIndices
 import com.example.utility.ExtractionUtility.extractSifat
 import com.example.utility.QuranGrammarApplication.Companion.context
 
@@ -427,28 +428,30 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
 
         // Extract Arabic sentence based on startindex and endindex
-        val extractedSentence = if (info.startindex >= 0 && info.endindex <= quranText.length) {
-            quranText.substring(info.startindex, info.endindex).trim()
-        } else {
-            "Invalid index range"
-        }
-
-        // Extract translation using wordfrom and wordnoto
-        val translationBuilder = StringBuilder()
-        for (entry in corpus) {
-            if (entry.wordno in info.wordfrom..info.wordto) {
-                // Assuming we're extracting the English translation (you can replace 'en' with another language field if needed)
-                translationBuilder.append("${entry.en} ").append(" ")
+        if(info.type!="nountype") {
+            val extractedSentence = if (info.startindex >= 0 && info.endindex <= quranText.length && info.startindex <= info.endindex) {
+                quranText.substring(info.startindex, min(info.endindex, quranText.length)).trim() // Use min to ensure endindex is within bounds
+            } else {
+                "Invalid index range"
             }
+
+            // Extract translation using wordfrom and wordnoto
+            val translationBuilder = StringBuilder()
+            for (entry in corpus) {
+                if (entry.wordno in info.wordfrom..info.wordto) {
+                    // Assuming we're extracting the English translation (you can replace 'en' with another language field if needed)
+                    translationBuilder.append("${entry.en} ").append(" ")
+                }
+            }
+            val extractedTranslation = translationBuilder.toString().trim()
+            val types = info.type
+
+            // Format the result string
+            val dataString =
+                "${info.surahid}|${info.ayahid}|${info.wordfrom}|${info.wordto}|${info.startindex}|${info.endindex}|$extractedSentence|$extractedTranslation|$types"
+            result.add(dataString)
+
         }
-        val extractedTranslation = translationBuilder.toString().trim()
-
-        // Format the result string
-        val dataString =
-            "${info.surahid}|${info.ayahid}|${info.wordfrom}|${info.wordto}|${info.startindex}|${info.endindex}|$extractedSentence|$extractedTranslation"
-        result.add(dataString)
-
-
         return result
     }
 
@@ -474,7 +477,8 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         // val wordInfo = utils.getNASAB()
         //  val wordInfo=       utils.getNasbAall()
       //    val wordInfo=utils.getKanaAll()
-        val wordInfo=  utils.getManAmmaConditional()
+       // val wordInfo=  utils.getManAmmaConditional()
+        val wordInfo=    utils.getNegationall()
       //  val wordInfo = utils.getLauAll()
         //  val wordInfoss= utils.getIzaAll()
         // val wordInfo=utils.getInALL()
@@ -484,10 +488,10 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         for (s in wordInfo!!.indices) {
             val ss = wordInfo!![s]
             val corpusEntity = mainViewModel.getCorpusEntityFilterSurahAya(
-                ss.surah, ss.ayah
+                ss.surahid, ss.ayahid
             )
                     as ArrayList<CorpusEntity>
-            val quran = mainViewModel.getsurahayahVerses(ss.surah, ss.ayah)
+            val quran = mainViewModel.getsurahayahVerses(ss.surahid, ss.ayahid)
 
            // val lamNegationDataList =             ExtractionUtility.extractKana(corpusEntity,ss, quran.value!![0].qurantext,quran.value!![0].translation)
             //   val lamNegationDataList =             extractSentenceAndTranslationFromShartIndices(corpusEntity,ss, quran.value!![0].qurantext)
@@ -501,7 +505,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
 
             //   val extractedSentences =    extractConditionalSentencesIZAWITHVERB(corpusEntity)
-                 val extractedSentences =           extractConditionalSentencesWhenWithMANLAMMARSLT(corpusEntity)
+              //   val extractedSentences =           extractConditionalSentencesWhenWithMANLAMMARSLT(corpusEntity)
             //  val extractedSentences = extractConditionalSentencesIZAWITHRSLT(corpusEntity)
 
             /*     lamNegationDataList = extractSentenceAndTranslationFromWordIndices(
@@ -511,7 +515,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                  )
      */
 
-            //    val lamNegationDataList =              extractSentencesFromIndexdata(corpusEntity,ss, quran.value!![0].qurantext)
+              val lamNegationDataList =              extractSentenceAndTranslationFromWordIndices(corpusEntity,ss, quran.value!![0].qurantext)
             // val lamNegationDataList=         maaPastTenceNegation(corpusEntity, quran.value!![s].qurantext)
             //    val lamNegationDataList =                setPresentTenceNegationwithLA(corpusEntity, quran.value!![s].qurantext)
             //    val lamNegationDataList=         setMaaNegationPresent(corpusEntity, quran.value!![s].qurantext)
@@ -522,26 +526,26 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             // val lamNegationDataList =                extractInMaIllaSentences(corpusEntity, quran.value!![s].qurantext)
 
 
-          /*  if (lamNegationDataList.isNotEmpty()) {
+            if (lamNegationDataList.isNotEmpty()) {
                  allLamNegativeSenteces.add(lamNegationDataList)
 
-             }*/
-           if (extractedSentences.isNotEmpty()) {
+             }
+        /*   if (extractedSentences.isNotEmpty()) {
                 accusativeSentencesCollection.addAll(extractedSentences)
 
 
-            }
+            }*/
 
         }
    //   val (setenceCollection, Sentences) = nasab(accusativeSentencesCollection)
 
-        val (setenceCollection, Sentences) = shart(accusativeSentencesCollection)
+       // val (setenceCollection, Sentences) = shart(accusativeSentencesCollection)
 
 
-        val fileName = "shartblanace.csv"
-       writeNegationDataToFile(context!!, setenceCollection, fileName)
+        val fileName = "fulldataextraction.csv"
+     //  writeNegationDataToFile(context!!, setenceCollection, fileName)
 
-     //   writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
+        writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
     }
 
     private fun shart(accusativeSentencesCollection: MutableList<Map<String, Any>>): Pair<ArrayList<List<String>>, ArrayList<String>> {

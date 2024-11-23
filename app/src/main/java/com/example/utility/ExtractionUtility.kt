@@ -32,6 +32,8 @@ import com.example.utility.QuranViewUtils.extractValues
 import com.example.utility.QuranViewUtils.hasNunation
 
 object ExtractionUtility {
+
+
     fun collectBrokenPlurals(corpus: List<CorpusEntity>, qurantext: String): List<String> {
         val brokenPluralPatterns = listOf(
             "فُعُوْلٌ",
@@ -143,6 +145,7 @@ object ExtractionUtility {
 
         return identifiedPlurals
     }
+
     fun extractSifat(corpusList: List<CorpusEntity>, qurantext: String): List<String> {
         val mousufSifaPairs = mutableListOf<Pair<String, String>>()
         val extractedSentences = mutableListOf<String>()
@@ -154,17 +157,13 @@ object ExtractionUtility {
             }
 
             val isAdjective = (currentWord.tagone == "ADJ" || currentWord.tagtwo == "ADJ" ||
-                    currentWord.tagthree == "ADJ" || currentWord.tagfour == "ADJ" && currentWord.tagfive != "ADJ" )
-
+                    currentWord.tagthree == "ADJ" || currentWord.tagfour == "ADJ" && currentWord.tagfive != "ADJ")
 
 
             var nounDef = false
-            if (isAdjective ) {
+            if (isAdjective) {
                 var nounDetails = ""
                 var currentWords = ""
-
-
-
 
 
                 // Check for broken plural or gender number agreement
@@ -172,38 +171,29 @@ object ExtractionUtility {
                     currentWord.araone + currentWord.aratwo + currentWord.arathree + currentWord.arafour + currentWord.arafive
 
 
+                val sifa =
+                    currentWord.araone + currentWord.aratwo + currentWord.arathree + currentWord.arafour + currentWord.arafive
 
 
+                var sifaword = currentWord.wordno
+                val translationBuilder = StringBuilder()
+                translationBuilder.append(currentWord.en)
 
-
-
-                            val sifa =
-                                currentWord.araone + currentWord.aratwo + currentWord.arathree + currentWord.arafour + currentWord.arafive
-
-
-                            var sifaword = currentWord.wordno
-                            val translationBuilder = StringBuilder()
-                            translationBuilder.append(currentWord.en)
-
-                            val extractedSentence = "$sifa"
-                            val startindex = qurantext.indexOf(extractedSentence)
-                            val endindex = startindex + extractedSentence.length
-                            val nountype = "sifa"
-                            val dataString =
-                                "${currentWord.surah}|${currentWord.ayah}|$sifaword|$startindex|$endindex|$extractedSentence|$translationBuilder|$nountype"
-                            extractedSentences.add(dataString)
-                           // mousufSifaPairs.add(Pair(mousuf, sifa))
-
-
-
-
-
+                val extractedSentence = "$sifa"
+                val startindex = qurantext.indexOf(extractedSentence)
+                val endindex = startindex + extractedSentence.length
+                val nountype = "sifa"
+                val dataString =
+                    "${currentWord.surah}|${currentWord.ayah}|$sifaword|$startindex|$endindex|$extractedSentence|$translationBuilder|$nountype"
+                extractedSentences.add(dataString)
+                // mousufSifaPairs.add(Pair(mousuf, sifa))
 
 
             }
         }
         return extractedSentences
     }
+
     fun extractMousufSifanew(corpusList: List<CorpusEntity>, qurantext: String): List<String> {
         val mousufSifaPairs = mutableListOf<Pair<String, String>>()
         val extractedSentences = mutableListOf<String>()
@@ -215,17 +205,13 @@ object ExtractionUtility {
             }
 
             val isAdjective = (currentWord.tagone == "ADJ" || currentWord.tagtwo == "ADJ" ||
-                    currentWord.tagthree == "ADJ" || currentWord.tagfour == "ADJ" && currentWord.tagfive != "ADJ" )
-
+                    currentWord.tagthree == "ADJ" || currentWord.tagfour == "ADJ" && currentWord.tagfive != "ADJ")
 
 
             var nounDef = false
-            if (isAdjective ) {
+            if (isAdjective) {
                 var nounDetails = ""
                 var currentWords = ""
-
-
-
 
 
                 // Check for broken plural or gender number agreement
@@ -238,7 +224,7 @@ object ExtractionUtility {
 
 
                     if (i - 1 >= 0) {
-                        val previousWord = corpusList[i -1]
+                        val previousWord = corpusList[i - 1]
                         if (previousWord.tagone == "N" || previousWord.tagtwo == "N" || previousWord.tagthree == "N" || previousWord.tagfour == "N"
                             || previousWord.tagfive == "N" ||
                             previousWord.tagone == "T" || previousWord.tagtwo == "T" || previousWord.tagthree == "T" || previousWord.tagfour == "T"
@@ -247,7 +233,7 @@ object ExtractionUtility {
                             || previousWord.tagfive == ""
 
 
-                            ) {
+                        ) {
                             val sifa =
                                 currentWord.araone + currentWord.aratwo + currentWord.arathree + currentWord.arafour + currentWord.arafive
                             var mousuf =
@@ -271,15 +257,12 @@ object ExtractionUtility {
                     }
 
 
-
-
-
-
                 }
             }
         }
         return extractedSentences
     }
+
     fun extractMousufSifa(corpusList: List<CorpusEntity>, qurantext: String): List<String> {
         val mousufSifaPairs = mutableListOf<Pair<String, String>>()
         val extractedSentences = mutableListOf<String>()
@@ -801,7 +784,6 @@ object ExtractionUtility {
     fun trimWord(word: String): String {
         return word.replace(Regex("[,ٓ]+$"), "")
     }
-
 
 
     fun extractInMaIllaPositiveSentences(
@@ -2163,54 +2145,71 @@ if (w != null) {
 
     ): List<String> {
         val result = mutableListOf<String>()
-
-
+        var wordto = 0
+        var translationBuilder = StringBuilder()
         var startIndex = -1
         var endIndex = -1
         var currentWordIndex = 0
         val wordsInVerse =
             quranText.split("\\s+".toRegex()) // Split Arabic verse by whitespace to get individual words
 
-        // Find the start and end index for the words based on wordfrom and wordto
-        for ((i, word) in wordsInVerse.withIndex()) {
-            if (currentWordIndex + 1 == wordInfo.wordfrom) {
-                startIndex = quranText.indexOf(word)
-            }
-            if (currentWordIndex + 1 == wordInfo.wordto) {
-                endIndex = quranText.indexOf(word) + word.length
-                break
-            }
-            currentWordIndex++
-        }
-        var extractedSentence = ""
-        if (startIndex != -1 && endIndex != -1) {
-            // Extract the Arabic sentence between the start and end indexes
-            try {
-                extractedSentence = quranText.substring(startIndex, endIndex).trim()
-            } catch (e: StringIndexOutOfBoundsException) {
-                e.printStackTrace()
-                println(wordInfo.surahid + wordInfo.ayahid)
-                println(quranText)
-            }
-
-
-            // Extract translation using wordfrom and wordnoto
-            val translationBuilder = StringBuilder()
-            for (entry in corpus) {
-                if (entry.wordno in wordInfo.wordfrom..wordInfo.wordto) {
-                    translationBuilder.append("${entry.en} ").append(" ")
+            // Find the start and end index for the words based on wordfrom and wordto
+            for ((i, word) in wordsInVerse.withIndex()) {
+                if (currentWordIndex + 1 == wordInfo.wordfrom) {
+                    startIndex = quranText.indexOf(word)
                 }
-            }
-            val extractedTranslation = translationBuilder.toString().trim()
 
-            // Format the result string
-            val dataString =
-                "${wordInfo.surahid}|${wordInfo.ayahid}|${wordInfo.wordfrom}|${wordInfo.wordto}|$startIndex|$endIndex|$extractedSentence|$extractedTranslation|$quranText"
-            result.add(dataString)
-        } else {
-            // Handle the case when startIndex or endIndex is not found
-            result.add("Error: Couldn't find indices for Surah ${wordInfo.surahid}, Ayah ${wordInfo.ayahid}, Words ${wordInfo.wordfrom} to ${wordInfo.wordto}")
-        }
+                if (wordInfo.type.equals("past")) {
+                    wordto = wordInfo.wordto + 1
+                } else {
+                    wordto = wordInfo.wordto
+                }
+                if (currentWordIndex + 1 == wordto) {
+                    endIndex = quranText.indexOf(word) + word.length
+                    break
+                }
+                currentWordIndex++
+            }
+            var extractedSentence = ""
+            if (startIndex != -1 && endIndex != -1) {
+                // Extract the Arabic sentence between the start and end indexes
+                try {
+                    extractedSentence = quranText.substring(startIndex, endIndex).trim()
+                } catch (e: StringIndexOutOfBoundsException) {
+                    e.printStackTrace()
+                    println(wordInfo.surahid + wordInfo.ayahid)
+                    println(quranText)
+                }
+
+
+                // Extract translation using wordfrom and wordnoto
+                translationBuilder = StringBuilder()
+                for (entry in corpus) {
+                    if (wordInfo.type.equals("past")) {
+                        wordto = wordInfo.wordto + 1
+                    } else {
+                        wordto = wordInfo.wordto
+                    }
+                    if (entry.wordno in wordInfo.wordfrom..wordto) {
+                        translationBuilder.append("${entry.en} ").append(" ")
+                    }
+                }
+                val extractedTranslation = translationBuilder.toString().trim()
+                val type = wordInfo.type
+                // Format the result string
+                val dataString =
+                    "${wordInfo.surahid}|${wordInfo.ayahid}|${wordInfo.wordfrom}|$wordto|$startIndex|$endIndex|$extractedSentence|$extractedTranslation|${wordInfo.arabictext}|${wordInfo.englishtext}|$type|$quranText"
+                result.add(dataString)
+            } else {
+                val extractedTranslation = translationBuilder.toString().trim()
+                if(wordInfo.type=="future"){
+                    println("check")
+                }
+                // Handle the case when startIndex or endIndex is not found
+                val dataString =
+                    "${wordInfo.surahid}|${wordInfo.ayahid}|${wordInfo.wordfrom}|$wordto|$startIndex|$endIndex|$extractedSentence|$extractedTranslation|${wordInfo.arabictext}|${wordInfo.englishtext}|${wordInfo.type}|$quranText"
+                result.add(dataString)
+            }
 
 
         return result
@@ -2309,7 +2308,6 @@ if (w != null) {
 
         return extractedSentences
     }
-
 
 
 }
