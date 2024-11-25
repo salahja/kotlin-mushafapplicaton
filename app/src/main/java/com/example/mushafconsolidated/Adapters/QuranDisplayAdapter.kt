@@ -454,7 +454,7 @@ class QuranDisplayAdapter(
         } else {
             holder.erabexpand.visibility = View.GONE
         }
-        holder.mafoolatarow.visibility = View.VISIBLE
+        holder.mafoolatarrow.visibility = View.VISIBLE
 
     }
 
@@ -864,7 +864,7 @@ class QuranDisplayAdapter(
 
 
         lateinit var erabnotescardView: CardView
-        lateinit var mafoolatarow: ImageView
+        lateinit var mafoolatarrow: ImageView
 
         lateinit var bookmark: ImageView
         lateinit var jumpto: ImageView
@@ -957,9 +957,9 @@ class QuranDisplayAdapter(
                 erab_notes_expand.setOnClickListener(this)
                 erab_notes_expand.tag = "erab_notes"
                 erabnotescardView = view.findViewById(R.id.base_cardview)
-                mafoolatarow = view.findViewById(R.id.show)
+                mafoolatarrow = view.findViewById(R.id.show)
                 hiddenGroup = view.findViewById(R.id.card_group)
-                mafoolatarow.setOnClickListener(this)
+                mafoolatarrow.setOnClickListener(this)
                 mafoolat = view.findViewById(R.id.directobject)
                 base_cardview = view.findViewById(R.id.base_cardview)
                 collectionfb = view.findViewById(R.id.collectionfb)
@@ -1198,17 +1198,17 @@ class QuranDisplayAdapter(
                 })
 
 
-                mafoolatarow.setOnClickListener { view1: View? ->
+                mafoolatarrow.setOnClickListener { view1: View? ->
                     TransitionManager.beginDelayedTransition(erabnotescardView, AutoTransition())
                     if (hiddenGroup.visibility == View.GONE) {
                         hiddenGroup.visibility = View.VISIBLE
                         val drawable = ContextCompat.getDrawable(context, R.drawable.double_arrow_up)
-                        mafoolatarow.setImageDrawable(drawable)
+                        mafoolatarrow.setImageDrawable(drawable)
                     } else {
                         //     colllayout.setLayoutParams(params);
                         hiddenGroup.visibility = View.GONE
                         val drawable = ContextCompat.getDrawable(context, R.drawable.arrow_shape)
-                        mafoolatarow.setImageDrawable(drawable)
+                        mafoolatarrow.setImageDrawable(drawable)
                     }
                 }
 
