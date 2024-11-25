@@ -2137,7 +2137,68 @@ if (w != null) {
 
         return result
     }
+    fun extractSentenceAndTranslationFromWordNumbers(
+        corpus: List<CorpusEntity>,
+        wordInfo: NegationEnt,
+        quranText: String
 
+    ): List<String> {
+        val result = mutableListOf<String>()
+        var wordto = 0
+        var translationBuilder = StringBuilder()
+        var startIndex = -1
+        var endIndex = -1
+        var currentWordIndex = 0
+        val wordsInVerse =
+            quranText.split("\\s+".toRegex()) // Split Arabic verse by whitespace to get individual words
+
+        // Find the start and end index for the words based on wordfrom and wordto
+        for ((i, word) in wordsInVerse.withIndex()) {
+            if (currentWordIndex + 1 == wordInfo.wordfrom) {
+                startIndex = quranText.indexOf(word)
+            }
+
+
+            if (currentWordIndex + 1 == wordInfo.wordto) {
+                endIndex = quranText.indexOf(word) + word.length
+                break
+            }
+            currentWordIndex++
+        }
+        var extractedSentence = ""
+        if (startIndex != -1 && endIndex != -1) {
+            // Extract the Arabic sentence between the start and end indexes
+            try {
+                extractedSentence = quranText.substring(startIndex, endIndex).trim()
+            } catch (e: StringIndexOutOfBoundsException) {
+                e.printStackTrace()
+                println(wordInfo.surahid + wordInfo.ayahid)
+                println(quranText)
+            }
+
+
+
+            // Format the result string
+            val dataString =
+                "${wordInfo.surahid}|${wordInfo.ayahid}|${wordInfo.wordfrom}|${wordInfo.wordto}|$startIndex|$endIndex|${wordInfo.arabictext}|${wordInfo.englishtext}" +
+                        "|${wordInfo.verse}|${wordInfo.translation}|${wordInfo.type}|$quranText"
+            result.add(dataString)
+        } else {
+            val extractedTranslation = translationBuilder.toString().trim()
+            if(wordInfo.type=="future"){
+                println("check")
+            }
+            val type="check"
+            // Handle the case when startIndex or endIndex is not found
+            val dataString =
+                "${wordInfo.surahid}|${wordInfo.ayahid}|${wordInfo.wordfrom}|${wordInfo.wordto}|$startIndex|$endIndex|${wordInfo.arabictext}|${wordInfo.englishtext}" +
+                        "|${wordInfo.verse}|${wordInfo.translation}|$type|$quranText"
+            result.add(dataString)
+        }
+
+
+        return result
+    }
     fun extractSentenceAndTranslationFromWordIndices(
         corpus: List<CorpusEntity>,
         wordInfo: NegationEnt,

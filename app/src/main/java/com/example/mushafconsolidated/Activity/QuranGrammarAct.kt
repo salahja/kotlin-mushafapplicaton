@@ -39,6 +39,7 @@ import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
+import androidx.compose.ui.semantics.text
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
@@ -98,6 +99,7 @@ import com.example.utility.ExtractionUtility.extractInMaIllaNegativeSentences
 import com.example.utility.ExtractionUtility.extractMousufSifa
 import com.example.utility.ExtractionUtility.extractMousufSifanew
 import com.example.utility.ExtractionUtility.extractSentenceAndTranslationFromWordIndices
+import com.example.utility.ExtractionUtility.extractSentenceAndTranslationFromWordNumbers
 import com.example.utility.ExtractionUtility.extractSifat
 import com.example.utility.QuranGrammarApplication.Companion.context
 
@@ -323,7 +325,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         val start = false
         if (start) {
          mainLoopFromIndexExtraction()
-          //  mainLoopforErabStringEXTRACTION()
+         //mainLoopforErabStringEXTRACTION()
          //    mainLoopforIndexEXTRACTION()
             //extractExpNegationSentences()
         }
@@ -478,7 +480,8 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         //  val wordInfo=       utils.getNasbAall()
       //    val wordInfo=utils.getKanaAll()
        // val wordInfo=  utils.getManAmmaConditional()
-        val wordInfo=    utils.getNegationall()
+     //   val wordInfo=    utils.getNegationall()
+         val wordInfo=        utils.getNasabFilterSubType("shart")
       //  val wordInfo = utils.getLauAll()
         //  val wordInfoss= utils.getIzaAll()
         // val wordInfo=utils.getInALL()
@@ -515,7 +518,11 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                  )
      */
 
-              val lamNegationDataList =              extractSentenceAndTranslationFromWordIndices(corpusEntity,ss, quran.value!![0].qurantext)
+             // val lamNegationDataList =              extractSentenceAndTranslationFromWordIndices(corpusEntity,ss, quran.value!![0].qurantext)
+        //    val lamNegationDataList =              addQuranVerseTranslationErab(ss, quran.value!![0].qurantext,quran.value!![0].translation,quran.value!![0].ar_irab_two)
+            val lamNegationDataList =             extractSentenceAndTranslationFromWordNumbers(corpusEntity,ss,quran.value!![0].qurantext)
+
+
             // val lamNegationDataList=         maaPastTenceNegation(corpusEntity, quran.value!![s].qurantext)
             //    val lamNegationDataList =                setPresentTenceNegationwithLA(corpusEntity, quran.value!![s].qurantext)
             //    val lamNegationDataList=         setMaaNegationPresent(corpusEntity, quran.value!![s].qurantext)
@@ -542,10 +549,34 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
        // val (setenceCollection, Sentences) = shart(accusativeSentencesCollection)
 
 
-        val fileName = "fulldataextraction.csv"
+        val fileName = "shartindex.csv"
      //  writeNegationDataToFile(context!!, setenceCollection, fileName)
 
         writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
+    }
+
+    private fun addQuranVerseTranslationErab( wordInfo: NegationEnt, qurantext: String, translation: String, arIrabTwo: String): List<String> {
+        val result = mutableListOf<String>()
+        val surah=wordInfo.surahid
+        val ayah=wordInfo.ayahid
+        val wordfrom=wordInfo.wordfrom
+        val wordto=wordInfo.wordto
+        val start=wordInfo.startindex
+        val end=wordInfo.endindex
+        val arabic=wordInfo.arabictext
+        val english=wordInfo.englishtext
+        val verse=qurantext
+        val trans=translation
+        val erab=arIrabTwo
+        val types=wordInfo.type
+
+        val replacedText = erab.replace("\n", "")
+        val dataString = "$surah|$ayah|$wordfrom|$wordto|$start|$end|$arabic|$english|$verse|$trans|$types"
+
+  /*      val dataString =
+            "$surah|$ayah|$wordfrom|$wordto|$start|$end|$arabic|$english|$verse|$trans|$erab|$types"*/
+   result.add(dataString)
+        return result
     }
 
     private fun shart(accusativeSentencesCollection: MutableList<Map<String, Any>>): Pair<ArrayList<List<String>>, ArrayList<String>> {
@@ -607,6 +638,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             val quranVerse = shartsequence[0].quranText
             val translation = shartsequence[0].translation
             val lastword = shartsequence.last().wordno
+
             delimitedString1 =
                 "$type|$surah|$ayah|$wordNos|$condword|$firstVerbWordno|$secondVerbWordno|$endWord|$arabicText|$englishText|$quranVerse|$translation"
         }

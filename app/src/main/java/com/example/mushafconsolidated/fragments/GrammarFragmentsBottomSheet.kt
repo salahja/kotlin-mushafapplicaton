@@ -98,7 +98,7 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
     //   private enum class NasbPart { HARF, ISM, KHABAR }
     val model: QuranViewModel by viewModels()
     private var dark: Boolean = false
-    private var quran: List<QuranEntity>? = null
+  //  private var quran: List<QuranEntity>? = null
     private var corpusSurahWord: List<CorpusEntity>? = null
     var chapterid = 0
     private var ayanumber = 0
@@ -145,7 +145,7 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
         val model = ViewModelProvider(requireActivity())[QuranViewModel::class.java]
         val corpusAndQurandata = quranRepository.CorpusAndQuranDataSurah(chapterid)
         // corpusSurahWord = model.getCorpusEntityFilterSurahAya(chapterid, ayanumber)
-        quran = model.getsurahayahVerseslist(chapterid, ayanumber).value
+      //  quran = model.getsurahayahVerseslist(chapterid, ayanumber).value
         negaTionList = utils.geTNegatonFilerSurahAyah(chapterid, ayanumber)
 
         expandableListDetail = getData()
@@ -215,8 +215,10 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
                   corpusSurahWord!![0].surah.toString() + ":" + corpusSurahWord!![0].surah + ":-" + quran!![0].qurantext
               )
           )*/
-        verse.add(SpannableString.valueOf(quran!![0].qurantext))
-        if (whichtranslation == "en_sahih") {
+        translation.add(SpannableString.valueOf(negaTionList[0].translation))
+        verse.add(SpannableString.valueOf(negaTionList[0].verse))
+
+ /*       if (whichtranslation == "en_sahih") {
             translation.add(SpannableString.valueOf(quran!![0].translation))
         } else if (whichtranslation == "en_arberry") {
             translation.add(SpannableString.valueOf(quran!![0].en_arberry))
@@ -225,7 +227,7 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
         } else {
             translation.add(SpannableString.valueOf(quran!![0].translation))
         }
-
+*/
         val mausoofsifaarray: MutableList<SpannableString> = ArrayList()
 
 

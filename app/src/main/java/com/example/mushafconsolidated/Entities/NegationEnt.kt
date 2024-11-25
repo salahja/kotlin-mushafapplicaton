@@ -29,6 +29,8 @@ class NegationEnt constructor(
     var endindex: Int,
     var arabictext: String,
     var englishtext: String,
+    var verse: String,
+    var translation: String,
     var type: String,
 
 

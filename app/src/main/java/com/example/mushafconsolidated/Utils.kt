@@ -151,6 +151,11 @@ class Utils {
 
     }
 
+    fun getNasabFilterSubType(type:String): List<NegationEnt> {
+        return  database.NegationDao().getNasabFilterSubType(type)
+
+    }
+
 
 
 
