@@ -27,6 +27,7 @@ import com.example.mushafconsolidated.Entities.NewKanaEntity
 import com.example.mushafconsolidated.Entities.NewMudhafEntity
 import com.example.mushafconsolidated.Entities.NewNasbEntity
 import com.example.mushafconsolidated.Entities.NewShartEntity
+
 import com.example.mushafconsolidated.Entities.NounCorpus
 import com.example.mushafconsolidated.Entities.NounCorpusBreakup
 import com.example.mushafconsolidated.Entities.PastTencePOJO
@@ -268,12 +269,12 @@ class Utils {
     }
 
     fun getShart(tid:Int):List<ShartListingPojo>{
-        val sqlshart:String=("select newshart.surah,newshart.ayah,newshart.indexstart,newshart.indexend,newshart.shartindexstart,newshart.shartindexend,\n" +
-                "newshart.jawabshartindexstart,newshart.jawabshartindexend,newshart.harfwordno,newshart.shartstatwordno,newshart.shartendwordno,\n" +
-                "newshart.jawabstartwordno,newshart.jawabendwordno,qurans.page,qurans.passage_no,qurans.qurantext,qurans.has_prostration,qurans.translation,\n" +
+        val sqlshart:String=("select negationfulldata.surahid as surah,negationfulldata.ayahid as ayah,negationfulldata.wordfrom,negationfulldata.wordto,negationfulldata.startindex,negationfulldata.endindex,\n" +
+                "negationfulldata.arabictext,negationfulldata.englishtext,negationfulldata.verse,negationfulldata.type,\n" +
+                "qurans.page,qurans.passage_no,qurans.qurantext,qurans.has_prostration,qurans.translation,\n" +
                 "qurans.en_transliteration,qurans.en_arberry,qurans.en_jalalayn,qurans.ur_jalalayn,qurans.tafsir_kathir,qurans.ur_junagarhi,qurans.ar_irab_two\n" +
-                " from newshart,qurans where newshart.surah=qurans.surah and newshart.ayah=qurans.ayah and " +
-                "newshart.surah ==  \""
+                " from negationfulldata,qurans where negationfulldata.surahid=qurans.surah and negationfulldata.ayahid=qurans.ayah and " +
+                "negationfulldata.type like '%shart%' and negationfulldata.surahid ==  \""
                 + tid + "\"")
 
         val query: SimpleSQLiteQuery = SimpleSQLiteQuery(sqlshart)
@@ -282,6 +283,8 @@ class Utils {
 
 
     }
+
+
     fun getNASAB():List<AccusativePojo>{
         val accusative:String=("SELECT \n" +
                 "    corpusexpand.surah,\n" +

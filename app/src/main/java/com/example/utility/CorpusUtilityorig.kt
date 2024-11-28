@@ -16,9 +16,9 @@ import android.text.style.BackgroundColorSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
+import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LiveData
 import com.example.Constant
 import com.example.Constant.harfshartspanDark
 import com.example.Constant.jawabshartspanDark
@@ -39,11 +39,14 @@ import com.example.mushafconsolidated.Entities.ShartListingPojo
 import com.example.mushafconsolidated.Entities.SifaEntity
 import com.example.mushafconsolidated.Entities.SifaListingPojo
 import com.example.mushafconsolidated.R
+
+
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.model.NewNewQuranCorpusWbw
 import com.example.mushafconsolidated.model.NewQuranCorpusWbw
 import com.example.mushafconsolidated.model.QuranCorpusWbw
 import com.example.mushafconsolidated.model.QuranEntityCorpusEntityWbwEntity
+import com.example.utility.QuranGrammarApplication.Companion.context
 import org.ahocorasick.trie.Trie
 import java.util.regex.Pattern
 
@@ -51,7 +54,7 @@ class CorpusUtilityorig(private var context: Context?) {
     var ayah = 0
 
     constructor(context: Context, suraid: Int, ayah: Int) : this(context) {
-
+        this.context=context
         this.ayah = ayah
     }
 
@@ -922,95 +925,147 @@ class CorpusUtilityorig(private var context: Context?) {
 
 
         ) {
-        val utils = Utils(QuranGrammarApplication.context!!)
-        // val surah = utils.getShartSurahNew(surah_id)
-        var counter = 0
-        //  final ArrayList<ShartEntity> surah = utils.getShartSurah(surah_id);
-        //TO 9;118 IZA IN THE MEANING OF HEENA AND 9 122 IZA AS HEENA
 
-        for (shart in shartSentences!!) {
-            val indexstart = shart!!.indexstart
-            val indexend = shart.indexend
-            val shartsindex = shart.shartindexstart
-            val sharteindex = shart.shartindexend
-            val jawabstartindex = shart.jawabshartindexstart
-            val jawabendindex = shart.jawabshartindexend
+        val builder = androidx.appcompat.app.AlertDialog.Builder(QuranGrammarApplication.context!!)
 
-
-            val spannableverse: SpannableString
             if (dark) {
-                Constant.harfshartspanDark = ForegroundColorSpan(Constant.GOLD)
-                Constant.shartspanDark = ForegroundColorSpan(Constant.ORANGE400)
+                Constant.harfshartspanDark = ForegroundColorSpan(Constant.BYELLOW)
+                Constant.shartspanDark = ForegroundColorSpan(Constant.BCYAN)
                 Constant.jawabshartspanDark = ForegroundColorSpan(Color.CYAN)
             } else {
                 Constant.harfshartspanDark = ForegroundColorSpan(Constant.FORESTGREEN)
-                Constant.shartspanDark = ForegroundColorSpan(Constant.KASHMIRIGREEN)
+                Constant.shartspanDark = ForegroundColorSpan(Constant.WMIDNIHTBLUE)
                 Constant.jawabshartspanDark = ForegroundColorSpan(Constant.WHOTPINK)
             }
-            try {
-                //   spannableverse = corpusayahWordArrayList[shart.ayah - 1].spannableverse!!
-                spannableverse = shart.spannableVerse!!
-                //   spannableString = SpannableString.valueOf(corpusayahWordArrayList.get(shart.getAyah() - 1).getSpannableverse());
+
+
+            for (shart in shartSentences!!) {
+                val indexstart = shart!!.startindex
+                val indexend = shart.endindex
+
                 try {
-                    if (indexstart == 0 || indexstart > 0) {
-                        spannableverse.setSpan(
-                            Constant.harfshartspanDark,
-                            indexstart,
-                            indexend,
-                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                        )
-                        spannableverse.setSpan(
-                            UnderlineSpan(),
-                            indexstart,
-                            indexend,
-                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                        )
+                    if(shart.type=="shartonly"){
+
+                        val singleSpacedText = shart.arabictext!!.replace("\\s+".toRegex(), " ")
+                        //    val (firstWord, restOfString) = singleSpacedText.split(" ", limit = 2)
+                        val firstWord = singleSpacedText.substringBefore(" ")
+                        val restOfString = singleSpacedText.substringAfter(" ")
+                        val harfindex= shart.spannableVerse!!.indexOf(firstWord)
+                        val shartindex=shart.spannableVerse!!.indexOf(restOfString)
+                        if(harfindex!=-1 && shartindex!=-1 ) {
+
+                            shart.spannableVerse!!.setSpan(
+                                Constant.harfshartspanDark,
+                                harfindex,
+                                harfindex + firstWord.length,
+                                0
+                            )
+
+                            shart.spannableVerse!!.setSpan(
+                                Constant.shartspanDark,
+                                harfindex + firstWord.length,
+                                shartindex + restOfString.length,
+                                0
+
+
+                            )
+                            shart.spannableVerse!!.setSpan(
+                                UnderlineSpan(),
+                                harfindex,
+                                shartindex+restOfString.length,
+                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                        }
+
                     }
-                    if (shartsindex == 0 || shartsindex > 0) {
-                        spannableverse.setSpan(
-                            Constant.shartspanDark,
-                            shartsindex,
-                            sharteindex,
-                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                        )
-                        spannableverse.setSpan(
-                            UnderlineSpan(),
-                            shartsindex,
-                            sharteindex,
-                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                        )
+                    else    if(shart.type=="shartnojawab"){
+                        val singleSpacedText = shart.arabictext!!.replace("\\s+".toRegex(), " ")
+                        val (firstWord, restOfString) = singleSpacedText.split(" ", limit = 2)
+                        val firstWordStripped = firstWord.replace(":", "")
+                        val harfindex=shart.spannableVerse!!.indexOf(firstWordStripped)
+                        val shartindex=shart.spannableVerse!!.indexOf(restOfString)
+                        if(harfindex!=-1 && shartindex!=-1 ) {
+                            shart.spannableVerse!!.setSpan(
+                                harfshartspanDark,
+                                harfindex,
+                                harfindex + firstWordStripped.length,
+                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                            shart.spannableVerse!!.setSpan(
+                                Constant.shartspanDark,
+                                harfindex + firstWordStripped.length,
+                                shartindex + restOfString.length,
+
+                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+
+                            shart.spannableVerse!!.setSpan(
+                                UnderlineSpan(),
+                                harfindex,
+                                harfindex+shartindex+restOfString.length,
+                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                        }
+
                     }
-                    if (jawabstartindex == 0 || jawabstartindex > 0) {
-                        val myDrawable =
-                            AppCompatResources.getDrawable(context!!, R.drawable.oval_circle)!!
-                        myDrawable.setBounds(
-                            0,
-                            0,
-                            myDrawable.intrinsicWidth,
-                            myDrawable.intrinsicHeight
-                        )
-                        spannableverse.setSpan(
-                            Constant.jawabshartspanDark,
-                            jawabstartindex,
-                            jawabendindex,
-                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                        )
-                        spannableverse.setSpan(
-                            UnderlineSpan(),
-                            jawabstartindex,
-                            jawabendindex,
-                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                        )
+                    else if(shart.type=="shartall"){
+                        val singleSpacedText = shart.arabictext!!.replace("\\s+".toRegex(), " ")
+                        val split = singleSpacedText.split(":")
+                        //    if (split.size >= 2) {
+                        val regex = Regex("\\.\\.+")
+                        val firstWordt = split[0]
+                        val firstWord = regex.replace(firstWordt, "")
+                        var seconthirdstring = split[1]
+
+                        val laststring = split[2]
+                        val totalLength = firstWord.length + seconthirdstring.length
+                        val harfindex=shart.spannableVerse!!.indexOf(firstWordt)
+                        val shartindex=shart.spannableVerse!!.indexOf(seconthirdstring)
+                        val jawabindex=shart.spannableVerse!!.indexOf(laststring)
+
+                        if(harfindex!=-1 && shartindex!=-1 && jawabindex!=-1){
+//    Constant.harfshartspanDark,
+                            //    Constant.jawabshartspanDark,
+                            //         Constant.harfkhabarspanDark,
+                            shart.spannableVerse!!.setSpan(
+                                harfshartspanDark,
+                                harfindex,
+                                harfindex+firstWordt.length,
+                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+                            shart.spannableVerse!!.setSpan(
+                                shartspanDark,
+                                harfindex+firstWordt.length,
+                                shartindex+seconthirdstring.length,
+                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                            shart.spannableVerse!!.setSpan(
+                                jawabshartspanDark,
+                                jawabindex,
+                                jawabindex+laststring.length,
+                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                            shart.spannableVerse!!.setSpan(
+                                UnderlineSpan(),
+                                harfindex,
+                                jawabindex+laststring.length,
+                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+
+                        }
+
+
+
                     }
                 } catch (e: IndexOutOfBoundsException) {
-                    //System.out.println(e.getMessage());
+
+                    Toast.makeText(QuranGrammarApplication.context!!, "Surah ID: ${shart.surah}, Ayah ID: ${shart.ayah}", Toast.LENGTH_LONG).show()
+
                 }
-            } catch (e: IndexOutOfBoundsException) {
-                //System.out.println(e.getMessage());
             }
 
 
-        }
+
 
     }
 
@@ -2748,7 +2803,12 @@ class CorpusUtilityorig(private var context: Context?) {
 
         }
 
-        fun setAyahGrammaticalPhrases(spannableverse: SpannableString?, surah: Int, ayah: Int) {
+        fun setAyahGrammaticalPhrases(
+            spannableverse: SpannableString?,
+            surah: Int,
+            ayah: Int,
+
+        ) {
 
             if (spannableverse != null) {
 
@@ -2767,7 +2827,12 @@ class CorpusUtilityorig(private var context: Context?) {
         }
 
 
-        private fun setKanaSurahAyah(spannableverse: SpannableString, surah_id: Int, ayah: Int) {
+        private fun setKanaSurahAyah(
+            spannableverse: SpannableString,
+            surah_id: Int,
+            ayah: Int
+
+        ) {
             val utils = Utils(QuranGrammarApplication.context!!)
             val kanalist = utils.getKananewSurahAyah(surah_id, ayah)
             val harfkana: ForegroundColorSpan
@@ -2898,13 +2963,170 @@ class CorpusUtilityorig(private var context: Context?) {
         }
 
 
-        private fun setShartSurahAyah(spannableverse: SpannableString, surah_id: Int, ayah: Int) {
+        private fun setShartSurahAyah(
+            spannableverse: SpannableString,
+            surah_id: Int,
+            ayah: Int
+
+        ) {
             val utils = Utils(QuranGrammarApplication.context!!)
             val surah = utils.getShartSurahAyahNew(surah_id, ayah)
             val counter = 0
+            val builder = androidx.appcompat.app.AlertDialog.Builder(context!!)
             //  final ArrayList<ShartEntity> surah = utils.getShartSurah(surah_id);
             //TO 9;118 IZA IN THE MEANING OF HEENA AND 9 122 IZA AS HEENA
-            if (surah_id in 2..10 || surah_id in 58..114) {
+            if (surah_id in 1..114 ) {
+                val surah = utils.getNegationFilterSurahAyahType(surah_id, ayah,"shart")
+
+                if (dark) {
+                    Constant.harfshartspanDark = ForegroundColorSpan(Constant.BYELLOW)
+                    Constant.shartspanDark = ForegroundColorSpan(Constant.BCYAN)
+                    Constant.jawabshartspanDark = ForegroundColorSpan(Color.CYAN)
+                } else {
+                    Constant.harfshartspanDark = ForegroundColorSpan(Constant.FORESTGREEN)
+                    Constant.shartspanDark = ForegroundColorSpan(Constant.WMIDNIHTBLUE)
+                    Constant.jawabshartspanDark = ForegroundColorSpan(Constant.WHOTPINK)
+                }
+
+
+                for (shart in surah!!) {
+                    val indexstart = shart!!.startindex
+                    val indexend = shart.endindex
+
+                    try {
+                       if(shart.type=="shartonly"){
+
+                           val singleSpacedText = shart.arabictext.replace("\\s+".toRegex(), " ")
+                       //    val (firstWord, restOfString) = singleSpacedText.split(" ", limit = 2)
+                           val firstWord = singleSpacedText.substringBefore(" ")
+                           val restOfString = singleSpacedText.substringAfter(" ")
+                           val harfindex=spannableverse.indexOf(firstWord)
+                           val shartindex=spannableverse.indexOf(restOfString)
+                           if(harfindex!=-1 && shartindex!=-1 ) {
+
+                               spannableverse.setSpan(
+                                   Constant.harfshartspanDark,
+                                   harfindex,
+                                   harfindex + firstWord.length,
+                                   0
+                               )
+
+                               spannableverse.setSpan(
+                                   Constant.shartspanDark,
+                                   harfindex + firstWord.length,
+                                   shartindex + restOfString.length,
+                                   0
+
+
+                               )
+                               spannableverse.setSpan(
+                                   UnderlineSpan(),
+                                   harfindex,
+                                   shartindex+restOfString.length,
+                                   Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                               )
+                           }
+
+                       }
+                    else    if(shart.type=="shartnojawab"){
+                            val singleSpacedText = shart.arabictext.replace("\\s+".toRegex(), " ")
+                            val (firstWord, restOfString) = singleSpacedText.split(" ", limit = 2)
+                            val firstWordStripped = firstWord.replace(":", "")
+                            val harfindex=spannableverse.indexOf(firstWordStripped)
+                            val shartindex=spannableverse.indexOf(restOfString)
+                            if(harfindex!=-1 && shartindex!=-1 ) {
+                                spannableverse.setSpan(
+                                    harfshartspanDark,
+                                    harfindex,
+                                    harfindex + firstWordStripped.length,
+                                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                                )
+                                spannableverse.setSpan(
+                                    Constant.shartspanDark,
+                                    harfindex + firstWordStripped.length,
+                                    shartindex + restOfString.length,
+
+                                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                                )
+
+                                spannableverse.setSpan(
+                                    UnderlineSpan(),
+                                    harfindex,
+                                    harfindex+shartindex+restOfString.length,
+                                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                                )
+                            }
+
+                        }
+                      else if(shart.type=="shartall"){
+                            val singleSpacedText = shart.arabictext.replace("\\s+".toRegex(), " ")
+                            val split = singleSpacedText.split(":")
+                            //    if (split.size >= 2) {
+                            val regex = Regex("\\.\\.+")
+                            val firstWordt = split[0]
+                            val firstWord = regex.replace(firstWordt, "")
+                            val seconthirdstring = split[1]
+                            val laststring = split[2]
+                            val totalLength = firstWord.length + seconthirdstring.length
+                            val harfindex=spannableverse.indexOf(firstWordt)
+                            val shartindex=spannableverse.indexOf(seconthirdstring)
+                            val jawabindex=spannableverse.indexOf(laststring)
+                           if(harfindex!=-1 && shartindex!=-1 && jawabindex!=-1){
+//    Constant.harfshartspanDark,
+                               //    Constant.jawabshartspanDark,
+                               //         Constant.harfkhabarspanDark,
+                               spannableverse.setSpan(
+                                   harfshartspanDark,
+                                   harfindex,
+                                   harfindex+firstWordt.length,
+                                   Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+                               spannableverse.setSpan(
+                                   shartspanDark,
+                                   harfindex+firstWordt.length,
+                                   shartindex+seconthirdstring.length,
+                                   Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                               )
+                               spannableverse.setSpan(
+                                   jawabshartspanDark,
+                                   jawabindex,
+                                   jawabindex+laststring.length,
+                                   Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                               )
+                               spannableverse.setSpan(
+                                   UnderlineSpan(),
+                                   harfindex,
+                                   jawabindex+laststring.length,
+                                   Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                               )
+
+                           }
+
+
+
+                       }else {
+
+                           if ((indexstart == 0 || indexstart > 1) && (indexend < spannableverse.length)) {
+                               spannableverse.setSpan(
+                                   UnderlineSpan(),
+                                   indexstart,
+                                   indexend,
+                                   Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                               )
+                           }
+                       }
+                    } catch (e: IndexOutOfBoundsException) {
+                        builder.setView(R.layout.layout_loading_dialog)
+                        val dialog = builder.create()
+                      dialog.setMessage("Surah ID: ${shart.surahid}, Ayah ID: ${shart.ayahid}")
+                        dialog
+                            .setTitle("IndexOutOfBoundsException")
+                        dialog.show()
+
+                    }
+                }
+
+            }else    if (surah_id in 2..10 || surah_id in 58..114) {
                 for (shart in surah!!) {
                     val indexstart = shart!!.indexstart
                     val indexend = shart.indexend

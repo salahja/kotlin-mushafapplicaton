@@ -745,7 +745,7 @@ class QuranDisplayAdapter(
 
 
         if (spannableverse != null) {
-
+             val corpus=CorpusUtilityorig(context)
             CorpusUtilityorig.setAyahGrammaticalPhrases(spannableverse, surah, ayah)
             if (sifaIndexList != null && sifaIndexList.isNotEmpty()) {
                 CorpusUtilityorig.setMausoofSifaFromCache(spannableverse, sifaIndexList)

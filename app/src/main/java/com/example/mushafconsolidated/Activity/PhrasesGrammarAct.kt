@@ -981,11 +981,11 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
            } else if(harf == "shart"){
                shartSentences = util.getShart(chapterno)
                for (ac in shartSentences) {
-                   ac.spannableVerse= SpannableString(ac.qurantext)
+                   ac.spannableVerse= SpannableString(ac.verse)
                }
                corpus.setShartDisplay(shartSentences)
                filterQuranDataNewv1(corpusGroupedByAyah, allofQuran, shartSentences) { it.ayah }
-               HightLightKeyWord(shartSentences, accusativesSentences, sifaSentences)
+              // HightLightKeyWord(shartSentences, accusativesSentences, sifaSentences)
 
            }else if(harf == "mausuf"){
                sifaSentences = util.getSifalisting(chapterno)

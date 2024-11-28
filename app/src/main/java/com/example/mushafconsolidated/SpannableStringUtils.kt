@@ -11,6 +11,7 @@ import com.example.Constant.KASHMIRIGREEN
 import com.example.Constant.ORANGE400
 import com.example.Constant.WHOTPINK
 import com.example.Constant.harfinnaspanDark
+import com.example.Constant.harfismspanDark
 import com.example.Constant.harfkhabarspanDark
 import com.example.mushafconsolidated.Entities.NegationEnt
 import com.example.mushafconsolidated.data.Quadruple
@@ -322,7 +323,7 @@ object SpannableStringUtils {
                                 0
                             )
                             spannableString.setSpan(
-                                Constant.jawabshartspanDark,
+                                Constant.shartspanDark,
                                 firstWord.length,
                                 firstWord.length + seconthirdstring.length,
                                 0
@@ -331,7 +332,7 @@ object SpannableStringUtils {
                             )
                             try {
                                 spannableString.setSpan(
-                                    Constant.harfkhabarspanDark,
+                                    Constant.jawabshartspanDark,
                                     firstWord.length + seconthirdstring.length,
                                     seconthirdstring.length + firstWord.length + totalLength,
                                     0
@@ -400,7 +401,39 @@ object SpannableStringUtils {
                             }
 
 
-                        } else if (type == "nasabtwoharfism-one") {
+                        } else if (type == "nasabtwoismlater") {
+                            val parts = arabicString.split(":")
+                            val firstPartWords = parts[0].split(" ")
+
+
+                            val result = processString(arabicString)
+
+                            println("First part: ${result.first}")
+                            println("Second part: ${result.second}")
+                            spannableString.setSpan(
+                                harfinnaspanDark,
+                                0,
+                                result.first.length,
+                                0
+                            )
+                            spannableString.setSpan(
+                                harfkhabarspanDark,
+                                result.first.length,
+                                result.first.length + result.second.length,
+                                0
+                            )
+                            spannableString.setSpan(
+                                harfismspanDark,
+                                result.first.length + result.second.length,
+                                arabicString.length + 2, // Use totalLength as the end index
+                                0
+                            )
+
+
+                        }
+
+
+                            else if (type == "nasabtwoharfism-one") {
                             val words = arabicString.split(
                                 " ",
                                 limit = 3
@@ -434,7 +467,7 @@ object SpannableStringUtils {
                             )
 
 
-                        } else if (type == "nasabtwoharfism-two") {
+                        } else if (type == "nasabtwo-twoism") {
                             val parts = arabicString.split(" ", limit = 4)
 
 
