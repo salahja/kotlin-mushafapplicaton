@@ -4826,7 +4826,84 @@ if (w != null) {
 
         return conditionalSentences
     }
+    fun extractKanaSistersSentences(corpusData: List<CorpusEntity>, qurantext: String, translation: String): List<Map<String, Any>> {
+        val accusativeSentences = mutableListOf<Map<String, Any>>()
+        listOf("ظلل","كود","صبح","ليس")
+        for (i in corpusData.indices) {
+            val row = corpusData[i]
+            val tags = listOf(
+                row.rootaraone,
+                row.rootaratwo,
+                row.rootarathree,
+                row.rootarafour,
+                row.rootarafive,
+                row.tagone,
+                row.tagtwo,
+                row.tagthree,
+                row.tagfour,
+                row.tagfive
+            ) // Create tags list
+            val detailstag = listOf(
+                row.detailsone,
+                row.detailstwo,
+                row.detailsthree,
+                row.detailsfour,
+                row.detailsfive
+            )
+            if (row.surah == 2 && row.ayah == 34 && row.wordno == 11) {
+                println("check")
+            }
+  val isValid=          (tags.contains("ليس") || tags.contains("كود") || tags.contains("صبح") || tags.contains("ظلل") && tags.contains("V"))
+            if (isValid && "PRON" in tags) {
+                val accWordNo = row.wordno
+                //     val predicateSequence = findSequenceEndingInNom(corpusData, startIndex = i)
+                val predicateSequence = findSequenceEndingInAccu(corpusData, startIndex = i)
+                if (predicateSequence != null) {
+                    accusativeSentences.add(
+                        mapOf(
+                            "type" to "Scenario 1",
+                            "accWordNo" to accWordNo,
+                            "quranverse" to qurantext,
+                            "translation" to translation,
+                            "predicateSequence" to predicateSequence
+                        )
+                    )
+                }
+            } else if (isValid) {
+                val accWordNo = row.wordno
+                //   val accSequence = findAccNounSequenceEndingInNom(corpusData, startIndex = i)
+                // val accSequence = findAccNounSequenceEndingInNomoldnew(corpusData, startIndex = i)
+                if (row.surah == 2 && row.ayah == 34 && row.wordno == 11) {
+                    println("check")
+                }
 
+                val accSequence = findAccNounSequenceEndingInACC(corpusData, startIndex = i)
+                if (accSequence != null) {
+                    accusativeSentences.add(
+                        mapOf(
+                            "type" to "Scenario 2",
+                            "accWordNo" to accWordNo,
+                            "quranverse" to qurantext,
+                            "translation" to translation,
+                            "accSequence" to accSequence
+                        )
+                    )
+                }/* else {
+                    // Capture surah and ayah if no sequence found
+                    accusativeSentences.add(
+                        mapOf(
+                            "type" to "No sequence found for Scenario 2",
+                            "surah" to row.surah,
+                            "ayah" to row.ayah
+                        )
+                    )
+                }*/
+            }
+
+        }
+
+        return accusativeSentences
+    }
     fun extractKanaSentences(corpusData: List<CorpusEntity>, qurantext: String, translation: String): List<Map<String, Any>> {
         val accusativeSentences = mutableListOf<Map<String, Any>>()
 
@@ -5448,9 +5525,28 @@ if (w != null) {
         return null
     }
 
-
     @OptIn(UnstableApi::class)
     fun writeNegationDataToFile(
+        context: Context,
+        allAbsoluteNegationData: ArrayList<List<String>>,
+        fileName: String
+    ) {
+        try {
+            context.openFileOutput(fileName, Context.MODE_PRIVATE).use { fileOutputStream ->
+                OutputStreamWriter(fileOutputStream).use { outputStreamWriter ->
+                    allAbsoluteNegationData.forEach { absoluteNegationDataList ->
+                        absoluteNegationDataList.forEach { dataString ->
+                            outputStreamWriter.write(dataString + "\n")
+                        }
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("FileIO", "Error writing to file: ${e.message}", e)
+        }
+    }
+    @OptIn(UnstableApi::class)
+    fun writeNegationDataToFiles(
         context: Context, allAbsoluteNegationData: ArrayList<List<String>>, fileName: String
     ) {
         try {

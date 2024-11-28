@@ -302,6 +302,16 @@ class Utils {
         return database.RawDao().getAccusativeListing(query)
 
     }
+
+    fun getKadaSisters():List<AccusativePojo>{
+
+        val kada:String=("select * from corpusexpand where tagone=\"V\" and (rootaraone=\"صبح\" or rootaraone=\"كود\" or rootaraone=\"ليس\" or rootaraone=\"ظلل\") or ( tagtwo=\"V\" and rootaratwo=\"صبح\" or rootaratwo=\"كود\" or rootaratwo=\"ليس\" or rootaratwo=\"ظلل\")\n" +
+                "or ( tagthree=\"V\" and rootarathree=\"صبح\" or rootarathree=\"كود\" or rootarathree=\"ليس\" or rootarathree=\"ظلل\")")
+        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(kada)
+        //  List<Book> result = booksDao.getBooks(query);
+        return database.RawDao().getAccusativeListing(query)
+
+    }
     fun getKanaAll():List<AccusativePojo>{
         val kana:String=("select \n" +
                 "*\n" +

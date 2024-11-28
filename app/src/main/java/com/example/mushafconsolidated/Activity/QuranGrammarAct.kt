@@ -97,11 +97,13 @@ import com.example.utility.CorpusUtilityorig.Companion.findWordOccurrencesArabic
 import com.example.utility.CorpusUtilityorig.Companion.searchForTameez
 import com.example.utility.ExtractionUtility.extractAccusativeSentences
 import com.example.utility.ExtractionUtility.extractInMaIllaNegativeSentences
+import com.example.utility.ExtractionUtility.extractKanaSistersSentences
 import com.example.utility.ExtractionUtility.extractMousufSifa
 import com.example.utility.ExtractionUtility.extractMousufSifanew
 import com.example.utility.ExtractionUtility.extractSentenceAndTranslationFromWordIndices
 import com.example.utility.ExtractionUtility.extractSentenceAndTranslationFromWordNumbers
 import com.example.utility.ExtractionUtility.extractSifat
+import com.example.utility.ExtractionUtility.nasab
 import com.example.utility.ExtractionUtility.writeNegationDataToFile
 import com.example.utility.QuranGrammarApplication.Companion.context
 
@@ -324,7 +326,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
         val word = "عَهْدَهُۥٓۖ"
         //   QuranViewUtils.showIndexOfWindow(this,verse,word)
-        val start = false
+        val start = true
         if (start) {
          mainLoopFromIndexExtraction()
          //mainLoopforErabStringEXTRACTION()
@@ -497,7 +499,8 @@ private   fun mainLoopFromIndexExtraction() {
     //    val wordInfo=utils.getKanaAll()
     // val wordInfo=  utils.getManAmmaConditional()
     //   val wordInfo=    utils.getNegationall()
-    val wordInfo=        utils.getNasabFilterSubType("shart")
+  //  val wordInfo=        utils.getNasabFilterSubType("shart")
+    val wordInfo=    utils.getKadaSisters()
     //  val wordInfo = utils.getLauAll()
     //  val wordInfoss= utils.getIzaAll()
     // val wordInfo=utils.getInALL()
@@ -507,10 +510,10 @@ private   fun mainLoopFromIndexExtraction() {
     for (s in wordInfo!!.indices) {
         val ss = wordInfo!![s]
         val corpusEntity = mainViewModel.getCorpusEntityFilterSurahAya(
-            ss.surahid, ss.ayahid
+            ss.surah, ss.ayah
         )
                 as ArrayList<CorpusEntity>
-        val quran = mainViewModel.getsurahayahVerses(ss.surahid, ss.ayahid)
+        val quran = mainViewModel.getsurahayahVerses(ss.surah, ss.ayah)
 
         // val lamNegationDataList =             ExtractionUtility.extractKana(corpusEntity,ss, quran.value!![0].qurantext,quran.value!![0].translation)
         //   val lamNegationDataList =             extractSentenceAndTranslationFromShartIndices(corpusEntity,ss, quran.value!![0].qurantext)
@@ -518,6 +521,8 @@ private   fun mainLoopFromIndexExtraction() {
         //  val lamNegationDataList =        extractSentenceAndTranslationFromNasabIndices(corpusEntity,ss, quran.value!![0].qurantext)
         //val extractedSentences = extractAccusativeSentences(corpusEntity)
         // val extractedSentences     = extractKanaSentences(corpusEntity,quran.value!![0].qurantext,quran.value!![0].translation)
+
+        val extractedSentences     =     extractKanaSistersSentences(corpusEntity,quran.value!![0].qurantext,quran.value!![0].translation)
         //   val extractedSentences = extractConditionalSentencesWhenWithVerbsIN(corpusEntity,quran.value!![0].qurantext,quran.value!![0].translation)
 
         //     val extractedSentences = extractConditionalSentencesWhenWithVerbsMAMINJUSSIVE(corpusEntity,quran.value!![0].qurantext, quran.value!![0].translation)
@@ -536,7 +541,7 @@ private   fun mainLoopFromIndexExtraction() {
 
         // val lamNegationDataList =              extractSentenceAndTranslationFromWordIndices(corpusEntity,ss, quran.value!![0].qurantext)
         //    val lamNegationDataList =              addQuranVerseTranslationErab(ss, quran.value!![0].qurantext,quran.value!![0].translation,quran.value!![0].ar_irab_two)
-        val lamNegationDataList =             extractSentenceAndTranslationFromWordNumbers(corpusEntity,ss,quran.value!![0].qurantext)
+   //     val lamNegationDataList =             extractSentenceAndTranslationFromWordNumbers(corpusEntity,ss,quran.value!![0].qurantext)
 
 
         // val lamNegationDataList=         maaPastTenceNegation(corpusEntity, quran.value!![s].qurantext)
@@ -549,26 +554,26 @@ private   fun mainLoopFromIndexExtraction() {
         // val lamNegationDataList =                extractInMaIllaSentences(corpusEntity, quran.value!![s].qurantext)
 
 
-        if (lamNegationDataList.isNotEmpty()) {
+     /*   if (lamNegationDataList.isNotEmpty()) {
             allLamNegativeSenteces.add(lamNegationDataList)
 
-        }
-        /*   if (extractedSentences.isNotEmpty()) {
+        }*/
+          if (extractedSentences.isNotEmpty()) {
                 accusativeSentencesCollection.addAll(extractedSentences)
 
 
-            }*/
+            }
 
     }
-    //   val (setenceCollection, Sentences) = nasab(accusativeSentencesCollection)
+        val (setenceCollection, Sentences) = nasab(accusativeSentencesCollection)
 
     // val (setenceCollection, Sentences) = shart(accusativeSentencesCollection)
 
 
-    val fileName = "shartindex.csv"
-    //  writeNegationDataToFile(context!!, setenceCollection, fileName)
+    val fileName = "kada.csv"
+    writeNegationDataToFile(context!!, setenceCollection, fileName)
 
-    writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
+  //  writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
 }
     private fun loadSurahFromIntentData() {
         bundles = intent.extras

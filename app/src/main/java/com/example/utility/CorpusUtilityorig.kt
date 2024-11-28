@@ -2,6 +2,7 @@ package com.example.utility
 
 import FileUtility
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
@@ -2972,7 +2973,7 @@ class CorpusUtilityorig(private var context: Context?) {
             val utils = Utils(QuranGrammarApplication.context!!)
             val surah = utils.getShartSurahAyahNew(surah_id, ayah)
             val counter = 0
-            val builder = androidx.appcompat.app.AlertDialog.Builder(context!!)
+            val builder = AlertDialog.Builder(context!!)
             //  final ArrayList<ShartEntity> surah = utils.getShartSurah(surah_id);
             //TO 9;118 IZA IN THE MEANING OF HEENA AND 9 122 IZA AS HEENA
             if (surah_id in 1..114 ) {
@@ -2992,7 +2993,9 @@ class CorpusUtilityorig(private var context: Context?) {
                 for (shart in surah!!) {
                     val indexstart = shart!!.startindex
                     val indexend = shart.endindex
-
+                    if(shart.surahid==10 && shart.ayahid==22){
+                        println("check")
+                    }
                     try {
                        if(shart.type=="shartonly"){
 
@@ -3071,6 +3074,9 @@ class CorpusUtilityorig(private var context: Context?) {
                             val harfindex=spannableverse.indexOf(firstWordt)
                             val shartindex=spannableverse.indexOf(seconthirdstring)
                             val jawabindex=spannableverse.indexOf(laststring)
+                           if(shart.surahid==10 && shart.ayahid==22){
+                               println("check")
+                           }
                            if(harfindex!=-1 && shartindex!=-1 && jawabindex!=-1){
 //    Constant.harfshartspanDark,
                                //    Constant.jawabshartspanDark,
