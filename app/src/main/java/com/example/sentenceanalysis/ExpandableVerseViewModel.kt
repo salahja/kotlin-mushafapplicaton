@@ -19,8 +19,10 @@ import com.example.mushafconsolidated.Entities.SifaEntity
 import com.example.mushafconsolidated.Entities.wbwentity
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.fragments.GrammerFragmentsBottomSheet
+import com.example.mushafconsolidated.fragments.GrammerFragmentsBottomSheetOrig
 import com.example.mushafconsolidated.model.QuranCorpusWbw
 import com.example.mushafconsolidated.model.SarfSagheerPOJO
+import com.example.mushafconsolidated.model.Word
 import com.example.utility.QuranGrammarApplication
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -998,7 +1000,7 @@ class ExpandableVerseViewModel(
         val sb = StringBuilder()
         var firstwordindex = 0
         var lastwordindex = 0
-        val split = GrammerFragmentsBottomSheet.SplitQuranVerses()
+        val split = SplitQuranVerses()
         val words = split.splitSingleVerse(quranverses)
         val trim = charSequence.toString().trim { it <= ' ' }
         val strings = trim.split("\\s".toRegex()).dropLastWhile { it.isEmpty() }
@@ -1792,6 +1794,24 @@ class ExpandableVerseViewModel(
         _expandedCardIdsList.value = _expandedCardIdsList.value.toMutableList().also { list ->
             if (list.contains(cardId)) list.remove(cardId) else list.add(cardId)
         }
+    }
+}
+
+
+internal class SplitQuranVerses  // --Commented out by Inspection (26/04/22, 12:48 AM):private List<CorpusAyahWord> corpusayahWordArrayList;
+{
+    fun splitSingleVerse(quraverses: String): java.util.ArrayList<Word> {
+        val ayahWordArrayList = java.util.ArrayList<Word>()
+        val s = quraverses.split(" ".toRegex()).dropLastWhile { it.isEmpty() }
+            .toTypedArray()
+        for (i in s.indices) {
+            val word = Word()
+            word.wordsAr = (s[i])
+            word.wordno = (i + 1)
+            ayahWordArrayList.add(word)
+        }
+        return ayahWordArrayList
+        //     return ayahWords;
     }
 }
 

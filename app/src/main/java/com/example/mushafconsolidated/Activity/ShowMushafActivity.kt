@@ -99,7 +99,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.common.util.Util
 import androidx.media3.exoplayer.util.EventLogger
 import androidx.media3.ui.LegacyPlayerControlView
-import com.example.mushafconsolidated.Entities.SurahHeader
+import com.example.mushafconsolidated.data.SurahHeader
 
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior

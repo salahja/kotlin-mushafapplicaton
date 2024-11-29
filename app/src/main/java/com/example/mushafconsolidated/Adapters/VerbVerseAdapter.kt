@@ -9,7 +9,6 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Environment
@@ -301,7 +300,7 @@ class VerbVerseAdapter(
     private fun setAyahGrammaticalPhrases(holder: VerbVerseAdapter.ItemViewAdapter, spannableverse: SpannableString?, ayah: Int, surah: Int) {
 
         if (spannableverse != null) {
-            CorpusUtilityorig.setAyahGrammaticalPhrases(spannableverse,surah,ayah)
+            CorpusUtilityorig.setAyahGrammaticalPhrases(spannableverse, surah, ayah)
             holder.quran_textView.text = spannableverse
         }
 

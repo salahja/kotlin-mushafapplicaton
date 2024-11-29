@@ -19,11 +19,7 @@ import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Constant
 import com.example.mushafconsolidated.Entities.CorpusEntity
-import com.example.mushafconsolidated.Entities.HalEnt
-import com.example.mushafconsolidated.Entities.LiajlihiEnt
-import com.example.mushafconsolidated.Entities.MafoolBihi
-import com.example.mushafconsolidated.Entities.MafoolMutlaqEnt
-import com.example.mushafconsolidated.Entities.TameezEnt
+
 import com.example.mushafconsolidated.Entities.lughat
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListener
@@ -64,25 +60,19 @@ class NewRootWordDisplayAdapter : RecyclerView.Adapter<NewRootWordDisplayAdapter
     private lateinit var wazannumberslist: ArrayList<String>
 
     private lateinit var sagheer: SarfSagheer
-    private var mafoolbihi: ArrayList<MafoolBihi>? = null
-    private var tameez: ArrayList<TameezEnt>? = null
-    private lateinit var haliaSentence: ArrayList<HalEnt>
+
 
     // private ArrayList<GrammarWordEntity> grammarArayList = new ArrayList<>();
     //new  private lateinit var sarfsagheer: ArrayList<SarfSagheer>
-    private var mutlaq: ArrayList<MafoolMutlaqEnt>? = null
+
 
     private lateinit var sharedPreferences: SharedPreferences
     private var sarfsagheer: java.util.ArrayList<SarfSagheer>? = null
-    private var liajlihi: ArrayList<LiajlihiEnt>? = null
+
 
     constructor(
         context: Context,
-        haliaSentence: ArrayList<HalEnt>?,
-        tameez: ArrayList<TameezEnt>?,
-        mafoolbihi: ArrayList<MafoolBihi>?,
-        mutlaqword: ArrayList<MafoolMutlaqEnt>?,
-        liajlihiEntArrayList: ArrayList<LiajlihiEnt>?,
+
         verb: Boolean,
         wazannumberslist: ArrayList<String>?,
         spannable: SpannableStringBuilder?,
@@ -98,11 +88,7 @@ class NewRootWordDisplayAdapter : RecyclerView.Adapter<NewRootWordDisplayAdapter
         sarfSagheerList: ArrayList<SarfSagheer>?,
     ) {
         this.context = context
-        this.haliaSentence = haliaSentence!!
-        this.tameez = tameez
-        this.mafoolbihi = mafoolbihi
-        mutlaq = mutlaqword
-        liajlihi = liajlihiEntArrayList
+
         isverb = verb
         this.wazannumberslist = wazannumberslist!!
         this.spannable = spannable!!
@@ -284,89 +270,11 @@ class NewRootWordDisplayAdapter : RecyclerView.Adapter<NewRootWordDisplayAdapter
         val mutlaqwordspan = SpannableStringBuilder()
 
 
-        if (tameez!!.isNotEmpty()) {
-            tameezwordspan.append("(").append("تمييز").append(")")
-            tameezwordspan.append(tameez!![0].word)
-            val spanhash: Map<String?, ForegroundColorSpan> =
-                CorpusUtilityorig.stringForegroundColorSpanMap
-            tameezwordspan.setSpan(
-                spanhash["N"],
-                0,
-                tameezwordspan.length,
-                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-            holder.tameeztv?.text = tameezwordspan
-            holder.tameeztv?.visibility = View.VISIBLE
-        }
-        if (worddetails["liajlihi"] != null) {
-            ajlihiwordspan.append("(").append("مفعول لأجله").append(")")
-            val spanhash: Map<String?, ForegroundColorSpan> =
-                CorpusUtilityorig.stringForegroundColorSpanMap
-            ajlihiwordspan.append(liajlihi!![0].word)
-            ajlihiwordspan.setSpan(
-                spanhash["N"],
-                0,
-                ajlihiwordspan.length,
-                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-            holder.liajlihitv!!.text = ajlihiwordspan
-            holder.liajlihitv!!.visibility = View.VISIBLE
-        }
-        if (worddetails["mutlaqword"] != null) {
-            mutlaqwordspan.append("(").append("مفعول المطلق").append(")")
-            val spanhash: Map<String?, ForegroundColorSpan> =
-                CorpusUtilityorig.stringForegroundColorSpanMap
-            mutlaqwordspan.append(mutlaq!![0].word)
-            mutlaqwordspan.setSpan(
-                spanhash["N"],
-                0,
-                mutlaqwordspan.length,
-                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-            holder.mutlaqtv!!.text = mutlaqwordspan
-            holder.mutlaqtv!!.visibility = View.VISIBLE
-        }
+
+
         var charSequence: CharSequence? = ""
-        if (worddetails["mafoolbihi"] != null) {
-            val spanhash: Map<String?, ForegroundColorSpan> =
-                CorpusUtilityorig.stringForegroundColorSpanMap
-            //   mafoolbihiverb.append(mafoolbihi.get(0).getWord());
-            val b: Boolean = mafoolbihi!![0].objectpronoun == null
-            if (!b) {
-                mafoolbihiverb.append(mafoolbihi!![0].word)
-                objectpronoun =
-                    SpannableStringBuilder.valueOf(mafoolbihi!![0].objectpronoun)
-                objectpronoun.append("(").append("مفعول به").append(")")
-                mafoolbihiverb.setSpan(
-                    spanhash["V"],
-                    0,
-                    mafoolbihiverb.length,
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-                objectpronoun.setSpan(
-                    spanhash["PRON"], 0, objectpronoun.length,
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-                charSequence = TextUtils.concat(mafoolbihiverb, " ", objectpronoun)
-            } else {
-                mafoolbihiverb.append(mafoolbihi!![0].word)
-                mafoolbihiverb.append("(").append("مفعول به").append(")")
-                mafoolbihiverb.setSpan(
-                    spanhash["N"],
-                    0,
-                    mafoolbihiverb.length,
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-                charSequence = TextUtils.concat(mafoolbihiverb)
-            }
-        }
-        if (haliaSentence.isNotEmpty()) {
-            holder.haliaSentence!!.text = haliaSentence[0].text
-            holder.haliaSentence!!.visibility = View.VISIBLE
-            holder.haliaSentence!!.textSize = arabicFontsize!!.toFloat()
-            holder.haliaSentence!!.typeface = mequran
-            holder.haliaSentence!!.ellipsize = TextUtils.TruncateAt.MARQUEE
-        }
+
+
         if (mafoolbihiverb.isNotEmpty()) {
             holder.mafoolat!!.text = charSequence
             holder.mafoolat!!.textSize = arabicFontsize!!.toFloat()

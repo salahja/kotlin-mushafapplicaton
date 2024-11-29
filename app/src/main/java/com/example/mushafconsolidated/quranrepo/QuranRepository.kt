@@ -4,20 +4,20 @@ package com.example.mushafconsolidated.quranrepo
 import androidx.lifecycle.LiveData
 import com.example.mushafconsolidated.DAO.AbsoluteNegationDao
 import com.example.mushafconsolidated.DAO.AnaQuranChapterDao
-import com.example.mushafconsolidated.DAO.BadalErabNotesDao
+
 import com.example.mushafconsolidated.DAO.BookMarkDao
 import com.example.mushafconsolidated.DAO.CorpusExpandedDao
 
-import com.example.mushafconsolidated.DAO.HaliyaDao
+
 import com.example.mushafconsolidated.DAO.HansDao
-import com.example.mushafconsolidated.DAO.IllaPositiveDao
+
 
 
 import com.example.mushafconsolidated.DAO.LaneRootDao
 import com.example.mushafconsolidated.DAO.LughatDao
-import com.example.mushafconsolidated.DAO.MafoolBihiDao
-import com.example.mushafconsolidated.DAO.MafoolMutlaqEntDao
-import com.example.mushafconsolidated.DAO.MutlaqBadalaAlihiTameezDao
+
+
+
 import com.example.mushafconsolidated.DAO.NegationDao
 import com.example.mushafconsolidated.DAO.NewKanaDao
 import com.example.mushafconsolidated.DAO.NewMudhafDao
@@ -30,24 +30,21 @@ import com.example.mushafconsolidated.DAO.SifaDao
 import com.example.mushafconsolidated.DAO.SifaMudhafDao
 import com.example.mushafconsolidated.DAO.VerbCorpusDao
 import com.example.mushafconsolidated.DAO.grammarRulesDao
-import com.example.mushafconsolidated.DAO.liajlihiDao
+
 import com.example.mushafconsolidated.DAO.surahsummaryDao
-import com.example.mushafconsolidated.DAO.tameezDao
+
 import com.example.mushafconsolidated.DAO.wbwDao
 import com.example.mushafconsolidated.Entities.AbsoluteNegationEnt
 
-import com.example.mushafconsolidated.Entities.BadalErabNotesEnt
+
 import com.example.mushafconsolidated.Entities.BookMarks
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
 import com.example.mushafconsolidated.Entities.CorpusEntity
 
-import com.example.mushafconsolidated.Entities.HalEnt
-import com.example.mushafconsolidated.Entities.IllaPositive
 
-import com.example.mushafconsolidated.Entities.LiajlihiEnt
-import com.example.mushafconsolidated.Entities.MafoolBihi
-import com.example.mushafconsolidated.Entities.MafoolMutlaqEnt
-import com.example.mushafconsolidated.Entities.MutlaqBadalaAlihiTameezEnt
+
+
+
 import com.example.mushafconsolidated.Entities.NegationEnt
 import com.example.mushafconsolidated.Entities.NewKanaEntity
 import com.example.mushafconsolidated.Entities.NewMudhafEntity
@@ -58,7 +55,7 @@ import com.example.mushafconsolidated.Entities.NounCorpus
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.SifaEntity
 import com.example.mushafconsolidated.Entities.SifaMudhafEnt
-import com.example.mushafconsolidated.Entities.TameezEnt
+
 import com.example.mushafconsolidated.Entities.VerbCorpus
 import com.example.mushafconsolidated.Entities.hanslexicon
 
@@ -70,8 +67,8 @@ import javax.inject.Inject
 
 
  class QuranRepository @Inject constructor(
-     var mutlaqbadalaalihiTameezDao: MutlaqBadalaAlihiTameezDao,
-     var illaPositiveDao: IllaPositiveDao,
+
+
      var negationsDao: NegationDao,
      var sifaMudhafDao: SifaMudhafDao,
      var absoluteNegationDao:AbsoluteNegationDao,
@@ -80,22 +77,21 @@ import javax.inject.Inject
      var qurandao: QuranDao,
      val ssummary: surahsummaryDao,
      val chaptersdao: AnaQuranChapterDao,
-     val mafoolb: MafoolBihiDao,
-     var jumlahaliya: HaliyaDao,
-     val tammezent: tameezDao,
-     val mutlaqent: MafoolMutlaqEntDao,
-     val liajlihient: liajlihiDao,
-     val badalErabNotesEnt: BadalErabNotesDao,
+
+
+
+
+
+
      val bookm: BookMarkDao,
 
      val hansdao: HansDao,
      val lanesdao: LaneRootDao,
-     val ajlihiworddao: liajlihiDao,
-     val mutlaqworddao: MafoolMutlaqEntDao,
-     val tameezword: tameezDao,
+
+
 
      val nouncorpusdao: NounCorpusDao,
-     val mafoolbihi: MafoolBihiDao,
+
      val verbcorpusdao: VerbCorpusDao,
      val kanaDao: NewKanaDao,
      val shartDAO: NewShartDAO,
@@ -181,14 +177,6 @@ import javax.inject.Inject
 
 
 
-     fun getIllaPositiveFilterSurah(surah: Int): List<IllaPositive> =
-         illaPositiveDao.getIllaPositiveFilterSurah(surah)
-
-
-
-
-     fun getIllaPositiveAll(): List<IllaPositive> =
-         illaPositiveDao.getIllaPositiveAll()
 
 
 
@@ -218,37 +206,14 @@ import javax.inject.Inject
 
 
 
-     fun getIMBATFilterSurahAndType(surah: Int,type:String): List<MutlaqBadalaAlihiTameezEnt> =
-         mutlaqbadalaalihiTameezDao.getIMBATFilterSurahAndType(surah,type)
 
-     fun getIMBATFilterSurahAyahAndType(surah: Int, ayah: Int, type:String): List<MutlaqBadalaAlihiTameezEnt> =
-         mutlaqbadalaalihiTameezDao.getMBATFilterSurahAyahType(surah, ayah,type)
-
-
-     fun getMBATFilterSurahAyah(surah: Int, ayah: Int): List<MutlaqBadalaAlihiTameezEnt> =
-         mutlaqbadalaalihiTameezDao.getMBATFilterSurahAyah(surah, ayah)
-
-     fun getMBATAll(): List<MutlaqBadalaAlihiTameezEnt> =
-         mutlaqbadalaalihiTameezDao.getMBATAll()
-
-     fun getIMBATFilterSurah(surah: Int): List<MutlaqBadalaAlihiTameezEnt> =
-         mutlaqbadalaalihiTameezDao.getIMBATFilterSurah(surah)
 
      fun getCorpusEntityFilterSurah(surah: Int, ): List<CorpusEntity> =
          corpusDao.getVersesBySurahLive(surah)
 
-    fun getMafoolbihi(surah: Int, ayah: Int, wordno: Int): List<MafoolBihi> =
-        mafoolbihi.getMafoolbihi(surah, ayah, wordno)
 
-    fun gethalsurahayah(cid: Int, aid: Int): List<HalEnt> = jumlahaliya.getHaliya(cid, aid)
-    fun getAjlihiword(surah: Int, ayah: Int, wordno: Int): List<LiajlihiEnt> =
-        ajlihiworddao.getMafoolLiajlihi(surah, ayah, wordno)
 
-    fun getMutlaqWOrd(surah: Int, ayah: Int, wordno: Int): List<MafoolMutlaqEnt> =
-        mutlaqworddao.getMafoolbihiword(surah, ayah, wordno)
 
-    fun getTameezword(surah: Int, ayah: Int, wordno: Int): List<TameezEnt> =
-        tameezword.getTameezWord(surah, ayah, wordno)
 
     fun getNouncorpus(surah: Int, ayah: Int, wordno: Int): List<NounCorpus> =
         nouncorpusdao.getQuranNounsBysurahayahword(surah, ayah, wordno)
@@ -288,13 +253,13 @@ import javax.inject.Inject
         qurandao.getsurahayahVersesl(cid, ayid)
 
     fun getSurahSummary(cid: Int): LiveData<List<surahsummary>> = ssummary.getSurahSummary(cid)
-    fun getMafoolbihiSurah(cid: Int): List<MafoolBihi> = mafoolb.getBySurah(cid)
-    fun gettameezsurah(cid: Int): List<TameezEnt> = tammezent.getTameezSurah(cid)
-    fun gethalsurah(cid: Int): List<HalEnt> = jumlahaliya.getHaliyaSurah(cid)
-    fun getmutlaqsura(cid: Int): List<MafoolMutlaqEnt> = mutlaqent.getMutlaqsurah(cid)
-    fun getliajlihsura(cid: Int): List<LiajlihiEnt> = liajlihient.getMafoolLiajlihisurah(cid)
 
-    fun getbadalnotes(cid: Int): List<BadalErabNotesEnt> = badalErabNotesEnt.getBadalNotesSurah(cid)
+
+
+
+
+
+
 
     suspend fun insertlive(entity: BookMarks) {
         bookm.insertBookmark(entity)
@@ -316,12 +281,7 @@ import javax.inject.Inject
     }
    suspend fun getChapterData(chapterNo: Int): ChapterData {
         return ChapterData(
-            mafoolbihiwords = mafoolb.getBySurah(chapterNo),
-            jumlahaliya = jumlahaliya.getHaliyaSurah(chapterNo),
-            tammezent = tammezent.getTameezSurah(chapterNo),
-            liajlihient = liajlihient.getMafoolLiajlihisurah(chapterNo),
-            mutlaqent = mutlaqent.getMutlaqsurah(chapterNo),
-            badalErabNotesEnt = badalErabNotesEnt.getBadalNotesSurah(chapterNo),
+
             allofQuran = qurandao.getQuranVersesBySurahl(chapterNo), // Fetch Quran verses
             corpusSurahWord = qurandao.getQuranCorpusWbwbysurah(chapterNo) //Fetch corpus data
         )
@@ -380,12 +340,8 @@ data class QuranData(
 
 
 data class ChapterData(
-val mafoolbihiwords: List<MafoolBihi>,
-val jumlahaliya: List<HalEnt>,
-val tammezent: List<TameezEnt>,
-val liajlihient: List<LiajlihiEnt>,
-val mutlaqent: List<MafoolMutlaqEnt>,
-val badalErabNotesEnt: List<BadalErabNotesEnt>,
+
+
 val allofQuran: List<QuranEntity>, // Assuming you need this as well
 val corpusSurahWord: List<QuranCorpusWbw>// Assuming you need this as well
 )

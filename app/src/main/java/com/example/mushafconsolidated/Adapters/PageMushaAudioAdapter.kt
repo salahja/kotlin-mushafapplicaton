@@ -13,8 +13,9 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mushafconsolidated.Entities.Page
-import com.example.mushafconsolidated.Entities.SurahHeader
+
 import com.example.mushafconsolidated.R
+import com.example.mushafconsolidated.data.SurahHeader
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidatedimport.Config
 import com.example.utility.CorpusUtilityorig.Companion.getSpannable

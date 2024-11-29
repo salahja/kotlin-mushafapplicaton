@@ -58,28 +58,27 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.Constant
 import com.example.Constant.SURAHFRAGTAG
 import com.example.mushafconsolidated.BottomOptionDialog
-import com.example.mushafconsolidated.Entities.BadalErabNotesEnt
+
 import com.example.mushafconsolidated.Entities.BookMarks
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
 import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.FutureTenceListingPojo
-import com.example.mushafconsolidated.Entities.HalEnt
+
 import com.example.mushafconsolidated.Entities.InMaListingPOJO
-import com.example.mushafconsolidated.Entities.LiajlihiEnt
-import com.example.mushafconsolidated.Entities.MafoolBihi
-import com.example.mushafconsolidated.Entities.MafoolMutlaqEnt
+
 import com.example.mushafconsolidated.Entities.NasbListingPojo
 import com.example.mushafconsolidated.Entities.PastTencePOJO
 import com.example.mushafconsolidated.Entities.PresentTencePOJO
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.ShartListingPojo
 import com.example.mushafconsolidated.Entities.SifaListingPojo
-import com.example.mushafconsolidated.Entities.SurahHeader
-import com.example.mushafconsolidated.Entities.TameezEnt
+
+
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SurahSummary
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.ajroomiya.NewAjroomiyaDetailHostActivity
+import com.example.mushafconsolidated.data.SurahHeader
 import com.example.mushafconsolidated.databinding.PhrasesNewFragmentReadingBinding
 import com.example.mushafconsolidated.fragments.BookMarkCreateFrag
 import com.example.mushafconsolidated.fragments.BookmarkFragment
@@ -208,12 +207,7 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
 
     //  private OnClickListener onClickListener;
     //  private val newadapterlist = LinkedHashMap<Int, ArrayList<NewCorpusAyahWord>>()
-    private var mafoolbihiwords: List<MafoolBihi?>? = null
-    private var Jumlahaliya: List<HalEnt?>? = null
-    private var Tammezent: List<TameezEnt?>? = null
-    private var Mutlaqent: List<MafoolMutlaqEnt?>? = null
-    private var Liajlihient: List<LiajlihiEnt?>? = null
-    private var BadalErabNotesEnt: List<BadalErabNotesEnt?>? = null
+
     private var isMakkiMadani = 0
     var chapterno = 0
     private lateinit var parentRecyclerView: RecyclerView
@@ -987,11 +981,11 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
            } else if(harf == "shart"){
                shartSentences = util.getShart(chapterno)
                for (ac in shartSentences) {
-                   ac.spannableVerse= SpannableString(ac.qurantext)
+                   ac.spannableVerse= SpannableString(ac.verse)
                }
                corpus.setShartDisplay(shartSentences)
                filterQuranDataNewv1(corpusGroupedByAyah, allofQuran, shartSentences) { it.ayah }
-               HightLightKeyWord(shartSentences, accusativesSentences, sifaSentences)
+              // HightLightKeyWord(shartSentences, accusativesSentences, sifaSentences)
 
            }else if(harf == "mausuf"){
                sifaSentences = util.getSifalisting(chapterno)

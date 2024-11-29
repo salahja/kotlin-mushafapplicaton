@@ -44,21 +44,19 @@ import androidx.transition.TransitionManager
 import com.example.Constant
 import com.example.mushafconsolidated.Activity.TafsirFullscreenActivity
 import com.example.mushafconsolidated.Adapters.RevalationCity
-import com.example.mushafconsolidated.Entities.BadalErabNotesEnt
+
 import com.example.mushafconsolidated.Entities.CorpusEntity
-import com.example.mushafconsolidated.Entities.HalEnt
+
 import com.example.mushafconsolidated.Entities.InMaListingPOJO
-import com.example.mushafconsolidated.Entities.LiajlihiEnt
-import com.example.mushafconsolidated.Entities.MafoolBihi
-import com.example.mushafconsolidated.Entities.MafoolMutlaqEnt
+
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.ShartListingPojo
-import com.example.mushafconsolidated.Entities.SurahHeader
-import com.example.mushafconsolidated.Entities.TameezEnt
+
 import com.example.mushafconsolidated.Entities.wbwentity
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SurahSummary
 import com.example.mushafconsolidated.Utils
+import com.example.mushafconsolidated.data.SurahHeader
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet.Companion.TAG
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.model.NewQuranCorpusWbw

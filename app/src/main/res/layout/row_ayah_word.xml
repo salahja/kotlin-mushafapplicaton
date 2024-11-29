@@ -57,6 +57,9 @@
     <include
         layout="@layout/quran_tranlation_rows"
         android:visibility="visible" />
+    <include
+        layout="@layout/phrases_list_item"
+        android:visibility="visible" />
 
     <View
         android:layout_width="fill_parent"

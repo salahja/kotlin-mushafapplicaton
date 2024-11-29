@@ -10,19 +10,15 @@ import androidx.room.PrimaryKey
 class ShartListingPojo constructor(){
     var surah: Int=0
     var ayah: Int=0
-    var indexstart: Int=0
-    var indexend: Int=0
-    var shartindexstart: Int=0
-    var shartindexend: Int=0
-    var jawabshartindexstart: Int=0
-    var jawabshartindexend: Int=0
-    var harfwordno: Int=0
-    var shartstatwordno: Int=0
-    var shartendwordno: Int=0
-    var jawabstartwordno: Int=0
-    var jawabendwordno: Int=0
-    var comment: String? = null
-    var qurantext: String? = null
+    var wordfrom: Int=0
+    var wordto: Int=0
+    var startindex: Int=0
+    var endindex: Int=0
+
+    var arabictext: String? = null
+    var englishtext: String? = null
+    var verse: String? = null
+    var type: String? = null
     var has_prostration: Int=0
     var translation: String? = null
     var en_transliteration: String? = null
@@ -32,7 +28,7 @@ class ShartListingPojo constructor(){
     var ur_jalalayn: String? = null
     var ur_junagarhi: String? = null
     var passage_no: String? = null
-    var tafsir_kathir: String? = null
+
     @Ignore
     var spannableVerse: SpannableString? = null
     @Ignore

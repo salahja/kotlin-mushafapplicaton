@@ -17,8 +17,9 @@ import com.example.Constant.AYAH_ID
 import com.example.Constant.SURAH_ARABIC_NAME
 import com.example.Constant.SURAH_ID
 import com.example.mushafconsolidated.Entities.QuranEntity
-import com.example.mushafconsolidated.Entities.SurahHeader
+
 import com.example.mushafconsolidated.R
+import com.example.mushafconsolidated.data.SurahHeader
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.model.CorpusWbwWord
 import com.example.mushafconsolidatedimport.Config

@@ -45,10 +45,7 @@ import com.example.mushafconsolidated.Activity.LughatWordDetailsAct
 
 import com.example.mushafconsolidated.Activity.WordOccuranceAct
 import com.example.mushafconsolidated.Entities.CorpusEntity
-import com.example.mushafconsolidated.Entities.HalEnt
-import com.example.mushafconsolidated.Entities.LiajlihiEnt
-import com.example.mushafconsolidated.Entities.MafoolBihi
-import com.example.mushafconsolidated.Entities.MafoolMutlaqEnt
+
 import com.example.mushafconsolidated.Entities.NewKanaEntity
 import com.example.mushafconsolidated.Entities.NewMudhafEntity
 import com.example.mushafconsolidated.Entities.NewNasbEntity
@@ -56,7 +53,7 @@ import com.example.mushafconsolidated.Entities.NewShartEntity
 import com.example.mushafconsolidated.Entities.NounCorpus
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.SifaEntity
-import com.example.mushafconsolidated.Entities.TameezEnt
+
 import com.example.mushafconsolidated.Entities.VerbCorpus
 import com.example.mushafconsolidated.Entities.VerbWazan
 import com.example.mushafconsolidated.Entities.lughat
@@ -92,11 +89,7 @@ import java.util.Objects
 class WordAnalysisBottomSheet : DialogFragment() {
     private lateinit var recyclerView: RecyclerView
     private val sarfSagheerList = ArrayList<SarfSagheer>()
-    var mafoolbihi: List<MafoolBihi> = ArrayList()
-    private var haliaSentence: List<HalEnt> = ArrayList()
-    private var tameezWord: List<TameezEnt> = ArrayList()
-    private var liajlihiEntArrayList: List<LiajlihiEnt> = ArrayList()
-    private var mutlaqword: List<MafoolMutlaqEnt> = ArrayList()
+
     var corpusSurahWord: List<CorpusEntity> = ArrayList()
     private var wazannumberslist = ArrayList<String>()
     private var rwAdapter: NewRootWordDisplayAdapter? = null
@@ -232,11 +225,7 @@ class WordAnalysisBottomSheet : DialogFragment() {
 
                     rwAdapter = NewRootWordDisplayAdapter(
                         requireContext(),
-                        haliaSentence as ArrayList<HalEnt>?,
-                        tameezWord as ArrayList<TameezEnt>?,
-                        mafoolbihi as ArrayList<MafoolBihi>?,
-                        mutlaqword as ArrayList<MafoolMutlaqEnt>?,
-                        liajlihiEntArrayList as ArrayList<LiajlihiEnt>?,
+
                         isVerb,
                         wazannumberslist,
                         spannable,
@@ -344,11 +333,7 @@ class WordAnalysisBottomSheet : DialogFragment() {
 
                 rwAdapter = NewRootWordDisplayAdapter(
                     requireContext(),
-                    haliaSentence as ArrayList<HalEnt>?,
-                    tameezWord as ArrayList<TameezEnt>?,
-                    mafoolbihi as ArrayList<MafoolBihi>?,
-                    mutlaqword as ArrayList<MafoolMutlaqEnt>?,
-                    liajlihiEntArrayList as ArrayList<LiajlihiEnt>?,
+
                     isVerb,
                     wazannumberslist,
                     spannable,
@@ -681,11 +666,7 @@ class WordAnalysisBottomSheet : DialogFragment() {
 
                 rwAdapter = NewRootWordDisplayAdapter(
                     requireContext(),
-                    haliaSentence as ArrayList<HalEnt>?,
-                    tameezWord as ArrayList<TameezEnt>?,
-                    mafoolbihi as ArrayList<MafoolBihi>?,
-                    mutlaqword as ArrayList<MafoolMutlaqEnt>?,
-                    liajlihiEntArrayList as ArrayList<LiajlihiEnt>?,
+
                     isVerb,
                     wazannumberslist,
                     spannable,
@@ -710,24 +691,8 @@ class WordAnalysisBottomSheet : DialogFragment() {
         mainViewModel: QuranViewModel,
         wordno: Int
     ) {
-        mafoolbihi =
-            mainViewModel.getMafoolbihiword(chapterId, ayahNumber, wordno).value ?: emptyList()
-        haliaSentence = mainViewModel.gethalsurahayah(chapterId, ayahNumber).value ?: emptyList()
-        tameezWord = mainViewModel.getTameezword(chapterId, ayahNumber, wordno).value ?: emptyList()
-        liajlihiEntArrayList =
-            mainViewModel.getAjlihiword(chapterId, ayahNumber, wordno).value ?: emptyList()
-        mutlaqword = mainViewModel.getMutlaqWOrd(chapterId, ayahNumber, wordno).value ?: emptyList()
 
 
-        //Simplified using the Elvis operator ?:
-        wordbdetail["tameez"] =
-            if (tameezWord.isNotEmpty()) SpannableStringBuilder.valueOf("yes") else null
-        wordbdetail["liajlihi"] =
-            if (liajlihiEntArrayList.isNotEmpty()) SpannableStringBuilder.valueOf("yes") else null
-        wordbdetail["mafoolbihi"] =
-            if (mafoolbihi.isNotEmpty()) SpannableStringBuilder.valueOf("yes") else null
-        wordbdetail["mutlaqword"] =
-            if (mutlaqword.isNotEmpty()) SpannableStringBuilder.valueOf("yes") else null
     }
 
 
