@@ -148,7 +148,7 @@ object SpannableStringUtils {
 
 
 
-            }  else if (type == "kanaharfismlater" || type == "kanaharfismlate") {
+            }  else if (type == "kanaharfismlater" || type == "kadaismlater") {
                 val parts = arabicString.split(":")
                 val firstPartWords = parts[0].split(" ")
 
@@ -177,7 +177,7 @@ object SpannableStringUtils {
                 )
 
 
-            } else if (type == "kanatwo") {
+            } else if (type == "kanatwo" || type=="kadatwo") {
                 val parts = arabicString.split(" ", limit = 3)
 
 
@@ -212,7 +212,7 @@ object SpannableStringUtils {
                 )
 
             } else
-                if (type == "kanaone") {
+                if (type == "kanaone" || type=="kadaone") {
 
                     val combinedString = "$arabicString\n$englishString"
                     val spannableStrings = SpannableString(combinedString)
