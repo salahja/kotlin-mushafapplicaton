@@ -94,7 +94,21 @@ import java.io.File
 /*@Module
 @InstallIn(SingletonComponent::class)*/
 @Database(
-    entities = [  NegationEnt::class,  AbsoluteNegationEnt::class,lysaEnt::class,jsonsurahentity::class,MufradatEntity::class,AllahNamesDetails::class, lanerootdictionary::class, Qari::class, surahsummary::class, quranexplorer::class, AllahNames::class, GrammarRules::class, hanslexicon::class, qurandictionary::class, lanelexicon::class, lughat::class, NewNasbEntity::class, NewShartEntity::class, NewKanaEntity::class, NewMudhafEntity::class, SifaEntity::class, wbwentity::class, NounCorpus::class, VerbCorpus::class, QuranEntity::class, CorpusEntity::class, BookMarks::class, ChaptersAnaEntity::class],
+    entities = [NegationEnt::class,
+        AbsoluteNegationEnt::class,
+        lysaEnt::class,
+        jsonsurahentity::class,
+        MufradatEntity::class,
+        AllahNamesDetails::class,
+        lanerootdictionary::class, Qari::class,
+        surahsummary::class, quranexplorer::class,
+        AllahNames::class, GrammarRules::class, hanslexicon::class, qurandictionary::class, lanelexicon::class,
+        lughat::class, NewNasbEntity::class,
+        NewShartEntity::class,
+        NewKanaEntity::class,
+        NewMudhafEntity::class,
+        SifaEntity::class,
+        wbwentity::class, NounCorpus::class, VerbCorpus::class, QuranEntity::class, CorpusEntity::class, BookMarks::class, ChaptersAnaEntity::class],
     version = 1
 )
 abstract class QuranAppDatabase : RoomDatabase() {

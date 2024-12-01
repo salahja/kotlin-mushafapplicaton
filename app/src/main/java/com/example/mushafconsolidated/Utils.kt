@@ -312,6 +312,23 @@ class Utils {
         return database.RawDao().getAccusativeListing(query)
 
     }
+
+    fun getRelativePronouns():List<AccusativePojo>{
+
+        val kada:String=("select * from corpusexpand where tagone=\"REL\" or tagtwo=\"REL\" or tagthree=\"REL\" or tagfour=\"REL\" or tagfive=\"REL\"")
+        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(kada)
+        //  List<Book> result = booksDao.getBooks(query);
+        return database.RawDao().getAccusativeListing(query)
+
+    }
+    fun getSubordinateClause():List<AccusativePojo>{
+
+        val kada:String=("select * from corpusexpand where tagone=\"SUB\" or tagtwo=\"SUB\" or tagthree=\"SUB\" or tagfour=\"SUB\" or tagfive=\"SUB\"")
+        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(kada)
+        //  List<Book> result = booksDao.getBooks(query);
+        return database.RawDao().getAccusativeListing(query)
+
+    }
     fun getKanaAll():List<AccusativePojo>{
         val kana:String=("select \n" +
                 "*\n" +
