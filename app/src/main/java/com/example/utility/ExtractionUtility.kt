@@ -12,6 +12,8 @@ import androidx.annotation.OptIn
 import androidx.lifecycle.ViewModelProvider
 import androidx.media3.common.util.Log
 import androidx.media3.common.util.UnstableApi
+
+
 import com.example.Constant.FORESTGREEN
 import com.example.Constant.GOLD
 import com.example.Constant.GREENDARK
@@ -4826,6 +4828,55 @@ if (w != null) {
 
         return conditionalSentences
     }
+    fun extractsilaMousula(corpusData: List<CorpusEntity>, qurantext: String, translation: String): List<Map<String, Any>> {
+        val accusativeSentences = mutableListOf<Map<String, Any>>()
+        listOf("ظلل","كود","صبح","ليس")
+        for (i in corpusData.indices) {
+            val row = corpusData[i]
+            val tags = listOf(
+                row.rootaraone,
+                row.rootaratwo,
+                row.rootarathree,
+                row.rootarafour,
+                row.rootarafive,
+                row.tagone,
+                row.tagtwo,
+                row.tagthree,
+                row.tagfour,
+                row.tagfive
+            ) // Create tags list
+            val detailstag = listOf(
+                row.detailsone,
+                row.detailstwo,
+                row.detailsthree,
+                row.detailsfour,
+                row.detailsfive
+            )
+            if (row.surah == 2 && row.ayah == 34 && row.wordno == 11) {
+                println("check")
+            }
+
+            if (  "SUB" in tags) {
+                val accWordNo = row.wordno
+                //     val predicateSequence = findSequenceEndingInNom(corpusData, startIndex = i)
+                val predicateSequence = findSequenceForSila(corpusData, startIndex = i)
+                if (predicateSequence != null) {
+                    accusativeSentences.add(
+                        mapOf(
+                            "type" to "Scenario 1",
+                            "accWordNo" to accWordNo,
+                            "quranverse" to qurantext,
+                            "translation" to translation,
+                            "predicateSequence" to predicateSequence
+                        )
+                    )
+                }
+            }
+
+        }
+
+        return accusativeSentences
+    }
     fun extractKanaSistersSentences(corpusData: List<CorpusEntity>, qurantext: String, translation: String): List<Map<String, Any>> {
         val accusativeSentences = mutableListOf<Map<String, Any>>()
         listOf("ظلل","كود","صبح","ليس")
@@ -4853,7 +4904,7 @@ if (w != null) {
             if (row.surah == 2 && row.ayah == 34 && row.wordno == 11) {
                 println("check")
             }
-  val isValid=          (tags.contains("ليس") || tags.contains("كود") || tags.contains("صبح") || tags.contains("ظلل") && tags.contains("V"))
+              val isValid=          (tags.contains("ليس") || tags.contains("كود") || tags.contains("صبح") || tags.contains("ظلل") && tags.contains("V"))
             if (isValid && "PRON" in tags) {
                 val accWordNo = row.wordno
                 //     val predicateSequence = findSequenceEndingInNom(corpusData, startIndex = i)
@@ -4984,6 +5035,51 @@ if (w != null) {
 
 
 
+    fun findSequenceForSila(
+        data: List<CorpusEntity>,
+        startIndex: Int,
+    ): List<CorpusRow>? {
+        val sequence = mutableListOf<CorpusRow>()
+        var loopEndedEarly = false
+        for (i in startIndex until min(startIndex + 5, data.size)) {
+            val entity = data[i]
+                var loopEndedEarly = false
+            val row = CorpusRow(
+                surah = entity.surah,
+                ayah = entity.ayah,
+                wordno = entity.wordno,
+                tags = listOf(
+                    entity.tagone,
+                    entity.tagtwo,
+                    entity.tagthree,
+                    entity.tagfour,
+                    entity.tagfive
+                ),
+                details = listOf(
+                    entity.detailsone,
+                    entity.detailstwo,
+                    entity.detailsthree,
+                    entity.detailsfour,
+                    entity.detailsfive
+                ),
+                arabicText = entity.araone + entity.aratwo + entity.arathree + entity.arafour + entity.arafive,
+                englishText = entity.en
+
+            )
+
+            sequence.add(row)
+
+
+        }
+        loopEndedEarly = sequence.size < 5
+        // Add dummy row if sequence size is less than 5
+    /*    while (sequence.size < 5) {
+            sequence.add(CorpusRow(surah = 0, ayah = 0, wordno = 0, tags = emptyList(), details = emptyList(), arabicText = "yes", englishText = "yes"))
+        }*/
+
+
+        return sequence
+    }
     fun findSequenceEndingInAccu(
         data: List<CorpusEntity>,
         startIndex: Int,

@@ -19,6 +19,16 @@ data class CorpusRow(
     val englishText: String  // Represents concatenated araone to arafive
 
 )
+data class SilaCorpusRow(
+    val surah: Int,
+    val ayah: Int,
+    val wordno: Int,
+    val tags: List<String?>,  // Represents tagone to tagfive
+    val details: List<String?>,
+    val arabicText: String,
+    val englishText: String  // Represents concatenated araone to arafive
+
+)
 
 data class ShartCorpusRow(
     val surah: Int,

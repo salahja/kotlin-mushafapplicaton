@@ -103,6 +103,7 @@ import com.example.utility.ExtractionUtility.extractMousufSifanew
 import com.example.utility.ExtractionUtility.extractSentenceAndTranslationFromWordIndices
 import com.example.utility.ExtractionUtility.extractSentenceAndTranslationFromWordNumbers
 import com.example.utility.ExtractionUtility.extractSifat
+import com.example.utility.ExtractionUtility.extractsilaMousula
 import com.example.utility.ExtractionUtility.nasab
 import com.example.utility.ExtractionUtility.writeNegationDataToFile
 import com.example.utility.QuranGrammarApplication.Companion.context
@@ -326,7 +327,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
         val word = "عَهْدَهُۥٓۖ"
         //   QuranViewUtils.showIndexOfWindow(this,verse,word)
-        val start = true
+        val start = false
         if (start) {
          mainLoopFromIndexExtraction()
          //mainLoopforErabStringEXTRACTION()
@@ -500,7 +501,9 @@ private   fun mainLoopFromIndexExtraction() {
     // val wordInfo=  utils.getManAmmaConditional()
     //   val wordInfo=    utils.getNegationall()
   //  val wordInfo=        utils.getNasabFilterSubType("shart")
-    val wordInfo=    utils.getKadaSisters()
+  //  val wordInfo=    utils.getKadaSisters()
+   // val wordInfo=    utils.getRelativePronouns()
+    val wordInfo=    utils.getSubordinateClause()
     //  val wordInfo = utils.getLauAll()
     //  val wordInfoss= utils.getIzaAll()
     // val wordInfo=utils.getInALL()
@@ -522,7 +525,8 @@ private   fun mainLoopFromIndexExtraction() {
         //val extractedSentences = extractAccusativeSentences(corpusEntity)
         // val extractedSentences     = extractKanaSentences(corpusEntity,quran.value!![0].qurantext,quran.value!![0].translation)
 
-        val extractedSentences     =     extractKanaSistersSentences(corpusEntity,quran.value!![0].qurantext,quran.value!![0].translation)
+      //  val extractedSentences     =     extractKanaSistersSentences(corpusEntity,quran.value!![0].qurantext,quran.value!![0].translation)
+          val extractedSentences     =       extractsilaMousula(corpusEntity,quran.value!![0].qurantext,quran.value!![0].translation)
         //   val extractedSentences = extractConditionalSentencesWhenWithVerbsIN(corpusEntity,quran.value!![0].qurantext,quran.value!![0].translation)
 
         //     val extractedSentences = extractConditionalSentencesWhenWithVerbsMAMINJUSSIVE(corpusEntity,quran.value!![0].qurantext, quran.value!![0].translation)
@@ -570,7 +574,7 @@ private   fun mainLoopFromIndexExtraction() {
     // val (setenceCollection, Sentences) = shart(accusativeSentencesCollection)
 
 
-    val fileName = "kada.csv"
+    val fileName = "anmasdariya.csv"
     writeNegationDataToFile(context!!, setenceCollection, fileName)
 
   //  writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
