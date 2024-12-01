@@ -540,40 +540,6 @@ object SpannableStringUtils {
                                     )
 
 
-                                } else if (type == "nasabtwoharfism-one") {
-                                    val words = arabicString.split(
-                                        " ",
-                                        limit = 3
-                                    ) // Split with limit to avoid more than needed
-                                    val firstWord = words.getOrNull(0) ?: ""
-                                    val secondWord = words.getOrNull(1) ?: ""
-
-                                    val restOfString = words.drop(2).joinToString(" ")
-                                    val totalLength =
-                                        firstWord.length + secondWord.length + restOfString.length
-
-                                    spannableString.setSpan(
-                                        Constant.harfinnaspanDark,
-                                        0,
-                                        firstWord.length,
-                                        0
-                                    )
-                                    spannableString.setSpan(
-                                        Constant.harfkhabarspanDark,
-                                        firstWord.length,
-                                        firstWord.length + secondWord.length,
-                                        0
-
-
-                                    )
-                                    spannableString.setSpan(
-                                        Constant.harfismspanDark,
-                                        firstWord.length + secondWord.length,
-                                        secondWord.length + totalLength + 2,
-                                        0
-                                    )
-
-
                                 } else if (type == "nasabtwo-twoism") {
                                     val parts = arabicString.split(" ", limit = 4)
 
@@ -605,29 +571,6 @@ object SpannableStringUtils {
                                         Constant.harfkhabarspanDark,
                                         firstWord.length,
                                         seconthirdstring.length + firstWord.length,
-                                        0
-                                    )
-
-
-                                } else if (type == "nasabtwoharfism") {
-
-                                    val parts = arabicString.split(" ", limit = 2)
-
-                                    // Get the first word and the rest of the string
-                                    val firstWord = parts.getOrNull(0) ?: ""
-                                    val restOfString = parts.getOrNull(1) ?: ""
-                                    val totalLength = firstWord.length + restOfString.length
-
-                                    spannableString.setSpan(
-                                        Constant.harfinnaspanDark,
-                                        0,
-                                        firstWord.length,
-                                        0
-                                    )
-                                    spannableString.setSpan(
-                                        Constant.harfismspanDark,
-                                        firstWord.length,
-                                        totalLength,
                                         0
                                     )
 
