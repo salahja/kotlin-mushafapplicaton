@@ -19,10 +19,10 @@ import com.example.mushafconsolidated.DAO.LughatDao
 
 
 import com.example.mushafconsolidated.DAO.NegationDao
-import com.example.mushafconsolidated.DAO.NewKanaDao
+
 import com.example.mushafconsolidated.DAO.NewMudhafDao
-import com.example.mushafconsolidated.DAO.NewNasbDao
-import com.example.mushafconsolidated.DAO.NewShartDAO
+
+
 import com.example.mushafconsolidated.DAO.NounCorpusDao
 
 import com.example.mushafconsolidated.DAO.QuranDao
@@ -46,10 +46,10 @@ import com.example.mushafconsolidated.Entities.CorpusEntity
 
 
 import com.example.mushafconsolidated.Entities.NegationEnt
-import com.example.mushafconsolidated.Entities.NewKanaEntity
-import com.example.mushafconsolidated.Entities.NewMudhafEntity
-import com.example.mushafconsolidated.Entities.NewNasbEntity
-import com.example.mushafconsolidated.Entities.NewShartEntity
+
+
+
+
 import com.example.mushafconsolidated.Entities.NounCorpus
 
 import com.example.mushafconsolidated.Entities.QuranEntity
@@ -93,9 +93,7 @@ import javax.inject.Inject
      val nouncorpusdao: NounCorpusDao,
 
      val verbcorpusdao: VerbCorpusDao,
-     val kanaDao: NewKanaDao,
-     val shartDAO: NewShartDAO,
-     val nasbDao: NewNasbDao,
+
      val mousufSifa: SifaDao,
      val mudhafDao: NewMudhafDao,
 
@@ -109,17 +107,7 @@ import javax.inject.Inject
         corpusDao.getVersesBySurah(cid)
 
 
-    fun getkana(surah: Int, ayah: Int): List<NewKanaEntity> =
-        kanaDao.getkanabysurahAyah(surah, ayah)
 
-    fun getshart(surah: Int, ayah: Int): List<NewShartEntity> =
-        shartDAO.getShartBySurahAyah(surah, ayah)
-
-    fun getnasab(surah: Int, ayah: Int): List<NewNasbEntity> =
-        nasbDao.getHarfNasbIndicesSurahAyah(surah, ayah)!!
-
-    fun getmudhaf(surah: Int, ayah: Int): List<NewMudhafEntity> =
-        mudhafDao.getMudhafSurahAyah(surah, ayah)
 
 
 
@@ -135,12 +123,7 @@ import javax.inject.Inject
          sifaMudhafDao.getISIfaMudhaafFilterSurahAndType(surah,type)
 
 
-     fun getkanasurah(surah: Int): List<NewKanaEntity> = kanaDao.getkanabysurah(surah)
 
-    fun getshartsurah(surah: Int): List<NewShartEntity> = shartDAO.getShartBySurah(surah)
-
-    fun getnasabsurah(surah: Int): List<NewNasbEntity> = nasbDao.getHarfNasbIndices(surah)
-    fun getmudhafsurah(surah: Int): List<NewMudhafEntity> = mudhafDao.getMudhafSurah(surah)
     fun getsifasurah(surah: Int): List<SifaEntity> = mousufSifa.getSifaindexesBySurah(surah)
 
 

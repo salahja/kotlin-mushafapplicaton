@@ -19,10 +19,9 @@ import com.example.mushafconsolidated.DAO.LughatDao
 
 
 import com.example.mushafconsolidated.DAO.NegationDao
-import com.example.mushafconsolidated.DAO.NewKanaDao
+
 import com.example.mushafconsolidated.DAO.NewMudhafDao
-import com.example.mushafconsolidated.DAO.NewNasbDao
-import com.example.mushafconsolidated.DAO.NewShartDAO
+
 import com.example.mushafconsolidated.DAO.NounCorpusDao
 
 import com.example.mushafconsolidated.DAO.QariDao
@@ -155,20 +154,7 @@ object AppModule {
     }
 
 
-    @Singleton
-    @Provides
-    fun NewShartDAO(appDB: QuranAppDatabase): NewShartDAO {
 
-        return appDB.NewShartDAO()
-    }
-
-
-    @Singleton
-    @Provides
-    fun NewNasbDao(appDB: QuranAppDatabase): NewNasbDao {
-
-        return appDB.NewNasbDao()
-    }
 
 
     @Singleton
@@ -179,12 +165,7 @@ object AppModule {
     }
 
 
-    @Singleton
-    @Provides
-    fun NewKanaDao(appDB: QuranAppDatabase): NewKanaDao {
 
-        return appDB.NewKanaDao()
-    }
 
 
     @Singleton

@@ -39,6 +39,7 @@ import com.codelab.basics.ui.theme.brownmd_theme_light_onTertiaryContainer
 import com.codelab.basics.ui.theme.brownmd_theme_light_outline
 import com.codelab.basics.ui.theme.brownmd_theme_light_outlineVariant
 import com.codelab.basics.ui.theme.brownmd_theme_light_primary
+import com.codelab.basics.ui.theme.brownmd_theme_light_primaryContainer
 import com.codelab.basics.ui.theme.brownmd_theme_light_scrim
 import com.codelab.basics.ui.theme.brownmd_theme_light_secondary
 import com.codelab.basics.ui.theme.brownmd_theme_light_secondaryContainer
@@ -76,41 +77,12 @@ import com.codelab.basics.ui.theme.md_theme_dark_surfaceTint
 import com.codelab.basics.ui.theme.md_theme_dark_surfaceVariant
 import com.codelab.basics.ui.theme.md_theme_dark_tertiary
 import com.codelab.basics.ui.theme.md_theme_dark_tertiaryContainer
-import com.codelab.basics.ui.theme.md_theme_light_background
-import com.codelab.basics.ui.theme.md_theme_light_error
-import com.codelab.basics.ui.theme.md_theme_light_errorContainer
-import com.codelab.basics.ui.theme.md_theme_light_inverseOnSurface
-import com.codelab.basics.ui.theme.md_theme_light_inversePrimary
-import com.codelab.basics.ui.theme.md_theme_light_inverseSurface
-import com.codelab.basics.ui.theme.md_theme_light_onBackground
-import com.codelab.basics.ui.theme.md_theme_light_onError
-import com.codelab.basics.ui.theme.md_theme_light_onErrorContainer
-import com.codelab.basics.ui.theme.md_theme_light_onPrimary
-import com.codelab.basics.ui.theme.md_theme_light_onPrimaryContainer
-import com.codelab.basics.ui.theme.md_theme_light_onSecondary
-import com.codelab.basics.ui.theme.md_theme_light_onSecondaryContainer
-import com.codelab.basics.ui.theme.md_theme_light_onSurface
-import com.codelab.basics.ui.theme.md_theme_light_onSurfaceVariant
-import com.codelab.basics.ui.theme.md_theme_light_onTertiary
-import com.codelab.basics.ui.theme.md_theme_light_onTertiaryContainer
-import com.codelab.basics.ui.theme.md_theme_light_outline
-import com.codelab.basics.ui.theme.md_theme_light_outlineVariant
-import com.codelab.basics.ui.theme.md_theme_light_primary
-import com.codelab.basics.ui.theme.md_theme_light_primaryContainer
-import com.codelab.basics.ui.theme.md_theme_light_scrim
-import com.codelab.basics.ui.theme.md_theme_light_secondary
-import com.codelab.basics.ui.theme.md_theme_light_secondaryContainer
-import com.codelab.basics.ui.theme.md_theme_light_surface
-import com.codelab.basics.ui.theme.md_theme_light_surfaceTint
-import com.codelab.basics.ui.theme.md_theme_light_surfaceVariant
-import com.codelab.basics.ui.theme.md_theme_light_tertiary
-import com.codelab.basics.ui.theme.md_theme_light_tertiaryContainer
 
 
 val LightColors = lightColorScheme(
     primary = brownmd_theme_light_primary,
     onPrimary = brownmd_theme_light_onPrimary,
-    primaryContainer = md_theme_light_primaryContainer,
+    primaryContainer = brownmd_theme_light_primaryContainer,
     onPrimaryContainer = brownmd_theme_light_onPrimaryContainer,
     secondary = brownmd_theme_light_secondary,
     onSecondary = brownmd_theme_light_onSecondary,
@@ -350,35 +322,35 @@ object AppThemeSettings {
 
 
 val LightColorss = lightColorScheme(
-    primary = md_theme_light_primary,
-    onPrimary = md_theme_light_onPrimary,
-    primaryContainer = md_theme_light_primaryContainer,
-    onPrimaryContainer = md_theme_light_onPrimaryContainer,
-    secondary = md_theme_light_secondary,
-    onSecondary = md_theme_light_onSecondary,
-    secondaryContainer = md_theme_light_secondaryContainer,
-    onSecondaryContainer = md_theme_light_onSecondaryContainer,
-    tertiary = md_theme_light_tertiary,
-    onTertiary = md_theme_light_onTertiary,
-    tertiaryContainer = md_theme_light_tertiaryContainer,
-    onTertiaryContainer = md_theme_light_onTertiaryContainer,
-    error = md_theme_light_error,
-    errorContainer = md_theme_light_errorContainer,
-    onError = md_theme_light_onError,
-    onErrorContainer = md_theme_light_onErrorContainer,
-    background = md_theme_light_background,
-    onBackground = md_theme_light_onBackground,
-    surface = md_theme_light_surface,
-    onSurface = md_theme_light_onSurface,
-    surfaceVariant = md_theme_light_surfaceVariant,
-    onSurfaceVariant = md_theme_light_onSurfaceVariant,
-    outline = md_theme_light_outline,
-    inverseOnSurface = md_theme_light_inverseOnSurface,
-    inverseSurface = md_theme_light_inverseSurface,
-    inversePrimary = md_theme_light_inversePrimary,
-    surfaceTint = md_theme_light_surfaceTint,
-    outlineVariant = md_theme_light_outlineVariant,
-    scrim = md_theme_light_scrim,
+    primary = brownmd_theme_light_primary,
+    onPrimary = brownmd_theme_light_onPrimary,
+    primaryContainer = brownmd_theme_light_primaryContainer,
+    onPrimaryContainer = brownmd_theme_light_onPrimaryContainer,
+    secondary = brownmd_theme_light_secondary,
+    onSecondary = brownmd_theme_light_onSecondary,
+    secondaryContainer = brownmd_theme_light_secondaryContainer,
+    onSecondaryContainer = brownmd_theme_light_onSecondaryContainer,
+    tertiary = brownmd_theme_light_tertiary,
+    onTertiary = brownmd_theme_light_onTertiary,
+    tertiaryContainer = brownmd_theme_light_tertiaryContainer,
+    onTertiaryContainer = brownmd_theme_light_onTertiaryContainer,
+    error = brownmd_theme_light_error,
+    errorContainer = brownmd_theme_light_errorContainer,
+    onError = brownmd_theme_light_onError,
+    onErrorContainer = brownmd_theme_light_onErrorContainer,
+    background = brownmd_theme_light_background,
+    onBackground = brownmd_theme_light_onBackground,
+    surface = brownmd_theme_light_surface,
+    onSurface = brownmd_theme_light_onSurface,
+    surfaceVariant = brownmd_theme_light_surfaceVariant,
+    onSurfaceVariant = brownmd_theme_light_onSurfaceVariant,
+    outline = brownmd_theme_light_outline,
+    inverseOnSurface = brownmd_theme_light_inverseOnSurface,
+    inverseSurface = brownmd_theme_light_inverseSurface,
+    inversePrimary = brownmd_theme_light_inversePrimary,
+    surfaceTint = brownmd_theme_light_surfaceTint,
+    outlineVariant = brownmd_theme_light_outlineVariant,
+    scrim = brownmd_theme_light_scrim,
 )
 
 

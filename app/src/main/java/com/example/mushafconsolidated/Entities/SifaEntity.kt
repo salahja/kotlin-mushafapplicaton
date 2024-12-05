@@ -30,6 +30,8 @@ class SifaEntity constructor(
     var endindex: Int,
     var arabictext: String,
     var englishtext: String,
+    var verse:String,
+    var translation:String,
     var comment: String,
     @field:PrimaryKey(
         autoGenerate = true

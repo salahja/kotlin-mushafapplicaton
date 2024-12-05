@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "bf0074b57f5e3ab477ca8b4ee027a067",
+    "identityHash": "c6c87a8949917b3b53ab3a2e7e581aff",
     "entities": [
       {
         "tableName": "negationfulldata",
@@ -284,7 +284,7 @@
       },
       {
         "tableName": "mufradat_verses",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `SurahNumber` INTEGER NOT NULL, `AyahNumber` INTEGER NOT NULL, `AyahTextQalam` TEXT NOT NULL, `AyahTextMuhammadi` INTEGER NOT NULL, `AyahTextPdms` TEXT NOT NULL, `AyahTextPlain` TEXT NOT NULL, `Translation` TEXT NOT NULL, `Tafseer` TEXT NOT NULL, `Words` TEXT NOT NULL, `SurahName` TEXT NOT NULL, `Ruku` INTEGER NOT NULL, `Sajda` INTEGER NOT NULL, `ParahNumber` INTEGER NOT NULL, `RukuParahNumber` INTEGER NOT NULL, `RukuSurahNumber` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `SurahNumber` INTEGER NOT NULL, `AyahNumber` INTEGER NOT NULL, `AyahTextQalam` TEXT NOT NULL, `Translation` TEXT NOT NULL, `Tafseer` TEXT NOT NULL, `Words` TEXT NOT NULL, `SurahName` TEXT NOT NULL, `Ruku` INTEGER NOT NULL, `Sajda` INTEGER NOT NULL, `ParahNumber` INTEGER NOT NULL, `RukuParahNumber` INTEGER NOT NULL, `RukuSurahNumber` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "Id",
@@ -307,24 +307,6 @@
           {
             "fieldPath": "AyahTextQalam",
             "columnName": "AyahTextQalam",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "AyahTextMuhammadi",
-            "columnName": "AyahTextMuhammadi",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "AyahTextPdms",
-            "columnName": "AyahTextPdms",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "AyahTextPlain",
-            "columnName": "AyahTextPlain",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -895,344 +877,8 @@
         "foreignKeys": []
       },
       {
-        "tableName": "newnasb",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surah` INTEGER NOT NULL, `ayah` INTEGER NOT NULL, `indexstart` INTEGER NOT NULL, `indexend` INTEGER NOT NULL, `ismstart` INTEGER NOT NULL, `ismend` INTEGER NOT NULL, `khabarstart` INTEGER NOT NULL, `khabarend` INTEGER NOT NULL, `harfwordno` INTEGER NOT NULL, `ismstartwordno` INTEGER NOT NULL, `ismendwordno` INTEGER NOT NULL, `khabarstartwordno` INTEGER NOT NULL, `khabarendwordno` INTEGER NOT NULL, `mahdoof` INTEGER NOT NULL, `englishtext` TEXT NOT NULL, `comment` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
-        "fields": [
-          {
-            "fieldPath": "surah",
-            "columnName": "surah",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "ayah",
-            "columnName": "ayah",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "indexstart",
-            "columnName": "indexstart",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "indexend",
-            "columnName": "indexend",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "ismstart",
-            "columnName": "ismstart",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "ismend",
-            "columnName": "ismend",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "khabarstart",
-            "columnName": "khabarstart",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "khabarend",
-            "columnName": "khabarend",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "harfwordno",
-            "columnName": "harfwordno",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "ismstartwordno",
-            "columnName": "ismstartwordno",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "ismendwordno",
-            "columnName": "ismendwordno",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "khabarstartwordno",
-            "columnName": "khabarstartwordno",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "khabarendwordno",
-            "columnName": "khabarendwordno",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "mahdoof",
-            "columnName": "mahdoof",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "englishtext",
-            "columnName": "englishtext",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "comment",
-            "columnName": "comment",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "autoGenerate": true,
-          "columnNames": [
-            "id"
-          ]
-        },
-        "indices": [],
-        "foreignKeys": []
-      },
-      {
-        "tableName": "newshart",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surah` INTEGER NOT NULL, `ayah` INTEGER NOT NULL, `indexstart` INTEGER NOT NULL, `indexend` INTEGER NOT NULL, `shartindexstart` INTEGER NOT NULL, `shartindexend` INTEGER NOT NULL, `jawabshartindexstart` INTEGER NOT NULL, `jawabshartindexend` INTEGER NOT NULL, `harfwordno` INTEGER NOT NULL, `shartstatwordno` INTEGER NOT NULL, `shartendwordno` INTEGER NOT NULL, `jawabstartwordno` INTEGER NOT NULL, `jawabendwordno` INTEGER NOT NULL, `englishtext` TEXT NOT NULL, `comment` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
-        "fields": [
-          {
-            "fieldPath": "surah",
-            "columnName": "surah",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "ayah",
-            "columnName": "ayah",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "indexstart",
-            "columnName": "indexstart",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "indexend",
-            "columnName": "indexend",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "shartindexstart",
-            "columnName": "shartindexstart",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "shartindexend",
-            "columnName": "shartindexend",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "jawabshartindexstart",
-            "columnName": "jawabshartindexstart",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "jawabshartindexend",
-            "columnName": "jawabshartindexend",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "harfwordno",
-            "columnName": "harfwordno",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "shartstatwordno",
-            "columnName": "shartstatwordno",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "shartendwordno",
-            "columnName": "shartendwordno",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "jawabstartwordno",
-            "columnName": "jawabstartwordno",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "jawabendwordno",
-            "columnName": "jawabendwordno",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "englishtext",
-            "columnName": "englishtext",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "comment",
-            "columnName": "comment",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "autoGenerate": true,
-          "columnNames": [
-            "id"
-          ]
-        },
-        "indices": [],
-        "foreignKeys": []
-      },
-      {
-        "tableName": "newkana",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surah` INTEGER NOT NULL, `ayah` INTEGER NOT NULL, `indexstart` INTEGER NOT NULL, `indexend` INTEGER NOT NULL, `khabarstart` INTEGER NOT NULL, `khabarend` INTEGER NOT NULL, `ismkanastart` INTEGER NOT NULL, `ismkanaend` INTEGER NOT NULL, `harfwordno` INTEGER NOT NULL, `ismwordo` INTEGER NOT NULL, `ismendword` INTEGER NOT NULL, `khabarstartwordno` INTEGER NOT NULL, `khabarendwordno` INTEGER NOT NULL, `mahdoof` INTEGER NOT NULL, `comment` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
-        "fields": [
-          {
-            "fieldPath": "surah",
-            "columnName": "surah",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "ayah",
-            "columnName": "ayah",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "indexstart",
-            "columnName": "indexstart",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "indexend",
-            "columnName": "indexend",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "khabarstart",
-            "columnName": "khabarstart",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "khabarend",
-            "columnName": "khabarend",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "ismkanastart",
-            "columnName": "ismkanastart",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "ismkanaend",
-            "columnName": "ismkanaend",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "harfwordno",
-            "columnName": "harfwordno",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "ismwordo",
-            "columnName": "ismwordo",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "ismendword",
-            "columnName": "ismendword",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "khabarstartwordno",
-            "columnName": "khabarstartwordno",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "khabarendwordno",
-            "columnName": "khabarendwordno",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "mahdoof",
-            "columnName": "mahdoof",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "comment",
-            "columnName": "comment",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "autoGenerate": true,
-          "columnNames": [
-            "id"
-          ]
-        },
-        "indices": [],
-        "foreignKeys": []
-      },
-      {
-        "tableName": "newmudhaf",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surah` INTEGER NOT NULL, `ayah` INTEGER NOT NULL, `wordfrom` INTEGER NOT NULL, `wordto` INTEGER NOT NULL, `startindex` INTEGER NOT NULL, `endindex` INTEGER NOT NULL, `arabictext` TEXT NOT NULL, `englishtext` TEXT NOT NULL, `comment` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "tableName": "sifa",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surah` INTEGER NOT NULL, `ayah` INTEGER NOT NULL, `wordfrom` INTEGER NOT NULL, `wordto` INTEGER NOT NULL, `startindex` INTEGER NOT NULL, `endindex` INTEGER NOT NULL, `arabictext` TEXT NOT NULL, `englishtext` TEXT NOT NULL, `verse` TEXT NOT NULL, `translation` TEXT NOT NULL, `comment` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
           {
             "fieldPath": "surah",
@@ -1283,6 +929,18 @@
             "notNull": true
           },
           {
+            "fieldPath": "verse",
+            "columnName": "verse",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "translation",
+            "columnName": "translation",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
             "fieldPath": "comment",
             "columnName": "comment",
             "affinity": "TEXT",
@@ -1305,7 +963,7 @@
         "foreignKeys": []
       },
       {
-        "tableName": "sifa",
+        "tableName": "newmudhaf",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surah` INTEGER NOT NULL, `ayah` INTEGER NOT NULL, `wordfrom` INTEGER NOT NULL, `wordto` INTEGER NOT NULL, `startindex` INTEGER NOT NULL, `endindex` INTEGER NOT NULL, `arabictext` TEXT NOT NULL, `englishtext` TEXT NOT NULL, `comment` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
           {
@@ -2235,7 +1893,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'bf0074b57f5e3ab477ca8b4ee027a067')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c6c87a8949917b3b53ab3a2e7e581aff')"
     ]
   }
 }

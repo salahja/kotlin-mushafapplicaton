@@ -38,7 +38,7 @@ object SpannableStringUtils {
             var type = data.type
             var combinedString = ""
             //  type += " "
-            if (type == "silaverify" || type == "anmasdarverify") {
+            if (type == "silaverify" || type == "anmasdarverify" || type=="anmasdar") {
                 val combinedString = StringBuilder().apply {
                     append("(Not Verified-)")
                     append(" ")// Append "X" at the beginning
@@ -612,6 +612,11 @@ object SpannableStringUtils {
                 phrasetype = "sifa"
             } else if (type.contains("mudhaf")) {
                 phrasetype = "mudhaf"
+            }
+            else if (type.contains("sila")) {
+                phrasetype = "sila"
+            } else if (type.contains("anmasdar")) {
+                phrasetype = "anmasdar"
             }
 
 

@@ -286,12 +286,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             startActivity(intents)
         }
         android.preference.PreferenceManager.setDefaultValues(this, R.xml.preferences, false)
-        mausoof = shared.getBoolean("mausoof", true)
-        mudhaf = shared.getBoolean("mudhaf", true)
-        harfnasb = shared.getBoolean("harfnasb", true)
-        shart = shared.getBoolean("shart", true)
-        kana = shared.getBoolean("kana", true)
-        mafoolat = shared.getBoolean("mafoolat", false)
+
         getpreferences()
         //bundle = intent
         bundles = intent.extras
@@ -1072,7 +1067,7 @@ private   fun mainLoopFromIndexExtraction() {
         builder.setView(R.layout.layout_loading_dialog)
         val dialog = builder.create()
         val listener: OnItemClickListenerOnLong = this
-        val corpus = CorpusUtilityorig(this)
+
         val scope = CoroutineScope(Dispatchers.Main)
 
         //bysurah(dialog, scope,  listener)

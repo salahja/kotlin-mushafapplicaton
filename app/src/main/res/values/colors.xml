@@ -3,8 +3,8 @@
 
     <color name="teal_700">#FF018786</color>
 
-    <color name="colorDayNightWhite">#FFFFFF</color>
-    <color name="colorDayNightPurple">#B388FF</color>
+    <color name="colorDayNightWhite">#F4E9C4</color>
+    <color name="colorDayNightPurple">#ffeee7d2</color>
 
 
     <color name="abc_decor_view_status_guard">#ff000000</color>
