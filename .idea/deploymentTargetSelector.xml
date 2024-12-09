@@ -4,7 +4,7 @@
     <selectionStates>
       <SelectionState runConfigName="Mushaf">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-12-03T18:34:22.879261785Z">
+        <DropdownSelection timestamp="2024-12-08T18:36:16.404051364Z">
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="LocalEmulator" identifier="path=/home/anons/.android/avd/Copy_of_10.1_WXGA_Tablet_API_31.avd" />

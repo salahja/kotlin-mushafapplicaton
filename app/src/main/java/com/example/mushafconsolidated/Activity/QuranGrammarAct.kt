@@ -11,8 +11,6 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -39,7 +37,6 @@ import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
-import androidx.compose.ui.semantics.text
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
@@ -63,8 +60,6 @@ import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
 import com.example.mushafconsolidated.Entities.CorpusEntity
 
 
-
-import com.example.mushafconsolidated.Entities.NegationEnt
 import com.example.mushafconsolidated.Entities.QuranEntity
 
 
@@ -72,8 +67,6 @@ import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SurahSummary
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.ajroomiya.NewAjroomiyaDetailHostActivity
-import com.example.mushafconsolidated.data.CorpusRow
-import com.example.mushafconsolidated.data.ShartCorpusRow
 import com.example.mushafconsolidated.data.SurahHeader
 import com.example.mushafconsolidated.databinding.NewFragmentReadingBinding
 import com.example.mushafconsolidated.fragments.BookMarkCreateFrag
@@ -90,27 +83,15 @@ import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.example.mushafconsolidated.settingsimport.Constants
 import com.example.mushafconsolidatedimport.ParticleColorScheme
 import com.example.sentenceanalysis.SentenceGrammarAnalysis
-import com.example.utility.CorpusUtilityorig
 import com.example.utility.CorpusUtilityorig.Companion.HightLightKeyWordold
 
-import com.example.utility.CorpusUtilityorig.Companion.findWordOccurrencesArabic
-import com.example.utility.CorpusUtilityorig.Companion.searchForTameez
 import com.example.utility.ExtractionUtility.extractAccusativeSentences
-import com.example.utility.ExtractionUtility.extractInMaIllaNegativeSentences
-import com.example.utility.ExtractionUtility.extractKanaSistersSentences
-import com.example.utility.ExtractionUtility.extractMousufSifa
 import com.example.utility.ExtractionUtility.extractMousufSifanew
-import com.example.utility.ExtractionUtility.extractSentenceAndTranslationFromWordIndices
-import com.example.utility.ExtractionUtility.extractSentenceAndTranslationFromWordNumbers
-import com.example.utility.ExtractionUtility.extractSifat
 import com.example.utility.ExtractionUtility.extractsilaMousula
 import com.example.utility.ExtractionUtility.nasab
 import com.example.utility.ExtractionUtility.writeNegationDataToFile
 import com.example.utility.QuranGrammarApplication.Companion.context
 
-import com.example.utility.QuranViewUtils.extractCase
-
-import com.example.utility.QuranViewUtils.extractVerbType
 import com.example.utility.ScreenshotUtils
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.color.DynamicColors
@@ -132,10 +113,8 @@ import sj.hisnul.fragments.NamesDetail
 import wheel.OnWheelChangedListener
 import wheel.WheelView
 import java.io.File
-import java.io.OutputStreamWriter
 import javax.inject.Inject
 import kotlin.collections.List
-import kotlin.math.min
 import kotlin.collections.List as CollectionsList
 
 
@@ -144,12 +123,7 @@ import kotlin.collections.List as CollectionsList
 class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
 
-    private lateinit var extractedSentencesWithIndices: CollectionsList<Pair<String, Pair<Int, Int>>>
-    private val wordDetailLauncher = registerForActivityResult(WordDetailContract()) { wordFound ->
-        if (!wordFound) {
-            Toast.makeText(this, "Word detail not found", Toast.LENGTH_SHORT).show()
-        }
-    }
+
 
     private var bundles: Bundle? = null
     private lateinit var mainViewModel: QuranViewModel
@@ -171,7 +145,6 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
     private var surahorpart = 0
 
-    // TextView tvsurah, tvayah, tvrukus;
     private var currentSelectSurah = 0
 
     // --Commented out by Inspection (13/08/23, 4:31 pm):RelativeLayout layoutBottomSheet;
@@ -187,17 +160,9 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     // ChipNavigationBar chipNavigationBar;
     private lateinit var materialToolbar: Toolbar
 
-    //goes with extracttwothree
 
-    // private lateinit var flowAyahWordAdapterpassage: FlowAyahWordAdapterPassage
-    // private UpdateMafoolFlowAyahWordAdapter flowAyahWordAdapter;
-    private var mausoof = false
-    private var mudhaf = false
-    private var harfnasb = false
-    private var shart = false
     private lateinit var soraList: ArrayList<ChaptersAnaEntity>
-    private var kana = false
-    private var mafoolat = false
+
     private lateinit var allofQuran: CollectionsList<QuranEntity>
     private lateinit var shared: SharedPreferences
 
@@ -281,11 +246,13 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
         setSupportActionBar(materialToolbar)
 
 
+/*
         if (isFirstTime) {
             val intents = Intent(this@QuranGrammarAct, ActivitySettings::class.java)
             startActivity(intents)
         }
         android.preference.PreferenceManager.setDefaultValues(this, R.xml.preferences, false)
+*/
 
         getpreferences()
         //bundle = intent
@@ -600,7 +567,7 @@ private   fun mainLoopFromIndexExtraction() {
         this.shared = PreferenceManager.getDefaultSharedPreferences(this@QuranGrammarAct)
 
         currenttheme =
-            PreferenceManager.getDefaultSharedPreferences(this).getString("themepref", "dark")
+            PreferenceManager.getDefaultSharedPreferences(this).getString("themepref", "brown")
         switchTheme(currenttheme) // Call switchTheme before super.onCreate()
         DynamicColors.applyToActivitiesIfAvailable(this.application)
     }
@@ -1110,7 +1077,7 @@ private   fun mainLoopFromIndexExtraction() {
                     val gson = Gson()
                     allofQuran = corpusAndQurandata.allofQuran
                     corpusGroupedByAyah = gson.fromJson(jsonString, mapType)
-                    println("check")
+                 //   println("check")
                 } else {
 
                     allofQuran = corpusAndQurandata.allofQuran
@@ -1204,14 +1171,7 @@ private   fun mainLoopFromIndexExtraction() {
 
     }
 
-    private fun loadItemListCompose(dataBundle: Bundle) {
-        val homeactivity = Intent(this@QuranGrammarAct, SentenceGrammarAnalysis::class.java)
-        homeactivity.putExtras(dataBundle)
-        intent.addCategory(Intent.CATEGORY_LAUNCHER)
-        startActivity(homeactivity)
 
-
-    }
 
     @SuppressLint("RestrictedApi")
     override fun onItemClick(v: View, position: Int) {
@@ -1535,7 +1495,8 @@ private   fun mainLoopFromIndexExtraction() {
         } else if (tag == "overflow_img") {
             // overFlowMenu(view, position, colortag)
         } else if (tag == "help_img") {
-            println("check")/* ParticleColorScheme.newInstance()
+          //  println("check")
+            /* ParticleColorScheme.newInstance()
                  .show(this@QuranGrammarAct.supportFragmentManager, WordAnalysisBottomSheet.TAG)*/
 
             val fragment = ScrollingFragment.newInstance(
@@ -1568,8 +1529,8 @@ private   fun mainLoopFromIndexExtraction() {
             val dataBundle = Bundle()
             dataBundle.putInt(Constant.SURAH_ID, word.surah)
             dataBundle.putInt(Constant.AYAH_ID, Math.toIntExact(word.ayah.toLong()))
-            loadItemListCompose(dataBundle)
-            //   loadItemListGrammarLineWise(word.surah, word.ayah)
+
+             loadItemListGrammarLineWise(word.surah, word.ayah)
 
         }
     }
@@ -1586,7 +1547,8 @@ private   fun mainLoopFromIndexExtraction() {
     }
 
     private fun handleHelpImage(position: Int) {
-        println("check")/* ParticleColorScheme.newInstance()
+        //println("check")
+        /* ParticleColorScheme.newInstance()
                  .show(this@QuranGrammarAct.supportFragmentManager, WordAnalysisBottomSheet.TAG)*/
         val fragment = ScrollingFragment.newInstance(
             allofQuran[position].surah,
@@ -1640,16 +1602,6 @@ private   fun mainLoopFromIndexExtraction() {
         readingintent.putExtra(Constant.SURAH_ARABIC_NAME, surahArabicName)
         startActivity(readingintent)
 
-    }
-
-    private fun getBitmapFromView(view: View, defaultColor: Int): Bitmap {
-        val bitmap = Bitmap.createBitmap(
-            view.width, view.height, Bitmap.Config.ARGB_8888
-        )
-        val canvas = Canvas(bitmap)
-        canvas.drawColor(defaultColor)
-        view.draw(canvas)
-        return bitmap
     }
 
     private fun reloadActivity() {
@@ -1727,73 +1679,3 @@ private   fun mainLoopFromIndexExtraction() {
     companion object
 }
 
-/*    fun extractAccusativeSentences(corpusData: List<CorpusRow>): List<Map<String, Any>> {
-        val accusativeSentences = mutableListOf<Map<String, Any>>()
-
-        for (i in corpusData.indices) {
-            val row = corpusData[i]
-
-            // Scenario 1: ACC tag followed by PRON, ending in NOM (in details)
-            if ("ACC" in row.tags && "PRON" in row.tags) {
-                val accWordNo = row.wordno
-
-                // Find sequence ending with a nominative case (NOM) in details fields
-                val predicateSequence = findSequenceEndingInNom(corpusData, startIndex = i + 1)
-                if (predicateSequence != null) {
-                    accusativeSentences.add(
-                        mapOf(
-                            "type" to "Scenario 1",
-                            "accWordNo" to accWordNo,
-                            "predicateSequence" to predicateSequence
-                        )
-                    )
-                }
-            }
-
-            // Scenario 2: ACC tag, noun sequence, ending in NOM (in details)
-            else if ("ACC" in row.tags) {
-                val accWordNo = row.wordno
-
-                val accSequence = findAccNounSequenceEndingInNom(corpusData, startIndex = i + 1)
-                if (accSequence != null) {
-                    accusativeSentences.add(
-                        mapOf(
-                            "type" to "Scenario 2",
-                            "accWordNo" to accWordNo,
-                            "accSequence" to accSequence
-                        )
-                    )
-                }
-            }
-        }
-
-        return accusativeSentences
-    }
-
-    fun findSequenceEndingInNom(data: List<CorpusRow>, startIndex: Int): List<CorpusRow>? {
-        val sequence = mutableListOf<CorpusRow>()
-        for (row in data.drop(startIndex)) {
-            sequence.add(row)
-            if (isNominative(row.details)) {
-                return sequence
-            }
-        }
-        return null
-    }
-
-    fun findAccNounSequenceEndingInNom(data: List<CorpusRow>, startIndex: Int): List<CorpusRow>? {
-        val sequence = mutableListOf<CorpusRow>()
-        for (row in data.drop(startIndex)) {
-            if ("ACC" in row.tags || "N" in row.tags) { // Continue with ACC and nouns
-                sequence.add(row)
-            }
-            if (isNominative(row.details)) { // End on NOM in details fields
-                return sequence
-            }
-        }
-        return null
-    }
-
-    fun isNominative(details: List<String>): Boolean {
-        return details.any { it == "NOM" }
-    }*/

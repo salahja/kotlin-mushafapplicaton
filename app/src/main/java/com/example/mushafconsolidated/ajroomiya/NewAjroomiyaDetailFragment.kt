@@ -1,19 +1,19 @@
 package com.example.mushafconsolidated.ajroomiya
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnDragListener
 import android.view.ViewGroup
 import android.webkit.WebView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.mushafconsolidated.Entities.GrammarRules
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.ajroomiya.placeholder.AjroomiyaRulecontents
-import com.example.mushafconsolidated.databinding.NewFragmentAjroomiyaListBinding
+import com.example.mushafconsolidated.databinding.NewFragmentAjroomiyaDetailBinding
+
 import com.google.android.material.appbar.CollapsingToolbarLayout
+import org.sj.conjugator.activity.BaseActivity
 
 /**
  * A fragment representing a single GrammarRule detail screen.
@@ -33,15 +33,8 @@ class NewAjroomiyaDetailFragment
     private var mItem: GrammarRules? = null
     private var mToolbarLayout: CollapsingToolbarLayout? = null
     private lateinit var mTextView: WebView
-    private val dragListener = OnDragListener { v: View?, event: DragEvent ->
-        if (event.action == DragEvent.ACTION_DROP) {
-            val clipDataItem = event.clipData.getItemAt(0)
-            mItem = AjroomiyaRulecontents.ITEM_MAP[clipDataItem.text.toString()]
-            updateContent()
-        }
-        true
-    }
-    private var binding: NewFragmentAjroomiyaListBinding? = null
+    private var _binding: NewFragmentAjroomiyaDetailBinding? = null
+    private val binding get() = _binding!!
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (requireArguments().containsKey(ARG_ITEM_ID)) {
@@ -51,39 +44,58 @@ class NewAjroomiyaDetailFragment
             mItem = AjroomiyaRulecontents.ITEM_MAP[requireArguments().getString(ARG_ITEM_ID)]
         }
     }
-
-    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        val rootView: View =
-            inflater.inflate(R.layout.new_fragment_ajroomiya_detail, container, false)
-        //   binding = FragmentGrammarruleDetailBinding.inflate(inflater, container, false);
-        //  View rootView = binding.getRoot();
-        mToolbarLayout = rootView.findViewById<CollapsingToolbarLayout>(R.id.toolbar_layout)
-        mTextView = rootView.findViewById<WebView>(R.id.ajroomiya_detail)
-        val webSettings = mTextView.settings
-        webSettings.javaScriptEnabled = true
-        //  mTextView.setInitialScale(1);
-        //   mTextView.getSettings().setLoadWithOverviewMode(true);
-        //    mTextView.getSettings().setUseWideViewPort(true);
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = NewFragmentAjroomiyaDetailBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        //      mTextView.getSettings().setBuiltInZoomControls(true);
+        // Retrieve the current theme (adjust this based on how you share data between activity and fragment)
+        val currentTheme = arguments?.getString("currentTheme") ?: BaseActivity.DARK_THEME
+
+        // Apply background color based on theme
+        val backgroundColor = when (currentTheme){
+            BaseActivity.DARK_THEME -> ContextCompat.getColor(requireContext(), R.color.bg_brown)
+            else -> ContextCompat.getColor(requireContext(), R.color.md_db__theme_dark_background)
+        }
+        view.setBackgroundColor(backgroundColor)
+
+        mTextView=binding.ajroomiyaDetail
+        mToolbarLayout=binding.toolbarLayout
+        mTextView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+        mTextView.settings.javaScriptEnabled = true
+        mTextView.settings.domStorageEnabled = true
+        mTextView.settings.loadWithOverviewMode = true
+        mTextView.settings.useWideViewPort = true
+        mTextView.settings.builtInZoomControls = true
+
+
+       mTextView.setInitialScale(3)
+        mTextView.settings.loadWithOverviewMode = true
+        mTextView.settings.useWideViewPort = true
+
+        mTextView.settings.builtInZoomControls = true
         // Show the placeholder content as text in a TextView & in the toolbar if available.
         updateContent()
-        rootView.setOnDragListener(dragListener)
-        return rootView
+
+       // root.setOnDragListener(dragListener)
+        // Implement additional logic here as needed
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding = null
+        _binding = null
     }
 
     private fun updateContent() {
         if (mItem != null) {
-            mTextView.loadDataWithBaseURL(null, mItem!!.detailsrules, "text/html", "utf-8", null)
+            mTextView.loadDataWithBaseURL(
+                null, mItem!!.detailsrules, "text/html", "utf-8", null)
             //   mTextView.setText(mItem.getDetailsrules());
             if (mToolbarLayout != null) {
                 mToolbarLayout!!.title = mItem!!.worddetails
