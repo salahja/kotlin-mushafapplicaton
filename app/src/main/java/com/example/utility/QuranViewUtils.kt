@@ -583,8 +583,9 @@ object QuranViewUtils {
         when (wbw) {
             "en" -> {
             //    translation.text = word.wordno.toString()
-                    translation.text = word.en
-                translation.paintFlags = translation.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+
+                    translation.text = word.en+" "+ "   "
+           //     translation.paintFlags = translation.paintFlags or Paint.UNDERLINE_TEXT_FLAG
             }
 
             "bn" -> {

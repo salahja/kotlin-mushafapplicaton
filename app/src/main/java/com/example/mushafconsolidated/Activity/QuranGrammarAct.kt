@@ -100,6 +100,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.common.reflect.TypeToken
 import com.google.gson.Gson
+import com.quiz.ArabicVerbQuizActNew
 import dagger.hilt.android.AndroidEntryPoint
 import database.NamesGridImageAct
 import kotlinx.coroutines.CoroutineScope
@@ -619,19 +620,19 @@ private   fun mainLoopFromIndexExtraction() {
             }
 
             if (item.itemId == R.id.quiz) {
-                /*  materialToolbar.title = "Verb Quiz"
+              materialToolbar.title = "Verb Quiz"
                   val settingint = Intent(this@QuranGrammarAct, ArabicVerbQuizActNew::class.java)
                   settingint.putExtra(Constants.SURAH_INDEX, chapterno)
-                  startActivity(settingint)*/
+                  startActivity(settingint)
 
 
-                val phrasesDisplayFrag = PhrasesDisplayFrag()
+               /* val phrasesDisplayFrag = PhrasesDisplayFrag()
                 //  TameezDisplayFrag bookmarkFragment=new TameezDisplayFrag();
                 val transactions = supportFragmentManager.beginTransaction()
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 transactions.add(R.id.frame_container_qurangrammar, phrasesDisplayFrag)
                     .addToBackStack("mujarrad")
-                transactions.commit()
+                transactions.commit()*/
             }
 
 
