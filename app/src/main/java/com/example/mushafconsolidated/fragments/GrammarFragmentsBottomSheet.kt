@@ -12,45 +12,16 @@ package com.example.mushafconsolidated.fragments
  */
 
 
-import Utility.ArabicLiterals
-import android.graphics.Color
 import android.os.Bundle
 import android.text.SpannableString
-import android.text.SpannableString.valueOf
-import android.text.SpannableStringBuilder
-import android.text.Spanned
-import android.text.TextUtils
-import android.text.style.BackgroundColorSpan
-import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ExpandableListView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
-import com.example.Constant
 
-import com.example.Constant.BCYAN
-import com.example.Constant.CYANLIGHTEST
-import com.example.Constant.FORESTGREEN
-import com.example.Constant.GOLD
-import com.example.Constant.KASHMIRIGREEN
-import com.example.Constant.ORANGE400
-import com.example.Constant.WBURNTUMBER
-import com.example.Constant.WHOTPINK
-import com.example.Constant.deepburnsienna
-import com.example.Constant.harfinnaspanDark
-import com.example.Constant.harfismspanDark
-import com.example.Constant.harfkhabarspanDark
-import com.example.Constant.harfshartspanDark
-import com.example.Constant.jawabshartspanDark
-import com.example.Constant.prussianblue
-import com.example.Constant.shartspanDark
-import com.example.Constant.sifaspansDark
-import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.NegationEnt
 
 
@@ -59,18 +30,13 @@ import com.example.mushafconsolidated.SpannableStringUtils
 
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.model.SarfSagheerPOJO
-import com.example.mushafconsolidated.model.Word
 import com.example.mushafconsolidated.quranrepo.QuranRepository
 import com.example.mushafconsolidated.quranrepo.QuranViewModel
-import com.example.utility.CorpusUtilityorig
-import com.example.utility.QuranGrammarApplication
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.Executors
 import javax.inject.Inject
 import kotlin.collections.isNotEmpty
-import kotlin.collections.map
-import kotlin.collections.toTypedArray
 
 /**
  *
@@ -220,7 +186,7 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
 
         val  anMasdarArray: MutableList<SpannableString> = ArrayList()
         val  silaMousalArray: MutableList<SpannableString> = ArrayList()
-
+        val  halArray: MutableList<SpannableString> = ArrayList()
 
 
         setAllPhrases(
@@ -234,7 +200,8 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
             mudhafarray,
             mausoofsifaarray,
             anMasdarArray,
-            silaMousalArray
+            silaMousalArray,
+            halArray
         )
 
         val pastNegNoteOne = String.format(
@@ -276,7 +243,7 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
         expandableListDetail["Possessive/إضافَة"] = mudhafarray
         expandableListDetail["The Subordinate Clause (صلة)"] = silaMousalArray
         expandableListDetail["The Subordinate Clause (حرف مصدري)"] = anMasdarArray
-
+        expandableListDetail["The Circumstantil Clause (حرف مصدري)"] = halArray
         return expandableListDetail
     }
 
@@ -291,7 +258,8 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
         mudhafarray: MutableList<SpannableString>,
         mausoofsifaarray: MutableList<SpannableString>,
         anMasdarArray: MutableList<SpannableString>,
-        silaMousalArray: MutableList<SpannableString>
+        silaMousalArray: MutableList<SpannableString>,
+        halArray: MutableList<SpannableString>
     ) {
         val spannedStrings = SpannableStringUtils.applySpans(negaTionList, "light")
 
@@ -320,6 +288,8 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
                 anMasdarArray.add(spannableString)
             } else if (type.contains("anmasdar")) {
                 silaMousalArray.add(spannableString)
+            }else if (type.contains("hal")) {
+                halArray.add(spannableString)
             }
 
         }

@@ -1250,7 +1250,7 @@ class CorpusUtilityorig(private var context: Context?) {
                 shartagainstback = prefs.getInt("shartback", Constant.INDIGO)
                 mudhafColoragainstBlack = prefs.getInt("mausoofwhite", Color.GREEN)
                 mausofColoragainstBlack = prefs.getInt("mudhafwhite", Constant.MIDNIGHTBLUE)
-                sifatColoragainstBlack = prefs.getInt("sifatwhite", Constant.ORANGE400)
+                sifatColoragainstBlack = prefs.getInt("sifatwhite", Constant.GREENDARK)
                 brokenPlurarColoragainstBlack = prefs.getInt("brokenwhite", Constant.DARKMAGENTA)
             }
             val inshartiastr = "«إِنْ» شرطية"
@@ -1262,6 +1262,7 @@ class CorpusUtilityorig(private var context: Context?) {
             val jawab = "جواب"
             val shart = ArrayList<String>()
             val mutlaq = ArrayList<String>()
+            val fael=ArrayList<String>()
             val mudhaf=ArrayList<String>()
             mutlaq.add("مطلق")
             mutlaq.add("مفعولا مطلقا")
@@ -1294,6 +1295,16 @@ class CorpusUtilityorig(private var context: Context?) {
             val mudhaflenght = mudhafilahistr[0].length
             val sifalength = sifastr.length
             val hal = ArrayList<String>()
+            fael.add("وفاعله")
+            fael.add("فاعله")
+            fael.add("والواو فاعله")
+            fael.add("فاعله مستتر")
+            fael.add("الفاعل مستتر")
+            fael.add("فاعل")
+            fael.add("فاعل.")
+            fael.add("والفاعل")
+            fael.add("الفاعل")
+            fael.add("والفاعل مستتر")
             hal.add("في محل نصب حال")
             hal.add("في محل نصب حال.")
             hal.add("والجملة حالية")
@@ -1355,6 +1366,20 @@ class CorpusUtilityorig(private var context: Context?) {
                     Trie.builder().onlyWholeWordsWhiteSpaceSeparated().addKeywords(mafoolbihi)
                         .build()
                 val mafoolbihiemit = mafoolbihitri.parseText(ar_irab_two)
+                val faeltri =
+                    Trie.builder().onlyWholeWordsWhiteSpaceSeparated().addKeywords(fael)
+                        .build()
+                val faelemit = faeltri.parseText(ar_irab_two)
+
+                for (emit in faelemit) {
+                    str.setSpan(
+                        ForegroundColorSpan(sifatColoragainstBlack),
+                        emit.start,
+                        emit.start + emit.keyword.length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                }
+
                 for (emit in mafoolbihiemit) {
                     str.setSpan(
                         ForegroundColorSpan(sifatColoragainstBlack),

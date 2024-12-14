@@ -444,13 +444,111 @@ object SpannableStringUtils {
                   0
                 )
               } catch (e: IndexOutOfBoundsException) {
-             //   println(ayahid)
-             //   println(surahid)
+
+              }
+
+
+
+            } else if (type == "twohal") {
+              val split = arabicString.split(":")
+              //    if (split.size >= 2) {
+              val regex = Regex("\\.\\.+")
+              val firstWordt = split[0]
+              val firstWord = regex.replace(firstWordt, "")
+              val seconthirdstring = split[1]
+              val totalLength = firstWord.length + seconthirdstring.length
+
+              spannableString.setSpan(
+                Constant.harfshartspanDark,
+                0,
+                firstWord.length,
+                0
+              )
+              spannableString.setSpan(
+                Constant.jawabshartspanDark,
+                firstWord.length,
+                firstWord.length + seconthirdstring.length,
+                0
+
+
+              )
+
+              try {
+                spannableString.setSpan(
+                  Constant.jawabshartspanDark,
+                  firstWord.length + seconthirdstring.length,
+                  seconthirdstring.length + firstWord.length + split[2].length + 2,
+                  0
+                )
+              } catch (e: IndexOutOfBoundsException) {
+                //   println(ayahid)
+                //   println(surahid)
+              }
+
+
+            }else if (type == "haltwo") {
+              val split = arabicString.split(":")
+              //    if (split.size >= 2) {
+              val regex = Regex("\\.\\.+")
+              val firstWordt = split[0]
+              val firstWord = regex.replace(firstWordt, "")
+              val seconthirdstring = split[1]
+              val totalLength = firstWord.length + seconthirdstring.length
+
+              spannableString.setSpan(
+                Constant.harfshartspanDark,
+                0,
+                firstWord.length,
+                0
+              )
+
+              try {
+                spannableString.setSpan(
+                  Constant.jawabshartspanDark,
+                  firstWord.length + seconthirdstring.length,
+                  seconthirdstring.length + firstWord.length + split[2].length + 2,
+                  0
+                )
+              } catch (e: IndexOutOfBoundsException) {
+                //   println(ayahid)
+                //   println(surahid)
               }
 
               //  }
+            }else if (type == "halone") {
+              val split = arabicString.split(":")
+              //    if (split.size >= 2) {
+              val regex = Regex("\\.\\.+")
+              val firstWordt = split[0]
+              val firstWord = regex.replace(firstWordt, "")
+              val seconthirdstring = split[1]
+              val totalLength = firstWord.length + seconthirdstring.length
 
-            } else if (type == "nasabone") {
+              spannableString.setSpan(
+                Constant.harfshartspanDark,
+                0,
+                firstWord.length,
+                0
+              )
+
+              spannableString.setSpan(
+                Constant.jawabshartspanDark,
+                firstWord.length,
+                firstWord.length + seconthirdstring.length,
+                0
+
+
+              )
+
+
+
+              //  }
+            }
+
+
+
+
+              else if (type == "nasabone") {
 
               val (firstWord, restOfString) = arabicString.split(
                 " ",
@@ -615,6 +713,8 @@ object SpannableStringUtils {
         phrasetype = "sila"
       } else if (type.contains("anmasdar")) {
         phrasetype = "anmasdar"
+      }else if (type.contains("hal")) {
+        phrasetype = "hal"
       }
 
 

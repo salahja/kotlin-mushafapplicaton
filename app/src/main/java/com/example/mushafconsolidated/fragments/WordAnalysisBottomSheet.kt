@@ -187,59 +187,71 @@ class WordAnalysisBottomSheet : DialogFragment() {
             val corpusNounWord = mainViewModel.getNouncorpus(chapterId, ayahNumber, wordNo).value
             val verbCorpusRootWord =
                 mainViewModel.getVerbRootBySurahAyahWord(chapterId, ayahNumber, wordNo).value
+/*
+`
+            if (corpusNounWord!!.isEmpty() && verbCorpusRootWord!!.isEmpty()) {
+                // Display a message (e.g., using Toast or Snackbar)
+                Toast.makeText(requireContext(), "Word details not found", Toast.LENGTH_SHORT).show()
+                return@launch // Terminate the launch block
+            }
+*/
+
             val corpusSurahWord =
                 mainViewModel.getCorpusEntityFilterbywordno(chapterId, ayahNumber, wordNo).value
                     ?: return@launch
 
-            // Continue with data processing...
-            val am = NewQuranMorphologyDetails(
-                corpusSurahWord,
-                corpusNounWord as? ArrayList<NounCorpus>,
-                verbCorpusRootWord as? ArrayList<VerbCorpus>,
-                requireContext()
-            )
+            if (corpusNounWord!!.isNotEmpty() || verbCorpusRootWord!!.isNotEmpty()) {
+                // Continue with data processing...
+                val am = NewQuranMorphologyDetails(
+                    corpusSurahWord,
+                    corpusNounWord as? ArrayList<NounCorpus>,
+                    verbCorpusRootWord as? ArrayList<VerbCorpus>,
+                    requireContext()
+                )
 
-            handleWordDetailsorig(
-                am,
-                verbCorpusRootWord,
-                mainViewModel,
-                wordNo,
-                corpusNounWord,
-                wbwtranslation,
-                mainViewModel,
-                quran
-            )
+                handleWordDetailsorig(
+                    am,
+                    verbCorpusRootWord,
+                    mainViewModel,
+                    wordNo,
+                    corpusNounWord,
+                    wbwtranslation,
+                    mainViewModel,
+                    quran
+                )
 
-            // Handle UI updates after data is ready
-            requireActivity().runOnUiThread {
-                dialog.dismiss()
-                if (showGrammarFragments) {
-                    GrammarFragmentsListAdapter(
-                        requireContext(),
-                        expandableListTitle, expandableListDetail
-                    )
-                } else {
-                    //          rwAdapter = RootWordDisplayAdapter(context!!)
+                // Handle UI updates after data is ready
+                requireActivity().runOnUiThread {
+                    dialog.dismiss()
+                    if (showGrammarFragments) {
+                        GrammarFragmentsListAdapter(
+                            requireContext(),
+                            expandableListTitle, expandableListDetail
+                        )
+                    } else {
+                        //          rwAdapter = RootWordDisplayAdapter(context!!)
 
-                    rwAdapter = NewRootWordDisplayAdapter(
-                        requireContext(),
+                        rwAdapter = NewRootWordDisplayAdapter(
+                            requireContext(),
 
-                        isVerb,
-                        wazannumberslist,
-                        spannable,
-                        isNoun,
-                        ismfaelmafool,
-                        isparticple,
-                        isconjugation,
-                        corpusSurahWord as ArrayList<CorpusEntity>,
-                        wordbdetail,
-                        vbdetail,
-                        isMazeedSarfSagheer,
-                        isThulathiSarfSagheer,
-                        sarfSagheerList
-                    )
-                    recyclerView.adapter = rwAdapter
+                            isVerb,
+                            wazannumberslist,
+                            spannable,
+                            isNoun,
+                            ismfaelmafool,
+                            isparticple,
+                            isconjugation,
+                            corpusSurahWord as ArrayList<CorpusEntity>,
+                            wordbdetail,
+                            vbdetail,
+                            isMazeedSarfSagheer,
+                            isThulathiSarfSagheer,
+                            sarfSagheerList
+                        )
+                        recyclerView.adapter = rwAdapter
+                    }
                 }
+
             }
 
 

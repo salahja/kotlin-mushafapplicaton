@@ -199,7 +199,7 @@ open class NewQuranMorphologyDetails(
             return vbdetail
         }
 
-    private fun convertForms(mform: String?) {
+    private fun convertFormsold(mform: String?) {
         when (mform) {
             "IV" -> form = 1
             "II" -> form = 2
@@ -219,6 +219,23 @@ open class NewQuranMorphologyDetails(
                 Thulathi = s.ifEmpty {
                     null
                 }
+            }
+        }
+    }
+
+    private fun convertForms(mform: String?) {
+        when (mform) {
+            "IV" -> form = 1
+            "II" -> form = 2
+            "III" -> form = 3
+            "VII" -> form = 4
+            "VIII" -> form = 5
+            "VI" -> form = 7
+            "V" -> form = 8
+            "X" -> form = 9
+            else -> {
+                val s = verbcorpusform?.getOrNull(0)?.thulathibab ?: "" // Safe access with elvis operator
+                Thulathi = if (s.isNotEmpty()) s else null // Assign null only if s is empty
             }
         }
     }

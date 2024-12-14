@@ -1,41 +1,19 @@
 package com.example.utility
 
-import Utility.ArabicLiterals
 import android.content.Context
-import android.graphics.Color
-import android.text.Html
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.TextUtils
-import android.text.style.ForegroundColorSpan
 import androidx.annotation.OptIn
-import androidx.lifecycle.ViewModelProvider
 import androidx.media3.common.util.Log
 import androidx.media3.common.util.UnstableApi
 
 
-import com.example.Constant.FORESTGREEN
-import com.example.Constant.GOLD
-import com.example.Constant.GREENDARK
-import com.example.Constant.KASHMIRIGREEN
-import com.example.Constant.ORANGE400
-import com.example.Constant.WHOTPINK
-import com.example.Constant.harfshartspanDark
-import com.example.Constant.jawabshartspanDark
-import com.example.Constant.shartspanDark
 import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.NegationEnt
 
 
-import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.wbwentity
-import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.data.CorpusRow
 import com.example.mushafconsolidated.data.ShartCorpusRow
-import com.example.mushafconsolidated.quranrepo.QuranViewModel
-import com.example.utility.CorpusUtilityorig.Companion.dark
 import com.example.utility.CorpusUtilityorig.Companion.findWordOccurrencesArabic
-import com.example.utility.QuranGrammarApplication.Companion.context
 import com.example.utility.QuranViewUtils.extractCase
 import com.example.utility.QuranViewUtils.extractConsonants
 import com.example.utility.QuranViewUtils.extractGender
@@ -1073,6 +1051,41 @@ if (w != null) {
 
         return result
     }
+
+    fun getVersesAndTranslation(
+        corpus: List<CorpusEntity>,
+        wordInfo: NegationEnt,
+        quranText: String,
+        translation: String
+
+    ): List<String> {
+        val result = mutableListOf<String>()
+        var wordto = 0
+        var translationBuilder = StringBuilder()
+        var startIndex = -1
+        var endIndex = -1
+        var currentWordIndex = 0
+        val wordsInVerse =
+            quranText.split("\\s+".toRegex()) // Split Arabic verse by whitespace to get individual words
+
+
+        var extractedSentence = ""
+
+
+
+
+
+                val extractedTranslation = translationBuilder.toString().trim()
+                val type = wordInfo.type
+                // Format the result string
+                val dataString =
+                    "${wordInfo.surahid}|${wordInfo.ayahid}|${wordInfo.wordfrom}|${wordInfo.wordto}|${wordInfo.startindex}|${wordInfo.endindex}|${wordInfo.arabictext}|${wordInfo.englishtext}|$quranText|$translation|${wordInfo.type}"
+                result.add(dataString)
+
+
+
+        return result
+    }
     fun extractSentenceAndTranslationFromWordIndices(
         corpus: List<CorpusEntity>,
         wordInfo: NegationEnt,
@@ -1094,11 +1107,8 @@ if (w != null) {
                     startIndex = quranText.indexOf(word)
                 }
 
-                if (wordInfo.type.equals("past")) {
-                    wordto = wordInfo.wordto + 1
-                } else {
                     wordto = wordInfo.wordto
-                }
+
                 if (currentWordIndex + 1 == wordto) {
                     endIndex = quranText.indexOf(word) + word.length
                     break
@@ -1106,6 +1116,7 @@ if (w != null) {
                 currentWordIndex++
             }
             var extractedSentence = ""
+        if(!wordInfo.arabictext.contains("check")){
             if (startIndex != -1 && endIndex != -1) {
                 // Extract the Arabic sentence between the start and end indexes
                 try {
@@ -1120,11 +1131,9 @@ if (w != null) {
                 // Extract translation using wordfrom and wordnoto
                 translationBuilder = StringBuilder()
                 for (entry in corpus) {
-                    if (wordInfo.type.equals("past")) {
-                        wordto = wordInfo.wordto + 1
-                    } else {
+
                         wordto = wordInfo.wordto
-                    }
+
                     if (entry.wordno in wordInfo.wordfrom..wordto) {
                         translationBuilder.append("${entry.en} ").append(" ")
                     }
@@ -1137,15 +1146,13 @@ if (w != null) {
                 result.add(dataString)
             } else {
                 val extractedTranslation = translationBuilder.toString().trim()
-                if(wordInfo.type=="future"){
-                    println("check")
-                }
+
                 // Handle the case when startIndex or endIndex is not found
                 val dataString =
                     "${wordInfo.surahid}|${wordInfo.ayahid}|${wordInfo.wordfrom}|$wordto|$startIndex|$endIndex|$extractedSentence|$extractedTranslation|${wordInfo.arabictext}|${wordInfo.englishtext}|${wordInfo.type}|$quranText"
                 result.add(dataString)
             }
-
+}
 
         return result
     }
@@ -1409,10 +1416,10 @@ if (w != null) {
                 sentenceMap["predicateSequence"] as List<ShartCorpusRow>
             }
             var delimitedString = ""
-            //  delimitedString = shartInCollection(shartsequence, sentenceMap, delimitedString, type)
+             delimitedString = shartInCollection(shartsequence, sentenceMap, delimitedString, type)
 
 
-            delimitedString = sequenceCollection(sequence, type, sentenceMap, delimitedString)
+         //   delimitedString = sequenceCollection(sequence, type, sentenceMap, delimitedString)
 
             // Create the pipe-delimited string
 
@@ -2523,13 +2530,19 @@ if (w != null) {
             val arabicWord = row.araone + row.aratwo + row.arathree + row.arafour + row.arafive
 
             // Check if this row is a conditional word
-            val isCondi = tags.any { it?.contains("COND") == true }
-            val isWord = arabicWord.contains("إِن") || arabicWord.contains("وَإِن") ||
+            val isCondii = tags.any { it?.contains("COND") == true }
+            val isWorda = arabicWord.contains("إِن") || arabicWord.contains("وَإِن") ||
                     arabicWord.contains("فَإِن") || arabicWord.contains("أَفَإِي۟ن") || arabicWord.contains(
                 "وَلَئِنِ"
             )
 
-            if (isCondi && isWord) {
+            val isWord = arabicWord.contains("إِمَّا") || arabicWord.contains("إِمَّآ") ||
+                arabicWord.contains("فَإِن") || arabicWord.contains("أَفَإِي۟ن") || arabicWord.contains(
+                "وَلَئِنِ"
+            )
+
+
+            if ( isWord) {
                 val sequence = mutableListOf<ShartCorpusRow>()
                 val condWord = row.wordno
                 var firstVerb: Int? = null
@@ -3735,6 +3748,68 @@ if (w != null) {
 
         return accusativeSentences
     }
+
+    fun extractOutsideDoer(corpusData: List<CorpusEntity>, qurantext: String, translation: String): List<Map<String, Any>> {
+        val accusativeSentences = mutableListOf<Map<String, Any>>()
+        listOf("ظلل","كود","صبح","ليس")
+        for (i in corpusData.indices) {
+            val row = corpusData[i]
+            val tags = listOf(
+                row.rootaraone,
+                row.rootaratwo,
+                row.rootarathree,
+                row.rootarafour,
+                row.rootarafive,
+                row.tagone,
+                row.tagtwo,
+                row.tagthree,
+                row.tagfour,
+                row.tagfive
+            ) // Create tags list
+            val detailstag = listOf(
+                row.detailsone,
+                row.detailstwo,
+                row.detailsthree,
+                row.detailsfour,
+                row.detailsfive
+            )
+            if (row.surah == 25 && row.ayah == 27 && row.wordno == 9) {
+                println("check")
+            }
+            detailstag.any()
+
+       val ismasculinesingular=     detailstag.any{it!!.contains("3MS")} && tags.any{it!!.contains("V")}
+            val isfemmsingular=     detailstag.any{it!!.contains("3FS")} && tags.any{it!!.contains("V")}
+            if (isfemmsingular || ismasculinesingular)  {
+
+
+
+
+                val accWordNo = row.wordno
+                  val predicateSequence = findSequenceEndingInNomold(corpusData, startIndex = i)
+              //  val predicateSequence = findSequenceForSila(corpusData, startIndex = i)
+                if (predicateSequence != null) {
+                    accusativeSentences.add(
+                        mapOf(
+                            "type" to "Scenario 1",
+                            "accWordNo" to accWordNo,
+                            "quranverse" to qurantext,
+                            "translation" to translation,
+                            "predicateSequence" to predicateSequence
+                        )
+                    )
+
+                }
+
+            }
+
+        }
+
+        return accusativeSentences
+    }
+
+
+
     fun extractKanaSistersSentences(corpusData: List<CorpusEntity>, qurantext: String, translation: String): List<Map<String, Any>> {
         val accusativeSentences = mutableListOf<Map<String, Any>>()
         listOf("ظلل","كود","صبح","ليس")
@@ -4045,10 +4120,13 @@ if (w != null) {
             )
 
             sequence.add(row)
-
-            if (row.details.any { it!!.contains("NOM") }) {
+            if(entity.ayah==27){
+                println("check")
+            }
+            val isok=    row. details.any{it!!.contains("NOM")} && row.tags.any{it!!.contains("N")}
+            if (isok) {
                 // Check if the next element exists and meets the conditions
-                if (i + 1 < data.size) {
+                /*if (i + 1 < data.size) {
                     val nextEntity = data[i + 1]
                     if (nextEntity.tagone == "N" || nextEntity.tagtwo == "N" || nextEntity.tagthree == "N" || nextEntity.tagfour == "N") {
                         if (nextEntity.detailsone?.contains("NOM") == true || nextEntity.detailstwo?.contains(
@@ -4082,12 +4160,12 @@ if (w != null) {
                             sequence.add(nextRow)
                         }
                     }
-                }
+                }*/
                 return sequence
             }
         }
 
-        return sequence
+        return null
     }
 
 

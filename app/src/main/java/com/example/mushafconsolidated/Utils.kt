@@ -119,6 +119,10 @@ class Utils {
         return  database.NegationDao().getINegationFilterSurahAndType(cid,type)
 
     }
+    fun getNegationFilterSurahAndTypetemp( type:String,   ): List<NegationEnt> {
+        return  database.NegationDao().getNegationFilterSurahAndTypetemp(type)
+
+    }
 
 
 
@@ -316,6 +320,30 @@ class Utils {
         return database.RawDao().getAccusativeListing(query)
 
     }
+
+    fun getSelectedChapter():List<AccusativePojo>{
+
+        val kada:String=("select * from corpusexpand where surah=41")
+        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(kada)
+        //  List<Book> result = booksDao.getBooks(query);
+        return database.RawDao().getAccusativeListing(query)
+
+    }
+    fun getSelectedChapters(tid:Int):List<AccusativePojo>{
+        val sqlshart:String=("select * from corpusexpand where surah ==  \""
+            + tid + "\"")
+
+        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(sqlshart)
+        //  List<Book> result = booksDao.getBooks(query);
+        return database.RawDao().getAccusativeListing(query)
+
+
+    }
+
+
+
+
+
     fun getKanaAll():List<AccusativePojo>{
         val kana:String=("select \n" +
                 "*\n" +
@@ -366,6 +394,24 @@ class Utils {
         return database.RawDao().getAccusativeListing(query)
 
     }
+
+    fun getIMMA():List<AccusativePojo>{
+        val kana:String=("SELECT *\n" +
+            "  FROM corpusexpand,\n" +
+            "       qurans\n" +
+            " WHERE (corpusexpand.araone = \"إِمَّا\" OR \n" +
+            "        corpusexpand.aratwo = \"إِمَّا\" OR \n" +
+            "        corpusexpand.aratwo = \"إِمَّآ\" OR \n" +
+            "        corpusexpand.arathree = \"إِمَّآ\") AND \n" +
+            "       corpusexpand.surah = qurans.surah AND \n" +
+            "       corpusexpand.ayah = qurans.ayah")
+
+        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(kana)
+        //  List<Book> result = booksDao.getBooks(query);
+        return database.RawDao().getAccusativeListing(query)
+
+    }
+
     fun getInALL():List<AccusativePojo>{
         val kana:String=("SELECT *\n" +
                 "  FROM corpusexpand,\n" +
