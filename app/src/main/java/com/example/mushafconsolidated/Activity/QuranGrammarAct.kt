@@ -290,7 +290,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
         val word = "عَهْدَهُۥٓۖ"
         //   QuranViewUtils.showIndexOfWindow(this,verse,word)
-        val start = true
+        val start = false
         if (start) {
          mainLoopFromIndexExtraction()
          //mainLoopforErabStringEXTRACTION()
