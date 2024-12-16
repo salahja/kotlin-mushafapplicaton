@@ -354,16 +354,16 @@ class NewSurahDisplayFrag : Fragment(), SearchView.OnQueryTextListener {
 
             if (item.itemId == R.id.quiz) {
 
-                /*val settingint = Intent(requireActivity(), ArabicVerbQuizActNew::class.java)
+               val settingint = Intent(requireActivity(), ArabicVerbQuizActNew::class.java)
 
-                startActivity(settingint)*/
-                val phrasesDisplayFrag = PhrasesDisplayFrag()
+                startActivity(settingint)
+  /*              val phrasesDisplayFrag = PhrasesDisplayFrag()
                 //  TameezDisplayFrag bookmarkFragment=new TameezDisplayFrag();
                 val transactions = requireActivity().   supportFragmentManager.beginTransaction()
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 transactions.add(R.id.frame_container_qurangrammar, phrasesDisplayFrag)
                     .addToBackStack("mujarrad")
-                transactions.commit()
+                transactions.commit()*/
 
 
             }

@@ -17,10 +17,8 @@ import com.example.mushafconsolidated.Entities.GrammarRules
 
 
 import com.example.mushafconsolidated.Entities.NegationEnt
-import com.example.mushafconsolidated.Entities.NewKanaEntity
-import com.example.mushafconsolidated.Entities.NewMudhafEntity
-import com.example.mushafconsolidated.Entities.NewNasbEntity
-import com.example.mushafconsolidated.Entities.NewShartEntity
+
+
 import com.example.mushafconsolidated.Entities.NounCorpus
 
 import com.example.mushafconsolidated.Entities.QuranEntity
@@ -75,10 +73,6 @@ class QuranViewModel @Inject constructor(
     private var corpusentity: MutableLiveData<List<CorpusEntity>> = MutableLiveData()
     private var quranlist: MutableLiveData<List<QuranEntity>> = MutableLiveData()
 
-    var kana: MutableLiveData<List<NewKanaEntity>> = MutableLiveData()
-    var shart: MutableLiveData<List<NewShartEntity>> = MutableLiveData()
-    private var nasab: MutableLiveData<List<NewNasbEntity>> = MutableLiveData()
-    var mudhaf: MutableLiveData<List<NewMudhafEntity>> = MutableLiveData()
     private var sifa: MutableLiveData<List<SifaEntity>> = MutableLiveData()
 
     private var absolutNegation: MutableLiveData<List<AbsoluteNegationEnt>> = MutableLiveData()
@@ -113,31 +107,6 @@ class QuranViewModel @Inject constructor(
 
 
 
-    fun getkana(surah: Int, ayah: Int): LiveData<List<NewKanaEntity>> {
-
-        kana.value = this.quranRepository.getkana(surah, ayah)
-        return kana
-    }
-
-    fun getshart(surah: Int, ayah: Int): LiveData<List<NewShartEntity>> {
-
-        shart.value = this.quranRepository.getshart(surah, ayah)
-        return shart
-    }
-
-    fun getnasab(surah: Int, ayah: Int): LiveData<List<NewNasbEntity>> {
-        nasab.value = this.quranRepository.getnasab(surah, ayah)
-        return nasab
-    }
-
-    fun getmudhafFilterSurahAyah(surah: Int, ayah: Int): List<NewMudhafEntity> {
-   return this.quranRepository.getmudhaf(surah, ayah)
-
-    }
-    fun getmudhafFilterSurah(surah: Int): List<NewMudhafEntity> {
-        return this.quranRepository.getmudhafsurah(surah)
-
-    }
 
 
 

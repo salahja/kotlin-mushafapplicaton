@@ -59,13 +59,9 @@
         android:title="Show Translation" />
 
     <SwitchPreference
-        android:defaultValue="false"
+        android:defaultValue="true"
         android:key="@string/prefs_show_erab"
         android:title="Show Erab" />
-    <SwitchPreference
-        android:defaultValue="false"
-        android:key="@string/prefs_show_kathir"
-        android:title="Show Ibne Kathir" />
 
     <SwitchPreference
         android:defaultValue="true"
@@ -91,7 +87,7 @@
         android:key="@string/prefs_wbw"
         android:title="Select WBW Language" />
     <SwitchPreference
-        android:defaultValue="true"
+        android:defaultValue="false"
         android:key="@string/pref_default_device_font"
         android:title="Default Device Font"
         app:icon="@drawable/baseline_font_download_24" />
@@ -103,7 +99,7 @@
         android:title="Select Translation" />
 
 
-    <PreferenceCategory
+    <!--<PreferenceCategory
 
         android:title="Grmmatical Syntax-Experimental" />
 
@@ -143,7 +139,7 @@
     <SwitchPreference
         android:defaultValue="false"
         android:key="@string/prefs_grammar_sentence"
-        android:title="Grammitica Analysis-Sentence wise    " />
+        android:title="Grammitica Analysis-Sentence wise    " />-->
 
     <PreferenceCategory
 
@@ -177,7 +173,7 @@
 
 
         <Preference
-            android:defaultValue="dark"
+            android:defaultValue="brown"
            android:key="themepref"
             app:fragment="com.example.mushafconsolidated.fragments.ActivitySettings$SelectQuranFronts"
             app:icon="@drawable/ic_baseline_format_paint_34"

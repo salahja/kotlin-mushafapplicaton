@@ -46,10 +46,6 @@ import com.example.mushafconsolidated.Activity.LughatWordDetailsAct
 import com.example.mushafconsolidated.Activity.WordOccuranceAct
 import com.example.mushafconsolidated.Entities.CorpusEntity
 
-import com.example.mushafconsolidated.Entities.NewKanaEntity
-import com.example.mushafconsolidated.Entities.NewMudhafEntity
-import com.example.mushafconsolidated.Entities.NewNasbEntity
-import com.example.mushafconsolidated.Entities.NewShartEntity
 import com.example.mushafconsolidated.Entities.NounCorpus
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.SifaEntity
@@ -60,6 +56,8 @@ import com.example.mushafconsolidated.Entities.lughat
 import com.example.mushafconsolidated.Entities.wbwentity
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.R.layout
+import com.example.mushafconsolidated.SpannableStringUtils
+import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.databinding.RootDialogFragmentBinding
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListener
 import com.example.mushafconsolidated.quranrepo.QuranViewModel
@@ -189,59 +187,71 @@ class WordAnalysisBottomSheet : DialogFragment() {
             val corpusNounWord = mainViewModel.getNouncorpus(chapterId, ayahNumber, wordNo).value
             val verbCorpusRootWord =
                 mainViewModel.getVerbRootBySurahAyahWord(chapterId, ayahNumber, wordNo).value
+/*
+`
+            if (corpusNounWord!!.isEmpty() && verbCorpusRootWord!!.isEmpty()) {
+                // Display a message (e.g., using Toast or Snackbar)
+                Toast.makeText(requireContext(), "Word details not found", Toast.LENGTH_SHORT).show()
+                return@launch // Terminate the launch block
+            }
+*/
+
             val corpusSurahWord =
                 mainViewModel.getCorpusEntityFilterbywordno(chapterId, ayahNumber, wordNo).value
                     ?: return@launch
 
-            // Continue with data processing...
-            val am = NewQuranMorphologyDetails(
-                corpusSurahWord,
-                corpusNounWord as? ArrayList<NounCorpus>,
-                verbCorpusRootWord as? ArrayList<VerbCorpus>,
-                requireContext()
-            )
+            if (corpusNounWord!!.isNotEmpty() || verbCorpusRootWord!!.isNotEmpty()) {
+                // Continue with data processing...
+                val am = NewQuranMorphologyDetails(
+                    corpusSurahWord,
+                    corpusNounWord as? ArrayList<NounCorpus>,
+                    verbCorpusRootWord as? ArrayList<VerbCorpus>,
+                    requireContext()
+                )
 
-            handleWordDetailsorig(
-                am,
-                verbCorpusRootWord,
-                mainViewModel,
-                wordNo,
-                corpusNounWord,
-                wbwtranslation,
-                mainViewModel,
-                quran
-            )
+                handleWordDetailsorig(
+                    am,
+                    verbCorpusRootWord,
+                    mainViewModel,
+                    wordNo,
+                    corpusNounWord,
+                    wbwtranslation,
+                    mainViewModel,
+                    quran
+                )
 
-            // Handle UI updates after data is ready
-            requireActivity().runOnUiThread {
-                dialog.dismiss()
-                if (showGrammarFragments) {
-                    GrammarFragmentsListAdapter(
-                        requireContext(),
-                        expandableListTitle, expandableListDetail
-                    )
-                } else {
-                    //          rwAdapter = RootWordDisplayAdapter(context!!)
+                // Handle UI updates after data is ready
+                requireActivity().runOnUiThread {
+                    dialog.dismiss()
+                    if (showGrammarFragments) {
+                        GrammarFragmentsListAdapter(
+                            requireContext(),
+                            expandableListTitle, expandableListDetail
+                        )
+                    } else {
+                        //          rwAdapter = RootWordDisplayAdapter(context!!)
 
-                    rwAdapter = NewRootWordDisplayAdapter(
-                        requireContext(),
+                        rwAdapter = NewRootWordDisplayAdapter(
+                            requireContext(),
 
-                        isVerb,
-                        wazannumberslist,
-                        spannable,
-                        isNoun,
-                        ismfaelmafool,
-                        isparticple,
-                        isconjugation,
-                        corpusSurahWord as ArrayList<CorpusEntity>,
-                        wordbdetail,
-                        vbdetail,
-                        isMazeedSarfSagheer,
-                        isThulathiSarfSagheer,
-                        sarfSagheerList
-                    )
-                    recyclerView.adapter = rwAdapter
+                            isVerb,
+                            wazannumberslist,
+                            spannable,
+                            isNoun,
+                            ismfaelmafool,
+                            isparticple,
+                            isconjugation,
+                            corpusSurahWord as ArrayList<CorpusEntity>,
+                            wordbdetail,
+                            vbdetail,
+                            isMazeedSarfSagheer,
+                            isThulathiSarfSagheer,
+                            sarfSagheerList
+                        )
+                        recyclerView.adapter = rwAdapter
+                    }
                 }
+
             }
 
 
@@ -642,11 +652,12 @@ class WordAnalysisBottomSheet : DialogFragment() {
             if (corpusSurahWord.isNotEmpty()) {
                 val quranverses: String = quran!![0].qurantext
                 spannable = SpannableStringBuilder(quranverses)
-                setShart(models)
+              //  setAllPhrases()
+        /*        setShart(models)
                 setHarfNasb(models)
                 setMausoofSifa(models, quran as ArrayList<QuranEntity>)
                 setMudhaf(models)
-                setKana(models)
+                setKana(models)*/
             } else {
                 val quranverses: String = quran!![0].qurantext
                 spannable = SpannableStringBuilder(quranverses)
@@ -685,6 +696,37 @@ class WordAnalysisBottomSheet : DialogFragment() {
             }
         }
         // }//scope
+    }
+
+    private fun setAllPhrases() {
+        val utils= Utils(requireContext())
+     val negaTionList=   utils.geTNegatonFilerSurahAyah(chapterId,ayahNumber)
+        val spannedStrings = SpannableStringUtils.applySpans(negaTionList, "light")
+
+        for ((i, j: Int, type, spannableString) in spannedStrings) {
+
+        /*    if (type.contains("kana")) {
+                kanaarray.add(spannableString)
+            } else if (type.contains("nasab")) {
+
+                harfnasbarray.add(spannableString)
+            } else if (type.contains("shart")) {
+                shartarray.add(spannableString)
+            } else if (type.contains("present")) {
+                presentTenceNegationArray.add(spannableString)
+            } else if (type.contains("past")) {
+                pastTenceNegationArray.add(spannableString)
+            } else if (type.contains("future")) {
+                futureTenceNegationArray.add(spannableString)
+            } else if (type.contains("exp")) {
+                inMaIllaNegationArray.add(spannableString)
+            } else if (type.contains("sifa")) {
+                mausoofsifaarray.add(spannableString)
+            } else if (type.contains("mudhaf")) {
+                mudhafarray.add(spannableString)
+            }*/
+
+        }
     }
 
     private fun loadMafoolat(
@@ -848,7 +890,7 @@ class WordAnalysisBottomSheet : DialogFragment() {
         editor.apply()
     }
 
-    private fun setHarfNasb(model: QuranViewModel) {
+/*    private fun setHarfNasb(model: QuranViewModel) {
         val harfnasb =
             model.getnasab(chapterId, ayahNumber).value as ArrayList<NewNasbEntity>
         if (harfnasb != null) {
@@ -928,6 +970,7 @@ class WordAnalysisBottomSheet : DialogFragment() {
         }
     }
 
+
     private fun setShart(model: QuranViewModel) {
         val shart = model.getshart(chapterId, ayahNumber).value as ArrayList<NewShartEntity>
         //  this.spannable = new SpannableStringBuilder(quranverses);
@@ -1004,7 +1047,7 @@ class WordAnalysisBottomSheet : DialogFragment() {
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
             )
         }
-    }
+    }*/
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -23,10 +23,7 @@ import com.example.mushafconsolidated.Entities.InMaListingPOJO
 
 import com.example.mushafconsolidated.Entities.NasbListingPojo
 import com.example.mushafconsolidated.Entities.NegationEnt
-import com.example.mushafconsolidated.Entities.NewKanaEntity
-import com.example.mushafconsolidated.Entities.NewMudhafEntity
-import com.example.mushafconsolidated.Entities.NewNasbEntity
-import com.example.mushafconsolidated.Entities.NewShartEntity
+
 
 import com.example.mushafconsolidated.Entities.NounCorpus
 import com.example.mushafconsolidated.Entities.NounCorpusBreakup
@@ -84,13 +81,6 @@ class Utils {
         }
     }
 
-    fun getMudhafSurahNew(id: Int): List<NewMudhafEntity?>? {
-        return database.NewMudhafDao().getMudhafSurah(id)
-    }
-
-    fun getMudhafALl(): List<NewMudhafEntity> {
-        return database.NewMudhafDao().mudhafAll()
-    }
 
 
 
@@ -129,6 +119,10 @@ class Utils {
         return  database.NegationDao().getINegationFilterSurahAndType(cid,type)
 
     }
+    fun getNegationFilterSurahAndTypetemp( type:String,   ): List<NegationEnt> {
+        return  database.NegationDao().getNegationFilterSurahAndTypetemp(type)
+
+    }
 
 
 
@@ -160,9 +154,6 @@ class Utils {
 
 
 
-    fun getMudhafSurahAyahNew(id: Int, aid: Int): List<NewMudhafEntity> {
-        return database.NewMudhafDao().getMudhafSurahAyah(id, aid)
-    }
     fun getSurahJson(sid:    Int): List<jsonsurahentity?>? {
         Log.d(TAG, "getQuranRoot: started")
         return database.JasonSurahDao().getSurahJson(sid)
@@ -329,6 +320,30 @@ class Utils {
         return database.RawDao().getAccusativeListing(query)
 
     }
+
+    fun getSelectedChapter():List<AccusativePojo>{
+
+        val kada:String=("select * from corpusexpand where surah=41")
+        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(kada)
+        //  List<Book> result = booksDao.getBooks(query);
+        return database.RawDao().getAccusativeListing(query)
+
+    }
+    fun getSelectedChapters(tid:Int):List<AccusativePojo>{
+        val sqlshart:String=("select * from corpusexpand where surah ==  \""
+            + tid + "\"")
+
+        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(sqlshart)
+        //  List<Book> result = booksDao.getBooks(query);
+        return database.RawDao().getAccusativeListing(query)
+
+
+    }
+
+
+
+
+
     fun getKanaAll():List<AccusativePojo>{
         val kana:String=("select \n" +
                 "*\n" +
@@ -379,6 +394,24 @@ class Utils {
         return database.RawDao().getAccusativeListing(query)
 
     }
+
+    fun getIMMA():List<AccusativePojo>{
+        val kana:String=("SELECT *\n" +
+            "  FROM corpusexpand,\n" +
+            "       qurans\n" +
+            " WHERE (corpusexpand.araone = \"إِمَّا\" OR \n" +
+            "        corpusexpand.aratwo = \"إِمَّا\" OR \n" +
+            "        corpusexpand.aratwo = \"إِمَّآ\" OR \n" +
+            "        corpusexpand.arathree = \"إِمَّآ\") AND \n" +
+            "       corpusexpand.surah = qurans.surah AND \n" +
+            "       corpusexpand.ayah = qurans.ayah")
+
+        val query: SimpleSQLiteQuery = SimpleSQLiteQuery(kana)
+        //  List<Book> result = booksDao.getBooks(query);
+        return database.RawDao().getAccusativeListing(query)
+
+    }
+
     fun getInALL():List<AccusativePojo>{
         val kana:String=("SELECT *\n" +
                 "  FROM corpusexpand,\n" +
@@ -930,13 +963,6 @@ class Utils {
         return database.RawDao().getverbdetails(query)
     }
 
-    fun getHarfNasbIndexesnew(id: Int): List<NewNasbEntity?>? {
-        return database.NewNasbDao().getHarfNasbIndices(id)
-    }
-
-    fun getHarfNasbIndicesSurahAyah(id: Int, aid: Int): List<NewNasbEntity?>? {
-        return database.NewNasbDao().getHarfNasbIndicesSurahAyah(id, aid)
-    }
 
 
     //  List<Book> result = booksDao.getBooks(query);
@@ -974,9 +1000,7 @@ class Utils {
         return database.SifaDao().getSifaindexesBySurahAyah(id, aid)
     }
 
-    fun getShartSurahNew(id: Int): List<NewShartEntity?>? {
-        return database.NewShartDAO().getShartBySurah(id)
-    }
+
 
     fun getRootDictionary(id: String): List<lughat?>? {
         return database.LughatDao().getRootWordDictionary(id.trim { it <= ' ' })
@@ -1008,29 +1032,12 @@ class Utils {
             return database.QuranExplorerDao()?.aLL
         }
 
-    fun getKananew(id: Int): List<NewKanaEntity>? {
-        return database.NewKanaDao().getkanabysurah(id)
-    }
-    fun getKanaAlls( ): List<NewKanaEntity> {
-        return database.NewKanaDao().kanaall()
-    }
 
 
 
-    fun getKananewSurahAyah(id: Int, aid: Int): List<NewKanaEntity>? {
-        return database.NewKanaDao().getkanabysurahAyah(id, aid)
-    }
 
-    fun getShartSurahAyahNew(id: Int, ayah: Int): List<NewShartEntity>? {
-        return database.NewShartDAO().getShartBySurahAyah(id, ayah)
-    }
 
-    fun getShartALL(): List<NewShartEntity>? {
-        return database.NewShartDAO().shartAll()
-    }
-    fun getNasbAall(): List<NewNasbEntity> {
-        return database.NewNasbDao().harfNasbIndAll()
-    }
+
 
 
 

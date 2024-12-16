@@ -11,10 +11,13 @@ import android.os.Environment
 import android.preference.PreferenceManager
 import android.widget.Toast
 import androidx.activity.result.launch
+import androidx.annotation.OptIn
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.media3.common.util.Log
+import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.RecyclerView
 import androidx.window.layout.WindowMetricsCalculator
 
@@ -26,6 +29,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry
 import org.apache.commons.compress.archivers.sevenz.SevenZFile
 import java.io.BufferedInputStream
@@ -42,21 +46,16 @@ import java.util.zip.ZipInputStream
 class MainActivity : BaseActivity() {
     private var newquran: File? = null
     private var recview: RecyclerView? = null
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-    }
 
+    @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
+           super.onCreate(savedInstanceState)
         switchTheme("brown")
-        super.onCreate(savedInstanceState)
-         val splashScreen = installSplashScreen()
-
-        // Use a coroutine to delay the splash screen
-        var keepSplashOnScreen = true
-        CoroutineScope(Dispatchers.Main).launch {
-            delay(3000) // Delay for 3 seconds (adjust as needed)
-            keepSplashOnScreen = false
-            splashScreen.setKeepOnScreenCondition { keepSplashOnScreen }
+        val splashScreen = installSplashScreen()
+        splashScreen.setKeepOnScreenCondition {
+            // Simulate work being done, replace with your actual logic
+            runBlocking { delay(1000) }
+            false
         }
         val hasPermission = ContextCompat.checkSelfPermission(
             this,
@@ -67,32 +66,22 @@ class MainActivity : BaseActivity() {
         setContentView(R.layout.main_activity)
         recview = findViewById(R.id.recycler_views)
         val sp = PreferenceManager.getDefaultSharedPreferences(this)
-        val SPL = 1
-        if (sp.getInt("spl", 0) != SPL) {
+        if (sp.getInt("spl", 0) != 1) {
             PreferenceManager.setDefaultValues(this, R.xml.preferences, true)
-            //  PreferenceManager.setDefaultValues(this, R.xml.prefs2, true);
-            sp.edit().putInt("spl", SPL).apply()
+            sp.edit().putInt("spl", 1).apply()
         }
         newquran = File("$FILEPATH/$DATABASENAME")
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S) {
-            if (!hasPermission) {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                    REQUEST_WRITE_STORAGE
-                )
-            } else {
-                try {
-                    validateFilesAndDownload()
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-            }
+        if (!hasPermission) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                REQUEST_WRITE_STORAGE
+            )
         } else {
             try {
                 validateFilesAndDownload()
             } catch (e: IOException) {
-                e.printStackTrace()
+                Log.e("MainActivity", "Error validating or downloading files", e)
             }
         }
         //  PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
@@ -154,30 +143,10 @@ class MainActivity : BaseActivity() {
             //   new CopyDatabase().execute();
             copyDatbases()
         } else {
-            /*      LinearLayoutManager ln=new LinearLayoutManager(this);
-            recview.setLayoutManager(ln);
-                List<Page> pages = new ArrayList<>();
-                Page page;
-                Utils utils=new Utils(this);
-                List<QuranEntity> ayahItems;
-                for (int i = 1; i <= 604; i++) {
-                    ayahItems = utils.getAyahsByPage(i);
-                    if (ayahItems.size() > 0) {
-                        page = new Page();
-                        page.setAyahItems(ayahItems);
-                        page.setPageNum(i);
-                        page.setJuz(ayahItems.get(0).getJuz());
-                        pages.add(page);
-                    }
-                }
 
-                fullQuranPages = new ArrayList<>(pages);
-            PageAdapter pageAdapter=new PageAdapter(pages,this);
-            recview.setAdapter(pageAdapter);*/
             val homeactivity = Intent(this@MainActivity, QuranGrammarAct::class.java)
             startActivity(homeactivity)
-            //   MainActivity.this.finish();
-            //   initnavigation();
+
         }
     }
 
@@ -284,94 +253,8 @@ class MainActivity : BaseActivity() {
     }
 
 
-    private fun zipExtraction(
-        ex: ExecutorService,
-        dialog: AlertDialog
-    ) {
-        runOnUiThread {
-            val zipfile =
-                File(getExternalFilesDir(null)!!.absolutePath + getString(R.string.app_folder_path) + File.separator + DATABASEZIP)
-            val targetDirectory = File(FILEPATH)
-            val mainDatabasesZIP = File(zipfile.toString())
-            var zis: ZipInputStream? = null
-            var progress = 1
-            try {
-                zis = ZipInputStream(
-                    BufferedInputStream(
-                        FileInputStream(mainDatabasesZIP)
-                    )
-                )
-            } catch (e: FileNotFoundException) {
-                e.printStackTrace()
-                val dialog1 =
-                    AlertDialog.Builder(this@MainActivity)
-                dialog1.setMessage(e.cause.toString())
-                val alertDialog = dialog1.create()
-                alertDialog.show()
-            }
-            try {
-                var ze: ZipEntry
-                var count: Int
-                val buffer = ByteArray(8192)
-                try {
-                    while (zis!!.nextEntry.also { ze = it } != null) {
-                        val file = File(targetDirectory, ze.name)
-                        val dir =
-                            if (ze.isDirectory) file else file.parentFile
-                        if (!dir.isDirectory && !dir.mkdirs()) throw FileNotFoundException(
-                            "Failed to ensure directory: " + dir.absolutePath
-                        )
-                        if (ze.isDirectory) continue
-                        FileOutputStream(file).use { fout ->
-                            progress += 1
-                            while (zis.read(buffer).also { count = it } != -1) {
-                                fout.write(buffer, 0, count)
-                                progress += 1
-                                //   progressBarDD.setProgress(progress);
-                            }
-                        }
-                    }
-                } catch (ex: NullPointerException) {
-                    try {
-                        zis!!.close()
-                        mainDatabasesZIP.delete()
-                        //     progressBarDD.dismiss();
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    }
-                }
 
-            } catch (e: IOException) {
-                e.printStackTrace()
-            } finally {
-                try {
-                    zis!!.close()
-                    mainDatabasesZIP.delete()
-                    //     progressBarDD.dismiss();
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-            }
-            ex.shutdown()
-            dialog.dismiss()
-            val zipintent = Intent(this@MainActivity, QuranGrammarAct::class.java)
-            startActivity(zipintent)
-            finish()
-        }
-    }
 
-    val defaultSaveRootPath: Boolean
-        get() {
-            var useExternalStorage = false
-            val mounted = Environment.getExternalStorageState() == "mounted"
-            val freeSpace = Environment.getExternalStorageDirectory().freeSpace
-            if (mounted) {
-                if (freeSpace > 0) {
-                    useExternalStorage = true
-                }
-            }
-            return useExternalStorage
-        }
 
     enum class WindowSizeClass {
         COMPACT, MEDIUM, EXPANDED

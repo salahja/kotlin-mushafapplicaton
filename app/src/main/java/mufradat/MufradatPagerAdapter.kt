@@ -311,7 +311,7 @@ class MufradatPagerAdapter(
 
         //  holder.ayah_text.setTextSize(Float.parseFloat(pref.getArabicTextFonts()));
         //   holder.ayah_text.setText(verse.getAyahTextQalam());
-        holder.ayah_text.text = verse.ayahTextPdms
+        holder.ayah_text.text = verse.ayahTextQalam
 
 
         //        if (SharedPref.arabicFontSelection().equals("Muhammadi.ttf")) {

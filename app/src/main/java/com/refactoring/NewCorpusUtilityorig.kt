@@ -19,7 +19,7 @@ import androidx.core.content.ContextCompat
 import com.example.Constant
 import com.example.justJava.FrameSpan
 import com.example.mushafconsolidated.Entities.NewMudhafEntity
-import com.example.mushafconsolidated.Entities.NewShartEntity
+
 import com.example.mushafconsolidated.Entities.SifaEntity
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.Utils
@@ -93,97 +93,9 @@ class NewCorpusUtilityorig {
         }
     }
 
-    fun newnewHarfNasbDb(corpusayahWordArrayList: ArrayList<CorpusAyahWord>, surah_id: Int) {
-        val utils = Utils(QuranGrammarApplication.context!!)
-        val harfnasb = utils.getHarfNasbIndexesnew(surah_id)
-        //TODO SURA10 7 INNA ISM INNALIZINA(0,5,6,9 AND KHABR IN 10;8 oolika(0,12,len33)
-        if (surah_id == 2 || surah_id == 3 || surah_id == 4 || surah_id == 5 || surah_id == 6 || surah_id == 7 || surah_id == 8 || surah_id == 9 || surah_id == 10 || surah_id == 59 || surah_id == 60 || surah_id == 61 || surah_id == 62 || surah_id == 63 || surah_id == 64 || surah_id == 65 || surah_id == 66 || surah_id == 67 || surah_id == 68 || surah_id == 69 || surah_id == 70 || surah_id == 71 || surah_id == 72 || surah_id == 73 || surah_id == 74 || surah_id == 75 || surah_id == 76 || surah_id == 77 || surah_id == 78 || surah_id > 78 && surah_id <= 114) {
-            var spannableverse: SpannableString
-            val err = ArrayList<String>()
-            for (nasb in harfnasb!!) {
-                val indexstart = nasb!!.indexstart
-                val indexend = nasb.indexend
-                val ismstartindex = nasb.ismstart
-                val ismendindex = nasb.ismend
-                val khabarstart = nasb.khabarstart
-                val khabarend = nasb.khabarend
-                spannableverse = corpusayahWordArrayList[nasb.ayah - 1].spannableverse!!
-                try {
-                    if (dark) {
-                        Constant.harfinnaspanDark = ForegroundColorSpan(Color.GREEN)
-                    } else {
-                        Constant.harfinnaspanDark = ForegroundColorSpan(Constant.KASHMIRIGREEN)
-                    }
-                    //  harfinnaspanDark=new ForegroundColorSpan(GREEN);
-                    spannableverse.setSpan(
-                        Constant.harfinnaspanDark,
-                        indexstart,
-                        indexend,
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                    )
-                } catch (e: IndexOutOfBoundsException) {
-                    //    System.out.println(nasb.getSurah() + ":" + nasb.getAyah());
-                    err.add(nasb.surah.toString() + ":" + nasb.ayah)
-                }
-                try {
-                    //    spannableverse.setSpan(new ForegroundColorSpan(GOLD), ismindexone, ismindexone + lenism1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    if (dark) {
-                        Constant.harfismspanDark = ForegroundColorSpan(Constant.BCYAN)
-                    } else {
-                        Constant.harfismspanDark = ForegroundColorSpan(Constant.prussianblue)
-                    }
-                    spannableverse.setSpan(
-                        Constant.harfismspanDark,
-                        ismstartindex,
-                        ismendindex,
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                    )
-                } catch (e: IndexOutOfBoundsException) {
-                    //     System.out.println(nasb.getSurah() + ":" + nasb.getAyah());
-                    err.add(nasb.surah.toString() + ":" + nasb.ayah)
-                }
-                try {
-                    if (dark) {
-                        Constant.harfkhabarspanDark = ForegroundColorSpan(Color.YELLOW)
-                    } else {
-                        Constant.harfkhabarspanDark = ForegroundColorSpan(Constant.deepburnsienna)
-                    }
-                    spannableverse.setSpan(
-                        Constant.harfkhabarspanDark,
-                        khabarstart,
-                        khabarend,
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                    )
-                } catch (e: IndexOutOfBoundsException) {
-                    //   System.out.println(nasb.getSurah() + ":" + nasb.getAyah());
-                    err.add(nasb.surah.toString() + ":" + nasb.ayah)
-                }
-            }
-        }
-    }
-
-    fun setMudhafFromDB(corpusayahWordArrayList: ArrayList<CorpusAyahWord>, surah_id: Int) {
-        val utils = Utils(QuranGrammarApplication.context!!)
-        val surah = utils.getMudhafSurahNew(surah_id)
 
 
-//todo 2 188 iza ahudu
-        //todo 9;92 UNCERTAIN
-        //TODO 9:94 JAWABHARMAHDOOF 9 95 JAWABHSARMAHODFF
-        //TO 9;118 IZA IN THE MEANING OF HEENA AND 9 122 IZA AS HEENA
-        for (mudhafen in surah!!) {
-            val indexstart = mudhafen!!.startindex
-            val indexend = mudhafen.endindex
-            val frameshartharf = FrameSpan(Color.GREEN, 2f, Constant.RECKT)
-            MudhafSpansSetup(
-                frameshartharf,
-                corpusayahWordArrayList,
-                mudhafen,
-                indexstart,
-                indexend
-            )
-        }
-    }
+
 
     private fun MudhafSpansSetup(
         frameshartharf: FrameSpan,
@@ -222,176 +134,10 @@ class NewCorpusUtilityorig {
         }
     }
 
-    fun setShart(corpusayahWordArrayList: ArrayList<CorpusAyahWord>, surah_id: Int) {
-        val utils = Utils(QuranGrammarApplication.context!!)
-        val surah = utils.getShartSurahNew(surah_id)
-        //  final ArrayList<ShartEntity> surah = utils.getShartSurah(surah_id);
 
-        //TO 9;118 IZA IN THE MEANING OF HEENA AND 9 122 IZA AS HEENA
-        if (surah_id > 1 && surah_id <= 10 || surah_id > 57 && surah_id <= 114) {
-            for (shart in surah!!) {
-                val indexstart = shart!!.indexstart
-                val indexend = shart!!.indexend
-                val shartsindex = shart.shartindexstart
-                val sharteindex = shart.shartindexend
-                val jawabstartindex = shart.jawabshartindexstart
-                val jawabendindex = shart.jawabshartindexend
-                try {
-                } catch (e: ArrayIndexOutOfBoundsException) {
-                    println(shart.surah.toString() + " " + shart.ayah)
-                }
 
-                //   spanIt(SpanType.BGCOLOR,spannableString, shart, indexstart, indexend, shartsindex, sharteindex, jawabstartindex, jawabendindex);
-                ColoredShart(
-                    corpusayahWordArrayList,
-                    shart,
-                    indexstart,
-                    indexend,
-                    shartsindex,
-                    sharteindex,
-                    jawabstartindex,
-                    jawabendindex
-                )
-            }
-        }
-    }
 
-    private fun ColoredShart(
-        corpusayahWordArrayList: ArrayList<CorpusAyahWord>,
-        shart: NewShartEntity,
-        indexstart: Int,
-        indexend: Int,
-        shartsindex: Int,
-        sharteindex: Int,
-        jawabstartindex: Int,
-        jawabendindex: Int
-    ) {
-        val spannableverse: SpannableString
-        if (dark) {
-            Constant.harfshartspanDark = ForegroundColorSpan(Constant.GOLD)
-            Constant.shartspanDark = ForegroundColorSpan(Constant.ORANGE400)
-            Constant.jawabshartspanDark = ForegroundColorSpan(Color.CYAN)
-        } else {
-            Constant.harfshartspanDark = ForegroundColorSpan(Constant.FORESTGREEN)
-            Constant.shartspanDark = ForegroundColorSpan(Constant.KASHMIRIGREEN)
-            Constant.jawabshartspanDark = ForegroundColorSpan(Constant.WHOTPINK)
-        }
-        try {
-            spannableverse = corpusayahWordArrayList[shart.ayah - 1].spannableverse!!
-            //   spannableString = SpannableString.valueOf(corpusayahWordArrayList.get(shart.getAyah() - 1).getSpannableverse());
-            try {
-                if (indexstart == 0 || indexstart > 0) {
-                    spannableverse.setSpan(
-                        Constant.harfshartspanDark,
-                        indexstart,
-                        indexend,
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                    )
-                    spannableverse.setSpan(
-                        UnderlineSpan(),
-                        indexstart,
-                        indexend,
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                    )
-                }
-                if (shartsindex == 0 || shartsindex > 0) {
-                    spannableverse.setSpan(
-                        Constant.shartspanDark,
-                        shartsindex,
-                        sharteindex,
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                    )
-                    spannableverse.setSpan(
-                        UnderlineSpan(),
-                        shartsindex,
-                        sharteindex,
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                    )
-                }
-                if (jawabstartindex == 0 || jawabstartindex > 0) {
-                    val myDrawable =
-                        AppCompatResources.getDrawable(context!!, R.drawable.oval_circle)!!
-                    myDrawable.setBounds(
-                        0,
-                        0,
-                        myDrawable.intrinsicWidth,
-                        myDrawable.intrinsicHeight
-                    )
-                    spannableverse.setSpan(
-                        Constant.jawabshartspanDark,
-                        jawabstartindex,
-                        jawabendindex,
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                    )
-                    spannableverse.setSpan(
-                        UnderlineSpan(),
-                        jawabstartindex,
-                        jawabendindex,
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                    )
-                }
-            } catch (e: IndexOutOfBoundsException) {
-                //System.out.println(e.getMessage());
-            }
-        } catch (e: IndexOutOfBoundsException) {
-            //System.out.println(e.getMessage());
-        }
-    }
 
-    fun setKana(corpusayahWordArrayList: ArrayList<CorpusAyahWord>, surah_id: Int) {
-        val utils = Utils(
-            context!!.applicationContext
-        )
-        val kanalist = utils.getKananew(surah_id)
-        val harfkana: ForegroundColorSpan
-        val kanaism: ForegroundColorSpan
-        val kanakhbar: ForegroundColorSpan
-        if (dark) {
-            harfkana = ForegroundColorSpan(Constant.GOLD)
-            kanaism = ForegroundColorSpan(Constant.ORANGE400)
-            kanakhbar = ForegroundColorSpan(Color.CYAN)
-        } else {
-            harfkana = ForegroundColorSpan(Constant.FORESTGREEN)
-            kanaism = ForegroundColorSpan(Constant.KASHMIRIGREEN)
-            kanakhbar = ForegroundColorSpan(Constant.WHOTPINK)
-        }
-        if (surah_id > 1 && surah_id <= 10 || surah_id > 58 && surah_id <= 114) {
-            for (kana in kanalist!!) {
-                val spannableverse = corpusayahWordArrayList[kana!!.ayah - 1].spannableverse
-                try {
-                    if (spannableverse != null) {
-                        spannableverse.setSpan(
-                            harfkana,
-                            kana!!.indexstart,
-                            kana!!.indexend,
-                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                        )
-                    }
-                    //    shart.setSpannedverse(spannableverse);
-                    if (spannableverse != null) {
-                        spannableverse.setSpan(
-                            kanakhbar,
-                            kana!!.khabarstart,
-                            kana!!.khabarend,
-                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                        )
-                    }
-                    //   shart.setSpannedverse(spannableverse);
-                    if (spannableverse != null) {
-                        spannableverse.setSpan(
-                            kanaism,
-                            kana!!.ismkanastart,
-                            kana!!.ismkanaend,
-                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                        )
-                    }
-                    //   shart.setSpannedverse(spannableverse);
-                } catch (e: IndexOutOfBoundsException) {
-                    //System.out.println(e.getMessage());
-                }
-            }
-        }
-    }
 
     companion object {
         private var dark = true

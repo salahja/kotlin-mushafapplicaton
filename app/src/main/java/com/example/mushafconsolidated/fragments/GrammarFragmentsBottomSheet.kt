@@ -12,71 +12,31 @@ package com.example.mushafconsolidated.fragments
  */
 
 
-import Utility.ArabicLiterals
-import android.graphics.Color
 import android.os.Bundle
 import android.text.SpannableString
-import android.text.SpannableString.valueOf
-import android.text.SpannableStringBuilder
-import android.text.Spanned
-import android.text.TextUtils
-import android.text.style.BackgroundColorSpan
-import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ExpandableListView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
-import com.example.Constant
 
-import com.example.Constant.BCYAN
-import com.example.Constant.CYANLIGHTEST
-import com.example.Constant.FORESTGREEN
-import com.example.Constant.GOLD
-import com.example.Constant.KASHMIRIGREEN
-import com.example.Constant.ORANGE400
-import com.example.Constant.WBURNTUMBER
-import com.example.Constant.WHOTPINK
-import com.example.Constant.deepburnsienna
-import com.example.Constant.harfinnaspanDark
-import com.example.Constant.harfismspanDark
-import com.example.Constant.harfkhabarspanDark
-import com.example.Constant.harfshartspanDark
-import com.example.Constant.jawabshartspanDark
-import com.example.Constant.prussianblue
-import com.example.Constant.shartspanDark
-import com.example.Constant.sifaspansDark
-import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.NegationEnt
 
-import com.example.mushafconsolidated.Entities.NewMudhafEntity
-import com.example.mushafconsolidated.Entities.NewNasbEntity
-import com.example.mushafconsolidated.Entities.NewShartEntity
 
-import com.example.mushafconsolidated.Entities.QuranEntity
-import com.example.mushafconsolidated.Entities.SifaEntity
-import com.example.mushafconsolidated.Entities.wbwentity
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SpannableStringUtils
 
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.model.SarfSagheerPOJO
-import com.example.mushafconsolidated.model.Word
 import com.example.mushafconsolidated.quranrepo.QuranRepository
 import com.example.mushafconsolidated.quranrepo.QuranViewModel
-import com.example.utility.CorpusUtilityorig
-import com.example.utility.QuranGrammarApplication
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.Executors
 import javax.inject.Inject
 import kotlin.collections.isNotEmpty
-import kotlin.collections.map
-import kotlin.collections.toTypedArray
 
 /**
  *
@@ -90,16 +50,16 @@ import kotlin.collections.toTypedArray
 @AndroidEntryPoint
 class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
 
-    enum class NasbPart { HARF, ISM, KHABAR }
+
 
     private lateinit var negaTionList: List<NegationEnt>
     private var whichwbw: String? = null
 
-    //   private enum class NasbPart { HARF, ISM, KHABAR }
+
     val model: QuranViewModel by viewModels()
     private var dark: Boolean = false
-  //  private var quran: List<QuranEntity>? = null
-    private var corpusSurahWord: List<CorpusEntity>? = null
+
+
     var chapterid = 0
     private var ayanumber = 0
     private var isverbconjugaton = false
@@ -107,9 +67,9 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
     lateinit var expandableListView: ExpandableListView
     var expandableListTitle: List<String>? = null
     var expandableListDetail: LinkedHashMap<String, List<SpannableString>>? = null
-    private var kanaExpandableListDetail: List<SpannableString>? = null
+
     var vbdetail = HashMap<String, String>()
-    var wordbdetail: HashMap<String, SpannableStringBuilder>? = null
+
     private var showGrammarFragments = false
     private var ThulathiMazeedConjugatonList: ArrayList<ArrayList<*>>? = null
     var sarf: SarfSagheerPOJO? = null
@@ -123,7 +83,7 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?,
     ): View? {
         val view = inflater.inflate(R.layout.expand_list, container, false)
-        // RecyclerView recyclerView = view.findViewById(R.id.wordByWordRecyclerView);
+
         expandableListView = view.findViewById<View>(R.id.expandableListView) as ExpandableListView
         val builder = AlertDialog.Builder(
             requireActivity()
@@ -142,10 +102,8 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
         ayanumber = stringArray[1].toInt()
         val ex = Executors.newSingleThreadExecutor()
         val utils = Utils(activity)
-        val model = ViewModelProvider(requireActivity())[QuranViewModel::class.java]
-        val corpusAndQurandata = quranRepository.CorpusAndQuranDataSurah(chapterid)
-        // corpusSurahWord = model.getCorpusEntityFilterSurahAya(chapterid, ayanumber)
-      //  quran = model.getsurahayahVerseslist(chapterid, ayanumber).value
+
+
         negaTionList = utils.geTNegatonFilerSurahAyah(chapterid, ayanumber)
 
         expandableListDetail = getData()
@@ -207,27 +165,10 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
         val expandableListDetail = java.util.LinkedHashMap<String, List<SpannableString>>()
         val verse: MutableList<SpannableString> = ArrayList()
         val translation: MutableList<SpannableString> = ArrayList()
-        val utils = Utils(QuranGrammarApplication.context)
 
-
-        /*verse.add(
-              SpannableString.valueOf(
-                  corpusSurahWord!![0].surah.toString() + ":" + corpusSurahWord!![0].surah + ":-" + quran!![0].qurantext
-              )
-          )*/
         translation.add(SpannableString.valueOf(negaTionList[0].translation))
         verse.add(SpannableString.valueOf(negaTionList[0].verse))
 
- /*       if (whichtranslation == "en_sahih") {
-            translation.add(SpannableString.valueOf(quran!![0].translation))
-        } else if (whichtranslation == "en_arberry") {
-            translation.add(SpannableString.valueOf(quran!![0].en_arberry))
-        } else if (whichtranslation == "en_jalalayn") {
-            translation.add(SpannableString.valueOf(quran!![0].en_jalalayn))
-        } else {
-            translation.add(SpannableString.valueOf(quran!![0].translation))
-        }
-*/
         val mausoofsifaarray: MutableList<SpannableString> = ArrayList()
 
 
@@ -243,8 +184,9 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
 
         val InMaIllaNegationArray: MutableList<SpannableString> = ArrayList()
 
-
-
+        val  anMasdarArray: MutableList<SpannableString> = ArrayList()
+        val  silaMousalArray: MutableList<SpannableString> = ArrayList()
+        val  halArray: MutableList<SpannableString> = ArrayList()
 
 
         setAllPhrases(
@@ -256,7 +198,10 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
             futureTenceNegationArray,
             InMaIllaNegationArray,
             mudhafarray,
-            mausoofsifaarray
+            mausoofsifaarray,
+            anMasdarArray,
+            silaMousalArray,
+            halArray
         )
 
         val pastNegNoteOne = String.format(
@@ -296,7 +241,9 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
         expandableListDetail["Verb kāna/كان واخواتها"] = kanaarray
         expandableListDetail["Adjectival Phrases/مرکب توصیفی"] = mausoofsifaarray
         expandableListDetail["Possessive/إضافَة"] = mudhafarray
-
+        expandableListDetail["The Subordinate Clause (صلة)"] = silaMousalArray
+        expandableListDetail["The Subordinate Clause (حرف مصدري)"] = anMasdarArray
+        expandableListDetail["The Circumstantil Clause (حرف مصدري)"] = halArray
         return expandableListDetail
     }
 
@@ -309,7 +256,10 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
         futureTenceNegationArray: MutableList<SpannableString>,
         inMaIllaNegationArray: MutableList<SpannableString>,
         mudhafarray: MutableList<SpannableString>,
-        mausoofsifaarray: MutableList<SpannableString>
+        mausoofsifaarray: MutableList<SpannableString>,
+        anMasdarArray: MutableList<SpannableString>,
+        silaMousalArray: MutableList<SpannableString>,
+        halArray: MutableList<SpannableString>
     ) {
         val spannedStrings = SpannableStringUtils.applySpans(negaTionList, "light")
 
@@ -334,6 +284,12 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
                 mausoofsifaarray.add(spannableString)
             } else if (type.contains("mudhaf")) {
                 mudhafarray.add(spannableString)
+            }else if (type.contains("sila")) {
+                anMasdarArray.add(spannableString)
+            } else if (type.contains("anmasdar")) {
+                silaMousalArray.add(spannableString)
+            }else if (type.contains("hal")) {
+                halArray.add(spannableString)
             }
 
         }

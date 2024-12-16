@@ -23,14 +23,11 @@ import com.example.mushafconsolidated.DAO.LaneDao
 import com.example.mushafconsolidated.DAO.LaneRootDao
 import com.example.mushafconsolidated.DAO.LughatDao
 import com.example.mushafconsolidated.DAO.LysaDao
-
-
-
 import com.example.mushafconsolidated.DAO.NegationDao
-import com.example.mushafconsolidated.DAO.NewKanaDao
+
+
 import com.example.mushafconsolidated.DAO.NewMudhafDao
-import com.example.mushafconsolidated.DAO.NewNasbDao
-import com.example.mushafconsolidated.DAO.NewShartDAO
+
 import com.example.mushafconsolidated.DAO.NounCorpusDao
 
 import com.example.mushafconsolidated.DAO.QariDao
@@ -60,10 +57,7 @@ import com.example.mushafconsolidated.Entities.GrammarRules
 
 import com.example.mushafconsolidated.Entities.NamesDetailsDao
 import com.example.mushafconsolidated.Entities.NegationEnt
-import com.example.mushafconsolidated.Entities.NewKanaEntity
 import com.example.mushafconsolidated.Entities.NewMudhafEntity
-import com.example.mushafconsolidated.Entities.NewNasbEntity
-import com.example.mushafconsolidated.Entities.NewShartEntity
 import com.example.mushafconsolidated.Entities.NounCorpus
 
 import com.example.mushafconsolidated.Entities.Qari
@@ -103,11 +97,9 @@ import java.io.File
         lanerootdictionary::class, Qari::class,
         surahsummary::class, quranexplorer::class,
         AllahNames::class, GrammarRules::class, hanslexicon::class, qurandictionary::class, lanelexicon::class,
-        lughat::class, NewNasbEntity::class,
-        NewShartEntity::class,
-        NewKanaEntity::class,
-        NewMudhafEntity::class,
+        lughat::class,
         SifaEntity::class,
+        NewMudhafEntity::class,
         wbwentity::class, NounCorpus::class, VerbCorpus::class, QuranEntity::class, CorpusEntity::class, BookMarks::class, ChaptersAnaEntity::class],
     version = 1
 )
@@ -131,7 +123,7 @@ abstract class QuranAppDatabase : RoomDatabase() {
     abstract fun NegationDao(): NegationDao
 
 
-
+    abstract fun NewMudhafDao(): NewMudhafDao
 
 
 
@@ -191,40 +183,9 @@ abstract class QuranAppDatabase : RoomDatabase() {
      */
     abstract fun SifaDao(): SifaDao
 
-    /**
-     * New shart d a o
-     *
-     * @return
-     *///  public abstract ShartDAO ShartDAO();
-    abstract fun NewShartDAO(): NewShartDAO
 
-    /**
-     * New nasb dao
-     *
-     * @return
-     *///  public abstract KanaDao KanaDao();
-    //public abstract NasbDao NasbDao();
-    abstract fun NewNasbDao(): NewNasbDao
 
-    /**
-     * New mudhaf dao
-     *
-     * @return
-     */
-    abstract fun NewMudhafDao(): NewMudhafDao
 
-    /**
-     * New kana dao
-     *
-     * @return
-     */
-    abstract fun NewKanaDao(): NewKanaDao
-
-    /**
-     * Lughat dao
-     *
-     * @return
-     */
     abstract fun LughatDao(): LughatDao
 
     /**

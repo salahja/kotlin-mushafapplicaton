@@ -16,12 +16,8 @@ public class MufradatEntity {
     public int AyahNumber;
     @NonNull
     public String AyahTextQalam;
-    @NonNull
-    public int AyahTextMuhammadi;
-    @NonNull
-    public String AyahTextPdms;
-    @NonNull
-    public String AyahTextPlain;
+
+
     @NonNull
     public String Translation;
     @NonNull
@@ -38,8 +34,8 @@ public class MufradatEntity {
     public String RukuSurahNumber;
 
     public MufradatEntity(int Id, int SurahNumber, int  AyahNumber, @NonNull String AyahTextQalam,
-                          int AyahTextMuhammadi, @NonNull String  AyahTextPdms,
-                          @NonNull String AyahTextPlain, @NonNull String  Translation,
+
+
                           @NonNull String   Tafseer, @NonNull String  Words,
                           @NonNull String SurahName, int Ruku, int Sajda ,
                           int ParahNumber, int  RukuParahNumber, @NonNull String RukuSurahNumber) {
@@ -47,9 +43,7 @@ public class MufradatEntity {
         this.SurahNumber = SurahNumber;
         this.AyahNumber =  AyahNumber;
         this. AyahTextQalam = AyahTextQalam;
-        this.  AyahTextMuhammadi = AyahTextMuhammadi;
-        this.  AyahTextPdms =  AyahTextPdms;
-        this. AyahTextPlain = AyahTextPlain;
+
         this.Translation = Translation;
         this.Tafseer =   Tafseer;
         this. Words =  Words;
@@ -78,19 +72,11 @@ public class MufradatEntity {
         return AyahTextQalam;
     }
 
-    public int getAyahTextMuhammadi() {
-        return AyahTextMuhammadi;
-    }
 
-    @NonNull
-    public String getAyahTextPdms() {
-        return AyahTextPdms;
-    }
 
-    @NonNull
-    public String getAyahTextPlain() {
-        return AyahTextPlain;
-    }
+
+
+
 
     @NonNull
     public String getTranslation() {

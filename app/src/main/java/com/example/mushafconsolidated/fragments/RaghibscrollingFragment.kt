@@ -111,7 +111,7 @@ class ScrollingFragment : Fragment() {
 
         val arabicText = result.asList().get(0).toString()
         val urduText = result.asList().get(1).toString()*/
-        binding.ayahText.text = tafseer?.get(0)!!.ayahTextPdms
+        binding.ayahText.text = tafseer?.get(0)!!.ayahTextQalam
         binding.ayahTranslation.text = tafseer?.get(0)!!.translation
         binding.ayahTafseer.text = tafseer?.get(0)!!.tafseer
         binding.ayahTranslation.setTypeface(

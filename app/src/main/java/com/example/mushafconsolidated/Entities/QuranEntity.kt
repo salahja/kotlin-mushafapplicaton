@@ -31,11 +31,11 @@ class QuranEntity constructor(
     var en_transliteration: String,
     var en_jalalayn: String,
     var en_arberry: String,
-    var ar_irab_two: String,
+    var ar_irab_one: String,
     var ur_jalalayn: String,
     var ur_junagarhi: String,
     var tafsir_kathir: String,
-    var en_irab: String,
+    var ar_irab_two: String,
     @field:PrimaryKey(
         autoGenerate = true
     ) var docid: Int,

@@ -87,90 +87,12 @@ class VerseModel(
         util = Utils(QuranGrammarApplication.context!!)
          corpus = CorpusUtilityorig(QuranGrammarApplication.context)
 
-        getZarf(chapid)
+
 
 
     }
 
-    fun getZarf(chapid: Int) {
-        viewModelScope.launch {
-            val isdark=   true
 
-            val testList = arrayListOf<QuranArrays>()
-
-
-            val quranbySurah = util.getQuranbySurah(chapid)
-            val chapterlist = util.getAllAnaChapters()
-            // quranModel.getchapters().collectAsState()
-            val corpusSurahWord = util.getQuranCorpusWbwbysurah(chapid)
-
-            val hashlist = corpus.composeWBWCollection(quranbySurah, corpusSurahWord)
-            //  quranModel.setspans(newnewadapterlist, chapid)
-
-
-            testList += QuranArrays(
-                hashlist,
-                corpusSurahWord,
-                quranbySurah!!,
-                chapterlist as List<ChaptersAnaEntity>
-            )
-
-
-
-
-
-         corpus.setShart(hashlist, chapid)
-
-
-
-                    corpus.setMudhafFromDB(   hashlist,
-                        chapid
-                    )
-
-                //   corpusayahWordArrayList?.get(0)?.let { corpus.setMudhafFromDB(it, chapid) }
-
-
-
-                    corpus.SetMousufSifaDB(
-                        hashlist,
-                        chapid
-                    )
-
-                //  corpus.NewMAOUSOOFSIFA(corpusayahWordArrayList);
-
-
-                    corpus.newnewHarfNasbDb(
-                        hashlist,
-                        chapid
-                    )
-
-
-
-/*            corpus.setMudhafss(hashlist, chapid,isdark)
-            corpus.setSifa(hashlist, chapid,isdark)
-            corpus.setShart(hashlist,chapid,isdark)
-            corpus.newnewHarfNasbDb(hashlist,chapid,isdark)*/
-//                    corpus.setKana(hashlist,chapid,isdark)
-
-
-
-
-            _uiStates.emit(testList)
-
-            _cards.emit(testList)
-
-
-
-
-
-            loading.value = false
-
-
-
-        }
-        //    closeDialog()
-        loading.value = false
-    }
 
 }
 
