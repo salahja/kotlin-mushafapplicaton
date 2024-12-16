@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "c6c87a8949917b3b53ab3a2e7e581aff",
+    "identityHash": "dbb188856fbf111b0e0b0b9db4451b1c",
     "entities": [
       {
         "tableName": "negationfulldata",
@@ -1368,7 +1368,7 @@
       },
       {
         "tableName": "qurans",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surah` INTEGER NOT NULL, `ayah` INTEGER NOT NULL, `page` INTEGER NOT NULL, `quarter` INTEGER NOT NULL, `hizb` INTEGER NOT NULL, `juz` INTEGER NOT NULL, `qurantext` TEXT NOT NULL, `passage_no` INTEGER NOT NULL, `has_prostration` INTEGER NOT NULL, `translation` TEXT NOT NULL, `en_transliteration` TEXT NOT NULL, `en_jalalayn` TEXT NOT NULL, `en_arberry` TEXT NOT NULL, `ar_irab_two` TEXT NOT NULL, `ur_jalalayn` TEXT NOT NULL, `ur_junagarhi` TEXT NOT NULL, `tafsir_kathir` TEXT NOT NULL, `en_irab` TEXT NOT NULL, `docid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, FOREIGN KEY(`surah`) REFERENCES `chaptersana`(`chapterid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surah` INTEGER NOT NULL, `ayah` INTEGER NOT NULL, `page` INTEGER NOT NULL, `quarter` INTEGER NOT NULL, `hizb` INTEGER NOT NULL, `juz` INTEGER NOT NULL, `qurantext` TEXT NOT NULL, `passage_no` INTEGER NOT NULL, `has_prostration` INTEGER NOT NULL, `translation` TEXT NOT NULL, `en_transliteration` TEXT NOT NULL, `en_jalalayn` TEXT NOT NULL, `en_arberry` TEXT NOT NULL, `ar_irab_one` TEXT NOT NULL, `ur_jalalayn` TEXT NOT NULL, `ur_junagarhi` TEXT NOT NULL, `tafsir_kathir` TEXT NOT NULL, `ar_irab_two` TEXT NOT NULL, `docid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, FOREIGN KEY(`surah`) REFERENCES `chaptersana`(`chapterid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "surah",
@@ -1449,8 +1449,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "ar_irab_two",
-            "columnName": "ar_irab_two",
+            "fieldPath": "ar_irab_one",
+            "columnName": "ar_irab_one",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -1473,8 +1473,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "en_irab",
-            "columnName": "en_irab",
+            "fieldPath": "ar_irab_two",
+            "columnName": "ar_irab_two",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -1893,7 +1893,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c6c87a8949917b3b53ab3a2e7e581aff')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'dbb188856fbf111b0e0b0b9db4451b1c')"
     ]
   }
 }

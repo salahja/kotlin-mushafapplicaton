@@ -1334,8 +1334,8 @@ class CorpusUtilityorig(private var context: Context?) {
             mafoolbihi.add("في محل نصب مفعول")
             mafoolbihi.add("مفعول")
             for (pojo in allofQuran!!) {
-                //  String ar_irab_two = pojo.getAr_irab_two();
-                val ar_irab_two = pojo.ar_irab_two.replace("\n", "");
+             val ar_irab_two = pojo.ar_irab_two;
+        //    val ar_irab_two = pojo.ar_irab_two.replace("\n", "");
                 val str = SpannableStringBuilder(ar_irab_two)
                 val mudhaftrie = Trie.builder().onlyWholeWords().addKeywords(mudhafilahistr).build()
                 val mudhafemit = mudhaftrie.parseText(ar_irab_two)
