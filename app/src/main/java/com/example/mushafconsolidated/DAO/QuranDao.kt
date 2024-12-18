@@ -6,9 +6,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.model.NewQuranCorpusWbw
-import com.example.mushafconsolidated.model.QuranCorpusWbw
 import com.example.mushafconsolidated.model.QuranEntityCorpusEntityWbwEntity
-import com.example.mushafconsolidated.model.QuranwithCorpusWbw
 
 
 //.QuranEntity
@@ -16,7 +14,7 @@ import com.example.mushafconsolidated.model.QuranwithCorpusWbw
 
 @Dao
 interface QuranDao {
-
+/*
     @Query("SELECT q.surah, " +
             "q.ayah, " +
             "q.qurantext, " +
@@ -99,20 +97,21 @@ interface QuranDao {
             "FROM qurans q " +
             "JOIN    CorpusExpand ce ON q.surah = ce.surah AND q.ayah = ce.ayah " +
             "JOIN wbw w ON ce.surah = w.surah AND ce.ayah = w.ayah AND ce.wordno = w.wordno WHERE q.surah=:surahid")
-
     fun getQuranandCorpusandWbwbySurah(surahid: Int): List<QuranEntityCorpusEntityWbwEntity>
+*/
 
-    @Transaction
+    /*@Transaction
     @Query("SELECT * FROM CorpusExpand JOIN wbw ON wbw.id = CorpusExpand.id where corpusexpand.surah=:surahid and corpusexpand.ayah=:ayahid and corpusexpand.wordno=:wordno")
 
     fun getQuranCorpusWbw(surahid: Int, ayahid: Int, wordno: Int): List<QuranCorpusWbw>
-
-    @Transaction
+*/
+    /*@Transaction
     @Query("SELECT * FROM CorpusExpand JOIN wbw ON wbw.id = CorpusExpand.id where corpusexpand.surah=:surahid")
-
     fun getQuranCorpusWbwbysurah(surahid: Int): List<QuranCorpusWbw>
+    */
 
 
+/*
 
     @Transaction
     @Query("SELECT * FROM CorpusExpand JOIN wbw ON wbw.id = CorpusExpand.id where  CorpusExpand.rootaraone||CorpusExpand.rootaratwo ||CorpusExpand.rootarathree||CorpusExpand.rootarafour||CorpusExpand.rootarafive=:root")
@@ -123,6 +122,7 @@ interface QuranDao {
     @Query("SELECT * FROM CorpusExpand JOIN wbw ON wbw.id = CorpusExpand.id where corpusexpand.surah=:surahid and corpusexpand.ayah=:ayahid")
 
     fun getQuranCorpusWbwSurhAyah(surahid: Int, ayahid: Int): List<QuranCorpusWbw>
+*/
 
 
     /*

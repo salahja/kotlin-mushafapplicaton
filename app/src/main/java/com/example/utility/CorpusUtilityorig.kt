@@ -2,7 +2,6 @@ package com.example.utility
 
 import FileUtility
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
@@ -18,7 +17,6 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
 import android.widget.Toast
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import com.example.Constant
 import com.example.Constant.harfshartspanDark
@@ -27,7 +25,6 @@ import com.example.Constant.jawabshartspanDark
 import com.example.Constant.shartspanDark
 import com.example.justJava.FrameSpan
 import com.example.mushafconsolidated.Entities.CorpusEntity
-import com.example.mushafconsolidated.Entities.CorpusExpandWbwPOJO
 import com.example.mushafconsolidated.Entities.FutureTenceListingPojo
 import com.example.mushafconsolidated.Entities.InMaListingPOJO
 import com.example.mushafconsolidated.Entities.NasbListingPojo
@@ -45,9 +42,7 @@ import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.model.NewNewQuranCorpusWbw
 import com.example.mushafconsolidated.model.NewQuranCorpusWbw
-import com.example.mushafconsolidated.model.QuranCorpusWbw
 import com.example.mushafconsolidated.model.QuranEntityCorpusEntityWbwEntity
-import com.example.utility.QuranGrammarApplication.Companion.context
 import org.ahocorasick.trie.Trie
 import java.util.regex.Pattern
 
@@ -690,58 +685,6 @@ class CorpusUtilityorig(private var context: Context?) {
 
 
 
-
-    }
-
-
-
-
-
-
-
-    fun composeWBWCollection(
-        allofQuran: List<QuranEntity>?,
-        corpusSurahWord: List<QuranCorpusWbw>?
-    ): LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>> {
-
-        val newnewadapterlist = LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>>()
-        var qurancorpusarray = ArrayList<NewQuranCorpusWbw>()
-
-
-        var aindex = 0
-        var secondindex = 0
-
-        while (aindex <= allofQuran!!.size) {
-
-            var ayahWord = NewQuranCorpusWbw()
-
-            try {
-                while (corpusSurahWord!![secondindex].corpus.ayah <= allofQuran[aindex].ayah) {
-                    if (corpusSurahWord[secondindex].corpus.ayah != allofQuran[aindex].ayah) {
-                        break
-                    }
-
-                    ayahWord.spannableverse =
-                        SpannableString.valueOf(allofQuran[aindex].qurantext)
-                    ayahWord.wbw = corpusSurahWord[secondindex].wbw
-                    ayahWord.corpus = corpusSurahWord[secondindex++].corpus
-                    qurancorpusarray.add(ayahWord)
-
-                    ayahWord = NewQuranCorpusWbw()
-                }
-            } catch (e: IndexOutOfBoundsException) {
-                println(e.message)
-            }
-
-            if (qurancorpusarray.isNotEmpty()) {
-                newnewadapterlist[aindex] = qurancorpusarray
-                val ayahWord = NewQuranCorpusWbw()
-            }
-            qurancorpusarray = ArrayList()
-            aindex++
-        }
-
-        return newnewadapterlist
 
     }
 
@@ -2056,141 +1999,6 @@ class CorpusUtilityorig(private var context: Context?) {
             }
 
             return newnewadapterlist
-        }
-
-        fun composeWBWCollection(
-            allofQuran: List<QuranEntity>?,
-            corpusSurahWord: List<QuranCorpusWbw>?
-        ): LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>> {
-
-            val newnewadapterlist = LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>>()
-            if (allofQuran == null || corpusSurahWord == null) return newnewadapterlist
-
-            // Group corpusSurahWord by ayah to avoid redundant looping
-            val corpusGroupedByAyah = corpusSurahWord.groupBy { it.corpus.ayah }
-
-            for (quranEntity in allofQuran) {
-                val qurancorpusarray = ArrayList<NewQuranCorpusWbw>()
-                val matchingCorpusList = corpusGroupedByAyah[quranEntity.ayah]
-
-                if (matchingCorpusList != null) {
-                    for (corpusWbw in matchingCorpusList) {
-                        val ayahWord = NewQuranCorpusWbw()
-                        ayahWord.spannableverse = SpannableString.valueOf(quranEntity.qurantext)
-                        ayahWord.wbw = corpusWbw.wbw
-                        ayahWord.corpus = corpusWbw.corpus
-                        qurancorpusarray.add(ayahWord)
-                    }
-                    newnewadapterlist[quranEntity.ayah] = qurancorpusarray
-                }
-            }
-
-            return newnewadapterlist
-        }
-
-        fun NotcomposeWBWCollection(
-            allofQuran: List<QuranEntity>?,
-            corpusSurahWord: List<QuranCorpusWbw>?
-        ): LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>> {
-
-            val newnewadapterlist = LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>>()
-            if (allofQuran == null || corpusSurahWord == null) return newnewadapterlist
-
-            // Group corpusSurahWord by ayah to avoid redundant looping
-            val corpusGroupedByAyah = corpusSurahWord.groupBy { it.corpus.ayah }
-
-            for (quranEntity in allofQuran) {
-                val qurancorpusarray = ArrayList<NewQuranCorpusWbw>()
-                val matchingCorpusList = corpusGroupedByAyah[quranEntity.ayah]
-
-                if (matchingCorpusList != null) {
-                    for (corpusWbw in matchingCorpusList) {
-                        val ayahWord = NewQuranCorpusWbw()
-                        ayahWord.spannableverse = SpannableString.valueOf(quranEntity.qurantext)
-                        ayahWord.wbw = corpusWbw.wbw
-                        ayahWord.corpus = corpusWbw.corpus
-                        qurancorpusarray.add(ayahWord)
-                    }
-                    newnewadapterlist[quranEntity.ayah] = qurancorpusarray
-                }
-            }
-
-            return newnewadapterlist
-        }
-
-        fun composeWBWCollectionold(
-            allofQuran: List<QuranEntity>?,
-            corpusSurahWord: List<QuranCorpusWbw>?
-        ): LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>> {
-
-            val newnewadapterlist = LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>>()
-            if (allofQuran == null || corpusSurahWord == null) return newnewadapterlist
-
-            for (i in allofQuran.indices) {
-                val qurancorpusarray = ArrayList<NewQuranCorpusWbw>()
-                for (j in corpusSurahWord.indices) {
-                    if (corpusSurahWord[j].corpus.ayah == allofQuran[i].ayah) {
-                        val ayahWord = NewQuranCorpusWbw()
-                        ayahWord.spannableverse = SpannableString.valueOf(allofQuran[i].qurantext)
-                        ayahWord.wbw = corpusSurahWord[j].wbw
-                        ayahWord.corpus = corpusSurahWord[j].corpus
-                        qurancorpusarray.add(ayahWord)
-                    } else if (corpusSurahWord[j].corpus.ayah > allofQuran[i].ayah) {
-                        break
-                    }
-                }
-                if (qurancorpusarray.isNotEmpty()) {
-                    newnewadapterlist[i] = qurancorpusarray
-                }
-            }
-
-            return newnewadapterlist
-        }
-
-        fun composeWBWCollectionorig(
-            allofQuran: List<QuranEntity>?,
-            corpusSurahWord: List<QuranCorpusWbw>?
-        ): LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>> {
-
-            val newnewadapterlist = LinkedHashMap<Int, ArrayList<NewQuranCorpusWbw>>()
-            var qurancorpusarray = ArrayList<NewQuranCorpusWbw>()
-
-
-            var aindex = 0
-            var secondindex = 0
-
-            while (aindex <= allofQuran!!.size) {
-
-                var ayahWord = NewQuranCorpusWbw()
-
-                try {
-                    while (corpusSurahWord!![secondindex].corpus.ayah <= allofQuran[aindex].ayah) {
-                        if (corpusSurahWord[secondindex].corpus.ayah != allofQuran[aindex].ayah) {
-                            break
-                        }
-
-                        ayahWord.spannableverse =
-                            SpannableString.valueOf(allofQuran[aindex].qurantext)
-                        ayahWord.wbw = corpusSurahWord[secondindex].wbw
-                        ayahWord.corpus = corpusSurahWord[secondindex++].corpus
-                        qurancorpusarray.add(ayahWord)
-
-                        ayahWord = NewQuranCorpusWbw()
-                    }
-                } catch (e: IndexOutOfBoundsException) {
-                    println(e.message)
-                }
-
-                if (qurancorpusarray.isNotEmpty()) {
-                    newnewadapterlist[aindex] = qurancorpusarray
-                    val ayahWord = NewQuranCorpusWbw()
-                }
-                qurancorpusarray = ArrayList()
-                aindex++
-            }
-
-            return newnewadapterlist
-
         }
 
         fun setAyahGrammaticalPhrases(

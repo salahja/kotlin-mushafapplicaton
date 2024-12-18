@@ -25,6 +25,7 @@ import com.example.Constant.QURAN_VERB_ROOT
 import com.example.Constant.QURAN_VERB_WAZAN
 import com.example.Constant.VERBMOOD
 import com.example.Constant.VERBTYPE
+import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.VerbCorpus
 import com.example.mushafconsolidated.Entities.VerbWazan
@@ -33,7 +34,6 @@ import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.databinding.FragmentArabicVerbQuizBinding
 import com.example.mushafconsolidated.fragments.QuranMorphologyDetails
 
-import com.example.mushafconsolidated.model.QuranCorpusWbw
 import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.example.utility.CorpusUtilityorig.Companion.NewSetWordSpan
 import com.google.android.material.button.MaterialButton
@@ -53,7 +53,7 @@ class ArabicVerbQuizActNew : BaseActivity(), View.OnClickListener {
     open var form = 0
     private var totalquestion: Int = 5
     private lateinit var answerButtons: Array<TextView>
-    private var corpusSurahWord: List<QuranCorpusWbw>? = null
+    private var corpusSurahWord: List<CorpusEntity>? = null
     private var qurans: List<QuranEntity>? = null
     //private lateinit var cverb: wbwentity
     private lateinit var cverb: VerbCorpus
@@ -287,17 +287,17 @@ class ArabicVerbQuizActNew : BaseActivity(), View.OnClickListener {
             withContext(Dispatchers.Main) {
 
                 corpusSurahWord = mainViewModel.getQuranCorpusWbw(cverb.chapterno,cverb.verseno,cverb.wordno).value
-                qurans=                 mainViewModel.getsurahayahVerses(corpusSurahWord!!.get(0).corpus.surah, corpusSurahWord!!.get(0).corpus.ayah).value
+                qurans=                 mainViewModel.getsurahayahVerses(corpusSurahWord!!.get(0).surah, corpusSurahWord!!.get(0).ayah).value
 
 
                 val surahayahdetails = StringBuilder()
                 val spannableString = NewSetWordSpan(
-                    corpusSurahWord!!.get(0).corpus.tagone, corpusSurahWord!!.get(0).corpus.tagtwo, corpusSurahWord!!.get(0).corpus.tagthree, corpusSurahWord!!.get(0).corpus.tagfour, corpusSurahWord!!.get(0).corpus.tagfive,
-                    corpusSurahWord!!.get(0).corpus.araone!!, corpusSurahWord!!.get(0).corpus.aratwo!!, corpusSurahWord!!.get(0).corpus.arathree!!, corpusSurahWord!!.get(0).corpus.arafour!!, corpusSurahWord!!.get(0).corpus.arafive!!
+                    corpusSurahWord!!.get(0).tagone, corpusSurahWord!!.get(0).tagtwo, corpusSurahWord!!.get(0).tagthree, corpusSurahWord!!.get(0).tagfour, corpusSurahWord!!.get(0).tagfive,
+                    corpusSurahWord!!.get(0).araone!!, corpusSurahWord!!.get(0).aratwo!!, corpusSurahWord!!.get(0).arathree!!, corpusSurahWord!!.get(0).arafour!!, corpusSurahWord!!.get(0).arafive!!
                 )
 
-                surahayahdetails.append(corpusSurahWord!!.get(0).corpus.ayah).append("  ").append("").append("   ")
-                    .append(corpusSurahWord!!.get(0).corpus.surah).append(" ")
+                surahayahdetails.append(corpusSurahWord!!.get(0).ayah).append("  ").append("").append("   ")
+                    .append(corpusSurahWord!!.get(0).surah).append(" ")
                 val sbs = SpannableString(surahayahdetails)
                 val charSequence = TextUtils.concat(spannableString, surahayahdetails)
                 val correct = StringBuilder()
@@ -325,11 +325,11 @@ class ArabicVerbQuizActNew : BaseActivity(), View.OnClickListener {
                     } else {
                         formName = QuranMorphologyDetails.getFormName(cverb.form)
                     }
-                    if(corpusSurahWord!![0].corpus.detailsone!!.contains("SUFFIX|+n:EMPH")
-                        || corpusSurahWord!![0].corpus.detailstwo!!.contains("SUFFIX|+n:EMPH")
-                        || corpusSurahWord!![0].corpus.detailsthree!!.contains("SUFFIX|+n:EMPH")
-                        || corpusSurahWord!![0].corpus.detailsfour!!.contains("SUFFIX|+n:EMPH")
-                        || corpusSurahWord!![0].corpus.detailsfive!!.contains("SUFFIX|+n:EMPH")
+                    if(corpusSurahWord!![0].detailsone!!.contains("SUFFIX|+n:EMPH")
+                        || corpusSurahWord!![0].detailstwo!!.contains("SUFFIX|+n:EMPH")
+                        || corpusSurahWord!![0].detailsthree!!.contains("SUFFIX|+n:EMPH")
+                        || corpusSurahWord!![0].detailsfour!!.contains("SUFFIX|+n:EMPH")
+                        || corpusSurahWord!![0].detailsfive!!.contains("SUFFIX|+n:EMPH")
                     ) {
 
                         correct.append(genderNumberdetails).append(" ").append(tensevoicemood).append(":").append("EMPH")
@@ -376,11 +376,11 @@ class ArabicVerbQuizActNew : BaseActivity(), View.OnClickListener {
                          .append(cverb?.get(0)?.arathree).append(cverb?.get(0)?.arafour)
                          .append(cverb?.get(0)?.arafive).append(":").append(cverb?.get(0)?.en)*/
                 verbdetails.text = spannableString
-                word_trans_textView.text = corpusSurahWord!!.get(0).wbw.en
+                word_trans_textView.text = corpusSurahWord!!.get(0).en
                 correctanswer.text = correct
                 val span = SpannableString(qurans!!.get(0).qurantext)
-                val arabicword = corpusSurahWord!!.get(0).corpus.araone!!+corpusSurahWord!!.get(0).corpus.aratwo!!+ corpusSurahWord!!.get(0).corpus.arathree!!+
-                        corpusSurahWord!!.get(0).corpus.arafour!!+ corpusSurahWord!!.get(0).corpus.arafive!!
+                val arabicword = corpusSurahWord!!.get(0).araone!!+corpusSurahWord!!.get(0).aratwo!!+ corpusSurahWord!!.get(0).arathree!!+
+                        corpusSurahWord!!.get(0).arafour!!+ corpusSurahWord!!.get(0).arafive!!
                 val indexOf = span.indexOf(arabicword)
                 try {
 
@@ -1019,11 +1019,11 @@ class ArabicVerbQuizActNew : BaseActivity(), View.OnClickListener {
                         verbmood="Subjunctive"
                     }else if(cverb.mood_kananumbers.equals("JUS")){
                         verbmood="Jussive"
-                    } else if(corpusSurahWord!![0].corpus.detailsone!!.contains("SUFFIX|+n:EMPH")
-                        || corpusSurahWord!![0].corpus.detailstwo!!.contains("SUFFIX|+n:EMPH")
-                        || corpusSurahWord!![0].corpus.detailsthree!!.contains("SUFFIX|+n:EMPH")
-                        || corpusSurahWord!![0].corpus.detailsfour!!.contains("SUFFIX|+n:EMPH")
-                        || corpusSurahWord!![0].corpus.detailsfive!!.contains("SUFFIX|+n:EMPH")
+                    } else if(corpusSurahWord!![0].detailsone!!.contains("SUFFIX|+n:EMPH")
+                        || corpusSurahWord!![0].detailstwo!!.contains("SUFFIX|+n:EMPH")
+                        || corpusSurahWord!![0].detailsthree!!.contains("SUFFIX|+n:EMPH")
+                        || corpusSurahWord!![0].detailsfour!!.contains("SUFFIX|+n:EMPH")
+                        || corpusSurahWord!![0].detailsfive!!.contains("SUFFIX|+n:EMPH")
                     ){
                         verbmood="Emphatic"
                     }

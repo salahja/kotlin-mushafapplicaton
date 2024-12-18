@@ -10,7 +10,7 @@ import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.NegationEnt
 
 
-import com.example.mushafconsolidated.Entities.wbwentity
+
 import com.example.mushafconsolidated.data.CorpusRow
 import com.example.mushafconsolidated.data.ShartCorpusRow
 import com.example.utility.CorpusUtilityorig.Companion.findWordOccurrencesArabic
@@ -903,90 +903,6 @@ object ExtractionUtility {
     }
 
 
-
-
-     fun getWordTranslation(list: List<wbwentity>): String {
-        val wbwEntity = list.get(0) // Assuming list is not null and has at least one element
-        return when ("en") {
-            "en" -> wbwEntity.en
-            "ur" -> wbwEntity.ur!!
-            "bn" -> wbwEntity.bn
-            "id" -> wbwEntity.id.toString()
-            else -> {
-                wbwEntity.en
-            }
-        }
-    }
-
-     fun appendTranslation(
-
-        sb: StringBuilder,
-        wordByWordEntities: List<wbwentity?>?,
-        wordRange: IntRange? = null
-    ) {
-        if (wordByWordEntities != null) {
-            for (w in wordByWordEntities) {
-                /*
-                val temp: StringBuilder
-if (w != null) {
-    val translation = getSelectedTranslation(w)
-    temp = if (translation != null) {
-        translation
-    } else {
-        StringBuilder()
-    }
-} else {
-    temp = StringBuilder()
-}
-                 */
-                val temp = w?.let { getSelectedTranslation(it) }
-                    ?: StringBuilder() // Handle null wbwentity
-                if (w != null) {
-                    if (wordRange == null || w.wordno in wordRange) {
-                        sb.append(temp).append(" ")
-                    }
-                }
-            }
-        }
-    }
-
-
-     fun getTranslationForLanguage(list: List<wbwentity>): StringBuffer {
-        val sb = StringBuffer()
-        val whichwbw = "en"
-        when (whichwbw) {
-            "en" -> sb.append(list[0].en).append(".......")
-            "ur" -> sb.append(list[0].ur).append(".......")
-            "bn" -> sb.append(list[0].bn).append(".......")
-            "id" -> sb.append(list[0].id).append(".......")
-            else -> {
-                sb.append(list[0].en).append(".......")
-
-            }
-        }
-        return sb
-    }
-
-
-
-
-
-    fun getSelectedTranslation(tr: wbwentity): StringBuilder {
-        val sb = StringBuilder()
-        when ("en") {
-            "en" -> sb.append(tr.en)
-            "ur" -> sb.append(tr.ur)
-            "bn" -> sb.append(tr.bn)
-            "id" -> sb.append(tr.id)
-            else -> {
-
-                sb.append("tr.en") // Example: Append a default value
-
-            }
-        }
-        // sb.append(" ") // Uncomment if you need to add a space after the translation
-        return sb
-    }
 
 
     fun extractSentenceAndTranslationFromWordNumbers(

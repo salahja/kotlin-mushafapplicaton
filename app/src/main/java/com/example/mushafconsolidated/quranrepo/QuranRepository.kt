@@ -33,7 +33,7 @@ import com.example.mushafconsolidated.DAO.grammarRulesDao
 
 import com.example.mushafconsolidated.DAO.surahsummaryDao
 
-import com.example.mushafconsolidated.DAO.wbwDao
+
 import com.example.mushafconsolidated.Entities.AbsoluteNegationEnt
 
 
@@ -61,7 +61,6 @@ import com.example.mushafconsolidated.Entities.hanslexicon
 
 import com.example.mushafconsolidated.Entities.lanerootdictionary
 import com.example.mushafconsolidated.Entities.surahsummary
-import com.example.mushafconsolidated.model.QuranCorpusWbw
 import javax.inject.Inject
 
 
@@ -72,7 +71,7 @@ import javax.inject.Inject
      var negationsDao: NegationDao,
      var sifaMudhafDao: SifaMudhafDao,
      var absoluteNegationDao:AbsoluteNegationDao,
-     var wbwdao:wbwDao,
+
      var corpusDao: CorpusExpandedDao,
      var qurandao: QuranDao,
      val ssummary: surahsummaryDao,
@@ -133,8 +132,8 @@ import javax.inject.Inject
      fun getAllVerbCorpus(): List<VerbCorpus> =
          verbcorpusdao.getAllVerbs()
 
-    fun getQuranCorpusWbw(surah: Int, ayah: Int, wordno: Int): List<QuranCorpusWbw> =
-        qurandao.getQuranCorpusWbw(surah, ayah, wordno)
+    fun getQuranCorpusWbw(surah: Int, ayah: Int, wordno: Int): List<CorpusEntity> =
+        corpusDao.getCorpusWord(surah, ayah, wordno)
 
      fun getCorpusEntityFilterbywordno(surah: Int, ayah: Int, wordno: Int): List<CorpusEntity> =
          corpusDao.getCorpusWord(surah, ayah, wordno)
@@ -215,14 +214,14 @@ import javax.inject.Inject
      fun getSingleChapters(cid: Int): List<ChaptersAnaEntity> =
          chaptersdao.getSingleChapters(cid)
 
-    fun getQuranCorpusWbwbysurah(cid: Int): List<QuranCorpusWbw> =
-        qurandao.getQuranCorpusWbwbysurah(cid)
+    fun getQuranCorpusWbwbysurah(cid: Int): List<CorpusEntity> =
+      corpusDao.getVersesBySurah(cid)
 
-    fun getQuranCorpusWbwbyroot(root: String): List<QuranCorpusWbw> =
-        qurandao.getQuranCorpusWbwbyRoot(root)
+    fun getQuranCorpusWbwbyroot(root: String): List<CorpusEntity> =
+      corpusDao.getQuranCorpusWbwbyroot(root)
 
-    fun getQuranCorpusWbwbysurahAyah(cid: Int, aid: Int): List<QuranCorpusWbw> =
-        qurandao.getQuranCorpusWbwSurhAyah(cid, aid)
+    fun getQuranCorpusWbwbysurahAyahWord(cid: Int, aid: Int,wid:Int): List<CorpusEntity> =
+        corpusDao.getCorpusWord(cid, aid,wid)
 
     fun getsurahbychap(cid: Int): List<QuranEntity> = qurandao.getQuranVersesBySurahl(cid)
 
@@ -262,20 +261,13 @@ import javax.inject.Inject
 
 
     }
-   suspend fun getChapterData(chapterNo: Int): ChapterData {
-        return ChapterData(
-
-            allofQuran = qurandao.getQuranVersesBySurahl(chapterNo), // Fetch Quran verses
-            corpusSurahWord = qurandao.getQuranCorpusWbwbysurah(chapterNo) //Fetch corpus data
-        )
-    }
 
 
-      fun getQuranData(chapterNo: Int): QuranData {
+   fun getQuranData(chapterNo: Int): QuranData {
          return QuranData(
 
              allofQuran = qurandao.getQuranVersesBySurahl(chapterNo), // Fetch Quran verses
-             corpusSurahWord = qurandao.getQuranCorpusWbwbysurah(chapterNo), //Fetch corpus data
+             corpusSurahWord = corpusDao.getVersesBySurah(chapterNo), //Fetch corpus data
              copusExpandSurah = corpusDao.getVersesBySurah(chapterNo),
          )
      }
@@ -312,7 +304,7 @@ data class CorpusAndQuranData(
 data class QuranData(
 
     val allofQuran: List<QuranEntity>, // Assuming you need this as well
-    val corpusSurahWord: List<QuranCorpusWbw>,
+    val corpusSurahWord: List<CorpusEntity>,
     val copusExpandSurah:List<CorpusEntity>// Assuming you need this as well
 
 )
@@ -326,5 +318,5 @@ data class ChapterData(
 
 
 val allofQuran: List<QuranEntity>, // Assuming you need this as well
-val corpusSurahWord: List<QuranCorpusWbw>// Assuming you need this as well
+val corpusSurahWord: List<CorpusEntity>// Assuming you need this as well
 )

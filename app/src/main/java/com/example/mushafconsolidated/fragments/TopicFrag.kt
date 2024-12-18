@@ -30,7 +30,6 @@ import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.SurahSummary
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.model.CorpusAyahWord
-import com.example.mushafconsolidated.model.QuranCorpusWbw
 import com.example.mushafconsolidated.quranrepo.QuranRepository
 import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.example.sentenceanalysis.SentenceGrammarAnalysis
@@ -67,7 +66,7 @@ class TopicFrag : DialogFragment(), OnItemClickListenerOnLong {
     private var newnewadapterlist = LinkedHashMap<Int, ArrayList<CorpusEntity>>()
     private var allofQuran: List<QuranEntity>? = null
     private lateinit var mainViewModel: QuranViewModel
-    private lateinit var newcorpusayahWordArrayList: ArrayList<QuranCorpusWbw>
+    private lateinit var newcorpusayahWordArrayList: ArrayList<CorpusEntity>
     private lateinit var arrayofquran: ArrayList<ArrayList<QuranEntity>>
     private lateinit var arrayofadapterlist: ArrayList<LinkedHashMap<Int, ArrayList<CorpusEntity>>>
     private  var corpusGroupedByAyah:LinkedHashMap<Int, ArrayList<CorpusEntity>> =

@@ -37,6 +37,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.Executors
 import javax.inject.Inject
 import kotlin.collections.isNotEmpty
+import kotlin.collections.sortWith
 
 /**
  *
@@ -71,7 +72,7 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
     var vbdetail = HashMap<String, String>()
 
     private var showGrammarFragments = false
-    private var ThulathiMazeedConjugatonList: ArrayList<ArrayList<*>>? = null
+    private var thulathiMazeedConjugatonList: ArrayList<ArrayList<*>>? = null
     var sarf: SarfSagheerPOJO? = null
     private var dialog: AlertDialog? = null
 
@@ -109,31 +110,40 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
         expandableListDetail = getData()
         //  kanaExpandableListDetail = kana
         expandableListTitle = ArrayList(expandableListDetail!!.keys)
-        ThulathiMazeedConjugatonList = ArrayList()
+        val groupComparator = Comparator<String> { group1, group2 ->
+            val hasChildren1 = expandableListDetail!![group1]?.isNotEmpty() ?: false
+            val hasChildren2 = expandableListDetail!![group2]?.isNotEmpty() ?: false
+
+            when {
+                hasChildren1 && !hasChildren2 -> -1 // group1 has children, group2 doesn't
+                !hasChildren1 && hasChildren2 -> 1 // group1 doesn't have children, group2 does
+                else -> 0 // both have children or both don't have children
+            }
+        }
+        (expandableListTitle as ArrayList<String>).sortWith(groupComparator)
+        thulathiMazeedConjugatonList = ArrayList()
         isverbconjugaton = false
         participles = false
 
 
         //  val   corpusNounWord=  model.getNouncorpus(chapterid,ayanumber,1)
-        ex.execute(object : Runnable {
-            override fun run() {
-                activity!!.runOnUiThread { dialog!!.show() }
+        ex.execute {
+            requireActivity().runOnUiThread { dialog!!.show() }
 
-                activity!!.runOnUiThread {
-                    ex.shutdown()
-                    dialog!!.dismiss()
-                    val grammarFragmentsListAdapter: GrammarFragmentsListAdapter =
-                        GrammarFragmentsListAdapter(
-                            context!!, expandableListTitle as ArrayList<String>,
-                            expandableListDetail!!
-                        )
-                    expandableListView.setAdapter(grammarFragmentsListAdapter)
-                    for (i in 0 until grammarFragmentsListAdapter.groupCount) {
-                        expandableListView.collapseGroup(i)
-                    }
+            requireActivity().runOnUiThread {
+                ex.shutdown()
+                dialog!!.dismiss()
+                val grammarFragmentsListAdapter =
+                    GrammarFragmentsListAdapter(
+                        requireContext(), expandableListTitle as ArrayList<String>,
+                        expandableListDetail!!
+                    )
+                expandableListView.setAdapter(grammarFragmentsListAdapter)
+                for (i in 0 until grammarFragmentsListAdapter.groupCount) {
+                    expandableListView.collapseGroup(i)
                 }
             }
-        })
+        }
         return view
     }
 
@@ -160,7 +170,7 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
             android.preference.PreferenceManager.getDefaultSharedPreferences(requireContext())
         val preferences = prefs.getString("theme", "dark")
         dark = preferences == "dark" || preferences == "blue" || preferences == "green"
-        val whichtranslation = prefs.getString("selecttranslation", "en_sahih")
+
         whichwbw = prefs.getString("wbw", "en")
         val expandableListDetail = java.util.LinkedHashMap<String, List<SpannableString>>()
         val verse: MutableList<SpannableString> = ArrayList()
@@ -178,11 +188,11 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
         val shartarray: MutableList<SpannableString> = ArrayList()
         val harfnasbarray: MutableList<SpannableString> = ArrayList()
         val kanaarray: MutableList<SpannableString> = ArrayList()
-        val PastTenceNegationArray: MutableList<SpannableString> = ArrayList()
+        val pastTenceNegationArray: MutableList<SpannableString> = ArrayList()
         val presentTenceNegationArray: MutableList<SpannableString> = ArrayList()
         val futureTenceNegationArray: MutableList<SpannableString> = ArrayList()
 
-        val InMaIllaNegationArray: MutableList<SpannableString> = ArrayList()
+        val inMaIllaNegationArray: MutableList<SpannableString> = ArrayList()
 
         val  anMasdarArray: MutableList<SpannableString> = ArrayList()
         val  silaMousalArray: MutableList<SpannableString> = ArrayList()
@@ -193,10 +203,10 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
             shartarray,
             harfnasbarray,
             kanaarray,
-            PastTenceNegationArray,
+            pastTenceNegationArray,
             presentTenceNegationArray,
             futureTenceNegationArray,
-            InMaIllaNegationArray,
+            inMaIllaNegationArray,
             mudhafarray,
             mausoofsifaarray,
             anMasdarArray,
@@ -216,11 +226,11 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
             " two combination La-Nafiya+Mudharay  and Ma-Mudhary for refutation or in the context of debate",
             "\u202Bمَا\u202C"
         )
-        if (PastTenceNegationArray.isNotEmpty()) {
-            PastTenceNegationArray.add(SpannableString.valueOf(pastNegNoteOne))
-            PastTenceNegationArray.add(SpannableString.valueOf(pastNegNoteTwo))
+        if (pastTenceNegationArray.isNotEmpty()) {
+            pastTenceNegationArray.add(SpannableString.valueOf(pastNegNoteOne))
+            pastTenceNegationArray.add(SpannableString.valueOf(pastNegNoteTwo))
         }
-        if (PastTenceNegationArray.isNotEmpty()) {
+        if (pastTenceNegationArray.isNotEmpty()) {
             presentTenceNegationArray.add(SpannableString.valueOf(presentNegNote))
         }
 
@@ -229,13 +239,13 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
         expandableListDetail["Verse"] = verse
         expandableListDetail["Translation"] = translation
         expandableListDetail["Verb sentence-Past Tence Negation- Stences(لَمْ/مَا))"] =
-            PastTenceNegationArray
+            pastTenceNegationArray
         expandableListDetail["Verb sentence-Present Tence Negation- Stences(مَا/لَا)"] =
             presentTenceNegationArray
         expandableListDetail["Verb sentence-Future Tence Negation- Stences(لَّن)"] =
             futureTenceNegationArray
         expandableListDetail["Exceptive Sentences with (إلاّ-(أداة الاستْثناء)) & Restriction/Exclusive (الحَصْر) "] =
-            InMaIllaNegationArray
+            inMaIllaNegationArray
         expandableListDetail["Conditional/جملة شرطية\""] = shartarray
         expandableListDetail["Accusative/ "] = harfnasbarray
         expandableListDetail["Verb kāna/كان واخواتها"] = kanaarray
@@ -298,13 +308,7 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
     }
 
 
-    /*val kana: List<SpannableString>
-        get() {
-            val kanaarray: MutableList<SpannableString> = ArrayList()
-            newsetKana(kanaarray)
-            return kanaarray
-        }
-*/
+
 
 }
 

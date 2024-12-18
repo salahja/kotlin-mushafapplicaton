@@ -36,7 +36,7 @@ import com.example.mushafconsolidated.DAO.grammarRulesDao
 import com.example.mushafconsolidated.DAO.qurandictionaryDao
 import com.example.mushafconsolidated.DAO.surahsummaryDao
 
-import com.example.mushafconsolidated.DAO.wbwDao
+
 import com.example.mushafconsolidated.Entities.NamesDetailsDao
 import com.example.mushafconsolidated.QuranAppDatabase
 import dagger.Module
@@ -136,13 +136,6 @@ object AppModule {
     fun NounCorpusDao(appDB: QuranAppDatabase): NounCorpusDao {
 
         return appDB.NounCorpusDao()
-    }
-
-    @Singleton
-    @Provides
-    fun wbwDao(appDB: QuranAppDatabase): wbwDao {
-
-        return appDB.wbwDao()
     }
 
 

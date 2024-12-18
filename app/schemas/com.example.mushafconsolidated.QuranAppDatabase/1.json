@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "dbb188856fbf111b0e0b0b9db4451b1c",
+    "identityHash": "8f55af5ac561afe1776e445117b937e8",
     "entities": [
       {
         "tableName": "negationfulldata",
@@ -1037,80 +1037,6 @@
         "foreignKeys": []
       },
       {
-        "tableName": "wbw",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surah` INTEGER NOT NULL, `ayah` INTEGER NOT NULL, `wordno` INTEGER NOT NULL, `wordcount` INTEGER NOT NULL, `en` TEXT NOT NULL, `bn` TEXT NOT NULL, `in` TEXT NOT NULL, `ur` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `juz` INTEGER NOT NULL)",
-        "fields": [
-          {
-            "fieldPath": "surah",
-            "columnName": "surah",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "ayah",
-            "columnName": "ayah",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "wordno",
-            "columnName": "wordno",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "wordcount",
-            "columnName": "wordcount",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "en",
-            "columnName": "en",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "bn",
-            "columnName": "bn",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "in",
-            "columnName": "in",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "ur",
-            "columnName": "ur",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "juz",
-            "columnName": "juz",
-            "affinity": "INTEGER",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "autoGenerate": true,
-          "columnNames": [
-            "id"
-          ]
-        },
-        "indices": [],
-        "foreignKeys": []
-      },
-      {
         "tableName": "nouncorpus",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`root_a` TEXT, `lemma_a` TEXT, `araword` TEXT, `surah` INTEGER NOT NULL, `ayah` INTEGER NOT NULL, `wordno` INTEGER NOT NULL, `token` INTEGER NOT NULL, `words` TEXT, `tag` TEXT NOT NULL, `propone` TEXT, `proptwo` TEXT, `form` TEXT, `lemma` TEXT, `root` TEXT, `gendernumber` TEXT, `type` TEXT, `cases` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `details` TEXT NOT NULL)",
         "fields": [
@@ -1893,7 +1819,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'dbb188856fbf111b0e0b0b9db4451b1c')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8f55af5ac561afe1776e445117b937e8')"
     ]
   }
 }

@@ -53,7 +53,7 @@ import com.example.mushafconsolidated.Entities.SifaEntity
 import com.example.mushafconsolidated.Entities.VerbCorpus
 import com.example.mushafconsolidated.Entities.VerbWazan
 import com.example.mushafconsolidated.Entities.lughat
-import com.example.mushafconsolidated.Entities.wbwentity
+
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.R.layout
 import com.example.mushafconsolidated.SpannableStringUtils
@@ -200,7 +200,6 @@ class WordAnalysisBottomSheet : DialogFragment() {
                 mainViewModel.getCorpusEntityFilterbywordno(chapterId, ayahNumber, wordNo).value
                     ?: return@launch
 
-            if (corpusNounWord!!.isNotEmpty() || verbCorpusRootWord!!.isNotEmpty()) {
                 // Continue with data processing...
                 val am = NewQuranMorphologyDetails(
                     corpusSurahWord,
@@ -252,7 +251,7 @@ class WordAnalysisBottomSheet : DialogFragment() {
                     }
                 }
 
-            }
+
 
 
         }
@@ -471,7 +470,7 @@ class WordAnalysisBottomSheet : DialogFragment() {
 
     private fun updateTranslation(wbwTranslation: String?, wordNo: Int, models: QuranViewModel) {
         wordbdetail["translation"] = SpannableStringBuilder(
-            wbwTranslation ?: models.getwbwTranslationbywordno(chapterId, ayahNumber, wordNo)
+            wbwTranslation ?: models.getQuranCorpusWbwbysurahAyahWord(chapterId, ayahNumber, wordNo)
                 .value?.firstOrNull()?.en.orEmpty()
         )
     }
@@ -640,11 +639,11 @@ class WordAnalysisBottomSheet : DialogFragment() {
 
             if (wbwtranslation == null) {
                 val allwords =
-                    models.getwbwTranslationbywordno(
+                    models.getQuranCorpusWbwbysurahAyahWord(
                         chapterId,
                         ayahNumber,
                         wordno
-                    ).value as ArrayList<wbwentity>
+                    ).value as ArrayList<CorpusEntity>
                 wordbdetail["translation"] = SpannableStringBuilder.valueOf(allwords[0].en)
             } else {
                 wordbdetail["translation"] = SpannableStringBuilder.valueOf(wbwtranslation)

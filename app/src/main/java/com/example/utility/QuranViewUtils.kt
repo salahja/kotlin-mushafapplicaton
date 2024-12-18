@@ -1,6 +1,5 @@
 package com.example.utility
 
-import Utility.ArabicLiterals
 import android.app.Dialog
 import android.content.Context
 import android.content.res.ColorStateList
@@ -20,11 +19,10 @@ import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.NounCorpus
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.VerbCorpus
-import com.example.mushafconsolidated.Entities.wbwentity
+
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.fragments.WordMorphologyDetails
-import com.example.mushafconsolidated.model.QuranCorpusWbw
 import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip
 import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltipUtils
 import android.graphics.Color
@@ -40,7 +38,6 @@ import com.example.mushafconsolidated.SpannableStringUtils
 import com.example.mushafconsolidated.model.Word
 
 import com.example.mushafconsolidated.quranrepo.QuranViewModel
-import com.example.utility.CorpusUtilityorig.Companion.dark
 import kotlin.collections.getOrPut
 import kotlin.text.indexOf
 import kotlin.text.toIntOrNull
@@ -556,27 +553,6 @@ object QuranViewUtils {
         return Triple(firstWord, subsequentWords, secondPart)
     }
 
-    fun setWordClickListener(
-        view: View,
-        context: Context,
-        word: QuranCorpusWbw,
-        surahName: String,
-        loadItemList: (Bundle, wbwentity) -> Unit
-    ) {
-        view.setOnClickListener {
-            val dialog = Dialog(context)
-            dialog.setTitle(word.corpus!!.araone + word.corpus!!.aratwo + word.corpus!!.arathree + word.corpus!!.arafour + word.corpus!!.arafive)
-
-            val dataBundle = Bundle()
-            dataBundle.putInt(Constant.SURAH_ID, word.corpus!!.surah)
-            dataBundle.putInt(Constant.AYAHNUMBER, word.corpus!!.ayah)
-            dataBundle.putInt(Constant.WORDNUMBER, word.corpus!!.wordno)
-            dataBundle.putString(Constant.SURAH_ARABIC_NAME, surahName)
-            loadItemList(dataBundle, word.wbw)
-
-        }
-    }
-
     // ... other functions ...
 
     fun setWordTranslation(translation: TextView, word: CorpusEntity, wbw: String) {
@@ -654,16 +630,16 @@ object QuranViewUtils {
     fun showWordMorphologyTooltip(
         context: Context,
         view: View,
-        word: QuranCorpusWbw,
+        word: CorpusEntity,
         isNightmode: String
     ) {
         val utils = Utils(QuranGrammarApplication.context!!)
 
         val verbCorpusRootWords =
             utils.getQuranRoot(
-                word.corpus.surah,
-                word.corpus.ayah,
-                word.corpus.wordno
+                word.surah,
+                word.ayah,
+                word.wordno
             )
         if (verbCorpusRootWords.isNotEmpty() && verbCorpusRootWords[0].tag == "V") {
             //    vbdetail = ams.getVerbDetails();
@@ -671,18 +647,18 @@ object QuranViewUtils {
         }
         val corpusNounWord: List<NounCorpus> =
             utils.getQuranNouns(
-                word.corpus.surah,
-                word.corpus.ayah,
-                word.corpus.wordno
+                word.surah,
+                word.ayah,
+                word.wordno
             )
         val verbCorpusRootWord: List<VerbCorpus> =
             utils.getQuranRoot(
-                word.corpus.surah,
-                word.corpus.ayah,
-                word.corpus.wordno
+                word.surah,
+                word.ayah,
+                word.wordno
             )
         val qm = WordMorphologyDetails(
-            word.corpus,
+            word,
             corpusNounWord, verbCorpusRootWord
         )
         val workBreakDown = qm.workBreakDown
@@ -815,13 +791,13 @@ object QuranViewUtils {
     }
 
 
-    fun getSpannedRoots(tag: QuranCorpusWbw, rootword: String): SpannableString {
+    fun getSpannedRoots(tag: CorpusEntity, rootword: String): SpannableString {
         return CorpusUtilityorig.ColorizeRootword(
-            tag.corpus!!.tagone!!,
-            tag.corpus!!.tagtwo!!,
-            tag.corpus!!.tagthree!!,
-            tag.corpus!!.tagfour!!,
-            tag.corpus!!.tagfive!!,
+            tag!!.tagone!!,
+            tag!!.tagtwo!!,
+            tag!!.tagthree!!,
+            tag!!.tagfour!!,
+            tag!!.tagfive!!,
             rootword
         )!!
     }
@@ -852,18 +828,18 @@ object QuranViewUtils {
         )
     }
 
-    fun getSpannedWords(tag: QuranCorpusWbw): SpannableString {
+    fun getSpannedWords(tag: CorpusEntity): SpannableString {
         return CorpusUtilityorig.NewSetWordSpan(
-            tag.corpus!!.tagone,
-            tag.corpus!!.tagtwo,
-            tag.corpus!!.tagthree,
-            tag.corpus!!.tagfour,
-            tag.corpus!!.tagfive,
-            tag.corpus!!.araone!!,
-            tag.corpus!!.aratwo!!,
-            tag.corpus!!.arathree!!,
-            tag.corpus!!.arafour!!,
-            tag.corpus!!.arafive!!
+            tag!!.tagone,
+            tag!!.tagtwo,
+            tag!!.tagthree,
+            tag!!.tagfour,
+            tag!!.tagfive,
+            tag!!.araone!!,
+            tag!!.aratwo!!,
+            tag!!.arathree!!,
+            tag!!.arafour!!,
+            tag!!.arafive!!
         )
     }
 

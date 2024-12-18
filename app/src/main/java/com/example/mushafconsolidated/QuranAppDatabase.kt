@@ -42,7 +42,7 @@ import com.example.mushafconsolidated.DAO.grammarRulesDao
 import com.example.mushafconsolidated.DAO.qurandictionaryDao
 import com.example.mushafconsolidated.DAO.surahsummaryDao
 
-import com.example.mushafconsolidated.DAO.wbwDao
+
 import com.example.mushafconsolidated.Entities.AbsoluteNegationEnt
 
 import com.example.mushafconsolidated.Entities.BookMarks
@@ -75,7 +75,7 @@ import com.example.mushafconsolidated.Entities.lysaEnt
 import com.example.mushafconsolidated.Entities.qurandictionary
 import com.example.mushafconsolidated.Entities.quranexplorer
 import com.example.mushafconsolidated.Entities.surahsummary
-import com.example.mushafconsolidated.Entities.wbwentity
+
 import com.example.mushafconsolidated.settingsimport.Constants.Companion.DATABASENAME
 import database.Dao.NamesDao
 import database.entity.AllahNames
@@ -100,7 +100,7 @@ import java.io.File
         lughat::class,
         SifaEntity::class,
         NewMudhafEntity::class,
-        wbwentity::class, NounCorpus::class, VerbCorpus::class, QuranEntity::class, CorpusEntity::class, BookMarks::class, ChaptersAnaEntity::class],
+         NounCorpus::class, VerbCorpus::class, QuranEntity::class, CorpusEntity::class, BookMarks::class, ChaptersAnaEntity::class],
     version = 1
 )
 abstract class QuranAppDatabase : RoomDatabase() {
@@ -174,7 +174,7 @@ abstract class QuranAppDatabase : RoomDatabase() {
      *
      * @return
      */
-    abstract fun wbwDao(): wbwDao
+
 
     /**
      * Sifa dao

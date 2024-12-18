@@ -21,6 +21,12 @@ interface CorpusExpandedDao {
     @Query("select * from CorpusExpand where ayah  between :start and :end")
     fun getVersesByPart(start: Int, end: Int): List<CorpusEntity?>?
 
+    @Query("SELECT * FROM CorpusExpand WHERE rootaraone||rootaratwo||rootarathree||rootarafour=:root")
+    fun getQuranCorpusWbwbyroot(root: String): List<CorpusEntity>
+
+
+
+
     @Query("SELECT * FROM CorpusExpand WHERE surah=:id and ayah=:ayahid and wordno=:wordid")
     fun getCorpusWord(
         id: Int,

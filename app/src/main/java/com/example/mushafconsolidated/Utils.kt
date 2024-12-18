@@ -47,9 +47,8 @@ import com.example.mushafconsolidated.Entities.lughat
 import com.example.mushafconsolidated.Entities.lysaEnt
 import com.example.mushafconsolidated.Entities.qurandictionary
 import com.example.mushafconsolidated.Entities.quranexplorer
-import com.example.mushafconsolidated.Entities.wbwentity
+
 import com.example.mushafconsolidated.model.Juz
-import com.example.mushafconsolidated.model.QuranCorpusWbw
 import com.example.mushafconsolidated.model.QuranEntityCorpusEntityWbwEntity
 import database.entity.AllahNames
 import mufradat.MufradatEntity
@@ -93,17 +92,12 @@ class Utils {
         return database.MufradatDao().getShaikTafseerAya(id,aid)
     }
 
-    fun getQuranCorpusWbwbysurah(id: Int): List<QuranCorpusWbw> {
-        return database.QuranDao().getQuranCorpusWbwbysurah(id)
-    }
 
     fun getexp(exp: String,rslt:String): List<CorpusEntity> {
         return database.getCorpusExpandDao().getExplistbytag(exp,rslt)
     }
 
-    fun getQuranCorpusWord(id: Int, aid: Int, wid: Int): List<QuranCorpusWbw> {
-        return database.QuranDao().getQuranCorpusWbw(id, aid, wid)
-    }
+
 
     fun getNegationFilterSurahAyahType(cid: Int, aid: Int,type: String ): List<NegationEnt> {
         return  database.NegationDao().getNegationFilterSurahAyahType(cid, aid,type)
@@ -1041,30 +1035,8 @@ class Utils {
 
 
 
-    fun getwbwQuranbTranslationbyrange(id: Int, ayah: Int,wordfrom: Int, wordto:Int): List<wbwentity> {
-        return database.wbwDao().getwbwQuranbTranslationbyrange(id,ayah,wordfrom,wordto)
-    }
 
 
-
-    fun getwbwQuranBySurahAyah(id: Int, aid: Int): List<wbwentity>? {
-        return database.wbwDao().getwbwQuranBySurahAyah(id, aid)
-    }
-   fun getwbwQuranBySurahAyahWord(cid: Int, aid: Int, wid: Int):List<wbwentity>?  {
-
-     return  database.wbwDao().getwbwQuranBySurahAyahWord(cid, aid, wid)
-   }
-
-
-    fun getwbwQuranbTranslation(
-        sid: Int,
-        aid: Int,
-        firstwordindex: Int,
-        lastwordindex: Int,
-    ): List<wbwentity>? {
-        return database.wbwDao()
-            .getwbwQuranbTranslationbyrange(sid, aid, firstwordindex, lastwordindex)
-    }
 
     fun getNounBreakup(tid: String): List<NounCorpusBreakup>? {
         val sqlverb: String =
@@ -1165,13 +1137,6 @@ class Utils {
         return database.VerbCorpusDao().getQuranVerbsByfirstletter(id)
     }
 
-    fun getQuranCorpusWbwSurhAyah(cid: Int, aid: Int, wid: Int): List<QuranCorpusWbw> {
-        return database.QuranDao().getQuranCorpusWbw(cid, aid, wid)
-    }
-
-    fun getQuranandCorpusandWbwbySurah(cid: Int): List<QuranEntityCorpusEntityWbwEntity> {
-        return database.QuranDao().getQuranandCorpusandWbwbySurah(cid)
-    }
 
     fun getLaysa()  :List<lysaEnt> {
         return database.LysaDao().getLysa()

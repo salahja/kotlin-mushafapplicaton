@@ -10,11 +10,11 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.Constant
+import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.NegationEnt
 import com.example.mushafconsolidated.Entities.QuranEntity
-import com.example.mushafconsolidated.Entities.wbwentity
+
 import com.example.mushafconsolidated.Utils
-import com.example.mushafconsolidated.model.QuranCorpusWbw
 import com.example.mushafconsolidated.model.SarfSagheerPOJO
 import com.example.mushafconsolidated.model.Word
 import com.example.utility.QuranGrammarApplication
@@ -38,7 +38,7 @@ class ExpandableVerseViewModel(
     //  val model: QuranVIewModel by viewModels()
     private var dark: Boolean = false
 
-    private var corpusSurahWord: List<QuranCorpusWbw>? = null
+    private var corpusSurahWord: List<CorpusEntity>? = null
 
     private lateinit var negaTionList: List<NegationEnt>
     var vbdetail = HashMap<String, String>()
@@ -761,18 +761,6 @@ class ExpandableVerseViewModel(
         }
     }
 
-
-    private fun getSelectedTranslation(tr: wbwentity, value: Int): StringBuilder {
-        val sb = StringBuilder()
-        when (value) {
-            0 -> sb.append(tr.en)
-            1 -> sb.append(tr.ur)
-            2 -> sb.append(tr.bn)
-            3 -> sb.append(tr.id)
-        }
-        sb.append(" ")
-        return sb
-    }
 
 
     fun onCardArrowClicked(cardId: Int) {

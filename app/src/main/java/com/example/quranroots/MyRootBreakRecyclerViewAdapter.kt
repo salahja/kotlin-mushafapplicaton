@@ -12,13 +12,13 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
+import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.NounCorpus
 import com.example.mushafconsolidated.Entities.RootWordDetails
 import com.example.mushafconsolidated.Entities.VerbCorpus
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.fragments.WordMorphologyDetails
-import com.example.mushafconsolidated.model.QuranCorpusWbw
 import com.example.mushafconsolidatedimport.Config
 import com.example.utility.CorpusUtilityorig.Companion.NewSetWordSpan
 import com.example.utility.QuranGrammarApplication
@@ -34,11 +34,11 @@ import org.sj.conjugator.interfaces.OnItemClickListener
  * TODO: Replace the implementation with code for your data type.
  */
 class MyRootBreakRecyclerViewAdapter(
-    private val corpusSurahWord: List<QuranCorpusWbw>?,
+    private val corpusSurahWord: List<CorpusEntity>?,
     private val chapters: MutableLiveData<List<ChaptersAnaEntity>>
 ) :
     RecyclerView.Adapter<MyRootBreakRecyclerViewAdapter.ViewHolder>() {
-    private lateinit var quranCorpusWbw: QuranCorpusWbw
+    private lateinit var quranCorpusWbw: CorpusEntity
     private lateinit var wordDetails: RootWordDetails
     private lateinit var mItemClickListener: OnItemClickListener
     private var arabicfontSize: Int = 0
@@ -72,22 +72,22 @@ class MyRootBreakRecyclerViewAdapter(
         quranCorpusWbw = corpusSurahWord!![position]
         val sb = StringBuilder()
         val spannableString = NewSetWordSpan(
-            quranCorpusWbw.corpus.tagone,
-            quranCorpusWbw.corpus.tagtwo,
-            quranCorpusWbw.corpus.tagthree,
-            quranCorpusWbw.corpus.tagfour,
-            quranCorpusWbw.corpus.tagfive,
-            quranCorpusWbw.corpus.araone!!,
-            quranCorpusWbw.corpus.aratwo!!,
-            quranCorpusWbw.corpus.arathree!!,
-            quranCorpusWbw.corpus.arafour!!,
-            quranCorpusWbw.corpus.arafive!!
+            quranCorpusWbw.tagone,
+            quranCorpusWbw.tagtwo,
+            quranCorpusWbw.tagthree,
+            quranCorpusWbw.tagfour,
+            quranCorpusWbw.tagfive,
+            quranCorpusWbw.araone!!,
+            quranCorpusWbw.aratwo!!,
+            quranCorpusWbw.arathree!!,
+            quranCorpusWbw.arafour!!,
+            quranCorpusWbw.arafive!!
         )
 
         //  sb.append(lughat.getSurah()).append("   ").append(lughat.getNamearabic()).append(lughat.getAyah()).append(" ").append(lughat.getArabic());
-        sb.append(quranCorpusWbw.corpus.ayah).append("  ")
-            .append(chapters.value!!.get(quranCorpusWbw.corpus.surah).namearabic).append("   ")
-            .append(quranCorpusWbw.corpus.surah).append(" ").append(quranCorpusWbw.wbw.en)
+        sb.append(quranCorpusWbw.ayah).append("  ")
+            .append(chapters.value!!.get(quranCorpusWbw.surah).namearabic).append("   ")
+            .append(quranCorpusWbw.surah).append(" ").append(quranCorpusWbw.en)
         val sbs = SpannableString(sb)
         val charSequence = TextUtils.concat(spannableString, sb)
         // charSequence=TextUtils.concat(sb);
@@ -140,9 +140,9 @@ class MyRootBreakRecyclerViewAdapter(
                 val utils = Utils(QuranGrammarApplication.context!!)
                 val verbCorpusRootWords =
                     utils.getQuranRoot(
-                        quranCorpusWbw.corpus.surah,
-                        quranCorpusWbw.corpus.ayah,
-                        quranCorpusWbw.corpus.wordno
+                        quranCorpusWbw.surah,
+                        quranCorpusWbw.ayah,
+                        quranCorpusWbw.wordno
                     )
                 if (verbCorpusRootWords!!.isNotEmpty() && verbCorpusRootWords[0]!!.tag == "V") {
                     //    vbdetail = ams.getVerbDetails();
@@ -150,18 +150,18 @@ class MyRootBreakRecyclerViewAdapter(
                 }
                 val corpusNounWord: List<NounCorpus> =
                     utils.getQuranNouns(
-                        quranCorpusWbw.corpus.surah,
-                        quranCorpusWbw.corpus.ayah,
-                        quranCorpusWbw.corpus.wordno
+                        quranCorpusWbw.surah,
+                        quranCorpusWbw.ayah,
+                        quranCorpusWbw.wordno
                     )
                 val verbCorpusRootWord: List<VerbCorpus> =
                     utils.getQuranRoot(
-                        quranCorpusWbw.corpus.surah,
-                        quranCorpusWbw.corpus.ayah,
-                        quranCorpusWbw.corpus.wordno
+                        quranCorpusWbw.surah,
+                        quranCorpusWbw.ayah,
+                        quranCorpusWbw.wordno
                     )
                 val qm = WordMorphologyDetails(
-                    quranCorpusWbw.corpus,
+                    quranCorpusWbw,
                     corpusNounWord!!, verbCorpusRootWord!!
                 )
                 val sharedPreferences =
