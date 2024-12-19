@@ -43,6 +43,7 @@ import com.example.mushafconsolidated.Entities.VerbCorpusBreakup
 import com.example.mushafconsolidated.Entities.hanslexicon
 import com.example.mushafconsolidated.Entities.jsonsurahentity
 import com.example.mushafconsolidated.Entities.lanelexicon
+import com.example.mushafconsolidated.Entities.lanerootdictionary
 import com.example.mushafconsolidated.Entities.lughat
 import com.example.mushafconsolidated.Entities.lysaEnt
 import com.example.mushafconsolidated.Entities.qurandictionary
@@ -230,20 +231,18 @@ class Utils {
                     "       CorpusExpand.detailsthree,\n" +
                     "       CorpusExpand.detailsfour,\n" +
                     "       CorpusExpand.detailsfive,\n" +
-                    "       wbw.en,\n" +
-                    "       wbw.bn,\n" +
-                    "       wbw.[in],\n" +
-                    "       wbw.ur,\n" +
+                    "       CorpusExpand.en,\n" +
+                    "       CorpusExpand.bn,\n" +
+                    "       CorpusExpand.[in],\n" +
+                    "       CorpusExpand.ur,\n" +
                     "       qurans.qurantext\n" +
                     "  FROM corpusexpand,\n" +
                     "       qurans,\n" +
-                    "       wbw\n" +
+
                     " WHERE CorpusExpand.surah == \""
                     + tid + "\""
                     + "AND \n" +
-                    "       corpusexpand.surah = wbw.surah AND \n" +
-                    "       corpusexpand.ayah = wbw.ayah AND \n" +
-                    "       corpusexpand.wordno = wbw.wordno AND\n" +
+
                     "       corpusexpand.surah = qurans.surah AND \n" +
                     "       corpusexpand.ayah = qurans.ayah  \n" +
                     " ORDER BY corpusexpand.surah,\n" +
@@ -663,21 +662,19 @@ class Utils {
                     "       CorpusExpand.detailsthree,\n" +
                     "       CorpusExpand.detailsfour,\n" +
                     "       CorpusExpand.detailsfive,\n" +
-                    "       wbw.en,\n" +
-                    "       wbw.bn,\n" +
-                    "       wbw.[in],\n" +
-                    "       wbw.ur,\n" +
+                    "       CorpusExpand.en,\n" +
+                    "       CorpusExpand.bn,\n" +
+                    "       CorpusExpand.[in],\n" +
+                    "       CorpusExpand.ur,\n" +
                     "       qurans.qurantext\n" +
                     "  FROM corpusexpand,\n" +
                     "       qurans,\n" +
-                    "       wbw\n" +
+
                     " WHERE CorpusExpand.surah == \""
                     + tid + "\""
                     + "AND \n" +
                     "(CorpusExpand.tagone=\"T\" OR CorpusExpand.tagtwo=\"T\" OR CorpusExpand.tagthree=\"T\"\tOR CorpusExpand.tagfour=\"T\" or CorpusExpand.tagfive=\"T\" or CorpusExpand.tagone=\"COND\" OR CorpusExpand.tagtwo=\"COND\" OR CorpusExpand.tagthree=\"COND\"\tOR CorpusExpand.tagfour=\"COND\" or CorpusExpand.tagfive=\"COND\") AND \n"+
-                    "       corpusexpand.surah = wbw.surah AND \n" +
-                    "       corpusexpand.ayah = wbw.ayah AND \n" +
-                    "       corpusexpand.wordno = wbw.wordno AND\n" +
+
                     "       corpusexpand.surah = qurans.surah AND \n" +
                     "       corpusexpand.ayah = qurans.ayah  \n" +
                     " ORDER BY corpusexpand.surah,\n" +
@@ -719,21 +716,19 @@ class Utils {
                     "       CorpusExpand.detailsthree,\n" +
                     "       CorpusExpand.detailsfour,\n" +
                     "       CorpusExpand.detailsfive,\n" +
-                    "       wbw.en,\n" +
-                    "       wbw.bn,\n" +
-                    "       wbw.[in],\n" +
-                    "       wbw.ur,\n" +
+                    "       CorpusExpand.en,\n" +
+                    "       CorpusExpand.bn,\n" +
+                    "       CorpusExpand.[in],\n" +
+                    "       CorpusExpand.ur,\n" +
                     "       qurans.qurantext\n" +
                     "  FROM corpusexpand,\n" +
                     "       qurans,\n" +
-                    "       wbw\n" +
+
                     " WHERE CorpusExpand.surah == \""
                     + tid + "\""
                     + "AND \n" +
                     "(CorpusExpand.tagone=\"ACC\" OR CorpusExpand.tagtwo=\"ACC\" OR CorpusExpand.tagthree=\"ACC\"\tOR CorpusExpand.tagfour=\"ACC\" or CorpusExpand.tagfive=\"ACC\") AND \n"+
-                    "       corpusexpand.surah = wbw.surah AND \n" +
-                    "       corpusexpand.ayah = wbw.ayah AND \n" +
-                    "       corpusexpand.wordno = wbw.wordno AND\n" +
+
                     "       corpusexpand.surah = qurans.surah AND \n" +
                     "       corpusexpand.ayah = qurans.ayah  \n" +
                     " ORDER BY corpusexpand.surah,\n" +
@@ -774,14 +769,14 @@ class Utils {
                     "       nouncorpus.gendernumber,\n" +
                     "       nouncorpus.type,\n" +
                     "       nouncorpus.cases,\n" +
-                    "       wbw.en\n" +
+                    "       corpusexpand.en\n" +
                     "      FROM corpusexpand,nouncorpus,\n" +
-                    "       wbw,qurans\n" +
+                    "       qurans\n" +
                     "    where   nouncorpus.tag = \""
                     + tid + "\""
-                    + "    AND   corpusexpand.surah = wbw.surah AND  corpusexpand.surah = nouncorpus.surah AND \n" +
-                    "       corpusexpand.ayah = wbw.ayah AND      corpusexpand.ayah = nouncorpus.ayah AND \n" +
-                    "       corpusexpand.wordno = wbw.wordno   AND  corpusexpand.wordno = nouncorpus.wordno " +
+                    + "    AND    corpusexpand.surah = nouncorpus.surah AND \n" +
+                    "         corpusexpand.ayah = nouncorpus.ayah AND \n" +
+                    "         corpusexpand.wordno = nouncorpus.wordno " +
                     "and corpusexpand.surah = qurans.surah AND   corpusexpand.ayah = qurans.ayah  order by corpusexpand.surah,corpusexpand.ayah")
         val query: SimpleSQLiteQuery = SimpleSQLiteQuery(sqlverb)
         //  List<Book> result = booksDao.getBooks(query);
@@ -822,9 +817,9 @@ class Utils {
                     "       verbcorpus.gendernumber,\n" +
                     "       verbcorpus.mood_kananumbers,\n" +
                     "       verbcorpus.kana_mood,\n" +
-                    "       wbw.en\n" +
+                    "       corpusexpand.en\n" +
                     "      FROM corpusexpand,verbcorpus,\n" +
-                    "       wbw,qurans\n" +
+                    "       qurans\n" +
                     " WHERE (corpusexpand.tagone = \"V\" OR \n" +
                     "        corpusexpand.tagtwo = \"V\" OR \n" +
                     "        corpusexpand.tagthree = \"V\" OR \n" +
@@ -832,9 +827,9 @@ class Utils {
                     "        corpusexpand.tagfive = \"V\") AND \n" +
                     "       corpusexpand.lemaraone||corpusexpand.lemaratwo||corpusexpand.lemarathree||corpusexpand.lemarafour||corpusexpand.lemarafive=  \""
                     + tid + "\""
-                    + "    AND   corpusexpand.surah = wbw.surah AND  corpusexpand.surah = verbcorpus.chapterno AND \n" +
-                    "       corpusexpand.ayah = wbw.ayah AND      corpusexpand.ayah = verbcorpus.verseno AND \n" +
-                    "       corpusexpand.wordno = wbw.wordno   AND  corpusexpand.wordno = verbcorpus.wordno and corpusexpand.surah = qurans.surah AND   corpusexpand.ayah = qurans.ayah order by corpusexpand.surah,corpusexpand.ayah")
+                    + "    AND  corpusexpand.surah = verbcorpus.chapterno AND \n" +
+                    "           corpusexpand.ayah = verbcorpus.verseno AND \n" +
+                    "           corpusexpand.wordno = verbcorpus.wordno and corpusexpand.surah = qurans.surah AND   corpusexpand.ayah = qurans.ayah order by corpusexpand.surah,corpusexpand.ayah")
         val query: SimpleSQLiteQuery = SimpleSQLiteQuery(sqlverb)
         //  List<Book> result = booksDao.getBooks(query);
         return database.RawDao().getVerbOccuranceBreakVerses(query)
@@ -874,14 +869,14 @@ class Utils {
                     "       nouncorpus.gendernumber,\n" +
                     "       nouncorpus.type,\n" +
                     "       nouncorpus.cases,\n" +
-                    "       wbw.en\n" +
+                    "       corpusexpand.en\n" +
                     "      FROM corpusexpand,nouncorpus,\n" +
-                    "       wbw,qurans\n" +
+                    "       qurans\n" +
                     "    where  corpusexpand.lemaraone||corpusexpand.lemaratwo||corpusexpand.lemarathree||corpusexpand.lemarafour||corpusexpand.lemarafive=  \""
                     + tid + "\""
-                    + "    AND   corpusexpand.surah = wbw.surah AND  corpusexpand.surah = nouncorpus.surah AND \n" +
-                    "       corpusexpand.ayah = wbw.ayah AND      corpusexpand.ayah = nouncorpus.ayah AND \n" +
-                    "       corpusexpand.wordno = wbw.wordno   AND  corpusexpand.wordno = nouncorpus.wordno" +
+                    + "    AND    corpusexpand.surah = nouncorpus.surah AND \n" +
+                    "           corpusexpand.ayah = nouncorpus.ayah AND \n" +
+                    "         corpusexpand.wordno = nouncorpus.wordno" +
                     " and corpusexpand.surah = qurans.surah AND   corpusexpand.ayah = qurans.ayah order by corpusexpand.surah,corpusexpand.ayah")
         val query: SimpleSQLiteQuery = SimpleSQLiteQuery(sqlverb)
         //  List<Book> result = booksDao.getBooks(query);
@@ -898,14 +893,14 @@ class Utils {
                     "       qurandictionary.surah,\n" +
                     "       qurandictionary.ayah,\n" +
                     "       qurandictionary.rootarabic,\n" +
-                    "\t   wbw.en,\n" +
+                    "\t   wbbw.en,\n" +
                     "\t   chaptersana.abjadname,chaptersana.namearabic,chaptersana.nameenglish \n" +
                     "\t  \n" +
                     " \n" +
-                    "      FROM corpusexpand,qurandictionary,wbw,chaptersana\n" +
+                    "      FROM corpusexpand,qurandictionary,chaptersana\n" +
                     "\t  where  qurandictionary.surah = CorpusExpand.surah AND  qurandictionary.ayah = CorpusExpand.ayah  \n" +
-                    "\tand qurandictionary.wordno = CorpusExpand.wordno  AND qurandictionary.surah=wbw.surah and qurandictionary.ayah=wbw.ayah\n" +
-                    "and qurandictionary.wordno=wbw.wordno and qurandictionary.surah=chaptersana.chapterid and qurandictionary.rootarabic=  \""
+                    "\tand qurandictionary.wordno = CorpusExpand.wordno  AND  \n" +
+                    "and  qurandictionary.surah=chaptersana.chapterid and qurandictionary.rootarabic=  \""
                     + tid + "\"")
         val query: SimpleSQLiteQuery = SimpleSQLiteQuery(sqlverb)
         //  List<Book> result = booksDao.getBooks(query);
@@ -921,17 +916,17 @@ class Utils {
                     "       qurandictionary.surah,\n" +
                     "       qurandictionary.ayah,\n" +
                     "       qurandictionary.rootarabic,qurandictionary.wordno,\n" +
-                    "\t   wbw.en,\n" +
+                    "\t   CorpusExpand.en,\n" +
                     "\t   chaptersana.abjadname,chaptersana.namearabic,chaptersana.nameenglish,\n" +
                     "\t   verbcorpus.form,verbcorpus.thulathibab,verbcorpus.gendernumber,verbcorpus.tense,verbcorpus.voice,verbcorpus.mood_kananumbers,verbcorpus.kana_mood,verbcorpus.lemma_a\n" +
                     "\t  \n" +
                     " \n" +
-                    "      FROM corpusexpand,qurandictionary,wbw,chaptersana,verbcorpus\n" +
+                    "      FROM corpusexpand,qurandictionary,chaptersana,verbcorpus\n" +
                     "\t  where (CorpusExpand.tagone=\"V\" OR CorpusExpand.tagtwo=\"V\" OR CorpusExpand.tagthree=\"V\" OR CorpusExpand.tagfour=\"V\" \n" +
                     "\t or CorpusExpand.tagfive==\"V\" )and qurandictionary.surah = CorpusExpand.surah AND  qurandictionary.ayah = CorpusExpand.ayah  \n" +
-                    "\t \tand qurandictionary.wordno = verbcorpus.wordno  AND qurandictionary.surah=verbcorpus.chapterno and qurandictionary.ayah=verbcorpus.verseno\n" +
-                    "\tand qurandictionary.wordno = CorpusExpand.wordno  AND qurandictionary.surah=wbw.surah and qurandictionary.ayah=wbw.ayah\n" +
-                    "and qurandictionary.wordno=wbw.wordno and qurandictionary.surah=chaptersana.chapterid and qurandictionary.rootarabic=  \""
+                    "\t \t  AND qurandictionary.surah=verbcorpus.chapterno and qurandictionary.ayah=verbcorpus.verseno\n" +
+                    "\tand qurandictionary.wordno = CorpusExpand.wordno  n" +
+                    " and qurandictionary.surah=chaptersana.chapterid and qurandictionary.rootarabic=  \""
                     + tid + "\"")
         val query: SimpleSQLiteQuery = SimpleSQLiteQuery(sqlverb)
         //  List<Book> result = booksDao.getBooks(query);
@@ -943,14 +938,11 @@ class Utils {
                     "CorpusExpand.lemaraone ||CorpusExpand. lemaratwo ||CorpusExpand. lemarathree || CorpusExpand.lemarafour ||CorpusExpand. lemarafive as lemma,\n" +
                     "CorpusExpand.araone,CorpusExpand.aratwo,CorpusExpand.arathree,CorpusExpand.arafour,CorpusExpand.arafive,\n" +
                     "CorpusExpand.tagone,CorpusExpand.tagtwo,CorpusExpand.tagthree,CorpusExpand.tagfour,CorpusExpand.tagfive,\n" +
-                    " \t   wbw.en,\n" +
+                    " \t   CorpusExpand.en,\n" +
                     "\t   verbcorpus.form,verbcorpus.thulathibab,verbcorpus.gendernumber,verbcorpus.tense,verbcorpus.voice,verbcorpus.mood_kananumbers,verbcorpus.kana_mood,verbcorpus.lemma_a,qurans.qurantext,qurans.en_arberry\n" +
-                    "\t   FROM corpusexpand,wbw,verbcorpus,qurans\n" +
+                    "\t   FROM corpusexpand,verbcorpus,qurans\n" +
                     "\t  where (CorpusExpand.tagone=\"V\" OR CorpusExpand.tagtwo=\"V\" OR CorpusExpand.tagthree=\"V\" OR CorpusExpand.tagfour=\"V\" \n" +
-                    "\t or CorpusExpand.tagfive==\"V\" )\n" +
-                    "  \tand wbw.wordno = verbcorpus.wordno  AND wbw.surah=verbcorpus.chapterno and wbw.ayah=verbcorpus.verseno\n" +
-                    "\tand wbw.wordno = CorpusExpand.wordno  AND wbw.surah=CorpusExpand.surah and wbw.ayah=CorpusExpand.ayah\n" +
-                    "\tand qurans.surah=wbw.surah and qurans.ayah=wbw.ayah"
+                    "\t or CorpusExpand.tagfive==\"V\" )\n"
                     )
         val query: SimpleSQLiteQuery = SimpleSQLiteQuery(sqlverb)
         //  List<Book> result = booksDao.getBooks(query);
@@ -1003,6 +995,10 @@ class Utils {
     fun getLanesDifinition(id: String): List<lanelexicon?>? {
         return database.LaneDao()?.getLanesDefinition(id.trim { it <= ' ' })
     }
+    fun getLanesRootDifinition(id: String): List<lanerootdictionary?>? {
+        return database.LaneRootDao()?.getLanesRootDefinition(id.trim { it <= ' ' })
+    }
+
 
     fun getHansDifinition(id: String): List<hanslexicon?>? {
         return database.HansDao().getHansDefinition(id.trim { it <= ' ' })
