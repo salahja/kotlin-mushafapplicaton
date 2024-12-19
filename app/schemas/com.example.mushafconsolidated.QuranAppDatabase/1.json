@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "8f55af5ac561afe1776e445117b937e8",
+    "identityHash": "682d30e315878ca0734e894dba102442",
     "entities": [
       {
         "tableName": "negationfulldata",
@@ -741,50 +741,6 @@
         "foreignKeys": []
       },
       {
-        "tableName": "laneslexicon",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rootword` TEXT NOT NULL, `word` TEXT NOT NULL, `parentid` INTEGER NOT NULL, `definition` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
-        "fields": [
-          {
-            "fieldPath": "rootword",
-            "columnName": "rootword",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "word",
-            "columnName": "word",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "parentid",
-            "columnName": "parentid",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "definition",
-            "columnName": "definition",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "autoGenerate": true,
-          "columnNames": [
-            "id"
-          ]
-        },
-        "indices": [],
-        "foreignKeys": []
-      },
-      {
         "tableName": "onlylugat",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surah` INTEGER NOT NULL, `ayah` INTEGER NOT NULL, `surahname` TEXT NOT NULL, `wordno` INTEGER NOT NULL, `rootword` TEXT NOT NULL, `hansweir` TEXT, `arabicword` TEXT NOT NULL, `ur_lughat` TEXT NOT NULL, `meaning` TEXT NOT NULL, `letter` TEXT NOT NULL, `en_lughat` TEXT NOT NULL, `comments` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
@@ -1038,7 +994,7 @@
       },
       {
         "tableName": "nouncorpus",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`root_a` TEXT, `lemma_a` TEXT, `araword` TEXT, `surah` INTEGER NOT NULL, `ayah` INTEGER NOT NULL, `wordno` INTEGER NOT NULL, `token` INTEGER NOT NULL, `words` TEXT, `tag` TEXT NOT NULL, `propone` TEXT, `proptwo` TEXT, `form` TEXT, `lemma` TEXT, `root` TEXT, `gendernumber` TEXT, `type` TEXT, `cases` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `details` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`root_a` TEXT, `lemma_a` TEXT, `araword` TEXT, `surah` INTEGER NOT NULL, `ayah` INTEGER NOT NULL, `wordno` INTEGER NOT NULL, `token` INTEGER NOT NULL, `tag` TEXT NOT NULL, `propone` TEXT, `proptwo` TEXT, `form` TEXT, `lemma` TEXT, `root` TEXT, `gendernumber` TEXT, `type` TEXT, `cases` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `details` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "root_a",
@@ -1081,12 +1037,6 @@
             "columnName": "token",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "words",
-            "columnName": "words",
-            "affinity": "TEXT",
-            "notNull": false
           },
           {
             "fieldPath": "tag",
@@ -1819,7 +1769,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8f55af5ac561afe1776e445117b937e8')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '682d30e315878ca0734e894dba102442')"
     ]
   }
 }

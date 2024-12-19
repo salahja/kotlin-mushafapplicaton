@@ -42,7 +42,7 @@ import com.example.mushafconsolidated.Entities.VerbCorpus
 import com.example.mushafconsolidated.Entities.VerbCorpusBreakup
 import com.example.mushafconsolidated.Entities.hanslexicon
 import com.example.mushafconsolidated.Entities.jsonsurahentity
-import com.example.mushafconsolidated.Entities.lanelexicon
+
 import com.example.mushafconsolidated.Entities.lanerootdictionary
 import com.example.mushafconsolidated.Entities.lughat
 import com.example.mushafconsolidated.Entities.lysaEnt
@@ -992,9 +992,6 @@ class Utils {
         return database.LughatDao().getRootWordDictionary(id.trim { it <= ' ' })
     }
 
-    fun getLanesDifinition(id: String): List<lanelexicon?>? {
-        return database.LaneDao()?.getLanesDefinition(id.trim { it <= ' ' })
-    }
     fun getLanesRootDifinition(id: String): List<lanerootdictionary?>? {
         return database.LaneRootDao()?.getLanesRootDefinition(id.trim { it <= ' ' })
     }

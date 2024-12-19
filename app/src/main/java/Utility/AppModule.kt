@@ -12,7 +12,7 @@ import com.example.mushafconsolidated.DAO.HansDao
 
 
 
-import com.example.mushafconsolidated.DAO.LaneDao
+
 import com.example.mushafconsolidated.DAO.LaneRootDao
 import com.example.mushafconsolidated.DAO.LughatDao
 
@@ -169,12 +169,6 @@ object AppModule {
     }
 
 
-    @Singleton
-    @Provides
-    fun LaneDao(appDB: QuranAppDatabase): LaneDao? {
-
-        return appDB.LaneDao()
-    }
 
 
     @Singleton

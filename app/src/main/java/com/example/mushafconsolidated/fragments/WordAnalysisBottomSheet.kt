@@ -700,7 +700,7 @@ class WordAnalysisBottomSheet : DialogFragment() {
     private fun setAllPhrases() {
         val utils= Utils(requireContext())
      val negaTionList=   utils.geTNegatonFilerSurahAyah(chapterId,ayahNumber)
-        val spannedStrings = SpannableStringUtils.applySpans(negaTionList, "light")
+        val spannedStrings = SpannableStringUtils.applySpans(negaTionList, true)
 
         for ((i, j: Int, type, spannableString) in spannedStrings) {
 

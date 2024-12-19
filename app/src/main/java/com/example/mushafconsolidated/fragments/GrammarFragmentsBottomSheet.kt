@@ -58,7 +58,7 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
 
 
     val model: QuranViewModel by viewModels()
-    private var dark: Boolean = false
+    private var currentTheme: Boolean = false
 
 
     var chapterid = 0
@@ -99,6 +99,8 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
         val shared = PreferenceManager.getDefaultSharedPreferences(
             requireContext()
         )
+    val    currenttheme =
+            shared.getString("themepref", "brown")
         showGrammarFragments = shared.getBoolean("fragments", false)
         ayanumber = stringArray[1].toInt()
         val ex = Executors.newSingleThreadExecutor()
@@ -169,7 +171,7 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
         val prefs =
             android.preference.PreferenceManager.getDefaultSharedPreferences(requireContext())
         val preferences = prefs.getString("theme", "dark")
-        dark = preferences == "dark" || preferences == "blue" || preferences == "green"
+        currentTheme = preferences == "dark" || preferences == "blue" || preferences == "green"
 
         whichwbw = prefs.getString("wbw", "en")
         val expandableListDetail = java.util.LinkedHashMap<String, List<SpannableString>>()
@@ -211,7 +213,8 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
             mausoofsifaarray,
             anMasdarArray,
             silaMousalArray,
-            halArray
+            halArray,
+            currentTheme
         )
 
         val pastNegNoteOne = String.format(
@@ -269,9 +272,10 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
         mausoofsifaarray: MutableList<SpannableString>,
         anMasdarArray: MutableList<SpannableString>,
         silaMousalArray: MutableList<SpannableString>,
-        halArray: MutableList<SpannableString>
+        halArray: MutableList<SpannableString>,
+        currentTheme: Boolean
     ) {
-        val spannedStrings = SpannableStringUtils.applySpans(negaTionList, "light")
+        val spannedStrings = SpannableStringUtils.applySpans(negaTionList, currentTheme)
 
         for ((i, j: Int, type, spannableString) in spannedStrings) {
 

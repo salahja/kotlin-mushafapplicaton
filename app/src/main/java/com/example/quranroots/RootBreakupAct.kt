@@ -46,7 +46,8 @@ import com.example.mushafconsolidated.Entities.RootVerbDetails
 import com.example.mushafconsolidated.Entities.VerbCorpusBreakup
 import com.example.mushafconsolidated.Entities.VerbWazan
 import com.example.mushafconsolidated.Entities.hanslexicon
-import com.example.mushafconsolidated.Entities.lanelexicon
+import com.example.mushafconsolidated.Entities.lanerootdictionary
+
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.databinding.ActivityRootBreakupBinding
@@ -517,8 +518,8 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
                                     runOnUiThread { dialog.show() }
                                     var list: ArrayList<SpannableString> =
                                         ArrayList()
-                                    val lanesDifinition: java.util.ArrayList<lanelexicon?>? =
-                                        utils.getLanesDifinition(root) as java.util.ArrayList<lanelexicon?>?
+                                    val lanesDifinition: java.util.ArrayList<lanerootdictionary?>? =
+                                        utils.getLanesRootDifinition(root) as java.util.ArrayList<lanerootdictionary?>?
                                     for (lanes in lanesDifinition!!) {
 
                                         list.add(SpannableString.valueOf(lanes!!.definition))

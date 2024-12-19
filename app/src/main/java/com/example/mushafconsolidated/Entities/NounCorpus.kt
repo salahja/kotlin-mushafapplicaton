@@ -16,7 +16,7 @@ class NounCorpus {
     var ayah: Int
     var wordno: Int
     var token: Int
-    var words: String?
+
     var tag: String
     var propone: String?
     var proptwo: String?
@@ -39,7 +39,7 @@ class NounCorpus {
         ayah: Int,
         wordno: Int,
         token: Int,
-        words: String?,
+
         tag: String,
         propone: String?,
         proptwo: String?,
@@ -59,7 +59,7 @@ class NounCorpus {
         this.ayah = ayah
         this.wordno = wordno
         this.token = token
-        this.words = words
+
         this.tag = tag
         this.propone = propone
         this.proptwo = proptwo
@@ -83,7 +83,7 @@ class NounCorpus {
         ayah: Int,
         wordno: Int,
         token: Int,
-        words: String?,
+
         tag: String,
         propone: String?,
         proptwo: String?,
@@ -104,7 +104,7 @@ class NounCorpus {
         this.ayah = ayah
         this.wordno = wordno
         this.token = token
-        this.words = words
+
         this.tag = tag
         this.propone = propone
         this.proptwo = proptwo

@@ -28,7 +28,7 @@ import com.example.mushafconsolidated.Entities.CorpusVerbWbwOccurance
 import com.example.mushafconsolidated.Entities.NounCorpusBreakup
 import com.example.mushafconsolidated.Entities.VerbCorpusBreakup
 import com.example.mushafconsolidated.Entities.hanslexicon
-import com.example.mushafconsolidated.Entities.lanelexicon
+
 import com.example.mushafconsolidated.Entities.lanerootdictionary
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.Utils
@@ -265,7 +265,7 @@ open class WordOccuranceAct : BaseActivity() {
         for (occurrence in occurrences) {
             val (ref, spannableVerses) = when (wordType) {
                 WordType.HANS, WordType.LANES -> {
-                    val definition = if (occurrence is hanslexicon) occurrence.definition else (occurrence as lanelexicon).definition
+                    val definition = if (occurrence is hanslexicon) occurrence.definition else (occurrence as lanerootdictionary).definition
                     Pair(SpannableString(""), SpannableString(definition)) // Return a Pair
                 }
                 WordType.NOUN -> formatNounOccurrence(occurrence as CorpusNounWbwOccurance)

@@ -25,7 +25,7 @@ interface NounCorpusDao {
     fun allnounscount(verbroot: String): List<NounCorpus>
 
     @Transaction
-    @Query("SELECT count(root_a) as count,root_a,lemma_a,araword,surah,ayah,wordno,token,words,tag,propone,proptwo,form,lemma,root,gendernumber,type,cases,details,id  FROM nouncorpus where root_a=:root group by root_a,form order by surah,ayah")
+    @Query("SELECT count(root_a) as count,root_a,lemma_a,araword,surah,ayah,wordno,token,tag,propone,proptwo,form,lemma,root,gendernumber,type,cases,details,id  FROM nouncorpus where root_a=:root group by root_a,form order by surah,ayah")
     fun getNounBreakup(root: String): List<NounCorpus>
 
     /*    @RawQuery(observedEntities = arrayOf(CorpusExpandWbwPOJO::class))

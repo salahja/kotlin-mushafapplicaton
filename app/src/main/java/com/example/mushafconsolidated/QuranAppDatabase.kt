@@ -19,7 +19,6 @@ import com.example.mushafconsolidated.DAO.HansDao
 import com.example.mushafconsolidated.DAO.JasonSurahDao
 
 
-import com.example.mushafconsolidated.DAO.LaneDao
 import com.example.mushafconsolidated.DAO.LaneRootDao
 import com.example.mushafconsolidated.DAO.LughatDao
 import com.example.mushafconsolidated.DAO.LysaDao
@@ -68,7 +67,7 @@ import com.example.mushafconsolidated.Entities.VerbCorpus
 import com.example.mushafconsolidated.Entities.hanslexicon
 import com.example.mushafconsolidated.Entities.jsonsurahentity
 
-import com.example.mushafconsolidated.Entities.lanelexicon
+
 import com.example.mushafconsolidated.Entities.lanerootdictionary
 import com.example.mushafconsolidated.Entities.lughat
 import com.example.mushafconsolidated.Entities.lysaEnt
@@ -96,7 +95,7 @@ import java.io.File
         AllahNamesDetails::class,
         lanerootdictionary::class, Qari::class,
         surahsummary::class, quranexplorer::class,
-        AllahNames::class, GrammarRules::class, hanslexicon::class, qurandictionary::class, lanelexicon::class,
+        AllahNames::class, GrammarRules::class, hanslexicon::class, qurandictionary::class,
         lughat::class,
         SifaEntity::class,
         NewMudhafEntity::class,
@@ -193,7 +192,7 @@ abstract class QuranAppDatabase : RoomDatabase() {
      *
      * @return
      */
-    abstract fun LaneDao(): LaneDao?
+
 
     /**
      * Lane root dao

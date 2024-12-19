@@ -102,7 +102,7 @@ object QuranViewUtils {
         quranModel: QuranViewModel,
         surah: Int,
         negationCache: MutableMap<Int, MutableMap<Int, MutableList<SpannableString>>>,
-        isNightmode: String
+        isNightmode: Boolean
     ) {
         val negantionData = quranModel.getNegationFilterSurah(surah)
         val futureTenceCache: MutableMap<String, List<List<SpannableString>>> = mutableMapOf()

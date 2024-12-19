@@ -36,6 +36,7 @@ import androidx.cardview.widget.CardView
 
 
 import androidx.constraintlayout.widget.Group
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 
@@ -124,6 +125,7 @@ class QuranDisplayAdapter(
     private var translationfontsize: Int = 0
     lateinit var mItemClickListener: OnItemClickListenerOnLong
     private lateinit var isNightmode: String
+    private var currentTheme=false
     private var headercolor = 0
 
     private lateinit var colorwordfont: Typeface
@@ -155,7 +157,13 @@ class QuranDisplayAdapter(
         QuranViewUtils.initialize(mainViewModel)
         // Assuming you have a QuranModel instance and caches like before
         val surah = allofQuran[0].surah
+
+
+        val preferences = sharedPreferences.getString("theme", "dark")
+        currentTheme = preferences == "dark" || preferences == "blue" || preferences == "green"
+
         isNightmode = sharedPreferences.getString("themepref", "dark").toString()
+        currentTheme = preferences == "dark" || preferences == "blue" || preferences == "green"
 // Call utility functions to cache the data
         QuranViewUtils.cacheAbsoluteNegationData(quranModel, surah, absoluteNegationCache)
         QuranViewUtils.cacheSifaData(quranModel, surah, sifaCache)
@@ -163,7 +171,7 @@ class QuranDisplayAdapter(
 
         //    QuranViewUtils.cachePastTenceData(quranModel, surah, pastTenceCache)
         //   QuranViewUtils.cacheFutureTenceData(quranModel, surah, futureTenceCache)
-        QuranViewUtils.cacheNegationData(quranModel, surah, negationCache, isNightmode)
+        QuranViewUtils.cacheNegationData(quranModel, surah, negationCache, currentTheme)
 
 
 
