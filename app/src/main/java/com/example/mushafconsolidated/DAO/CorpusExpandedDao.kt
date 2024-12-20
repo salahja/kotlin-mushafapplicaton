@@ -1,6 +1,5 @@
 package com.example.mushafconsolidated.DAO
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
 import com.example.mushafconsolidated.Entities.CorpusEntity
@@ -12,7 +11,7 @@ import com.example.mushafconsolidated.Entities.CorpusEntity
 @Dao
 interface CorpusExpandedDao {
     @Query("SELECT * FROM CorpusExpand WHERE surah=:id")
-    fun getVersesBySurah(id: Int): List<CorpusEntity>
+    fun getCorpusVersesBySurah(id: Int): List<CorpusEntity>
 
     @Query("SELECT * FROM CorpusExpand WHERE surah=:id and ayah=:ayahid")
     fun getVersesBySurahAndAya(id: Int, ayahid: Int): List<CorpusEntity>
@@ -24,8 +23,8 @@ interface CorpusExpandedDao {
     @Query("SELECT * FROM CorpusExpand WHERE rootaraone||rootaratwo||rootarathree||rootarafour=:root")
     fun getQuranCorpusWbwbyroot(root: String): List<CorpusEntity>
 
-
-
+    @Query("SELECT * FROM CorpusExpand order by surah,ayah,wordno")
+    fun getCorpusAll( ): List<CorpusEntity>
 
     @Query("SELECT * FROM CorpusExpand WHERE surah=:id and ayah=:ayahid and wordno=:wordid")
     fun getCorpusWord(
