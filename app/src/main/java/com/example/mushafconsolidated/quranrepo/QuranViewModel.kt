@@ -163,6 +163,18 @@ class QuranViewModel @Inject constructor(
 
     }
 
+
+    fun getQuranCorpusWbwbysurah(cid: Int): List<CorpusEntity> {
+
+
+
+          return quranRepository.getQuranCorpusWbwbysurah(cid)
+
+
+
+    }
+
+
     fun getAbsoluteNegationFilerSurahAyah(cid: Int, aid: Int, ): List<AbsoluteNegationEnt> {
         return  this.quranRepository.getAbsoluteNegationFilerSurahAyah(cid, aid)
 
@@ -332,16 +344,6 @@ class QuranViewModel @Inject constructor(
     }
 
 
-    fun getQuranCorpusWbwbysurah(cid: Int): LiveData<List<CorpusEntity>> {
-
-
-        viewModelScope.launch {
-            qurancorpus.value = quranRepository.getQuranCorpusWbwbysurah(cid)
-        }
-
-
-        return qurancorpus
-    }
 
     fun getQuranCorpusWbwbyroot(root: String): LiveData<List<CorpusEntity>> {
 
@@ -387,6 +389,14 @@ class QuranViewModel @Inject constructor(
         return this.quranRepository.getNouncorpusFilterSurahAyah(surah, ayah)
 
     }
+    fun getNouncorpusFilterSurah(surah: Int, ): List<NounCorpus> {
+
+        return this.quranRepository.getNouncorpusFilterSurah(surah)
+
+    }
+
+
+
 
     fun getCorpusEntityFilterSurah(cid: Int ): MutableLiveData<List<CorpusEntity>> {
         corpusentity.value = this.quranRepository.getCorpusEntityFilterSurah(cid)

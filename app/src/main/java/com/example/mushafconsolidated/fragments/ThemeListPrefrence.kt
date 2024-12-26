@@ -78,7 +78,7 @@ class ThemeListPrefrence constructor() : BottomSheetDialogFragment() {
         init {
             // TODO: Customize the item layout
             //  super(inflater.inflate(R.layout.fragment_item_list_dialog_list_dialog_item, parent, false));
-            purple = itemView.findViewById(R.id.Purple)
+            purple = itemView.findViewById(R.id.Light)
             black = itemView.findViewById(R.id.Black)
             dark_blue = itemView.findViewById(R.id.Dark_Blue)
             green = itemView.findViewById(R.id.green)

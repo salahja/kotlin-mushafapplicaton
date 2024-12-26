@@ -28,6 +28,7 @@ import com.example.mushafconsolidated.DAO.NegationDao
 import com.example.mushafconsolidated.DAO.NewMudhafDao
 
 import com.example.mushafconsolidated.DAO.NounCorpusDao
+import com.example.mushafconsolidated.DAO.OutsideDoerDAO
 
 import com.example.mushafconsolidated.DAO.QariDao
 import com.example.mushafconsolidated.DAO.QuranDao
@@ -58,6 +59,7 @@ import com.example.mushafconsolidated.Entities.NamesDetailsDao
 import com.example.mushafconsolidated.Entities.NegationEnt
 import com.example.mushafconsolidated.Entities.NewMudhafEntity
 import com.example.mushafconsolidated.Entities.NounCorpus
+import com.example.mushafconsolidated.Entities.OutSideDoer
 
 import com.example.mushafconsolidated.Entities.Qari
 import com.example.mushafconsolidated.Entities.QuranEntity
@@ -99,6 +101,7 @@ import java.io.File
         lughat::class,
         SifaEntity::class,
         NewMudhafEntity::class,
+        OutSideDoer::class,
          NounCorpus::class, VerbCorpus::class, QuranEntity::class, CorpusEntity::class, BookMarks::class, ChaptersAnaEntity::class],
     version = 1
 )
@@ -110,6 +113,7 @@ abstract class QuranAppDatabase : RoomDatabase() {
      */
     abstract fun AnaQuranChapterDao(): AnaQuranChapterDao
     abstract fun JasonSurahDao() : JasonSurahDao
+    abstract fun OutsideDoerDAO(): OutsideDoerDAO
     /**
      * Book mark dao
      *

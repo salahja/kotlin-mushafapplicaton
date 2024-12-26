@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "682d30e315878ca0734e894dba102442",
+    "identityHash": "24648ab04831437b1eada2f233e27151",
     "entities": [
       {
         "tableName": "negationfulldata",
@@ -993,8 +993,52 @@
         "foreignKeys": []
       },
       {
+        "tableName": "outsidedoer",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surah` INTEGER NOT NULL, `ayah` INTEGER NOT NULL, `wordno` INTEGER NOT NULL, `wordtext` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "surah",
+            "columnName": "surah",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ayah",
+            "columnName": "ayah",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wordno",
+            "columnName": "wordno",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wordtext",
+            "columnName": "wordtext",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
         "tableName": "nouncorpus",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`root_a` TEXT, `lemma_a` TEXT, `araword` TEXT, `surah` INTEGER NOT NULL, `ayah` INTEGER NOT NULL, `wordno` INTEGER NOT NULL, `token` INTEGER NOT NULL, `tag` TEXT NOT NULL, `propone` TEXT, `proptwo` TEXT, `form` TEXT, `lemma` TEXT, `root` TEXT, `gendernumber` TEXT, `type` TEXT, `cases` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `details` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`root_a` TEXT, `lemma_a` TEXT, `araword` TEXT, `fael` TEXT, `surah` INTEGER NOT NULL, `ayah` INTEGER NOT NULL, `wordno` INTEGER NOT NULL, `token` INTEGER NOT NULL, `tag` TEXT NOT NULL, `propone` TEXT, `proptwo` TEXT, `form` TEXT, `lemma` TEXT, `root` TEXT, `gendernumber` TEXT, `type` TEXT, `cases` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `details` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "root_a",
@@ -1011,6 +1055,12 @@
           {
             "fieldPath": "araword",
             "columnName": "araword",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "fael",
+            "columnName": "fael",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -1384,7 +1434,7 @@
       },
       {
         "tableName": "CorpusExpand",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surah` INTEGER NOT NULL, `ayah` INTEGER NOT NULL, `wordno` INTEGER NOT NULL, `wordcount` INTEGER NOT NULL, `araone` TEXT, `aratwo` TEXT, `arathree` TEXT, `arafour` TEXT, `arafive` TEXT, `tagone` TEXT, `tagtwo` TEXT, `tagthree` TEXT, `tagfour` TEXT, `tagfive` TEXT, `rootaraone` TEXT, `rootaratwo` TEXT, `rootarathree` TEXT, `rootarafour` TEXT, `rootarafive` TEXT, `lemaraone` TEXT, `lemaratwo` TEXT, `lemarathree` TEXT, `lemarafour` TEXT, `lemarafive` TEXT, `detailsone` TEXT, `detailstwo` TEXT, `detailsthree` TEXT, `detailsfour` TEXT, `detailsfive` TEXT, `en` TEXT NOT NULL, `bn` TEXT NOT NULL, `ind` TEXT NOT NULL, `ur` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `juz` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`surah` INTEGER NOT NULL, `ayah` INTEGER NOT NULL, `wordno` INTEGER NOT NULL, `wordcount` INTEGER NOT NULL, `araone` TEXT, `aratwo` TEXT, `arathree` TEXT, `arafour` TEXT, `arafive` TEXT, `tagone` TEXT, `tagtwo` TEXT, `tagthree` TEXT, `tagfour` TEXT, `tagfive` TEXT, `rootaraone` TEXT, `rootaratwo` TEXT, `rootarathree` TEXT, `rootarafour` TEXT, `rootarafive` TEXT, `lemma` TEXT, `detailsone` TEXT, `detailstwo` TEXT, `detailsthree` TEXT, `detailsfour` TEXT, `detailsfive` TEXT, `en` TEXT NOT NULL, `bn` TEXT NOT NULL, `ind` TEXT NOT NULL, `ur` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `juz` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "surah",
@@ -1501,32 +1551,8 @@
             "notNull": false
           },
           {
-            "fieldPath": "lemaraone",
-            "columnName": "lemaraone",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "lemaratwo",
-            "columnName": "lemaratwo",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "lemarathree",
-            "columnName": "lemarathree",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "lemarafour",
-            "columnName": "lemarafour",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "lemarafive",
-            "columnName": "lemarafive",
+            "fieldPath": "lemma",
+            "columnName": "lemma",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -1769,7 +1795,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '682d30e315878ca0734e894dba102442')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '24648ab04831437b1eada2f233e27151')"
     ]
   }
 }

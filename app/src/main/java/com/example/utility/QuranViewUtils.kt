@@ -814,7 +814,7 @@ object QuranViewUtils {
     }
 
     fun NewgetSpannedWords(tag: CorpusEntity): SpannableString {
-        return CorpusUtilityorig.NewSetWordSpan(
+        return CorpusUtilityorig.QuranWbWSpan(
             tag.tagone,
             tag.tagtwo,
             tag.tagthree,
@@ -824,7 +824,8 @@ object QuranViewUtils {
             tag.aratwo!!,
             tag.arathree!!,
             tag.arafour!!,
-            tag.arafive!!
+            tag.arafive!!,
+            tag.detailsone!!
         )
     }
 
@@ -910,7 +911,57 @@ object QuranViewUtils {
         return nunationRegex.containsMatchIn(text)
     }
 
+    fun extractConsonantsprev(input: String): String {
+        val arabicDiacritics =
+            "[\\u064B-\\u065F\\u0670\\u06D6-\\u06DC\\u06DF-\\u06E8\\u06EA-\\u06ED]" // Arabic diacritic Unicode range
+        val vowels = "[ًٌٍَُِْ]" // Short vowels (fatha, kasra, damma, etc.)
+        val dots = "[\\.]{1,2}" // Matches single or double dots
+
+        // Remove diacritics, vowels, and dots
+        val result= input.replace(Regex(arabicDiacritics), "") .replace(Regex(vowels), "")      .replace(Regex(dots), "")
+        return result
+    }
+
+    fun extractConsonantsssss(input: String): String {
+        // Define Arabic diacritics and vowels explicitly
+        val arabicDiacriticsAndVowels = "[\\u064B-\\u065F\\u0670\\u06D6-\\u06ED]" // Includes all Arabic diacritics and vowels
+        val arabicLetters = "[\\u0621-\\u064A]" // Matches Arabic letters
+
+        // Letters without dots in Arabic script
+        val lettersWithoutDots = setOf('ا', 'د', 'ذ', 'ر', 'ز', 'و', 'ى', 'ه', 'ء')
+
+        // Remove diacritics and vowels first
+        val cleanedInput = input.replace(Regex(arabicDiacriticsAndVowels), "")
+
+        // Filter for consonants without dots
+        return cleanedInput.filter { it in lettersWithoutDots || it.toString().matches(Regex(arabicLetters)) }
+    }
+
     fun extractConsonants(input: String): String {
+        // Define Arabic diacritics and vowels explicitly
+        val arabicDiacriticsAndVowels = "[\\u064B-\\u0652\\u0670\\u06D6-\\u06ED]" // Includes diacritics, vowels, and related marks
+        val arabicLetters = "[\\u0621-\\u064A]" // Matches only Arabic letters, excluding diacritics
+        val alifkhan="[\\u0670-]"
+        val removealifkhan=input.replace(Regex(alifkhan),"ا")
+        // Remove diacritics and vowels
+        val cleanedInput = input.replace(Regex(arabicDiacriticsAndVowels), "")
+
+        // Filter out any remaining non-Arabic letters (for safety)
+        return cleanedInput.filter { it.toString().matches(Regex(arabicLetters)) }
+    }
+
+    fun extractConsonantsgem(input: String): String {
+        val arabicDiacritics = "[\\u064B-\\u065F\\u0670\\u06D6-\\u06DC\\u06DF-\\u06E8\\u06EA-\\u06ED]" // Arabic diacritic Unicode range
+        val vowels = "[ًٌٍَُِْ]" // Short vowels (fatha, kasra, damma, etc.)
+        val dots = "[\\u064B-\\u0652]" // Matches Arabic dots (shadda, fathatan, dammatan, kasratan, etc.)
+        val arabicLetters = "[\\u0621-\\u064A]" // Matches Arabic letters
+
+        // Remove diacritics, vowels, and dots
+        return input.replace(Regex("$arabicDiacritics|$vowels|$dots"), "")
+            .filter { it.toString().matches(Regex(arabicLetters)) }
+    }
+
+    fun extractConsonantss(input: String): String {
         val arabicDiacritics =
             "[\\u064B-\\u065F\\u0670\\u06D6-\\u06DC\\u06DF-\\u06E8\\u06EA-\\u06ED]" // Arabic diacritic Unicode range
         val vowels = "[ًٌٍَُِْ]" // Short vowels (fatha, kasra, damma, etc.)

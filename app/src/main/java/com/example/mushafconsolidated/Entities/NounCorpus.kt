@@ -12,6 +12,7 @@ class NounCorpus {
     var root_a: String?
     var lemma_a: String?
     var araword: String?
+    var fael: String?
     var surah: Int
     var ayah: Int
     var wordno: Int
@@ -35,6 +36,7 @@ class NounCorpus {
         root_a: String?,
         lemma_a: String?,
         araword: String?,
+        fael:String?,
         surah: Int,
         ayah: Int,
         wordno: Int,
@@ -55,6 +57,7 @@ class NounCorpus {
         this.root_a = root_a
         this.lemma_a = lemma_a
         this.araword = araword
+        this.fael=fael
         this.surah = surah
         this.ayah = ayah
         this.wordno = wordno
@@ -79,6 +82,7 @@ class NounCorpus {
         root_a: String?,
         lemma_a: String?,
         araword: String?,
+        fael: String?,
         surah: Int,
         ayah: Int,
         wordno: Int,
@@ -100,6 +104,7 @@ class NounCorpus {
         this.root_a = root_a
         this.lemma_a = lemma_a
         this.araword = araword
+        this.fael=fael
         this.surah = surah
         this.ayah = ayah
         this.wordno = wordno

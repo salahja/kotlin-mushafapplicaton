@@ -27,6 +27,7 @@ import com.example.mushafconsolidated.Entities.NegationEnt
 
 import com.example.mushafconsolidated.Entities.NounCorpus
 import com.example.mushafconsolidated.Entities.NounCorpusBreakup
+import com.example.mushafconsolidated.Entities.OutSideDoer
 import com.example.mushafconsolidated.Entities.PastTencePOJO
 
 import com.example.mushafconsolidated.Entities.PresentTencePOJO
@@ -94,9 +95,10 @@ class Utils {
     }
 
 
-    fun getexp(exp: String,rslt:String): List<CorpusEntity> {
-        return database.getCorpusExpandDao().getExplistbytag(exp,rslt)
+    fun getCorpusVersesBySurah(cid:Int ): List<CorpusEntity> {
+        return database.getCorpusExpandDao().getCorpusVersesBySurah(cid)
     }
+
 
 
 
@@ -161,6 +163,21 @@ class Utils {
 
         return database.AnaQuranChapterDao().chapterslist()
     }
+    fun outSideDoer(): List<OutSideDoer> {
+
+        return database.OutsideDoerDAO().outsidedoerlist()
+    }
+    fun outSideDoerSurah(cid: Int): List<OutSideDoer> {
+
+        return database.OutsideDoerDAO().doerlistSurah(cid)
+    }
+
+    fun getCorpusAll(): List<CorpusEntity> {
+
+        return database.getCorpusExpandDao().getCorpusAll()
+    }
+
+
 
     fun getSingleChapter(id: Int): List<ChaptersAnaEntity?>? {
         Log.d(TAG, "getSingleChapter: started")

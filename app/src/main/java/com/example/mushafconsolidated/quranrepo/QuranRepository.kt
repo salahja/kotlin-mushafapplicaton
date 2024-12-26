@@ -103,7 +103,7 @@ import javax.inject.Inject
      ) {
 
     fun getQuranCorpusBysurah(cid: Int): List<CorpusEntity> =
-        corpusDao.getVersesBySurah(cid)
+        corpusDao.getCorpusVersesBySurah(cid)
 
 
 
@@ -203,6 +203,9 @@ import javax.inject.Inject
      fun getNouncorpusFilterSurahAyah(surah: Int, ayah: Int): List<NounCorpus> =
          nouncorpusdao.getQuranNounAyah(surah, ayah)
 
+   fun getNouncorpusFilterSurah(surah: Int): List<NounCorpus> =
+     nouncorpusdao.getQuranNounSurah(surah)
+
     val chapters: LiveData<List<ChaptersAnaEntity>> = chaptersdao.chaptersl()
 
     val bookmarlist: LiveData<List<BookMarks>> = bookm.getBookMarksLive()
@@ -215,7 +218,7 @@ import javax.inject.Inject
          chaptersdao.getSingleChapters(cid)
 
     fun getQuranCorpusWbwbysurah(cid: Int): List<CorpusEntity> =
-      corpusDao.getVersesBySurah(cid)
+      corpusDao.getCorpusVersesBySurah(cid)
 
     fun getQuranCorpusWbwbyroot(root: String): List<CorpusEntity> =
       corpusDao.getQuranCorpusWbwbyroot(root)
@@ -267,8 +270,8 @@ import javax.inject.Inject
          return QuranData(
 
              allofQuran = qurandao.getQuranVersesBySurahl(chapterNo), // Fetch Quran verses
-             corpusSurahWord = corpusDao.getVersesBySurah(chapterNo), //Fetch corpus data
-             copusExpandSurah = corpusDao.getVersesBySurah(chapterNo),
+             corpusSurahWord = corpusDao.getCorpusVersesBySurah(chapterNo), //Fetch corpus data
+             copusExpandSurah = corpusDao.getCorpusVersesBySurah(chapterNo),
          )
      }
 
@@ -276,7 +279,7 @@ import javax.inject.Inject
          return CorpusAndQuranData(
 
              allofQuran = qurandao.getQuranVersesBySurahl(chapterNo), // Fetch Quran verses
-            copusExpandSurah = corpusDao.getVersesBySurah(chapterNo),
+            copusExpandSurah = corpusDao.getCorpusVersesBySurah(chapterNo),
          )
      }
 

@@ -81,12 +81,12 @@ import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.example.mushafconsolidated.settingsimport.Constants
 import com.example.mushafconsolidatedimport.ParticleColorScheme
 import com.example.utility.CorpusUtilityorig.Companion.HightLightKeyWordold
+import com.example.utility.CorpusUtilityorig.Companion.searchForFael
+import com.example.utility.CorpusUtilityorig.Companion.searchForFaelwordno
+import com.example.utility.CorpusUtilityorig.Companion.updateCorpusWithFael
 
 import com.example.utility.ExtractionUtility.extractAccusativeSentences
-import com.example.utility.ExtractionUtility.extractConditionalSentencesWhenWithVerbsIN
-import com.example.utility.ExtractionUtility.extractMousufSifanew
 import com.example.utility.ExtractionUtility.extractOutsideDoer
-import com.example.utility.ExtractionUtility.getVersesAndTranslation
 import com.example.utility.ExtractionUtility.nasab
 import com.example.utility.ExtractionUtility.shart
 import com.example.utility.ExtractionUtility.writeNegationDataToFile
@@ -291,10 +291,13 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     val start = false
     if (start) {
       //mainLoopFromIndexExtraction()
-      temloop()
-      //mainLoopforErabStringEXTRACTION()
+      //temloop()
+      //    CorpusConsolidateLemmas()
+      //     mainLoopforErabStringEXTRACTION()
       //mainLoopforIndexEXTRACTION()
       //extractExpNegationSentences()
+  updateCorpus()
+   //   ExtractDoer()
     }
 
 
@@ -379,7 +382,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
   }
 
-  private fun mainLoopforErabStringEXTRACTION() {
+  private fun LoopForDoerRawExtraction() {
     mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
     val utils = Utils(this)
     val allLamNegativeSenteces = ArrayList<List<String>>()
@@ -387,24 +390,80 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     var allofQuran: List<QuranEntity>? = null
 
 
-    for (i in 1..114) {
+    for (i in 2..2) {
       val quran = utils.getQuranbySurah(i)
-      //     val quran = mainViewModel.getquranbySUrah(i)
-      for (qd in quran.indices) {
-        val info = quran[qd]
-        val corpusEntity = mainViewModel.getCorpusEntityFilterSurahAya(
-          i, info.ayah
-        ) as ArrayList<CorpusEntity>
-        val list = extractMousufSifanew(corpusEntity, info.qurantext)
-        //   val list = extractSifat(corpusEntity,info.qurantext)
+      val lamNegationDataList = searchForFael(quran)
 
-
-        if (list.isNotEmpty()) {
-          allLamNegativeSenteces.add(list)
-        }
+      if (lamNegationDataList.isNotEmpty()) {
+        allLamNegativeSenteces.add(lamNegationDataList)
       }
 
-      // val lamNegationDataList = searchForTameez(quran)
+
+    }
+    val fileName = "surahtworaw.csv"
+    writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
+  }
+
+  private fun updateCorpus() {
+
+    mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
+    val utils = Utils(this)
+    val allLamNegativeSenteces = ArrayList<List<String>>()
+
+    val doer = utils.outSideDoer()
+    val corpus = utils.getCorpusAll()
+    val fileNames = "found.csv"
+    writeNegationDataToFile(context!!, allLamNegativeSenteces, fileNames)
+    val lamNegationDataList = updateCorpusWithFael(doer, corpus)
+
+    if (lamNegationDataList.isNotEmpty()) {
+      allLamNegativeSenteces.add(lamNegationDataList)
+    }
+    writeNegationDataToFile(context!!, allLamNegativeSenteces, fileNames)
+
+  }
+
+  private fun mainLoopforErabStringEXTRACTION() {
+    mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
+    val utils = Utils(this)
+    val allLamNegativeSenteces = ArrayList<List<String>>()
+    // val allLamNegativeSenteces =                             ArrayList<List<Pair<String, String>>>()
+    var allofQuran: List<QuranEntity>? = null
+
+    val aydi = "أَيْدِيهِمْ"
+    val doer = utils.outSideDoerSurah(41)
+    val corpus = utils.getCorpusVersesBySurah(41)
+    val fileNames = "corpus.csv"
+    writeNegationDataToFile(context!!, allLamNegativeSenteces, fileNames)
+    val lamNegationDataList = updateCorpusWithFael(doer, corpus)
+
+    if (lamNegationDataList.isNotEmpty()) {
+      allLamNegativeSenteces.add(lamNegationDataList)
+    }
+
+    for (i in 0..0) {
+      val quran = utils.getQuranbySurah(i)
+
+
+      //     val quran = mainViewModel.getquranbySUrah(i)
+
+//  val nouncorpus=        mainViewModel.getNouncorpusFilterSurah(i)
+      val nouncorpus = mainViewModel.getQuranCorpusWbwbysurah(i) as ArrayList<CorpusEntity>
+
+      val corpusEntity = mainViewModel.getQuranCorpusWbwbysurah(
+        i,
+      ) as ArrayList<CorpusEntity>
+      //  val list = extractMousufSifanew(corpusEntity, info.qurantext)
+      //   val list = extractSifat(corpusEntity,info.qurantext)
+      val lamNegationDataList = searchForFaelwordno(quran, nouncorpus)
+
+
+      if (lamNegationDataList.isNotEmpty()) {
+        allLamNegativeSenteces.add(lamNegationDataList)
+      }
+
+
+      //    val lamNegationDataList = searchForFael(quran, nouncorus)
 
       //test with surah 11 ayah 81
 
@@ -437,7 +496,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
 
     }
-    val fileName = "NEWSIFA.csv"
+    val fileName = "outsidedoer.csv"
     writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
   }
 
@@ -451,31 +510,91 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
     val utils = Utils(this)
     val chapters = utils.getAllAnaChapters()
- //   val sifa = utils.getSifaAll()
+    //   val sifa = utils.getSifaAll()
     for (chapter in chapters!!.indices) {
 
-      val sifaentity    =         utils.getSifabySurah(chapters[chapter]!!.chapterid)
+      val sifaentity = utils.getSifabySurah(chapters[chapter]!!.chapterid)
+      utils.getCorpusWbwBySurah(2)
       val versescount = chapters[chapter]!!.versescount
-      var ayanumber=1
-       for( sifa in sifaentity!!.indices){
+      var ayanumber = 1
+      for (sifa in sifaentity!!.indices) {
 
         val arabic = sifaentity.get(sifa)!!.verse
-        val dataString =          "${chapters.get(chapter)!!.chapterid}|$ayanumber|$arabic"
+        val dataString = "${chapters.get(chapter)!!.chapterid}|$ayanumber|$arabic"
         allLamNegativeSenteces.add(listOf(dataString))
-         ayanumber++
+        ayanumber++
       }
 
       var fileName = sifaentity!![0]!!.surah.toString()
 
 
     }
-   val fileName="surah.csv"
+    val fileName = "surah.csv"
 
     writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
 
 
   }
 
+  private fun CorpusConsolidateLemmas() {
+    mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
+    var allLamNegativeSenteces = ArrayList<List<String>>()
+
+    val accsentece = ArrayList<Map<String, Any>>()
+    val accusativeSentencesCollection = mutableListOf<Map<String, Any>>()
+    var lamNeationDataList: List<String> = emptyList()
+
+    val utils = Utils(this)
+    val corpus = utils.getCorpusAll()
+    //   val sifa = utils.getSifaAll()
+    var fileName = ""
+    for (ctr in corpus!!.indices) {
+      val row = corpus[ctr]
+      val lemma = ""
+      //val lemma=row.lemaraone+row.lemaratwo+row.lemarathree+row.lemarafour+row.lemarafive
+      val dataString = "${row.surah}?${row.ayah}?${row.wordno}?${row.wordcount}?" +
+          "${row.araone}?${row.aratwo}?${row.arathree}?${row.arafour}?${row.arafive}?" +
+          "${row.tagone}?${row.tagtwo}?${row.tagthree}?${row.tagfour}?${row.tagfive}?" +
+          "${row.rootaraone}?${row.rootaratwo}?${row.rootarathree}?${row.rootarafour}?${row.rootarafive}?" +
+          "$lemma?${row.detailsone}?${row.detailstwo}?${row.detailsthree}?${row.detailsfour}?${row.detailsfive}?${row.juz}?${row.en}?${row.bn}?${row.ind}?${row.ur}"
+      allLamNegativeSenteces.add(listOf(dataString))
+
+
+    }
+
+
+    writeNegationDataToFile(context!!, allLamNegativeSenteces, "newcorpus.csv")
+
+
+  }
+
+  private fun ExtractDoer() {
+    mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
+    val utils = Utils(this)
+    val accusativeSentencesCollection = mutableListOf<Map<String, Any>>()
+    for (i in 2..114) {
+      val quran = utils.getQuranbySurah(i)
+      val corpusEntity = mainViewModel.getQuranCorpusWbwbysurah(
+        i
+      ) as ArrayList<CorpusEntity>
+
+
+      val extractedSentences =   extractOutsideDoer(corpusEntity, quran)
+      if (extractedSentences.isNotEmpty()) {
+        accusativeSentencesCollection.addAll(extractedSentences)
+
+
+      }
+      val (setenceCollection, Sentences) = shart(accusativeSentencesCollection)
+      val fileName = "odoer.csv"
+      writeNegationDataToFile(context!!, setenceCollection, fileName)
+    }
+ //   val (setenceCollection, Sentences) = nasab(accusativeSentencesCollection)
+
+
+
+
+  }
 
   private fun mainLoopFromIndexExtraction() {
     mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
@@ -529,8 +648,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
       // val extractedSentences     = extractKanaSentences(corpusEntity,quran.value!![0].qurantext,quran.value!![0].translation)
 
       //  val extractedSentences     =     extractKanaSistersSentences(corpusEntity,quran.value!![0].qurantext,quran.value!![0].translation)
-      val extractedSentences =
-        extractOutsideDoer(corpusEntity, quran.value!![0].qurantext, quran.value!![0].translation)
+      //   val extractedSentences =  extractOutsideDoer(corpusEntity, quran.value!![0].qurantext, quran.value!![0].translation)
       //  val extractedSentences = extractConditionalSentencesWhenWithVerbsIN(corpusEntity,quran.value!![0].qurantext,quran.value!![0].translation)
 
       // val extractedSentencess = extractConditionalSentencesWhenWithVerbsMAMINJUSSIVE(corpusEntity,quran.value!![0].qurantext, quran.value!![0].translation)
@@ -568,11 +686,11 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
                   allLamNegativeSenteces.add(lamNegationDataList)
 
               }*/
-      if (extractedSentences.isNotEmpty()) {
+     /* if (extractedSentences.isNotEmpty()) {
         accusativeSentencesCollection.addAll(extractedSentences)
 
 
-      }
+      }*/
 
     }
 
