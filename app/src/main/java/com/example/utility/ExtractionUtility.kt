@@ -1326,12 +1326,12 @@ object ExtractionUtility {
       } else {
         sentenceMap["predicateSequence"] as List<CorpusRow>
       }
-/*
-      val shartsequence = if (type == "Scenario 1") {
-        sentenceMap["predicateSequence"] as List<ShartCorpusRow>
-      } else {
-        sentenceMap["predicateSequence"] as List<ShartCorpusRow>
-      }*/
+      /*
+            val shartsequence = if (type == "Scenario 1") {
+              sentenceMap["predicateSequence"] as List<ShartCorpusRow>
+            } else {
+              sentenceMap["predicateSequence"] as List<ShartCorpusRow>
+            }*/
       var delimitedString = ""
       //   delimitedString = shartInCollection(shartsequence, sentenceMap, delimitedString, type)
 
@@ -1343,9 +1343,9 @@ object ExtractionUtility {
 
       // Add the delimited string as a list of strings to Sentences
       Sentences.add(delimitedString)
-        setenceCollection.add(listOf(delimitedString))
+      setenceCollection.add(listOf(delimitedString))
     }
-      setenceCollection.add(Sentences)
+    setenceCollection.add(Sentences)
     return Pair(setenceCollection, Sentences)
   }
 
@@ -1417,8 +1417,22 @@ object ExtractionUtility {
           val arabicText = sequence.joinToString(" ") { it.arabicText }
           val englishText = sequence.joinToString(" ") { it.englishText }
           val lastword = sequence.last().wordno
+          var details = ""
+          if (sequence.size == 2) {
+            details = sequence[1].details[0].toString()
+          } else if (sequence.size == 3) {
+            details = sequence[2].details[0].toString()
+          } else if (sequence.size == 4) {
+            details = sequence[3].details[0].toString()
+          } else if (sequence.size == 5) {
+            details = sequence[4].details[0].toString()
+          }
+
+          val detailsone = sequence.first().details
+          val detailslast = sequence.last().details
           delimitedString1 =
-            "$type|$surah|$ayah|$wordNos|$firstWordNo|$lastword|$arabicText|$englishText"
+            "$type?$surah?$ayah?$wordNos?$condword?$firstWordNo?$lastword?$detailsone?$arabicText?$englishText?$details"
+
         } else {
           val condword =
             sentenceMap["accWordNo"] as Int // Accessing the value for key "accWordNo"
@@ -3670,6 +3684,63 @@ object ExtractionUtility {
     return accusativeSentences
   }
 
+
+  fun extractInsideDoer(
+    corpusData: List<CorpusEntity>,
+    quran: List<QuranEntity>
+  ): List<String> {
+    val accusativeSentences = mutableListOf<Map<String, Any>>()
+    listOf("ظلل", "كود", "صبح", "ليس")
+    val result = mutableListOf<String>()
+    for (i in corpusData.indices) {
+      val row = corpusData[i]
+      val tags = listOf(
+        row.rootaraone,
+        row.rootaratwo,
+        row.rootarathree,
+        row.rootarafour,
+        row.rootarafive,
+        row.tagone,
+        row.tagtwo,
+        row.tagthree,
+        row.tagfour,
+        row.tagfive
+      ) // Create tags list
+      val detailstag = listOf(
+        row.detailsone,
+        row.detailstwo,
+        row.detailsthree,
+        row.detailsfour,
+        row.detailsfive
+      )
+      if (row.surah == 25 && row.ayah == 27 && row.wordno == 9) {
+        println("check")
+      }
+      detailstag.any()
+
+      val ismasculinesingular =
+        detailstag.any { it!!.contains("3MS") } && tags.any { it!!.contains("V") }
+      val isfemmsingular =
+        detailstag.any { it!!.contains("3FS") } && tags.any { it!!.contains("V") }
+     if (isfemmsingular || ismasculinesingular) {
+
+
+        // Format the result string
+        val dataString =
+          "${row.surah}|${row.ayah}|${row.wordno}|${row.lemma}"
+        result.add(dataString)
+
+       // val accWordNo = row.wordno
+        //val predicateSequence = findSequenceEndingInNom(corpusData, startIndex = i)
+
+
+      }
+
+    }
+
+    return result
+  }
+
   fun extractOutsideDoer(
     corpusData: List<CorpusEntity>,
     quran: List<QuranEntity>
@@ -3710,7 +3781,9 @@ object ExtractionUtility {
 
 
         val accWordNo = row.wordno
-        val predicateSequence = findSequenceEndingInNom(corpusData, startIndex = i)
+        // val predicateSequence = findSequenceEndingInNom(corpusData, startIndex = i)
+
+        val predicateSequence = findSequenceforRestofmsfs(corpusData, startIndex = i)
 
         //  val predicateSequence = findSequenceForSila(corpusData, startIndex = i)
         if (predicateSequence != null) {
@@ -4025,6 +4098,53 @@ object ExtractionUtility {
     return sequence
   }
 
+
+  fun findSequenceforRestofmsfs(
+    data: List<CorpusEntity>,
+    startIndex: Int,
+  ): List<CorpusRow>? {
+    val sequence = mutableListOf<CorpusRow>()
+
+    for (i in startIndex until min(
+      startIndex + 4,
+      data.size
+    )) { // Loop for 4 words or until end of data
+      val entity = data[i]
+      val row = CorpusRow(
+        surah = entity.surah,
+        ayah = entity.ayah,
+        wordno = entity.wordno,
+        tags = listOf(
+          entity.tagone,
+          entity.tagtwo,
+          entity.tagthree,
+          entity.tagfour,
+          entity.tagfive
+        ),
+        details = listOf(
+          entity.detailsone,
+          entity.detailstwo,
+          entity.detailsthree,
+          entity.detailsfour,
+          entity.detailsfive
+        ),
+        arabicText = entity.araone + entity.aratwo + entity.arathree + entity.arafour + entity.arafive,
+        englishText = entity.en
+      )
+      if (row.surah == 7 && row.ayah == 5) {
+        println()
+      }
+      sequence.add(row)
+
+      // Check if tags contain "NOM" and "N"
+      if (row.details.any { it?.contains("|FAEL") == true } && row.tags.any { it?.contains("N") == true }) {
+        return sequence // Return sequence if found
+      }
+    }
+
+    return null // Return null if not found
+  }
+
   fun findSequenceEndingInNom(
     data: List<CorpusEntity>,
     startIndex: Int,
@@ -4057,13 +4177,13 @@ object ExtractionUtility {
         arabicText = entity.araone + entity.aratwo + entity.arathree + entity.arafour + entity.arafive,
         englishText = entity.en
       )
-  if(row.surah==7 && row.ayah==5 ){
-    println()
-  }
+      if (row.surah == 7 && row.ayah == 5) {
+        println()
+      }
       sequence.add(row)
 
       // Check if tags contain "NOM" and "N"
-      if (row.details.any { it?.contains("NOM") == true } && row.tags.any { it?.contains("N") == true }) {
+      if (row.details.any { it?.contains("|FAEL") == true } && row.tags.any { it?.contains("N") == true }) {
         return sequence // Return sequence if found
       }
     }

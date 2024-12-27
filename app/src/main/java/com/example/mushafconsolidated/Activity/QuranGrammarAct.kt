@@ -86,6 +86,7 @@ import com.example.utility.CorpusUtilityorig.Companion.searchForFaelwordno
 import com.example.utility.CorpusUtilityorig.Companion.updateCorpusWithFael
 
 import com.example.utility.ExtractionUtility.extractAccusativeSentences
+import com.example.utility.ExtractionUtility.extractInsideDoer
 import com.example.utility.ExtractionUtility.extractOutsideDoer
 import com.example.utility.ExtractionUtility.nasab
 import com.example.utility.ExtractionUtility.shart
@@ -296,8 +297,8 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
       //     mainLoopforErabStringEXTRACTION()
       //mainLoopforIndexEXTRACTION()
       //extractExpNegationSentences()
-  updateCorpus()
-   //   ExtractDoer()
+   updateCorpus()
+  //  ExtractDoer()
     }
 
 
@@ -412,7 +413,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
     val doer = utils.outSideDoer()
     val corpus = utils.getCorpusAll()
-    val fileNames = "found.csv"
+    val fileNames = "corpusversiontwobalancemustatar.csv"
     writeNegationDataToFile(context!!, allLamNegativeSenteces, fileNames)
     val lamNegationDataList = updateCorpusWithFael(doer, corpus)
 
@@ -571,26 +572,39 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
   private fun ExtractDoer() {
     mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
     val utils = Utils(this)
-    val accusativeSentencesCollection = mutableListOf<Map<String, Any>>()
+      //   val accusativeSentencesCollection = mutableListOf<Map<String, Any>>()
+    val allLamNegativeSenteces = ArrayList<List<String>>()
+
+
     for (i in 2..114) {
       val quran = utils.getQuranbySurah(i)
       val corpusEntity = mainViewModel.getQuranCorpusWbwbysurah(
         i
       ) as ArrayList<CorpusEntity>
+      val lamNegationDataList =   extractInsideDoer(corpusEntity, quran)
 
-
-      val extractedSentences =   extractOutsideDoer(corpusEntity, quran)
-      if (extractedSentences.isNotEmpty()) {
+        //    val extractedSentences =   extractInsideDoer(corpusEntity, quran)
+    /*  if (extractedSentences.isNotEmpty()) {
         accusativeSentencesCollection.addAll(extractedSentences)
 
 
+      }*/
+      if (lamNegationDataList.isNotEmpty()) {
+        allLamNegativeSenteces.add(lamNegationDataList)
       }
-      val (setenceCollection, Sentences) = shart(accusativeSentencesCollection)
-      val fileName = "odoer.csv"
-      writeNegationDataToFile(context!!, setenceCollection, fileName)
-    }
- //   val (setenceCollection, Sentences) = nasab(accusativeSentencesCollection)
 
+    //  val (setenceCollection, Sentences) = shart(accusativeSentencesCollection)
+      val fileName = "insidedoer.csv"
+      //writeNegationDataToFile(context!!, setenceCollection, fileName)
+
+
+    }
+
+
+    //  val (setenceCollection, Sentences) = shart(accusativeSentencesCollection)
+    val fileName = "filterinsidedoerforsingulars.csv"
+    //writeNegationDataToFile(context!!, setenceCollection, fileName)
+    writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
 
 
 

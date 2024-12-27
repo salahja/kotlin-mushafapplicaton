@@ -928,7 +928,7 @@ class CorpusUtilityorig(private var context: Context?) {
         }
 
         if (matchingOutsideDoer != null) {
-          corpusEntity.detailsone = "${corpusEntity.detailsone}|FAEL"
+          corpusEntity.detailsone = "${corpusEntity.detailsone}|INMUSTATAR"
           val datastring="${matchingOutsideDoer.surah}|${matchingOutsideDoer.ayah}|${matchingOutsideDoer.wordno}|${matchingOutsideDoer.wordtext}"
           found.add(datastring)
         }
@@ -941,8 +941,8 @@ class CorpusUtilityorig(private var context: Context?) {
         }
         ayalist.add(datastring)
       }
-     return found
-    //  return ayalist
+    // return found
+   return ayalist
     }
 
     @JvmStatic
@@ -1681,6 +1681,7 @@ class CorpusUtilityorig(private var context: Context?) {
           str = SpannableString(araone.trim { it <= ' ' })
           str.setSpan(spanhash[tagone], 0, araone.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
           str.setSpan(StyleSpan(Typeface.BOLD), 0, araone.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+          str.setSpan(UnderlineSpan(), 0, araone.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         } else if (faeldetails.contains("|FAEL")) {
           str = SpannableString(araone.trim { it <= ' ' })
           str.setSpan(spanhash[tagone], 0, araone.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
