@@ -14,12 +14,15 @@ import android.text.Spanned
 import android.text.TextPaint
 import android.text.TextUtils
 import android.text.style.BackgroundColorSpan
+import android.text.style.CharacterStyle
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
+import android.text.style.UpdateAppearance
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.text.color
 import com.example.Constant
 import com.example.Constant.harfshartspanDark
 import com.example.Constant.jawabshartspanDark
@@ -1634,6 +1637,7 @@ class CorpusUtilityorig(private var context: Context?) {
       arafive: String,
       faeldetails: String
     ): SpannableString {
+      val boldSpan = StyleSpan(Typeface.BOLD)
       var araone = araone
       var aratwo = aratwo
       var arathree = arathree
@@ -1722,6 +1726,7 @@ class CorpusUtilityorig(private var context: Context?) {
             0,araone.length+aratwo.length,
             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
           )
+          setRsltRemSpan(tagone, str, araone)
         } else
           if (faeldetails.contains("|FAEL")) {
             val boldSpan = StyleSpan(Typeface.BOLD)
@@ -1750,7 +1755,7 @@ class CorpusUtilityorig(private var context: Context?) {
               araone.length + aratwo.length,
               Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
             )
-
+            setRsltRemSpan(tagone, str, araone)
 
 
           } else {
@@ -1764,10 +1769,10 @@ class CorpusUtilityorig(private var context: Context?) {
               araone.length + aratwo.length,
               Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
             )
-
+            setRsltRemSpan(tagone, str, araone)
           }
       } else if (tagcounter == 3) {
-        val boldSpan = StyleSpan(Typeface.BOLD)
+
 
         if (faeldetails.contains("|INMUSTATAR")) {
           str =
@@ -1785,7 +1790,7 @@ class CorpusUtilityorig(private var context: Context?) {
 
           str.setSpan(StyleSpan(Typeface.BOLD), 0, araone.length + aratwo.length + arathree.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-
+          setRsltRemSpan(tagone, str, araone)
 
         } else
           if (faeldetails.contains("|FAEL")) {
@@ -1822,7 +1827,7 @@ class CorpusUtilityorig(private var context: Context?) {
               0,araone.length+aratwo.length+arathree.length,
               Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
             )
-
+            setRsltRemSpan(tagone, str, araone)
 
 
 
@@ -1844,6 +1849,7 @@ class CorpusUtilityorig(private var context: Context?) {
               araone.length + aratwo.length + arathree.length,
               Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
             )
+            setRsltRemSpan(tagone, str, araone)
           }
       } else if (tagcounter == 4) {
         val boldSpan = StyleSpan(Typeface.BOLD)
@@ -1871,6 +1877,7 @@ class CorpusUtilityorig(private var context: Context?) {
             0,araone.length+aratwo.length+arathree.length+arafour.length,
             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
           )
+          setRsltRemSpan(tagone, str, araone)
         }else
         if (faeldetails.contains("|FAEL")) {
           str =
@@ -1892,7 +1899,7 @@ class CorpusUtilityorig(private var context: Context?) {
             0,araone.length+aratwo.length+arathree.length+arafour.length,
             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
           )
-
+          setRsltRemSpan(tagone, str, araone)
         } else {
 
           str =
@@ -1916,27 +1923,108 @@ class CorpusUtilityorig(private var context: Context?) {
             araone.length + aratwo.length + arathree.length + arafour.trim { it <= ' ' }.length,
             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
           )
+          setRsltRemSpan(tagone, str, araone)
         }
         //    str.setSpan(attachedpronoun, araone.length() + aratwo.length() + arathree.length() + arafour.length(), araone.length() + aratwo.length() + arathree.length() + arafour.trim().length() + arafive.trim().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
       } else if (tagcounter == 5) {
-        str =
-          SpannableString(araone.trim { it <= ' ' } + aratwo.trim { it <= ' ' } + arathree.trim { it <= ' ' } + arafour.trim { it <= ' ' } + arafive.trim { it <= ' ' })
-        str.setSpan(spanhash[tagone], 0, araone.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        str.setSpan(spanhash[tagtwo], araone.length, araone.length + aratwo.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        str.setSpan(spanhash[tagthree], araone.length + aratwo.length, araone.length + aratwo.length + arathree.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        str.setSpan(spanhash[tagfour], araone.length + aratwo.length + arathree.length, araone.length + aratwo.length + arathree.length + arafour.trim { it <= ' ' }.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        str.setSpan(spanhash[tagfive],
-          araone.length + aratwo.length + arathree.length + arafour.length,
-          araone.length + aratwo.length + arathree.length + arafour.trim { it <= ' ' }.length + arafive.trim { it <= ' ' }.length,
-          Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
+        if(faeldetails.contains("INMUSTATAR")){
+          str =
+            SpannableString(araone.trim { it <= ' ' } + aratwo.trim { it <= ' ' } + arathree.trim { it <= ' ' } + arafour.trim { it <= ' ' } + arafive.trim { it <= ' ' })
+          str.setSpan(spanhash[tagone], 0, araone.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+          str.setSpan(spanhash[tagtwo], araone.length, araone.length + aratwo.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+          str.setSpan(spanhash[tagthree], araone.length + aratwo.length, araone.length + aratwo.length + arathree.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+          str.setSpan(spanhash[tagfour], araone.length + aratwo.length + arathree.length, araone.length + aratwo.length + arathree.length + arafour.trim { it <= ' ' }.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+          str.setSpan(spanhash[tagfive],araone.length + aratwo.length + arathree.length + arafour.length,  araone.length + aratwo.length + arathree.length + arafour.trim { it <= ' ' }.length + arafive.trim { it <= ' ' }.length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+          )
+          str.setSpan(
+            UnderlineSpan(),
+            0,araone.length+aratwo.length+arathree.length+arafour.length+arafive.length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+          )
+          str.setSpan(
+            boldSpan,
+            0,araone.length+aratwo.length+arathree.length+arafour.length+arafive.length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+          setRsltRemSpan(tagone, str, araone)
+
+        } else     if (faeldetails.contains("|FAEL")) {
+
+          str =
+            SpannableString(araone.trim { it <= ' ' } + aratwo.trim { it <= ' ' } + arathree.trim { it <= ' ' } + arafour.trim { it <= ' ' } + arafive.trim { it <= ' ' })
+          str.setSpan(spanhash[tagone], 0, araone.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+          str.setSpan(spanhash[tagtwo], araone.length, araone.length + aratwo.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+          str.setSpan(spanhash[tagthree], araone.length + aratwo.length, araone.length + aratwo.length + arathree.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+          str.setSpan(spanhash[tagfour], araone.length + aratwo.length + arathree.length, araone.length + aratwo.length + arathree.length + arafour.trim { it <= ' ' }.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+          str.setSpan(spanhash[tagfive],araone.length + aratwo.length + arathree.length + arafour.length,  araone.length + aratwo.length + arathree.length + arafour.trim { it <= ' ' }.length + arafive.trim { it <= ' ' }.length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+          )
+          str.setSpan(
+            StyleSpan(Typeface.BOLD),
+            0,araone.length+aratwo.length+arathree.length+arafour.length+arafive.length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+          )
+          str.setSpan(
+            StyleSpan(Typeface.ITALIC),
+            0,araone.length+aratwo.length+arathree.length+arafour.length+arafive.length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+          setRsltRemSpan(tagone, str, araone)
+        }else {
+          str =
+            SpannableString(araone.trim { it <= ' ' } + aratwo.trim { it <= ' ' } + arathree.trim { it <= ' ' } + arafour.trim { it <= ' ' } + arafive.trim { it <= ' ' })
+          str.setSpan(spanhash[tagone], 0, araone.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+          str.setSpan(
+            spanhash[tagtwo],
+            araone.length,
+            araone.length + aratwo.length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+          )
+          str.setSpan(
+            spanhash[tagthree],
+            araone.length + aratwo.length,
+            araone.length + aratwo.length + arathree.length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+          )
+          str.setSpan(
+            spanhash[tagfour],
+            araone.length + aratwo.length + arathree.length,
+            araone.length + aratwo.length + arathree.length + arafour.trim { it <= ' ' }.length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+          )
+          str.setSpan(spanhash[tagfive],
+            araone.length + aratwo.length + arathree.length + arafour.length,
+            araone.length + aratwo.length + arathree.length + arafour.trim { it <= ' ' }.length + arafive.trim { it <= ' ' }.length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+          )
+          setRsltRemSpan(tagone, str, araone)
+        }
       } else {
         str =
           SpannableString(araone.trim { it <= ' ' } + aratwo.trim { it <= ' ' } + arathree.trim { it <= ' ' } + arafour.trim { it <= ' ' } + arafive.trim { it <= ' ' })
       }
+
+
       return str
     }
 
+    private fun setRsltRemSpan(
+      tagone: String,
+      str: SpannableString,
+      araone: String
+    ) {
+      if (tagone.contains("RSLT") || tagone.contains("REM")) {
+        str.setSpan(StyleSpan(Typeface.BOLD), 0, araone.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        str.setSpan(UnderlineSpan(), 0, araone.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        str.setSpan(DoubleUnderlineSpan(), 0, araone.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE) // Add double underline
+      }
+    }
+    class DoubleUnderlineSpan : CharacterStyle(), UpdateAppearance {
+      override fun updateDrawState(tp: TextPaint) {
+        tp.isUnderlineText = true
+        tp.color = tp.linkColor // Use the default link color for the second underline
+        // You can customize the color and other properties of the second underline here
+      }
+    }
     @JvmStatic
     fun NewSetWordSpan(
       tagone: String?,
@@ -1983,14 +2071,9 @@ class CorpusUtilityorig(private var context: Context?) {
       arathree = arathree.trim { it <= ' ' }
       arafour = arafour.trim { it <= ' ' }
       arafive = arafive.trim { it <= ' ' }
-      //   SharedPreferences sharedPreferences =
-      //      androidx.preference.PreferenceManager.getDefaultSharedPreferences(DarkThemeApplication.context!!);
-      //   String isNightmode = sharedPreferences.getString("themepref", "dark" );
-      //   if (isNightmode.equals("dark")||isNightmode.equals("blue")) {
+
       val spanhash: Map<String?, ForegroundColorSpan> = stringForegroundColorSpanMap
-      //  }else{
-      //   spanhash = getColorSpanforPhrasesLight();
-      //  }
+
       if (tagcounter == 1) {
         str = SpannableString(araone.trim { it <= ' ' })
         str.setSpan(spanhash[tagone], 0, araone.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)

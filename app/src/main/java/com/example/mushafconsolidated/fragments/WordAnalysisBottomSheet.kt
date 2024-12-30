@@ -58,10 +58,12 @@ import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.R.layout
 import com.example.mushafconsolidated.SpannableStringUtils
 import com.example.mushafconsolidated.Utils
+
 import com.example.mushafconsolidated.databinding.RootDialogFragmentBinding
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListener
 import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.example.mushafconsolidatedimport.VerbFormsDialogFrag
+
 import com.example.utility.CorpusUtilityorig.Companion.getSpancolor
 import com.example.utility.QuranGrammarApplication
 import dagger.hilt.android.AndroidEntryPoint
@@ -1085,7 +1087,11 @@ class WordAnalysisBottomSheet : DialogFragment() {
         val cleanedForm = vbform.replace(Regex("[()]"), "")
 
         val data = arrayOf(cleanedForm)
-        VerbFormsDialogFrag.newInstance(data).show(requireActivity().supportFragmentManager, TAG)
+      //  VerbFormsDialogFrag.newInstance(data).show(requireActivity().supportFragmentManager, TAG)
+
+        // In your parent DialogFragment
+        val verbFormsDialogFrag = VerbFormsDialogFrag.newInstance(data)
+        verbFormsDialogFrag.show(childFragmentManager, "verbFormsDialogFrag")
     }
 
     private fun handleWordViewClick() {
