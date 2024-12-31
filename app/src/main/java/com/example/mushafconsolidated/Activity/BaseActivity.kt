@@ -21,12 +21,12 @@ open class BaseActivity : AppCompatActivity() {
     // }
     protected fun switchTheme(currenttheme: String?) {
         when (currenttheme) {
-            LIGHT_THEME -> setTheme(R.style.AppThemebrow)
-            DARK_THEME -> setTheme(R.style.Theme_Black)
+            LIGHT_THEME -> setTheme(R.style.AppThemeLight)
+            DARK_THEME -> setTheme(R.style.AppThemeDark)
             DARK_BLUE -> setTheme(R.style.AppTheme_materialdarkblue)
             DARK_GREEN -> setTheme(R.style.AppTheme_DarkGreen)
             BROWN_MODE -> setTheme(R.style.Theme_Browns)
-            else -> setTheme(R.style.Theme_Black)
+            else -> setTheme(R.style.AppThemeDark)
         }
         PreferenceManager.getDefaultSharedPreferences(this).edit().putString("theme", currenttheme)
             .apply()

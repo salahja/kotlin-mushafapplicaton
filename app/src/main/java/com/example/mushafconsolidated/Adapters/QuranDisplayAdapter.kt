@@ -382,7 +382,7 @@ class QuranDisplayAdapter(
         val showErab = sharedPreferences.getBoolean("showErabKey", true)
         wordByWordDisplay = sharedPreferences.getBoolean("wordByWordDisplay", false)
 
-        QuranViewUtils.setBackgroundColor(context, holder.itemView, isNightmode, position % 2 == 1)
+     QuranViewUtils.setBackgroundColor(context, holder.itemView, isNightmode, position % 2 == 1)
 
 
         val key = Pair(entity!!.surah, entity!!.ayah)

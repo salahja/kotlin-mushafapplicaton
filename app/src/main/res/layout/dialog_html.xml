@@ -1,0 +1,39 @@
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+
+    app:behavior_hideable="false"
+    app:behavior_peekHeight="200dp"
+
+
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+<RelativeLayout
+    android:id="@+id/htmlbottomsheet"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:overScrollMode="ifContentScrolls" />
+
+    <Button
+        android:id="@+id/closeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/webView"
+        android:text="Close"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp" />
+
+</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

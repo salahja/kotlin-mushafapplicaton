@@ -68,53 +68,57 @@
         <item name="tabTextColor">@color/mtrl_tabs_icon_color_selector</item>
         <item name="tabUnboundedRipple">true</item>
     </style>
-
-
-    <style name="Theme.Black" parent="Theme.Material3.Dark.NoActionBar">
-        <item name="android:windowDisablePreview">true</item>
-        <item name="android:windowBackground">@color/bg_black</item>
-        <item name="android:textViewStyle">@style/Base.Widget.TextView</item>
-        <item name="android:textColor">@color/neutral1</item>
-        <item name="android:activatedBackgroundIndicator">@drawable/activatedbackgroundblack</item>
-        <item name="android:fastScrollPreviewBackgroundRight">@drawable/fs_preview_bg</item>
-        <item name="android:fastScrollTrackDrawable">@null</item>
-        <item name="android:fastScrollOverlayPosition">atThumb</item>
-        <item name="android:fastScrollTextColor">?colorPrimary</item>
-        <item name="android:actionMenuTextAppearance">@style/ActionMenuText</item>
-        <item name="backgroundColor">@color/bg_black</item>
-        <item name="backgroundColorLight">@color/background_color_light_black</item>
-        <item name="colorAccent">@color/colorPrimaryBlackDark</item>
-        <item name="colorAccentLight">@color/colorPrimaryBlackLight</item>
-        <item name="colorControlHighlight">?colorPrimaryLight</item>
-        <item name="colorControlNormal">@color/neutral5</item>
-        <item name="colorError">@color/errorColor</item>
-        <item name="colorOutline">@color/md_theme_blue_outline</item>
-        <item name="colorOnError">#ffffffff</item>
-        <item name="colorOnPrimary">@color/neutral0</item>
-        <item name="colorOnSecondary">@color/neutral0</item>
-        <item name="colorPrimary">@color/colorPrimaryBlack</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryBlackDark</item>
-        <item name="colorPrimaryLight">@color/colorPrimaryBlackLight</item>
-        <item name="colorPrimarySurface">@color/bg_black</item>
-        <item name="colorPrimaryVariant">@color/colorPrimaryBlackDark</item>
-        <item name="colorSecondary">@color/colorPrimaryBlack</item>
-        <item name="colorSecondaryVariant">@color/colorPrimaryBlackLight</item>
-        <item name="colorSurface">@color/bg_surface_black</item>
-        <item name="even_item_bg">@color/bg_black</item>
-        <item name="item_selector">@drawable/item_selector_black</item>
-        <item name="odd_item_bg">@color/odd_item_bg_black</item>
-        <item name="card_bg">@color/card_item_bg_black</item>
-        <item name="dialog_bg">@color/odd_item_bg_dark_blue_light</item>
-        <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
-        <item name="sc_tint_color">@color/colorPrimaryBlack</item>
-        <item name="sc_unchecked_tint_color">@color/bg_black</item>
-        <item name="textColorLight">@color/neutral3</item>
-        <item name="tabStyle">@style/RoundedTabLayoutStyleDark</item>
-        <item name="android:spinnerStyle">@style/spinner_styles_black</item>
-        <!-- <item name="bottomNavigationStyle">@style/Widget.Material3.BottomNavigationView</item>-->
-        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.Material3.BottomSheetDialog</item>
+    <style name="AppThemeDark" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="cardBackgroundColor">@color/md_theme_background</item>
+        <item name="colorPrimary">@color/md_theme_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/md_theme_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/md_theme_secondary</item>
+        <item name="colorOnSecondary">@color/md_theme_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/md_theme_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/md_theme_tertiary</item>
+        <item name="colorOnTertiary">@color/md_theme_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/md_theme_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/md_theme_onTertiaryContainer</item>
+        <item name="colorError">@color/md_theme_error</item>
+        <item name="colorOnError">@color/md_theme_onError</item>
+        <item name="colorErrorContainer">@color/md_theme_errorContainer</item>
+        <item name="colorOnErrorContainer">@color/md_theme_onErrorContainer</item>
+        <item name="android:colorBackground">@color/md_theme_background</item>
+        <item name="colorOnBackground">@color/md_theme_onBackground</item>
+        <item name="colorSurface">@color/md_theme_surface</item>
+        <item name="colorOnSurface">@color/md_theme_onSurface</item>
+        <item name="colorSurfaceVariant">@color/md_theme_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_onSurfaceVariant</item>
+        <item name="colorOutline">@color/md_theme_outline</item>
+        <item name="colorOutlineVariant">@color/md_theme_outlineVariant</item>
+        <item name="colorSurfaceInverse">@color/md_theme_inverseSurface</item>
+        <item name="colorOnSurfaceInverse">@color/md_theme_inverseOnSurface</item>
+        <item name="colorPrimaryInverse">@color/md_theme_inversePrimary</item>
+        <item name="colorPrimaryFixed">@color/md_theme_primaryFixed</item>
+        <item name="colorOnPrimaryFixed">@color/md_theme_onPrimaryFixed</item>
+        <item name="colorPrimaryFixedDim">@color/md_theme_primaryFixedDim</item>
+        <item name="colorOnPrimaryFixedVariant">@color/md_theme_onPrimaryFixedVariant</item>
+        <item name="colorSecondaryFixed">@color/md_theme_secondaryFixed</item>
+        <item name="colorOnSecondaryFixed">@color/md_theme_onSecondaryFixed</item>
+        <item name="colorSecondaryFixedDim">@color/md_theme_secondaryFixedDim</item>
+        <item name="colorOnSecondaryFixedVariant">@color/md_theme_onSecondaryFixedVariant</item>
+        <item name="colorTertiaryFixed">@color/md_theme_tertiaryFixed</item>
+        <item name="colorOnTertiaryFixed">@color/md_theme_onTertiaryFixed</item>
+        <item name="colorTertiaryFixedDim">@color/md_theme_tertiaryFixedDim</item>
+        <item name="colorOnTertiaryFixedVariant">@color/md_theme_onTertiaryFixedVariant</item>
+        <item name="colorSurfaceDim">@color/md_theme_surfaceDim</item>
+        <item name="colorSurfaceBright">@color/md_theme_surfaceBright</item>
+        <item name="colorSurfaceContainerLowest">@color/md_theme_surfaceContainerLowest</item>
+        <item name="colorSurfaceContainerLow">@color/md_theme_surfaceContainerLow</item>
+        <item name="colorSurfaceContainer">@color/md_theme_surfaceContainer</item>
+        <item name="colorSurfaceContainerHigh">@color/md_theme_surfaceContainerHigh</item>
+        <item name="colorSurfaceContainerHighest">@color/md_theme_surfaceContainerHighest</item>
     </style>
+
+
 
 
     -
@@ -176,6 +180,7 @@
 
 
     <style name="AppTheme.DarkGreen" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="cardBackgroundColor">@color/mdgreen_theme_dark_onPrimary</item>
         <item name="colorPrimary">@color/mdgreen_theme_dark_primary</item>
         <item name="colorOnPrimary">@color/mdgreen_theme_dark_onPrimary</item>
         <item name="colorPrimaryContainer">@color/mdgreen_theme_dark_primaryContainer</item>
@@ -221,10 +226,11 @@
 
 
     <style name="AppTheme.materialdarkblue" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="cardBackgroundColor">@color/colorPrimaryDarkBlueLight</item>
         <item name="android:windowDisablePreview">true</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="tabStyle">@style/RoundedTabLayoutStyleDark</item>
+<!--        <item name="tabStyle">@style/RoundedTabLayoutStyleDark</item>-->
         <item name="colorPrimary">@color/md_db__theme_dark_primary</item>
         <item name="colorOnPrimary">@color/md_db__theme_dark_onPrimary</item>
         <item name="colorPrimaryContainer">@color/md_db__theme_dark_primaryContainer</item>
@@ -241,7 +247,7 @@
         <item name="colorErrorContainer">@color/md_db__theme_dark_errorContainer</item>
         <item name="colorOnError">@color/md_db__theme_dark_onError</item>
         <item name="colorOnErrorContainer">@color/md_db__theme_dark_onErrorContainer</item>
-        <item name="android:colorBackground">@color/md_db__theme_dark_background</item>
+        <item name="android:colorBackground">@color/bg_dark_blue</item>
         <item name="colorOnBackground">@color/md_db__theme_dark_onBackground</item>
         <item name="colorSurface">@color/md_db__theme_dark_surface</item>
         <item name="colorOnSurface">@color/md_db__theme_dark_onSurface</item>
@@ -258,6 +264,7 @@
         <item name="colorPrimaryInverse">@color/md_db__theme_dark_inversePrimary</item>
     </style>
     <style name="Theme.Browns" parent="Theme.Material3.Light.NoActionBar">
+        <item name="cardBackgroundColor">@color/odd_item_bg_brown</item>
         <item name="android:windowDisablePreview">true</item>
         <item name="android:colorBackground">@color/bg_brown</item>
         <item name="android:windowBackground">@color/bg_brown</item>
@@ -281,7 +288,8 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
         <item name="textColorLight">@color/neutral7</item>
     </style>
-    <style name="AppThemebrow" parent="Theme.Material3.Light.NoActionBar">
+    <style name="AppThemeLight" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="cardBackgroundColor">@color/odd_item_bg_brown</item>
         <item name="colorPrimary">@color/brownlight_md_theme_light_primary</item>
         <item name="colorOnPrimary">#FFEB3B</item>
         <item name="colorPrimaryContainer">@color/brownlight_md_theme_light_primaryContainer</item>
@@ -298,7 +306,7 @@
         <item name="colorErrorContainer">@color/brownlight_md_theme_light_errorContainer</item>
         <item name="colorOnError">@color/brownlight_md_theme_light_onError</item>
         <item name="colorOnErrorContainer">@color/brownlight_md_theme_light_onErrorContainer</item>
-        <item name="android:colorBackground">@color/brownlight_md_theme_light_background</item>
+        <item name="android:colorBackground">@color/bg_brown</item>
         <item name="colorOnBackground">@color/brownlight_md_theme_light_onBackground</item>
         <item name="colorSurface">@color/brownlight_md_theme_light_surface</item>
         <item name="colorOnSurface">@color/brownlight_md_theme_light_onSurface</item>
@@ -311,6 +319,7 @@
     </style>
 
     <style name="AppTheme" parent="Theme.Material3.Light.NoActionBar">
+        <item name="cardBackgroundColor">@color/odd_item_bg_brown</item>
         <item name="colorPrimary">@color/md_theme_light_primary</item>
         <item name="colorOnPrimary">@color/md_theme_light_onPrimary</item>
         <item name="colorPrimaryContainer">@color/md_theme_light_primaryContainer</item>

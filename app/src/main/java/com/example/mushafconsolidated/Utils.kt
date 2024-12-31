@@ -361,8 +361,7 @@ class Utils {
                 "FROM \n" +
                 "    corpusexpand, qurans\n" +
                 "WHERE \n" +
-                "    (corpusexpand.lemaraone = \"كَانَ\" OR corpusexpand.lemaratwo = \"كَانَ\" OR corpusexpand.lemarathree = \"كَانَ\" OR \n" +
-                "    corpusexpand.lemarafour = \"كَانَ\" OR corpusexpand.lemarafive = \"كَانَ\")\n" +
+                "    (corpusexpand.lemma = \"كَانَ\" \n" +
                 " \n" +
                 "    AND corpusexpand.surah = qurans.surah \n" +
                 "    AND corpusexpand.ayah = qurans.ayah and qurans.surah>8 ")
@@ -842,7 +841,7 @@ class Utils {
                     "        corpusexpand.tagthree = \"V\" OR \n" +
                     "        Corpusexpand.tagfour = \"V\" OR \n" +
                     "        corpusexpand.tagfive = \"V\") AND \n" +
-                    "       corpusexpand.lemaraone||corpusexpand.lemaratwo||corpusexpand.lemarathree||corpusexpand.lemarafour||corpusexpand.lemarafive=  \""
+                    "       corpusexpand.lemma=  \""
                     + tid + "\""
                     + "    AND  corpusexpand.surah = verbcorpus.chapterno AND \n" +
                     "           corpusexpand.ayah = verbcorpus.verseno AND \n" +
@@ -889,7 +888,7 @@ class Utils {
                     "       corpusexpand.en\n" +
                     "      FROM corpusexpand,nouncorpus,\n" +
                     "       qurans\n" +
-                    "    where  corpusexpand.lemaraone||corpusexpand.lemaratwo||corpusexpand.lemarathree||corpusexpand.lemarafour||corpusexpand.lemarafive=  \""
+                    "    where  corpusexpand.lemma=  \""
                     + tid + "\""
                     + "    AND    corpusexpand.surah = nouncorpus.surah AND \n" +
                     "           corpusexpand.ayah = nouncorpus.ayah AND \n" +
@@ -903,7 +902,7 @@ class Utils {
     fun getRootDetails(tid: String): List<RootWordDetails?>? {
         val sqlverb: String =
             ("SELECT CorpusExpand.araone ||CorpusExpand. aratwo ||CorpusExpand. arathree || CorpusExpand.arafour ||CorpusExpand. arafive as arabic,\n" +
-                    "CorpusExpand.lemaraone ||CorpusExpand. lemaratwo ||CorpusExpand. lemarathree || CorpusExpand.lemarafour ||CorpusExpand. lemarafive as lemma,\n" +
+                    "CorpusExpand.lemma as lemma,\n" +
                     "CorpusExpand.araone,CorpusExpand.aratwo,CorpusExpand.arathree,CorpusExpand.arafour,CorpusExpand.arafive,\n" +
                     "CorpusExpand.tagone,CorpusExpand.tagtwo,CorpusExpand.tagthree,CorpusExpand.tagfour,CorpusExpand.tagfive,CorpusExpand.wordno,\n" +
                     "CorpusExpand.tagone||\"-\" ||CorpusExpand. tagtwo||\"-\" ||CorpusExpand. tagthree ||\"-\"|| CorpusExpand.tagfour ||CorpusExpand. tagfive as tag,\n" +
@@ -927,7 +926,7 @@ class Utils {
     fun getRootVerbDetailsbyRootword(tid: String): List<RootVerbDetails?>? {
         val sqlverb: String =
             ("SELECT CorpusExpand.araone ||CorpusExpand. aratwo ||CorpusExpand. arathree || CorpusExpand.arafour ||CorpusExpand.arafive as arabic,\n" +
-                    "CorpusExpand.lemaraone ||CorpusExpand. lemaratwo ||CorpusExpand. lemarathree || CorpusExpand.lemarafour ||CorpusExpand. lemarafive as lemma,\n" +
+                    "CorpusExpand.lemma as lemma,\n" +
                     "CorpusExpand.araone,CorpusExpand.aratwo,CorpusExpand.arathree,CorpusExpand.arafour,CorpusExpand.arafive,\n" +
                     "CorpusExpand.tagone,CorpusExpand.tagtwo,CorpusExpand.tagthree,CorpusExpand.tagfour,CorpusExpand.tagfive,\n" +
                     "       qurandictionary.surah,\n" +
@@ -942,7 +941,7 @@ class Utils {
                     "\t  where (CorpusExpand.tagone=\"V\" OR CorpusExpand.tagtwo=\"V\" OR CorpusExpand.tagthree=\"V\" OR CorpusExpand.tagfour=\"V\" \n" +
                     "\t or CorpusExpand.tagfive==\"V\" )and qurandictionary.surah = CorpusExpand.surah AND  qurandictionary.ayah = CorpusExpand.ayah  \n" +
                     "\t \t  AND qurandictionary.surah=verbcorpus.chapterno and qurandictionary.ayah=verbcorpus.verseno\n" +
-                    "\tand qurandictionary.wordno = CorpusExpand.wordno  n" +
+                    "\tand qurandictionary.wordno = CorpusExpand.wordno" +
                     " and qurandictionary.surah=chaptersana.chapterid and qurandictionary.rootarabic=  \""
                     + tid + "\"")
         val query: SimpleSQLiteQuery = SimpleSQLiteQuery(sqlverb)
@@ -952,7 +951,7 @@ class Utils {
     fun getAllRootVerbDetails(): List<RootVerbDetails?>? {
         val sqlverb: String =
             ("SELECT CorpusExpand.araone ||CorpusExpand. aratwo ||CorpusExpand. arathree || CorpusExpand.arafour ||CorpusExpand.arafive as arabic,\n" +
-                    "CorpusExpand.lemaraone ||CorpusExpand. lemaratwo ||CorpusExpand. lemarathree || CorpusExpand.lemarafour ||CorpusExpand. lemarafive as lemma,\n" +
+                    "CorpusExpand.lemma as lemma,\n" +
                     "CorpusExpand.araone,CorpusExpand.aratwo,CorpusExpand.arathree,CorpusExpand.arafour,CorpusExpand.arafive,\n" +
                     "CorpusExpand.tagone,CorpusExpand.tagtwo,CorpusExpand.tagthree,CorpusExpand.tagfour,CorpusExpand.tagfive,\n" +
                     " \t   CorpusExpand.en,\n" +
@@ -1068,9 +1067,14 @@ class Utils {
         return database.RawDao().getVerbBreakup(query)
     }
 
-    val grammarRules: List<GrammarRules?>?
+    val grammarRules: List<GrammarRules>
         get() {
             return database.grammarRulesDao().grammarRules
+        }
+
+    fun getGrammarRulesByHarf(form:String): List<GrammarRules>{
+
+            return database.grammarRulesDao().getGrammarRulesByHarf(form)
         }
 
     fun getQuranbySurah(id: Int): List<QuranEntity> {

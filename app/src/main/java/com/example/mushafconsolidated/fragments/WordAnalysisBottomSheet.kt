@@ -21,6 +21,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -1087,11 +1088,24 @@ class WordAnalysisBottomSheet : DialogFragment() {
         val cleanedForm = vbform.replace(Regex("[()]"), "")
 
         val data = arrayOf(cleanedForm)
-      //  VerbFormsDialogFrag.newInstance(data).show(requireActivity().supportFragmentManager, TAG)
+
+  //   VerbFormsDialogFrag.newInstance(data).show(requireActivity().supportFragmentManager, TAG)
+  val  form = data!![0]
+        var formstr: String? = "Form"
+        formstr = if (!form!!.contains("Form")) {
+            "$formstr $form"
+        } else {
+            form
+        }
+        val mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
+        val htmlContent = mainViewModel.getGramarRulesbyHarf(formstr!!.toString()).value
+        val dialog = HtmlBottomSheetDialog.newInstance(htmlContent?.get(0)!!.detailsrules, "HTML Dialog")
+        dialog.show(requireActivity().supportFragmentManager, "HtmlBottomSheetDialog")
+
 
         // In your parent DialogFragment
-        val verbFormsDialogFrag = VerbFormsDialogFrag.newInstance(data)
-        verbFormsDialogFrag.show(childFragmentManager, "verbFormsDialogFrag")
+       /*val verbFormsDialogFrag = VerbFormsDialogFrag.newInstance(data)
+        verbFormsDialogFrag.show(childFragmentManager, "verbFormsDialogFrag")*/
     }
 
     private fun handleWordViewClick() {
