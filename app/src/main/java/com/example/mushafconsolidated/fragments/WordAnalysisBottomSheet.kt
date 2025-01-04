@@ -541,7 +541,9 @@ class WordAnalysisBottomSheet : DialogFragment() {
                 }
 
             }
-            isnoun = wordbdetail["noun"] != null
+
+            isnoun = wordbdetail["noun"] != null || wordbdetail["worddetails"]?.contains("Location") ?: false
+
             //   isProperNoun= wordbdetail["noun"]!!.contains("Proper Noun:")
 
             wordbdetail["noun"]?.let { noun ->

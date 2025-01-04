@@ -288,6 +288,12 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
         <item name="textColorLight">@color/neutral7</item>
     </style>
+
+    <style name="HtmlBottomSheetDialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
     <style name="AppThemeLight" parent="Theme.Material3.Dark.NoActionBar">
         <item name="cardBackgroundColor">@color/odd_item_bg_brown</item>
         <item name="colorPrimary">@color/brownlight_md_theme_light_primary</item>

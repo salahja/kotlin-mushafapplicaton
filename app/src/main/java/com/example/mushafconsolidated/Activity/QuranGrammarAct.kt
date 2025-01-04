@@ -297,7 +297,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
       //     mainLoopforErabStringEXTRACTION()
       //mainLoopforIndexEXTRACTION()
       //extractExpNegationSentences()
-   updateCorpus()
+  // updateCorpus()
   //  ExtractDoer()
     }
 
@@ -316,20 +316,6 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     val utils = Utils(this)
     val allLamNegativeSenteces = ArrayList<List<String>>()
     // val allLamNegativeSenteces =                             ArrayList<List<Pair<String, String>>>()
-    var allofQuran: List<QuranEntity>? = null
-    /*
-            val text =
-                "(مِنْ آيَةٍ) جار ومجرور متعلقان بمحذوف صفة من ما والمعنى أي شيء ننسخ من الآيات وقيل متعلقان بمحذوف حال من ما، وقال بعضهم من زائدة وآية تمييز"
-            val regex = "\\(([^)]+)\\)(?:\\s+\\w+)*\\s+(تمييز|تمييز\\.|التمييز)".toRegex()
-
-            val match = regex.find(text)
-            if (match != null) {
-                val wordInParentheses = match.groupValues[1]
-                val keyword = match.groupValues[2]
-                println("Word in parentheses: $wordInParentheses")
-                println("Keyword: $keyword")
-            }
-    */
 
     for (i in 11..114) {
       //   val quran = utils.getQuranbySurah(i)
@@ -501,41 +487,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
   }
 
-  private fun temloop() {
-    mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
-    var allLamNegativeSenteces = ArrayList<List<String>>()
 
-    val accsentece = ArrayList<Map<String, Any>>()
-    val accusativeSentencesCollection = mutableListOf<Map<String, Any>>()
-    var lamNeationDataList: List<String> = emptyList()
-
-    val utils = Utils(this)
-    val chapters = utils.getAllAnaChapters()
-    //   val sifa = utils.getSifaAll()
-    for (chapter in chapters!!.indices) {
-
-      val sifaentity = utils.getSifabySurah(chapters[chapter]!!.chapterid)
-      utils.getCorpusWbwBySurah(2)
-      val versescount = chapters[chapter]!!.versescount
-      var ayanumber = 1
-      for (sifa in sifaentity!!.indices) {
-
-        val arabic = sifaentity.get(sifa)!!.verse
-        val dataString = "${chapters.get(chapter)!!.chapterid}|$ayanumber|$arabic"
-        allLamNegativeSenteces.add(listOf(dataString))
-        ayanumber++
-      }
-
-      var fileName = sifaentity!![0]!!.surah.toString()
-
-
-    }
-    val fileName = "surah.csv"
-
-    writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
-
-
-  }
 
   private fun CorpusConsolidateLemmas() {
     mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
@@ -1276,8 +1228,8 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
     val scope = CoroutineScope(Dispatchers.Main)
 
-    //bysurah(dialog, scope,  listener)
-    bysurahjsonStorage(dialog, scope, listener)
+     bysurah(dialog, scope,  listener)
+  //  bysurahjsonStorage(dialog, scope, listener)
 
   }
 
@@ -1289,6 +1241,77 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     } catch (e: Exception) {
       // e.printStackTrace()
       null // Return null if an error occurs
+    }
+  }
+
+
+  @OptIn(UnstableApi::class)
+  private fun bysurah(
+    dialog: AlertDialog,
+    ex: CoroutineScope,
+    listener: OnItemClickListenerOnLong,
+  ) {
+    runOnUiThread {
+      dialog.show()
+      dialog.window?.setBackgroundDrawableResource(R.color.bg_brown)
+    }
+
+    ex.launch(Dispatchers.IO) {
+
+        val fileName = "surah$chapterno.json"
+        //  var newnewadapterlist: LinkedHashMap<Int, ArrayList<NewCorpusEntity>>? = null
+        val corpusAndQurandata = quranRepository.CorpusAndQuranDataSurah(chapterno)
+
+
+          allofQuran = corpusAndQurandata.allofQuran
+          corpusSurahWord = corpusAndQurandata.copusExpandSurah
+
+          corpusGroupedByAyah =
+            corpusSurahWord!!.groupBy { it.ayah } as LinkedHashMap<Int, ArrayList<CorpusEntity>>
+
+
+          val gson = Gson()
+          val json = gson.toJson(corpusGroupedByAyah)
+          saveJsonFile(context!!, fileName, json)
+
+
+        withContext(Dispatchers.Main) {
+          dialog.dismiss()
+
+          parentRecyclerView = binding.overlayViewRecyclerView
+
+          if (jumptostatus) {
+            surahorpart = chapterno
+          }
+          val header =
+            SurahHeader(rukucount, versescount, chapterno, surahArabicName, " ")
+
+          HightLightKeyWordold(allofQuran)
+
+          val adapter =
+
+
+            QuranDisplayAdapter(
+              false,
+              header,
+              allofQuran,
+              corpusGroupedByAyah,
+              this@QuranGrammarAct,
+              surahArabicName,
+              isMakkiMadani,
+              listener,
+              mainViewModel,
+
+
+              )
+
+          //      adapter.addContext(this@QuranGrammarAct)
+          //  adapter.addContext(this@QuranGrammarAct)
+          parentRecyclerView.setHasFixedSize(true)
+          parentRecyclerView.adapter = adapter
+          parentRecyclerView.post { parentRecyclerView.scrollToPosition(verseNo) }
+        }
+
     }
   }
 

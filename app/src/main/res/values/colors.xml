@@ -420,6 +420,11 @@
     <color name="Lime">#A3E4A3</color>
     <color name="DarkGreen">#006400</color>
     <color name="redhot">#D93375</color>
+    <color name="deblueone">#6495ED</color>
+    <color name="debluetwo">#4682B4</color>
+    <color name="degreenone">#458B74</color>
+    <color name="degreentwo">#556B2F</color>
+
     <color name="black_overlay">#66000000</color>
 
 

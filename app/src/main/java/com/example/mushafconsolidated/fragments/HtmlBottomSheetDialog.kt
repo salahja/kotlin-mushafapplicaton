@@ -1,16 +1,19 @@
 package com.example.mushafconsolidated.fragments
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.databinding.VfourExpandableNewactivityShowAyahsBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
@@ -27,12 +30,12 @@ class HtmlBottomSheetDialog : BottomSheetDialogFragment() {
     htmlContent = bundle!!.getString("htmlContent")
 
     val view = inflater.inflate(R.layout.dialog_html, container, false)
-
+    view.setBackgroundResource(android.R.color.transparent)
     val webView = view.findViewById<WebView>(R.id.webView)
     val closeButton = view.findViewById<Button>(R.id.closeButton)
     val bottomsheetHtml: RelativeLayout =view.findViewById(R.id.htmlbottomsheet)
     bottomsheetHtmlBehaviour = BottomSheetBehavior.from(bottomsheetHtml)
-    bottomsheetHtmlBehaviour.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+    bottomsheetHtmlBehaviour.state = BottomSheetBehavior.STATE_EXPANDED
 
 
     webView.settings.javaScriptEnabled = true

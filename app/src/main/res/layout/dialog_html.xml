@@ -7,7 +7,7 @@
     android:padding="16dp"
 
     app:behavior_hideable="false"
-    app:behavior_peekHeight="200dp"
+    app:behavior_peekHeight="100dp"
 
 
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
@@ -30,7 +30,7 @@
         android:id="@+id/closeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/webView"
+        android:layout_above="@+id/webView"
         android:text="Close"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="8dp" />
