@@ -31,12 +31,14 @@ import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.launch
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.compose.ui.semantics.dialog
+import androidx.compose.ui.semantics.dismiss
 
 
 import androidx.constraintlayout.widget.Group
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 
@@ -68,6 +70,8 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textview.MaterialTextView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 import sj.hisnul.fragments.NamesDetail
 import java.io.File
@@ -139,7 +143,7 @@ class QuranDisplayAdapter(
 
     // private val negationCache: MutableMap<Int, MutableMap<Int, Pair<SpannableString, String>>> =        mutableMapOf()
     // private val negationCache: MutableMap<Int, MutableMap<Int, MutableList<Pair<SpannableString, String>>>> = mutableMapOf()
-    private val negationCache: MutableMap<Int, MutableMap<Int, MutableList<SpannableString>>> =
+    private val phrasesCache: MutableMap<Int, MutableMap<Int, MutableList<SpannableString>>> =
         mutableMapOf()
 
 
@@ -168,10 +172,7 @@ class QuranDisplayAdapter(
         QuranViewUtils.cacheAbsoluteNegationData(quranModel, surah, absoluteNegationCache)
         QuranViewUtils.cacheSifaData(quranModel, surah, sifaCache)
         QuranViewUtils.cacheMudhafData(quranModel, surah, mudhafCache)
-
-        //    QuranViewUtils.cachePastTenceData(quranModel, surah, pastTenceCache)
-        //   QuranViewUtils.cacheFutureTenceData(quranModel, surah, futureTenceCache)
-        QuranViewUtils.cacheNegationData(quranModel, surah, negationCache, currentTheme)
+        QuranViewUtils.cachePhrasesData(quranModel, surah, phrasesCache, currentTheme)
 
 
 
@@ -522,6 +523,10 @@ class QuranDisplayAdapter(
                     QuranViewUtils.NewgetSpannedWords(word)
                 }
 
+
+
+
+
                 // Log when we're fetching the word from cache
                 /*      if (spannedWordsCache.containsKey(word)) {
                           Log.d(TAG, "FROM CACHE")
@@ -708,7 +713,7 @@ class QuranDisplayAdapter(
     ) {
 
 
-        val spannableStringsList = negationCache[key.first]?.get(key.second) ?: emptyList()
+        val spannableStringsList = phrasesCache[key.first]?.get(key.second) ?: emptyList()
 
         for (spannableString in spannableStringsList) {
             phraseGroups.add(spannableString)

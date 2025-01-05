@@ -1258,7 +1258,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
     ex.launch(Dispatchers.IO) {
 
-        val fileName = "surah$chapterno.json"
+
         //  var newnewadapterlist: LinkedHashMap<Int, ArrayList<NewCorpusEntity>>? = null
         val corpusAndQurandata = quranRepository.CorpusAndQuranDataSurah(chapterno)
 
@@ -1270,9 +1270,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
             corpusSurahWord!!.groupBy { it.ayah } as LinkedHashMap<Int, ArrayList<CorpusEntity>>
 
 
-          val gson = Gson()
-          val json = gson.toJson(corpusGroupedByAyah)
-          saveJsonFile(context!!, fileName, json)
+
 
 
         withContext(Dispatchers.Main) {
@@ -1305,8 +1303,6 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
               )
 
-          //      adapter.addContext(this@QuranGrammarAct)
-          //  adapter.addContext(this@QuranGrammarAct)
           parentRecyclerView.setHasFixedSize(true)
           parentRecyclerView.adapter = adapter
           parentRecyclerView.post { parentRecyclerView.scrollToPosition(verseNo) }

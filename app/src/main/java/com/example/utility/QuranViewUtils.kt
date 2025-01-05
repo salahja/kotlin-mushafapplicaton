@@ -98,7 +98,7 @@ object QuranViewUtils {
 
 
 
-    fun cacheNegationData(
+    fun cachePhrasesData(
         quranModel: QuranViewModel,
         surah: Int,
         negationCache: MutableMap<Int, MutableMap<Int, MutableList<SpannableString>>>,
