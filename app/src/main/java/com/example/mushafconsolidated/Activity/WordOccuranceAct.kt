@@ -28,7 +28,8 @@ import com.example.mushafconsolidated.Entities.CorpusVerbWbwOccurance
 import com.example.mushafconsolidated.Entities.NounCorpusBreakup
 import com.example.mushafconsolidated.Entities.VerbCorpusBreakup
 import com.example.mushafconsolidated.Entities.hanslexicon
-import com.example.mushafconsolidated.Entities.lanelexicon
+
+import com.example.mushafconsolidated.Entities.lanerootdictionary
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.fragments.QuranMorphologyDetails
@@ -225,6 +226,7 @@ open class WordOccuranceAct : BaseActivity() {
     }
     private fun getWordOccurrences(wordType: WordType, word: String, callback: (List<Any>) -> Unit) {
         val ex = Executors.newSingleThreadExecutor()
+
         runOnUiThread { dialog!!.show() }
         ex.execute {
             val occurrences = when (wordType) {
@@ -246,7 +248,8 @@ open class WordOccuranceAct : BaseActivity() {
                   //  val verbRoot = getVerbRoot(root!!)
                     verbRoot?.let { utils.getHansDifinition(it) } as ArrayList<hanslexicon>
                 }
-                WordType.LANES -> utils.getLanesDifinition(root!!) as ArrayList<lanelexicon>
+
+                WordType.LANES -> utils.getLanesRootDifinition(root!!) as ArrayList<lanerootdictionary>
                 WordType.NOUN -> utils.getNounOccuranceBreakVerses(word) as ArrayList<CorpusNounWbwOccurance>
                 WordType.VERB -> utils.getVerbOccuranceBreakVerses(word) as ArrayList<CorpusVerbWbwOccurance>
             }
@@ -262,7 +265,7 @@ open class WordOccuranceAct : BaseActivity() {
         for (occurrence in occurrences) {
             val (ref, spannableVerses) = when (wordType) {
                 WordType.HANS, WordType.LANES -> {
-                    val definition = if (occurrence is hanslexicon) occurrence.definition else (occurrence as lanelexicon).definition
+                    val definition = if (occurrence is hanslexicon) occurrence.definition else (occurrence as lanerootdictionary).definition
                     Pair(SpannableString(""), SpannableString(definition)) // Return a Pair
                 }
                 WordType.NOUN -> formatNounOccurrence(occurrence as CorpusNounWbwOccurance)

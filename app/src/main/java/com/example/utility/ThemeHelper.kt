@@ -46,7 +46,7 @@ object ThemeHelper {
             DARK_THEME -> {
 
                 // AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                QuranGrammarApplication.context!!.setTheme(R.style.Theme_Black)
+                QuranGrammarApplication.context!!.setTheme(R.style.AppThemeDark)
             }
 
             DARK_BLUE -> {

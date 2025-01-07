@@ -2,6 +2,7 @@ package com.example.mushafconsolidatedimport
 
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,8 @@ import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip
+import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltipUtils
 
 
 /**
@@ -30,11 +33,11 @@ class VerbFormsDialogFrag : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         //  return inflater.inflate(R.layout.verb_forms, container, false);
-        val view: View = inflater.inflate(R.layout.webview, container, false)
+        val view: View = inflater.inflate(R.layout.dialog_html, container, false)
         val bundle = this.arguments
         val stringArray = bundle!!.getStringArray(ARG_OPTIONS_DATA)
         form = stringArray!![0]
-        val wv = view.findViewById<View>(R.id.webview) as WebView
+        val wv = view.findViewById<View>(R.id.webView) as WebView
 
         var formstr: String? = "Form"
         formstr = if (!form!!.contains("Form")) {
@@ -45,11 +48,23 @@ class VerbFormsDialogFrag : BottomSheetDialogFragment() {
         val mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
         val list = mainViewModel.getGramarRulesbyHarf(formstr!!).value
 
-        if (list != null) {
+       if (list != null) {
             if (list.isNotEmpty()) {
                 wv.loadDataWithBaseURL(null, list[0].detailsrules, "text/html", "utf-8", null)
             }
         }
+
+     /*   SimpleTooltip.Builder(context)
+            .anchorView(view)
+            .text(list?.get(0)?.detailsrules ?:"" )
+          //  .backgroundColor(backgroundColor)
+            .gravity(Gravity.TOP)
+            .modal(true)
+            .arrowDrawable(android.R.drawable.ic_media_previous)
+            .arrowHeight(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
+            .arrowWidth(SimpleTooltipUtils.pxFromDp(50f).toInt().toFloat())
+            .build()
+            .show()*/
         return view
     }
 

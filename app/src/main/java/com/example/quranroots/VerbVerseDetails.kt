@@ -37,7 +37,6 @@ import com.example.mushafconsolidated.fragments.GrammerFragmentsBottomSheet
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListenerOnLong
 import com.example.mushafconsolidated.model.CorpusAyahWord
-import com.example.mushafconsolidated.model.QuranCorpusWbw
 import com.example.mushafconsolidated.quranrepo.QuranRepository
 import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.example.utility.CorpusUtilityorig
@@ -60,7 +59,7 @@ class VerbVerseDetails : BaseActivity(), OnItemClickListenerOnLong {
     private  var corpusGroupedByAyah:LinkedHashMap<Int, ArrayList<CorpusEntity>> =
         LinkedHashMap()
 
-    private lateinit var newcorpusayahWordArrayList: ArrayList<QuranCorpusWbw>
+    private lateinit var newcorpusayahWordArrayList: ArrayList<CorpusEntity>
 
     private lateinit var arrayofadapterlist: ArrayList<LinkedHashMap<Int, ArrayList<CorpusEntity>>>
 

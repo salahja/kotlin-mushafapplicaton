@@ -31,8 +31,11 @@ import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.launch
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.compose.ui.semantics.dialog
+import androidx.compose.ui.semantics.dismiss
 
 
 import androidx.constraintlayout.widget.Group
@@ -67,6 +70,8 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textview.MaterialTextView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 import sj.hisnul.fragments.NamesDetail
 import java.io.File
@@ -124,6 +129,7 @@ class QuranDisplayAdapter(
     private var translationfontsize: Int = 0
     lateinit var mItemClickListener: OnItemClickListenerOnLong
     private lateinit var isNightmode: String
+    private var currentTheme=false
     private var headercolor = 0
 
     private lateinit var colorwordfont: Typeface
@@ -137,7 +143,7 @@ class QuranDisplayAdapter(
 
     // private val negationCache: MutableMap<Int, MutableMap<Int, Pair<SpannableString, String>>> =        mutableMapOf()
     // private val negationCache: MutableMap<Int, MutableMap<Int, MutableList<Pair<SpannableString, String>>>> = mutableMapOf()
-    private val negationCache: MutableMap<Int, MutableMap<Int, MutableList<SpannableString>>> =
+    private val phrasesCache: MutableMap<Int, MutableMap<Int, MutableList<SpannableString>>> =
         mutableMapOf()
 
 
@@ -155,15 +161,18 @@ class QuranDisplayAdapter(
         QuranViewUtils.initialize(mainViewModel)
         // Assuming you have a QuranModel instance and caches like before
         val surah = allofQuran[0].surah
+
+
+        val preferences = sharedPreferences.getString("theme", "dark")
+        currentTheme = preferences == "dark" || preferences == "blue" || preferences == "green"
+
         isNightmode = sharedPreferences.getString("themepref", "dark").toString()
+        currentTheme = preferences == "dark" || preferences == "blue" || preferences == "green"
 // Call utility functions to cache the data
         QuranViewUtils.cacheAbsoluteNegationData(quranModel, surah, absoluteNegationCache)
         QuranViewUtils.cacheSifaData(quranModel, surah, sifaCache)
         QuranViewUtils.cacheMudhafData(quranModel, surah, mudhafCache)
-
-        //    QuranViewUtils.cachePastTenceData(quranModel, surah, pastTenceCache)
-        //   QuranViewUtils.cacheFutureTenceData(quranModel, surah, futureTenceCache)
-        QuranViewUtils.cacheNegationData(quranModel, surah, negationCache, isNightmode)
+        QuranViewUtils.cachePhrasesData(quranModel, surah, phrasesCache, currentTheme)
 
 
 
@@ -374,7 +383,7 @@ class QuranDisplayAdapter(
         val showErab = sharedPreferences.getBoolean("showErabKey", true)
         wordByWordDisplay = sharedPreferences.getBoolean("wordByWordDisplay", false)
 
-        QuranViewUtils.setBackgroundColor(context, holder.itemView, isNightmode, position % 2 == 1)
+     QuranViewUtils.setBackgroundColor(context, holder.itemView, isNightmode, position % 2 == 1)
 
 
         val key = Pair(entity!!.surah, entity!!.ayah)
@@ -513,6 +522,10 @@ class QuranDisplayAdapter(
                     //    Log.d(TAG, "FROM FILE (generated new SpannableString)")
                     QuranViewUtils.NewgetSpannedWords(word)
                 }
+
+
+
+
 
                 // Log when we're fetching the word from cache
                 /*      if (spannedWordsCache.containsKey(word)) {
@@ -700,7 +713,7 @@ class QuranDisplayAdapter(
     ) {
 
 
-        val spannableStringsList = negationCache[key.first]?.get(key.second) ?: emptyList()
+        val spannableStringsList = phrasesCache[key.first]?.get(key.second) ?: emptyList()
 
         for (spannableString in spannableStringsList) {
             phraseGroups.add(spannableString)

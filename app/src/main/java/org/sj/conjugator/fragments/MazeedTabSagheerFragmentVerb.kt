@@ -13,8 +13,10 @@ import com.example.Constant.QURAN_VERB_WAZAN
 import com.example.Constant.VERBMOOD
 import com.example.Constant.VERBTYPE
 import com.example.mushafconsolidated.R
+
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
 import com.example.mushafconsolidatedimport.VerbFormsDialogFrag
+
 import org.sj.conjugator.adapter.SarfMujarradSarfSagheerListingAdapter
 import org.sj.conjugator.interfaces.OnItemClickListener
 import org.sj.conjugator.utilities.GatherAll

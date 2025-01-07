@@ -25,11 +25,8 @@ class CorpusEntity constructor(
     var rootarathree: String?,
     var rootarafour: String?,
     var rootarafive: String?,
-    var lemaraone: String?,
-    var lemaratwo: String?,
-    var lemarathree: String?,
-    var lemarafour: String?,
-    var lemarafive: String?,
+    var lemma: String?,
+
     var detailsone: String?,
     var detailstwo: String?,
     var detailsthree: String?,

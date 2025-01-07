@@ -42,7 +42,7 @@ class GrammarFragmentsListAdapter(
         if (convertView == null) {
             val layoutInflater = context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            convertView = layoutInflater.inflate(R.layout.list_grammar_item, parent, false)
+            convertView = layoutInflater.inflate(R.layout.lgrammar_item, parent, false)
         }
         val mequran =
             Typeface.createFromAsset(QuranGrammarApplication.context!!.assets, "Roboto.ttf")
@@ -112,6 +112,8 @@ class GrammarFragmentsListAdapter(
         // Hide group view if child list is empty
         if (getChildrenCount(listPosition) == 0) {
             convertView?.visibility = View.GONE
+            val expandableListView = parent as ExpandableListView
+            expandableListView.setGroupIndicator(null)
         } else {
             convertView?.visibility = View.VISIBLE
         }

@@ -37,6 +37,7 @@ import com.example.Constant.particlespanDark
 import com.example.mushafconsolidated.Activity.LughatWordDetailsAct
 import com.example.mushafconsolidated.Adapters.NounVerbOccuranceListAdapter
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
+import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.CorpusNounWbwOccurance
 import com.example.mushafconsolidated.Entities.CorpusVerbWbwOccurance
 import com.example.mushafconsolidated.Entities.NounCorpusBreakup
@@ -45,13 +46,13 @@ import com.example.mushafconsolidated.Entities.RootVerbDetails
 import com.example.mushafconsolidated.Entities.VerbCorpusBreakup
 import com.example.mushafconsolidated.Entities.VerbWazan
 import com.example.mushafconsolidated.Entities.hanslexicon
-import com.example.mushafconsolidated.Entities.lanelexicon
+import com.example.mushafconsolidated.Entities.lanerootdictionary
+
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.databinding.ActivityRootBreakupBinding
 import com.example.mushafconsolidated.fragments.QuranMorphologyDetails
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
-import com.example.mushafconsolidated.model.QuranCorpusWbw
 import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.example.utility.CorpusUtilityorig.Companion.getSpannableVerses
 import com.example.utility.QuranGrammarApplication
@@ -96,7 +97,7 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
 
     private var verbdetails: ArrayList<RootVerbDetails>? = null
 
-    private var corpusSurahWord: List<QuranCorpusWbw>? = null
+    private var corpusSurahWord: List<CorpusEntity>? = null
     private var allofQuran: List<QuranEntity>? = null
     private lateinit var mainViewModel: QuranViewModel
     private var isverb = false
@@ -193,21 +194,21 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
 
                     val datas = HashMap<String, String>()
                     val newbundle = Bundle()
-                    newbundle.putInt(SURAH_ID, wordDetails.corpus.surah)
-                    newbundle.putInt(AYAH_ID, wordDetails.corpus.ayah)
+                    newbundle.putInt(SURAH_ID, wordDetails.surah)
+                    newbundle.putInt(AYAH_ID, wordDetails.ayah)
 
                     newbundle.putString(
                         SURAH_ARABIC_NAME,
-                        allChapters.value!![wordDetails.corpus.surah].namearabic
+                        allChapters.value!![wordDetails.surah].namearabic
                     )
 
 
 
                     newbundle.putString(
-                        ARABICWORD, wordDetails.corpus.araone + wordDetails.corpus.aratwo +
-                                wordDetails.corpus.arathree + wordDetails.corpus.arafour + wordDetails.corpus.arafive
+                        ARABICWORD, wordDetails.araone + wordDetails.aratwo +
+                                wordDetails.arathree + wordDetails.arafour + wordDetails.arafive
                     )
-                    newbundle.putString(WORDMEANING, wordDetails.wbw.en)
+                    newbundle.putString(WORDMEANING, wordDetails.en)
                     newbundle.putSerializable("map", datas)
                     val intents = Intent(this@RootBreakupAct, VerbVerseDetails::class.java)
                     intents.putExtras(newbundle)
@@ -517,8 +518,8 @@ class RootBreakupAct : BaseActivity(), OnItemClickListener, View.OnClickListener
                                     runOnUiThread { dialog.show() }
                                     var list: ArrayList<SpannableString> =
                                         ArrayList()
-                                    val lanesDifinition: java.util.ArrayList<lanelexicon?>? =
-                                        utils.getLanesDifinition(root) as java.util.ArrayList<lanelexicon?>?
+                                    val lanesDifinition: java.util.ArrayList<lanerootdictionary?>? =
+                                        utils.getLanesRootDifinition(root) as java.util.ArrayList<lanerootdictionary?>?
                                     for (lanes in lanesDifinition!!) {
 
                                         list.add(SpannableString.valueOf(lanes!!.definition))

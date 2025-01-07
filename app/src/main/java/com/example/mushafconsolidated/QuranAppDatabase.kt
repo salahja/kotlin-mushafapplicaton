@@ -19,7 +19,6 @@ import com.example.mushafconsolidated.DAO.HansDao
 import com.example.mushafconsolidated.DAO.JasonSurahDao
 
 
-import com.example.mushafconsolidated.DAO.LaneDao
 import com.example.mushafconsolidated.DAO.LaneRootDao
 import com.example.mushafconsolidated.DAO.LughatDao
 import com.example.mushafconsolidated.DAO.LysaDao
@@ -29,6 +28,7 @@ import com.example.mushafconsolidated.DAO.NegationDao
 import com.example.mushafconsolidated.DAO.NewMudhafDao
 
 import com.example.mushafconsolidated.DAO.NounCorpusDao
+import com.example.mushafconsolidated.DAO.OutsideDoerDAO
 
 import com.example.mushafconsolidated.DAO.QariDao
 import com.example.mushafconsolidated.DAO.QuranDao
@@ -42,7 +42,7 @@ import com.example.mushafconsolidated.DAO.grammarRulesDao
 import com.example.mushafconsolidated.DAO.qurandictionaryDao
 import com.example.mushafconsolidated.DAO.surahsummaryDao
 
-import com.example.mushafconsolidated.DAO.wbwDao
+
 import com.example.mushafconsolidated.Entities.AbsoluteNegationEnt
 
 import com.example.mushafconsolidated.Entities.BookMarks
@@ -59,6 +59,7 @@ import com.example.mushafconsolidated.Entities.NamesDetailsDao
 import com.example.mushafconsolidated.Entities.NegationEnt
 import com.example.mushafconsolidated.Entities.NewMudhafEntity
 import com.example.mushafconsolidated.Entities.NounCorpus
+import com.example.mushafconsolidated.Entities.OutSideDoer
 
 import com.example.mushafconsolidated.Entities.Qari
 import com.example.mushafconsolidated.Entities.QuranEntity
@@ -68,14 +69,14 @@ import com.example.mushafconsolidated.Entities.VerbCorpus
 import com.example.mushafconsolidated.Entities.hanslexicon
 import com.example.mushafconsolidated.Entities.jsonsurahentity
 
-import com.example.mushafconsolidated.Entities.lanelexicon
+
 import com.example.mushafconsolidated.Entities.lanerootdictionary
 import com.example.mushafconsolidated.Entities.lughat
 import com.example.mushafconsolidated.Entities.lysaEnt
 import com.example.mushafconsolidated.Entities.qurandictionary
 import com.example.mushafconsolidated.Entities.quranexplorer
 import com.example.mushafconsolidated.Entities.surahsummary
-import com.example.mushafconsolidated.Entities.wbwentity
+
 import com.example.mushafconsolidated.settingsimport.Constants.Companion.DATABASENAME
 import database.Dao.NamesDao
 import database.entity.AllahNames
@@ -96,11 +97,12 @@ import java.io.File
         AllahNamesDetails::class,
         lanerootdictionary::class, Qari::class,
         surahsummary::class, quranexplorer::class,
-        AllahNames::class, GrammarRules::class, hanslexicon::class, qurandictionary::class, lanelexicon::class,
+        AllahNames::class, GrammarRules::class, hanslexicon::class, qurandictionary::class,
         lughat::class,
         SifaEntity::class,
         NewMudhafEntity::class,
-        wbwentity::class, NounCorpus::class, VerbCorpus::class, QuranEntity::class, CorpusEntity::class, BookMarks::class, ChaptersAnaEntity::class],
+        OutSideDoer::class,
+         NounCorpus::class, VerbCorpus::class, QuranEntity::class, CorpusEntity::class, BookMarks::class, ChaptersAnaEntity::class],
     version = 1
 )
 abstract class QuranAppDatabase : RoomDatabase() {
@@ -111,6 +113,7 @@ abstract class QuranAppDatabase : RoomDatabase() {
      */
     abstract fun AnaQuranChapterDao(): AnaQuranChapterDao
     abstract fun JasonSurahDao() : JasonSurahDao
+    abstract fun OutsideDoerDAO(): OutsideDoerDAO
     /**
      * Book mark dao
      *
@@ -174,7 +177,7 @@ abstract class QuranAppDatabase : RoomDatabase() {
      *
      * @return
      */
-    abstract fun wbwDao(): wbwDao
+
 
     /**
      * Sifa dao
@@ -193,7 +196,7 @@ abstract class QuranAppDatabase : RoomDatabase() {
      *
      * @return
      */
-    abstract fun LaneDao(): LaneDao?
+
 
     /**
      * Lane root dao

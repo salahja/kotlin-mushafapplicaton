@@ -13,6 +13,7 @@ import com.example.Constant.WHOTPINK
 import com.example.Constant.harfinnaspanDark
 import com.example.Constant.harfismspanDark
 import com.example.Constant.harfkhabarspanDark
+import com.example.Constant.mudhafspansDark
 import com.example.mushafconsolidated.Entities.NegationEnt
 import com.example.mushafconsolidated.data.Quadruple
 import com.example.utility.CorpusUtilityorig.Companion.dark
@@ -24,7 +25,7 @@ object SpannableStringUtils {
 
   fun applySpans(
     negantionData: List<NegationEnt>,
-    isNightmode: String
+    dark: Boolean
   ): List<Quadruple<Int, Int, String, SpannableString>> {
     //   val spannedStrings = mutableListOf<Triple<Int, String, SpannableString>>()
     val spannedStrings = mutableListOf<Quadruple<Int, Int, String, SpannableString>>()
@@ -64,7 +65,7 @@ object SpannableStringUtils {
 
       }
 
-      dark = isNightmode == "dark" || isNightmode == "blue" || isNightmode == "green"
+
 
       if (dark) {
         Constant.harfshartspanDark = ForegroundColorSpan(Constant.BYELLOW)
@@ -95,7 +96,12 @@ object SpannableStringUtils {
       } else {
         Constant.sifaspansDark = BackgroundColorSpan(Constant.CYANLIGHTEST)
       }
-
+      if (dark) {
+        Constant.mudhafspansDark =
+          BackgroundColorSpan(Constant.MIDNIGHTBLUE)
+      } else {
+        Constant.mudhafspansDark = BackgroundColorSpan(Constant.GREENYELLOW)
+      }
       val colorSpan = if (dark) {
         BackgroundColorSpan(Constant.MIDNIGHTBLUE) // Create a new BackgroundColorSpan instance
       } else {
@@ -136,7 +142,7 @@ object SpannableStringUtils {
           )
         } else if (type == "mudhaf") {
           spannableString.setSpan(
-            colorSpan,
+            mudhafspansDark,
             0,
             arabicString.length,
             0

@@ -12,7 +12,7 @@ import com.example.mushafconsolidated.DAO.HansDao
 
 
 
-import com.example.mushafconsolidated.DAO.LaneDao
+
 import com.example.mushafconsolidated.DAO.LaneRootDao
 import com.example.mushafconsolidated.DAO.LughatDao
 
@@ -36,7 +36,7 @@ import com.example.mushafconsolidated.DAO.grammarRulesDao
 import com.example.mushafconsolidated.DAO.qurandictionaryDao
 import com.example.mushafconsolidated.DAO.surahsummaryDao
 
-import com.example.mushafconsolidated.DAO.wbwDao
+
 import com.example.mushafconsolidated.Entities.NamesDetailsDao
 import com.example.mushafconsolidated.QuranAppDatabase
 import dagger.Module
@@ -138,13 +138,6 @@ object AppModule {
         return appDB.NounCorpusDao()
     }
 
-    @Singleton
-    @Provides
-    fun wbwDao(appDB: QuranAppDatabase): wbwDao {
-
-        return appDB.wbwDao()
-    }
-
 
     @Singleton
     @Provides
@@ -176,12 +169,6 @@ object AppModule {
     }
 
 
-    @Singleton
-    @Provides
-    fun LaneDao(appDB: QuranAppDatabase): LaneDao? {
-
-        return appDB.LaneDao()
-    }
 
 
     @Singleton

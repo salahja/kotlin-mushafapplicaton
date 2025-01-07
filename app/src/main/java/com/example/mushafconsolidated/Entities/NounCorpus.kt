@@ -12,11 +12,12 @@ class NounCorpus {
     var root_a: String?
     var lemma_a: String?
     var araword: String?
+    var fael: String?
     var surah: Int
     var ayah: Int
     var wordno: Int
     var token: Int
-    var words: String?
+
     var tag: String
     var propone: String?
     var proptwo: String?
@@ -35,11 +36,12 @@ class NounCorpus {
         root_a: String?,
         lemma_a: String?,
         araword: String?,
+        fael:String?,
         surah: Int,
         ayah: Int,
         wordno: Int,
         token: Int,
-        words: String?,
+
         tag: String,
         propone: String?,
         proptwo: String?,
@@ -55,11 +57,12 @@ class NounCorpus {
         this.root_a = root_a
         this.lemma_a = lemma_a
         this.araword = araword
+        this.fael=fael
         this.surah = surah
         this.ayah = ayah
         this.wordno = wordno
         this.token = token
-        this.words = words
+
         this.tag = tag
         this.propone = propone
         this.proptwo = proptwo
@@ -79,11 +82,12 @@ class NounCorpus {
         root_a: String?,
         lemma_a: String?,
         araword: String?,
+        fael: String?,
         surah: Int,
         ayah: Int,
         wordno: Int,
         token: Int,
-        words: String?,
+
         tag: String,
         propone: String?,
         proptwo: String?,
@@ -100,11 +104,12 @@ class NounCorpus {
         this.root_a = root_a
         this.lemma_a = lemma_a
         this.araword = araword
+        this.fael=fael
         this.surah = surah
         this.ayah = ayah
         this.wordno = wordno
         this.token = token
-        this.words = words
+
         this.tag = tag
         this.propone = propone
         this.proptwo = proptwo

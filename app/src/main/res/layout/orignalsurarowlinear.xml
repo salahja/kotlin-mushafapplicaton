@@ -24,8 +24,8 @@
         app:cardPreventCornerOverlap="false"
         app:layout_anchorGravity="bottom"
         app:rippleColor="@color/colorAccent"
-      style="@style/Widget.Material3.CardView.Outlined"
 
+        android:background="?attr/cardBackgroundColor"
 
         app:strokeWidth="1dp">
 

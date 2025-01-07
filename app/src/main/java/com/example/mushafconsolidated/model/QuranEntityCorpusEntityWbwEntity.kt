@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import androidx.room.Relation
 import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.QuranEntity
-import com.example.mushafconsolidated.Entities.wbwentity
+
 
 data class QuranEntityCorpusEntityWbwEntity constructor(
 

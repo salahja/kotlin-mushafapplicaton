@@ -611,7 +611,7 @@ open class NewQuranMorphologyDetails(
             //
             val expandTagsone = expandTags(tagone)
             wordbdetail["lemma"] =
-                SpannableStringBuilder.valueOf(corpusSurahWord[0].lemaraone)
+                SpannableStringBuilder.valueOf(corpusSurahWord[0].lemma)
             val spannableString = NewSetWordSpan(tagone, "", "", "", "", araone, "", "", "", "")
             val tagspannables =
                 NewSetWordSpanTag(tagone, "", "", "", "", araone, "", "", "", expandTagsone)
@@ -622,7 +622,7 @@ open class NewQuranMorphologyDetails(
             }
         } else if (corpusSurahWord[0].wordcount === 2) {
             wordbdetail["lemma"] = SpannableStringBuilder.valueOf(
-                corpusSurahWord[0].lemaraone + corpusSurahWord[0].lemaratwo
+                corpusSurahWord[0].lemma
             )
             val arabicspannable = SpannableStringBuilder(
                 araone + aratwo
@@ -655,8 +655,7 @@ open class NewQuranMorphologyDetails(
         } else if (corpusSurahWord[0].wordcount === 3) {
             val sb = StringBuilder()
             wordbdetail["lemma"] = SpannableStringBuilder.valueOf(
-                (corpusSurahWord[0].lemaraone + corpusSurahWord[0].lemaratwo +
-                        corpusSurahWord[0].lemarathree)
+                (corpusSurahWord[0].lemma )
             )
             val one: Int = corpusSurahWord[0].araone!!.length //2
             val two: Int = corpusSurahWord[0].aratwo!!.length //3
@@ -711,8 +710,7 @@ open class NewQuranMorphologyDetails(
             }
         } else if (corpusSurahWord[0].wordcount === 4) {
             wordbdetail["lemma"] = SpannableStringBuilder.valueOf(
-                (corpusSurahWord[0].lemaraone + corpusSurahWord[0].lemaratwo +
-                        corpusSurahWord[0].lemarathree)
+                (corpusSurahWord[0].lemma )
             )
             val one: Int = corpusSurahWord[0].araone!!.length //2
             val two: Int = corpusSurahWord[0].aratwo!!.length //3
@@ -776,9 +774,7 @@ open class NewQuranMorphologyDetails(
             )
             val sb = StringBuilder()
             wordbdetail["lemma"] = SpannableStringBuilder.valueOf(
-                (corpusSurahWord[0].lemaraone + corpusSurahWord[0].lemaratwo +
-                        corpusSurahWord[0].lemarathree + corpusSurahWord[0]
-                    .lemarafour + corpusSurahWord[0].lemarafive)
+                (corpusSurahWord[0].lemma )
             )
             val tagspannables = NewSetWordSpanTag(
                 tagone,

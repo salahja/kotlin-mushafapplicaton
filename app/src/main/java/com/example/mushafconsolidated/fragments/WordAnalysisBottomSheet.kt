@@ -21,6 +21,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -53,15 +54,17 @@ import com.example.mushafconsolidated.Entities.SifaEntity
 import com.example.mushafconsolidated.Entities.VerbCorpus
 import com.example.mushafconsolidated.Entities.VerbWazan
 import com.example.mushafconsolidated.Entities.lughat
-import com.example.mushafconsolidated.Entities.wbwentity
+
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.R.layout
 import com.example.mushafconsolidated.SpannableStringUtils
 import com.example.mushafconsolidated.Utils
+
 import com.example.mushafconsolidated.databinding.RootDialogFragmentBinding
 import com.example.mushafconsolidated.intrfaceimport.OnItemClickListener
 import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.example.mushafconsolidatedimport.VerbFormsDialogFrag
+
 import com.example.utility.CorpusUtilityorig.Companion.getSpancolor
 import com.example.utility.QuranGrammarApplication
 import dagger.hilt.android.AndroidEntryPoint
@@ -200,7 +203,6 @@ class WordAnalysisBottomSheet : DialogFragment() {
                 mainViewModel.getCorpusEntityFilterbywordno(chapterId, ayahNumber, wordNo).value
                     ?: return@launch
 
-            if (corpusNounWord!!.isNotEmpty() || verbCorpusRootWord!!.isNotEmpty()) {
                 // Continue with data processing...
                 val am = NewQuranMorphologyDetails(
                     corpusSurahWord,
@@ -252,7 +254,7 @@ class WordAnalysisBottomSheet : DialogFragment() {
                     }
                 }
 
-            }
+
 
 
         }
@@ -471,7 +473,7 @@ class WordAnalysisBottomSheet : DialogFragment() {
 
     private fun updateTranslation(wbwTranslation: String?, wordNo: Int, models: QuranViewModel) {
         wordbdetail["translation"] = SpannableStringBuilder(
-            wbwTranslation ?: models.getwbwTranslationbywordno(chapterId, ayahNumber, wordNo)
+            wbwTranslation ?: models.getQuranCorpusWbwbysurahAyahWord(chapterId, ayahNumber, wordNo)
                 .value?.firstOrNull()?.en.orEmpty()
         )
     }
@@ -539,7 +541,9 @@ class WordAnalysisBottomSheet : DialogFragment() {
                 }
 
             }
-            isnoun = wordbdetail["noun"] != null
+
+            isnoun = wordbdetail["noun"] != null || wordbdetail["worddetails"]?.contains("Location") ?: false
+
             //   isProperNoun= wordbdetail["noun"]!!.contains("Proper Noun:")
 
             wordbdetail["noun"]?.let { noun ->
@@ -640,11 +644,11 @@ class WordAnalysisBottomSheet : DialogFragment() {
 
             if (wbwtranslation == null) {
                 val allwords =
-                    models.getwbwTranslationbywordno(
+                    models.getQuranCorpusWbwbysurahAyahWord(
                         chapterId,
                         ayahNumber,
                         wordno
-                    ).value as ArrayList<wbwentity>
+                    ).value as ArrayList<CorpusEntity>
                 wordbdetail["translation"] = SpannableStringBuilder.valueOf(allwords[0].en)
             } else {
                 wordbdetail["translation"] = SpannableStringBuilder.valueOf(wbwtranslation)
@@ -701,7 +705,7 @@ class WordAnalysisBottomSheet : DialogFragment() {
     private fun setAllPhrases() {
         val utils= Utils(requireContext())
      val negaTionList=   utils.geTNegatonFilerSurahAyah(chapterId,ayahNumber)
-        val spannedStrings = SpannableStringUtils.applySpans(negaTionList, "light")
+        val spannedStrings = SpannableStringUtils.applySpans(negaTionList, true)
 
         for ((i, j: Int, type, spannableString) in spannedStrings) {
 
@@ -1086,7 +1090,24 @@ class WordAnalysisBottomSheet : DialogFragment() {
         val cleanedForm = vbform.replace(Regex("[()]"), "")
 
         val data = arrayOf(cleanedForm)
-        VerbFormsDialogFrag.newInstance(data).show(requireActivity().supportFragmentManager, TAG)
+
+  //   VerbFormsDialogFrag.newInstance(data).show(requireActivity().supportFragmentManager, TAG)
+  val  form = data!![0]
+        var formstr: String? = "Form"
+        formstr = if (!form!!.contains("Form")) {
+            "$formstr $form"
+        } else {
+            form
+        }
+        val mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
+        val htmlContent = mainViewModel.getGramarRulesbyHarf(formstr!!.toString()).value
+        val dialog = HtmlBottomSheetDialog.newInstance(htmlContent?.get(0)!!.detailsrules, "HTML Dialog")
+        dialog.show(requireActivity().supportFragmentManager, "HtmlBottomSheetDialog")
+
+
+        // In your parent DialogFragment
+       /*val verbFormsDialogFrag = VerbFormsDialogFrag.newInstance(data)
+        verbFormsDialogFrag.show(childFragmentManager, "verbFormsDialogFrag")*/
     }
 
     private fun handleWordViewClick() {

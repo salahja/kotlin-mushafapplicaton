@@ -55,11 +55,11 @@ class NewAjroomiyaDetailFragment
         super.onViewCreated(view, savedInstanceState)
 
         // Retrieve the current theme (adjust this based on how you share data between activity and fragment)
-        val currentTheme = arguments?.getString("currentTheme") ?: BaseActivity.DARK_THEME
+        val currentTheme = arguments?.getString("currentTheme") ?: BaseActivity.BROWN_MODE
 
         // Apply background color based on theme
         val backgroundColor = when (currentTheme){
-            BaseActivity.DARK_THEME -> ContextCompat.getColor(requireContext(), R.color.bg_brown)
+            BaseActivity.BROWN_MODE -> ContextCompat.getColor(requireContext(), R.color.bg_brown)
             else -> ContextCompat.getColor(requireContext(), R.color.md_db__theme_dark_background)
         }
         view.setBackgroundColor(backgroundColor)

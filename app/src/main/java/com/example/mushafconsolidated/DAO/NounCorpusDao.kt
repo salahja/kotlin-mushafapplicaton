@@ -16,6 +16,9 @@ interface NounCorpusDao {
     @Query("SELECT * FROM nouncorpus where surah=:surahid and ayah=:ayaid  order by surah,ayah,wordno")
     fun getQuranNounAyah(surahid: Int, ayaid: Int): List<NounCorpus>
 
+    @Query("SELECT * FROM nouncorpus where surah=:surahid  order by surah,ayah,wordno")
+    fun getQuranNounSurah(surahid: Int,  ): List<NounCorpus>
+
     //   @Query("SELECT count(root_a), lemma_a,form,araword,tag,propone,proptwo FROM nouncorpus where root_a=:verbroot group by lemma_a,root_a,tag,propone,proptwo")
     @get:Query("SELECT * FROM nouncorpus  ")
     val allnouns: List<NounCorpus>
@@ -25,7 +28,7 @@ interface NounCorpusDao {
     fun allnounscount(verbroot: String): List<NounCorpus>
 
     @Transaction
-    @Query("SELECT count(root_a) as count,root_a,lemma_a,araword,surah,ayah,wordno,token,words,tag,propone,proptwo,form,lemma,root,gendernumber,type,cases,details,id  FROM nouncorpus where root_a=:root group by root_a,form order by surah,ayah")
+    @Query("SELECT count(root_a) as count,root_a,lemma_a,araword,surah,ayah,wordno,token,tag,propone,proptwo,form,lemma,root,gendernumber,type,cases,details,id  FROM nouncorpus where root_a=:root group by root_a,form order by surah,ayah")
     fun getNounBreakup(root: String): List<NounCorpus>
 
     /*    @RawQuery(observedEntities = arrayOf(CorpusExpandWbwPOJO::class))

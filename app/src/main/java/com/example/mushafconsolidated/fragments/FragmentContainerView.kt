@@ -70,7 +70,7 @@ class FragmentContainerView constructor() : BottomSheetDialogFragment() {
         )
     ), View.OnClickListener {
         var purple: RadioButton
-        var black: RadioButton
+
         var dark_blue: RadioButton
         var green: RadioButton
         var brown: RadioButton
@@ -78,8 +78,8 @@ class FragmentContainerView constructor() : BottomSheetDialogFragment() {
         init {
             // TODO: Customize the item layout
             //  super(inflater.inflate(R.layout.fragment_item_list_dialog_list_dialog_item, parent, false));
-            purple = itemView.findViewById(R.id.Purple)
-            black = itemView.findViewById(R.id.Black)
+            purple = itemView.findViewById(R.id.Light)
+
             dark_blue = itemView.findViewById(R.id.Dark_Blue)
             green = itemView.findViewById(R.id.green)
             brown = itemView.findViewById(R.id.Brown)
@@ -95,16 +95,7 @@ class FragmentContainerView constructor() : BottomSheetDialogFragment() {
                     dismiss()
                 }
             })
-            black.setOnClickListener(object : View.OnClickListener {
-                public override fun onClick(v: View?) {
-                    val editor: SharedPreferences.Editor =
-                        PreferenceManager.getDefaultSharedPreferences(activity).edit()
-                    //     SharedPreferences.Editor editor = getActivity().getSharedPreferences("properties", 0).edit();
-                    editor.putString("themepref", "dark")
-                    editor.apply()
-                    dismiss()
-                }
-            })
+
             dark_blue.setOnClickListener(object : View.OnClickListener {
                 public override fun onClick(v: View?) {
                     val editor: SharedPreferences.Editor =
@@ -169,8 +160,7 @@ class FragmentContainerView constructor() : BottomSheetDialogFragment() {
             ).getString("themepref", "dark")
             if ((theme == "light")) {
                 holder.purple.isChecked = true
-            } else if ((theme == "dark")) {
-                holder.black.isChecked = true
+
             } else if ((theme == "blue")) {
                 holder.dark_blue.isChecked = true
             } else if ((theme == "light")) {
