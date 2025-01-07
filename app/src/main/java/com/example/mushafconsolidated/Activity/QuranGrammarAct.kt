@@ -13,6 +13,7 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.text.SpannableString
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuInflater
@@ -51,6 +52,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.example.Constant
 import com.example.Constant.SURAHFRAGTAG
+import com.example.mushafconsolidated.Adapters.NewQuranDisplayAdapter
 import com.example.mushafconsolidated.Adapters.QuranDisplayAdapter
 import com.example.mushafconsolidated.BottomOptionDialog
 
@@ -87,11 +89,10 @@ import com.example.utility.CorpusUtilityorig.Companion.updateCorpusWithFael
 
 import com.example.utility.ExtractionUtility.extractAccusativeSentences
 import com.example.utility.ExtractionUtility.extractInsideDoer
-import com.example.utility.ExtractionUtility.extractOutsideDoer
 import com.example.utility.ExtractionUtility.nasab
-import com.example.utility.ExtractionUtility.shart
 import com.example.utility.ExtractionUtility.writeNegationDataToFile
 import com.example.utility.QuranGrammarApplication.Companion.context
+import com.example.utility.QuranViewUtils
 
 import com.example.utility.ScreenshotUtils
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -124,7 +125,12 @@ import kotlin.collections.List as CollectionsList
 @AndroidEntryPoint
 class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
+  private var currentTheme=false
+  private val absoluteNegationCache = HashMap<Pair<Int, Int>, List<Int>>() //
+  private var sifaCache = HashMap<Pair<Int, Int>, MutableList<List<Int>>>()//
 
+  private val mudhafCache = HashMap<Pair<Int, Int>, MutableList<List<Int>>>()//
+  private val phrasesCache: MutableMap<Int, MutableMap<Int, MutableList<SpannableString>>> = mutableMapOf()
   private var bundles: Bundle? = null
   private lateinit var mainViewModel: QuranViewModel
   private var corpusSurahWord: CollectionsList<CorpusEntity>? = null
@@ -1149,6 +1155,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
   private fun customizeDialogAppearance(alertDialog: AlertDialog) {
     val preferences = shared.getString("themepref", "dark")
+    currentTheme = preferences == "dark" || preferences == "blue" || preferences == "green"
     when (preferences) {
       "light" -> alertDialog.window!!.setBackgroundDrawableResource(R.color.md_theme_dark_onSecondary)
       "brown" -> alertDialog.window!!.setBackgroundDrawableResource(R.color.background_color_light_brown)
@@ -1269,7 +1276,10 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
           corpusGroupedByAyah =
             corpusSurahWord!!.groupBy { it.ayah } as LinkedHashMap<Int, ArrayList<CorpusEntity>>
 
-
+      QuranViewUtils.cacheAbsoluteNegationData(mainViewModel, chapterno, absoluteNegationCache)
+      QuranViewUtils.cacheSifaData(mainViewModel, chapterno, sifaCache)
+      QuranViewUtils.cacheMudhafData(mainViewModel, chapterno, mudhafCache)
+      QuranViewUtils.cachePhrasesData(mainViewModel, chapterno, phrasesCache, currentTheme)
 
 
 
@@ -1289,7 +1299,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
           val adapter =
 
 
-            QuranDisplayAdapter(
+            NewQuranDisplayAdapter(
               false,
               header,
               allofQuran,
@@ -1299,6 +1309,11 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
               isMakkiMadani,
               listener,
               mainViewModel,
+             absoluteNegationCache ,
+                sifaCache, 
+          mudhafCache,
+          phrasesCache    
+    
 
 
               )
