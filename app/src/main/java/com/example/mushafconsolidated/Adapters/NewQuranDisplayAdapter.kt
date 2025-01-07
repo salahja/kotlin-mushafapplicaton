@@ -118,7 +118,7 @@ class NewQuranDisplayAdapter(
     lateinit var mItemClickListener: OnItemClickListenerOnLong
     private lateinit var isNightmode: String
     private var currentTheme=false
-    private var headercolor = 0
+
 
     private lateinit var colorwordfont: Typeface
 
