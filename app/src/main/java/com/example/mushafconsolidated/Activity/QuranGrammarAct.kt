@@ -37,6 +37,7 @@ import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
+import androidx.compose.ui.graphics.vector.group
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
@@ -116,8 +117,11 @@ import sj.hisnul.fragments.NamesDetail
 import wheel.OnWheelChangedListener
 import wheel.WheelView
 import java.io.File
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 import javax.inject.Inject
 import kotlin.collections.List
+import kotlin.text.trim
 import kotlin.collections.List as CollectionsList
 
 
@@ -182,7 +186,7 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
   var chapterno = 0
   private lateinit var parentRecyclerView: RecyclerView
   private var mushafview = false
-
+private var preferences=""
 
   @Deprecated("Deprecated in Java")
   override fun onBackPressed() {
@@ -251,6 +255,9 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     materialToolbar = binding.toolbarmain
     setSupportActionBar(materialToolbar)
 
+    this.shared = PreferenceManager.getDefaultSharedPreferences(this@QuranGrammarAct)
+    preferences = shared.getString("themepref", "dark").toString()
+    currentTheme = preferences == "dark" || preferences == "blue" || preferences == "green"
 
     /*
             if (isFirstTime) {
@@ -299,8 +306,9 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     if (start) {
       //mainLoopFromIndexExtraction()
       //temloop()
+      synclughat()
       //    CorpusConsolidateLemmas()
-      //     mainLoopforErabStringEXTRACTION()
+     //     mainLoopforErabStringEXTRACTION()
       //mainLoopforIndexEXTRACTION()
       //extractExpNegationSentences()
   // updateCorpus()
@@ -414,6 +422,89 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
     }
     writeNegationDataToFile(context!!, allLamNegativeSenteces, fileNames)
 
+  }
+
+  private fun synclughat(){
+    mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
+    val utils = Utils(this)
+    val allLamNegativeSenteces = ArrayList<List<String>>()
+
+    for (lughat in utils.getAlllughat()) {
+
+      val arabicWords = extractArabicAndEnglish(lughat.en_lughat)
+      val datastring="${lughat.surah}?${lughat.ayah}?${lughat.surahname}?$arabicWords?${lughat.wordno}?${lughat.hansweir}?${lughat.arabicword}?${lughat.ur_lughat}" +
+          "?${lughat.meaning} \"?${lughat.en_lughat} \"?${lughat.letter}"
+      allLamNegativeSenteces.add(listOf(datastring))
+
+    }
+    val fileName = "lughat.csv"
+    writeNegationDataToFile(context!!, allLamNegativeSenteces, fileName)
+
+  }
+
+  fun extractArabicAndEnglisssh(text: String):String {
+    val pattern = Pattern.compile("([\\u0621-\\u064A\\s]+)(?:\\n|\\n\\n)([A-Z]+(?:-[A-Z]+)+)")
+    val matcher: Matcher = pattern.matcher(text)
+    var arabicPart=""
+    while (matcher.find()) {
+      val arabicPart = matcher.group(1).trim() // Trim to remove leading/trailing spaces
+      val englishPart = matcher.group(2)
+      println("Arabic: $arabicPart")
+      println("English: $englishPart")
+      println("---")
+    }
+    return arabicPart
+  }
+
+  fun extractArabicAndEnglishs(text: String):String {
+    val pattern = Pattern.compile("([A-Z]+(?:-[A-Z]+)+)\\s+([\\u0621-\\u064A\\s]+)")
+    val matcher: Matcher = pattern.matcher(text)
+    var arabicPart=""
+    while (matcher.find()) {
+      val englishPart = matcher.group(1)
+       arabicPart = matcher.group(2).trim() // Trim to remove leading/trailing spaces
+      println("English: $englishPart")
+      println("Arabic: $arabicPart")
+      println("---")
+    }
+    return arabicPart
+  }
+
+
+  fun extractArabicAndEnglish(text: String) :String{
+    val pattern = Pattern.compile("([A-Z]+(?:-[A-Z]+)+)\\s+([\\u0621-\\u064A\\s]+)|([\\u0621-\\u064A])")
+   // val matcher: Matcher = pattern.matcher(text)
+    val split = text.split("\n")
+
+    val matcher: Matcher = pattern.matcher(split[0])
+    var arabicPart=""
+    while (matcher.find()) {
+      if (matcher.group(1) != null && matcher.group(2) != null) {
+        val englishPart = matcher.group(1)
+         arabicPart = matcher.group(2).trim()
+        println("English: $englishPart")
+        println("Arabic: $arabicPart")
+      } else if (matcher.group(3) != null) {
+        val singleArabicLetter = matcher.group(3)
+        println("Single Arabic: $singleArabicLetter")
+      }
+      println("---")
+    }
+    return arabicPart
+  }
+
+
+  fun extractArabicWordsAtLineStart(input: String): List<String> {
+    val regex = Regex("^[\\u0600-\\u06FF]+", RegexOption.MULTILINE)
+    val aw= regex.findAll(input).map { it.value.trim() }.toList()
+    return  aw
+  }
+
+  fun extractArabicWords(input: String): List<String> {
+    val regex = Regex("[A-Za-z-]+\\s+([\\u0600-\\u06FF\\s]+)\\n")
+    val aw= regex.findAll(input).map { it.groupValues[1].trim() }.toList()
+
+    return aw
   }
 
   private fun mainLoopforErabStringEXTRACTION() {
@@ -761,10 +852,9 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
   }
 
   private fun setupThemeAndPreferences() {
-    this.shared = PreferenceManager.getDefaultSharedPreferences(this@QuranGrammarAct)
+   // this.shared = PreferenceManager.getDefaultSharedPreferences(this@QuranGrammarAct)
 
-    currenttheme =
-      PreferenceManager.getDefaultSharedPreferences(this).getString("themepref", "brown")
+    currenttheme =      PreferenceManager.getDefaultSharedPreferences(this).getString("themepref", "brown")
     switchTheme(currenttheme) // Call switchTheme before super.onCreate()
     DynamicColors.applyToActivitiesIfAvailable(this.application)
   }
@@ -1154,8 +1244,8 @@ class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
 
   private fun customizeDialogAppearance(alertDialog: AlertDialog) {
-    val preferences = shared.getString("themepref", "dark")
-    currentTheme = preferences == "dark" || preferences == "blue" || preferences == "green"
+
+
     when (preferences) {
       "light" -> alertDialog.window!!.setBackgroundDrawableResource(R.color.md_theme_dark_onSecondary)
       "brown" -> alertDialog.window!!.setBackgroundDrawableResource(R.color.background_color_light_brown)

@@ -109,6 +109,7 @@ class QuranViewModel @Inject constructor(
 
 
 
+
     fun getsifaFileterSurahAyah(surah: Int, ayah: Int): List<SifaEntity> {
         return  this.quranRepository.getsifa(surah, ayah)
 

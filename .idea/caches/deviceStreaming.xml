@@ -20,6 +20,7 @@
           <option name="brand" value="DOCOMO" />
           <option name="codename" value="F01L" />
           <option name="id" value="F01L" />
+          <option name="labId" value="google" />
           <option name="manufacturer" value="FUJITSU" />
           <option name="name" value="F-01L" />
           <option name="screenDensity" value="360" />
@@ -31,6 +32,7 @@
           <option name="brand" value="OPPO" />
           <option name="codename" value="OP573DL1" />
           <option name="id" value="OP573DL1" />
+          <option name="labId" value="google" />
           <option name="manufacturer" value="OPPO" />
           <option name="name" value="CPH2557" />
           <option name="screenDensity" value="480" />
@@ -42,6 +44,7 @@
           <option name="brand" value="DOCOMO" />
           <option name="codename" value="SH-01L" />
           <option name="id" value="SH-01L" />
+          <option name="labId" value="google" />
           <option name="manufacturer" value="SHARP" />
           <option name="name" value="AQUOS sense2 SH-01L" />
           <option name="screenDensity" value="480" />
@@ -53,6 +56,7 @@
           <option name="brand" value="samsung" />
           <option name="codename" value="a51" />
           <option name="id" value="a51" />
+          <option name="labId" value="google" />
           <option name="manufacturer" value="Samsung" />
           <option name="name" value="Galaxy A51" />
           <option name="screenDensity" value="420" />
@@ -64,6 +68,7 @@
           <option name="brand" value="google" />
           <option name="codename" value="akita" />
           <option name="id" value="akita" />
+          <option name="labId" value="google" />
           <option name="manufacturer" value="Google" />
           <option name="name" value="Pixel 8a" />
           <option name="screenDensity" value="420" />
@@ -75,6 +80,7 @@
           <option name="brand" value="samsung" />
           <option name="codename" value="b0q" />
           <option name="id" value="b0q" />
+          <option name="labId" value="google" />
           <option name="manufacturer" value="Samsung" />
           <option name="name" value="Galaxy S22 Ultra" />
           <option name="screenDensity" value="600" />
@@ -86,6 +92,7 @@
           <option name="brand" value="google" />
           <option name="codename" value="bluejay" />
           <option name="id" value="bluejay" />
+          <option name="labId" value="google" />
           <option name="manufacturer" value="Google" />
           <option name="name" value="Pixel 6a" />
           <option name="screenDensity" value="420" />
@@ -97,6 +104,7 @@
           <option name="brand" value="google" />
           <option name="codename" value="caiman" />
           <option name="id" value="caiman" />
+          <option name="labId" value="google" />
           <option name="manufacturer" value="Google" />
           <option name="name" value="Pixel 9 Pro" />
           <option name="screenDensity" value="360" />
@@ -107,7 +115,9 @@
           <option name="api" value="34" />
           <option name="brand" value="google" />
           <option name="codename" value="comet" />
+          <option name="default" value="true" />
           <option name="id" value="comet" />
+          <option name="labId" value="google" />
           <option name="manufacturer" value="Google" />
           <option name="name" value="Pixel 9 Pro Fold" />
           <option name="screenDensity" value="390" />
@@ -119,6 +129,7 @@
           <option name="brand" value="samsung" />
           <option name="codename" value="crownqlteue" />
           <option name="id" value="crownqlteue" />
+          <option name="labId" value="google" />
           <option name="manufacturer" value="Samsung" />
           <option name="name" value="Galaxy Note9" />
           <option name="screenDensity" value="420" />
@@ -130,6 +141,7 @@
           <option name="brand" value="samsung" />
           <option name="codename" value="dm3q" />
           <option name="id" value="dm3q" />
+          <option name="labId" value="google" />
           <option name="manufacturer" value="Samsung" />
           <option name="name" value="Galaxy S23 Ultra" />
           <option name="screenDensity" value="600" />
@@ -140,7 +152,9 @@
           <option name="api" value="34" />
           <option name="brand" value="samsung" />
           <option name="codename" value="e1q" />
+          <option name="default" value="true" />
           <option name="id" value="e1q" />
+          <option name="labId" value="google" />
           <option name="manufacturer" value="Samsung" />
           <option name="name" value="Galaxy S24" />
           <option name="screenDensity" value="480" />
@@ -148,10 +162,23 @@
           <option name="screenY" value="2340" />
         </PersistentDeviceSelectionData>
         <PersistentDeviceSelectionData>
+          <option name="api" value="34" />
+          <option name="brand" value="samsung" />
+          <option name="codename" value="e3q" />
+          <option name="id" value="e3q" />
+          <option name="labId" value="google" />
+          <option name="manufacturer" value="Samsung" />
+          <option name="name" value="Galaxy S24 Ultra" />
+          <option name="screenDensity" value="450" />
+          <option name="screenX" value="1440" />
+          <option name="screenY" value="3120" />
+        </PersistentDeviceSelectionData>
+        <PersistentDeviceSelectionData>
           <option name="api" value="33" />
           <option name="brand" value="google" />
           <option name="codename" value="felix" />
           <option name="id" value="felix" />
+          <option name="labId" value="google" />
           <option name="manufacturer" value="Google" />
           <option name="name" value="Pixel Fold" />
           <option name="screenDensity" value="420" />
@@ -163,6 +190,7 @@
           <option name="brand" value="google" />
           <option name="codename" value="felix" />
           <option name="id" value="felix" />
+          <option name="labId" value="google" />
           <option name="manufacturer" value="Google" />
           <option name="name" value="Pixel Fold" />
           <option name="screenDensity" value="420" />
@@ -174,6 +202,7 @@
           <option name="brand" value="google" />
           <option name="codename" value="felix_camera" />
           <option name="id" value="felix_camera" />
+          <option name="labId" value="google" />
           <option name="manufacturer" value="Google" />
           <option name="name" value="Pixel Fold (Camera-enabled)" />
           <option name="screenDensity" value="420" />
@@ -184,7 +213,9 @@
           <option name="api" value="33" />
           <option name="brand" value="samsung" />
           <option name="codename" value="gts8uwifi" />
+          <option name="formFactor" value="Tablet" />
           <option name="id" value="gts8uwifi" />
+          <option name="labId" value="google" />
           <option name="manufacturer" value="Samsung" />
           <option name="name" value="Galaxy Tab S8 Ultra" />
           <option name="screenDensity" value="320" />
@@ -196,6 +227,7 @@
           <option name="brand" value="google" />
           <option name="codename" value="husky" />
           <option name="id" value="husky" />
+          <option name="labId" value="google" />
           <option name="manufacturer" value="Google" />
           <option name="name" value="Pixel 8 Pro" />
           <option name="screenDensity" value="390" />
@@ -207,6 +239,7 @@
           <option name="brand" value="motorola" />
           <option name="codename" value="java" />
           <option name="id" value="java" />
+          <option name="labId" value="google" />
           <option name="manufacturer" value="Motorola" />
           <option name="name" value="G20" />
           <option name="screenDensity" value="280" />
@@ -218,6 +251,7 @@
           <option name="brand" value="google" />
           <option name="codename" value="komodo" />
           <option name="id" value="komodo" />
+          <option name="labId" value="google" />
           <option name="manufacturer" value="Google" />
           <option name="name" value="Pixel 9 Pro XL" />
           <option name="screenDensity" value="360" />
@@ -229,6 +263,7 @@
           <option name="brand" value="google" />
           <option name="codename" value="lynx" />
           <option name="id" value="lynx" />
+          <option name="labId" value="google" />
           <option name="manufacturer" value="Google" />
           <option name="name" value="Pixel 7a" />
           <option name="screenDensity" value="420" />
@@ -240,6 +275,7 @@
           <option name="brand" value="google" />
           <option name="codename" value="oriole" />
           <option name="id" value="oriole" />
+          <option name="labId" value="google" />
           <option name="manufacturer" value="Google" />
           <option name="name" value="Pixel 6" />
           <option name="screenDensity" value="420" />
@@ -251,6 +287,7 @@
           <option name="brand" value="google" />
           <option name="codename" value="panther" />
           <option name="id" value="panther" />
+          <option name="labId" value="google" />
           <option name="manufacturer" value="Google" />
           <option name="name" value="Pixel 7" />
           <option name="screenDensity" value="420" />
@@ -262,6 +299,7 @@
           <option name="brand" value="samsung" />
           <option name="codename" value="q5q" />
           <option name="id" value="q5q" />
+          <option name="labId" value="google" />
           <option name="manufacturer" value="Samsung" />
           <option name="name" value="Galaxy Z Fold5" />
           <option name="screenDensity" value="420" />
@@ -273,6 +311,7 @@
           <option name="brand" value="samsung" />
           <option name="codename" value="q6q" />
           <option name="id" value="q6q" />
+          <option name="labId" value="google" />
           <option name="manufacturer" value="Samsung" />
           <option name="name" value="Galaxy Z Fold6" />
           <option name="screenDensity" value="420" />
@@ -283,7 +322,9 @@
           <option name="api" value="30" />
           <option name="brand" value="google" />
           <option name="codename" value="r11" />
+          <option name="formFactor" value="Wear OS" />
           <option name="id" value="r11" />
+          <option name="labId" value="google" />
           <option name="manufacturer" value="Google" />
           <option name="name" value="Pixel Watch" />
           <option name="screenDensity" value="320" />
@@ -296,6 +337,7 @@
           <option name="brand" value="google" />
           <option name="codename" value="redfin" />
           <option name="id" value="redfin" />
+          <option name="labId" value="google" />
           <option name="manufacturer" value="Google" />
           <option name="name" value="Pixel 5" />
           <option name="screenDensity" value="440" />
@@ -307,6 +349,7 @@
           <option name="brand" value="google" />
           <option name="codename" value="shiba" />
           <option name="id" value="shiba" />
+          <option name="labId" value="google" />
           <option name="manufacturer" value="Google" />
           <option name="name" value="Pixel 8" />
           <option name="screenDensity" value="420" />
@@ -317,7 +360,9 @@
           <option name="api" value="33" />
           <option name="brand" value="google" />
           <option name="codename" value="tangorpro" />
+          <option name="formFactor" value="Tablet" />
           <option name="id" value="tangorpro" />
+          <option name="labId" value="google" />
           <option name="manufacturer" value="Google" />
           <option name="name" value="Pixel Tablet" />
           <option name="screenDensity" value="320" />
@@ -328,7 +373,9 @@
           <option name="api" value="34" />
           <option name="brand" value="google" />
           <option name="codename" value="tokay" />
+          <option name="default" value="true" />
           <option name="id" value="tokay" />
+          <option name="labId" value="google" />
           <option name="manufacturer" value="Google" />
           <option name="name" value="Pixel 9" />
           <option name="screenDensity" value="420" />

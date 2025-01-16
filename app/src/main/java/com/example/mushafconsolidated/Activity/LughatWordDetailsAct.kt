@@ -444,8 +444,27 @@ class LughatWordDetailsAct : BaseActivity() {
             isdictionary -> {
                 setupTabLayout(tabLayout, viewPager, dictionarytitle)
             }
-             (ismujarrad && isVerbMarfu && !isimperative) ->
-                 setupTabLayout(tabLayout,viewPager,thulathientitles)
+             (ismujarrad && isVerbMarfu && !isimperative) -> {
+                 setupTabLayout(tabLayout, viewPager, thulathientitles)
+                 setLanguages(
+                     isimperative,
+                     ismujarrad,
+                     isparticple,
+                     isIsmMajroor,
+                     isIsmMansub,
+                     isIsmMarfu,
+                     isAugmentedWazan,
+                     isonlyarabicword,
+                     isrelative,
+                     isdem,
+                     isharfnasab,
+                     isShart,
+                     isprep,
+                     isnoconjugation,
+                     isdictionary,
+                     verbMood
+                 )
+             }
 
             (isAugmentedWazan && isVerbMajzoom) -> {
                 setLanguages(
