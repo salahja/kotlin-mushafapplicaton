@@ -13,6 +13,7 @@ import com.example.utility.QuranGrammarApplication
 import org.sj.conjugator.interfaces.OnItemClickListener
 import org.sj.data.MazeedResult
 import org.sj.verbConjugation.Amr
+import org.sj.verbConjugation.MadhiMudharay
 import org.sj.verbConjugation.NahiAmr
 
 
@@ -74,9 +75,9 @@ class MazeedVerbSarfKabeerAdapter(
 
 
 
-
-
         this.MadhiMaroof(madhi as MadhiMudharay,holder)
+
+   // this.MadhiMaroof(madhimudhary as MadhiMudharay,holder)
         improveMudhariMaroof(mudharaymaroof as MadhiMudharay,holder, arabicTypeface!!)
         MadhiMajhool(madhimajhool as MadhiMudharay,holder)
         improveMudhariMajhool(mudharaymajhool as MadhiMudharay,holder, arabicTypeface!!)
@@ -252,23 +253,7 @@ class MazeedVerbSarfKabeerAdapter(
         holder.amrantunna.text = antunna
     }
 
-    // Assuming these are your data classes and helper classes
-    data class MadhiMudharay(
-        val hua: Any,
-        val huma: Any,
-        val hum: Any,
-        val hia: Any,
-        val humaf: Any,
-        val hunna: Any,
-        val anta: Any,
-        val antuma: Any,
-        val antum: Any,
-        val anti: Any,
-        val antumaf: Any,
-        val antunna: Any,
-        val ana: Any,
-        val nahnu: Any
-    )
+
 
     class SharedPref(context: Context) {
         companion object {
@@ -337,7 +322,7 @@ class MazeedVerbSarfKabeerAdapter(
         textViewMap.forEach { (textView, key) ->
             textView.typeface = arabicTypeface
             val (pronoun, conjugation) = conjugationsMap[key] ?: Pair("", "")
-            textView.text = formatConjugation(pronoun, conjugation)
+            textView.text = conjugation?.let { formatConjugation(pronoun, it) }
         }
 
         FontSIzeSelection(viewHolder)
@@ -918,7 +903,7 @@ class MazeedVerbSarfKabeerAdapter(
         textViewMap.forEach { (textView, key) ->
             textView.typeface = arabicTypeface
             val (pronoun, conjugation) = conjugationsMap[key] ?: Pair("", "")
-            textView.text = formatConjugation(pronoun, conjugation)
+            textView.text = conjugation?.let { formatConjugation(pronoun, it) }
         }
     }
 

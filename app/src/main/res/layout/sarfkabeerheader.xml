@@ -32,7 +32,7 @@
         android:background="?selectableItemBackground"
         android:foregroundGravity="bottom"
 
-        android:visibility="gone"
+        android:visibility="visible"
   />
 
 

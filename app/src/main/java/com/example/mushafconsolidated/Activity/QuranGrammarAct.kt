@@ -452,7 +452,10 @@ private var preferences=""
       }
       if (item.itemId == R.id.ajroomiya_detail) {
         drawerLayout.closeDrawers()
-        val grammar = Intent(this, NewAjroomiyaDetailHostActivity::class.java)
+    //    val grammar = Intent(this, NewAjroomiyaDetailHostActivity::class.java)
+        val grammar = Intent(this, TextSpeechAct::class.java)
+
+
         startActivity(grammar)
       }
       if (item.itemId == R.id.phrases) {
