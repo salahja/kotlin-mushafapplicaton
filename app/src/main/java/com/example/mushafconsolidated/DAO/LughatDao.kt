@@ -11,7 +11,7 @@ interface LughatDao {
     fun getall(): List<lughat>
 
     @Query("SELECT * FROM onlylugat where rootword=:root")
-    fun getRootWordDictionary(root: String?): List<lughat>
+    fun getRootWordDictionary(root: String): List<lughat>
 
     @Query("SELECT * FROM onlylugat where arabicword=:root")
     fun getArabicWord(root: String?): List<lughat>

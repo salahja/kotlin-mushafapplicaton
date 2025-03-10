@@ -14,6 +14,7 @@ import com.example.Constant.VERBMOOD
 import com.example.Constant.VERBTYPE
 import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.Utils
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.sj.conjugator.adapter.LaysaAdapter
 
@@ -43,7 +44,7 @@ class LaysaVerbFrag : Fragment() {
     ): View? {
         setHasOptionsMenu(true)
         val view = inflater.inflate(R.layout.sarfkabeerheader, container, false)
-        val callButton = view.findViewById<FloatingActionButton>(R.id.action_buttons)
+        val callButton = view.findViewById<ExtendedFloatingActionButton>(R.id.action_buttons)
         val dataBundle = arguments
         if (dataBundle != null) {
             val callingfragment = dataBundle.getString(MUJARRADVERBTAG)

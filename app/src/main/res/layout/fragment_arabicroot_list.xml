@@ -7,37 +7,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:colorBackground"
-    android:orientation="vertical"
-    app:cardBackgroundColor="@android:color/transparent">
-
-    <SearchView
-        android:id="@+id/searchView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:queryHint="Search Roots"
-        app:iconifiedByDefault="false"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:layoutDirection="locale"
+   >
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/arabicroot_list"
-        android:name="com.example.roots.arabicrootListFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="?actionBarSize"
         android:layout_marginStart="@dimen/container_margin"
-        android:layout_marginTop="70dp"
         android:layout_marginEnd="@dimen/container_margin"
         app:layoutManager="LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchView"
-        tools:context="com.example.roots.arabicrootDetailHostActivity"
-        tools:listitem="@layout/arabicroot_list_content" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/verbroot_list_content" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_begin="@dimen/item_width" />
 
@@ -46,7 +36,7 @@
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="55dp"
+        android:layout_marginStart="@dimen/detail_container_margin"
         app:defaultNavHost="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -56,14 +46,11 @@
 
     <View
         android:id="@+id/divider2"
-        android:layout_width="1dp"
+        android:layout_width="10dp"
         android:layout_height="0dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/arabicroot_list"
-        app:layout_constraintHeight_default="percent"
-        app:layout_constraintHeight_percent="1"
-        app:layout_constraintHorizontal_bias="0.368"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/arabicroot_list"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -33,6 +33,9 @@
         android:orientation="vertical"
         app:layout_constraintGuide_begin="@dimen/item_width" />
 
+
+
+
     <fragment
         android:id="@+id/verbroot_detail_nav_container"
 

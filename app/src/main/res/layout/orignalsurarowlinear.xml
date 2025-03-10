@@ -33,54 +33,60 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/topPanel"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-
-                android:orientation="horizontal">
+                android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@id/tvNumber"
-
+                    android:id="@+id/tvNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-
+                    android:textSize="12.0sp"
                     android:layout_marginStart="@dimen/space_1"
-                    android:textSize="10.0sp" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
                 <TextView
-                    android:id="@id/tvArabic"
+                    android:id="@+id/tvArabic"
                     android:layout_width="0dp"
-                    style="@android:style/TextAppearance.DeviceDefault.Medium"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/space_1"
-                    android:layout_weight="7.0"
+                    style="@android:style/TextAppearance.DeviceDefault.Medium"
                     android:hint="The Opening"
                     android:padding="@dimen/space_1"
-                    />
+                    android:textSize="12.0sp"
+                    android:layout_marginStart="@dimen/space_1"
+                    app:layout_constraintStart_toEndOf="@id/tvNumber"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/makkimadaniicon"
+                    app:layout_constraintWidth_default="spread" />
 
                 <ImageView
-                    android:id="@id/makkimadaniicon"
-                    android:layout_width="24.0dip"
-
-                    android:layout_height="24.0dip"
-                    android:layout_gravity="center"
+                    android:id="@+id/makkimadaniicon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_margin="@dimen/space_1"
-                    android:layout_weight="1.0" />
-                <ImageView
-                    android:id="@id/surahicon"
-                    android:layout_width="30.0dip"
+                    app:layout_constraintStart_toEndOf="@id/tvArabic"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/surahicon" />
 
-                    android:layout_height="30dp"
-                    android:layout_gravity="center"
+                <ImageView
+                    android:id="@+id/surahicon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_marginEnd="@dimen/space_2"
-                    android:layout_weight="1.0"
-                    android:gravity="start"
-                    android:paddingEnd="@dimen/space_1" />
-            </LinearLayout>
+                    android:paddingEnd="@dimen/space_1"
+                    app:layout_constraintStart_toEndOf="@id/makkimadaniicon"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 
         </RelativeLayout>

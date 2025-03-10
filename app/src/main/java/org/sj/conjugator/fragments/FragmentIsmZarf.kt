@@ -15,6 +15,7 @@ import com.example.Constant.SARFKABEERWEAKNESS
 import com.example.Constant.VERBMOOD
 import com.example.Constant.VERBTYPE
 import com.example.mushafconsolidated.R
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.sj.conjugator.adapter.IsmZarffKabeerAdapter
 import org.sj.conjugator.utilities.GatherAll
@@ -50,7 +51,8 @@ class FragmentIsmZarf : Fragment() {
     ): View? {
         setHasOptionsMenu(true)
         val view = inflater.inflate(R.layout.sarfkabeerheader, container, false)
-        callButton = view.findViewById(R.id.action_buttons)
+
+        val callButton = view.findViewById<ExtendedFloatingActionButton>(R.id.action_buttons)
         val dataBundle = arguments
         if (dataBundle != null) {
             val callingfragment = dataBundle.getString(MUJARRADVERBTAG)

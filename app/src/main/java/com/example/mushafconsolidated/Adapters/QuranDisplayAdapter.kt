@@ -375,7 +375,7 @@ class QuranDisplayAdapter(
             context.assets,
             arabic_font_selection
         )
-        val FONTS_LOCATION_PATH = "fonts/DejaVuSans.ttf"
+        val FONTS_LOCATION_PATH = "fonts/me_quran.ttf"
         colorwordfont = Typeface.createFromAsset(
             QuranGrammarApplication.context!!.assets,
             FONTS_LOCATION_PATH

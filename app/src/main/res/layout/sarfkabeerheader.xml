@@ -20,20 +20,158 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="20dp" />
-    <!-- app:floating_title_color="@color/colorOnPrimary"    -->
-     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/action_buttons"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/sarfrecview"
-        android:layout_gravity="start|bottom|center"
-        android:layout_marginTop="-132dp"
-        android:layout_marginBottom="16.0dip"
-        android:background="?selectableItemBackground"
-        android:foregroundGravity="bottom"
 
-        android:visibility="gone"
-  />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity"
+        tools:ignore="HardcodedText">
+
+        <!--This will be the parent Floating Action Button-->
+        <!--After the implementation the Floating Action Button at
+             the bottom right corner as we have constrained accordingly-->
+        <!--After clicking the above button the
+            following two buttons will pop up.
+             So this button is considered as parent FAB-->
+        <!--After opening the application it looks like regular
+            FAB but after user clicks it, it extends-->
+        <!--This functionality has been handled in the MainActivity.java-->
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+
+            android:id="@+id/action_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/colorAccent"
+            android:text="Conjugation"
+            app:icon="@drawable/ic_baseline_expand_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!--Floating action button for add alarm-->
+        <!--Make sure that you are constraining this
+            button to the parent button-->
+        <!--Make sure to add backgroundTint attribute to match
+             the entire application color-->
+        <!--because after changing the base application theme the color
+             of the FAB is set Blue as default-->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/pastactiveFb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="@color/colorAccent"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toTopOf="@+id/action_buttons"
+            app:layout_constraintEnd_toEndOf="@+id/action_buttons"
+            app:srcCompat="@drawable/ic_action_voice_search" />
+
+        <!--Action name text for the add alarm button-->
+        <!--Make sure that you are constraining this
+            Text to the add Alarm FAB button-->
+        <TextView
+            android:id="@+id/pastactiveTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text=" Past Active"
+            app:layout_constraintBottom_toBottomOf="@+id/pastactiveFb"
+            app:layout_constraintEnd_toStartOf="@+id/pastactiveFb"
+            app:layout_constraintTop_toTopOf="@+id/pastactiveFb" />
+
+        <!--Floating action button for add person-->
+        <!--Make sure that you are constraining this button
+            to the add Alarm FAB button-->
+        <!--Make sure to add backgroundTint attribute to match
+             the entire application color-->
+        <!--because after changing the base application theme
+             the color of the FAB is set Blue as default-->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/pastpassiveFb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="@color/colorAccent"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toTopOf="@+id/pastactiveFb"
+            app:layout_constraintEnd_toEndOf="@+id/pastactiveFb"
+            app:layout_constraintStart_toStartOf="@+id/pastactiveFb"
+            app:srcCompat="@drawable/ic_action_voice_search" />
+
+        <!--Action name text for the add person button-->
+        <!--Make sure that you are constraining this Text
+             to the add Person FAB button-->
+        <TextView
+            android:id="@+id/pastpassiveTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="Past Passive"
+            app:layout_constraintBottom_toBottomOf="@+id/pastpassiveFb"
+            app:layout_constraintEnd_toStartOf="@+id/pastpassiveFb"
+            app:layout_constraintTop_toTopOf="@+id/pastpassiveFb" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/presentactiveFb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="@color/colorAccent"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toTopOf="@+id/pastpassiveFb"
+            app:layout_constraintEnd_toEndOf="@+id/pastpassiveFb"
+            app:layout_constraintStart_toStartOf="@+id/pastpassiveFb"
+            app:srcCompat="@drawable/ic_action_voice_search" />
+
+        <!--Action name text for the add person button-->
+        <!--Make sure that you are constraining this Text
+             to the add Person FAB button-->
+        <TextView
+            android:id="@+id/presentactivTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="Present Active"
+            app:layout_constraintBottom_toBottomOf="@+id/presentactiveFb"
+            app:layout_constraintEnd_toStartOf="@+id/presentactiveFb"
+            app:layout_constraintTop_toTopOf="@+id/presentactiveFb" />
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/presentpassiveFb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="@color/colorAccent"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toTopOf="@+id/presentactiveFb"
+            app:layout_constraintEnd_toEndOf="@+id/presentactiveFb"
+            app:layout_constraintStart_toStartOf="@+id/presentactiveFb"
+            app:srcCompat="@drawable/ic_action_voice_search" />
+
+        <!--Action name text for the add person button-->
+        <!--Make sure that you are constraining this Text
+             to the add Person FAB button-->
+        <TextView
+            android:id="@+id/presentpassiveTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="Present Passive"
+            app:layout_constraintBottom_toBottomOf="@+id/presentpassiveFb"
+            app:layout_constraintEnd_toStartOf="@+id/presentpassiveFb"
+            app:layout_constraintTop_toTopOf="@+id/presentpassiveFb" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
 
 
 </RelativeLayout>

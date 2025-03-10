@@ -1004,8 +1004,13 @@ class Utils {
 
 
 
-    fun getRootDictionary(id: String): List<lughat?>? {
+    fun getRootDictionary(id: String): List<lughat> {
         return database.LughatDao().getRootWordDictionary(id.trim { it <= ' ' })
+    }
+
+
+    fun getAlllughat( ): List<lughat> {
+        return database.LughatDao().getall()
     }
 
     fun getLanesRootDifinition(id: String): List<lanerootdictionary?>? {

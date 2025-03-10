@@ -462,7 +462,7 @@
             android:visibility="visible"
             android:autoSizeStepGranularity="6sp"
             android:gravity="center|right"
-            android:text="muzantum"
+            android:text="muzantunna"
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/muzantum"
@@ -519,7 +519,7 @@
             android:text="muznahnu"
             app:layout_constraintStart_toStartOf="parent"
 
-            app:layout_constraintTop_toBottomOf="@id/muzantumaf"
+            app:layout_constraintTop_toBottomOf="@id/muzantunna"
             app:layout_constraintWidth_percent="0.50" />
 
         <TextView
@@ -527,19 +527,17 @@
             style="@android:style/TextAppearance.DeviceDefault.Medium"
             android:layout_width="0.0dip"
             android:layout_height="wrap_content"
-            android:layout_marginStart="400dp"
             android:layout_weight="0.2"
             android:autoSizeMaxTextSize="26sp"
             android:autoSizeMinTextSize="10sp"
             android:autoSizeStepGranularity="6sp"
             android:gravity="center|right"
             android:paddingStart="5.0dip"
-
             android:paddingEnd="3.0dip"
             android:text="muzana"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/madhinahnu"
-            app:layout_constraintStart_toStartOf="@+id/muznahnu"
+
+            app:layout_constraintStart_toEndOf="@+id/muznahnu"
             app:layout_constraintTop_toBottomOf="@+id/muzanti" />
         <androidx.cardview.widget.CardView
             android:visibility="visible"
@@ -624,7 +622,7 @@
             app:layout_constraintStart_toEndOf="@id/madimajhuma"
             app:layout_constraintWidth_percent="0.33" />
 
-///
+
 
         <TextView
             android:id="@+id/madimajhunna"
@@ -813,7 +811,7 @@
             android:text="madimajnahnu"
             app:layout_constraintStart_toStartOf="parent"
 
-            app:layout_constraintTop_toBottomOf="@id/madimajantumaf"
+            app:layout_constraintTop_toBottomOf="@id/madimajantunna"
             app:layout_constraintWidth_percent="0.50" />
 
         <TextView
@@ -821,14 +819,12 @@
             style="@android:style/TextAppearance.DeviceDefault.Medium"
             android:layout_width="0.0dip"
             android:layout_height="wrap_content"
-            android:layout_marginStart="400dp"
             android:layout_weight="0.2"
             android:autoSizeMaxTextSize="26sp"
             android:autoSizeMinTextSize="10sp"
             android:autoSizeStepGranularity="6sp"
             android:gravity="center|right"
             android:paddingStart="5.0dip"
-
             android:paddingEnd="3.0dip"
             android:text="madimajana"
             app:layout_constraintEnd_toEndOf="parent"
@@ -1098,7 +1094,7 @@
             android:text="muzmajnahnu"
             app:layout_constraintStart_toStartOf="parent"
 
-            app:layout_constraintTop_toBottomOf="@id/muzmajantumaf"
+            app:layout_constraintTop_toBottomOf="@id/muzmajantunna"
             app:layout_constraintWidth_percent="0.50" />
 
         <TextView
@@ -1106,19 +1102,17 @@
             style="@android:style/TextAppearance.DeviceDefault.Medium"
             android:layout_width="0.0dip"
             android:layout_height="wrap_content"
-            android:layout_marginStart="400dp"
             android:layout_weight="0.2"
             android:autoSizeMaxTextSize="26sp"
             android:autoSizeMinTextSize="10sp"
             android:autoSizeStepGranularity="6sp"
             android:gravity="center|right"
             android:paddingStart="5.0dip"
-
             android:paddingEnd="3.0dip"
             android:text="muzmajana"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/madhinahnu"
-            app:layout_constraintStart_toStartOf="@+id/muzmajnahnu"
+            app:layout_constraintStart_toEndOf="@+id/muzmajnahnu"
+
             app:layout_constraintTop_toBottomOf="@+id/muzmajanti" />
 
 

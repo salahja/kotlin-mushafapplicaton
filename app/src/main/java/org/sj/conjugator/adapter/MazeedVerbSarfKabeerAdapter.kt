@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mushafconsolidated.R
 import com.example.utility.QuranGrammarApplication
 import org.sj.conjugator.interfaces.OnItemClickListener
-import org.sj.conjugator.utilities.SharedPref
 import org.sj.data.MazeedResult
 import org.sj.verbConjugation.Amr
 import org.sj.verbConjugation.MadhiMudharay
@@ -76,14 +75,15 @@ class MazeedVerbSarfKabeerAdapter(
 
 
 
+        this.MadhiMaroof(madhi as MadhiMudharay,holder)
 
+   // this.MadhiMaroof(madhimudhary as MadhiMudharay,holder)
+        improveMudhariMaroof(mudharaymaroof as MadhiMudharay,holder, arabicTypeface!!)
+        MadhiMajhool(madhimajhool as MadhiMudharay,holder)
+        improveMudhariMajhool(mudharaymajhool as MadhiMudharay,holder, arabicTypeface!!)
 
-        this.MadhiMaroof(madhi as MadhiMudharay,holder, 0)
-        MudhariMaroof(mudharaymaroof as MadhiMudharay,holder, 2)
-        MadhiMajhool(madhimajhool as MadhiMudharay,holder, 1)
-        MudhariMajhool(mudharaymajhool as MadhiMudharay,holder, 3)
-      Amar(amr as Amr,holder, 4)
-   AmarNahi(nahiamr as NahiAmr,holder, 5)
+      Amar(amr as Amr,holder  )
+   AmarNahi(nahiamr as NahiAmr,holder  )
         if (!aBoolean) {
             pronouns(holder)
         }
@@ -121,7 +121,7 @@ class MazeedVerbSarfKabeerAdapter(
         holder.nahnuid.typeface = arabicTypeface //(array[13]);
     }
 
-    private fun AmarNahi(amr: NahiAmr, holder: ViewHolder, position: Int) {
+    private fun AmarNahi(amr: NahiAmr, holder: ViewHolder  ) {
         val anta: String
         val antuma: String
         val antum: String
@@ -187,7 +187,7 @@ class MazeedVerbSarfKabeerAdapter(
         holder.nahiamrantunna.text = antunna
     }
 
-    private fun Amar(amr: Amr, holder: ViewHolder, position: Int) {
+    private fun Amar(amr: Amr, holder: ViewHolder  ) {
         val anta: String
         val antuma: String
         val antum: String
@@ -253,147 +253,221 @@ class MazeedVerbSarfKabeerAdapter(
         holder.amrantunna.text = antunna
     }
 
-    private fun MudhariMajhool(mudharaymajhool: MadhiMudharay, holder: ViewHolder, position: Int) {
-        val hua: String
-        val huma: String
-        val hum: String
-        val hia: String
-        val humaf: String
-        val hunna: String
-        val anta: String
-        val antuma: String
-        val antum: String
-        val anti: String
-        val antumaf: String
-        val antunna: String
-        val ana: String
-        val nahnu: String
-        val sf = SharedPref(
+
+
+    class SharedPref(context: Context) {
+        companion object {
+            fun GetSarfKabeerVerb(): Boolean {
+                // Replace this with actual implementation to get the value from Shared Preferences
+                return true // Example: Assuming true for traditional conjugation
+            }
+        }
+    }
+
+
+
+
+    fun improveMudhariMajhool(
+        imperfectPassiveConjugation: MadhiMudharay,
+        viewHolder: ViewHolder,
+
+        arabicTypeface: Typeface
+    ) {
+        val isTraditionalConjugation = SharedPref.GetSarfKabeerVerb()
+        val pronounList = context.resources.getStringArray(R.array.arabicpronouns)
+
+        // Helper function to format the conjugation string
+        fun formatConjugation(pronoun: String, conjugation: Any): String {
+            val formattedConjugation = conjugation.toString().removeSurrounding("[", "]")
+            return if (isTraditionalConjugation) "$pronoun-$formattedConjugation" else formattedConjugation
+        }
+
+        // Create a map to hold the conjugations and their corresponding text views
+        val conjugationsMap = mapOf(
+            "masculineSingularThirdPerson" to Pair(pronounList[0], imperfectPassiveConjugation.hua),
+            "masculineDualThirdPerson" to Pair(pronounList[1], imperfectPassiveConjugation.huma),
+            "masculinePluralThirdPerson" to Pair(pronounList[2], imperfectPassiveConjugation.hum),
+            "feminineSingularThirdPerson" to Pair(pronounList[3], imperfectPassiveConjugation.hia),
+            "feminineDualThirdPerson" to Pair(pronounList[4], imperfectPassiveConjugation.humaf),
+            "femininePluralThirdPerson" to Pair(pronounList[5], imperfectPassiveConjugation.hunna),
+            "masculineSingularSecondPerson" to Pair(pronounList[6], imperfectPassiveConjugation.anta),
+            "masculineDualSecondPerson" to Pair(pronounList[7], imperfectPassiveConjugation.antuma),
+            "masculinePluralSecondPerson" to Pair(pronounList[8], imperfectPassiveConjugation.antum),
+            "feminineSingularSecondPerson" to Pair(pronounList[9], imperfectPassiveConjugation.anti),
+            "feminineDualSecondPerson" to Pair(pronounList[7], imperfectPassiveConjugation.antumaf),
+            "femininePluralSecondPerson" to Pair(pronounList[11], imperfectPassiveConjugation.antunna),
+            "firstPersonSingular" to Pair(pronounList[12], imperfectPassiveConjugation.ana),
+            "firstPersonPlural" to Pair(pronounList[13], imperfectPassiveConjugation.nahnu)
+        )
+
+        // Map of TextViews to their corresponding keys in the conjugationsMap
+        val textViewMap = mapOf(
+            viewHolder.muzmajhua to "masculineSingularThirdPerson",
+            viewHolder.muzmajhuma to "masculineDualThirdPerson",
+            viewHolder.muzmajhum to "masculinePluralThirdPerson",
+            viewHolder.muzmajhia to "feminineSingularThirdPerson",
+            viewHolder.muzmajhumaf to "feminineDualThirdPerson",
+            viewHolder.muzmajhunna to "femininePluralThirdPerson",
+            viewHolder.muzmajanta to "masculineSingularSecondPerson",
+            viewHolder.muzmajantuma to "masculineDualSecondPerson",
+            viewHolder.muzmajantum to "masculinePluralSecondPerson",
+            viewHolder.muzmajanti to "feminineSingularSecondPerson",
+            viewHolder.muzmajantumaf to "feminineDualSecondPerson",
+            viewHolder.muzmajantunna to "femininePluralSecondPerson",
+            viewHolder.muzmajana to "firstPersonSingular",
+            viewHolder.muzmajnahnu to "firstPersonPlural"
+        )
+
+        // Iterate through the map and set the text and typeface
+        textViewMap.forEach { (textView, key) ->
+            textView.typeface = arabicTypeface
+            val (pronoun, conjugation) = conjugationsMap[key] ?: Pair("", "")
+            textView.text = conjugation?.let { formatConjugation(pronoun, it) }
+        }
+
+        FontSIzeSelection(viewHolder)
+    }
+    private fun MudhariMajhool(imperfectActivePassiveConjugation: MadhiMudharay, viewHolder: ViewHolder, position: Int) {
+        val masculineSingularThirdPerson: String
+        val masculineDualThirdPerson: String
+        val masculinePluralThirdPerson: String
+        val feminineSingularThirdPerson: String
+        val feminineDualThirdPerson: String
+        val femininePluralThirdPerson: String
+        val masculineSingularSecondPerson: String
+        val masculineDualSecondPerson: String
+        val masculinePluralSecondPerson: String
+        val feminineSingularSecondPerson: String
+        val feminineDualSecondPerson: String
+        val femininePluralSecondPerson: String
+        val firstPersonSingular: String
+        val firstPersonPlural: String
+        val sharedPreferences = SharedPref(
             context
         )
-        val isTraditional = SharedPref.GetSarfKabeerVerb()
-        val arraypronouns = context.resources.getStringArray(R.array.arabicpronouns)
-        var sb: StringBuilder
-        if (isTraditional) {
-            sb = StringBuilder()
-            sb.append(arraypronouns[0])
-            sb.append("-")
-            sb.append(mudharaymajhool.hua.toString().replace("[", "").replace("]", ""))//[0].toString())
-            hua = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[1])
-            sb.append("-")
-            sb.append(mudharaymajhool.huma.toString())//[1].toString())
-            huma = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[2])
-            sb.append("-")
-            sb.append(mudharaymajhool.hum.toString())//[2].toString())
-            hum = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[3])
-            sb.append("-")
-            sb.append(mudharaymajhool.hia.toString())//[3].toString())
-            hia = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[4])
-            sb.append("-")
-            sb.append(mudharaymajhool.humaf.toString())//[4].toString())
-            humaf = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[5])
-            sb.append("-")
-            sb.append(mudharaymajhool.hunna.toString())//[5].toString())
-            hunna = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[6])
-            sb.append("-")
-            sb.append(mudharaymajhool.anta.toString())//[6].toString())
-            anta = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[7])
-            sb.append("-")
-            sb.append(mudharaymajhool.antuma.toString())//[7].toString())
-            antuma = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[8])
-            sb.append("-")
-            sb.append(mudharaymajhool.antum.toString())//[8].toString())
-            antum = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[9])
-            sb.append("-")
-            sb.append(mudharaymajhool.anti.toString())//[9].toString())
-            anti = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[7])
-            sb.append("-")
-            sb.append(mudharaymajhool.antumaf.toString())//[7].toString())
-            antumaf = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[11])
-            sb.append("-")
-            sb.append(mudharaymajhool.antunna.toString())//[10].toString())
-            antunna = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[12])
-            sb.append("-")
-            sb.append(mudharaymajhool.ana.toString())//[11].toString())
-            ana = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[13])
-            sb.append("-")
-            sb.append(mudharaymajhool.nahnu.toString().replace("[", "").replace("]", ""))//[12].toString())
-            nahnu = sb.toString()
+        val isTraditionalConjugation = SharedPref.GetSarfKabeerVerb()
+        val pronounList = context.resources.getStringArray(R.array.arabicpronouns)
+        var conjugationBuilder: StringBuilder
+        if (isTraditionalConjugation) {
+            conjugationBuilder = StringBuilder()
+            conjugationBuilder.append(pronounList[0])
+            conjugationBuilder.append("-")
+            conjugationBuilder.append(imperfectActivePassiveConjugation.hua.toString().replace("[", "").replace("]", ""))//[0].toString())
+            masculineSingularThirdPerson = conjugationBuilder.toString()
+            conjugationBuilder = StringBuilder()
+            conjugationBuilder.append(pronounList[1])
+            conjugationBuilder.append("-")
+            conjugationBuilder.append(imperfectActivePassiveConjugation.huma.toString())//[1].toString())
+            masculineDualThirdPerson = conjugationBuilder.toString()
+            conjugationBuilder = StringBuilder()
+            conjugationBuilder.append(pronounList[2])
+            conjugationBuilder.append("-")
+            conjugationBuilder.append(imperfectActivePassiveConjugation.hum.toString())//[2].toString())
+            masculinePluralThirdPerson = conjugationBuilder.toString()
+            conjugationBuilder = StringBuilder()
+            conjugationBuilder.append(pronounList[3])
+            conjugationBuilder.append("-")
+            conjugationBuilder.append(imperfectActivePassiveConjugation.hia.toString())//[3].toString())
+            feminineSingularThirdPerson = conjugationBuilder.toString()
+            conjugationBuilder = StringBuilder()
+            conjugationBuilder.append(pronounList[4])
+            conjugationBuilder.append("-")
+            conjugationBuilder.append(imperfectActivePassiveConjugation.humaf.toString())//[4].toString())
+            feminineDualThirdPerson = conjugationBuilder.toString()
+            conjugationBuilder = StringBuilder()
+            conjugationBuilder.append(pronounList[5])
+            conjugationBuilder.append("-")
+            conjugationBuilder.append(imperfectActivePassiveConjugation.hunna.toString())//[5].toString())
+            femininePluralThirdPerson = conjugationBuilder.toString()
+            conjugationBuilder = StringBuilder()
+            conjugationBuilder.append(pronounList[6])
+            conjugationBuilder.append("-")
+            conjugationBuilder.append(imperfectActivePassiveConjugation.anta.toString())//[6].toString())
+            masculineSingularSecondPerson = conjugationBuilder.toString()
+            conjugationBuilder = StringBuilder()
+            conjugationBuilder.append(pronounList[7])
+            conjugationBuilder.append("-")
+            conjugationBuilder.append(imperfectActivePassiveConjugation.antuma.toString())//[7].toString())
+            masculineDualSecondPerson = conjugationBuilder.toString()
+            conjugationBuilder = StringBuilder()
+            conjugationBuilder.append(pronounList[8])
+            conjugationBuilder.append("-")
+            conjugationBuilder.append(imperfectActivePassiveConjugation.antum.toString())//[8].toString())
+            masculinePluralSecondPerson = conjugationBuilder.toString()
+            conjugationBuilder = StringBuilder()
+            conjugationBuilder.append(pronounList[9])
+            conjugationBuilder.append("-")
+            conjugationBuilder.append(imperfectActivePassiveConjugation.anti.toString())//[9].toString())
+            feminineSingularSecondPerson = conjugationBuilder.toString()
+            conjugationBuilder = StringBuilder()
+            conjugationBuilder.append(pronounList[7])
+            conjugationBuilder.append("-")
+            conjugationBuilder.append(imperfectActivePassiveConjugation.antumaf.toString())//[7].toString())
+            feminineDualSecondPerson = conjugationBuilder.toString()
+            conjugationBuilder = StringBuilder()
+            conjugationBuilder.append(pronounList[11])
+            conjugationBuilder.append("-")
+            conjugationBuilder.append(imperfectActivePassiveConjugation.antunna.toString())//[10].toString())
+            femininePluralSecondPerson = conjugationBuilder.toString()
+            conjugationBuilder = StringBuilder()
+            conjugationBuilder.append(pronounList[12])
+            conjugationBuilder.append("-")
+            conjugationBuilder.append(imperfectActivePassiveConjugation.ana.toString())//[11].toString())
+            firstPersonSingular = conjugationBuilder.toString()
+            conjugationBuilder = StringBuilder()
+            conjugationBuilder.append(pronounList[13])
+            conjugationBuilder.append("-")
+            conjugationBuilder.append(imperfectActivePassiveConjugation.nahnu.toString().replace("[", "").replace("]", ""))//[12].toString())
+            firstPersonPlural = conjugationBuilder.toString()
         } else {
-            hua = mudharaymajhool.hua.toString().replace("[", "").replace("]", "")
-            huma =mudharaymajhool.huma.toString()
-            hum = mudharaymajhool.hum.toString()
-            hia =mudharaymajhool.hia.toString()//[position][3].toString()
-            humaf =mudharaymajhool.humaf.toString()//[position][4].toString()
-            hunna =mudharaymajhool.hunna.toString()//[position][5].toString()
-            anta =mudharaymajhool.anta.toString()//[position][6].toString()
-            antuma =mudharaymajhool.antuma.toString()//[position][7].toString()
-            antum =mudharaymajhool.antum.toString()//[position][8].toString()
-            anti =mudharaymajhool.anti.toString()//[position][9].toString()
-            antumaf =mudharaymajhool.antumaf.toString()//[position][7].toString()
-            antunna =mudharaymajhool.antunna.toString()//[position][10].toString()
-            ana =mudharaymajhool.ana.toString()//[position][11].toString()
-            nahnu =mudharaymajhool.nahnu.toString().replace("[", "").replace("]", "")//[position][12].toString()
+            masculineSingularThirdPerson = imperfectActivePassiveConjugation.hua.toString().replace("[", "").replace("]", "")
+            masculineDualThirdPerson =imperfectActivePassiveConjugation.huma.toString()
+            masculinePluralThirdPerson = imperfectActivePassiveConjugation.hum.toString()
+            feminineSingularThirdPerson =imperfectActivePassiveConjugation.hia.toString()//[position][3].toString()
+            feminineDualThirdPerson =imperfectActivePassiveConjugation.humaf.toString()//[position][4].toString()
+            femininePluralThirdPerson =imperfectActivePassiveConjugation.hunna.toString()//[position][5].toString()
+            masculineSingularSecondPerson =imperfectActivePassiveConjugation.anta.toString()//[position][6].toString()
+            masculineDualSecondPerson =imperfectActivePassiveConjugation.antuma.toString()//[position][7].toString()
+            masculinePluralSecondPerson =imperfectActivePassiveConjugation.antum.toString()//[position][8].toString()
+            feminineSingularSecondPerson =imperfectActivePassiveConjugation.anti.toString()//[position][9].toString()
+            feminineDualSecondPerson =imperfectActivePassiveConjugation.antumaf.toString()//[position][7].toString()
+            femininePluralSecondPerson =imperfectActivePassiveConjugation.antunna.toString()//[position][10].toString()
+            firstPersonSingular =imperfectActivePassiveConjugation.ana.toString()//[position][11].toString()
+            firstPersonPlural =imperfectActivePassiveConjugation.nahnu.toString().replace("[", "").replace("]", "")//[position][12].toString()
         }
-        //     FontSIzeSelection(holder);
+        //     FontSIzeSelection(viewHolder);
 //ismfaile
         //   SharedPref.arabicFontSelection();
-        holder.muzmajhua.typeface = arabicTypeface
-        holder.muzmajhuma.typeface = arabicTypeface
-        holder.muzmajhum.typeface = arabicTypeface
-        holder.muzmajhia.typeface = arabicTypeface
-        holder.muzmajhumaf.typeface = arabicTypeface
-        holder.muzmajhunna.typeface = arabicTypeface
-        holder.muzmajanta.typeface = arabicTypeface
-        holder.muzmajantuma.typeface = arabicTypeface
-        holder.muzmajantum.typeface = arabicTypeface
-        holder.muzmajanti.typeface = arabicTypeface
-        holder.muzmajantumaf.typeface = arabicTypeface
-        holder.muzmajantunna.typeface = arabicTypeface
-        holder.muzmajana.typeface = arabicTypeface
-        holder.muzmajnahnu.typeface = arabicTypeface
-        holder.muzmajhua.text = hua
-        holder.muzmajhuma.text = huma
-        holder.muzmajhum.text = hum
-        holder.muzmajhia.text = hia
-        holder.muzmajhumaf.text = humaf
-        holder.muzmajhunna.text = hunna
-        holder.muzmajanta.text = anta
-        holder.muzmajantuma.text = antuma
-        holder.muzmajantum.text = antum
-        holder.muzmajanti.text = anti
-        holder.muzmajantumaf.text = antumaf
-        holder.muzmajantunna.text = antunna
-        holder.muzmajana.text = ana
+        viewHolder.muzmajhua.typeface = arabicTypeface
+        viewHolder.muzmajhuma.typeface = arabicTypeface
+        viewHolder.muzmajhum.typeface = arabicTypeface
+        viewHolder.muzmajhia.typeface = arabicTypeface
+        viewHolder.muzmajhumaf.typeface = arabicTypeface
+        viewHolder.muzmajhunna.typeface = arabicTypeface
+        viewHolder.muzmajanta.typeface = arabicTypeface
+        viewHolder.muzmajantuma.typeface = arabicTypeface
+        viewHolder.muzmajantum.typeface = arabicTypeface
+        viewHolder.muzmajanti.typeface = arabicTypeface
+        viewHolder.muzmajantumaf.typeface = arabicTypeface
+        viewHolder.muzmajantunna.typeface = arabicTypeface
+        viewHolder.muzmajana.typeface = arabicTypeface
+        viewHolder.muzmajnahnu.typeface = arabicTypeface
+        viewHolder.muzmajhua.text = masculineSingularThirdPerson
+        viewHolder.muzmajhuma.text = masculineDualThirdPerson
+        viewHolder.muzmajhum.text = masculinePluralThirdPerson
+        viewHolder.muzmajhia.text = feminineSingularThirdPerson
+        viewHolder.muzmajhumaf.text = feminineDualThirdPerson
+        viewHolder.muzmajhunna.text = femininePluralThirdPerson
+        viewHolder.muzmajanta.text = masculineSingularSecondPerson
+        viewHolder.muzmajantuma.text = masculineDualSecondPerson
+        viewHolder.muzmajantum.text = masculinePluralSecondPerson
+        viewHolder.muzmajanti.text = feminineSingularSecondPerson
+        viewHolder.muzmajantumaf.text = feminineDualSecondPerson
+        viewHolder.muzmajantunna.text = femininePluralSecondPerson
+        viewHolder.muzmajana.text = firstPersonSingular
         //
-        holder.muzmajnahnu.text = nahnu
-        FontSIzeSelection(holder)
+        viewHolder.muzmajnahnu.text = firstPersonPlural
+        FontSIzeSelection(viewHolder)
     }
 
     private fun FontSIzeSelection(holder: ViewHolder) {
@@ -493,7 +567,7 @@ class MazeedVerbSarfKabeerAdapter(
         }
     }
 
-    private fun MadhiMajhool(madhimajhool : MadhiMudharay,   holder: ViewHolder, position: Int) {
+    private fun MadhiMajhool(madhimajhool : MadhiMudharay,   holder: ViewHolder ) {
         val hua: String
         val huma: String
         val hum: String
@@ -631,113 +705,113 @@ class MazeedVerbSarfKabeerAdapter(
         holder.madimajnahnu.text = nahnu
     }
 
-    private fun MudhariMaroof(mudharaymaroof: MadhiMudharay, holder: ViewHolder, position: Int) {
-        val hua: String
-        val huma: String
-        val hum: String
+    private fun MudhariMaroof(imperfectActiveVoice: MadhiMudharay, holder: ViewHolder, position: Int) {
+        val heForm: String
+        val theyTwoMaleForm: String
+        val theyMaleForm: String
         val hia: String
-        val humaf: String
-        val hunna: String
-        val anta: String
-        val antuma: String
-        val antum: String
-        val anti: String
-        val antumaf: String
-        val antunna: String
+        val theyTwoFemaleForm: String
+        val theyFemaleForm: String
+        val youMaleForm: String
+        val youTwoMaleForm: String
+        val youMalePluralForm: String
+        val youFemaleForm: String
+        val youTwoFemaleForm: String
+        val youFemalePluralForm: String
         val ana: String
-        val nahnu: String
-        val sf = SharedPref(
+        val weForm: String
+        val preferences = SharedPref(
             context
         )
-        val isTraditional = SharedPref.GetSarfKabeerVerb()
-        val arraypronouns = context.resources.getStringArray(R.array.arabicpronouns)
-        var sb: StringBuilder
-        if (isTraditional) {
-            sb = StringBuilder()
-            sb.append(arraypronouns[0])
-            sb.append("-")
-            sb.append(mudharaymaroof.hua.toString().replace("[", "").replace("]", ""))//[0].toString())
-            hua = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[1])
-            sb.append("-")
-            sb.append(mudharaymaroof.huma.toString())//[1].toString())
-            huma = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[2])
-            sb.append("-")
-            sb.append(mudharaymaroof.hum.toString())//[2].toString())
-            hum = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[3])
-            sb.append("-")
-            sb.append(mudharaymaroof.hia.toString())//[3].toString())
-            hia = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[4])
-            sb.append("-")
-            sb.append(mudharaymaroof.humaf.toString())//[4].toString())
-            humaf = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[5])
-            sb.append("-")
-            sb.append(mudharaymaroof.hunna.toString())//[5].toString())
-            hunna = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[6])
-            sb.append("-")
-            sb.append(mudharaymaroof.anta.toString())//[6].toString())
-            anta = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[7])
-            sb.append("-")
-            sb.append(mudharaymaroof.antuma.toString())//[7].toString())
-            antuma = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[8])
-            sb.append("-")
-            sb.append(mudharaymaroof.antum.toString())//[8].toString())
-            antum = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[9])
-            sb.append("-")
-            sb.append(mudharaymaroof.anti.toString())//[9].toString())
-            anti = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[7])
-            sb.append("-")
-            sb.append(mudharaymaroof.antumaf.toString())//[7].toString())
-            antumaf = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[11])
-            sb.append("-")
-            sb.append(mudharaymaroof.antunna.toString())//[10].toString())
-            antunna = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[12])
-            sb.append("-")
-            sb.append(mudharaymaroof.ana.toString())//[11].toString())
-            ana = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[13])
-            sb.append("-")
-            sb.append(mudharaymaroof.nahnu.toString().replace("[", "").replace("]", ""))//[12].toString())
-            nahnu = sb.toString()
+        val isKabeerVerb = SharedPref.GetSarfKabeerVerb()
+        val pronouns = context.resources.getStringArray(R.array.arabicpronouns)
+        var stringBuilder: StringBuilder
+        if (isKabeerVerb) {
+            stringBuilder = StringBuilder()
+            stringBuilder.append(pronouns[0])
+            stringBuilder.append("-")
+            stringBuilder.append(imperfectActiveVoice.hua.toString().replace("[", "").replace("]", ""))//[0].toString())
+            heForm = stringBuilder.toString()
+            stringBuilder = StringBuilder()
+            stringBuilder.append(pronouns[1])
+            stringBuilder.append("-")
+            stringBuilder.append(imperfectActiveVoice.huma.toString())//[1].toString())
+            theyTwoMaleForm = stringBuilder.toString()
+            stringBuilder = StringBuilder()
+            stringBuilder.append(pronouns[2])
+            stringBuilder.append("-")
+            stringBuilder.append(imperfectActiveVoice.hum.toString())//[2].toString())
+            theyMaleForm = stringBuilder.toString()
+            stringBuilder = StringBuilder()
+            stringBuilder.append(pronouns[3])
+            stringBuilder.append("-")
+            stringBuilder.append(imperfectActiveVoice.hia.toString())//[3].toString())
+            hia = stringBuilder.toString()
+            stringBuilder = StringBuilder()
+            stringBuilder.append(pronouns[4])
+            stringBuilder.append("-")
+            stringBuilder.append(imperfectActiveVoice.humaf.toString())//[4].toString())
+            theyTwoFemaleForm = stringBuilder.toString()
+            stringBuilder = StringBuilder()
+            stringBuilder.append(pronouns[5])
+            stringBuilder.append("-")
+            stringBuilder.append(imperfectActiveVoice.hunna.toString())//[5].toString())
+            theyFemaleForm = stringBuilder.toString()
+            stringBuilder = StringBuilder()
+            stringBuilder.append(pronouns[6])
+            stringBuilder.append("-")
+            stringBuilder.append(imperfectActiveVoice.anta.toString())//[6].toString())
+            youMaleForm = stringBuilder.toString()
+            stringBuilder = StringBuilder()
+            stringBuilder.append(pronouns[7])
+            stringBuilder.append("-")
+            stringBuilder.append(imperfectActiveVoice.antuma.toString())//[7].toString())
+            youTwoMaleForm = stringBuilder.toString()
+            stringBuilder = StringBuilder()
+            stringBuilder.append(pronouns[8])
+            stringBuilder.append("-")
+            stringBuilder.append(imperfectActiveVoice.antum.toString())//[8].toString())
+            youMalePluralForm = stringBuilder.toString()
+            stringBuilder = StringBuilder()
+            stringBuilder.append(pronouns[9])
+            stringBuilder.append("-")
+            stringBuilder.append(imperfectActiveVoice.anti.toString())//[9].toString())
+            youFemaleForm = stringBuilder.toString()
+            stringBuilder = StringBuilder()
+            stringBuilder.append(pronouns[7])
+            stringBuilder.append("-")
+            stringBuilder.append(imperfectActiveVoice.antumaf.toString())//[7].toString())
+            youTwoFemaleForm = stringBuilder.toString()
+            stringBuilder = StringBuilder()
+            stringBuilder.append(pronouns[11])
+            stringBuilder.append("-")
+            stringBuilder.append(imperfectActiveVoice.antunna.toString())//[10].toString())
+            youFemalePluralForm = stringBuilder.toString()
+            stringBuilder = StringBuilder()
+            stringBuilder.append(pronouns[12])
+            stringBuilder.append("-")
+            stringBuilder.append(imperfectActiveVoice.ana.toString())//[11].toString())
+            ana = stringBuilder.toString()
+            stringBuilder = StringBuilder()
+            stringBuilder.append(pronouns[13])
+            stringBuilder.append("-")
+            stringBuilder.append(imperfectActiveVoice.nahnu.toString().replace("[", "").replace("]", ""))//[12].toString())
+            weForm = stringBuilder.toString()
         } else {
-            hua = mudharaymaroof.hua.toString().replace("[", "").replace("]", "")
-            huma =mudharaymaroof.huma.toString()
-            hum = mudharaymaroof.hum.toString()
-            hia =mudharaymaroof.hia.toString()//[position][3].toString()
-            humaf =mudharaymaroof.humaf.toString()//[position][4].toString()
-            hunna =mudharaymaroof.hunna.toString()//[position][5].toString()
-            anta =mudharaymaroof.anta.toString()//[position][6].toString()
-            antuma =mudharaymaroof.antuma.toString()//[position][7].toString()
-            antum =mudharaymaroof.antum.toString()//[position][8].toString()
-            anti =mudharaymaroof.anti.toString()//[position][9].toString()
-            antumaf =mudharaymaroof.antumaf.toString()//[position][7].toString()
-            antunna =mudharaymaroof.antunna.toString()//[position][10].toString()
-            ana =mudharaymaroof.ana.toString()//[position][11].toString()
-            nahnu =mudharaymaroof.nahnu.toString().replace("[", "").replace("]", "")//[position][12].toString()
+            heForm = imperfectActiveVoice.hua.toString().replace("[", "").replace("]", "")
+            theyTwoMaleForm =imperfectActiveVoice.huma.toString()
+            theyMaleForm = imperfectActiveVoice.hum.toString()
+            hia =imperfectActiveVoice.hia.toString()//[position][3].toString()
+            theyTwoFemaleForm =imperfectActiveVoice.humaf.toString()//[position][4].toString()
+            theyFemaleForm =imperfectActiveVoice.hunna.toString()//[position][5].toString()
+            youMaleForm =imperfectActiveVoice.anta.toString()//[position][6].toString()
+            youTwoMaleForm =imperfectActiveVoice.antuma.toString()//[position][7].toString()
+            youMalePluralForm =imperfectActiveVoice.antum.toString()//[position][8].toString()
+            youFemaleForm =imperfectActiveVoice.anti.toString()//[position][9].toString()
+            youTwoFemaleForm =imperfectActiveVoice.antumaf.toString()//[position][7].toString()
+            youFemalePluralForm =imperfectActiveVoice.antunna.toString()//[position][10].toString()
+            ana =imperfectActiveVoice.ana.toString()//[position][11].toString()
+            weForm =imperfectActiveVoice.nahnu.toString().replace("[", "").replace("]", "")//[position][12].toString()
         }
         holder.muzhua.typeface = arabicTypeface
         holder.muzhuma.typeface = arabicTypeface
@@ -753,174 +827,238 @@ class MazeedVerbSarfKabeerAdapter(
         holder.muzantunna.typeface = arabicTypeface
         holder.muzana.typeface = arabicTypeface
         holder.muznahnu.typeface = arabicTypeface
-        holder.muzhua.text = hua
-        holder.muzhuma.text = huma
-        holder.muzhum.text = hum
+        holder.muzhua.text = heForm
+        holder.muzhuma.text = theyTwoMaleForm
+        holder.muzhum.text = theyMaleForm
         holder.muzhia.text = hia
-        holder.muzhumaf.text = humaf
-        holder.muzhunna.text = hunna
-        holder.muzanta.text = anta
-        holder.muzantuma.text = antuma
-        holder.muzantum.text = antum
-        holder.muzanti.text = anti
-        holder.muzantumaf.text = antumaf
-        holder.muzantunna.text = antunna
+        holder.muzhumaf.text = theyTwoFemaleForm
+        holder.muzhunna.text = theyFemaleForm
+        holder.muzanta.text = youMaleForm
+        holder.muzantuma.text = youTwoMaleForm
+        holder.muzantum.text = youMalePluralForm
+        holder.muzanti.text = youFemaleForm
+        holder.muzantumaf.text = youTwoFemaleForm
+        holder.muzantunna.text = youFemalePluralForm
         holder.muzana.text = ana
-        holder.muznahnu.text = nahnu
+        holder.muznahnu.text = weForm
     }
 
-    private fun MadhiMaroof(madhi: MadhiMudharay, holder: ViewHolder, position: Int) {
-        val hua: String
-        val huma: String
-        val hum: String
-        val hia: String
-        val humaf: String
-        val hunna: String
-        val anta: String
-        val antuma: String
-        val antum: String
-        val anti: String
-        val antumaf: String
-        val antunna: String
-        val ana: String
-        val nahnu: String
-        val sf = SharedPref(
-            context
-        )
-        val isTraditional = SharedPref.GetSarfKabeerVerb()
-        val arraypronouns = context.resources.getStringArray(R.array.arabicpronouns)
-        var sb: StringBuilder
-        if (isTraditional) {
-            sb = StringBuilder()
-            sb.append(arraypronouns[0])
-            sb.append("-")
-            sb.append(madhi.hua.toString().replace("[", "").replace("]", ""))//[0].toString())
-            hua = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[1])
-            sb.append("-")
-            sb.append(madhi.huma.toString())//[1].toString())
-            huma = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[2])
-            sb.append("-")
-            sb.append(madhi.hum.toString())//[2].toString())
-            hum = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[3])
-            sb.append("-")
-            sb.append(madhi.hia.toString())//[3].toString())
-            hia = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[4])
-            sb.append("-")
-            sb.append(madhi.humaf.toString())//[4].toString())
-            humaf = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[5])
-            sb.append("-")
-            sb.append(madhi.hunna.toString())//[5].toString())
-            hunna = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[6])
-            sb.append("-")
-            sb.append(madhi.anta.toString())//[6].toString())
-            anta = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[7])
-            sb.append("-")
-            sb.append(madhi.antuma.toString())//[7].toString())
-            antuma = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[8])
-            sb.append("-")
-            sb.append(madhi.antum.toString())//[8].toString())
-            antum = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[9])
-            sb.append("-")
-            sb.append(madhi.anti.toString())//[9].toString())
-            anti = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[7])
-            sb.append("-")
-            sb.append(madhi.antumaf.toString())//[7].toString())
-            antumaf = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[11])
-            sb.append("-")
-            sb.append(madhi.antunna.toString())//[10].toString())
-            antunna = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[12])
-            sb.append("-")
-            sb.append(madhi.ana.toString())//[11].toString())
-            ana = sb.toString()
-            sb = StringBuilder()
-            sb.append(arraypronouns[13])
-            sb.append("-")
-            sb.append(madhi.nahnu.toString().replace("[", "").replace("]", ""))//[12].toString())
-            nahnu = sb.toString()
-        } else {
-            hua = madhi.hua.toString().replace("[", "").replace("]", "")
-            huma =madhi.huma.toString()
-            hum = madhi.hum.toString()
-            hia =madhi.hia.toString()//[position][3].toString()
-            humaf =madhi.humaf.toString()//[position][4].toString()
-            hunna =madhi.hunna.toString()//[position][5].toString()
-            anta =madhi.anta.toString()//[position][6].toString()
-            antuma =madhi.antuma.toString()//[position][7].toString()
-            antum =madhi.antum.toString()//[position][8].toString()
-            anti =madhi.anti.toString()//[position][9].toString()
-            antumaf =madhi.antumaf.toString()//[position][7].toString()
-            antunna =madhi.antunna.toString()//[position][10].toString()
-            ana =madhi.ana.toString()//[position][11].toString()
-            nahnu =madhi.nahnu.toString().replace("[", "").replace("]", "")//[position][12].toString()
+
+
+
+
+
+    fun improveMudhariMaroof(
+        imperfectActiveVoice: MadhiMudharay,
+        holder: ViewHolder,
+
+        arabicTypeface: Typeface
+    ) {
+        val isTraditionalConjugation = SharedPref.GetSarfKabeerVerb()
+        val pronouns = context.resources.getStringArray(R.array.arabicpronouns)
+
+        // Helper function to format the conjugation string
+        fun formatConjugation(pronoun: String, conjugation: Any): String {
+            val formattedConjugation = conjugation.toString().removeSurrounding("[", "]")
+            return if (isTraditionalConjugation) "$pronoun-$formattedConjugation" else formattedConjugation
         }
-        val sharedPreferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(
+
+        // Create a map to hold the conjugations and their corresponding text views
+        val conjugationsMap = mapOf(
+            "heForm" to Pair(pronouns[0], imperfectActiveVoice.hua),
+            "theyTwoMaleForm" to Pair(pronouns[1], imperfectActiveVoice.huma),
+            "theyMaleForm" to Pair(pronouns[2], imperfectActiveVoice.hum),
+            "hia" to Pair(pronouns[3], imperfectActiveVoice.hia),
+            "theyTwoFemaleForm" to Pair(pronouns[4], imperfectActiveVoice.humaf),
+            "theyFemaleForm" to Pair(pronouns[5], imperfectActiveVoice.hunna),
+            "youMaleForm" to Pair(pronouns[6], imperfectActiveVoice.anta),
+            "youTwoMaleForm" to Pair(pronouns[7], imperfectActiveVoice.antuma),
+            "youMalePluralForm" to Pair(pronouns[8], imperfectActiveVoice.antum),
+            "youFemaleForm" to Pair(pronouns[9], imperfectActiveVoice.anti),
+            "youTwoFemaleForm" to Pair(pronouns[7], imperfectActiveVoice.antumaf),
+            "youFemalePluralForm" to Pair(pronouns[11], imperfectActiveVoice.antunna),
+            "ana" to Pair(pronouns[12], imperfectActiveVoice.ana),
+            "weForm" to Pair(pronouns[13], imperfectActiveVoice.nahnu)
+        )
+
+        // Map of TextViews to their corresponding keys in the conjugationsMap
+        val textViewMap = mapOf(
+            holder.muzhua to "heForm",
+            holder.muzhuma to "theyTwoMaleForm",
+            holder.muzhum to "theyMaleForm",
+            holder.muzhia to "hia",
+            holder.muzhumaf to "theyTwoFemaleForm",
+            holder.muzhunna to "theyFemaleForm",
+            holder.muzanta to "youMaleForm",
+            holder.muzantuma to "youTwoMaleForm",
+            holder.muzantum to "youMalePluralForm",
+            holder.muzanti to "youFemaleForm",
+            holder.muzantumaf to "youTwoFemaleForm",
+            holder.muzantunna to "youFemalePluralForm",
+            holder.muzana to "ana",
+            holder.muznahnu to "weForm"
+        )
+
+        // Iterate through the map and set the text and typeface
+        textViewMap.forEach { (textView, key) ->
+            textView.typeface = arabicTypeface
+            val (pronoun, conjugation) = conjugationsMap[key] ?: Pair("", "")
+            textView.text = conjugation?.let { formatConjugation(pronoun, it) }
+        }
+    }
+
+    private fun MadhiMaroof(verbConjugation: MadhiMudharay, viewContainer: ViewHolder) {
+        val thirdPersonMasculineSingular: String
+        val thirdPersonMascul: String
+        val thirdPersonMasculinePlural: String
+        val thirdPersonFeminineSingular: String
+        val thirdPersonFeminineDual: String
+        val thirdPersonFemininePlural: String
+        val secondPersonMasculineSingular: String
+        val secondPersonMasculineDual: String
+        val secondPersonMasculinePlural: String
+        val secondPersonFeminineSingular: String
+        val secondPersonFeminineDual: String
+        val secondPersonFemininePlural: String
+        val firstPersonSingular: String
+        val firstPersonPlural: String
+        val sharedPreferences = SharedPref(
             context
         )
-        val language = sharedPreferences.getString("lan", "en")
-        val arrayheadings: Array<String> =
-            if (language == "en") context.resources.getStringArray(R.array.enverbheadings) else {
+        val isTraditionalMode = SharedPref.GetSarfKabeerVerb()
+        val pronouns = context.resources.getStringArray(R.array.arabicpronouns)
+        var stringBuilder: StringBuilder
+        if (isTraditionalMode) {
+            stringBuilder = StringBuilder()
+            stringBuilder.append(pronouns[0])
+            stringBuilder.append("-")
+            stringBuilder.append(verbConjugation.hua.toString().replace("[", "").replace("]", ""))//[0].toString())
+            thirdPersonMasculineSingular = stringBuilder.toString()
+            stringBuilder = StringBuilder()
+            stringBuilder.append(pronouns[1])
+            stringBuilder.append("-")
+            stringBuilder.append(verbConjugation.huma.toString())//[1].toString())
+            thirdPersonMascul = stringBuilder.toString()
+            stringBuilder = StringBuilder()
+            stringBuilder.append(pronouns[2])
+            stringBuilder.append("-")
+            stringBuilder.append(verbConjugation.hum.toString())//[2].toString())
+            thirdPersonMasculinePlural = stringBuilder.toString()
+            stringBuilder = StringBuilder()
+            stringBuilder.append(pronouns[3])
+            stringBuilder.append("-")
+            stringBuilder.append(verbConjugation.hia.toString())//[3].toString())
+            thirdPersonFeminineSingular = stringBuilder.toString()
+            stringBuilder = StringBuilder()
+            stringBuilder.append(pronouns[4])
+            stringBuilder.append("-")
+            stringBuilder.append(verbConjugation.humaf.toString())//[4].toString())
+            thirdPersonFeminineDual = stringBuilder.toString()
+            stringBuilder = StringBuilder()
+            stringBuilder.append(pronouns[5])
+            stringBuilder.append("-")
+            stringBuilder.append(verbConjugation.hunna.toString())//[5].toString())
+            thirdPersonFemininePlural = stringBuilder.toString()
+            stringBuilder = StringBuilder()
+            stringBuilder.append(pronouns[6])
+            stringBuilder.append("-")
+            stringBuilder.append(verbConjugation.anta.toString())//[6].toString())
+            secondPersonMasculineSingular = stringBuilder.toString()
+            stringBuilder = StringBuilder()
+            stringBuilder.append(pronouns[7])
+            stringBuilder.append("-")
+            stringBuilder.append(verbConjugation.antuma.toString())//[7].toString())
+            secondPersonMasculineDual = stringBuilder.toString()
+            stringBuilder = StringBuilder()
+            stringBuilder.append(pronouns[8])
+            stringBuilder.append("-")
+            stringBuilder.append(verbConjugation.antum.toString())//[8].toString())
+            secondPersonMasculinePlural = stringBuilder.toString()
+            stringBuilder = StringBuilder()
+            stringBuilder.append(pronouns[9])
+            stringBuilder.append("-")
+            stringBuilder.append(verbConjugation.anti.toString())//[9].toString())
+            secondPersonFeminineSingular = stringBuilder.toString()
+            stringBuilder = StringBuilder()
+            stringBuilder.append(pronouns[7])
+            stringBuilder.append("-")
+            stringBuilder.append(verbConjugation.antumaf.toString())//[7].toString())
+            secondPersonFeminineDual = stringBuilder.toString()
+            stringBuilder = StringBuilder()
+            stringBuilder.append(pronouns[11])
+            stringBuilder.append("-")
+            stringBuilder.append(verbConjugation.antunna.toString())//[10].toString())
+            secondPersonFemininePlural = stringBuilder.toString()
+            stringBuilder = StringBuilder()
+            stringBuilder.append(pronouns[12])
+            stringBuilder.append("-")
+            stringBuilder.append(verbConjugation.ana.toString())//[11].toString())
+            firstPersonSingular = stringBuilder.toString()
+            stringBuilder = StringBuilder()
+            stringBuilder.append(pronouns[13])
+            stringBuilder.append("-")
+            stringBuilder.append(verbConjugation.nahnu.toString().replace("[", "").replace("]", ""))//[12].toString())
+            firstPersonPlural = stringBuilder.toString()
+        } else {
+            thirdPersonMasculineSingular = verbConjugation.hua.toString().replace("[", "").replace("]", "")
+            thirdPersonMascul =verbConjugation.huma.toString()
+            thirdPersonMasculinePlural = verbConjugation.hum.toString()
+            thirdPersonFeminineSingular =verbConjugation.hia.toString()//[position][3].toString()
+            thirdPersonFeminineDual =verbConjugation.humaf.toString()//[position][4].toString()
+            thirdPersonFemininePlural =verbConjugation.hunna.toString()//[position][5].toString()
+            secondPersonMasculineSingular =verbConjugation.anta.toString()//[position][6].toString()
+            secondPersonMasculineDual =verbConjugation.antuma.toString()//[position][7].toString()
+            secondPersonMasculinePlural =verbConjugation.antum.toString()//[position][8].toString()
+            secondPersonFeminineSingular =verbConjugation.anti.toString()//[position][9].toString()
+            secondPersonFeminineDual =verbConjugation.antumaf.toString()//[position][7].toString()
+            secondPersonFemininePlural =verbConjugation.antunna.toString()//[position][10].toString()
+            firstPersonSingular =verbConjugation.ana.toString()//[position][11].toString()
+            firstPersonPlural =verbConjugation.nahnu.toString().replace("[", "").replace("]", "")//[position][12].toString()
+        }
+        val userPreferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(
+            context
+        )
+        val userLanguage = userPreferences.getString("lan", "en")
+        val conjugationHeadings: Array<String> =
+            if (userLanguage == "en") context.resources.getStringArray(R.array.enverbheadings) else {
                 context.resources.getStringArray(R.array.arverbheadings)
             }
-        //    holder.pronouns.setText(array[0]);
-        holder.pastactive.text = arrayheadings[1]
-        holder.presentactive.text = arrayheadings[2]
-        holder.pastpassive.text = arrayheadings[3]
-        holder.presentpassive.text = arrayheadings[4]
-        holder.command.text = arrayheadings[5]
-        holder.negcommand.text = arrayheadings[6]
-        holder.madhihua.typeface = arabicTypeface
-        //        holder.madhihuma.setTypeface(arabicTypeface);
-        holder.madhihum.typeface = arabicTypeface
-        holder.madhihia.typeface = arabicTypeface
-        holder.madhihumaf.typeface = arabicTypeface
-        holder.madhihunna.typeface = arabicTypeface
-        holder.madhianta.typeface = arabicTypeface
-        holder.madhiantuma.typeface = arabicTypeface
-        holder.madhiantum.typeface = arabicTypeface
-        holder.madhianti.typeface = arabicTypeface
-        holder.madhiantunna.typeface = arabicTypeface
-        holder.madhiantumaf.typeface = arabicTypeface
-        holder.madhiana.typeface = arabicTypeface
-        holder.madhinahnu.typeface = arabicTypeface
-        holder.madhihua.text = hua
-        holder.madhihua.text = hua
-        holder.madhihuma.text = huma
-        holder.madhihum.text = hum
-        holder.madhihia.text = hia
-        holder.madhihumaf.text = humaf
-        holder.madhihunna.text = hunna
-        holder.madhianta.text = anta
-        holder.madhiantuma.text = antuma
-        holder.madhiantum.text = antum
-        holder.madhianti.text = anti
-        holder.madhiantumaf.text = antumaf
-        holder.madhiantunna.text = antunna
-        holder.madhiana.text = ana
-        holder.madhinahnu.text = nahnu
+        //    viewContainer.pronouns.setText(array[0]);
+        viewContainer.pastactive.text = pronouns[1]
+        viewContainer.presentactive.text = pronouns[2]
+        viewContainer.pastpassive.text = pronouns[3]
+        viewContainer.presentpassive.text = pronouns[4]
+        viewContainer.command.text = pronouns[5]
+        viewContainer.negcommand.text = pronouns[6]
+        viewContainer.madhihua.typeface = arabicTypeface
+        //        viewContainer.madhihuma.setTypeface(arabicTypeface);
+        viewContainer.madhihum.typeface = arabicTypeface
+        viewContainer.madhihia.typeface = arabicTypeface
+        viewContainer.madhihumaf.typeface = arabicTypeface
+        viewContainer.madhihunna.typeface = arabicTypeface
+        viewContainer.madhianta.typeface = arabicTypeface
+        viewContainer.madhiantuma.typeface = arabicTypeface
+        viewContainer.madhiantum.typeface = arabicTypeface
+        viewContainer.madhianti.typeface = arabicTypeface
+        viewContainer.madhiantunna.typeface = arabicTypeface
+        viewContainer.madhiantumaf.typeface = arabicTypeface
+        viewContainer.madhiana.typeface = arabicTypeface
+        viewContainer.madhinahnu.typeface = arabicTypeface
+        viewContainer.madhihua.text = thirdPersonMasculineSingular
+        viewContainer.madhihua.text = thirdPersonMasculineSingular
+        viewContainer.madhihuma.text = thirdPersonMascul
+        viewContainer.madhihum.text = thirdPersonMasculinePlural
+        viewContainer.madhihia.text = thirdPersonFeminineSingular
+        viewContainer.madhihumaf.text = thirdPersonFeminineDual
+        viewContainer.madhihunna.text = thirdPersonFemininePlural
+        viewContainer.madhianta.text = secondPersonMasculineSingular
+        viewContainer.madhiantuma.text = secondPersonMasculineDual
+        viewContainer.madhiantum.text = secondPersonMasculinePlural
+        viewContainer.madhianti.text = secondPersonFeminineSingular
+        viewContainer.madhiantumaf.text = secondPersonFeminineDual
+        viewContainer.madhiantunna.text = secondPersonFemininePlural
+        viewContainer.madhiana.text = firstPersonSingular
+        viewContainer.madhinahnu.text = firstPersonPlural
     }
 
   /*  override fun getItemId(position: Int): Long {
