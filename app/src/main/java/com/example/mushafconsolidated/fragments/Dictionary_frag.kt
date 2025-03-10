@@ -22,6 +22,7 @@ import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.Utils
 import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.example.utility.QuranGrammarApplication
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
  
@@ -62,7 +63,7 @@ class Dictionary_frag(lughatWordDetailsAct: LughatWordDetailsAct, language: Stri
         setHasOptionsMenu(true)
         val mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
         val view = inflater.inflate(R.layout.sarfkabeerheader, container, false)
-        val callButton = view.findViewById<FloatingActionButton>(R.id.action_buttons)
+        val callButton = view.findViewById<ExtendedFloatingActionButton>(R.id.action_buttons)
         val dataBundle = arguments
         if (dataBundle != null) {
             val callingfragment = dataBundle.getString(Constant.MUJARRADVERBTAG)

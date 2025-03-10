@@ -48,7 +48,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:backgroundTint="@color/colorAccent"
-            android:text="Conjugation"
+            android:text="Participles"
             app:icon="@drawable/ic_baseline_expand_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -61,7 +61,7 @@
         <!--because after changing the base application theme the color
              of the FAB is set Blue as default-->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/pastactiveFb"
+            android:id="@+id/activeParticipleMasculineFb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
@@ -75,14 +75,14 @@
         <!--Make sure that you are constraining this
             Text to the add Alarm FAB button-->
         <TextView
-            android:id="@+id/pastactiveTv"
+            android:id="@+id/activeParticipleMasculineTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:text=" Past Active"
-            app:layout_constraintBottom_toBottomOf="@+id/pastactiveFb"
-            app:layout_constraintEnd_toStartOf="@+id/pastactiveFb"
-            app:layout_constraintTop_toTopOf="@+id/pastactiveFb" />
+            android:text="Active Masculine"
+            app:layout_constraintBottom_toBottomOf="@+id/activeParticipleMasculineFb"
+            app:layout_constraintEnd_toStartOf="@+id/activeParticipleMasculineFb"
+            app:layout_constraintTop_toTopOf="@+id/activeParticipleMasculineFb" />
 
         <!--Floating action button for add person-->
         <!--Make sure that you are constraining this button
@@ -92,80 +92,80 @@
         <!--because after changing the base application theme
              the color of the FAB is set Blue as default-->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/pastpassiveFb"
+            android:id="@+id/activeParticipleFeminineFb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:backgroundTint="@color/colorAccent"
             app:fabSize="mini"
-            app:layout_constraintBottom_toTopOf="@+id/pastactiveFb"
-            app:layout_constraintEnd_toEndOf="@+id/pastactiveFb"
-            app:layout_constraintStart_toStartOf="@+id/pastactiveFb"
+            app:layout_constraintBottom_toTopOf="@+id/activeParticipleMasculineFb"
+            app:layout_constraintEnd_toEndOf="@+id/activeParticipleMasculineFb"
+            app:layout_constraintStart_toStartOf="@+id/activeParticipleMasculineFb"
             app:srcCompat="@drawable/ic_action_voice_search" />
 
         <!--Action name text for the add person button-->
         <!--Make sure that you are constraining this Text
              to the add Person FAB button-->
         <TextView
-            android:id="@+id/pastpassiveTv"
+            android:id="@+id/activeParticipleFeminineTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:text="Past Passive"
-            app:layout_constraintBottom_toBottomOf="@+id/pastpassiveFb"
-            app:layout_constraintEnd_toStartOf="@+id/pastpassiveFb"
-            app:layout_constraintTop_toTopOf="@+id/pastpassiveFb" />
+            android:text="Active Feminine"
+            app:layout_constraintBottom_toBottomOf="@+id/activeParticipleFeminineFb"
+            app:layout_constraintEnd_toStartOf="@+id/activeParticipleFeminineFb"
+            app:layout_constraintTop_toTopOf="@+id/activeParticipleFeminineFb" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/presentactiveFb"
+            android:id="@+id/passiveParticipleMasculineFb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:backgroundTint="@color/colorAccent"
             app:fabSize="mini"
-            app:layout_constraintBottom_toTopOf="@+id/pastpassiveFb"
-            app:layout_constraintEnd_toEndOf="@+id/pastpassiveFb"
-            app:layout_constraintStart_toStartOf="@+id/pastpassiveFb"
+            app:layout_constraintBottom_toTopOf="@+id/activeParticipleFeminineFb"
+            app:layout_constraintEnd_toEndOf="@+id/activeParticipleFeminineFb"
+            app:layout_constraintStart_toStartOf="@+id/activeParticipleFeminineFb"
             app:srcCompat="@drawable/ic_action_voice_search" />
 
         <!--Action name text for the add person button-->
         <!--Make sure that you are constraining this Text
              to the add Person FAB button-->
         <TextView
-            android:id="@+id/presentactivTv"
+            android:id="@+id/passiveParticipleMasculineTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:text="Present Active"
-            app:layout_constraintBottom_toBottomOf="@+id/presentactiveFb"
-            app:layout_constraintEnd_toStartOf="@+id/presentactiveFb"
-            app:layout_constraintTop_toTopOf="@+id/presentactiveFb" />
+            android:text="Passive Masculine"
+            app:layout_constraintBottom_toBottomOf="@+id/passiveParticipleMasculineFb"
+            app:layout_constraintEnd_toStartOf="@+id/passiveParticipleMasculineFb"
+            app:layout_constraintTop_toTopOf="@+id/passiveParticipleMasculineFb" />
 
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/presentpassiveFb"
+            android:id="@+id/passiveParticipleFeminineFb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:backgroundTint="@color/colorAccent"
             app:fabSize="mini"
-            app:layout_constraintBottom_toTopOf="@+id/presentactiveFb"
-            app:layout_constraintEnd_toEndOf="@+id/presentactiveFb"
-            app:layout_constraintStart_toStartOf="@+id/presentactiveFb"
+            app:layout_constraintBottom_toTopOf="@+id/passiveParticipleMasculineFb"
+            app:layout_constraintEnd_toEndOf="@+id/passiveParticipleMasculineFb"
+            app:layout_constraintStart_toStartOf="@+id/passiveParticipleMasculineFb"
             app:srcCompat="@drawable/ic_action_voice_search" />
 
         <!--Action name text for the add person button-->
         <!--Make sure that you are constraining this Text
              to the add Person FAB button-->
         <TextView
-            android:id="@+id/presentpassiveTv"
+            android:id="@+id/passiveParticipleFeminineTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:text="Present Passive"
-            app:layout_constraintBottom_toBottomOf="@+id/presentpassiveFb"
-            app:layout_constraintEnd_toStartOf="@+id/presentpassiveFb"
-            app:layout_constraintTop_toTopOf="@+id/presentpassiveFb" />
+            android:text="Passive Feminine"
+            app:layout_constraintBottom_toBottomOf="@+id/passiveParticipleFeminineFb"
+            app:layout_constraintEnd_toStartOf="@+id/passiveParticipleFeminineFb"
+            app:layout_constraintTop_toTopOf="@+id/passiveParticipleFeminineFb" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
