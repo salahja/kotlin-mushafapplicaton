@@ -1063,7 +1063,7 @@ class GatherAll {
             augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), madhi, SystemConstants.PAST_TENSE, true, true
         )
         val madhiMajhoolResult = AugmentedTrilateralModifier.instance.build(
-            augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), madhiMajhool, SystemConstants.PAST_TENSE, true, true
+            augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), madhiMajhool, SystemConstants.PAST_TENSE, false, true
         )
         val mudharayResult = mudharay?.let {
             AugmentedTrilateralModifier.instance.build(augmentedRoot, rule.kov, augmentedRoot.form!!.toInt(), it, SystemConstants.PRESENT_TENSE, true, true)
