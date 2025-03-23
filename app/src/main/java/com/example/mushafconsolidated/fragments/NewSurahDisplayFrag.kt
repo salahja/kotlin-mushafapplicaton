@@ -279,7 +279,7 @@ class NewSurahDisplayFrag : Fragment(), SearchView.OnQueryTextListener {
                 QuranGrammarAct::class.java
             )
             //  Intent intent = new Intent(DarkThemeApplication.context!!, ReadingSurahPartActivity.class);
-            intent.putExtra("chapter", 18)
+            intent.putExtra(SURAH_ID, 18)
             intent.putExtra("chapterorpart", true)
             intent.putExtra("partname", allAnaChapters[18].abjadname)
             intent.putExtra("verseno", 1)
@@ -292,7 +292,7 @@ class NewSurahDisplayFrag : Fragment(), SearchView.OnQueryTextListener {
                 QuranGrammarAct::class.java
             )
             //  Intent intent = new Intent(DarkThemeApplication.context!!, ReadingSurahPartActivity.class);
-            intent.putExtra("chapter", 2)
+            intent.putExtra(SURAH_ID, 2)
             intent.putExtra("chapterorpart", true)
             intent.putExtra("partname", allAnaChapters[2].abjadname)
             intent.putExtra("verseno", 255)
