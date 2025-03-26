@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
     xmlns:tools="http://schemas.android.com/tools">
@@ -6,14 +5,12 @@
     <dist:module dist:instant="true" />
 
     <uses-feature android:name="android.hardware.type.watch" />
-
+    <!-- For API level 33 (Tiramisu) and higher -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" /> -->
-    <!-- <uses-permission android:name="android.permission.WRITE_SETTINGS"/> -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -33,10 +30,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
         android:usesCleartextTraffic="true"
-        tools:replace="android:allowBackup">
+        android:resizeableActivity="true"
+        tools:replace="android:allowBackup"
+        android:enableOnBackInvokedCallback="true">
         <activity
             android:name=".Activity.TextSpeechAct"
-            android:exported="false" />
+            android:exported="false"
+            android:taskAffinity="" />
         <activity
             android:name=".ajroomiya.NewAjroomiyaDetailHostActivity"
             android:exported="false"
@@ -49,7 +49,6 @@
             android:label="@string/title_activity_root_breakup"
             android:taskAffinity=""
             android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar" />
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -76,51 +75,38 @@
             android:theme="@style/Theme.App.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".Activity.ShowMushafActivity"
+            android:exported="false"
             android:parentActivityName=".Activity.MainActivity"
-            android:screenOrientation="portrait"
-            android:taskAffinity="com.example.mushafconsolidated.newtask">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.mushafconsolidated.Activity.MainActivity" />
-        </activity>
+
+            android:taskAffinity="com.example.mushafconsolidated.newtask"/>
         <activity
             android:name="com.quiz.ArabicVerbQuizActNew"
+            android:exported="false"
             android:parentActivityName=".Activity.MainActivity"
-            android:screenOrientation="fullSensor"
-            android:taskAffinity="com.example.mushafconsolidated.newtask">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.mushafconsolidated.Activity.MainActivity" />
-        </activity>
+
+            android:taskAffinity="com.example.mushafconsolidated.newtask"/>
         <activity
             android:name=".Activity.PrdownloaderAct"
+            android:exported="false"
             android:parentActivityName=".Activity.MainActivity"
-            android:screenOrientation="portrait"
-            android:taskAffinity="com.example.mushafconsolidated.newtask">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.mushafconsolidated.Activity.MainActivity" />
-        </activity>
+
+            android:taskAffinity="com.example.mushafconsolidated.newtask"/>
         <activity
             android:name="com.example.sentenceanalysis.SentenceGrammarAnalysis"
+            android:exported="false"
             android:parentActivityName=".Activity.MainActivity"
-            android:screenOrientation="portrait"
-            android:taskAffinity="com.example.mushafconsolidated.newtask">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.mushafconsolidated.Activity.MainActivity" />
-        </activity>
+
+            android:taskAffinity=""/>
         <activity
             android:name=".Activity.WordbywordMushafAct"
             android:parentActivityName=".Activity.MainActivity"
-            android:screenOrientation="portrait"
-            android:taskAffinity="com.example.mushafconsolidated.newtask">
+
+            android:taskAffinity="">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
@@ -128,8 +114,8 @@
         <activity
             android:name="mufradat.MufradatPagerActivity"
             android:parentActivityName=".Activity.MainActivity"
-            android:screenOrientation="portrait"
-            android:taskAffinity="com.example.mushafconsolidated.newtask">
+
+            android:taskAffinity="">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
@@ -137,8 +123,8 @@
         <activity
             android:name=".Activity.TafsirFullscreenActivity"
             android:parentActivityName=".Activity.MainActivity"
-            android:screenOrientation="portrait"
-            android:taskAffinity="com.example.mushafconsolidated.newtask">
+
+            android:taskAffinity="">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
@@ -146,8 +132,8 @@
         <activity
             android:name=".Activity.PhrasesGrammarAct"
             android:parentActivityName=".Activity.MainActivity"
-            android:screenOrientation="portrait"
-            android:taskAffinity="com.example.mushafconsolidated.newtask">
+
+            android:taskAffinity="">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
@@ -156,8 +142,8 @@
             android:name=".Activity.WordOccuranceAct"
             android:exported="true"
             android:parentActivityName=".Activity.MainActivity"
-            android:screenOrientation="portrait"
-            android:taskAffinity="com.example.mushafconsolidated.newtask">
+
+            android:taskAffinity="">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
@@ -166,8 +152,8 @@
             android:name=".Activity.KeyboardSearchResult"
             android:exported="true"
             android:parentActivityName=".Activity.MainActivity"
-            android:screenOrientation="portrait"
-            android:taskAffinity="com.example.mushafconsolidated.newtask">
+
+            android:taskAffinity="">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
@@ -176,8 +162,8 @@
             android:name="com.example.quranroots.VerbVerseDetails"
             android:exported="true"
             android:parentActivityName=".Activity.MainActivity"
-            android:screenOrientation="portrait"
-            android:taskAffinity="com.example.mushafconsolidated.newtask">
+
+            android:taskAffinity="">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
@@ -186,8 +172,8 @@
             android:name="com.example.voiceai.VoiceRecognitionActivity"
             android:exported="true"
             android:parentActivityName=".Activity.MainActivity"
-            android:screenOrientation="portrait"
-            android:taskAffinity="com.example.mushafconsolidated.newtask">
+
+            android:taskAffinity="">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
@@ -196,36 +182,41 @@
             android:name=".Activity.LughatWordDetailsAct"
             android:exported="true"
             android:label="@string/title_activity_verb_conjugation"
-            android:screenOrientation="portrait"
-            android:taskAffinity="com.example.mushafconsolidated.newtask">
+
+            android:taskAffinity="">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
         </activity>
         <activity
             android:name="org.sj.conjugator.activity.SarfSagheerActivity"
-            android:parentActivityName=".Activity.QuranGrammarAct">
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|keyboard"
+            android:parentActivityName=".Activity.QuranGrammarAct"
+            android:taskAffinity="">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
         </activity>
         <activity
+            android:exported="true"
             android:name="org.sj.conjugator.activity.ConjugatorTabsActivity"
-            android:parentActivityName=".Activity.QuranGrammarAct">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.mushafconsolidated.Activity.MainActivity" />
+            android:parentActivityName=".Activity.MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:taskAffinity="">
+
         </activity>
         <activity
             android:name="org.sj.conjugator.activity.ConjugatorAct"
-            android:parentActivityName=".Activity.QuranGrammarAct">
+            android:parentActivityName=".Activity.QuranGrammarAct"
+            android:taskAffinity="">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
         </activity>
         <activity
             android:name=".Activity.ActivitySettings"
-            android:parentActivityName=".Activity.QuranGrammarAct">
+            android:parentActivityName=".Activity.QuranGrammarAct"
+            android:taskAffinity="">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />
@@ -236,28 +227,21 @@
             android:enabled="true"
             android:exported="false" />
 
+
+
         <activity
             android:name=".Activity.QuranGrammarAct"
             android:exported="true"
             android:parentActivityName=".Activity.MainActivity"
-            android:screenOrientation="portrait"
-            android:taskAffinity=""
-            android:windowSoftInputMode="stateVisible|adjustResize">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:taskAffinity="com.example.mushafconsolidated.newtask"/>
 
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.mushafconsolidated.Activity.MainActivity" />
-        </activity>
+
         <activity
             android:name="database.NamesGridImageAct"
             android:parentActivityName=".Activity.MainActivity"
-            android:screenOrientation="portrait"
-            android:taskAffinity="com.example.mushafconsolidated.newtask">
+
+            android:taskAffinity="">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mushafconsolidated.Activity.MainActivity" />

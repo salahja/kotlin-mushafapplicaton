@@ -3,6 +3,7 @@ package com.example.mushafconsolidated.Activity
 
 import com.example.mushafconsolidated.Activityimport.BaseActivity
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.Log
 import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.RecyclerView
@@ -71,11 +73,53 @@ class MainActivity : BaseActivity() {
             sp.edit().putInt("spl", 1).apply()
         }
         newquran = File("$FILEPATH/$DATABASENAME")
-        if (!hasPermission) {
+        checkStoragePermission()
+        newquran = File("$FILEPATH/$DATABASENAME")
+
+        //  PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+    }
+
+    private fun checkStoragePermission() {
+        when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE -> {
+                checkStoragePermissionApi34()
+            }
+
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> {
+                checkStoragePermissionApi33()
+            }
+
+            else -> {
+                checkStoragePermissionOldApi()
+            }
+        }
+    }
+
+    @androidx.annotation.OptIn(UnstableApi::class)
+
+    private fun checkStoragePermissionApi34() {
+        val hasMediaImagesPermission = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.READ_MEDIA_IMAGES
+        ) == PackageManager.PERMISSION_GRANTED
+
+        val hasMediaVideosPermission = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.READ_MEDIA_VIDEO
+        ) == PackageManager.PERMISSION_GRANTED
+        val hasMediaAudioPermission = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.READ_MEDIA_AUDIO
+        ) == PackageManager.PERMISSION_GRANTED
+        if (!hasMediaImagesPermission || !hasMediaVideosPermission || !hasMediaAudioPermission) {
             ActivityCompat.requestPermissions(
                 this,
-                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                REQUEST_WRITE_STORAGE
+                arrayOf(
+                    Manifest.permission.READ_MEDIA_IMAGES,
+                    Manifest.permission.READ_MEDIA_VIDEO,
+                    Manifest.permission.READ_MEDIA_AUDIO
+                ),
+                REQUEST_READ_MEDIA_IMAGES
             )
         } else {
             try {
@@ -84,7 +128,50 @@ class MainActivity : BaseActivity() {
                 Log.e("MainActivity", "Error validating or downloading files", e)
             }
         }
-        //  PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+    }
+
+    @SuppressLint("UnsafeOptInUsageError")
+    @OptIn(UnstableApi::class)
+    private fun checkStoragePermissionApi33() {
+        val hasReadPermission = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.READ_MEDIA_IMAGES
+        ) == PackageManager.PERMISSION_GRANTED
+        if (!hasReadPermission) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.READ_MEDIA_IMAGES),
+                REQUEST_READ_MEDIA_IMAGES
+            )
+        } else {
+            try {
+                validateFilesAndDownload()
+            } catch (e: IOException) {
+                Log.e("MainActivity", "Error validating or downloading files", e)
+            }
+        }
+    }
+
+
+    @androidx.annotation.OptIn(UnstableApi::class)
+    private fun checkStoragePermissionOldApi() {
+        val hasPermission = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
+        if (!hasPermission) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                REQUEST_READ_EXTERNAL_STORAGE
+            )
+        } else {
+            try {
+                validateFilesAndDownload()
+            } catch (e: IOException) {
+                Log.e("MainActivity", "Error validating or downloading files", e)
+            }
+        }
     }
 
     private fun computeWindowSizeClasses() {
@@ -116,7 +203,7 @@ class MainActivity : BaseActivity() {
 
 
 
-    override fun onRequestPermissionsResult(
+     fun onRequestPermissionsResultold(
         requestCode: Int,
         permissions: Array<out String>, // Use 'out' for non-nullable strings
         grantResults: IntArray
@@ -136,6 +223,37 @@ class MainActivity : BaseActivity() {
         }
     }
 
+
+    // Handle permission results
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == REQUEST_READ_MEDIA_IMAGES) {
+            if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+                lifecycleScope.launch {
+                    validateFilesAndDownload()
+                }
+            } else {
+                // Explain why permission is needed
+                AlertDialog.Builder(this)
+                    .setTitle("Permission Required")
+                    .setMessage("The app needs storage permissions to function properly")
+                    .setPositiveButton("Retry") { _, _ ->
+                        checkStoragePermissionApi34()
+                    }
+                    .setNegativeButton("Exit") { _, _ ->
+                        finish()
+                    }
+                    .show()
+            }
+        }
+    }
+
+
     @Throws(IOException::class)
     private fun validateFilesAndDownload() {
         if (!newquran!!.exists()) {
@@ -146,6 +264,7 @@ class MainActivity : BaseActivity() {
 
             val homeactivity = Intent(this@MainActivity, QuranGrammarAct::class.java)
             startActivity(homeactivity)
+            finish()
 
         }
     }
@@ -262,6 +381,10 @@ class MainActivity : BaseActivity() {
 
     companion object {
         private const val REQUEST_WRITE_STORAGE = 112
+        private const val REQUEST_READ_MEDIA_IMAGES = 101
+        private const val REQUEST_READ_MEDIA_VIDEO = 102
+        private const val REQUEST_READ_MEDIA_AUDIO = 103
+        private const val REQUEST_READ_EXTERNAL_STORAGE = 104
     }
 }
 
