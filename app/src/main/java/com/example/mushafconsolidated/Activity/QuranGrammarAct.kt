@@ -129,7 +129,7 @@ import kotlin.collections.List as CollectionsList
 
 //import com.example.mushafconsolidated.Entities.JoinVersesTranslationDataTranslation;
 @AndroidEntryPoint
-class QuranGrammarAct : AppCompatActivity(), OnItemClickListenerOnLong {
+class QuranGrammarAct : BaseActivity(), OnItemClickListenerOnLong {
 
   private var currentTheme=false
   private val absoluteNegationCache = HashMap<Pair<Int, Int>, List<Int>>() //
@@ -249,12 +249,9 @@ private var preferences=""
   @RequiresApi(api = Build.VERSION_CODES.Q)
   override fun onCreate(savedInstanceState: Bundle?) {
 
-    val currenttheme = PreferenceManager.getDefaultSharedPreferences(this)
-      .getString("themepref", "dark")
-    DynamicColors.applyToActivitiesIfAvailable(this.application)
-    switchTheme(currenttheme)
+
     super.onCreate(savedInstanceState)
-    Log.d("QuranGrammarAct", "onCreate called")
+
 
     binding = NewFragmentReadingBinding.inflate(layoutInflater)
     setContentView(binding.root)
@@ -289,24 +286,7 @@ private var preferences=""
     }
   }
 
-  private fun switchTheme(currenttheme: String?) {
-    val currentAppliedTheme = PreferenceManager.getDefaultSharedPreferences(this).getString("theme", "dark")
-    when (currenttheme) {
-      BaseActivity.LIGHT_THEME -> setTheme(R.style.AppTheme)
-      BaseActivity.DARK_THEME -> setTheme(R.style.AppThemeDark)
-      BaseActivity.DARK_BLUE -> setTheme(R.style.AppTheme_materialdarkblue)
-      BaseActivity.DARK_GREEN -> setTheme(R.style.AppTheme_DarkGreen)
-      BaseActivity.BROWN_MODE -> setTheme(R.style.Theme_Browns)
-      else -> setTheme(R.style.AppThemeDark)
-    }
-    PreferenceManager.getDefaultSharedPreferences(this).edit().putString("theme", currenttheme)
-      .apply()
 
-    if (currenttheme != currentAppliedTheme) {
-      recreate()
-    }
-
-  }
 
   private fun loadDefaultSurahData() {
     initView()
@@ -340,7 +320,8 @@ private var preferences=""
 
   private fun loadSurahFromIntentData() {
     bundles = intent.extras
-
+    initView()
+    initnavigation()
     val chapter = bundles!!.getInt(Constant.SURAH_ID, 1)
     mushafview = bundles!!.getBoolean("passages", false)
     mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]

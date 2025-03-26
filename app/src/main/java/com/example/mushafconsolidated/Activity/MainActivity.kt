@@ -56,13 +56,10 @@ class MainActivity : BaseActivity() {
         val splashScreen = installSplashScreen()
         splashScreen.setKeepOnScreenCondition {
             // Simulate work being done, replace with your actual logic
-            runBlocking { delay(1000) }
+            runBlocking { delay(500) }
             false
         }
-        val hasPermission = ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        ) == PackageManager.PERMISSION_GRANTED
+
         computeWindowSizeClasses()
         //  setContentView(R.layout.fragment_reading);
         setContentView(R.layout.main_activity)
@@ -74,9 +71,8 @@ class MainActivity : BaseActivity() {
         }
         newquran = File("$FILEPATH/$DATABASENAME")
         checkStoragePermission()
-        newquran = File("$FILEPATH/$DATABASENAME")
 
-        //  PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
     }
 
     private fun checkStoragePermission() {
@@ -152,8 +148,6 @@ class MainActivity : BaseActivity() {
         }
     }
 
-
-    @androidx.annotation.OptIn(UnstableApi::class)
     private fun checkStoragePermissionOldApi() {
         val hasPermission = ContextCompat.checkSelfPermission(
             this,
@@ -200,30 +194,6 @@ class MainActivity : BaseActivity() {
         // Use widthWindowSizeClass and heightWindowSizeClass
     }
 
-
-
-
-     fun onRequestPermissionsResultold(
-        requestCode: Int,
-        permissions: Array<out String>, // Use 'out' for non-nullable strings
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_WRITE_STORAGE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                try {
-                    validateFilesAndDownload()
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-            } else {
-                Toast.makeText(this, getString(R.string.permission), Toast.LENGTH_LONG).show()
-                finish()
-            }
-        }
-    }
-
-
     // Handle permission results
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -252,23 +222,16 @@ class MainActivity : BaseActivity() {
             }
         }
     }
-
-
     @Throws(IOException::class)
     private fun validateFilesAndDownload() {
         if (!newquran!!.exists()) {
-            // first install copy newquran.db.zip and unzip
-            //   new CopyDatabase().execute();
             copyDatbases()
         } else {
-
             val homeactivity = Intent(this@MainActivity, QuranGrammarAct::class.java)
             startActivity(homeactivity)
             finish()
-
         }
     }
-
     private fun copyDatbases() {
         val ex = Executors.newSingleThreadExecutor()
         val builder = AlertDialog.Builder(this@MainActivity)
@@ -370,15 +333,9 @@ class MainActivity : BaseActivity() {
             finish()
         }
     }
-
-
-
-
-
     enum class WindowSizeClass {
         COMPACT, MEDIUM, EXPANDED
     }
-
     companion object {
         private const val REQUEST_WRITE_STORAGE = 112
         private const val REQUEST_READ_MEDIA_IMAGES = 101

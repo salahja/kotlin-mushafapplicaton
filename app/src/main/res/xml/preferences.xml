@@ -185,7 +185,7 @@
         android:max="60"
         app:defaultValue="22"
         app:key="pref_font_arabic_key"
-        app:min="12"
+        app:min="10"
         app:showSeekBarValue="true"
         app:summary="@string/seek_summary"
         app:title="@string/seek_titles" />
@@ -194,7 +194,7 @@
         android:max="60"
         app:defaultValue="22"
         app:key="pref_font_englsh_key"
-        app:min="12"
+        app:min="10"
         app:showSeekBarValue="true"
         app:summary="@string/seek_summary"
         app:title="@string/seek_title" />
