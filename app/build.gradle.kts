@@ -10,8 +10,8 @@ plugins {
 }
 
 android {
-  compileSdk = 34
-  buildToolsVersion = "34.0.0"
+  compileSdk = 35
+
 
 
 
@@ -22,7 +22,7 @@ android {
 
     versionCode = 2
     versionName = "1.0"
-
+    multiDexEnabled= true
     javaCompileOptions {
       annotationProcessorOptions {
         arguments["room.schemaLocation"] = "$projectDir/schemas"
@@ -45,7 +45,8 @@ android {
   buildTypes {
     release {
       isMinifyEnabled = false
-      proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+
+
     }
   }
 

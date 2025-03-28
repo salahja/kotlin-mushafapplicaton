@@ -18,6 +18,8 @@ package com.example.utility
 import android.app.Application
 import android.content.Context
 import android.content.res.Configuration
+import android.os.Build
+import android.os.StrictMode
 import androidx.preference.PreferenceManager
 
 import com.example.utility.ThemeHelper.applyTheme
@@ -32,7 +34,7 @@ class QuranGrammarApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-/*
+        /*
        if (LeakCanary.isInAnalyzerProcess(this)) {
             // Skip LeakCanary initialization for the analyzer process
             return

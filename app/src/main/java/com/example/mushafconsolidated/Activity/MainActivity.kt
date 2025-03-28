@@ -4,6 +4,8 @@ package com.example.mushafconsolidated.Activity
 import com.example.mushafconsolidated.Activityimport.BaseActivity
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.ActivityManager
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -12,11 +14,13 @@ import android.os.Environment
 import android.preference.PreferenceManager
 import android.widget.Toast
 import androidx.activity.result.launch
+import androidx.activity.viewModels
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.Log
 import androidx.media3.common.util.UnstableApi
@@ -27,11 +31,15 @@ import com.example.mushafconsolidated.R
 import com.example.mushafconsolidated.settingsimport.Constants.Companion.DATABASENAME
 import com.example.mushafconsolidated.settingsimport.Constants.Companion.DATABASEZIP
 import com.example.mushafconsolidated.settingsimport.Constants.Companion.FILEPATH
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry
 import org.apache.commons.compress.archivers.sevenz.SevenZFile
 import java.io.BufferedInputStream
@@ -44,157 +52,215 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
-
+@AndroidEntryPoint
 class MainActivity : BaseActivity() {
     private var newquran: File? = null
     private var recview: RecyclerView? = null
+    private val viewModel: MainViewModel by viewModels()
 
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
-           super.onCreate(savedInstanceState)
-        switchTheme("brown")
-        val splashScreen = installSplashScreen()
-        splashScreen.setKeepOnScreenCondition {
-            // Simulate work being done, replace with your actual logic
-            runBlocking { delay(500) }
-            false
-        }
+        super.onCreate(savedInstanceState)
 
-        computeWindowSizeClasses()
-        //  setContentView(R.layout.fragment_reading);
+        // Splash screen setup
+        installSplashScreen().setKeepOnScreenCondition { true }
+
+        // Theme and layout setup
+        switchTheme("brown")
         setContentView(R.layout.main_activity)
+
+        // Initialize UI components
         recview = findViewById(R.id.recycler_views)
+
+        // Initialize preferences
+        initPreferences()
+
+        // Setup window size classes
+        computeWindowSizeClasses()
+
+        // Check storage and database
+        checkStorageAndDatabase()
+    }
+
+    private fun initPreferences() {
         val sp = PreferenceManager.getDefaultSharedPreferences(this)
         if (sp.getInt("spl", 0) != 1) {
             PreferenceManager.setDefaultValues(this, R.xml.preferences, true)
             sp.edit().putInt("spl", 1).apply()
         }
-        newquran = File("$FILEPATH/$DATABASENAME")
-        checkStoragePermission()
+    }
 
+    private fun checkStorageAndDatabase() {
+        lifecycleScope.launch {
+            try {
+                // Get proper storage directory
+                val appDir = getExternalFilesDir("Mushafapplication") ?:
+                throw IOException("External storage not available")
 
+                newquran = File(appDir, DATABASENAME)
+
+                when {
+                    newquran?.exists() == true -> {
+                        launchQuranGrammarActivity()
+                    }
+                    else -> {
+                        checkStoragePermission()
+                    }
+                }
+            } catch (e: Exception) {
+                showErrorDialog("Initialization failed", e)
+            }
+        }
     }
 
     private fun checkStoragePermission() {
         when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE -> {
-                checkStoragePermissionApi34()
-            }
-
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> {
-                checkStoragePermissionApi33()
-            }
-
-            else -> {
-                checkStoragePermissionOldApi()
-            }
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE -> checkStoragePermissionApi34()
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> checkStoragePermissionApi33()
+            else -> checkStoragePermissionLegacy()
         }
     }
 
-    @androidx.annotation.OptIn(UnstableApi::class)
-
+    @OptIn(UnstableApi::class)
     private fun checkStoragePermissionApi34() {
-        val hasMediaImagesPermission = ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.READ_MEDIA_IMAGES
-        ) == PackageManager.PERMISSION_GRANTED
+        val permissionsToRequest = mutableListOf<String>().apply {
+            if (!hasPermission(Manifest.permission.READ_MEDIA_IMAGES)) add(Manifest.permission.READ_MEDIA_IMAGES)
+            if (!hasPermission(Manifest.permission.READ_MEDIA_VIDEO)) add(Manifest.permission.READ_MEDIA_VIDEO)
+            if (!hasPermission(Manifest.permission.READ_MEDIA_AUDIO)) add(Manifest.permission.READ_MEDIA_AUDIO)
+        }
 
-        val hasMediaVideosPermission = ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.READ_MEDIA_VIDEO
-        ) == PackageManager.PERMISSION_GRANTED
-        val hasMediaAudioPermission = ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.READ_MEDIA_AUDIO
-        ) == PackageManager.PERMISSION_GRANTED
-        if (!hasMediaImagesPermission || !hasMediaVideosPermission || !hasMediaAudioPermission) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(
-                    Manifest.permission.READ_MEDIA_IMAGES,
-                    Manifest.permission.READ_MEDIA_VIDEO,
-                    Manifest.permission.READ_MEDIA_AUDIO
-                ),
-                REQUEST_READ_MEDIA_IMAGES
-            )
+        if (permissionsToRequest.isNotEmpty()) {
+            requestPermissions(permissionsToRequest.toTypedArray(), REQUEST_READ_MEDIA_IMAGES)
         } else {
-            try {
-                validateFilesAndDownload()
-            } catch (e: IOException) {
-                Log.e("MainActivity", "Error validating or downloading files", e)
-            }
+            startDatabaseSetup()
         }
     }
 
-    @SuppressLint("UnsafeOptInUsageError")
     @OptIn(UnstableApi::class)
     private fun checkStoragePermissionApi33() {
-        val hasReadPermission = ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.READ_MEDIA_IMAGES
-        ) == PackageManager.PERMISSION_GRANTED
-        if (!hasReadPermission) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.READ_MEDIA_IMAGES),
-                REQUEST_READ_MEDIA_IMAGES
-            )
+        if (!hasPermission(Manifest.permission.READ_MEDIA_IMAGES)) {
+            requestPermissions(arrayOf(Manifest.permission.READ_MEDIA_IMAGES), REQUEST_READ_MEDIA_IMAGES)
         } else {
+            startDatabaseSetup()
+        }
+    }
+
+    private fun checkStoragePermissionLegacy() {
+        if (!hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_READ_EXTERNAL_STORAGE)
+        } else {
+            startDatabaseSetup()
+        }
+    }
+
+    private fun hasPermission(permission: String): Boolean {
+        return ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun startDatabaseSetup() {
+        lifecycleScope.launch {
             try {
+                showProgressDialog("Preparing database...")
                 validateFilesAndDownload()
-            } catch (e: IOException) {
-                Log.e("MainActivity", "Error validating or downloading files", e)
+            } catch (e: Exception) {
+                showErrorDialog("Database setup failed", e)
             }
         }
     }
 
-    private fun checkStoragePermissionOldApi() {
-        val hasPermission = ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
-        if (!hasPermission) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                REQUEST_READ_EXTERNAL_STORAGE
-            )
-        } else {
-            try {
-                validateFilesAndDownload()
-            } catch (e: IOException) {
-                Log.e("MainActivity", "Error validating or downloading files", e)
+    @Throws(IOException::class)
+    private suspend fun validateFilesAndDownload() {
+        if (newquran?.exists() != true) {
+            copyDatabase()
+        }
+        launchQuranGrammarActivity()
+    }
+
+    private suspend fun copyDatabase() {
+        withContext(Dispatchers.IO) {
+            val appDir = getExternalFilesDir("Mushafapplication") ?:
+            throw IOException("External storage not available")
+
+            val databaseFile = File(appDir, DATABASEZIP).apply {
+                parentFile?.mkdirs()
+                if (!exists()) createNewFile()
+            }
+
+            // Copy from assets
+            assets.open(DATABASEZIP).use { input ->
+                FileOutputStream(databaseFile).use { output ->
+                    input.copyTo(output)
+                }
+            }
+
+            // Extract database
+            extractDatabase(databaseFile, appDir)
+
+            // Verify extraction
+            val extractedDb = File(appDir, DATABASENAME)
+            if (!extractedDb.exists() || extractedDb.length() < MIN_DB_SIZE) {
+                throw IOException("Database extraction incomplete")
             }
         }
     }
 
-    private fun computeWindowSizeClasses() {
-        val metrics = WindowMetricsCalculator.getOrCreate().computeCurrentWindowMetrics(this)
-        val editor = PreferenceManager.getDefaultSharedPreferences(this@MainActivity).edit()
-        val widthDp = metrics.bounds.width() / resources.displayMetrics.density
-        if (widthDp < 600f) {
-            editor.putString("width", "compactWidth")
-            editor.apply()
-        } else if (widthDp < 840f) {
-            editor.putString("width", "mediumWidth")
-            editor.apply()
-        } else {
-            // widthWindowSizeClass = WindowSizeClass.EXPANDED;
-            editor.putString("width", "expandedWidth")
-            editor.apply()
+    private suspend fun extractDatabase(zipFile: File, targetDir: File) {
+        SevenZFile(zipFile).use { sevenZFile ->
+            val buffer = ByteArray(8 * 1024 * 1024) // 8MB buffer
+            var entry: SevenZArchiveEntry?
+
+            while (sevenZFile.nextEntry.also { entry = it } != null) {
+                if (entry?.isDirectory == true) continue
+
+                val outputFile = File(targetDir, entry?.name ?: continue).apply {
+                    parentFile?.mkdirs()
+                }
+
+                FileOutputStream(outputFile).use { output ->
+                    var bytesRead: Int
+                    while (sevenZFile.read(buffer).also { bytesRead = it } != -1) {
+                        output.write(buffer, 0, bytesRead)
+                    }
+                }
+            }
         }
-        val heightDp = metrics.bounds.height() / resources.displayMetrics.density
-        val heightWindowSizeClass: WindowSizeClass = if (heightDp < 480f) {
-            WindowSizeClass.COMPACT
-        } else if (heightDp < 900f) {
-            WindowSizeClass.MEDIUM
-        } else {
-            WindowSizeClass.EXPANDED
-        }
-        // Use widthWindowSizeClass and heightWindowSizeClass
+        zipFile.delete()
     }
 
-    // Handle permission results
+    private fun launchQuranGrammarActivity() {
+        if (isQuranGrammarActRunning()) return
+
+        startActivity(Intent(this, QuranGrammarAct::class.java).also {
+            finish()
+        })
+    }
+
+    private fun isQuranGrammarActRunning(): Boolean {
+        val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        return activityManager.appTasks?.any { task ->
+            task.taskInfo?.topActivity?.className == QuranGrammarAct::class.java.name
+        } ?: false
+    }
+
+    private fun showProgressDialog(message: String): AlertDialog {
+        return AlertDialog.Builder(this)
+            .setMessage(message)
+            .setCancelable(false)
+            .setView(R.layout.layout_loading_dialog)
+            .show().also {
+                viewModel.currentDialog = it
+            }
+    }
+
+    private fun showErrorDialog(title: String, exception: Exception) {
+        AlertDialog.Builder(this)
+            .setTitle(title)
+            .setMessage(exception.localizedMessage ?: "Unknown error")
+            .setPositiveButton("Retry") { _, _ -> checkStorageAndDatabase() }
+            .setNegativeButton("Exit") { _, _ -> finish() }
+            .show()
+    }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -202,147 +268,51 @@ class MainActivity : BaseActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if (requestCode == REQUEST_READ_MEDIA_IMAGES) {
-            if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
-                lifecycleScope.launch {
-                    validateFilesAndDownload()
+        when (requestCode) {
+            REQUEST_READ_MEDIA_IMAGES,
+            REQUEST_READ_EXTERNAL_STORAGE -> {
+                if (grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+                    startDatabaseSetup()
+                } else {
+                    showPermissionDeniedDialog()
                 }
-            } else {
-                // Explain why permission is needed
-                AlertDialog.Builder(this)
-                    .setTitle("Permission Required")
-                    .setMessage("The app needs storage permissions to function properly")
-                    .setPositiveButton("Retry") { _, _ ->
-                        checkStoragePermissionApi34()
-                    }
-                    .setNegativeButton("Exit") { _, _ ->
-                        finish()
-                    }
-                    .show()
             }
         }
     }
-    @Throws(IOException::class)
-    private fun validateFilesAndDownload() {
-        if (!newquran!!.exists()) {
-            copyDatbases()
-        } else {
-            val homeactivity = Intent(this@MainActivity, QuranGrammarAct::class.java)
-            startActivity(homeactivity)
-            finish()
+
+    private fun showPermissionDeniedDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Permission Required")
+            .setMessage("Storage permissions are required for the app to function")
+            .setPositiveButton("Retry") { _, _ -> checkStoragePermission() }
+            .setNegativeButton("Exit") { _, _ -> finish() }
+            .show()
+    }
+
+    private fun computeWindowSizeClasses() {
+        val metrics = WindowMetricsCalculator.getOrCreate()
+            .computeCurrentWindowMetrics(this)
+        val widthDp = metrics.bounds.width() / resources.displayMetrics.density
+
+        PreferenceManager.getDefaultSharedPreferences(this).edit().apply {
+            putString("width", when {
+                widthDp < 600f -> "compactWidth"
+                widthDp < 840f -> "mediumWidth"
+                else -> "expandedWidth"
+            })
+            apply()
         }
     }
-    private fun copyDatbases() {
-        val ex = Executors.newSingleThreadExecutor()
-        val builder = AlertDialog.Builder(this@MainActivity)
-        builder.setCancelable(false) // if you want user to wait for some process to finish,
-        builder.setView(R.layout.layout_loading_dialog)
-        val dialog = builder.create()
-        ex.execute(object : Runnable {
-            override fun run() {
-                runOnUiThread { dialog.show() }
-                val canWrie = canWriteInSDCard()
-                if (canWrie) {
-                    try {
-                        val databaseDirectory = File(FILEPATH)
-                        if (!databaseDirectory.exists()) {
-                            val cr = databaseDirectory.mkdirs()
-                            println(cr)
-                        }
-                        val databaseFile = File(databaseDirectory, DATABASEZIP)
-                        databaseFile.parentFile
-                        if (!databaseFile.exists()) {
-                            databaseFile.createNewFile()
-                        }
-                        //    InputStream inputStream = getApplicationContext().getAssets().open("newquran.db");
-                        val inputStream = applicationContext.assets.open(DATABASEZIP)
-                        val outputStream = FileOutputStream(databaseFile)
-                        //   publishProgress(0, fileSize);
-                        var copylength = 0
-                        val buffer = ByteArray(1024)
-                        while (true) {
-                            val read = inputStream.read(buffer)
-                            if (read == -1) break
-                            copylength += read
-                            //   publishProgress(copylength, fileSize);
-                            outputStream.write(buffer, 0, read)
-                        }
-                        outputStream.flush()
-                        outputStream.close()
-                        inputStream.close()
-                    } catch (e1: IOException) {
-                        e1.printStackTrace()
-                    }
-                }
-                sevenExtraction(ex, dialog)
-            }
 
-            private fun canWriteInSDCard(): Boolean {
-                val state = Environment.getExternalStorageState()
-                return Environment.MEDIA_MOUNTED == state
-            }
-        })
-    }
-
-    private fun sevenExtraction(
-        ex: ExecutorService,
-        dialog: AlertDialog
-    ) {
-        runOnUiThread {
-            val zipfile =
-                File(getExternalFilesDir(null)!!.absolutePath + getString(R.string.app_folder_path) + File.separator + DATABASEZIP)
-            val targetDirectory = File(FILEPATH)
-            val mainDatabasesZIP = File(zipfile.toString())
-            var zis: ZipInputStream? = null
-            var progress = 1
-
-            val sevenZFile = SevenZFile(mainDatabasesZIP)
-            try {
-                var entry: SevenZArchiveEntry?
-                val buffer= ByteArray(8192)
-                while (sevenZFile.nextEntry.also { entry = it } != null) {
-                    if (entry!!.isDirectory) continue // Skip directories
-
-                    val file = File(targetDirectory, entry!!.name)
-                    val dir = file.parentFile
-                    if (!dir.isDirectory && !dir.mkdirs()) {
-                        throw FileNotFoundException("Failed to ensure directory: " + dir.absolutePath)
-                    }
-
-                    FileOutputStream(file).use { fout ->
-                        var count: Int
-                        while (sevenZFile.read(buffer).also { count = it } != -1) {
-                            fout.write(buffer, 0, count)
-                            progress += 1
-                            // Update progress bar if needed
-                        }
-                    }
-                }
-            } catch (e: IOException) {
-                e.printStackTrace()
-                // Handle errors appropriately
-            } finally {
-                sevenZFile.close()
-                mainDatabasesZIP.delete()
-                // Dismiss progress dialog if used
-            }
-            ex.shutdown()
-            dialog.dismiss()
-            val zipintent = Intent(this@MainActivity, QuranGrammarAct::class.java)
-            startActivity(zipintent)
-            finish()
-        }
-    }
-    enum class WindowSizeClass {
-        COMPACT, MEDIUM, EXPANDED
-    }
     companion object {
-        private const val REQUEST_WRITE_STORAGE = 112
         private const val REQUEST_READ_MEDIA_IMAGES = 101
-        private const val REQUEST_READ_MEDIA_VIDEO = 102
-        private const val REQUEST_READ_MEDIA_AUDIO = 103
-        private const val REQUEST_READ_EXTERNAL_STORAGE = 104
+        private const val REQUEST_READ_EXTERNAL_STORAGE = 102
+        private const val MIN_DB_SIZE = 250 * 1024 * 1024 // 250MB
     }
 }
 
+
+class MainViewModel : ViewModel() {
+    var currentDialog: AlertDialog? = null
+}
 

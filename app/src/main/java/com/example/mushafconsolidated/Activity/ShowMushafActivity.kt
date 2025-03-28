@@ -615,8 +615,8 @@ class ShowMushafActivity : BaseActivity(), OnItemClickListenerOnLong, View.OnCli
         //  View view = inflater.inflate(R.layout.activity_wheel, null);
         dialogPicker.setView(view)
         mTextView = view.findViewById(R.id.textView2)
-        chapterWheel = view.findViewById(R.id.wv_year)
-        verseWheel = view.findViewById(R.id.wv_month)
+        chapterWheel = view.findViewById(R.id.surahnameTv)
+        verseWheel = view.findViewById(R.id.ayahnumberTv)
         chapterWheel.setEntries(*surahArrays)
         chapterWheel.currentIndex = currentSelectSurah - 1
         //set wheel initial state

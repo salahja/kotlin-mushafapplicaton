@@ -1,24 +1,20 @@
 package com.example.mushafconsolidated.Adapters
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
-import android.content.ActivityNotFoundException
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Bundle
-import android.os.Environment
 import android.preference.PreferenceManager
 import android.text.Html
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
-import android.text.format.DateFormat
 import android.text.style.LineBackgroundSpan
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -28,22 +24,20 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.compose.ui.text.TextPainter.paint
 import androidx.constraintlayout.widget.Group
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
-import com.example.Constant
 import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.Entities.NewMudhafEntity
 import com.example.mushafconsolidated.Entities.QuranEntity
 import com.example.mushafconsolidated.Entities.SifaEntity
 import com.example.mushafconsolidated.R
-import com.example.mushafconsolidated.SurahSummary
 import com.example.mushafconsolidated.data.PhraseItem
 import com.example.mushafconsolidated.data.SurahHeader
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
@@ -59,11 +53,6 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textview.MaterialTextView
-import sj.hisnul.fragments.NamesDetail
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.util.Date
 
 class NewQuranDisplayAdapter(
   isaudio: Boolean,
@@ -71,9 +60,9 @@ class NewQuranDisplayAdapter(
   private val header: SurahHeader,
 
   private val allofQuran: List<QuranEntity>,
-  private val ayahWordArrayList: LinkedHashMap<Int, ArrayList<CorpusEntity>>,
+  private val corpusGroupedByAyah: LinkedHashMap<Int, ArrayList<CorpusEntity>>,
   var context: Context,
-  private val SurahName: String,
+  private val surahName: String,
   private val isMakkiMadani: Int,
   listener: OnItemClickListenerOnLong?,
   mainViewModel: QuranViewModel,
@@ -117,6 +106,7 @@ class NewQuranDisplayAdapter(
     private var translationfontsize: Int = 0
     lateinit var mItemClickListener: OnItemClickListenerOnLong
     private lateinit var isNightmode: String
+  private lateinit var wordByWordFont: String
     private var currentTheme=false
 
 
@@ -166,6 +156,7 @@ class NewQuranDisplayAdapter(
         arabicfontSize = sharedPreferences.getInt("pref_font_arabic_key", 18)
         translationfontsize = sharedPreferences.getInt("pref_font_englsh_key", 18)
         defaultfont = sharedPreferences.getBoolean("default_font", true)
+        wordByWordFont= sharedPreferences.getString("word_font_selection", "DejaVuSans.ttf").toString()
         if (listener != null) {
             mItemClickListener = listener
         }
@@ -186,12 +177,12 @@ class NewQuranDisplayAdapter(
     }
 
     override fun getItemCount(): Int {
-        return ayahWordArrayList.size + 1
+        return corpusGroupedByAyah.size + 1
         //     return  quran.size();
     }
 
     override fun getItemId(position: Int): Long {
-        val ayahWord = ayahWordArrayList[position]
+        val ayahWord = corpusGroupedByAyah[position]
         var itemId: Long = 0
 
         itemId = ayahWord!![position].ayah.toLong()
@@ -203,7 +194,11 @@ class NewQuranDisplayAdapter(
         val view: View = if (viewType == 0) {
             LayoutInflater.from(parent.context).inflate(R.layout.surah_header, parent, false)
         } else {
+
+
+
             LayoutInflater.from(parent.context).inflate(R.layout.row_ayah_word, parent, false)
+
 
         }
         return ItemViewAdapter(view, viewType)
@@ -353,17 +348,21 @@ class NewQuranDisplayAdapter(
         val phraseGroups: MutableList<SpannableString> = mutableListOf()
 
 
-        val arabic_font_selection =
-            sharedPreferences.getString("Arabic_Font_Selection", "quranicfontregular.ttf")
-        val custom_font = Typeface.createFromAsset(
-          context.assets,
-          arabic_font_selection
-        )
-        val FONTS_LOCATION_PATH = "fonts/DejaVuSans.ttf"
+
+   /*     val FONTS_LOCATION_PATH = "fonts/DejaVuSans.ttf"
         colorwordfont = Typeface.createFromAsset(
           QuranGrammarApplication.context!!.assets,
           FONTS_LOCATION_PATH
         )
+*/
+
+      val arabic_font_selection =            sharedPreferences.getString("Arabic_Font_Selection", "me_quran.ttf")
+      val arabicwordfont =            sharedPreferences.getString("word_font_selection", "me_quran.ttf")
+      val custom_font = Typeface.createFromAsset(context.assets,arabic_font_selection)
+      colorwordfont=Typeface.createFromAsset(context.assets,arabicwordfont)
+
+
+
         val showErab = sharedPreferences.getBoolean("showErabKey", true)
         wordByWordDisplay = sharedPreferences.getBoolean("wordByWordDisplay", false)
 
@@ -378,14 +377,12 @@ class NewQuranDisplayAdapter(
 
         val sifaIndexList = sifaCache[key]
         val mudhafIndexList = mudhafCache[key]
-        /*        val presentTenceIndexList=presentTenceCache[key]
-                val pastTenceIndexList=pastTenceCache[key]
-                val futureTenceIndexList=futureTenceCache[key]*/
 
 
-        ayahWord = this.ayahWordArrayList[position + 1]
+
+        ayahWord = this.corpusGroupedByAyah[position + 1]
         if (entity != null) {
-          QuranViewUtils.storepreferences(context, entity, SurahName)
+          QuranViewUtils.storepreferences(context, entity, surahName)
         }
 
         spannableverse = SpannableString.valueOf(SpannableString(entity?.qurantext))
@@ -399,11 +396,9 @@ class NewQuranDisplayAdapter(
             sifaIndexList,
             mudhafIndexList,
             entity.surah,
-            entity.ayah
-            //   preentTenceIndexList,
-            //  pastTenceIndexList,
-            //  futureTenceIndexList,
-            //  key
+            entity.ayah,
+          custom_font
+
         )
 
         holder.base_cardview.visibility = View.GONE
@@ -451,12 +446,18 @@ class NewQuranDisplayAdapter(
 
     }
 
-    private fun displayWordByWord(
-      holder: ItemViewAdapter,
-      entity: QuranEntity,
-      sharedPreferences: SharedPreferences,
-      position: Int
-    ) {
+
+
+
+  private fun displayWordByWord(
+    holder: ItemViewAdapter,
+    entity: QuranEntity,
+    sharedPreferences: SharedPreferences,
+    position: Int
+
+  ) {
+    val paint = Paint()
+    paint.typeface=colorwordfont
         val showrootkey = sharedPreferences.getBoolean("showrootkey", true)
 
         val showWordColor = sharedPreferences.getBoolean("colortag", true)
@@ -467,10 +468,17 @@ class NewQuranDisplayAdapter(
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         holder.flow_word_by_word.removeAllViews()
 
-        val wordarray = ayahWordArrayList[position + 1]
+        val wordarray = corpusGroupedByAyah[position + 1]
+    @SuppressLint("InflateParams")  var view: View
         for (word in wordarray!!) {
             var aindex = 0
-            @SuppressLint("InflateParams") val view = inflater.inflate(R.layout.word_by_word, null)
+          if(wordByWordFont.equals("DejaVuSans.ttf")){
+          view = inflater.inflate(R.layout.word_by_word_dejavufont, null)
+
+          }else{
+         view = inflater.inflate(R.layout.word_by_word, null)
+          }
+
             arabicChipview = view.findViewById(R.id.word_arabic_chipview)
             arabicTv = view.findViewById(R.id.word_arabic_textView)
             rootword = view.findViewById(R.id.root_word)
@@ -508,19 +516,18 @@ class NewQuranDisplayAdapter(
                 }
 
 
+              val wordWidth = paint.measureText(spannedWord.toString())
+              val availableWidth = holder.flow_word_by_word.width
+
+              val arabicView =
+                if (showWbwTranslation && wordByWordDisplay) arabicChipview else arabicTv
+              arabicView.text = spannedWord
+              arabicView.textSize = arabicfontSize.toFloat()
+              arabicView.visibility = View.VISIBLE
 
 
 
-                // Log when we're fetching the word from cache
-                /*      if (spannedWordsCache.containsKey(word)) {
-                          Log.d(TAG, "FROM CACHE")
-                      }
-      */
-                val arabicView =
-                    if (showWbwTranslation && wordByWordDisplay) arabicChipview else arabicTv
-                arabicView.text = spannedWord
-                arabicView.textSize = arabicfontSize.toFloat()
-                arabicView.visibility = View.VISIBLE
+
             } else {
                 if (showWbwTranslation) {
                     arabicChipview.text =
@@ -572,11 +579,11 @@ class NewQuranDisplayAdapter(
             arabicChipview,
             context,
             word,
-            SurahName
+            surahName
           ) { bundle, word ->
             NewLoadItemList(bundle, word)
           }
-          QuranViewUtils.NewsetWordClickListener(view, context, word, SurahName) { bundle, word ->
+          QuranViewUtils.NewsetWordClickListener(view, context, word, surahName) { bundle, word ->
             NewLoadItemList(bundle, word)
           }
 
@@ -736,6 +743,7 @@ class NewQuranDisplayAdapter(
       mudhafIndexList: MutableList<List<Int>>?,
       surah: Int,
       ayah: Int,
+      custom_font: Typeface,
 
       ) {
 
@@ -758,7 +766,10 @@ class NewQuranDisplayAdapter(
             }
 
             //  CorpusUtilityorig.  setAbsoluteNegation(ayahWord,spannableverse)
-            holder.quran_textView.text = spannableverse
+           holder.quran_textView.text = spannableverse
+          holder.quran_textView.typeface=custom_font
+
+
             //   lateinit var quran_textView: MaterialTextView
         }
 
@@ -803,7 +814,7 @@ class NewQuranDisplayAdapter(
                 word.ayah.toString(),
                 word.en,
                 word.wordno.toString(),
-                SurahName
+                surahName
             )
             WordAnalysisBottomSheet.newInstance(data).show(
                 (context as AppCompatActivity).supportFragmentManager,
@@ -818,7 +829,7 @@ class NewQuranDisplayAdapter(
         //        surahInfo.append(surahName+".");
         surahInfo.append(verse!![0].surah).append(".")
         surahInfo.append(verse[0].ayah).append("-")
-        surahInfo.append(SurahName)
+        surahInfo.append(surahName)
         val sharedPreferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(
             context
         )
@@ -1000,198 +1011,78 @@ class NewQuranDisplayAdapter(
                         }
                     }
 
-                    private fun showFABMenu() {
-                        isFABOpen = true
-                        fabmenu.animate().rotationBy(180f)
-                        if (!isaudio) {
-                            tafsir.visibility = View.VISIBLE
-                            tafsir.animate().translationX(
-                                -QuranGrammarApplication.instance!!.resources.getDimension(R.dimen.standard_55)
-                            )
+// ... other imports ...
 
-                            tafsir.animate().rotationBy(360f)
-                            tafsir.animate().duration = 1500
+                  private fun showFABMenu() {
+                    isFABOpen = true
+                    fabmenu.animate().rotationBy(180f).setDuration(200).start()
 
+                    val buttonsToAnimate = getButtonsToAnimate()
+                    val translationXDistances = getTranslationXDistances()
+                    val startDelay = 0L
+                    val animationDuration = 300L
 
-
-                            jumptofb.visibility = View.VISIBLE
-                            jumptofb.animate().translationX(
-                                -QuranGrammarApplication.instance!!.resources.getDimension(R.dimen.standard_105)
-                            )
-
-                            jumptofb.animate().rotationBy(360f)
-                            bookmarfb.visibility = View.VISIBLE
-                            bookmarfb.animate().translationX(
-                                -QuranGrammarApplication.instance!!.resources.getDimension(R.dimen.standard_155)
-                            )
-
-                            bookmarfb.animate().rotationBy(360f)
-                            bookmarfb.animate().duration = 600
-                            summbaryfb.visibility = View.VISIBLE
-                            summbaryfb.animate().translationX(
-                                -QuranGrammarApplication.instance!!.resources.getDimension(R.dimen.standard_205)
-                            )
-
-                            summbaryfb.animate().rotationBy(360f)
-                            helpfb.visibility = View.VISIBLE
-                            helpfb.animate().translationX(
-                                -QuranGrammarApplication.instance!!.resources.getDimension(R.dimen.standard_255)
-                            )
-
-                            helpfb.animate().rotationBy(360f)
-                            sharescreenfb.visibility = View.VISIBLE
-                            sharescreenfb.animate().translationX(
-                                -QuranGrammarApplication.instance!!.resources.getDimension(R.dimen.standard_305)
-                            )
-
-                            sharescreenfb.animate().rotationBy(360f)
-                            sharescreenfb.animate().duration = 500
-                            /*  collectionfb.visibility = View.VISIBLE
-                              collectionfb.animate().translationX(
-                                  -QuranGrammarApplication.instance!!.resources.getDimension(R.dimen.standard_405)
-                              )
-
-                              collectionfb.animate().rotationBy(360f)
-                              collectionfb.animate().duration = 500*/
-                        } else {
-
-                            tafsir.visibility = View.VISIBLE
-                            tafsir.animate().translationX(
-                                -QuranGrammarApplication.instance!!.resources.getDimension(R.dimen.audio_105)
-                            )
-                            tafsir.animate().rotationBy(360f)
-
-                            summbaryfb.visibility = View.VISIBLE
-                            summbaryfb.animate().translationX(
-                                -QuranGrammarApplication.instance!!.resources.getDimension(R.dimen.audio_205)
-                            )
-                            summbaryfb.animate().rotationBy(360f)
-
-                            sharescreenfb.visibility = View.VISIBLE
-                            sharescreenfb.animate().translationX(
-                                -QuranGrammarApplication.instance!!.resources.getDimension(R.dimen.audio_305)
-                            )
-                            sharescreenfb.animate().rotationBy(360f)
-                            sharescreenfb.animate().duration = 500
-                        }
-
-                        summbaryfb.setOnClickListener { v: View? ->
-                            closeFABMenu()
-                            //  HideFabMenu();
-                            val chapter_no = ayahWord!![0].surah
-                            //   int verse = ayahWord.getWord().get(0).getVerseId();
-                            val verse = ayahWordArrayList[position - 1]!![0].ayah
-                            val dataBundle = Bundle()
-                            dataBundle.putInt(Constant.SURAH_ID, chapter_no)
-                            val item = SurahSummary()
-                            item.arguments = dataBundle
-                            SurahSummary.newInstance(chapter_no).show(
-                                (context as AppCompatActivity).supportFragmentManager,
-                              NamesDetail.TAG
-                            )
-                        }
-
-                        sharescreenfb.setOnClickListener(object : View.OnClickListener {
-                            override fun onClick(v: View) {
-                                closeFABMenu()
-                                //HideFabMenu();
-                                takeScreenShot((context as AppCompatActivity).window.decorView)
-                            }
-
-                            private fun takeScreenShot(view: View) {
-                                val date = Date()
-                                val format = DateFormat.format("MM-dd-yyyy_hh:mm:ss", date)
-                                try {
-                                    val mainDir = File(
-                                      context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-                                      "FilShare"
-                                    )
-                                    if (!mainDir.exists()) {
-                                        val mkdir = mainDir.mkdir()
-                                    }
-                                    val path = "$mainDir/Mushafapplication-$format.jpeg"
-                                    //    File zipfile = new File(getExternalFilesDir(null).getAbsolutePath() + getString(R.string.app_folder_path) + File.separator + DATABASEZIP);
-                                    view.isDrawingCacheEnabled = true
-                                    val color = Color.RED
-                                    val bitmap = getBitmapFromView(view, color)
-                                    val imageFile = File(path)
-                                    val fileOutputStream = FileOutputStream(imageFile)
-                                    bitmap.compress(Bitmap.CompressFormat.PNG, 90, fileOutputStream)
-                                    fileOutputStream.flush()
-                                    fileOutputStream.close()
-                                    shareScreenShot(imageFile)
-                                } catch (e: IOException) {
-                                    e.printStackTrace()
-                                }
-                            }
-
-                            fun getBitmapFromView(view: View, defaultColor: Int): Bitmap {
-                                val bitmap = Bitmap.createBitmap(
-                                  view.width, view.height, Bitmap.Config.ARGB_8888
-                                )
-                                val canvas = Canvas(bitmap)
-                                canvas.drawColor(defaultColor)
-                                view.draw(canvas)
-                                return bitmap
-                            }
-
-                            private fun shareScreenShot(imageFile: File) {
-                                val uri = FileProvider.getUriForFile(
-                                  context,
-                                  QuranGrammarApplication.context!!.packageName + ".provider",
-                                  imageFile
-                                )
-                                val intent = Intent()
-                                intent.action = Intent.ACTION_SEND
-                                intent.type = "image/*"
-                                intent.putExtra(
-                                  Intent.EXTRA_TEXT,
-                                    "Download Application from Instagram"
-                                )
-                                intent.putExtra(Intent.EXTRA_STREAM, uri)
-                                val resInfoList = context.packageManager.queryIntentActivities(
-                                    intent,
-                                  PackageManager.MATCH_DEFAULT_ONLY
-                                )
-                                for (resolveInfo in resInfoList) {
-                                    val packageName = resolveInfo.activityInfo.packageName
-                                    context.grantUriPermission(
-                                        packageName,
-                                        uri,
-                                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION
-                                    )
-                                }
-                                //  startActivity(Intent.createChooser(intent, "Share PDF using.."));
-                                try {
-                                    context.startActivity(
-                                      Intent.createChooser(
-                                        intent,
-                                        "Share With"
-                                      )
-                                    )
-                                } catch (e: ActivityNotFoundException) {
-                                    Toast.makeText(context, "No App Available", Toast.LENGTH_SHORT)
-                                        .show()
-                                }
-                            }
+                    buttonsToAnimate.forEachIndexed { index, button ->
+                      button.isVisible = true
+                      button.animate()
+                        .translationX(translationXDistances[index])
+                        .rotation(360f)
+                        .setDuration(animationDuration)
+                        .setStartDelay(startDelay + (index * 50)) // Stagger the animation
+                        .setListener(object : AnimatorListenerAdapter() {
+                          override fun onAnimationEnd(animation: Animator) {
+                            //You can add code here if needed.
+                          }
                         })
+                        .start()
                     }
+                  }
 
-                    private fun closeFABMenu() {
-                        isFABOpen = false
-                        fabmenu.animate().rotationBy(-180f)
-                        tafsir.animate().translationX(0f)
-                        tafsir.animate().rotationBy(0f)
-                        jumptofb.animate().translationX(0f)
-                        bookmarfb.animate().translationX(0f)
-                        bookmarfb.animate().rotationBy(360f)
-                        summbaryfb.animate().translationX(0f)
-                        helpfb.animate().translationX(0f)
-                        sharescreenfb.animate().translationX(0f)
-                        sharescreenfb.animate().rotationBy(360f)
-                        // collectionfb.animate().translationX(0f)
-                        //  collectionfb.animate().rotationBy(360f)
+                  private fun closeFABMenu() {
+                    isFABOpen = false
+                    fabmenu.animate().rotationBy(-180f).setDuration(200).start()
+
+                    val buttonsToAnimate = getButtonsToAnimate()
+
+                    buttonsToAnimate.forEachIndexed { index, button ->
+                      button.animate()
+                        .translationX(0f)
+                        .rotation(0f)
+                        .setDuration(300)
+                        .setStartDelay(0L + (index * 50)) // Stagger the animation
+                        .setListener(object : AnimatorListenerAdapter() {
+                          override fun onAnimationEnd(animation: Animator) {
+                            button.isVisible = false
+                          }
+                        })
+                        .start()
                     }
+                  }
+
+                  private fun getButtonsToAnimate(): List<View> {
+                    return if (isaudio) {
+                      listOf(tafsir, summbaryfb, sharescreenfb)
+                    } else {
+                      listOf(tafsir, jumptofb, bookmarfb, summbaryfb, helpfb, sharescreenfb)
+                    }
+                  }
+                  private fun getTranslationXDistances():List<Float>{
+                    val standard_55= -QuranGrammarApplication.instance!!.resources.getDimension(R.dimen.standard_55)
+                    val standard_105= -QuranGrammarApplication.instance!!.resources.getDimension(R.dimen.standard_105)
+                    val standard_155 = -QuranGrammarApplication.instance!!.resources.getDimension(R.dimen.standard_155)
+                    val standard_205 = -QuranGrammarApplication.instance!!.resources.getDimension(R.dimen.standard_205)
+                    val standard_255 = -QuranGrammarApplication.instance!!.resources.getDimension(R.dimen.standard_255)
+                    val standard_305= -QuranGrammarApplication.instance!!.resources.getDimension(R.dimen.standard_305)
+
+                    val audio_105= -QuranGrammarApplication.instance!!.resources.getDimension(R.dimen.audio_105)
+                    val audio_205 = -QuranGrammarApplication.instance!!.resources.getDimension(R.dimen.audio_205)
+                    val audio_305 = -QuranGrammarApplication.instance!!.resources.getDimension(R.dimen.audio_305)
+                    return if (isaudio) {
+                      listOf(audio_105, audio_205, audio_305)
+                    } else {
+                      listOf(standard_55, standard_105, standard_155, standard_205, standard_255, standard_305)
+                    }
+                  }
                 })
 
 

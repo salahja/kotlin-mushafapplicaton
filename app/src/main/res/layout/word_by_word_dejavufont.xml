@@ -9,13 +9,12 @@
         android:id="@+id/word_arabic_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minWidth="70dp"
-        android:maxWidth="275dp"
+
         android:elevation="10dp"
         android:fontFamily="cursive"
-        android:textAlignment="center"
-        android:visibility="visible"
 
+        android:visibility="visible"
+        android:breakStrategy="balanced"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -26,7 +25,7 @@
         style="@android:style/TextAppearance.DeviceDefault.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
+        android:textColor="@color/redhot"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/word_arabic_textView" />

@@ -4,7 +4,7 @@
     <selectionStates>
       <SelectionState runConfigName="Mushaf">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-03-25T23:01:15.533324049Z">
+        <DropdownSelection timestamp="2025-03-27T14:07:38.544762954Z">
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="LocalEmulator" identifier="path=/home/anons/.android/avd/Pixel_8a.avd" />
@@ -15,7 +15,7 @@
           <targets>
             <Target type="DEFAULT_BOOT">
               <handle>
-                <DeviceId pluginId="LocalEmulator" identifier="path=/home/anons/.android/avd/Pixel_9_Pro_XL.avd" />
+                <DeviceId pluginId="LocalEmulator" identifier="path=/home/anons/.android/avd/Pixel_8a.avd" />
               </handle>
             </Target>
           </targets>

@@ -170,7 +170,12 @@
             android:title="Select Fonts"
             app:fragment="com.example.mushafconsolidated.fragments.ActivitySettings$SelectQuranFronts"
             app:icon="@drawable/ic_baseline_font_download_24" />
-
+        <Preference
+            android:defaultValue="DejaVuSans.ttf"
+            android:title="Select Word by WordFonts"
+            app:fragment="com.example.mushafconsolidated.fragments.ActivitySettings$SelectQuranFronts"
+            app:icon="@drawable/ic_baseline_font_download_24"
+            app:key="word_font_selection" />
 
         <Preference
             android:defaultValue="brown"

@@ -57,7 +57,7 @@ import com.example.Constant
 import com.example.Constant.CHAPTER
 import com.example.mushafconsolidated.Activityimport.AyahCoordinate
 import com.example.mushafconsolidated.Activityimport.BaseActivity
-import com.example.mushafconsolidated.BottomOptionDialog
+
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
 import com.example.mushafconsolidated.Entities.Page
 import com.example.mushafconsolidated.Entities.Qari
@@ -71,6 +71,7 @@ import com.example.mushafconsolidated.databinding.FbarnormalfooterBinding
 import com.example.mushafconsolidated.databinding.RxfetchProgressBinding
 import com.example.mushafconsolidated.databinding.VfourExpandableNewactivityShowAyahsBinding
 import com.example.mushafconsolidated.Adapters.QuranDisplayAdapter
+import com.example.mushafconsolidated.BottomOptionDialog
 import com.example.mushafconsolidated.Entities.CorpusEntity
 import com.example.mushafconsolidated.data.SurahHeader
 

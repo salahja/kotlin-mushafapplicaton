@@ -13,7 +13,6 @@ import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
@@ -21,7 +20,6 @@ import com.example.Constant.QURAN_VERB_ROOT
 import com.example.Constant.QURAN_VERB_WAZAN
 import com.example.Constant.VERBMOOD
 import com.example.Constant.VERBTYPE
-import com.example.mushafconsolidated.BottomOptionDialog
 import com.example.mushafconsolidated.Entities.RootVerbDetails
 import com.example.mushafconsolidated.Entities.VerbWazan
 import com.example.mushafconsolidated.R

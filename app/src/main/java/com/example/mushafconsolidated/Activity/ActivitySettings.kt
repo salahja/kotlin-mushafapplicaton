@@ -10,15 +10,17 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SeekBarPreference
 import com.example.Constant
 import com.example.Constant.SURAHFRAGTAG
-import com.example.mushafconsolidated.Activity.QuranGrammarAct
 import com.example.mushafconsolidated.Activityimport.BaseActivity
 import com.example.mushafconsolidated.BottomOptionDialog
+
 import com.example.mushafconsolidated.R
+
 import com.example.mushafconsolidated.fragments.FontQuranListDialogFragment
 import com.example.mushafconsolidated.fragments.ThemeListPrefrence
 import com.example.mushafconsolidated.fragments.TranslationListPrefrence
 import com.example.mushafconsolidated.fragments.WbwTranslationListPrefrence
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
+import com.example.mushafconsolidated.fragments.WordFontSelection
 
 
 class ActivitySettings : BaseActivity(),
@@ -131,6 +133,19 @@ class ActivitySettings : BaseActivity(),
             FontQuranListDialogFragment.newInstance()
                 .show(this@ActivitySettings.supportFragmentManager, WordAnalysisBottomSheet.TAG)
             title = pref.title
+        } else if (pref.key == "word_font_selection") {
+            // Instantiate the new Fragment
+            val item = WordFontSelection()
+            //    item.setdata(rootWordMeanings,wbwRootwords,grammarRootsCombined);
+            val fragmentManager = this@ActivitySettings.supportFragmentManager
+            @SuppressLint("CommitTransaction") val transactions = fragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.abc_slide_in_top, android.R.anim.fade_out)
+            transactions.show(item)
+            WordFontSelection.newInstance()
+                .show(this@ActivitySettings.supportFragmentManager, WordAnalysisBottomSheet.TAG)
+            title = pref.title
+
+
         } else if (pref.key == "Exit") {
             val readingintent = intent
             finish()
