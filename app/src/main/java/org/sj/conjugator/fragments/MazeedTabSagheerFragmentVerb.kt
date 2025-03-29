@@ -53,7 +53,7 @@ class MazeedTabSagheerFragmentVerb() : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         setHasOptionsMenu(true)
-        val view = inflater.inflate(R.layout.sarfkabeerheader, container, false)
+        val view = inflater.inflate(R.layout.sarfsagheerheader, container, false)
 
         // Use arguments from Bundle, safely
         arguments?.let { args ->

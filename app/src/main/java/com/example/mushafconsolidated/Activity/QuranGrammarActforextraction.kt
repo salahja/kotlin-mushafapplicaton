@@ -37,7 +37,6 @@ import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
-import androidx.compose.ui.graphics.vector.group
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
@@ -56,6 +55,7 @@ import com.example.Constant.SURAHFRAGTAG
 import com.example.mushafconsolidated.Adapters.NewQuranDisplayAdapter
 import com.example.mushafconsolidated.Adapters.QuranDisplayAdapter
 import com.example.mushafconsolidated.BottomOptionDialog
+
 
 import com.example.mushafconsolidated.Entities.BookMarks
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
@@ -1126,8 +1126,8 @@ private var preferences=""
     val verseCounts = resources.getIntArray(R.array.versescount)
 
     val dialogView = layoutInflater.inflate(R.layout.activity_wheel_t, null)
-    val surahWheel: WheelView = dialogView.findViewById(R.id.wv_year)
-    val verseWheel: WheelView = dialogView.findViewById(R.id.wv_month)
+    val surahWheel: WheelView = dialogView.findViewById(R.id.surahnameTv)
+    val verseWheel: WheelView = dialogView.findViewById(R.id.ayahnumberTv)
     val textView: TextView = dialogView.findViewById(R.id.textView2)
 
     surahWheel.setEntries(*surahOptions)
