@@ -28,7 +28,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.annotation.OptIn
+
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
@@ -111,6 +111,7 @@ import wheel.OnWheelChangedListener
 import wheel.WheelView
 import java.io.File
 import javax.inject.Inject
+import kotlin.OptIn
 import kotlin.apply
 import kotlin.collections.List
 import kotlin.collections.List as CollectionsList
@@ -214,6 +215,7 @@ private var preferences=""
   }
 
 
+  @androidx.annotation.OptIn(UnstableApi::class)
   @OptIn(UnstableApi::class)
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
@@ -370,6 +372,7 @@ private var preferences=""
   }
 */
 
+  @androidx.annotation.OptIn(UnstableApi::class)
   @OptIn(UnstableApi::class)
   private fun initnavigation() {
     btnBottomSheet = binding.fab
@@ -847,17 +850,51 @@ private var preferences=""
   }
 
 
-  private fun loadJsonFromFile(context: Context, fileName: String): String? {
-    val file = File(context.filesDir, fileName)
-    return try {
-      file.readText()
-    } catch (e: Exception) {
-      // e.printStackTrace()
-      null // Return null if an error occurs
+  @androidx.annotation.OptIn(UnstableApi::class)
+  @OptIn(UnstableApi::class)
+  private fun bysurah(
+    dialog: AlertDialog,
+    coroutineScope: CoroutineScope,
+    listener: OnItemClickListenerOnLong
+  ) {
+    // Show dialog immediately on UI thread
+    dialog.show()
+
+
+    coroutineScope.launch {
+      try {
+        // Load data in background
+        val surahData = quranRepository.CorpusAndQuranDataSurah(chapterno)
+
+        require(surahData.allofQuran.isNotEmpty()) { "Quran data empty" }
+        require(surahData.copusExpandSurah.isNotEmpty()) { "Corpus data empty" }
+
+        // Process data in parallel
+        val (_, cacheJob) = withContext(Dispatchers.Default) {
+          val cacheDeferred = async { cacheSurahData(surahData.copusExpandSurah) }
+          Pair(surahData, cacheDeferred)
+        }
+
+        // Update UI
+        dialog.dismiss()
+        setupRecyclerView(
+          surahData.allofQuran,
+          surahData.copusExpandSurah,
+          listener
+        )
+        scrollToVerseIfNeeded()
+
+
+        cacheJob.await() // Ensure caching completes
+      } catch (e: Exception) {
+        dialog.dismiss()
+        handleDataLoadError(e)
+
+      }
     }
   }
   @OptIn(UnstableApi::class)
-  private fun bysurah(
+  private fun bysurahtonew(
     dialog: AlertDialog,
     coroutineScope: CoroutineScope,
     listener: OnItemClickListenerOnLong

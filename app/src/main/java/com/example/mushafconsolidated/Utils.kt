@@ -96,7 +96,7 @@ class Utils {
     }
 
 
-    fun getCorpusVersesBySurah(cid:Int ): List<CorpusEntity> {
+    suspend fun getCorpusVersesBySurah(cid:Int ): List<CorpusEntity> {
         return database.getCorpusExpandDao().getCorpusVersesBySurah(cid)
     }
 

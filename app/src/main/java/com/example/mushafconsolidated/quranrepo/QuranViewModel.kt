@@ -165,15 +165,6 @@ class QuranViewModel @Inject constructor(
     }
 
 
-    fun getQuranCorpusWbwbysurah(cid: Int): List<CorpusEntity> {
-
-
-
-          return quranRepository.getQuranCorpusWbwbysurah(cid)
-
-
-
-    }
 
 
     fun getAbsoluteNegationFilerSurahAyah(cid: Int, aid: Int, ): List<AbsoluteNegationEnt> {
