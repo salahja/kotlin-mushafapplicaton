@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "e75bb31a8661aaa6ab5041a8238ef4bb",
+    "identityHash": "360355eb93e16e10fad83a0a412db50f",
     "entities": [
       {
         "tableName": "mazeed",
@@ -224,7 +224,7 @@
       },
       {
         "tableName": "quranverbs",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`verb` TEXT, `root` TEXT, `thulathibab` TEXT, `form` TEXT, `frequency` TEXT, `meaning` TEXT, `id` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`verb` TEXT, `root` TEXT, `thulathibab` TEXT, `form` TEXT, `frequency` TEXT, `meaning` TEXT, `formroman` TEXT, `id` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "verb",
@@ -263,6 +263,12 @@
             "notNull": false
           },
           {
+            "fieldPath": "formroman",
+            "columnName": "formroman",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
@@ -282,7 +288,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e75bb31a8661aaa6ab5041a8238ef4bb')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '360355eb93e16e10fad83a0a412db50f')"
     ]
   }
 }

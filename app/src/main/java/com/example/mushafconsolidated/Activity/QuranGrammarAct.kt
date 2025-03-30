@@ -94,6 +94,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.quiz.ArabicVerbQuizActNew
 import dagger.hilt.android.AndroidEntryPoint
 import database.NamesGridImageAct
+import database.VerbDatabaseUtils
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -104,6 +105,7 @@ import kotlinx.coroutines.withContext
 import mufradat.MufradatPagerActivity
 import org.sj.conjugator.activity.BaseActivity
 import org.sj.conjugator.activity.ConjugatorAct
+import org.sj.data.VerbConjugator
 import sj.hisnul.fragments.NamesDetail
 import wheel.OnWheelChangedListener
 import wheel.WheelView
@@ -249,14 +251,11 @@ private var preferences=""
     this.shared = PreferenceManager.getDefaultSharedPreferences(this@QuranGrammarAct)
     preferences = shared.getString("themepref", "dark").toString()
     currentTheme = preferences == "dark" || preferences == "blue" || preferences == "green"
+   // EnglishVerbConjTest()
 
-    /*
-            if (isFirstTime) {
-                val intents = Intent(this@QuranGrammarAct, ActivitySettings::class.java)
-                startActivity(intents)
-            }
-            android.preference.PreferenceManager.setDefaultValues(this, R.xml.preferences, false)
-    */
+
+   // FirstRun()
+
 
     getpreferences()
     //bundle = intent
@@ -273,6 +272,39 @@ private var preferences=""
     }
   }
 
+  private fun EnglishVerbConjTest() {
+    val utils = VerbDatabaseUtils(this)
+    val str = "عون"
+    val mainViewModel: QuranViewModel by viewModels()
+
+
+    // Example of getting data (this is simplified, your real code will be different)
+    // Get a QuranicVerb from the quranicverbs table based on the root and form
+    val quranicVerb = utils.getQuranicVerbMeaning(str)
+    // Get a List of VerbCorpus from the verbcorpus table for all the occurrences of a verb with root Ewn
+    val verbCorpusList =
+      mainViewModel.getVerbRootBySurahAyahWord(1, 5, 4).value// from verbcorpus table
+
+    // Call the conjugateEnglish function to get the conjugations
+    val conjugationMap: Map<String, List<String>> =
+      VerbConjugator.conjugateEnglish(quranicVerb, verbCorpusList)
+
+    // Iterate through the map and print the conjugations
+    conjugationMap.forEach { (key, value) ->
+      println("Verb conjugation type: $key") // Print the tense and voice
+      for ((index, conjugatedVerb) in value.withIndex()) {
+        println("  ${index + 1}. $conjugatedVerb") // Print each conjugated verb
+      }
+    }
+  }
+
+  private fun FirstRun() {
+    if (isFirstTime) {
+      val intents = Intent(this@QuranGrammarAct, ActivitySettings::class.java)
+      startActivity(intents)
+    }
+    android.preference.PreferenceManager.setDefaultValues(this, R.xml.preferences, false)
+  }
 
 
   private fun loadDefaultSurahData() {

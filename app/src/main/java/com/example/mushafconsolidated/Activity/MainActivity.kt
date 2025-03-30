@@ -57,7 +57,7 @@ class MainActivity : BaseActivity() {
     private var newquran: File? = null
     private var recview: RecyclerView? = null
     private val viewModel: MainViewModel by viewModels()
-
+    private var dialog: AlertDialog? = null
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -167,7 +167,14 @@ class MainActivity : BaseActivity() {
             }
         }
     }
-
+    private fun showProgressDialog(message: String): AlertDialog {
+        dialog = AlertDialog.Builder(this)
+            .setMessage(message)
+            .setCancelable(false)
+            .setView(R.layout.layout_loading_dialog)
+            .show()
+        return dialog!!
+    }
     @Throws(IOException::class)
     private suspend fun validateFilesAndDownload() {
         if (newquran?.exists() != true) {
@@ -234,7 +241,12 @@ class MainActivity : BaseActivity() {
             finish()
         })
     }
-
+    override fun onDestroy() {
+        super.onDestroy()
+        // Dismiss the dialog if it's showing
+        dialog?.dismiss()
+        dialog = null
+    }
     private fun isQuranGrammarActRunning(): Boolean {
         val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         return activityManager.appTasks?.any { task ->
@@ -242,24 +254,17 @@ class MainActivity : BaseActivity() {
         } ?: false
     }
 
-    private fun showProgressDialog(message: String): AlertDialog {
-        return AlertDialog.Builder(this)
-            .setMessage(message)
-            .setCancelable(false)
-            .setView(R.layout.layout_loading_dialog)
-            .show().also {
-                viewModel.currentDialog = it
-            }
-    }
-
     private fun showErrorDialog(title: String, exception: Exception) {
-        AlertDialog.Builder(this)
+        dialog?.dismiss()
+        dialog =  AlertDialog.Builder(this)
             .setTitle(title)
             .setMessage(exception.localizedMessage ?: "Unknown error")
             .setPositiveButton("Retry") { _, _ -> checkStorageAndDatabase() }
             .setNegativeButton("Exit") { _, _ -> finish() }
             .show()
     }
+
+
 
     override fun onRequestPermissionsResult(
         requestCode: Int,

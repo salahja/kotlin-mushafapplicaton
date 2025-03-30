@@ -9,6 +9,7 @@ import database.Dao.BuckwaterDao
 import database.Dao.kovDao
 import database.Dao.mazeedDao
 import database.Dao.mujarradDao
+import database.Dao.quranVerbDao
 import database.entity.BuckwaterEntitiy
 import database.entity.MazeedEntity
 import database.entity.MujarradVerbs
@@ -27,7 +28,7 @@ abstract class VerbDatabase : RoomDatabase() {
     abstract fun kovDao(): kovDao
     abstract fun mujarradDao(): mujarradDao
     abstract fun mazeedDao(): mazeedDao
-
+  abstract fun quranVerbDao(): quranVerbDao
 
 
 

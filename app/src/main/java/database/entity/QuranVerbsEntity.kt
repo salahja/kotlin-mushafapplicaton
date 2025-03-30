@@ -11,5 +11,6 @@ class QuranVerbsEntity(
     var form: String?,
     var frequency: String?,
     var meaning: String?,
+    var formroman: String?,
     @field:PrimaryKey var id: Int
 )
