@@ -43,6 +43,10 @@ class VerbDatabaseUtils(context: Context?) {
     return database.quranVerbDao().getqurnicVerb(root)
   }
 
+  fun rootMeaningFilterByFrom(root:String,form:String ): List<QuranVerbsEntity> {
+    return database.quranVerbDao().getqurnicVerbMeaning(root,form)
+  }
+
     companion object {
         private lateinit var database: VerbDatabase
     }

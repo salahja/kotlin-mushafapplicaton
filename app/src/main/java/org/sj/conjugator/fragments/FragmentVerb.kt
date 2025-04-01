@@ -10,23 +10,33 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.Constant
+import com.example.Constant.AYAHNUMBER
 import com.example.Constant.QURAN_VERB_ROOT
 import com.example.Constant.QURAN_VERB_WAZAN
+import com.example.Constant.SURAH_ID
 import com.example.Constant.VERBMOOD
 import com.example.Constant.VERBTYPE
+import com.example.Constant.WORDNUMBER
 import com.example.mushafconsolidated.R
+import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import dagger.hilt.android.AndroidEntryPoint
+import database.VerbDatabaseUtils
 import org.sj.conjugator.adapter.MazeedVerbSarfKabeerAdapter
 import org.sj.conjugator.adapter.MujarradVerbSarfKabeerAdapter
 import org.sj.conjugator.utilities.GatherAll
 import org.sj.data.MazeedResult
 import org.sj.data.MujarradResult
+import org.sj.data.VerbConjugator
+import org.sj.verbConjugation.MadhiMudharay
 import java.util.Locale
 
-
+@AndroidEntryPoint
 class FragmentVerb : Fragment() {
   private val handler = Handler(Looper.getMainLooper())
   private val speechDelay = 1000L // 1 second delay between each speech
@@ -42,6 +52,9 @@ class FragmentVerb : Fragment() {
   private lateinit var unaugmentedFormula: String
   private var verbroot: String? = null
   private var verbmood: String? = null
+  private var surahid: String? = null
+  private var ayahnumber: String? = null
+  private var wordNo:String?=null
   private lateinit var pastActiveButton: FloatingActionButton
   private lateinit var pastPassiveButton: FloatingActionButton
   private lateinit var presentActiveButton: FloatingActionButton
@@ -61,6 +74,7 @@ class FragmentVerb : Fragment() {
   // These TextViews are taken to make visible and
   // invisible along with FABs except parent FAB's action
 
+ // private var mainViewModel: QuranViewModel by viewModels()
 
   // to check whether sub FABs are visible or not
   private var isAllFabsVisible: Boolean? = null
@@ -71,9 +85,13 @@ class FragmentVerb : Fragment() {
     dataBundle.getString(QURAN_VERB_WAZAN) //verb formula depnding upon the verbtype mujjarad or mazeed
     dataBundle.getString(VERBMOOD)
     dataBundle.getString(VERBTYPE)
+     dataBundle.getString(Constant.TENSE)
+     dataBundle.getString(Constant.VOICE)
     f.arguments = dataBundle
     return f
   }
+
+
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -108,6 +126,7 @@ class FragmentVerb : Fragment() {
     presentPassiveButton.visibility = View.GONE
     presentActiveActionText.visibility = View.GONE
     presentPassiveActionText.visibility = View.GONE
+    val mainViewModel: QuranViewModel by viewModels()
     // Set the Extended floating action button to
     // shrinked state initially
     callButton.shrink()
@@ -218,8 +237,11 @@ class FragmentVerb : Fragment() {
     }
     verbroot = dataBundle.getString(QURAN_VERB_ROOT)
     verbmood = dataBundle.getString(VERBMOOD)
+    surahid = dataBundle.getString(SURAH_ID)
+    ayahnumber = dataBundle.getString(AYAHNUMBER)
+    wordNo = dataBundle.getString(WORDNUMBER)
     recyclerView = view.findViewById(R.id.sarfrecview)
-    skabeer = setUparrays(view)
+    skabeer = setUparrays(view,mainViewModel)
     return view
   }
 
@@ -399,7 +421,7 @@ class FragmentVerb : Fragment() {
     super.onDestroy()
   }
 
-  private fun setUparrays(view: View): ArrayList<ArrayList<*>> {
+  private fun setUparrays(view: View, mainViewModel: QuranViewModel): ArrayList<ArrayList<*>> {
     if (isUnAugmented) {
       ninitThulathiAdapter()
     } else {
@@ -410,8 +432,19 @@ class FragmentVerb : Fragment() {
     return skabeer
   }
 
-  private fun initMazeedAdapter() {
+  private fun initMazeedAdapter( ) {
+    val mainViewModel: QuranViewModel by viewModels()
     mazeedlisting = GatherAll.instance.getMazeedListing(verbmood, verbroot, augmentedFormula)
+    val utils= VerbDatabaseUtils(requireContext())
+    val quranicVerb = utils.rootMeaningFilterByFrom(verbroot.toString(),
+      "I"
+    )
+    val verbCorpusList =
+      mainViewModel.getVerbRootBySurahAyahWord(surahid!!.toInt(),ayahnumber!!.toInt(), wordNo!!.toInt()).value// from verbcorpus table
+
+    val conjugationMap: MadhiMudharay =
+      VerbConjugator.conjugateEnglish(quranicVerb,verbCorpusList,
+       )
 
     val sk: MazeedVerbSarfKabeerAdapter =
       MazeedVerbSarfKabeerAdapter(mazeedlisting, requireContext())
@@ -422,6 +455,19 @@ class FragmentVerb : Fragment() {
 
   private fun ninitThulathiAdapter() {
     mujarradListing = GatherAll.instance.getMujarradListing(verbmood, verbroot, unaugmentedFormula)
+    val mainViewModel: QuranViewModel by viewModels()
+
+    val utils= VerbDatabaseUtils(requireContext())
+    val quranicVerb = utils.rootMeaningFilterByFrom(verbroot.toString(),
+      "0"
+    )
+    val verbCorpusList =
+      mainViewModel.getVerbRootBySurahAyahWord(surahid!!.toInt(),ayahnumber!!.toInt(), wordNo!!.toInt()).value// from verbcorpus table
+
+    val conjugationMap: MadhiMudharay =
+      VerbConjugator.conjugateEnglish(quranicVerb,verbCorpusList,
+      )
+
     //  mujarradListing.removeAt(0)
     val ska = MujarradVerbSarfKabeerAdapter(mujarradListing, requireContext())
     recyclerView!!.adapter = ska

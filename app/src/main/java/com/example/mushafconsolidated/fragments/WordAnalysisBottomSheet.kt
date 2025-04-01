@@ -42,6 +42,7 @@ import com.example.Constant.SHADDA
 import com.example.Constant.SURAH_ID
 import com.example.Constant.VERBMOOD
 import com.example.Constant.VERBTYPE
+import com.example.Constant.WORDNUMBER
 import com.example.mushafconsolidated.Activity.LughatWordDetailsAct
 
 import com.example.mushafconsolidated.Activity.WordOccuranceAct
@@ -96,6 +97,8 @@ class WordAnalysisBottomSheet : DialogFragment() {
     private var rwAdapter: NewRootWordDisplayAdapter? = null
     var chapterId = 0
     var ayahNumber = 0
+    var wordno=""
+    var voice=""
     private var _binding: RootDialogFragmentBinding? = null
     private val binding get() = _binding!!
     private var isMazeedSarfSagheer = false
@@ -190,6 +193,8 @@ class WordAnalysisBottomSheet : DialogFragment() {
             val corpusNounWord = mainViewModel.getNouncorpus(chapterId, ayahNumber, wordNo).value
             val verbCorpusRootWord =
                 mainViewModel.getVerbRootBySurahAyahWord(chapterId, ayahNumber, wordNo).value
+            wordno= wordNo.toString()
+
 /*
 `
             if (corpusNounWord!!.isEmpty() && verbCorpusRootWord!!.isEmpty()) {
@@ -1244,6 +1249,12 @@ class WordAnalysisBottomSheet : DialogFragment() {
                 putString(VERBMOOD, vbdetail["emph"]?.let { "Emphasized" } ?: "Indicative")
                 putString(QURAN_VERB_WAZAN, vb.wazan)
                 putString(QURAN_VERB_ROOT, vb.root)
+                putString(SURAH_ID, chapterId.toString())
+
+                putString(AYAHNUMBER, ayahNumber.toString())
+                putString(WORDNUMBER, wordno)
+
+
             }
 
             val intent =

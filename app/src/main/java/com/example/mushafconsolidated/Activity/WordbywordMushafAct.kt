@@ -1231,7 +1231,7 @@ class WordbywordMushafAct : BaseActivity(), OnItemClickListenerOnLong, View.OnCl
             val corpusAndQurandata = quranRepository.CorpusAndQuranDataSurah(surah)
 
                 val qurandata = quranRepository.getQuranData(surah)
-            allofQuran=   corpusAndQurandata.allofQuran
+            allofQuran=   corpusAndQurandata.quranVerses
             corpusSurahWord=corpusAndQurandata.copusExpandSurah
 
             corpusGroupedByAyah = corpusSurahWord!!.groupBy { it.ayah } as LinkedHashMap<Int, ArrayList<CorpusEntity>>

@@ -288,14 +288,14 @@ import javax.inject.Inject
    suspend fun CorpusAndQuranDataSurah(chapterNo: Int): CorpusAndQuranData=
      withContext(Dispatchers.IO){
        CorpusAndQuranData(
-         allofQuran = qurandao.getQuranVersesBySurahl(chapterNo), // Fetch Quran verses
+         quranVerses = qurandao.getQuranVersesBySurahl(chapterNo), // Fetch Quran verses
          copusExpandSurah = corpusDao.getCorpusVersesBySurah(chapterNo),
        )
      }
      fun CorpusAndQuranDataSurahAyah(chapterNo: Int,verseid:Int): CorpusAndQuranData {
          return CorpusAndQuranData(
 
-             allofQuran = qurandao.getQuranVersesBySurahAyah(chapterNo,verseid), // Fetch Quran verses
+             quranVerses = qurandao.getQuranVersesBySurahAyah(chapterNo,verseid), // Fetch Quran verses
              copusExpandSurah = corpusDao.getVersesBySurahAndAya(chapterNo,verseid),
          )
      }
@@ -307,9 +307,9 @@ import javax.inject.Inject
 
 data class CorpusAndQuranData(
 
-    val allofQuran: List<QuranEntity>, // Assuming you need this as well
+  var quranVerses: List<QuranEntity>, // Assuming you need this as well
 
-    val copusExpandSurah:List<CorpusEntity>// Assuming you need this as well
+  val copusExpandSurah:List<CorpusEntity>// Assuming you need this as well
 
 )
 

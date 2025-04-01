@@ -83,7 +83,7 @@ import database.Dao.quranVerbDao
 import database.entity.AllahNames
 import mufradat.MufradatDao
 import mufradat.MufradatEntity
-import org.sj.data.QuranicVerb
+
 
 import sj.hisnul.entity.AllahNamesDetails
 import java.io.File

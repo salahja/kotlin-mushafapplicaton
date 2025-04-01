@@ -26,7 +26,7 @@ import org.sj.conjugator.activity.ConjugatorAct
 import org.sj.conjugator.fragments.SettingsFragmentVerb
 import org.sj.conjugator.utilities.SharedPref
 import org.sj.data.VerbConjugator
-import org.sj.data.VerbCorpus
+
 import kotlin.getValue
 
 class MainActivity : BaseActivity() {

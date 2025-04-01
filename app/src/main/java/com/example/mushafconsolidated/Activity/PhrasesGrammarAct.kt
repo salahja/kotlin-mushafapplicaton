@@ -920,7 +920,7 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
 
             val corpusAndQurandata = quranRepository.CorpusAndQuranDataSurah(chapterno)
 
-            allofQuran = corpusAndQurandata.allofQuran
+            allofQuran = corpusAndQurandata.quranVerses
             corpusSurahWord = corpusAndQurandata.copusExpandSurah
 
             corpusGroupedByAyah =

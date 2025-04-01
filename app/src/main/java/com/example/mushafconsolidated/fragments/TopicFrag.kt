@@ -147,7 +147,7 @@ class TopicFrag : DialogFragment(), OnItemClickListenerOnLong {
             val corpusAndQurandata = quranRepository.CorpusAndQuranDataSurahAyah(surah,ayah)
 
             corpusSurahWord=corpusAndQurandata.copusExpandSurah
-            allofQuran=corpusAndQurandata.allofQuran
+            allofQuran=corpusAndQurandata.quranVerses
             corpusGroupedByAyah = corpusSurahWord!!.groupBy { it.ayah } as LinkedHashMap<Int, ArrayList<CorpusEntity>>
 
             /*         newnewadapterlist =
@@ -257,7 +257,7 @@ class TopicFrag : DialogFragment(), OnItemClickListenerOnLong {
        // corpusSurahWord = mainViewModel.getCorpusEntityFilterSurahAya(surahid, ayah).value
 
         val corpusAndQurandata = quranRepository.CorpusAndQuranDataSurahAyah(surahid,ayah)
-        allofQuran = corpusAndQurandata.allofQuran
+        allofQuran = corpusAndQurandata.quranVerses
         corpusSurahWord=corpusAndQurandata.copusExpandSurah
 
         corpusGroupedByAyah = corpusSurahWord!!.groupBy { it.ayah } as LinkedHashMap<Int, ArrayList<CorpusEntity>>

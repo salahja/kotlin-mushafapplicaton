@@ -30,8 +30,13 @@ import org.sj.conjugator.fragments.FragmentVerb
 import org.sj.conjugator.fragments.MazeedTabSagheerFragmentVerb
 import org.sj.conjugator.utilities.ArabicLiterals
 import org.sj.conjugator.utilities.SharedPref
+import com.example.Constant
+import com.example.Constant.AYAHNUMBER
+import com.example.Constant.SURAH_ID
+import com.example.Constant.WORDNUMBER
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class ConjugatorTabsActivity :  BaseActivity() {
     // Arrey of strings FOR TABS TITLES
     private val viewModel by viewModels<ConjugatorViewModel>()
@@ -55,6 +60,7 @@ class ConjugatorTabsActivity :  BaseActivity() {
     private val mazeedartitles = arrayOf("صرف صغير", "تصريف الأفعال ", "لاسم الفاعل/الاسم المفعول")
     var dataBundle: Bundle? = null
     private var ismujarrad = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newtabs)
@@ -83,16 +89,27 @@ class ConjugatorTabsActivity :  BaseActivity() {
         var verbform: String? = null
         var verbmood: String? = null
         var verbtype: String? = null
+        var surahid: String? = null
+        var ayahnumber: String? = null
+        var wordno: String? = null
+
         if (bundle != null) {
             verbform = bundle.getString(QURAN_VERB_WAZAN)
             verbmood = bundle.getString(VERBMOOD)
             verbtype = bundle.getString(VERBTYPE)
+            surahid = bundle.getString(SURAH_ID)
+            ayahnumber = bundle.getString(AYAHNUMBER)
+            wordno = bundle.getString(WORDNUMBER)
+
         }
         ismujarrad = verbtype == "mujarrad"
         dataBundle!!.putSerializable(QURAN_VERB_ROOT, verbroot)
         dataBundle!!.putString(QURAN_VERB_WAZAN, verbform)
         dataBundle!!.putString(VERBMOOD, verbmood)
         dataBundle!!.putString(VERBTYPE, verbtype)
+        dataBundle!!.putString(SURAH_ID, surahid)
+        dataBundle!!.putString(AYAHNUMBER, ayahnumber)
+        dataBundle!!.putString(WORDNUMBER, wordno)
         val sharedPref = SharedPref(
             QuranGrammarApplication.context!!
         )

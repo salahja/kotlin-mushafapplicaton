@@ -6,7 +6,6 @@ import VerbrootListFragment
 import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.app.Dialog
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
@@ -109,7 +108,6 @@ import org.sj.data.VerbConjugator
 import sj.hisnul.fragments.NamesDetail
 import wheel.OnWheelChangedListener
 import wheel.WheelView
-import java.io.File
 import javax.inject.Inject
 import kotlin.OptIn
 import kotlin.apply
@@ -253,7 +251,7 @@ private var preferences=""
     this.shared = PreferenceManager.getDefaultSharedPreferences(this@QuranGrammarAct)
     preferences = shared.getString("themepref", "dark").toString()
     currentTheme = preferences == "dark" || preferences == "blue" || preferences == "green"
-   // EnglishVerbConjTest()
+  //EnglishVerbConjTest()
 
 
    // FirstRun()
@@ -274,7 +272,7 @@ private var preferences=""
     }
   }
 
-  private fun EnglishVerbConjTest() {
+/*  private fun EnglishVerbConjTest() {
     val utils = VerbDatabaseUtils(this)
     val str = "عون"
     val mainViewModel: QuranViewModel by viewModels()
@@ -289,7 +287,14 @@ private var preferences=""
 
     // Call the conjugateEnglish function to get the conjugations
     val conjugationMap: Map<String, List<String>> =
-      VerbConjugator.conjugateEnglish(quranicVerb, verbCorpusList)
+      VerbConjugator.conjugateEnglish(
+        quranicVerb,
+        verbCorpusList,
+        verbmood,
+        verbroot,
+        augmentedFormula,
+        quranicVerb
+      )
 
     // Iterate through the map and print the conjugations
     conjugationMap.forEach { (key, value) ->
@@ -298,7 +303,7 @@ private var preferences=""
         println("  ${index + 1}. $conjugatedVerb") // Print each conjugated verb
       }
     }
-  }
+  }*/
 
   private fun FirstRun() {
     if (isFirstTime) {
@@ -866,9 +871,9 @@ private var preferences=""
         // Load data in background
         val surahData = quranRepository.CorpusAndQuranDataSurah(chapterno)
 
-        require(surahData.allofQuran.isNotEmpty()) { "Quran data empty" }
+        require(surahData.quranVerses.isNotEmpty()) { "Quran data empty" }
         require(surahData.copusExpandSurah.isNotEmpty()) { "Corpus data empty" }
-
+        allofQuran=surahData.quranVerses
         // Process data in parallel
         val (_, cacheJob) = withContext(Dispatchers.Default) {
           val cacheDeferred = async { cacheSurahData(surahData.copusExpandSurah) }
@@ -878,7 +883,7 @@ private var preferences=""
         // Update UI
         dialog.dismiss()
         setupRecyclerView(
-          surahData.allofQuran,
+          surahData.quranVerses,
           surahData.copusExpandSurah,
           listener
         )
@@ -907,9 +912,9 @@ private var preferences=""
         // Load data in background
         val surahData = withContext(Dispatchers.IO) {
           quranRepository.CorpusAndQuranDataSurah(chapterno).also {
-            require(it.allofQuran.isNotEmpty()) { "Quran data empty" }
+            require(it.quranVerses.isNotEmpty()) { "Quran data empty" }
             require(it.copusExpandSurah.isNotEmpty()) { "Corpus data empty" }
-            allofQuran=it.allofQuran
+            allofQuran=it.quranVerses
           }
 
         }
@@ -924,7 +929,7 @@ private var preferences=""
         withContext(Dispatchers.Main) {
           dialog.dismiss()
           setupRecyclerView(
-            surahData.allofQuran,
+            surahData.quranVerses,
             surahData.copusExpandSurah,
             listener
           )
@@ -953,7 +958,7 @@ private var preferences=""
     }
 
     private fun validateData(data: CorpusAndQuranData) {
-      require(data.allofQuran.isNotEmpty()) { "Quran data empty" }
+      require(data.quranVerses.isNotEmpty()) { "Quran data empty" }
       require(data.copusExpandSurah.isNotEmpty()) { "Corpus data empty" }
     }
   }

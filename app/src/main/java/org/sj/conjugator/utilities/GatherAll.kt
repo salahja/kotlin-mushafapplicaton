@@ -3,12 +3,16 @@ package org.sj.conjugator.utilities
 
 
 import VerbDetails
+import com.example.mushafconsolidated.Utils
+import com.example.utility.QuranGrammarApplication
+import database.VerbDatabaseUtils
 import org.sj.conjugator.activity.SystemConstants
 import org.sj.data.IsmAlaResult
 import org.sj.data.IsmFaelMafoolResult
 import org.sj.data.IsmZarfResult
 import org.sj.data.MazeedResult
 import org.sj.data.MujarradResult
+import org.sj.data.VerbConjugator
 import org.sj.nounConjugation.trilateral.augmented.AugmentedTrilateralActiveParticipleConjugator
 import org.sj.nounConjugation.trilateral.augmented.AugmentedTrilateralPassiveParticipleConjugator
 import org.sj.nounConjugation.trilateral.unaugmented.UnaugmentedTrilateralActiveParticipleConjugator
@@ -949,6 +953,23 @@ class GatherAll {
         verbRoot: String,
         augmentedFormula: String
     ): MazeedResult? {
+        val utils= VerbDatabaseUtils(QuranGrammarApplication.context)
+        val ut= Utils(QuranGrammarApplication.context)
+        val quranicVerb = utils.getQuranicVerbMeaning(verbRoot)
+        // Get a List of VerbCorpus from the verbcorpus table for all the occurrences of a verb with root Ewn
+       // val verbCorpusList =            utils.getVerbRootBySurahAyahWord(1, 5, 4).value// from verbcorpus table
+
+   /*     // Call the conjugateEnglish function to get the conjugations
+        val conjugationMap: Map<String, List<String>> =
+            VerbConjugator.conjugateEnglish(quranicVerb, verbCorpusList)
+
+        // Iterate through the map and print the conjugations
+        conjugationMap.forEach { (key, value) ->
+            println("Verb conjugation type: $key") // Print the tense and voice
+            for ((index, conjugatedVerb) in value.withIndex()) {
+                println("  ${index + 1}. $conjugatedVerb") // Print each conjugated verb
+            }
+        }*/
         // Get the augmented root
         val augmentedRoot = SarfDictionaryAmended.instance.getAugmentedTrilateralRoot(verbRoot, augmentedFormula)
             ?: return null // Return null if the root is not found
@@ -958,6 +979,7 @@ class GatherAll {
             ?: return null
 
         // Initialize lists
+        val madhiMudharayListEnglish = mutableListOf<MadhiMudharay>()
         val madhiMudharayList = mutableListOf<MadhiMudharay>()
         val skabeerIsmList = mutableListOf<FaelMafool>()
         val amrList = mutableListOf<Amr>()
@@ -966,6 +988,7 @@ class GatherAll {
 
         // Conjugate Madhi (past) and Madhimajhool (passive past)
         val madhi = AugmentedActivePastConjugator.instance.createVerbList(augmentedRoot, augmentedFormula.toInt())
+
         val madhiMajhool = AugmentedPassivePastConjugator.instance.createVerbList(augmentedRoot, augmentedFormula.toInt())
 
         // Handle different moods for Mudharay (present) and MudharayMajhool (passive present)
