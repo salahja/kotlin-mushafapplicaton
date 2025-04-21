@@ -1,8 +1,10 @@
 package database
 
 import android.content.Context
+import com.example.mushafconsolidated.Utils
 import database.entity.MazeedEntity
 import database.entity.MujarradVerbs
+import database.entity.QuranVerbsEntity
 import database.entity.kov
 
 class VerbDatabaseUtils(context: Context?) {
@@ -37,6 +39,13 @@ class VerbDatabaseUtils(context: Context?) {
   fun getMujarradVerbs(root: String?): ArrayList<MujarradVerbs?>? {
         return database.mujarradDao()!!.getverbTri(root) as ArrayList<MujarradVerbs?>?
     }
+  fun getQuranicVerbMeaning(root:String ): List<QuranVerbsEntity> {
+    return database.quranVerbDao().getqurnicVerb(root)
+  }
+
+  fun rootMeaningFilterByFrom(root:String,form:String ): List<QuranVerbsEntity> {
+    return database.quranVerbDao().getqurnicVerbMeaning(root,form)
+  }
 
     companion object {
         private lateinit var database: VerbDatabase

@@ -79,9 +79,11 @@ import com.example.mushafconsolidated.Entities.surahsummary
 
 import com.example.mushafconsolidated.settingsimport.Constants.Companion.DATABASENAME
 import database.Dao.NamesDao
+import database.Dao.quranVerbDao
 import database.entity.AllahNames
 import mufradat.MufradatDao
 import mufradat.MufradatEntity
+
 
 import sj.hisnul.entity.AllahNamesDetails
 import java.io.File

@@ -9,18 +9,25 @@ import android.view.View
 import android.view.Window
 import android.widget.Button
 import android.widget.RelativeLayout
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.preference.PreferenceManager
 import com.example.mushafconsolidated.R
+import com.example.mushafconsolidated.Utils
+import com.example.mushafconsolidated.quranrepo.QuranViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import database.VerbDatabaseUtils
 import org.sj.conjugator.activity.BaseActivity
 import org.sj.conjugator.activity.ConjugatorAct
 import org.sj.conjugator.fragments.SettingsFragmentVerb
 import org.sj.conjugator.utilities.SharedPref
+import org.sj.data.VerbConjugator
+
+import kotlin.getValue
 
 class MainActivity : BaseActivity() {
     var mazeedform = 0
@@ -48,6 +55,10 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.activity_verb_conjugation)
+
+// Assuming you have a way to get data from your tables...
+
+
         //  setContentView(R.layout.main_activity);
         if (isFirstTime) {
             val fragment = SettingsFragmentVerb()

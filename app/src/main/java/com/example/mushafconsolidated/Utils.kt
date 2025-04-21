@@ -53,6 +53,7 @@ import com.example.mushafconsolidated.Entities.quranexplorer
 import com.example.mushafconsolidated.model.Juz
 import com.example.mushafconsolidated.model.QuranEntityCorpusEntityWbwEntity
 import database.entity.AllahNames
+import database.entity.QuranVerbsEntity
 import mufradat.MufradatEntity
 
 
@@ -95,7 +96,7 @@ class Utils {
     }
 
 
-    fun getCorpusVersesBySurah(cid:Int ): List<CorpusEntity> {
+    suspend fun getCorpusVersesBySurah(cid:Int ): List<CorpusEntity> {
         return database.getCorpusExpandDao().getCorpusVersesBySurah(cid)
     }
 

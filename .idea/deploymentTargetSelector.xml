@@ -3,11 +3,11 @@
   <component name="deploymentTargetSelector">
     <selectionStates>
       <SelectionState runConfigName="Mushaf">
-        <option name="selectionMode" value="DIALOG" />
-        <DropdownSelection timestamp="2025-02-20T10:26:07.057243501Z">
+        <option name="selectionMode" value="DROPDOWN" />
+        <DropdownSelection timestamp="2025-03-29T23:25:18.349635403Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=/home/anons/.android/avd/Copy_of_10.1_WXGA_Tablet_API_31.avd" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=/home/anons/.android/avd/Pixel_8a.avd" />
             </handle>
           </Target>
         </DropdownSelection>
@@ -15,17 +15,28 @@
           <targets>
             <Target type="DEFAULT_BOOT">
               <handle>
-                <DeviceId pluginId="LocalEmulator" identifier="path=/home/anons/.android/avd/Copy_of_10.1_WXGA_Tablet_API_31.avd" />
+                <DeviceId pluginId="LocalEmulator" identifier="path=/home/anons/.android/avd/Pixel_8a.avd" />
               </handle>
             </Target>
           </targets>
         </DialogSelection>
       </SelectionState>
+      <SelectionState runConfigName="MushafApplication_.app.unitTest">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
       <SelectionState runConfigName="MushafApplication_.app.androidTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="MushafApplication_.app.unitTest">
+      <SelectionState runConfigName="MushafApplication_.app">
         <option name="selectionMode" value="DROPDOWN" />
+        <DropdownSelection timestamp="2025-04-19T15:22:03.183074412Z">
+          <Target type="DEFAULT_BOOT">
+            <handle>
+              <DeviceId pluginId="LocalEmulator" identifier="path=/home/anons/.android/avd/Pixel_8a.avd" />
+            </handle>
+          </Target>
+        </DropdownSelection>
+        <DialogSelection />
       </SelectionState>
     </selectionStates>
   </component>

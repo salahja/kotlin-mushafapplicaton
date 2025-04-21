@@ -50,8 +50,8 @@ class SurahAyahPickerDialog(
     val   utils=Utils(context)
         soraList=utils.getAllAnaChapters()
         textView = view.findViewById(R.id.textView2)
-        surahWheel = view.findViewById(R.id.wv_year)
-        ayahWheel = view.findViewById(R.id.wv_month)
+        surahWheel = view.findViewById(R.id.surahnameTv)
+        ayahWheel = view.findViewById(R.id.ayahnumberTv)
 
         initializeWheels()
 

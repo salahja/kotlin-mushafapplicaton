@@ -61,6 +61,8 @@ import com.example.mushafconsolidated.Entities.hanslexicon
 
 import com.example.mushafconsolidated.Entities.lanerootdictionary
 import com.example.mushafconsolidated.Entities.surahsummary
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -102,8 +104,7 @@ import javax.inject.Inject
 
      ) {
 
-    fun getQuranCorpusBysurah(cid: Int): List<CorpusEntity> =
-        corpusDao.getCorpusVersesBySurah(cid)
+
 
 
 
@@ -112,10 +113,10 @@ import javax.inject.Inject
 
     fun getsifa(surah: Int, ayah: Int): List<SifaEntity> =
         mousufSifa.getSifaindexesBySurahAyah(surah, ayah)
-     fun getsifaFilterSurah(surah: Int, ): List<SifaEntity> =
+     fun getsifaFilterSurah(surah: Int): List<SifaEntity> =
          mousufSifa.getSifaindexesBySurah(surah)
 
-     fun getSifaMousoofFileterSurah(surah: Int, ): List<SifaMudhafEnt> =
+     fun getSifaMousoofFileterSurah(surah: Int): List<SifaMudhafEnt> =
          sifaMudhafDao.getISIfaMudhaafFilterSurah(surah)
 
      fun getSifaMousoofFileterSurahType(surah: Int,type: String ): List<SifaMudhafEnt> =
@@ -190,7 +191,7 @@ import javax.inject.Inject
 
 
 
-     fun getCorpusEntityFilterSurah(surah: Int, ): List<CorpusEntity> =
+     fun getCorpusEntityFilterSurah(surah: Int): List<CorpusEntity> =
          corpusDao.getVersesBySurahLive(surah)
 
 
@@ -217,7 +218,7 @@ import javax.inject.Inject
      fun getSingleChapters(cid: Int): List<ChaptersAnaEntity> =
          chaptersdao.getSingleChapters(cid)
 
-    fun getQuranCorpusWbwbysurah(cid: Int): List<CorpusEntity> =
+    suspend fun getQuranCorpusWbwbysurah(cid: Int): List<CorpusEntity> =
       corpusDao.getCorpusVersesBySurah(cid)
 
     fun getQuranCorpusWbwbyroot(root: String): List<CorpusEntity> =
@@ -226,7 +227,7 @@ import javax.inject.Inject
     fun getQuranCorpusWbwbysurahAyahWord(cid: Int, aid: Int,wid:Int): List<CorpusEntity> =
         corpusDao.getCorpusWord(cid, aid,wid)
 
-    fun getsurahbychap(cid: Int): List<QuranEntity> = qurandao.getQuranVersesBySurahl(cid)
+   suspend fun getsurahbychap(cid: Int): List<QuranEntity> = qurandao.getQuranVersesBySurahl(cid)
 
 
     fun getsurahbyayahlist(cid: Int, ayid: Int): List<QuranEntity> =
@@ -266,7 +267,7 @@ import javax.inject.Inject
     }
 
 
-   fun getQuranData(chapterNo: Int): QuranData {
+  suspend fun getQuranData(chapterNo: Int): QuranData {
          return QuranData(
 
              allofQuran = qurandao.getQuranVersesBySurahl(chapterNo), // Fetch Quran verses
@@ -275,18 +276,26 @@ import javax.inject.Inject
          )
      }
 
-     fun CorpusAndQuranDataSurah(chapterNo: Int): CorpusAndQuranData {
+/*    fun CorpusAndQuranDataSurah(chapterNo: Int): CorpusAndQuranData {
          return CorpusAndQuranData(
 
              allofQuran = qurandao.getQuranVersesBySurahl(chapterNo), // Fetch Quran verses
             copusExpandSurah = corpusDao.getCorpusVersesBySurah(chapterNo),
          )
-     }
+     }*/
 
+   //In Quran Repository
+   suspend fun CorpusAndQuranDataSurah(chapterNo: Int): CorpusAndQuranData=
+     withContext(Dispatchers.IO){
+       CorpusAndQuranData(
+         quranVerses = qurandao.getQuranVersesBySurahl(chapterNo), // Fetch Quran verses
+         copusExpandSurah = corpusDao.getCorpusVersesBySurah(chapterNo),
+       )
+     }
      fun CorpusAndQuranDataSurahAyah(chapterNo: Int,verseid:Int): CorpusAndQuranData {
          return CorpusAndQuranData(
 
-             allofQuran = qurandao.getQuranVersesBySurahAyah(chapterNo,verseid), // Fetch Quran verses
+             quranVerses = qurandao.getQuranVersesBySurahAyah(chapterNo,verseid), // Fetch Quran verses
              copusExpandSurah = corpusDao.getVersesBySurahAndAya(chapterNo,verseid),
          )
      }
@@ -298,9 +307,9 @@ import javax.inject.Inject
 
 data class CorpusAndQuranData(
 
-    val allofQuran: List<QuranEntity>, // Assuming you need this as well
+  var quranVerses: List<QuranEntity>, // Assuming you need this as well
 
-    val copusExpandSurah:List<CorpusEntity>// Assuming you need this as well
+  val copusExpandSurah:List<CorpusEntity>// Assuming you need this as well
 
 )
 

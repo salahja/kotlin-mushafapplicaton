@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentEnd="true"
+    android:layout_gravity="bottom"
+    app:cardBackgroundColor="@android:color/transparent">
+
+    <FrameLayout
+        android:id="@+id/frame_container"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/sarfrecview"
+
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity"
+        tools:ignore="HardcodedText">
+
+        <!--This will be the parent Floating Action Button-->
+        <!--After the implementation the Floating Action Button at
+             the bottom right corner as we have constrained accordingly-->
+        <!--After clicking the above button the
+            following two buttons will pop up.
+             So this button is considered as parent FAB-->
+        <!--After opening the application it looks like regular
+            FAB but after user clicks it, it extends-->
+        <!--This functionality has been handled in the MainActivity.java-->
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+
+            android:id="@+id/action_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/colorAccent"
+            android:text="Conjugation"
+            android:visibility="gone"
+            app:icon="@drawable/ic_baseline_expand_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
+
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+</RelativeLayout>

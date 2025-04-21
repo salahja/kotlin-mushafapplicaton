@@ -15,24 +15,23 @@ open class BaseActivity : AppCompatActivity() {
         DynamicColors.applyToActivitiesIfAvailable(this.application)
         switchTheme(currenttheme)
     }
-
-    //  protected  void setTheme(){
-    //  switchTheme(currenttheme);
-    // }
-    protected fun switchTheme(currenttheme: String?) {
+     fun switchTheme(currenttheme: String?) {
+        val currentAppliedTheme = PreferenceManager.getDefaultSharedPreferences(this).getString("theme", "dark")
         when (currenttheme) {
-            LIGHT_THEME -> setTheme(R.style.AppTheme)
-            DARK_THEME -> setTheme(R.style.AppThemeDark)
-            DARK_BLUE -> setTheme(R.style.AppTheme_materialdarkblue)
-            DARK_GREEN -> setTheme(R.style.AppTheme_DarkGreen)
-            BROWN_MODE -> setTheme(R.style.Theme_Browns)
+            BaseActivity.LIGHT_THEME -> setTheme(R.style.AppTheme)
+            BaseActivity.DARK_THEME -> setTheme(R.style.AppThemeDark)
+            BaseActivity.DARK_BLUE -> setTheme(R.style.AppTheme_materialdarkblue)
+            BaseActivity.DARK_GREEN -> setTheme(R.style.AppTheme_DarkGreen)
+            BaseActivity.BROWN_MODE -> setTheme(R.style.Theme_Browns)
             else -> setTheme(R.style.AppThemeDark)
         }
         PreferenceManager.getDefaultSharedPreferences(this).edit().putString("theme", currenttheme)
             .apply()
 
+        if (currenttheme != currentAppliedTheme) {
+            recreate()
+        }
 
-        recreate()
     }
 
     companion object {

@@ -42,7 +42,7 @@
                     android:id="@+id/tvNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12.0sp"
+
                     android:layout_marginStart="@dimen/space_1"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -52,10 +52,10 @@
                     android:id="@+id/tvArabic"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    style="@android:style/TextAppearance.DeviceDefault.Medium"
+
                     android:hint="The Opening"
                     android:padding="@dimen/space_1"
-                    android:textSize="12.0sp"
+
                     android:layout_marginStart="@dimen/space_1"
                     app:layout_constraintStart_toEndOf="@id/tvNumber"
                     app:layout_constraintTop_toTopOf="parent"
@@ -65,8 +65,8 @@
 
                 <ImageView
                     android:id="@+id/makkimadaniicon"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_margin="@dimen/space_1"
                     app:layout_constraintStart_toEndOf="@id/tvArabic"
                     app:layout_constraintTop_toTopOf="parent"
@@ -75,8 +75,8 @@
 
                 <ImageView
                     android:id="@+id/surahicon"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_marginEnd="@dimen/space_2"
                     android:paddingEnd="@dimen/space_1"
                     app:layout_constraintStart_toEndOf="@id/makkimadaniicon"

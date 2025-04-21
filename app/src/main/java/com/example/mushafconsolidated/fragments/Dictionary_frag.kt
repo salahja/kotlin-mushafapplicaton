@@ -62,7 +62,7 @@ class Dictionary_frag(lughatWordDetailsAct: LughatWordDetailsAct, language: Stri
     ): View? {
         setHasOptionsMenu(true)
         val mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
-        val view = inflater.inflate(R.layout.sarfkabeerheader, container, false)
+        val view = inflater.inflate(R.layout.sarfsagheerheader, container, false)
         val callButton = view.findViewById<ExtendedFloatingActionButton>(R.id.action_buttons)
         val dataBundle = arguments
         if (dataBundle != null) {

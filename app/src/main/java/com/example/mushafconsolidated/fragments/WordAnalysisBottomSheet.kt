@@ -42,6 +42,7 @@ import com.example.Constant.SHADDA
 import com.example.Constant.SURAH_ID
 import com.example.Constant.VERBMOOD
 import com.example.Constant.VERBTYPE
+import com.example.Constant.WORDNUMBER
 import com.example.mushafconsolidated.Activity.LughatWordDetailsAct
 
 import com.example.mushafconsolidated.Activity.WordOccuranceAct
@@ -79,6 +80,7 @@ import org.sj.conjugator.utilities.GatherAll
 import org.sj.data.IsmFaelMafoolResult
 
 import java.util.Objects
+import kotlin.collections.remove
 
 
 /**
@@ -96,6 +98,9 @@ class WordAnalysisBottomSheet : DialogFragment() {
     private var rwAdapter: NewRootWordDisplayAdapter? = null
     var chapterId = 0
     var ayahNumber = 0
+    var wordno=""
+    var voice=""
+    var meaning=""
     private var _binding: RootDialogFragmentBinding? = null
     private val binding get() = _binding!!
     private var isMazeedSarfSagheer = false
@@ -190,6 +195,8 @@ class WordAnalysisBottomSheet : DialogFragment() {
             val corpusNounWord = mainViewModel.getNouncorpus(chapterId, ayahNumber, wordNo).value
             val verbCorpusRootWord =
                 mainViewModel.getVerbRootBySurahAyahWord(chapterId, ayahNumber, wordNo).value
+            wordno= wordNo.toString()
+
 /*
 `
             if (corpusNounWord!!.isEmpty() && verbCorpusRootWord!!.isEmpty()) {
@@ -202,6 +209,10 @@ class WordAnalysisBottomSheet : DialogFragment() {
             val corpusSurahWord =
                 mainViewModel.getCorpusEntityFilterbywordno(chapterId, ayahNumber, wordNo).value
                     ?: return@launch
+            if(corpusSurahWord.get(0).en!=null){
+
+                meaning=corpusSurahWord.get(0).en.toString()
+            }
 
                 // Continue with data processing...
                 val am = NewQuranMorphologyDetails(
@@ -494,6 +505,7 @@ class WordAnalysisBottomSheet : DialogFragment() {
         models: QuranViewModel,
         quran: List<QuranEntity>?
     ) {
+
         val shared = PreferenceManager.getDefaultSharedPreferences(requireContext())
         val mafoolat = shared.getBoolean("mafoolat", false)
         vb = VerbWazan()
@@ -503,6 +515,19 @@ class WordAnalysisBottomSheet : DialogFragment() {
                 vbdetail = am.verbDetails
                 isVerb = true
             }
+        }
+        if(vbdetail["thulathi"]==null){
+            // Show a Toast message
+            Toast.makeText(
+                requireContext(),
+                "Thulathi data is not available.",
+                Toast.LENGTH_LONG
+            ).show()
+
+            // Exit/terminate the current fragment
+         //   exitFragment()
+            return
+
         }
         if(root.equals("ليس")){
            isLysa=true
@@ -702,6 +727,13 @@ class WordAnalysisBottomSheet : DialogFragment() {
         // }//scope
     }
 
+    private fun exitFragment() {
+        if (isAdded) {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .remove(this)
+                .commit()
+        }
+    }
     private fun setAllPhrases() {
         val utils= Utils(requireContext())
      val negaTionList=   utils.geTNegatonFilerSurahAyah(chapterId,ayahNumber)
@@ -1244,6 +1276,13 @@ class WordAnalysisBottomSheet : DialogFragment() {
                 putString(VERBMOOD, vbdetail["emph"]?.let { "Emphasized" } ?: "Indicative")
                 putString(QURAN_VERB_WAZAN, vb.wazan)
                 putString(QURAN_VERB_ROOT, vb.root)
+                putString(SURAH_ID, chapterId.toString())
+
+                putString(AYAHNUMBER, ayahNumber.toString())
+                putString(WORDNUMBER, wordno)
+                putString(Constant.MEANING,meaning)
+
+
             }
 
             val intent =

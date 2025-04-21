@@ -69,9 +69,9 @@ class NewSurahDisplayAdapter(
         val te = cno.toString() + " " + surah.nameenglish;
 
         holder.tvsurahleft.text = te
-        if (!defaultfont) {
+      /*  if (!defaultfont) {
             holder.tvsurahleft.textSize = SharedPref.SeekarabicFontsize().toFloat()
-        }
+        }*/
         //
         val drawable = imgs?.getDrawable(cno - 1)
     //    imgs?.recycle()

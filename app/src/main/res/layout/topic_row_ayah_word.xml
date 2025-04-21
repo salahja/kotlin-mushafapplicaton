@@ -71,5 +71,5 @@
         android:layout_height="10dp"
         android:layout_marginLeft="1dp"
         android:layout_marginRight="1dp"
-        android:background="@color/redhot" />
+          />
 </LinearLayout>

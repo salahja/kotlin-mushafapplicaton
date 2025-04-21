@@ -170,7 +170,12 @@
             android:title="Select Fonts"
             app:fragment="com.example.mushafconsolidated.fragments.ActivitySettings$SelectQuranFronts"
             app:icon="@drawable/ic_baseline_font_download_24" />
-
+        <Preference
+            android:defaultValue="DejaVuSans.ttf"
+            android:title="Select Word by WordFonts"
+            app:fragment="com.example.mushafconsolidated.fragments.ActivitySettings$SelectQuranFronts"
+            app:icon="@drawable/ic_baseline_font_download_24"
+            app:key="word_font_selection" />
 
         <Preference
             android:defaultValue="brown"
@@ -185,7 +190,7 @@
         android:max="60"
         app:defaultValue="22"
         app:key="pref_font_arabic_key"
-        app:min="12"
+        app:min="10"
         app:showSeekBarValue="true"
         app:summary="@string/seek_summary"
         app:title="@string/seek_titles" />
@@ -194,7 +199,7 @@
         android:max="60"
         app:defaultValue="22"
         app:key="pref_font_englsh_key"
-        app:min="12"
+        app:min="10"
         app:showSeekBarValue="true"
         app:summary="@string/seek_summary"
         app:title="@string/seek_title" />

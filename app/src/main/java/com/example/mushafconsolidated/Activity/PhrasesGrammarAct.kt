@@ -59,6 +59,7 @@ import com.example.Constant
 import com.example.Constant.SURAHFRAGTAG
 import com.example.mushafconsolidated.BottomOptionDialog
 
+
 import com.example.mushafconsolidated.Entities.BookMarks
 import com.example.mushafconsolidated.Entities.ChaptersAnaEntity
 import com.example.mushafconsolidated.Entities.CorpusEntity
@@ -687,8 +688,8 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
         //  View view = inflater.inflate(R.layout.activity_wheel, null);
         dialogPicker.setView(view)
         mTextView = view.findViewById(R.id.textView2)
-        chapterWheel = view.findViewById(R.id.wv_year)
-        verseWheel = view.findViewById(R.id.wv_month)
+        chapterWheel = view.findViewById(R.id.surahnameTv)
+        verseWheel = view.findViewById(R.id.ayahnumberTv)
         chapterWheel.setEntries(*surahArrays)
         //  chapterWheel.setCurrentIndex(getSurahselected() - 1);
         chapterWheel.currentIndex = this.chapterno - 1
@@ -919,7 +920,7 @@ class PhrasesGrammarAct : BaseActivity(), OnItemClickListenerOnLong , View.OnCli
 
             val corpusAndQurandata = quranRepository.CorpusAndQuranDataSurah(chapterno)
 
-            allofQuran = corpusAndQurandata.allofQuran
+            allofQuran = corpusAndQurandata.quranVerses
             corpusSurahWord = corpusAndQurandata.copusExpandSurah
 
             corpusGroupedByAyah =

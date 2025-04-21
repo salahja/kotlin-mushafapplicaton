@@ -18,6 +18,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ExpandableListView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
 import androidx.preference.PreferenceManager
@@ -36,6 +37,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.Executors
 import javax.inject.Inject
+import kotlin.collections.get
 import kotlin.collections.isNotEmpty
 import kotlin.collections.sortWith
 
@@ -110,43 +112,47 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
         negaTionList = utils.geTNegatonFilerSurahAyah(chapterid, ayanumber)
 
         expandableListDetail = getData()
-        //  kanaExpandableListDetail = kana
-        expandableListTitle = ArrayList(expandableListDetail!!.keys)
-        val groupComparator = Comparator<String> { group1, group2 ->
-            val hasChildren1 = expandableListDetail!![group1]?.isNotEmpty() ?: false
-            val hasChildren2 = expandableListDetail!![group2]?.isNotEmpty() ?: false
+        if(expandableListDetail!!.isNotEmpty()) {
+            //  kanaExpandableListDetail = kana
+            expandableListTitle = ArrayList(expandableListDetail!!.keys)
+            val groupComparator = Comparator<String> { group1, group2 ->
+                val hasChildren1 = expandableListDetail!![group1]?.isNotEmpty() ?: false
+                val hasChildren2 = expandableListDetail!![group2]?.isNotEmpty() ?: false
 
-            when {
-                hasChildren1 && !hasChildren2 -> -1 // group1 has children, group2 doesn't
-                !hasChildren1 && hasChildren2 -> 1 // group1 doesn't have children, group2 does
-                else -> 0 // both have children or both don't have children
-            }
-        }
-        (expandableListTitle as ArrayList<String>).sortWith(groupComparator)
-        thulathiMazeedConjugatonList = ArrayList()
-        isverbconjugaton = false
-        participles = false
-
-
-        //  val   corpusNounWord=  model.getNouncorpus(chapterid,ayanumber,1)
-        ex.execute {
-            requireActivity().runOnUiThread { dialog!!.show() }
-
-            requireActivity().runOnUiThread {
-                ex.shutdown()
-                dialog!!.dismiss()
-                val grammarFragmentsListAdapter =
-                    GrammarFragmentsListAdapter(
-                        requireContext(), expandableListTitle as ArrayList<String>,
-                        expandableListDetail!!
-                    )
-                expandableListView.setAdapter(grammarFragmentsListAdapter)
-                for (i in 0 until grammarFragmentsListAdapter.groupCount) {
-                    expandableListView.collapseGroup(i)
+                when {
+                    hasChildren1 && !hasChildren2 -> -1 // group1 has children, group2 doesn't
+                    !hasChildren1 && hasChildren2 -> 1 // group1 doesn't have children, group2 does
+                    else -> 0 // both have children or both don't have children
                 }
             }
-        }
-        return view
+            (expandableListTitle as ArrayList<String>).sortWith(groupComparator)
+            thulathiMazeedConjugatonList = ArrayList()
+            isverbconjugaton = false
+            participles = false
+
+
+            //  val   corpusNounWord=  model.getNouncorpus(chapterid,ayanumber,1)
+            ex.execute {
+                requireActivity().runOnUiThread { dialog!!.show() }
+
+                requireActivity().runOnUiThread {
+                    ex.shutdown()
+                    dialog!!.dismiss()
+                    val grammarFragmentsListAdapter =
+                        GrammarFragmentsListAdapter(
+                            requireContext(), expandableListTitle as ArrayList<String>,
+                            expandableListDetail!!
+                        )
+                    expandableListView.setAdapter(grammarFragmentsListAdapter)
+                    for (i in 0 until grammarFragmentsListAdapter.groupCount) {
+                        expandableListView.collapseGroup(i)
+                    }
+                }
+            }
+            return view
+        }else
+            return null
+
     }
 
     companion object {
@@ -165,8 +171,99 @@ class GrammerFragmentsBottomSheet : BottomSheetDialogFragment() {
         }
     }
 
-
     private fun getData(): java.util.LinkedHashMap<String, List<SpannableString>> {
+        val prefs =
+            android.preference.PreferenceManager.getDefaultSharedPreferences(requireContext())
+        val preferences = prefs.getString("theme", "dark")
+        currentTheme = preferences == "dark" || preferences == "blue" || preferences == "green"
+
+        whichwbw = prefs.getString("wbw", "en")
+        val expandableListDetail = java.util.LinkedHashMap<String, List<SpannableString>>()
+        val verse: MutableList<SpannableString> = ArrayList()
+        val translation: MutableList<SpannableString> = ArrayList()
+        // Check if negaTionList is not empty before accessing its elements
+        if (negaTionList.isNotEmpty()) {
+            translation.add(SpannableString.valueOf(negaTionList[0].translation))
+            verse.add(SpannableString.valueOf(negaTionList[0].verse))
+        } else {
+            // Show a Toast message indicating that no phrases were found
+            Toast.makeText(requireContext(), "No Phrases found for this verse", Toast.LENGTH_SHORT).show()
+            // Return early to terminate the function
+            return expandableListDetail // Return an empty map
+        }
+        val mausoofsifaarray: MutableList<SpannableString> = ArrayList()
+        val mudhafarray: MutableList<SpannableString> = ArrayList()
+        val shartarray: MutableList<SpannableString> = ArrayList()
+        val harfnasbarray: MutableList<SpannableString> = ArrayList()
+        val kanaarray: MutableList<SpannableString> = ArrayList()
+        val pastTenceNegationArray: MutableList<SpannableString> = ArrayList()
+        val presentTenceNegationArray: MutableList<SpannableString> = ArrayList()
+        val futureTenceNegationArray: MutableList<SpannableString> = ArrayList()
+        val inMaIllaNegationArray: MutableList<SpannableString> = ArrayList()
+        val anMasdarArray: MutableList<SpannableString> = ArrayList()
+        val silaMousalArray: MutableList<SpannableString> = ArrayList()
+        val halArray: MutableList<SpannableString> = ArrayList()
+
+
+        setAllPhrases(
+            shartarray,
+            harfnasbarray,
+            kanaarray,
+            pastTenceNegationArray,
+            presentTenceNegationArray,
+            futureTenceNegationArray,
+            inMaIllaNegationArray,
+            mudhafarray,
+            mausoofsifaarray,
+            anMasdarArray,
+            silaMousalArray,
+            halArray,
+            currentTheme
+        )
+
+        val pastNegNoteOne = String.format(
+            "harf (-لَمْ-) only occurs with an imperfect/mudhary verb and it can push the meaning to the past tense "
+
+        )
+        val pastNegNoteTwo = String.format(
+            " and harf (%s) only occurs with a perfect/madhi verb and is used for refutation or in the context of debate",
+            "\u202Bمَا\u202C"
+        )
+        val presentNegNote = String.format(
+            " two combination La-Nafiya+Mudharay  and Ma-Mudhary for refutation or in the context of debate",
+            "\u202Bمَا\u202C"
+        )
+        if (pastTenceNegationArray.isNotEmpty()) {
+            pastTenceNegationArray.add(SpannableString.valueOf(pastNegNoteOne))
+            pastTenceNegationArray.add(SpannableString.valueOf(pastNegNoteTwo))
+        }
+        if (pastTenceNegationArray.isNotEmpty()) {
+            presentTenceNegationArray.add(SpannableString.valueOf(presentNegNote))
+        }
+
+
+
+        expandableListDetail["Verse"] = verse
+        expandableListDetail["Translation"] = translation
+        expandableListDetail["Verb sentence-Past Tence Negation- Stences(لَمْ/مَا))"] =
+            pastTenceNegationArray
+        expandableListDetail["Verb sentence-Present Tence Negation- Stences(مَا/لَا)"] =
+            presentTenceNegationArray
+        expandableListDetail["Verb sentence-Future Tence Negation- Stences(لَّن)"] =
+            futureTenceNegationArray
+        expandableListDetail["Exceptive Sentences with (إلاّ-(أداة الاستْثناء)) & Restriction/Exclusive (الحَصْر) "] =
+            inMaIllaNegationArray
+        expandableListDetail["Conditional/جملة شرطية\""] = shartarray
+        expandableListDetail["Accusative/ "] = harfnasbarray
+        expandableListDetail["Verb kāna/كان واخواتها"] = kanaarray
+        expandableListDetail["Adjectival Phrases/مرکب توصیفی"] = mausoofsifaarray
+        expandableListDetail["Possessive/إضافَة"] = mudhafarray
+        expandableListDetail["The Subordinate Clause (صلة)"] = silaMousalArray
+        expandableListDetail["The Subordinate Clause (حرف مصدري)"] = anMasdarArray
+        expandableListDetail["The Circumstantil Clause (حرف مصدري)"] = halArray
+        return expandableListDetail
+    }
+    private fun getDatas(): java.util.LinkedHashMap<String, List<SpannableString>> {
         //  val utils=Utils(requireContext())
         val prefs =
             android.preference.PreferenceManager.getDefaultSharedPreferences(requireContext())

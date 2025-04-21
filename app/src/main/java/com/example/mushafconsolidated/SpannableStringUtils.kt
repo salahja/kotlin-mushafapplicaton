@@ -310,15 +310,20 @@ object SpannableStringUtils {
             firstWord.length,
             0
           )
+           try {
+             spannableString.setSpan(
+               kanakhbar,
+               firstWord.length,
+               arabicString.length,
+               0
 
-          spannableString.setSpan(
-            kanakhbar,
-            firstWord.length,
-            arabicString.length,
-            0
 
+             )
+           } catch (e: IndexOutOfBoundsException) {
+             println(ayahid)
+             println(surahid)
+           }
 
-          )
 
         } else if (type == "silaverify" || type == "anmasdarverify") {
 

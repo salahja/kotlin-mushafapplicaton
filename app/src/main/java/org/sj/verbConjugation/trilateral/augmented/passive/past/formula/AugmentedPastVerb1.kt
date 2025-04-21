@@ -17,6 +17,8 @@ class AugmentedPastVerb1(
      * method
      */
     override fun form(): String {
-        return "أ" + ArabCharUtil.DAMMA + root!!.c1 + ArabCharUtil.SKOON + root!!.c2 + ArabCharUtil.KASRA + root!!.c3 + lastDpa + connectedPronoun
+        val str="أ" + ArabCharUtil.DAMMA + root!!.c1 + ArabCharUtil.SKOON + root!!.c2 + ArabCharUtil.KASRA + root!!.c3 + lastDpa + connectedPronoun
+        return str
+      //  return "أ" + ArabCharUtil.DAMMA + root!!.c1 + ArabCharUtil.SKOON + root!!.c2 + ArabCharUtil.KASRA + root!!.c3 + lastDpa + connectedPronoun
     }
 }

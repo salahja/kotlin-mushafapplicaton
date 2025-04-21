@@ -16,6 +16,7 @@ import com.example.mushafconsolidated.R
 
 import com.example.mushafconsolidated.fragments.WordAnalysisBottomSheet
 import com.example.mushafconsolidatedimport.VerbFormsDialogFrag
+import com.example.utility.QuranGrammarApplication.Companion.context
 
 import org.sj.conjugator.adapter.SarfMujarradSarfSagheerListingAdapter
 import org.sj.conjugator.interfaces.OnItemClickListener
@@ -24,10 +25,10 @@ import org.sj.data.MazeedResult
 import org.sj.data.MujarradResult
 
 
-class MazeedTabSagheerFragmentVerb(private val context: Context) : Fragment() {
+class MazeedTabSagheerFragmentVerb() : Fragment() {
     // --Commented out by Inspection (31/1/21 5:51 AM):ArrayList<String> sarfkabeer = new ArrayList<>();
-    var recyclerView: RecyclerView? = null
-    var isAugmented = false
+    private var recyclerView: RecyclerView? = null
+    private var isAugmented = false
     private var isUnAugmented = false
     private var sarfsagheerAdapter: SarfMujarradSarfSagheerListingAdapter? = null
     private lateinit var augmentedFormula: String
@@ -35,36 +36,38 @@ class MazeedTabSagheerFragmentVerb(private val context: Context) : Fragment() {
     private var verbroot: String? = null
     private var verbmood: String? = null
     private var skabeer = ArrayList<ArrayList<*>>()
-    var ssagheer: ArrayList<SarfSagheer>? = null
-    private var dataBundle: Bundle? = null
-    fun newInstance(): MazeedTabSagheerFragmentVerb {
-        val f = MazeedTabSagheerFragmentVerb(context)
-        val dataBundle = requireArguments()
-        if (null != dataBundle) {
-            dataBundle.getString(QURAN_VERB_ROOT)
-            dataBundle.getString(QURAN_VERB_WAZAN) //verb formula depnding upon the verbtype mujjarad or mazeed
-            dataBundle.getString(VERBMOOD)
-            dataBundle.getString(VERBTYPE)
+    private var ssagheer: ArrayList<SarfSagheer>? = null
+
+    // Required empty constructor
+
+    // New way to create an instance with data
+    companion object {
+        fun newInstance(bundle: Bundle): MazeedTabSagheerFragmentVerb {
+            val fragment = MazeedTabSagheerFragmentVerb()
+            fragment.arguments = bundle
+            return fragment
         }
-        f.arguments = dataBundle
-        return f
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         setHasOptionsMenu(true)
-        val view = inflater.inflate(R.layout.sarfkabeerheader, container, false)
-        dataBundle = arguments
-        if (dataBundle!!.getString(VERBTYPE) == "mujarrad") {
-            isUnAugmented = true
-            unaugmentedFormula = dataBundle!!.getString(QURAN_VERB_WAZAN)!!
-        } else {
-            augmentedFormula = dataBundle!!.getString(QURAN_VERB_WAZAN)!!
-            isAugmented = true
+        val view = inflater.inflate(R.layout.sarfsagheerheader, container, false)
+
+        // Use arguments from Bundle, safely
+        arguments?.let { args ->
+            if (args.getString(VERBTYPE) == "mujarrad") {
+                isUnAugmented = true
+                unaugmentedFormula = args.getString(QURAN_VERB_WAZAN) ?: ""
+            } else {
+                isAugmented = true
+                augmentedFormula = args.getString(QURAN_VERB_WAZAN) ?: ""
+            }
+            verbroot = args.getString(QURAN_VERB_ROOT)
+            verbmood = args.getString(VERBMOOD)
         }
-        verbroot = dataBundle!!.getString(QURAN_VERB_ROOT)
-        verbmood = dataBundle!!.getString(VERBMOOD)
+
         recyclerView = view.findViewById(R.id.sarfrecview)
         skabeer = setUparrays(view)
         return view
@@ -198,55 +201,7 @@ class MazeedTabSagheerFragmentVerb(private val context: Context) : Fragment() {
                         }
                     }
                 }
-                //      GrammarWordEntity wordEntity = (GrammarWordEntity) sarfsagheerAdapter.getItem(position);
-                val dataBundles = Bundle()
-                val wazan = wordEntity.wazan
-                val weakness = wordEntity.weakness
-                val root = wordEntity.verbroot
-                if (isAugmented) {
-                    /*  isUnAugmented = true;
-                    augmentedFormula = dataBundle.getString(QURAN_VERB_WAZAN);
-                    dataBundle.putString(VERBTYPE, "mujarrad");
-                    int color = context.getResources().getColor(R.color.background_color_light_brown);
-                    final ArrayList<ArrayList> indictive = GatherAll.getInstance().getMazeedListing(verbmood, root!!, augmentedFormula);
-                    VerbconjuationBottom frag=new VerbconjuationBottom();
-                    Bundle bundle=new Bundle();
-                    ArrayList list = indictive.get(1);
-                ;;
-                    bundle.putParcelableArrayList("list",list);
-                    frag.setArguments(bundle);
 
-                    frag.newInstance(list).show(((AppCompatActivity) context).getSupportFragmentManager(), WordAnalysisBottomSheet.TAG);
-*/
-                } else {
-
-                    /*unaugmentedFormula = dataBundle.getString(QURAN_VERB_WAZAN);
-                    dataBundle.putString(VERBTYPE, "mazeed");
-                    isAugmented = true;
-                    final ArrayList<ArrayList> lists = GatherAll.getInstance().getMujarradListing(verbmood, root!!, unaugmentedFormula);
-                    VerbconjuationBottom frag=new VerbconjuationBottom();
-                    Bundle bundle=new Bundle();
-                    ArrayList list = lists.get(1);
-                    ;;
-                    bundle.putParcelableArrayList("list",list);
-                    frag.setArguments(bundle);
-
-                    frag.newInstance(list).show(((AppCompatActivity) context).getSupportFragmentManager(), WordAnalysisBottomSheet.TAG);*/
-                }
-
-
-                /*       int word_no = wordEntity.getWord_no();
-                Bundle dataBundle = new Bundle();
-                dataBundle.putString(SURAH_ID, surah_id);
-                dataBundle.putInt(AYAHNUMBER, ayah_number);
-                dataBundle.putInt(WORDNUMBER, word_no);
-                dataBundle.putString(SURAH_ARABIC_NAME, suraharabicname);
-                RootDialog root!!Dialog = new RootDialog();
-                FragmentManager fragmentManager = getFragmentManager();
-                root!!Dialog.setArguments(dataBundle);
-                assert fragmentManager != null;
-                fragmentManager.beginTransaction().add(R.id.fragmentParentViewGroup, root!!Dialog).addToBackStack(ROOTDIALOGFRAG).commit();
-*/
             }
         })
     }
@@ -257,6 +212,5 @@ class MazeedTabSagheerFragmentVerb(private val context: Context) : Fragment() {
         ssagheer?.clear()// Clear the ArrayList
         // ... unregister other listeners if necessary
     }
-    companion object {
-    }
+
 }
