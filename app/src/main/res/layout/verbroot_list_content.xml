@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/id_text"
-        android:textSize="@dimen/text_size_30"
+
         android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
 
     <TextView
         android:id="@+id/content"
-        android:textSize="@dimen/text_size_30"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="60dp"

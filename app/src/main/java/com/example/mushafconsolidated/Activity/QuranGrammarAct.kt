@@ -260,6 +260,8 @@ private var preferences=""
     getpreferences()
     //bundle = intent
     bundles = intent.extras
+    initView()
+    initnavigation()
     if (bundles != null) {
       loadSurahFromIntentData()
 
@@ -320,8 +322,7 @@ private var preferences=""
 
     val list = mainViewModel.loadListschapter().value
     //    final boolean chapterorpartb = bundle.getBooleanExtra(CHAPTERORPART, true);
-    initView()
-    initnavigation()
+
     versescount = list!![chapterno - 1].versescount
     isMakkiMadani = list[chapterno - 1].ismakki
     rukucount = list[chapterno - 1].rukucount
@@ -346,15 +347,13 @@ private var preferences=""
 
   private fun loadSurahFromIntentData() {
     bundles = intent.extras
-    initView()
-    initnavigation()
+
     val chapter = bundles!!.getInt(Constant.SURAH_ID, 1)
     mushafview = bundles!!.getBoolean("passages", false)
     mainViewModel = ViewModelProvider(this)[QuranViewModel::class.java]
     val list = mainViewModel.loadListschapter().value
 
-    initView()
-    initnavigation()
+
     chapterno = chapter
 
     surahArabicName = list!![chapter - 1].abjadname

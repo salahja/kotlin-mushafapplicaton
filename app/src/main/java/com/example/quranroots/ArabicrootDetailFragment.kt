@@ -82,7 +82,7 @@ class ArabicrootDetailFragment : Fragment(), AdapterView.OnItemClickListener, Se
         var layoutManager = LinearLayoutManager(activity)
         adapter = RootDetailAdapter(rootsArrayList, requireContext())
         layoutManager.orientation = LinearLayoutManager.VERTICAL
-        layoutManager = GridLayoutManager(activity, 4)
+        layoutManager = GridLayoutManager(activity, 3)
         layoutManager.setSpanSizeLookup(object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 return if (position == 0) 3 else 1

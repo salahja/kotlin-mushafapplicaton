@@ -226,7 +226,7 @@ object VerbConjugator {
           val s = if (pronoun in listOf("he", "she", "it")) "s" else ""
           "$formNuance$s"
         }
-        "PASS" -> "is $formNuance"
+        "PASS" -> "was $formNuance"
         else -> formNuance
       }
       "imperative" -> when (voice) {

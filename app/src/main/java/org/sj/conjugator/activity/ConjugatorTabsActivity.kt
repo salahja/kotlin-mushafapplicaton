@@ -92,6 +92,7 @@ class ConjugatorTabsActivity :  BaseActivity() {
         var surahid: String? = null
         var ayahnumber: String? = null
         var wordno: String? = null
+        var meaning: String?=null
 
         if (bundle != null) {
             verbform = bundle.getString(QURAN_VERB_WAZAN)
@@ -100,6 +101,7 @@ class ConjugatorTabsActivity :  BaseActivity() {
             surahid = bundle.getString(SURAH_ID)
             ayahnumber = bundle.getString(AYAHNUMBER)
             wordno = bundle.getString(WORDNUMBER)
+
 
         }
         ismujarrad = verbtype == "mujarrad"

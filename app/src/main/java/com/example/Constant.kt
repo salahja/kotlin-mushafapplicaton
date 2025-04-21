@@ -147,6 +147,7 @@ object Constant {
     const val CHAPTERORPART = "chapterorpart"
     const val MAKKI_MADANI = "makkimadani"
     const val WORDNUMBER = "wordnumber"
+   const val MEANING="meaning"
     const val AYAH_ID = "ayah_id"
     const val SURAH_ID = "surah_id"
     const val HARF="harf"
